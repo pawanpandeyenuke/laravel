@@ -34,5 +34,18 @@ return [
         'key'    => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+	
+	'facebook' => [
+		'client_id' => '147417315641264',
+		'client_secret' => '796d800b177429195b9994152301c82f',
+		'redirect' => 'http://development.laravel.com/callback',
+	],
+ 
+	'twitter' => [
+		'client_id' => 'yjJPO9ogaQBbQl127IBJS5bCV',
+		'client_secret' => 'RMkAeOC47JWFS9d7zSDBCXgdN1InVEiTYdHCrdjsnmlYock8aX',
+		'redirect' => 'http://development.laravel.com/callback/twitter',
+	],
+    
 
 ];

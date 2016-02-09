@@ -56,6 +56,12 @@
 
                                 <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
                             </div>
+                            <div class="col-md-6 col-md-offset-4">
+								<p style="margin-top:5%">
+									<a class="btn btn-success" href="redirect">FB Login</a>
+									<a class="btn btn-success" href="redirect">Twitter Login</a>
+								</p>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -63,4 +69,6 @@
         </div>
     </div>
 </div>
+
+ 
 @endsection
