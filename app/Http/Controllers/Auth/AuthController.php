@@ -32,7 +32,7 @@ class AuthController extends Controller
      */
     protected $redirectTo = '/';
         
-    protected $redirectPath = '/home';
+    //protected $redirectPath = '/home';
 
     /**
      * Create a new authentication controller instance.
@@ -53,8 +53,7 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
+            'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
@@ -69,8 +68,6 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
@@ -82,17 +79,17 @@ class AuthController extends Controller
      *
      * @return Response
      */
-    public function redirectToProvider()
-    {
-        return Socialite::driver('facebook')->redirect();
-    }
+    //~ public function redirectToProvider()
+    //~ {
+        //~ return Socialite::driver('facebook')->redirect();
+    //~ }
 
     /**
      * Obtain the user information from Facebook.
      *
      * @return Response
      */
-    public function handleProviderCallback()
+/*    public function handleProviderCallback()
     {
         try {
             $user = Socialite::driver('facebook')->user();
@@ -106,14 +103,14 @@ class AuthController extends Controller
  
         return redirect()->route('home');
     }
- 
+ */
     /**
      * Return user if exists; create and return if doesn't
      *
      * @param $facebookUser
      * @return User
      */
-    private function findOrCreateUser($facebookUser)
+/*    private function findOrCreateUser($facebookUser)
     {
         $authUser = User::where('facebook_id', $facebookUser->id)->first();
  
@@ -128,4 +125,5 @@ class AuthController extends Controller
             'avatar' => $facebookUser->avatar
         ]);
     }
+    */
 }

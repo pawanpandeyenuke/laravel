@@ -15,6 +15,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+/*
+|
+| @Api Routes..
+|
+*/
+Route::post('api/signin', 'ApiController@signin');
+Route::post('api/signup', 'ApiController@signup');
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
