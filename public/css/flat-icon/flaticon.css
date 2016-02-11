@@ -1,0 +1,36 @@
+@font-face {
+	font-family: "Flaticon";
+	src: url("flaticon.eot");
+	src: url("flaticon.eot#iefix") format("embedded-opentype"),
+	url("flaticon.woff") format("woff"),
+	url("flaticon.ttf") format("truetype"),
+	url("flaticon.svg") format("svg");
+	font-weight: normal;
+	font-style: normal;
+}
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
+	font-family: Flaticon;
+        font-size: 20px;
+font-style: normal;
+}.flaticon-avatar83:before {
+	content: "\e000";
+}
+.flaticon-eye109:before {
+	content: "\e001";
+}
+.flaticon-letter133:before {
+	content: "\e002";
+}
+.flaticon-magnifyingglass138:before {
+	content: "\e003";
+}
+.flaticon-padlock50:before {
+	content: "\e004";
+}
+.flaticon-profile5:before {
+	content: "\e005";
+}
+.flaticon-search74:before {
+	content: "\e006";
+}

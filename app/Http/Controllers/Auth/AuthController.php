@@ -31,8 +31,6 @@ class AuthController extends Controller
      * @var string
      */
     protected $redirectTo = '/';
-        
-    //protected $redirectPath = '/home';
 
     /**
      * Create a new authentication controller instance.
@@ -53,7 +51,8 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
@@ -67,63 +66,23 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+        $userdata = User::create([
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
-    }
-    
-    /**
-     * Redirect the user to the Facebook authentication page.
-     *
-     * @return Response
-     */
-    //~ public function redirectToProvider()
-    //~ {
-        //~ return Socialite::driver('facebook')->redirect();
-    //~ }
+        
+		$tempEmail = explode('@', $data['email']);
+		$tempId = ( isset( $userdata->id ) && $userdata->id != "" ) ? $userdata->id : $userdata->user_id;
 
-    /**
-     * Obtain the user information from Facebook.
-     *
-     * @return Response
-     */
-/*    public function handleProviderCallback()
-    {
-        try {
-            $user = Socialite::driver('facebook')->user();
-        } catch (Exception $e) {
-            return redirect('auth/facebook');
-        }
- 
-        $authUser = $this->findOrCreateUser($user);
- 
-        Auth::login($authUser, true);
- 
-        return redirect()->route('home');
+		// Storing xmpp username and password.				
+		$user = User::find($userdata->id);
+		$user->xmpp_username = $tempEmail[0].'_'.$tempId;
+		$user->xmpp_password = md5($tempEmail[0]);
+		$user->save();
+        
+        return $userdata;
     }
- */
-    /**
-     * Return user if exists; create and return if doesn't
-     *
-     * @param $facebookUser
-     * @return User
-     */
-/*    private function findOrCreateUser($facebookUser)
-    {
-        $authUser = User::where('facebook_id', $facebookUser->id)->first();
- 
-        if ($authUser){
-            return $authUser;
-        }
- 
-        return User::create([
-            'name' => $facebookUser->name,
-            'email' => $facebookUser->email,
-            'facebook_id' => $facebookUser->id,
-            'avatar' => $facebookUser->avatar
-        ]);
-    }
-    */
+
 }

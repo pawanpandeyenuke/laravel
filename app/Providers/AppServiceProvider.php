@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Country;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+		
+		$countries = Country::all(['country_id', 'country_name']);
+		//print_r();die;
+		view()->share('countries', $countries);
     }
 
     /**

@@ -44,7 +44,19 @@ return [
 	'twitter' => [
 		'client_id' => 'yjJPO9ogaQBbQl127IBJS5bCV',
 		'client_secret' => 'RMkAeOC47JWFS9d7zSDBCXgdN1InVEiTYdHCrdjsnmlYock8aX',
-		'redirect' => 'http://development.laravel.com/callback/twitter',
+		'redirect' => 'http://development.laravel.com/callbacktwitter',
+	],
+    
+	'google' => [
+		'client_id' => '875545827153-ogtrtj4m0610tr7qc6ujrsbs98mq6fln.apps.googleusercontent.com',
+		'client_secret' => 'QbW-lrmDMk8ZeVK0eJV9XB2v',
+		'redirect' => 'http://development.laravel.com/callbackgoogle',
+	],
+    
+	'linkedin' => [
+		'client_id' => '75kno0ahk9abe7',
+		'client_secret' => '4c3Cjv0urMvDVWqa',
+		'redirect' => 'http://development.laravel.com/callbacklinkedin',
 	],
     
 

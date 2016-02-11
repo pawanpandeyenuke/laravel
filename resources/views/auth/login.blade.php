@@ -1,74 +1,105 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
-                <div class="panel-body">
+
+<div class="page-data login-page">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="login-banner">
+					<img src="/images/login-banner.png" alt="" class="img-responsive">
+				</div>
+				<div class="banner-botom-data text-center">
+					<h2>Register yourself to find friends</h2>
+					<p> join a group chat room to discuss and share your views and opinions with likeminded people</p>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="login-form">
+					<h3 class="text-center">Login with Accounts</h3>
+					
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                         {!! csrf_field() !!}
+                        
+						<div class="row field-row">
+							<div class="col-sm-12">
+								<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+									<input type="text" name="email" value="{{ old('email') }}" class="form-control icon-field" placeholder="Email ID">
+									
+									@if ($errors->has('email'))
+										<span class="help-block">
+											<strong>{{ $errors->first('email') }}</strong>
+										</span>
+									@endif
+																	
+									<span class="field-icon flaticon-letter133"></span>
+								</div>
+								<div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+									<input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword">
+									
+									@if ($errors->has('password'))
+										<span class="help-block">
+											<strong>{{ $errors->first('password') }}</strong>
+										</span>
+									@endif
+									
+									<span class="field-icon flaticon-padlock50"></span>
+									<div class="check-cont show-pw">
+										<input type="checkbox" onchange="document.getElementById('showpassword').type = this.checked ? 'text' : 'password'" name="checkboxG2" id="checkboxG2" class="css-checkbox"/>
+										<label for="checkboxG2" class="css-label">show</label>
+									</div>
+								</div>
+							</div>
+						</div>
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">E-Mail Address</label>
+						<div class="row field-row">
+							<div class="col-md-6 border-right">
+								<div class="checkbox-cont">
+									<input type="checkbox" name="checkboxG3" id="checkboxG3" class="css-checkbox" />
+									<label for="checkboxG3" class="css-label">Keep me logged in</label>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<a href="#" title="">Forgot Password?</a>
+							</div>
+						</div>
 
-                            <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input type="password" class="form-control" name="password">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember"> Remember Me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-sign-in"></i>Login
-                                </button>
-
-                                <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
-                            </div>
-                            <div class="col-md-6 col-md-offset-4">
-								<p style="margin-top:5%">
-									<a class="btn btn-success" href="redirect">FB Login</a>
-									<a class="btn btn-success" href="redirect">Twitter Login</a>
-								</p>
-                            </div>
-                        </div>
+						<div class="row field-row">
+							<div class="col-md-6">
+								<div class="btn-cont text-center">
+									<input type="submit" class="btn btn-primary" value="Login">
+									<!-- <a href="#" title="" class="btn btn-primary">Login</a> -->
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="btn-cont text-center">
+									<a href="{{ url('/register') }}" title="" class="btn btn-primary">Signup</a>
+								</div>
+							</div>
+						</div>
+						
                     </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                    
+					<div class="or-divider"><span>or</span></div>
+					<div class="social-login">
+						<ul>
+							<li><a href="redirect" class="fb"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="redirecttwitter" class="tw"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="redirectgoogle" class="gp"><i class="fa fa-google-plus"></i></a></li>
+							<li><a href="redirectlinkedin" class="lin"><i class="fa fa-linkedin"></i></a></li>
+						</ul>
 
+						<div class="social-store">
+							<ul>
+								<li><a href=""><img src="/images/apple-stroe-btn.png" alt=""></a></li>
+								<li><a href=""><img src="/images/android-store-btn.png" alt=""></a></li>
+							</ul>
+						</div>
+					</div><!--/social login-->
+				</div>
+			</div>
+		</div>
+	</div>
+</div><!--/pagedata-->
  
 @endsection

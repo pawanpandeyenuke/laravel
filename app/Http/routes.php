@@ -39,8 +39,16 @@ Route::post('api/signup', 'ApiController@signup');
 Route::get('/redirect', 'SocialAuthController@redirect');
 Route::get('/callback', 'SocialAuthController@callback');
 
-//~ Route::get('/redirect/{provider}', 'SocialAuthController@redirect');
-//~ Route::get('/callback/{provider}', 'SocialAuthController@callback');
+Route::get('/redirecttwitter', 'SocialAuthController@redirecttwitter');
+Route::get('/callbacktwitter', 'SocialAuthController@callbacktwitter');
+
+Route::get('/redirectgoogle', 'SocialAuthController@redirectgoogle');
+Route::get('/callbackgoogle', 'SocialAuthController@callbackgoogle');
+
+Route::get('/redirectlinkedin', 'SocialAuthController@redirectlinkedin');
+Route::get('/callbacklinkedin', 'SocialAuthController@callbacklinkedin');
+
+Route::get('home', 'HomeController@index');
 
 Route::group(['middleware' => ['web']], function () {
     //
