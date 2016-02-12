@@ -46,4 +46,8 @@ class User extends Authenticatable
 		'password' => 'required'
 	);
 	
+	public $socialApiRules = array(
+		'email' => 'required|email|unique:users,email'
+	);
+	
 }

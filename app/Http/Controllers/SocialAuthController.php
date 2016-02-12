@@ -20,8 +20,11 @@ class SocialAuthController extends Controller
 	 */
 	public function socialLogin( $providerUser )
 	{		
+		
+		//~ echo '<pre>';print_r($providerUser);die;
+		
 		if( !empty( $providerUser ) ){			
-			if( isset( $providerUser['email']) ){				
+			if( isset( $providerUser['email']) ){
 				$userDbObj = User::whereEmail($providerUser['email'])->first();
 				if(!$userDbObj){	
 					//register user
@@ -47,131 +50,83 @@ class SocialAuthController extends Controller
 
 
 	/**
-	 *  @Facebook Redirect Function
+	 *  @Redirect Function for different providers.
 	 */
-    public function redirect()
+    public function redirect( $provider )
     {
-        return Socialite::driver('facebook')->redirect();   
+        return Socialite::driver( $provider )->redirect();   
     }
 
+
 	/**
-	 *  @Facebook Callback Function
+	 *  @Callback Function for different providers.
 	 */
-    public function callback()
+    public function callback( $provider )
     {		
-        $providerUser = \Socialite::driver('facebook')->user();
-		$userData = array(
-			'fb_id' => $providerUser->getId(),
-			'nickname' => $providerUser->getNickname(),
-			'first_name' => $providerUser->user['first_name'],
-			'last_name' => $providerUser->user['last_name'],
-			'email' => $providerUser->getEmail(),
-			'avatar' => $providerUser->getAvatar()
-		);
-        
-        $user= self::socialLogin( $userData );
-        Auth::login($user);
-        return redirect('home');
-    }
-
-
-	/**
-	 *  @Twitter Redirect Function
-	 */
-	public function redirecttwitter()
-    {
-        return Socialite::driver('twitter')->redirect();
-    }
-
-
-	/**
-	 *  @Twitter Callback Function
-	 */
-    public function callbacktwitter()
-    {		
-		
-		$email = 'demo.user@twitter.com';
-        $providerUser = \Socialite::driver('twitter')->user();
-		$nameRaw = explode(' ', $providerUser->getName());
-		
-		$userData = array(
-			'twitter_id' => $providerUser->getId(),
-			'nickname' => $providerUser->getNickname(),
-			'first_name' => $nameRaw[0],
-			'last_name' => $nameRaw[1],
-			'email' => $email, //$providerUser->getEmail(),
-			'avatar' => $providerUser->getAvatar()
-		);
-
-        $user = self::socialLogin( $userData );
-        Auth::login($user);
-        return redirect('home');
-    }
-
-
-	/**
-	 *  @Google Redirect Function
-	 */
-	public function redirectgoogle()
-    {
-        return Socialite::driver('google')->redirect();
-    }
-
-
-	/**
-	 *  @Google Callback Function
-	 */
-    public function callbackgoogle()
-    {		
-		
-		//~ $email = 'demo.user@twitter.com';
-        $providerUser = \Socialite::driver('google')->user();
-
-		$userData = array(
-			'google_id' => $providerUser->getId(),
-			'nickname' => $providerUser->getNickname(),
-			'first_name' => $providerUser->user['name']['givenName'],
-			'last_name' => $providerUser->user['name']['familyName'],
-			'email' => $providerUser->getEmail(),
-			'avatar' => $providerUser->getAvatar()
-		);
-
-        $user = self::socialLogin( $userData );
-        Auth::login($user);
-        return redirect('home');
-    }
-
-
-	/**
-	 *  @Linkedin Redirect Function
-	 */
-	public function redirectlinkedin()
-    {
-        return Socialite::driver('linkedin')->redirect();
-    }
-
-
-	/**
-	 *  @Linkedin Callback Function
-	 */
-    public function callbacklinkedin()
-    {		
-		 
-        $providerUser = \Socialite::driver('linkedin')->user();
-        
-		//~ echo '<pre>';print_r($providerUser);die;
-		$userData = array(
-			'linked_id' => $providerUser->getId(),
-			'nickname' => $providerUser->getNickname(),
-			'first_name' => $providerUser->user['firstName'],
-			'last_name' => $providerUser->user['lastName'],
-			'email' => $providerUser->getEmail(),
-			'avatar' => $providerUser->getAvatar()
-		);
-
-        $user = self::socialLogin( $userData );
-        Auth::login($user);
-        return redirect('home');
-    }
  
+        $providerUser = \Socialite::driver( $provider )->user();
+        //~ echo '<pre>';print_r($providerUser);die;
+        switch( $provider ){
+			
+			case 'facebook':
+			
+				$userData = array(
+					'fb_id' => $providerUser->getId(),
+					'nickname' => $providerUser->getNickname(),
+					'first_name' => $providerUser->user['first_name'],
+					'last_name' => $providerUser->user['last_name'],
+					'email' => $providerUser->getEmail(),
+					'avatar' => $providerUser->getAvatar()
+				);
+				break;
+			
+			case 'twitter':
+			
+				$email = 'demo.user@twitter.com';
+				$nameRaw = explode(' ', $providerUser->getName());
+				
+				$userData = array(
+					'twitter_id' => $providerUser->getId(),
+					'nickname' => $providerUser->getNickname(),
+					'first_name' => $nameRaw[0],
+					'last_name' => $nameRaw[1],
+					'email' => $email, //$providerUser->getEmail(),
+					'avatar' => $providerUser->getAvatar()
+				);
+				break;
+				
+			case 'google':
+
+				$userData = array(
+					'google_id' => $providerUser->getId(),
+					'first_name' => $providerUser->user['name']['givenName'],
+					'last_name' => $providerUser->user['name']['familyName'],
+					'email' => $providerUser->getEmail(),
+					'avatar' => $providerUser->getAvatar()
+				);
+				break;
+				
+			case 'linkedin':
+
+				$userData = array(
+					'linked_id' => $providerUser->getId(),
+					'nickname' => $providerUser->getNickname(),
+					'first_name' => $providerUser->user['firstName'],
+					'last_name' => $providerUser->user['lastName'],
+					'email' => $providerUser->getEmail(),
+					'avatar' => $providerUser->getAvatar()
+				);
+				break;
+			
+			default :
+				
+				$userData = array();
+				break;			
+		}
+
+        $user = self::socialLogin( $userData );
+        Auth::login($user);
+        return redirect('home');
+    }
+
 }

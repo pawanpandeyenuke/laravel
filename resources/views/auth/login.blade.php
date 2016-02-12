@@ -83,10 +83,10 @@
 					<div class="or-divider"><span>or</span></div>
 					<div class="social-login">
 						<ul>
-							<li><a href="redirect" class="fb"><i class="fa fa-facebook"></i></a></li>
-							<li><a href="redirecttwitter" class="tw"><i class="fa fa-twitter"></i></a></li>
-							<li><a href="redirectgoogle" class="gp"><i class="fa fa-google-plus"></i></a></li>
-							<li><a href="redirectlinkedin" class="lin"><i class="fa fa-linkedin"></i></a></li>
+							<li><a href="{{ url('redirect/facebook') }}" class="fb"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="{{ url('redirect/twitter') }}" class="tw"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="{{ url('redirect/google') }}" class="gp"><i class="fa fa-google-plus"></i></a></li>
+							<li><a href="{{ url('redirect/linkedin') }}" class="lin"><i class="fa fa-linkedin"></i></a></li>
 						</ul>
 
 						<div class="social-store">

@@ -76,23 +76,7 @@
 										<label for="checkboxG2" class="css-label">show</label>
 									</div>
 								</div>
-								
-								<div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-									<input type="password" name="password_confirmation" class="form-control icon-field" placeholder="Password" id="showconfirmpassword">
-									
-									@if ($errors->has('password_confirmation'))
-										<span class="help-block">
-											<strong>{{ $errors->first('password_confirmation') }}</strong>
-										</span>
-									@endif
-									
-									<span class="field-icon flaticon-padlock50"></span>
-									<div class="check-cont show-pw">
-										<input type="checkbox" onchange="document.getElementById('showconfirmpassword').type = this.checked ? 'text' : 'password'" name="checkboxG3" id="checkboxG3" class="css-checkbox"/>
-										<label for="checkboxG3" class="css-label">show</label>
-									</div>
-								</div>
-								
+
 								<div class="form-group sex-option">
 									<ul>
 										<li>I am</li>
@@ -137,10 +121,10 @@
 					
 					<div class="social-login top-margin">
 						<ul>
-							<li><a href="" class="fb"><i class="fa fa-facebook"></i></a></li>
-							<li><a href="" class="tw"><i class="fa fa-twitter"></i></a></li>
-							<li><a href="" class="gp"><i class="fa fa-google-plus"></i></a></li>
-							<li><a href="" class="lin"><i class="fa fa-linkedin"></i></a></li>
+							<li><a href="{{ url('redirect/facebook') }}" class="fb"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="{{ url('redirect/twitter') }}" class="tw"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="{{ url('redirect/google') }}" class="gp"><i class="fa fa-google-plus"></i></a></li>
+							<li><a href="{{ url('redirect/linkedin') }}" class="lin"><i class="fa fa-linkedin"></i></a></li>
 						</ul>
 					</div><!--/social login-->
 				</div>
