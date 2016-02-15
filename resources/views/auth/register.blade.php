@@ -72,7 +72,7 @@
 									
 									<span class="field-icon flaticon-padlock50"></span>
 									<div class="check-cont show-pw">
-										<input type="checkbox" onchange="document.getElementById('showpassword').type = this.checked ? 'text' : 'password'" name="checkboxG2" id="checkboxG2" class="css-checkbox"/>
+										<input type="checkbox"  name="checkboxG2" id="checkboxG2" class="css-checkbox password-eye"/>
 										<label for="checkboxG2" class="css-label">show</label>
 									</div>
 								</div>
