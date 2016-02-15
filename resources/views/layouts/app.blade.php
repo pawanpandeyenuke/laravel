@@ -88,6 +88,8 @@
 				 else
 				 	  $('#showpassword').prop('type', 'password');
 				 $("#showpassword").focus();
+				 $('#showpassword').val($('#showpassword').val() + ' ');
+				 $('#showpassword').val($.trim($('#showpassword').val()));
 			});
 		</script>
 	</body>
