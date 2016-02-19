@@ -131,10 +131,9 @@ class ApiController extends Controller
 		
 		try{
 			$arguments = Request::all();
-			
 			$user = new User;			
 			$validator = Validator::make($arguments, $user->socialApiRules, $user->messages);
-
+			
 			if($validator->fails()){
 				$this->message = $this->getError($validator);				
 			}else{
