@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Country;
+use Auth, App\Country;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,11 +14,33 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-		
-		$countries = Country::all(['country_id', 'country_name']);
-		//print_r();die;
-		view()->share('countries', $countries);
+		// $usr = Auth::check();
+  //       echo '<pre>';print_r($usr);die('Null');
+        view()->share('countries', self::prepare(Country::all(['country_id', 'country_name'])));
+
+
     }
+
+    /**
+    * Prepare options array to share across views.
+    *
+    * @return array 
+    */
+    public function prepare( $data )
+    {   
+
+        // echo '<pre>';print_r(get_class($data));die;
+        $preparedData = array();
+        foreach( $data as $val ){
+
+            $preparedData[$val->country_id] = $val->country_name;
+
+        }
+
+        return $preparedData;
+        
+    }
+
 
     /**
      * Register any application services.

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Mail;
-use App\User, Auth;
+use App\User, App\Feed, App\Like, Auth;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City;
 use Validator, Input, Redirect, Request, Session, Hash;
@@ -168,8 +168,168 @@ class ApiController extends Controller
 		return $this->output();
 
 	}
-	 
-	
+
+
+	/*
+	 * Creating posts on api request.
+	 */
+	public function createPosts()
+	{
+		try
+		{
+			$arguments = Request::all();
+			$feeds = new Feed;
+
+			if( $arguments ){
+
+				if( !$arguments['user_by'] )
+					throw new Exception('User id is required.');
+
+				if( !is_numeric($arguments['user_by']) )
+					throw new Exception('Invalid user id.');
+
+				if( ( $arguments['message'] == null ) && ( $arguments['image'] == null ) )
+					throw new Exception('Please provide a message or image.');
+
+				$success = $feeds->create( $arguments );
+
+				if( $success ){
+					$this->message = 'Your post has been saved successfully.';
+					$this->status = 'success';
+					$this->data = $success;					
+				}
+
+			}
+
+		}catch( Exception $e ){
+
+			$this->message = $e->getMessage();
+
+		}
+		return $this->output();
+	}
+
+
+	/*
+	 * Fetch posts on api request.
+	 */
+	public function getPosts()
+	{
+		try
+		{
+			$arguments = Request::all();
+			$feeds = new Feed;
+			
+			if( $arguments )
+			{
+				$validator = Validator::make($arguments, $feeds->rules, $feeds->messages);
+
+				if($validator->fails()){
+					$this->message = $this->getError($validator);
+				}else{
+
+					// $posts = $feeds->where('user_by', '=', $arguments['user_by'])->get();
+					$posts = Feed::with('likesCount')->where('user_by', '=', $arguments['user_by'])->get();
+
+					if( $posts ){
+
+						$this->status = 'success';
+						$this->message = 'following of the results available.';
+						$this->data = $posts;
+
+					}
+					
+					
+				}
+			}
+
+		}catch( Exception $e ){
+
+			$this->message = $e->getMessage();
+
+		}
+
+		return $this->output();
+	}
+
+
+	/*
+	 * Managing likes on api request.
+	 */
+	public function likes()
+	{
+		try
+		{
+			$arguments = Request::all();
+			$likes = new Like;
+
+			if( $arguments ){
+
+				$validator = Validator::make($arguments, $likes->rules, $likes->messages);
+
+				if($validator->fails()) {
+					
+					throw new Exception($this->getError($validator));
+					
+				}else{
+
+					$feed = Feed::find($arguments['feed_id']);
+					if( !$feed )
+						throw new Exception( 'Feed does not exists' );
+					
+					$like = Like::where([
+						'feed_id' => $arguments['feed_id'],
+						'user_id' => $arguments['user_id'],
+					])->get();
+					
+					$id = '';
+					foreach( $like as $key => $val )
+						$id = $val['id'];
+					
+					if( !$like->isEmpty() ){
+
+						$model = Like::find($id);
+						$response = $model->update( $arguments );
+						$this->message = 'Like updated successfully.';
+						$this->status = 'success';
+						$model = Like::find($id);
+						$this->data = $model;
+
+					}else{
+
+						$model = new Like;
+						$response = $model->create( $arguments );
+						$this->message = 'Like created successfully.';
+						$this->status = 'success';
+						$this->data = $response;	
+
+					}
+
+				}
+
+			}
+		}catch( Exception $e ){
+
+			$this->message = $e->getMessage();
+
+		}
+		return $this->output();
+	}
+
+
+	/*
+	 * Managing comments on api request.
+	 */
+	public function comments()
+	{
+	/*		try
+			{
+
+			}catch(Exception $e){
+
+			}	*/
+	}
+
 	/*
 	 * Get country on request.
 	 */

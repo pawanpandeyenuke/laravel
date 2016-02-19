@@ -11,23 +11,34 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+/**
+ * @Ajax Routes..
+ *
+ **/
+Route::post('ajax/getstates', 'AjaxController@getStates');
+Route::post('ajax/getcities', 'AjaxController@getCities');
 
 
-/*
-|
-| @Api Routes..
-|
-*/
+
+
+/**
+ * @Api Routes..
+ *
+ **/
 Route::post('api/signin', 'ApiController@signin');
 Route::post('api/signup', 'ApiController@signup');
 Route::post('api/forget-Password', 'ApiController@forgetPassword');
+Route::post('api/social-login', 'ApiController@getSocialLogin');
+
 Route::post('api/countries', 'ApiController@getCountries');
 Route::post('api/states', 'ApiController@getStates');
 Route::post('api/cities', 'ApiController@getCities');
-Route::post('api/social-login', 'ApiController@getSocialLogin');
+
+Route::post('api/posts', 'ApiController@getPosts');
+Route::post('api/likes', 'ApiController@likes');
+Route::post('api/comments', 'ApiController@comments');
+Route::post('api/post/create', 'ApiController@createPosts');
 
 
 /*
@@ -46,12 +57,12 @@ Route::get('/callback/{provider}', 'SocialAuthController@callback');
 
 Route::get('home', 'HomeController@index');
 
-Route::group(['middleware' => ['web']], function () {
-    //
-});
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
     Route::get('/home', 'HomeController@index');
+	Route::get('dashboard', 'DashboardController@dashboard');
+	Route::post('dashboard', 'DashboardController@dashboard');
+	Route::get('/', 'DashboardController@dashboard');	
 });

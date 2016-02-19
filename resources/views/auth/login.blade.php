@@ -60,7 +60,7 @@
 								</div>
 							</div>
 							<div class="col-md-6">
-								<a href="#" title="">Forgot Password?</a>
+								<a href="{{ url('password/reset') }}" title="">Forgot Password?</a>
 							</div>
 						</div>
 

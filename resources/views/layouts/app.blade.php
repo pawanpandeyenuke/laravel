@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Friendz Square</title>
-<link href="css/bootstrap.css" rel="stylesheet">
-<link href="css/font-awesome.min.css" rel="stylesheet" media="all">
-<link href="css/flat-icon/flaticon.css" rel="stylesheet" media="all">
-<link href="css/style.css" rel="stylesheet">
-<link href="css/responsive.css" rel="stylesheet" media="all">
+<link href="/css/bootstrap.css" rel="stylesheet">
+<link href="/css/font-awesome.min.css" rel="stylesheet" media="all">
+<link href="/css/flat-icon/flaticon.css" rel="stylesheet" media="all">
+<link href="/css/style.css" rel="stylesheet">
+<link href="/css/responsive.css" rel="stylesheet" media="all">
     <style>
         body {
             font-family: 'Lato';
@@ -30,32 +30,43 @@
 					</div>
 					<div class="col-sm-6">
 						<div class="top-search">
+						{!! Form::open(array('url' => 'dashboard', 'id' => 'searchform')) !!}
 							<ul class="clearfix">
 								<li class="search-textbox">
-									<input type="text" class="search-field" placeholder="Search Friends">
+									<!-- <input type="text" class="search-field" placeholder="Search Friends"> -->
+									{!! Form::text('searchfriends', null, array(
+										'class'=>'search-field', 
+										'id'=>'searchfriends',
+										'placeholder'=>'Search Friends'
+									)) !!}
 								</li>
 								<li>
-									<select class="search-field">
-										<option>Country</option>
-										@foreach($countries as $data)
-											<option value="{{ $data->country_id }}">{{ $data->country_name }}</option>
-										@endforeach
-									</select>
+									{!! Form::select('country', $countries, null, array(
+										'class' => 'search-field',
+										'id' => 'country',
+									)); !!}
 								</li>
 								<li>
-									<select class="search-field">
-										<option>State</option>
-									</select>
+									{!! Form::select('state', ['State'], null, array(
+										'class' => 'search-field',
+										'id' => 'state',
+									)); !!}
 								</li>
 								<li>
-									<select class="search-field">
-										<option>City</option>
-									</select>
+									{!! Form::select('city', ['City'], null, array(
+										'class' => 'search-field',
+										'id' => 'city',
+									)); !!}
 								</li>
 								<li class="search-btn-cont">
-									<button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+									<!-- <button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button> -->
+									{!! Form::button('', array(
+										'class' => 'search-btn',
+										'id' => '',
+									)) !!}									
 								</li>
 							</ul>
+							{!! Form::close() !!}
 						</div>
 					</div>
 					<div class="col-sm-3">
@@ -79,6 +90,7 @@
 
 		<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>	
 		<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/js/custom.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
