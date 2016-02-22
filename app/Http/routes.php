@@ -36,9 +36,12 @@ Route::post('api/states', 'ApiController@getStates');
 Route::post('api/cities', 'ApiController@getCities');
 
 Route::post('api/posts', 'ApiController@getPosts');
-Route::post('api/likes', 'ApiController@likes');
-Route::post('api/comments', 'ApiController@comments');
 Route::post('api/post/create', 'ApiController@createPosts');
+
+Route::post('api/likes', 'ApiController@likes');
+
+Route::post('api/comments', 'ApiController@getComments');
+Route::post('api/comments/create', 'ApiController@postComments');
 
 
 /*

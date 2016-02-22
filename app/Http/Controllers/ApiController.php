@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Mail;
-use App\User, App\Feed, App\Like, Auth;
+use App\User, App\Feed, App\Like, App\Comment, Auth;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City;
 use Validator, Input, Redirect, Request, Session, Hash;
@@ -236,8 +236,7 @@ class ApiController extends Controller
 						$this->message = 'following of the results available.';
 						$this->data = $posts;
 
-					}
-					
+					}					
 					
 				}
 			}
@@ -319,15 +318,84 @@ class ApiController extends Controller
 	/*
 	 * Managing comments on api request.
 	 */
-	public function comments()
+	public function getComments()
 	{
-	/*		try
+		try
+		{
+			$arguments = Request::all();
+
+			if( empty($arguments['commented_by']) || !isset($arguments['commented_by']) )
+				throw new Exception('User id is a required field.');
+			
+			if( !is_numeric($arguments['commented_by'] ) )
+				throw new Exception('User id is invalid.');
+
+			$user = User::find($arguments['commented_by']);
+
+			if( count($user) <= 0 )
+				throw new Exception('This user does not exists.');
+
+			$comments = Comment::where('commented_by', $arguments['commented_by'])->get();
+			
+			$this->status = 'success';
+			$this->data = $comments;
+			$this->message = count($comments). ' comments found.';
+
+		}catch(Exception $e){
+
+			$this->message = $e->getMessage();
+
+		}
+
+		return $this->output();
+
+	}
+
+
+	/*
+	 * Creating comments on api request.
+	 */
+	public function postComments()
+	{
+			try
 			{
+				$arguments = Request::all();
+				$comments = new Comment;
+
+				$validator = Validator::make($arguments, $comments->rules, $comments->messages);
+
+				if($validator->fails()) {
+					
+					throw new Exception($this->getError($validator));
+
+				}else{
+
+					$user = User::find($arguments['commented_by']);
+					if( !$user )
+						throw new Exception('No record found of the user.');						
+
+					$feed = Feed::find($arguments['feed_id']);
+					if(!$feed)
+						throw new Exception('The post may have expired or does not exist.');
+					
+					$comments = new Comment;
+					$model = $comments->create($arguments);
+
+					$this->message = 'Comment successfully posted.';
+					$this->status = 'success';
+					$this->data = $model;	
+
+				}
 
 			}catch(Exception $e){
 
-			}	*/
+				$this->message = $e->getMessage();
+
+			}
+
+		return $this->output();
 	}
+
 
 	/*
 	 * Get country on request.
