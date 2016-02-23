@@ -8,6 +8,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Feed, App\Like, App\Comment;
 
 class User extends Authenticatable
 {
@@ -49,5 +50,5 @@ class User extends Authenticatable
 	public $socialApiRules = array(
 		'email' => 'required|email'
 	);
-	
+
 }

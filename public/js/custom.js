@@ -1,5 +1,12 @@
 $(document).ready(function(){
-	
+
+	// Post status updates via ajax call.
+	$("#postform").ajaxForm(function($response) { 
+            alert("Your post has been submitted successfully."); 
+            console.log($response);
+    }); 
+
+
 	$('#state').html('<option value="">State</option>');
 	$('#city').html('<option value="">City</option>');
 
@@ -30,13 +37,13 @@ $(document).ready(function(){
 			}			
 		});	
 	});
+ 
+});
 
-	$("#up_imgs").fileinput({
-	    uploadUrl: "/file-upload-batch/2",
-	    allowedFileExtensions: ["jpg", "png", "gif"],
-	    minImageWidth: 30,
-	    minImageHeight: 30,
-	    showCaption: false,
-	});
-	
+$("#up_imgs").fileinput({
+	uploadUrl: "/ajax/posts",
+	allowedFileExtensions: ["jpg", "png", "gif"],
+	minImageWidth: 30,
+	minImageHeight: 30,
+	showCaption: false,
 });

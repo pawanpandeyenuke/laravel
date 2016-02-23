@@ -6,7 +6,7 @@ use Mail;
 use App\User, App\Feed, App\Like, App\Comment, Auth;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City;
-use Validator, Input, Redirect, Request, Session, Hash;
+use Validator, Input, Redirect, Request, Session, Hash, DB;
 use \Exception;
 
 class ApiController extends Controller
@@ -227,14 +227,26 @@ class ApiController extends Controller
 					$this->message = $this->getError($validator);
 				}else{
 
-					// $posts = $feeds->where('user_by', '=', $arguments['user_by'])->get();
-					$posts = Feed::with('likesCount')->where('user_by', '=', $arguments['user_by'])->get();
+					$posts = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get();
+
+/*					$posts = DB::table('users')
+					            ->join('news_feed', 'news_feed.user_by', '=', 'users.id')
+					            ->join('likes', 'news_feed.user_by', '=', 'likes.user_id')
+					            ->join('comments', 'news_feed.user_by', '=', 'comments.commented_by')
+					            ->select('users.id', 'users.first_name', 'users.last_name', 'users.picture')
+					            ->selectRaw('likes.feed_id, count(*) as likescount')->groupBy('likes.feed_id')
+					            ->selectRaw('comments.feed_id, count(*) as commentscount')->groupBy('comments.feed_id')
+					            ->get();
+					            // ->toSql();*/
 
 					if( $posts ){
 
 						$this->status = 'success';
-						$this->message = 'following of the results available.';
-						$this->data = $posts;
+						$this->message = count($posts). ' posts found.';
+						$user = User::find($arguments['user_by']);
+						$this->data['image'] = $user->picture;
+						$this->data['name'] = $user->first_name.' '.$user->last_name;
+						$this->data['feeds'] = $posts;
 
 					}					
 					

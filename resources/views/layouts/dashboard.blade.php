@@ -11,6 +11,7 @@
 <link href="/css/fileinput.min.css" rel="stylesheet" media="all">
 <link href="/css/style.css" rel="stylesheet">
 <link href="/css/responsive.css" rel="stylesheet" media="all">
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 </head>
 
 <body class="dashboard">
@@ -51,11 +52,11 @@
 									)); !!}
 								</li>
 								<li class="search-btn-cont">
-									<!-- <button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button> -->
-									{!! Form::button('', array(
+									<button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+									<!-- {!! Form::button('', array(
 										'class' => 'search-btn',
 										'id' => '',
-									)) !!}									
+									)) !!}	 -->								
 								</li>
 							</ul>
 							{!! Form::close() !!}
@@ -78,7 +79,7 @@
 	
 	@yield('content')
 
-<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script> 
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/fileinput.min.js"></script>
 <script type="text/javascript" src="/js/custom.js"></script>

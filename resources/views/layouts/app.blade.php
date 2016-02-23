@@ -59,11 +59,11 @@
 									)); !!}
 								</li>
 								<li class="search-btn-cont">
-									<!-- <button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button> -->
-									{!! Form::button('', array(
+									<button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+									<!-- {!! Form::button('', array(
 										'class' => 'search-btn',
 										'id' => '',
-									)) !!}									
+									)) !!}	 -->								
 								</li>
 							</ul>
 							{!! Form::close() !!}
