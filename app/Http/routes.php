@@ -19,7 +19,7 @@
 Route::post('ajax/getstates', 'AjaxController@getStates');
 Route::post('ajax/getcities', 'AjaxController@getCities');
 
-
+Route::post('ajax/posts', 'AjaxController@posts');
 
 
 /**
@@ -68,4 +68,7 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('dashboard', 'DashboardController@dashboard');
 	Route::post('dashboard', 'DashboardController@dashboard');
 	Route::get('/', 'DashboardController@dashboard');	
+
+	// Route::get('post/image', 'DashboardController@image');	
+
 });

@@ -35,4 +35,25 @@ class Feed extends Model
 	    ->groupBy('feed_id');
 	}
 
+	public function comments()
+	{
+		return $this->hasMany('App\Comment');
+	}
+
+	public function commentsCount()
+	{
+	  return $this->comments()
+	    ->selectRaw('feed_id, count(*) as commentscount')
+	    ->groupBy('feed_id');
+	}
+
+	public function user()
+	{
+          return $this->belongsTo('App\User','user_by','id')->select(['id','first_name', 'last_name', 'picture']);
+	}
+
+	public function likedornot()
+	{
+          return $this->hasOne('App\Like','feed_id','id');
+	}
 }

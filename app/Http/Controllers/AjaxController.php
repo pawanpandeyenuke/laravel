@@ -7,9 +7,59 @@ use Session, Validator, Cookie;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
+use App\Feed, Auth;
+use \Exception;
 
 class AjaxController extends Controller
 {
+
+	//Handling posts
+	public function posts()
+	{
+		try
+		{
+			$arguments = Input::all();
+			$model = new Feed;
+
+			$validate = Validator::make($arguments, [
+				'message' => 'required',
+				'_token' => 'required'
+			]);
+			
+
+			if(isset($arguments['image'])){
+
+				return 'thanks!';
+
+			}
+
+
+			if( $validate->fails() ){
+				throw new Exception('Write something to post..');
+			}else{
+				
+				$user = Auth::User();
+				
+				$arguments['user_by'] = $user->id;
+				$feed = $model->create( $arguments );
+
+				if( !$feed )
+					throw new Exception('Something went wrong.');
+					
+				return $feed;
+
+			}
+
+
+		}catch( Exception $e ){
+
+			return $e->getMessage();
+
+		}
+		
+		return $input;
+		
+	}
 
 
 	//Get states

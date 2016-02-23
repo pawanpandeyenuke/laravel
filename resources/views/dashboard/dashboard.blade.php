@@ -27,10 +27,9 @@
 					  <!-- Tab panes -->
 					  <div class="tab-content">
 					    <div role="tabpanel" class="tab-pane active statusupd-cont" id="StatusUpdate">
-								{!! Form::open(array('url' => 'dashboard')) !!}
+								{!! Form::open(array('url' => 'ajax/posts', 'id' => 'postform')) !!}
 									<div class="row">
 										<div class="col-md-9">
-											<!-- <input type="text" class="form-control round-textbox" placeholder="What’s on your mind?"> -->
 											{!! Form::text('message', null, array(
 													'id' => 'newsfeed', 
 													'class' => 'form-control round-textbox', 
@@ -39,7 +38,6 @@
 											!!}
 										</div>
 										<div class="col-md-3">
-											<!-- <button type="button" class="btn btn-primary btn-full">Post</button> -->
 											{!! Form::submit('Post', array(
 													'id' => 'submit-btn', 
 													'class' => 'btn btn-primary btn-full'
@@ -50,14 +48,28 @@
 								{!! Form::close() !!}
 					    </div>
 					    <div role="tabpanel" class="tab-pane" id="AddPhotos">
+					    	{!! Form::open(array('url' => 'ajax/posts', 'id' => 'postform', 'files'=>true)) !!}
 								<div class="upload-photos">
 									<div class="form-group">
-										<input type="text" class="form-control" placeholder="Some text here..">
+										<!-- <input type="text" class="form-control" placeholder="Some text here.."> -->
+										{!! Form::text('message', null, array(
+												'id' => 'newsfeedimage', 
+												'class' => 'form-control', 
+												'placeholder' => 'Some text here..'
+											))
+										!!}
 									</div>
 									<div class="form-group">
-	                  <input id="up_imgs" class="file" type="file" multiple>
-	                </div>
+					                  <!-- <input id="up_imgs" class="file" type="file" multiple> -->
+										{!! Form::file('image', array(
+												'multiple',
+												'id' => 'up_imgs', 
+												'class' => 'file'
+											))
+										!!}
+					                </div>
 								</div>	
+							{!! Form::close() !!}
 					    </div>
 					  </div>
 					</div><!--/status tab-->
@@ -132,6 +144,5 @@
 			</div>
 		</div>
 	</div><!--/pagedata-->
-
 
 @endsection
