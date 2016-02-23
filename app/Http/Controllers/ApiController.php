@@ -227,6 +227,9 @@ class ApiController extends Controller
 					$this->message = $this->getError($validator);
 				}else{
 
+					if(!User::find($arguments['user_by']))
+						throw new Exception('The user id does not exists.');						
+
 					$posts = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get();
 
 /*					$posts = DB::table('users')
