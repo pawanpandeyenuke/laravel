@@ -30,9 +30,15 @@ class Feed extends Model
 
 	public function likesCount()
 	{
-	  return $this->likes()
-	    ->selectRaw('feed_id, count(*) as likescount')
-	    ->groupBy('feed_id');
+
+		$data = $this->likes()
+		    ->selectRaw('feed_id, count(*) as likescount')
+		    ->groupBy('feed_id');
+ 
+ 		if($data)
+			return $data;
+	  	else
+	  		return 'false';
 	}
 
 	public function comments()
@@ -42,9 +48,15 @@ class Feed extends Model
 
 	public function commentsCount()
 	{
-	  return $this->comments()
-	    ->selectRaw('feed_id, count(*) as commentscount')
-	    ->groupBy('feed_id');
+	
+		$data = $this->comments()
+			->selectRaw('feed_id, count(*) as commentscount')
+			->groupBy('feed_id');
+
+ 		if($data)
+			return $data;
+	  	else
+	  		return 'false';
 	}
 
 	public function user()

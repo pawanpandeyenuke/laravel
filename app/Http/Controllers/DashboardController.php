@@ -28,7 +28,7 @@ class DashboardController extends Controller
 
 	public function dashboard()
 	{
-        try{
+/*        try{
 
             // print_r();die;
             if(Request::isMethod('post'))
@@ -47,7 +47,7 @@ class DashboardController extends Controller
             }
         }catch( Exception $e){
             $this->error = $e->getMessage();
-        }
+        }*/
 
 		return view('dashboard.dashboard');
 	}

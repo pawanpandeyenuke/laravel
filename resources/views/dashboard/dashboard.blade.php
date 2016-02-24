@@ -45,10 +45,8 @@
 											!!}
 										</div>
 									</div>
-								{!! Form::close() !!}
 					    </div>
 					    <div role="tabpanel" class="tab-pane" id="AddPhotos">
-					    	{!! Form::open(array('url' => 'ajax/posts', 'id' => 'postform', 'files'=>true)) !!}
 								<div class="upload-photos">
 									<div class="form-group">
 										<!-- <input type="text" class="form-control" placeholder="Some text here.."> -->
@@ -60,14 +58,27 @@
 										!!}
 									</div>
 									<div class="form-group">
-					                  <!-- <input id="up_imgs" class="file" type="file" multiple> -->
-										{!! Form::file('image', array(
-												'multiple',
-												'id' => 'up_imgs', 
-												'class' => 'file'
+										<div id="wrapper">
+										   <!-- <input id="fileUpload" type="file"/><br /> -->
+										   <div id="image-holder" class="img-cont clearfix fileinput"> </div>
+
+										   <div class="fileinput fileinput-new" data-provides="fileinput">
+											    <span class="btn btn-primary btn-file"><span>Choose file</span>
+											    {!! Form::file('image', array(
+											    	'id' => 'fileUpload',
+											    )) !!}
+											    </span>
+											    <span class="fileinput-filename"></span><span class="fileinput-new">No file chosen</span>
+											</div>
+										</div>
+					                </div>
+									<div class="col-md-3">
+										{!! Form::submit('Post', array(
+												'id' => 'submit-btn', 
+												'class' => 'btn btn-primary btn-full'
 											))
 										!!}
-					                </div>
+									</div>
 								</div>	
 							{!! Form::close() !!}
 					    </div>
@@ -145,4 +156,9 @@
 		</div>
 	</div><!--/pagedata-->
 
+<style>
+	.file-error-message{
+		display:none !important;
+	}	
+</style>
 @endsection

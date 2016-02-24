@@ -230,7 +230,8 @@ class ApiController extends Controller
 					if(!User::find($arguments['user_by']))
 						throw new Exception('The user id does not exists.');						
 
-					$posts = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get();
+					//$posts = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get();
+					$posts = Feed::with('user')->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')->groupBy('news_feed.id')->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments'),DB::raw('count(likes.id) as likes')]);
 
 /*					$posts = DB::table('users')
 					            ->join('news_feed', 'news_feed.user_by', '=', 'users.id')
@@ -246,9 +247,6 @@ class ApiController extends Controller
 
 						$this->status = 'success';
 						$this->message = count($posts). ' posts found.';
-						$user = User::find($arguments['user_by']);
-						$this->data['image'] = $user->picture;
-						$this->data['name'] = $user->first_name.' '.$user->last_name;
 						$this->data['feeds'] = $posts;
 
 					}					

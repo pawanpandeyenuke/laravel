@@ -659,3 +659,10 @@ a:hover{
 .upload-photos .file-preview-frame img{
 	width:100% !important;
 }
+.img-cont{
+
+}
+.img-cont img{
+	width: 31%;
+	margin: 0 1% 20px;
+}

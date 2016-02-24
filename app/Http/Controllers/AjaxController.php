@@ -25,28 +25,28 @@ class AjaxController extends Controller
 				'message' => 'required',
 				'_token' => 'required'
 			]);
-			
-
-			if(isset($arguments['image'])){
-
-				return 'thanks!';
-
-			}
-
 
 			if( $validate->fails() ){
 				throw new Exception('Write something to post..');
 			}else{
 				
-				$user = Auth::User();
-				
-				$arguments['user_by'] = $user->id;
-				$feed = $model->create( $arguments );
+				$user = Auth::User();				
+				$arguments['user_by'] = $user->id;				
 
+				$file = Input::file('image');
+
+				if( isset($arguments['image']) && $file != null ){
+					
+					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+					$arguments['image'] = $image_name;
+					$file->move('uploads', $image_name);
+
+				}
+
+				$feed = $model->create( $arguments );
+				// echo '<pre>';print_r($arguments);die;
 				if( !$feed )
 					throw new Exception('Something went wrong.');
-					
-				return $feed;
 
 			}
 
@@ -55,10 +55,9 @@ class AjaxController extends Controller
 
 			return $e->getMessage();
 
-		}
-		
-		return $input;
-		
+		}		
+		echo 1;
+		exit;
 	}
 
 
