@@ -21,42 +21,50 @@ class AjaxController extends Controller
 			$arguments = Input::all();
 			$model = new Feed;
 
-			$validate = Validator::make($arguments, [
-				'message' => 'required',
-				'_token' => 'required'
-			]);
+			if( $arguments ){
 
-			if( $validate->fails() ){
-				throw new Exception('Write something to post..');
-			}else{
-				
 				$user = Auth::User();				
-				$arguments['user_by'] = $user->id;				
+				$arguments['user_by'] = $user->id;
+	
+				if( empty($arguments['image_message']) && empty($arguments['message']) && empty($arguments['image']))
+					throw new Exception('Post something to update.');
 
-				$file = Input::file('image');
 
-				if( isset($arguments['image']) && $file != null ){
+				if( !empty( $arguments['message'] ) ){
 					
+					$arguments['image'] = null;
+
+				}elseif( !empty($arguments['image_message']) || !empty($arguments['image']) ){
+
+					$arguments['message'] = $arguments['image_message'];
+					
+				}
+			
+				$file = Input::file('image');
+				if( isset($arguments['image']) && $file != null ){
+
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 					$arguments['image'] = $image_name;
 					$file->move('uploads', $image_name);
 
 				}
 
+				echo '<pre>';print_r($arguments);die;	
 				$feed = $model->create( $arguments );
-				// echo '<pre>';print_r($arguments);die;
+				
 				if( !$feed )
 					throw new Exception('Something went wrong.');
 
-			}
+				echo 'success';
 
+			}
 
 		}catch( Exception $e ){
 
 			return $e->getMessage();
 
 		}		
-		echo 1;
+
 		exit;
 	}
 

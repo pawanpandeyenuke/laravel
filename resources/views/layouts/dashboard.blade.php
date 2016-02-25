@@ -83,5 +83,6 @@
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/fileinput.min.js"></script>
 <script type="text/javascript" src="/js/custom.js"></script>
+<script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
 </body>
 </html>

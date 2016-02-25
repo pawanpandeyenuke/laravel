@@ -28,10 +28,12 @@ class DashboardController extends Controller
 
 	public function dashboard()
 	{
-/*        try{
+        try{
 
-            // print_r();die;
-            if(Request::isMethod('post'))
+            // $feeds = Feed::where('user_by', '=', Auth::User()->id)->get();
+            $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->get();
+            
+/*            if(Request::isMethod('post'))
             {
                 $input = Request::all();
                 if($input)
@@ -44,12 +46,13 @@ class DashboardController extends Controller
                     $feeds->save();
                 }
                 // echo '<pre>';print_r($input);die;
-            }
+            }*/
         }catch( Exception $e){
             $this->error = $e->getMessage();
-        }*/
+        }
 
-		return view('dashboard.dashboard');
+		return view('dashboard.dashboard')
+            ->with('feeds', $feeds);
 	}
 
  

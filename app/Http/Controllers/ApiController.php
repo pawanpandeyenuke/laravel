@@ -231,7 +231,7 @@ class ApiController extends Controller
 						throw new Exception('The user id does not exists.');						
 
 					//$posts = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get();
-					$posts = Feed::with('user')->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')->groupBy('news_feed.id')->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments'),DB::raw('count(likes.id) as likes')]);
+					// $posts = Feed::with('user')->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')->groupBy('news_feed.id')->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments'),DB::raw('count(likes.id) as likes')]);
 
 /*					$posts = DB::table('users')
 					            ->join('news_feed', 'news_feed.user_by', '=', 'users.id')
@@ -242,6 +242,12 @@ class ApiController extends Controller
 					            ->selectRaw('comments.feed_id, count(*) as commentscount')->groupBy('comments.feed_id')
 					            ->get();
 					            // ->toSql();*/
+
+					$posts = Feed::with('user')
+								->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')
+								->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')
+								->groupBy('news_feed.id')
+								->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments')]);
 
 					if( $posts ){
 
@@ -285,35 +291,24 @@ class ApiController extends Controller
 				}else{
 
 					$feed = Feed::find($arguments['feed_id']);
+
 					if( !$feed )
 						throw new Exception( 'Feed does not exists' );
 					
-					$like = Like::where([
-						'feed_id' => $arguments['feed_id'],
-						'user_id' => $arguments['user_id'],
-					])->get();
-					
-					$id = '';
-					foreach( $like as $key => $val )
-						$id = $val['id'];
-					
-					if( !$like->isEmpty() ){
+					$like = Like::where([ 'feed_id' => $arguments['feed_id'], 'user_id' => $arguments['user_id'] ])->get()->toArray();
 
-						$model = Like::find($id);
-						$response = $model->update( $arguments );
-						$this->message = 'Like updated successfully.';
-						$this->status = 'success';
-						$model = Like::find($id);
-						$this->data = $model;
-
-					}else{
-
+					if( empty($like) )
+					{						
 						$model = new Like;
 						$response = $model->create( $arguments );
 						$this->message = 'Like created successfully.';
 						$this->status = 'success';
 						$this->data = $response;	
 
+					}else{
+
+						$model = Like::where([ 'feed_id' => $arguments['feed_id'], 'user_id' => $arguments['user_id']])->delete();
+						echo '<pre>';print_r($model);exit;
 					}
 
 				}
