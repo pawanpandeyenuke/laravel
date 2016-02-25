@@ -26,21 +26,11 @@ class AjaxController extends Controller
 				$user = Auth::User();				
 				$arguments['user_by'] = $user->id;
 	
-				if( empty($arguments['image_message']) && empty($arguments['message']) && empty($arguments['image']))
+				if( empty($arguments['message']) && empty($arguments['image']))
 					throw new Exception('Post something to update.');
 
-
-				if( !empty( $arguments['message'] ) ){
-					
-					$arguments['image'] = null;
-
-				}elseif( !empty($arguments['image_message']) || !empty($arguments['image']) ){
-
-					$arguments['message'] = $arguments['image_message'];
-					
-				}
-			
 				$file = Input::file('image');
+
 				if( isset($arguments['image']) && $file != null ){
 
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
@@ -49,7 +39,6 @@ class AjaxController extends Controller
 
 				}
 
-				echo '<pre>';print_r($arguments);die;	
 				$feed = $model->create( $arguments );
 				
 				if( !$feed )
