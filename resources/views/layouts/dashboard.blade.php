@@ -7,6 +7,7 @@
 <title>Friendz Square</title>
 <link href="/css/bootstrap.css" rel="stylesheet">
 <link href="/css/font-awesome.min.css" rel="stylesheet" media="all">
+<link href="/fancybox/jquery.fancybox.css" rel="stylesheet" media="all">
 <link href="/css/flat-icon/flaticon.css" rel="stylesheet" media="all">
 <link href="/css/fileinput.min.css" rel="stylesheet" media="all">
 <link href="/css/style.css" rel="stylesheet">
@@ -79,10 +80,16 @@
 	
 	@yield('content')
 
+<input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <script src="http://malsup.github.com/jquery.form.js"></script> 
+<script type="text/javascript" src="/fancybox/jquery.fancybox.js"></script>
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/fileinput.min.js"></script>
 <script type="text/javascript" src="/js/custom.js"></script>
 <script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
+
+<script type="text/javascript">
+$('.popup').fancybox();
+</script>
 </body>
 </html>

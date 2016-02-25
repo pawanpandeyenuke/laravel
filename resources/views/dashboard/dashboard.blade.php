@@ -71,7 +71,7 @@
 											<!-- <button type="button" class="btn btn-primary">Post</button> -->
 											{!! Form::submit('Post', array(
 													'id' => 'submit-btn', 
-													'class' => 'btn btn-primary btn-full'
+													'class' => 'btn btn-primary'
 												))
 											!!}
 										</div>
@@ -79,15 +79,15 @@
 								{!! Form::close() !!}
 							</div>
 					    </div><!--/status tab-->
-					<div class="post-list">
+					<div class="post-list" id="postlist">
 						@foreach($feeds as $data)
-							<?php //echo '<pre>';print_r($data['user']['first_name']);die; ?>
-							<div class="single-post">
+							<?php //echo '<pre>';print_r($data->id);die; ?>
+							<div class="single-post" data-value="{{ $data->id }}" id="post_{{ $data->id }}">
 								<div class="post-header">
 									<div class="row">
 										<div class="col-md-7">
 											<a href="#" title="" class="user-thumb-link">
-												<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
+												<span class="small-thumb" style="background: url('uploads/1456394309_POST_XZY0484L(1.JPG');"></span>
 												{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}
 											</a>
 										</div>
@@ -113,7 +113,12 @@
 									<div class="post-actions">
 										<ul>
 											<li>
-												<a href="#" title=""><span class="icon flaticon-web"></span> 
+
+<!-- 										<div class="like-cont">
+											<input type="checkbox" name="checkboxG1" id="checkboxG1" class="css-checkbox" />
+											<label for="checkboxG1" class="css-label">55 <span>Likes</span></label>
+										</div> -->
+												<a style="cursor:pointer" title="" class="like"><span class="icon flaticon-web"></span> 
 													@if(count($data['likesCount']) > 0)
 														<span>{{ count($data['likesCount']) }} Likes</span>
 													@else
@@ -122,6 +127,7 @@
 												</a>
 											</li>
 											<li>
+<a href="#AllComment" class="popup"><span class="icon flaticon-interface-1"></span> 20 <span>Comments</span></a>
 												<span class="icon flaticon-interface-1"></span>
 												@if(count($data['commentsCount']) > 0)
 													<span>{{ count($data['commentsCount']) }} Comments</span>
@@ -138,7 +144,7 @@
 													<textarea type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
 												</div>
 												<div class="col-md-2">
-													<button type="button" class="btn btn-primary btn-full">Post</button>
+													<button type="button" class="btn btn-primary btn-full comment">Post</button>
 												</div>
 											</div>
 										</div><!--/post comment-->
@@ -159,6 +165,255 @@
 									</div>
 								</div><!--/post-footer-->
 							</div><!--/single post-->
+<div id="AllComment" class="post-list" style="display: none;">
+						<div class="container">
+							<div class="row">
+								<div class="col-sm-8 pop-post-left-side">
+									<div class="single-post">
+										<div class="pop-post-header">
+											<div class="post-header">
+												<div class="row">
+													<div class="col-md-7">
+														<a href="#" title="" class="user-thumb-link">
+															<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
+															Ami Koehler
+														</a>
+													</div>
+													<div class="col-md-5">
+														<div class="post-time text-right">
+															<ul>
+																<li><span class="icon flaticon-time">4:15 PM</span></li>
+																<li><span class="icon flaticon-days">7 WED</span></li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</div><!--/post header-->
+											<div class="pop-post-text clearfix">
+												<p>If you live long enough, you'll make mistakes. But if you learn from them, you'll be a better person. It's how you handle adversity, not how it affects you. The main thing is never quit, never quit, never quit.</p>
+											</div>
+										</div>
+										
+										<div class="post-data pop-post-img">
+											<img src="images/post-img-big.jpg" class="pop-img">
+										</div><!--/post data-->
+										<div class="post-footer pop-post-footer">
+											<div class="post-actions">
+												<ul>
+													<li>
+														<div class="like-cont">
+															<input type="checkbox" name="checkboxG4" id="checkboxG4" class="css-checkbox" />
+															<label for="checkboxG4" class="css-label">55 <span>Likes</span></label>
+														</div>
+													</li>
+													<li><span class="icon flaticon-interface-1"></span> 25 <span>Comments</span></li>
+												</ul>
+											</div><!--/post actions-->
+										</div><!--pop post footer-->
+									</div><!--/single post-->
+								</div>
+								<div class="col-sm-4 pop-comment-side-outer">
+									<div class="pop-comment-side">
+										<div class="post-comment-cont">
+											<div class="comments-list">
+												<ul>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">Yesterday</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Some comment text here...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+													<li>
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">Navi Sappal</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">Nice comment...</div>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+
+									<div class="pop-post-comment post-comment">
+										<div class="emoji-field-cont">
+											<textarea type="text" class="form-control comment-field" data-emojiable="true" placeholder="Type here..."></textarea>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
 						@endforeach
 					</div><!--/post list-->
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>

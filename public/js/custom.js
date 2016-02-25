@@ -41,11 +41,64 @@ $(document).ready(function(){
 	// Post status updates via ajax call.
 	$("#postform").ajaxForm(function(response) { 
 
-            console.log(response);
+		if(response){
+			$('#newsfeed').val('');
+			$('#image-holder').hide();
+			$('.group-span-filestyle label span:last-child').hide();
+
+			var _token = $('#postform input[name=_token]').val();
+
+/*			$.ajax({			
+				'url' : '/web/ajax/getposts',
+				'data' : { '_token' : _token },
+				'type' : 'post',
+				'success' : function(response){				
+					alert(response);				
+				}			
+			});	*/
+
+			// $('#postlist .single-post').first().hide();
+ 
+		}else{
+
+			alert('hello nawap');
+		}
 
     }); 
 
 
+	$('.like').click(function(){		
+		var _token = $('#postform input[name=_token]').val();
+		var feedId = $(this).closest('.single-post').data('value');
+		var user_id = $('#user_id').val();
+		// alert(id);
+		$.ajax({			
+			'url' : 'api/likes',
+			'data' : { '_token' : _token, 'feed_id' : feedId, 'user_id' : user_id, 'liked' : 'Yes' },
+			'type' : 'post',
+			'success' : function(response){				
+				// alert(response);				
+			}			
+		});	
+	});
+
+	$('.comment').click(function(){
+		var current = $(this);
+		var _token = $('#postform input[name=_token]').val();
+		var feedId = $(this).closest('.single-post').data('value');
+		var commentData = $(this).closest('.row').find('textarea').val();
+		var commented_by = $('#user_id').val();
+		if(commentData){
+			$.ajax({			
+				'url' : 'api/comments/create',
+				'data' : { '_token' : _token, 'feed_id' : feedId, 'commented_by' : commented_by, 'comments' : commentData },
+				'type' : 'post',
+				'success' : function(response){				
+					current.closest('.row').find('textarea').val('');
+				}			
+			});	
+		}
+	});
 
 	$('#state').html('<option value="">State</option>');
 	$('#city').html('<option value="">City</option>');

@@ -57,7 +57,7 @@ class AjaxController extends Controller
 		exit;
 	}
 
-
+ 
 	//Get states
 	public function getStates()
 	{

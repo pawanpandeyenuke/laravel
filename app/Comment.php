@@ -15,7 +15,7 @@ class Comment extends Model
 	public $timestamps = true;
 
 	public $messages = array(
-		'comments.required' => 'Invalid value for comment field',
+		'comments.required' => 'This is a required field',
 		'commented_by.required' => 'User id is a required field',
 		'commented_by.numeric' => 'User id must be numeric',
 		'feed_id.required' => 'Feed id is a required field',

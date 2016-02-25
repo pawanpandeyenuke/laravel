@@ -276,10 +276,11 @@ class ApiController extends Controller
 	public function likes()
 	{
 		try
-		{
+		{	
+			// return 'pawan';
 			$arguments = Request::all();
 			$likes = new Like;
-
+			// print_r($arguments);exit;
 			if( $arguments ){
 
 				$validator = Validator::make($arguments, $likes->rules, $likes->messages);
@@ -303,17 +304,21 @@ class ApiController extends Controller
 						$response = $model->create( $arguments );
 						$this->message = 'Like created successfully.';
 						$this->status = 'success';
-						$this->data = $response;	
+						$this->data = $response;
 
 					}else{
 
 						$model = Like::where([ 'feed_id' => $arguments['feed_id'], 'user_id' => $arguments['user_id']])->delete();
-						echo '<pre>';print_r($model);exit;
+						$this->message = 'Like updated successfully.';
+						$this->status = 'success';
+						$this->data = $arguments;
+						// echo '<pre>';print_r($response);exit;
 					}
 
 				}
 
 			}
+
 		}catch( Exception $e ){
 
 			$this->message = $e->getMessage();
@@ -368,6 +373,7 @@ class ApiController extends Controller
 			try
 			{
 				$arguments = Request::all();
+				// print_r($arguments);die('pawan');
 				$comments = new Comment;
 
 				$validator = Validator::make($arguments, $comments->rules, $comments->messages);

@@ -20,6 +20,9 @@ Route::post('ajax/getstates', 'AjaxController@getStates');
 Route::post('ajax/getcities', 'AjaxController@getCities');
 
 Route::post('ajax/posts', 'AjaxController@posts');
+Route::post('ajax/like', 'AjaxController@like');
+
+Route::post('/web/ajax/getposts', 'AjaxController@getAjaxPost');
 
 
 /**

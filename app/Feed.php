@@ -64,6 +64,11 @@ class Feed extends Model
           return $this->belongsTo('App\User','user_by','id')->select(['id','first_name', 'last_name', 'picture']);
 	}
 
+	public function commetsData()
+	{
+          return $this->hasMany('App\Comment','commented_by','id')->select(['comments','commented_by', 'feedid']);
+	}
+
 	public function likedornot()
 	{
           return $this->hasOne('App\Like','feed_id','id');
