@@ -254,7 +254,6 @@ class ApiController extends Controller
 						$this->status = 'success';
 						$this->message = count($posts). ' posts found.';
 						$this->data['feeds'] = $posts;
-						$this->data['feeds']['likedornot'] = 'false';
 
 					}					
 					
