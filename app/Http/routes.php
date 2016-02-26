@@ -70,6 +70,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/home', 'HomeController@index');
 	Route::get('dashboard', 'DashboardController@dashboard');
 	Route::post('dashboard', 'DashboardController@dashboard');
+	Route::get('settings/privacy', 'DashboardController@settings');	
 	Route::get('/', 'DashboardController@dashboard');	
 
 	// Route::get('post/image', 'DashboardController@image');	

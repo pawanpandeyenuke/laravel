@@ -20,12 +20,6 @@ class DashboardController extends Controller
         $this->middleware('auth');
     }
 
-	public function index()
-	{
-/*		return view('dashboard.dashboard');
-		return 'hello';*/
-	}
-
 	public function dashboard()
 	{
         try{
@@ -67,6 +61,10 @@ class DashboardController extends Controller
             ->with('feeds', $feeds);
 	}
 
- 
+
+    public function settings()
+    {
+        return view('dashboard.settings');
+    }
 
 }

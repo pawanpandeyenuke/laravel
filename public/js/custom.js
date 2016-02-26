@@ -34,40 +34,29 @@ $(document).ready(function(){
 	             alert("This browser does not support FileReader.");
 	         }
 	     } else {
-	         alert("Pls select only images");
+	         alert("Please select only images");
 	     }
 	});
 
 	// Post status updates via ajax call.
 	$("#postform").ajaxForm(function(response) { 
-
+ 
+		// alert(response);
 		if(response){
 			$('#newsfeed').val('');
 			$('#image-holder').hide();
-			$('.group-span-filestyle label span:last-child').hide();
+			$('.group-span-filestyle label .badge').hide();
 
-			var _token = $('#postform input[name=_token]').val();
-
-/*			$.ajax({			
-				'url' : '/web/ajax/getposts',
-				'data' : { '_token' : _token },
-				'type' : 'post',
-				'success' : function(response){				
-					alert(response);				
-				}			
-			});	*/
+			$('#postlist').first('.single-post').prepend(response);
 
 			// $('#postlist .single-post').first().hide();
  
-		}else{
-
-			alert('hello nawap');
-		}
+		} 
 
     }); 
 
 
-	$('.like').click(function(){		
+	$(document).on('click', '.like', function(){		
 		var _token = $('#postform input[name=_token]').val();
 		var feedId = $(this).closest('.single-post').data('value');
 		var user_id = $('#user_id').val();
@@ -82,7 +71,7 @@ $(document).ready(function(){
 		});	
 	});
 
-	$('.comment').click(function(){
+	$(document).on('click', '.comment', function(){
 		var current = $(this);
 		var _token = $('#postform input[name=_token]').val();
 		var feedId = $(this).closest('.single-post').data('value');
@@ -91,10 +80,15 @@ $(document).ready(function(){
 		if(commentData){
 			$.ajax({			
 				'url' : 'api/comments/create',
-				'data' : { '_token' : _token, 'feed_id' : feedId, 'commented_by' : commented_by, 'comments' : commentData },
+				'data' : { '_token' : _token, 'feed_id' : feedId, 'commented_by' : commented_by, 'comments' : commentData, 'ajaxrequest' : 'true' },
 				'type' : 'post',
 				'success' : function(response){				
 					current.closest('.row').find('textarea').val('');
+					var responsedata = jQuery.parseJSON(response);
+					// console.log(responsedata.data);
+					current.parents('.post-comment-cont').find('.comments-list ul').append(responsedata.data);
+					// current.closest('.comments-list ul').append(responsedata.data);
+					
 				}			
 			});	
 		}

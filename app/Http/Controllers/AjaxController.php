@@ -44,7 +44,97 @@ class AjaxController extends Controller
 				if( !$feed )
 					throw new Exception('Something went wrong.');
 
-				echo 'success';
+				$name = Auth::User()->first_name.' '.Auth::User()->last_name;
+				$time = $feed->updated_at->diffForHumans();
+				$picture = $feed->image;
+				$message = $feed->message;
+
+if(!empty($feed->message)){ 
+$message = <<<message
+<p>$message</p>
+message;
+}else{
+$message = '';
+}
+
+if(!empty($feed->image)){ 
+$picture = <<<image
+	<div class="post-img-cont">
+		<img src="uploads/$picture" class="post-img img-responsive">
+	</div>
+image;
+}else{
+$picture = '';
+}
+
+$postHtml = <<<postHtml
+
+			<div class="single-post" data-value="$feed->id" id="post_$feed->id">
+				<div class="post-header">
+					<div class="row">
+						<div class="col-md-7">
+							<a href="#" title="" class="user-thumb-link">
+								<span class="small-thumb" style="background: url('uploads/1456394309_POST_XZY0484L(1.JPG');"></span>
+								$name
+							</a>
+						</div>
+						<div class="col-md-5">
+							<div class="post-time text-right">
+								<ul>
+									<li>
+										<span class="icon flaticon-time">
+											$time
+										</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="post-data">
+					$message
+					$picture
+				</div>
+				<div class="post-footer">
+					<div class="post-actions">
+						<ul>
+							<li>
+								<div class="like-cont">
+									<input type="checkbox" name="" id="checkbox<?php echo $feed->id ?>" class="css-checkbox like"/>
+									<label for="checkbox<?php echo $feed->id ?>" class="css-label">
+										<span>Like</span>
+									</label>
+								</div>
+							</li>
+							<li>
+								<a href="#AllComment" class="popup">
+									<span class="icon flaticon-interface-1"></span> 
+									<span>Comment</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="post-comment-cont">
+						<div class="post-comment">
+							<div class="row">
+								<div class="col-md-10">
+									<textarea type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
+								</div>
+								<div class="col-md-2">
+									<button type="button" class="btn btn-primary btn-full comment">Post</button>
+								</div>
+							</div>
+						</div>
+						<div class="comments-list">
+							<ul>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+postHtml;
+
+echo $postHtml;
 
 			}
 

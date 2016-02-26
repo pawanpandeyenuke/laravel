@@ -20,7 +20,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-3">
-				<a href="{{ url('/') }}" title="" class="logo"><img src="images/logo.png" alt="Friendz Square"></a>
+				<a href="{{ url('/') }}" title="" class="logo"><img src="{{ url('images/logo.png') }}" alt="Friendz Square"></a>
 			</div>
 			<div class="col-sm-6">
 				<div class="top-search">

@@ -397,8 +397,25 @@ class ApiController extends Controller
 
 					$this->message = 'Comment successfully posted.';
 					$this->status = 'success';
-					$this->data = $model;	
 
+if($arguments['ajaxrequest'] == 'true'){
+
+	$userid = Auth::User()->id;
+	$username = Auth::User()->first_name.' '.Auth::User()->last_name;
+	$comment = $model->comments;
+$comment = <<<comments
+<li>
+	<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
+	<a class="user-link" title="" href="profile/$userid">$username</a>
+	<div class="comment-text">$comment</div>
+</li>
+comments;
+
+$this->data = $comment;
+
+}else{
+$this->data = $model;	
+}
 				}
 
 			}catch(Exception $e){
