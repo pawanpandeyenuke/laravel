@@ -118,7 +118,7 @@
 														$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $data->id])->get(); 
 														// echo '<pre>';print_r($likedata[0]);die;
 													?>
-													<input type="checkbox" name="" id="checkbox{{$data->id}}" class="css-checkbox like" {{isset($likedata[0]) ? 'checked' : ''}}/>
+													<input type="checkbox" name="" id="checkbox{{$data->id}}" class="css-checkbox" />
 													<label for="checkbox{{$data->id}}" class="css-label">
 														@if(count($data['likesCount']) > 0)
 															<span>{{ count($data['likesCount']) }} Likes</span>
@@ -131,12 +131,8 @@
 											<li>
 												<a href="#AllComment" class="popup">
 													<span class="icon flaticon-interface-1"></span> 
-													@if(isset($data->commentsCount[0]))
-														@if($data->commentsCount[0]->commentscount > 0)
-															<span>{{ $data->commentsCount[0]->commentscount }} Comments</span>
-														@else
-															<span>Comment</span>
-														@endif
+													@if(count($data['commentsCount']) > 0)
+														<span>{{ count($data['commentsCount']) }} Comments</span>
 													@else
 														<span>Comment</span>
 													@endif

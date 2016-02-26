@@ -230,7 +230,7 @@ class ApiController extends Controller
 					if(!User::find($arguments['user_by']))
 						throw new Exception('The user id does not exists.');						
 
-					//$posts = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get();
+					$posts = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get();
 					// $posts = Feed::with('user')->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')->groupBy('news_feed.id')->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments'),DB::raw('count(likes.id) as likes')]);
 
 /*					$posts = DB::table('users')
@@ -243,11 +243,11 @@ class ApiController extends Controller
 					            ->get();
 					            // ->toSql();*/
 
-					$posts = Feed::with('user')
+/*					$posts = Feed::with('user')
 								->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')
 								->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')
 								->groupBy('news_feed.id')
-								->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments')]);
+								->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments')]);*/
 
 					if( $posts ){
 

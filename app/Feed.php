@@ -31,14 +31,10 @@ class Feed extends Model
 	public function likesCount()
 	{
 
-		$data = $this->likes()
+		return $this->likes()
 		    ->selectRaw('feed_id, count(*) as likescount')
 		    ->groupBy('feed_id');
- 
- 		if($data)
-			return $data;
-	  	else
-	  		return 'false';
+
 	}
 
 	public function comments()
@@ -49,24 +45,15 @@ class Feed extends Model
 	public function commentsCount()
 	{
 	
-		$data = $this->comments()
+		return $this->comments()
 			->selectRaw('feed_id, count(*) as commentscount')
 			->groupBy('feed_id');
 
- 		if($data)
-			return $data;
-	  	else
-	  		return 'false';
 	}
 
 	public function user()
 	{
           return $this->belongsTo('App\User','user_by','id')->select(['id','first_name', 'last_name', 'picture']);
-	}
-
-	public function commetsData()
-	{
-          return $this->hasMany('App\Comment','commented_by','id')->select(['comments','commented_by', 'feedid']);
 	}
 
 	public function likedornot()

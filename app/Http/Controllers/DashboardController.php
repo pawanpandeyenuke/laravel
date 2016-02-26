@@ -31,14 +31,19 @@ class DashboardController extends Controller
         try{
 
             // $feeds = Feed::where('user_by', '=', Auth::User()->id)->get();
-            $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->orderBy('news_feed.id','DESC')->get();
+            $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
+            ->orderBy('news_feed.id','DESC')
+            ->get();
+
+
+           // echo '<pre>';print_r($feeds);die;
             /*$feeds = Feed::with('user')
                         ->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')
                         ->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')
                         ->groupBy('news_feed.id')
-                        ->get(['news_feed.*','comments.commented_by', 'comments.comments',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as commentscount')])
+                        ->get(['news_feed.*','comments.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as commentscount')])
                         ->toArray();*/
-            // echo '<pre>';print_r($feeds);die;
+            
             
 /*            if(Request::isMethod('post'))
             {
