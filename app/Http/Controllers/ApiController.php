@@ -305,6 +305,7 @@ class ApiController extends Controller
 						$this->message = 'Like created successfully.';
 						$this->status = 'success';
 						$this->data = $response;
+						$this->data['status'] = 'liked';
 
 					}else{
 
@@ -312,6 +313,8 @@ class ApiController extends Controller
 						$this->message = 'Like updated successfully.';
 						$this->status = 'success';
 						$this->data = $arguments;
+						$this->data['status'] = 'unliked';
+
 						// echo '<pre>';print_r($response);exit;
 					}
 

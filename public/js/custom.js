@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+	// $('.post-list').show();
+	
 	var myReader = new FileReader();
 
 	 $("#fileUpload").on('change', function () {
@@ -60,13 +62,39 @@ $(document).ready(function(){
 		var _token = $('#postform input[name=_token]').val();
 		var feedId = $(this).closest('.single-post').data('value');
 		var user_id = $('#user_id').val();
+		var current = $(this);
 		// alert(id);
 		$.ajax({			
 			'url' : 'api/likes',
 			'data' : { '_token' : _token, 'feed_id' : feedId, 'user_id' : user_id, 'liked' : 'Yes' },
 			'type' : 'post',
-			'success' : function(response){				
-				// alert(response);				
+			'success' : function(response){
+				var responsedata = jQuery.parseJSON(response);
+				if(responsedata.data.status == 'liked'){
+					var prev = current.parents('.like-cont').find('span').html();
+					var value = prev.split(' ');
+					if(value != '' && Number.isInteger(value)){
+						count = value[0];
+						likecount = ++count;
+						// alert(likecount);
+						current.parents('.like-cont').find('span').html(likecount+' Likes');
+					}else{
+						current.parents('.like-cont').find('span').html('1 Like');
+					}
+				}else{
+					var prev = current.parents('.like-cont').find('span').html();
+					var value = prev.split(' ');
+					if(value != '' && Number.isInteger(value)){
+						count = value[0];
+						likecount = --count;
+						// alert(likecount);
+						current.parents('.like-cont').find('span').html(likecount+' Likes');
+					}else{
+						current.parents('.like-cont').find('span').html('Like');
+					}
+				}
+				// var prev = current.parents('.like-cont').find('span').html();
+				// alert(responsedata.data.status);
 			}			
 		});	
 	});
