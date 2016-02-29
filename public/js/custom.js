@@ -118,18 +118,17 @@ $(document).ready(function(){
 
 						var prev = current.parents('.post-footer').find('.commentcount').html();
 						var value = prev.split(' ');
+
 						count = value[0];
-						if(count){
+						if(!count.trim()){
 							commentcount = ++count;
 							current.parents('.post-footer').find('.commentcount').html(commentcount+' Comments');
 						}else{
-							current.parents('.post-footer').find('.commentcount').html('1 Comments');
+							current.parents('.post-footer').find('.commentcount').html('1 Comment');
 						}
 
-
 					}
-					current.parents('.post-comment-cont').find('.comments-list ul').append(responsedata.data);
-					// current.closest('.comments-list ul').append(responsedata.data);
+					current.parents('.post-comment-cont').find('.comments-list ul').append(responsedata.data.data);
 					
 				}			
 			});	
