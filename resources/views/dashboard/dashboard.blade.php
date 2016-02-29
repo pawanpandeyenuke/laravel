@@ -129,16 +129,16 @@
 												</div>
 											</li>
 											<li>
-												<a href="#AllComment" class="popup">
+												<a href="#AllComment" class="popup popupajax">
 													<span class="icon flaticon-interface-1"></span> 
 													@if(isset($data->commentsCount[0]))
 														@if($data->commentsCount[0]->commentscount > 0)
-															<span>{{ $data->commentsCount[0]->commentscount }} Comments</span>
+															<span class="commentcount">{{ $data->commentsCount[0]->commentscount }} Comments</span>
 														@else
-															<span>Comment</span>
+															<span class="commentcount">Comment</span>
 														@endif
 													@else
-														<span>Comment</span>
+														<span class="commentcount">Comment</span>
 													@endif
 												</a>
 											</li>
@@ -177,111 +177,10 @@
 									</div>
 								</div><!--/post-footer-->
 							</div><!--/single post-->
-<div id="AllComment" id="" class="post-list" style="display: none;">
-						<div class="container">
-							<div class="row">
-								<div class="col-sm-8 pop-post-left-side">
-									<div class="single-post">
-										<div class="pop-post-header">
-											<div class="post-header">
-												<div class="row">
-													<div class="col-md-7">
-														<a href="#" title="" class="user-thumb-link">
-															<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
-															{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}
-														</a>
-													</div>
-													<div class="col-md-5">
-														<div class="post-time text-right">
-															<ul>
-																<li><span class="icon flaticon-time">{{ $data->updated_at->diffForHumans() }}</span></li>
-															</ul>
-														</div>
-													</div>
-												</div>
-											</div><!--/post header-->
-											<div class="pop-post-text clearfix">
-												<p>{{ $data->message }}</p>
-											</div>
-										</div>
-									@if($data->image)
-										<div class="post-data pop-post-img">
-											<img src="{{ url('uploads/'.$data->image) }}" class="pop-img">
-										</div>
-									@endif
-										<div class="post-footer pop-post-footer">
-											<div class="post-actions">
-												<ul>
-													<li>
-														<div class="like-cont">
-															<input type="checkbox" name="checkboxG4" id="checkbox{{$data->id}}" class="css-checkbox" {{isset($likedata[0]) ? 'checked' : ''}}/>
-															<label for="checkbox{{$data->id}}" class="css-label">
-																@if(count($data['likesCount']) > 0)
-																	<span>{{ count($data['likesCount']) }} Likes</span>
-																@else
-																	<span>Like</span>
-																@endif
-															</label>
-														</div>
-													</li>
-													<li>
-														<span class="icon flaticon-interface-1"></span>
-														@if(isset($data->commentsCount[0]))
-															@if($data->commentsCount[0]->commentscount > 0)
-																<span>{{ $data->commentsCount[0]->commentscount }} Comments</span>
-															@else
-																<span>Comment</span>
-															@endif
-														@else
-															<span>Comment</span>
-														@endif
-													</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-4 pop-comment-side-outer">
-									<div class="pop-comment-side">
-										<div class="post-comment-cont">
-											<div class="comments-list">
-												<ul>
-												@foreach($data->comments as $commentsData)
-												<?php $username = DB::table('users')->where('id', $commentsData->commented_by)->get(['first_name', 'last_name']);
-
-												$name = $username[0]->first_name.' '.$username[0]->last_name; ?>
-													<li>
-														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
-														<div class="comment-title-cont">
-															<div class="row">
-																<div class="col-sm-6">
-																	<a href="<?php echo 'profile/'.$commentsData->commented_by ?>" title="" class="user-link">{{$name}}</a>
-																</div>
-																<div class="col-sm-6">
-																	<div class="comment-time text-right">{{ $commentsData->updated_at->diffForHumans() }}</div>
-																</div>
-															</div>
-														</div>
-														<div class="comment-text">{{$commentsData->comments}}</div>
-													</li>
-												@endforeach
-												</ul>
-											</div>
-										</div>
-									</div>
-
-									<div class="pop-post-comment post-comment">
-										<div class="emoji-field-cont">
-											<textarea type="text" class="form-control comment-field" data-emojiable="true" placeholder="Type here..."></textarea>
-										</div>
-									</div>
-
-								</div>
-							</div>
-						</div>
-					</div>
 						@endforeach
-					</div><!--/post list-->
+
+					<div id="commentajax" style="display: none;">	</div>
+					</div>
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 				</div>
 

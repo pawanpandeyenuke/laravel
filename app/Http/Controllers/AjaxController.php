@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\State, App\City;
+use App\State, App\City, App\Like, App\Comment, App\User;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
@@ -147,7 +147,168 @@ echo $postHtml;
 		exit;
 	}
 
+
+	//Get comment box
+	public function getCommentBox()
+	{
+		$arguments = Input::all();
+
+		try{
+
+			$likes = Like::where('feed_id', '=', $arguments['feed_id'])->get();
+			$comments = Comment::where('feed_id', '=', $arguments['feed_id'])->get();
+			$feed = Feed::where('id', '=', $arguments['feed_id'])->get();
+
+			$user = User::find($feed[0]->user_by);
+			$feedPostUserName = $user->first_name.' '.$user->last_name;
  
+			$image = $feed[0]->image;
+			$message = $feed[0]->message;
+			$time = $feed[0]->updated_at->diffForHumans();
+
+
+			$likedata = Like::where(['user_id' => Auth::User()->id, 'feed_id' => $arguments['feed_id']])->get(); 
+			$checked = isset($likedata[0]) ? 'checked' : '';
+
+			$likescountData = Like::where(['feed_id' => $arguments['feed_id']])->get();
+			$likescount = count($likescountData);
+			if($likescount > 0){
+				$likespan = "<span>$likescount Likes</span>";
+			}else{
+				$likespan = "<span>Like</span>";
+			}
+
+			$commentscountData = Comment::where(['feed_id' => $arguments['feed_id']])->get();
+			$commentscount = count($commentscountData);
+			if($commentscount > 0){
+				$commentspan = "<span>$commentscount Comments</span>";
+			}else{
+				$commentspan = "<span>Comment</span>";
+			}
+
+			// echo '<pre>';print_r();die('pawan');
+
+$commentshtml = "";
+foreach($comments as $data){
+
+	$commentedBy = $data->commented_by;
+	$username = User::find($commentedBy);
+	$name = $username->first_name.' '.$username->last_name;
+
+$commentshtml .= '
+<li>
+	<span class="user-thumb" style="background: url(images/user-thumb.jpg)"></span>
+	<div class="comment-title-cont">
+		<div class="row">
+			<div class="col-sm-6">
+				<a href="#" title="" class="user-link">'.$name.'</a>
+			</div>
+			<div class="col-sm-6">
+				<div class="comment-time text-right">'.$time.'</div>
+			</div>
+		</div>
+	</div>
+	<div class="comment-text">'.$data->comments.'</div>
+</li>';
+}
+
+$getcomment = <<<getcomment
+
+<div id="AllComment" class="post-list">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8 pop-post-left-side">
+				<div class="single-post">
+					<div class="pop-post-header">
+						<div class="post-header">
+							<div class="row">
+								<div class="col-md-7">
+									<a href="#" title="" class="user-thumb-link">
+										<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
+										$feedPostUserName
+									</a>
+								</div>
+								<div class="col-md-5">
+									<div class="post-time text-right">
+										<ul>
+											<li><span class="icon flaticon-time">$time</span></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="pop-post-text clearfix postsajax">
+							<p class="postsonajax">$message</p>
+						</div>
+					</div>
+					
+					<div class="post-data pop-post-img">
+						<img src="uploads/$image" class="pop-img">
+					</div>
+					<div class="post-footer pop-post-footer">
+						<div class="post-actions">
+							<ul>
+								<li>
+									<div class="like-cont">
+										<input type="checkbox" name="checkboxG4" id="checkboxG4" class="css-checkbox" $checked/>
+										<label for="checkboxG4" class="css-label">
+											$likespan
+										</label>
+									</div>
+								</li>
+								<li>
+									<span class="icon flaticon-interface-1">
+									</span>
+								 	$commentspan
+								 </li>
+							</ul>
+						</div><!--/post actions-->
+					</div><!--pop post footer-->
+				</div><!--/single post-->
+			</div>
+			<div class="col-sm-4 pop-comment-side-outer">
+				<div class="pop-comment-side">
+					<div class="post-comment-cont">
+						<div class="comments-list">
+							<ul>
+							$commentshtml
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="pop-post-comment post-comment">
+					<div class="emoji-field-cont">
+						<textarea type="text" class="form-control comment-field" data-emojiable="true" placeholder="Type here..."></textarea>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+<script src="js/jquery.nicescroll.min.js"></script>
+<script>
+$('.pop-comment-side .post-comment-cont').niceScroll();
+var postsonajax = $('.postsonajax').html();
+if(postsonajax == ''){
+	$('.postsajax').remove();
+}
+</script>
+getcomment;
+
+			// print_r($arguments['feed_id']);die;		
+			echo $getcomment;
+
+		}catch(Exception $e){
+			return $e->getMessage();
+		}
+
+		exit;
+
+ 	}
+
+
 	//Get states
 	public function getStates()
 	{

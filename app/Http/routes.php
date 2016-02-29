@@ -21,6 +21,8 @@ Route::post('ajax/getcities', 'AjaxController@getCities');
 
 Route::post('ajax/posts', 'AjaxController@posts');
 Route::post('ajax/like', 'AjaxController@like');
+Route::post('ajax/comments/get', 'AjaxController@getCommentBox');
+
 
 Route::post('/web/ajax/getposts', 'AjaxController@getAjaxPost');
 
@@ -71,6 +73,7 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('dashboard', 'DashboardController@dashboard');
 	Route::post('dashboard', 'DashboardController@dashboard');
 	Route::get('settings/privacy', 'DashboardController@settings');	
+	Route::post('settings/privacy', 'DashboardController@settings');	
 	Route::get('/', 'DashboardController@dashboard');	
 
 	// Route::get('post/image', 'DashboardController@image');	

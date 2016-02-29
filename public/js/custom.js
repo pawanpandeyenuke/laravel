@@ -49,7 +49,11 @@ $(document).ready(function(){
 			$('#image-holder').hide();
 			$('.group-span-filestyle label .badge').hide();
 
-			$('#postlist').first('.single-post').prepend(response);
+			if(response != 'Post something to update.'){
+				$('#postlist').first('.single-post').prepend(response);
+			}
+			// alert(response);
+			// $('#postlist').first('.single-post').prepend(response);
 
 			// $('#postlist .single-post').first().hide();
  
@@ -73,10 +77,9 @@ $(document).ready(function(){
 				if(responsedata.data.status == 'liked'){
 					var prev = current.parents('.like-cont').find('span').html();
 					var value = prev.split(' ');
-					if(value != '' && Number.isInteger(value)){
+					if(value[0] != '' && Number.isInteger(value[0])){
 						count = value[0];
 						likecount = ++count;
-						// alert(likecount);
 						current.parents('.like-cont').find('span').html(likecount+' Likes');
 					}else{
 						current.parents('.like-cont').find('span').html('1 Like');
@@ -93,8 +96,6 @@ $(document).ready(function(){
 						current.parents('.like-cont').find('span').html('Like');
 					}
 				}
-				// var prev = current.parents('.like-cont').find('span').html();
-				// alert(responsedata.data.status);
 			}			
 		});	
 	});
@@ -113,7 +114,20 @@ $(document).ready(function(){
 				'success' : function(response){				
 					current.closest('.row').find('textarea').val('');
 					var responsedata = jQuery.parseJSON(response);
-					// console.log(responsedata.data);
+					if(responsedata.data.comment == 'true'){
+
+						var prev = current.parents('.post-footer').find('.commentcount').html();
+						var value = prev.split(' ');
+						count = value[0];
+						if(count){
+							commentcount = ++count;
+							current.parents('.post-footer').find('.commentcount').html(commentcount+' Comments');
+						}else{
+							current.parents('.post-footer').find('.commentcount').html('1 Comments');
+						}
+
+
+					}
 					current.parents('.post-comment-cont').find('.comments-list ul').append(responsedata.data);
 					// current.closest('.comments-list ul').append(responsedata.data);
 					
@@ -121,6 +135,27 @@ $(document).ready(function(){
 			});	
 		}
 	});
+
+
+	$(document).on('click', '.popupajax', function(){    
+
+		var feedId = $(this).closest('.single-post').data('value');
+		var _token = $('#postform input[name=_token]').val();
+		$.ajax({
+			'url' : 'ajax/comments/get',
+			'data' : { 'feed_id' : feedId, '_token' : _token },
+			'type' : 'post',
+			'success' : function(response){
+				// alert('success');
+				$('#commentajax').html(response);
+		        $.fancybox([
+		            { href : '#commentajax' }
+		        ]);
+			}
+		});
+
+	});
+
 
 	$('#state').html('<option value="">State</option>');
 	$('#city').html('<option value="">City</option>');
@@ -172,3 +207,19 @@ $(document).ready(function(){
 	minImageHeight: 30,
 	showCaption: false,
 });*/
+
+
+	//Emoji Picker
+	$(function() {
+      // Initializes and creates emoji set from sprite sheet
+      window.emojiPicker = new EmojiPicker({
+        emojiable_selector: '[data-emojiable=true]',
+        assetsPath: 'lib/img/',
+        popupButtonClasses: 'fa fa-smile-o'
+      });
+      // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+      // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+      // It can be called as many times as necessary; previously converted input fields will not be converted again
+      window.emojiPicker.discover();
+    });
+	

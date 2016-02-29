@@ -414,7 +414,8 @@ $comment = <<<comments
 </li>
 comments;
 
-$this->data = $comment;
+$this->data['data'] = $comment;
+$this->data['comment'] = 'true';
 
 }else{
 $this->data = $model;	
