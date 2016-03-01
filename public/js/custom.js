@@ -43,7 +43,6 @@ $(document).ready(function(){
 	// Post status updates via ajax call.
 	$("#postform").ajaxForm(function(response) { 
  
-		// alert(response);
 		if(response){
 			$('#newsfeed').val('');
 			$('#image-holder').hide();
@@ -52,11 +51,7 @@ $(document).ready(function(){
 			if(response != 'Post something to update.'){
 				$('#postlist').first('.single-post').prepend(response);
 			}
-			// alert(response);
-			// $('#postlist').first('.single-post').prepend(response);
 
-			// $('#postlist .single-post').first().hide();
- 
 		} 
 
     }); 
@@ -108,27 +103,25 @@ $(document).ready(function(){
 		var commented_by = $('#user_id').val();
 		if(commentData){
 			$.ajax({			
-				'url' : 'api/comments/create',
-				'data' : { '_token' : _token, 'feed_id' : feedId, 'commented_by' : commented_by, 'comments' : commentData, 'ajaxrequest' : 'true' },
+				'url' : 'ajax/comments/post',
+				'data' : { '_token' : _token, 'feed_id' : feedId, 'commented_by' : commented_by, 'comments' : commentData },
 				'type' : 'post',
 				'success' : function(response){				
+					
 					current.closest('.row').find('textarea').val('');
-					var responsedata = jQuery.parseJSON(response);
-					if(responsedata.data.comment == 'true'){
 
-						var prev = current.parents('.post-footer').find('.commentcount').html();
-						var value = prev.split(' ');
+					var prev = current.parents('.post-footer').find('.commentcount').html();
+					var value = prev.split(' ');
 
-						count = value[0];
-						if(!count.trim()){
-							commentcount = ++count;
-							current.parents('.post-footer').find('.commentcount').html(commentcount+' Comments');
-						}else{
-							current.parents('.post-footer').find('.commentcount').html('1 Comment');
-						}
-
+					count = value[0];
+					if(!count.trim()){
+						commentcount = ++count;
+						current.parents('.post-footer').find('.commentcount').html(commentcount+' Comments');
+					}else{
+						current.parents('.post-footer').find('.commentcount').html('1 Comment');
 					}
-					current.parents('.post-comment-cont').find('.comments-list ul').append(responsedata.data.data);
+
+					current.parents('.post-comment-cont').find('.comments-list ul').append(response);
 					
 				}			
 			});	
@@ -145,7 +138,6 @@ $(document).ready(function(){
 			'data' : { 'feed_id' : feedId, '_token' : _token },
 			'type' : 'post',
 			'success' : function(response){
-				// alert('success');
 				$('#commentajax').html(response);
 		        $.fancybox([
 		            { href : '#commentajax' }
