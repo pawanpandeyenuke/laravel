@@ -230,7 +230,20 @@ class ApiController extends Controller
 					if(!User::find($arguments['user_by']))
 						throw new Exception('The user id does not exists.');						
 
-					$posts = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get();
+					$per_page = 5;
+					$page = $arguments['page'];
+					$offset = ($page - 1) * $per_page;
+
+					$posts = Feed::orderBy('updated_at', 'desc')
+								->skip($offset)
+								->take($per_page)
+								->with('likesCount')
+								->with('commentsCount')
+								->with('user')
+								->with('likedornot')
+								->get()
+								->toArray();
+ 
 					// $posts = Feed::with('user')->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')->groupBy('news_feed.id')->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments'),DB::raw('count(likes.id) as likes')]);
 
 /*					$posts = DB::table('users')
@@ -351,18 +364,12 @@ class ApiController extends Controller
 			if( count($user) <= 0 )
 				throw new Exception('This feed does not exists.');
 
-			$comments = Comment::where('feed_id', $arguments['feed_id'])->get();
-			
 
-/*			$per_page = 10; //$arguments['page_size'];
-			$page = 1;
-			$offset = ($page-1) * $per_page;			
-			// $this->data['current_page'] = $arguments['page'];
-			// $this->data['page_size'] = $arguments['page_size'];
-			// $this->data['records'] = $comments->count();
-			$this->data['pages'] = ceil($comments->count() / $per_page);
-			$this->data['data'] = $comments->skip($offset)->take($per_page)->get()->toArray();*/
+			$per_page = 15;
+			$page = $arguments['page'];
+			$offset = ($page - 1) * $per_page;
 
+			$comments = Comment::where('feed_id', $arguments['feed_id'])->orderBy('updated_at', 'desc')->skip($offset)->take($per_page)->get()->toArray();
 
 			$this->status = 'success';
 			$this->data = $comments;
