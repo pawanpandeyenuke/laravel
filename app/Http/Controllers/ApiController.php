@@ -340,18 +340,18 @@ class ApiController extends Controller
 		{
 			$arguments = Request::all();
 
-			if( empty($arguments['commented_by']) || !isset($arguments['commented_by']) )
-				throw new Exception('User id is a required field.');
+			if( empty($arguments['feed_id']) || !isset($arguments['feed_id']) )
+				throw new Exception('Feed id is a required field.');
 			
-			if( !is_numeric($arguments['commented_by'] ) )
-				throw new Exception('User id is invalid.');
+			if( !is_numeric($arguments['feed_id'] ) )
+				throw new Exception('Feed id is invalid.');
 
-			$user = User::find($arguments['commented_by']);
+			$user = Feed::find($arguments['feed_id']);
 
 			if( count($user) <= 0 )
-				throw new Exception('This user does not exists.');
+				throw new Exception('This feed does not exists.');
 
-			$comments = Comment::where('commented_by', $arguments['commented_by'])->get();
+			$comments = Comment::where('feed_id', $arguments['feed_id'])->get();
 			
 			$this->status = 'success';
 			$this->data = $comments;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 	
 use Auth;
+use App\Library\Converse;
 use Socialite;
 use App\User;
 use Validator;
@@ -66,21 +67,28 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
+
         $userdata = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
-        
-		$tempEmail = explode('@', $data['email']);
-		$tempId = ( isset( $userdata->id ) && $userdata->id != "" ) ? $userdata->id : $userdata->user_id;
+ 
 
-		// Storing xmpp username and password.				
-		$user = User::find($userdata->id);
-		$user->xmpp_username = $tempEmail[0].'_'.$tempId;
-		$user->xmpp_password = md5($tempEmail[0]);
-		$user->save();
+        $tempPass = 'Enuke123';
+        $xmpp_username = $userdata->id.'@fs.yiipro.com';
+        $xmpp_password = md5($tempPass); //$userdata->password;
+
+        $user = User::find($userdata->id);
+        $user->xmpp_username = $xmpp_username;
+        $user->xmpp_password = $xmpp_password;
+        $user->save();
+
+
+        $converse = new Converse;
+        $response = $converse->register($xmpp_username, $xmpp_password);        
+        // dd($response);exit;
         
         return $userdata;
     }
