@@ -10,10 +10,12 @@ class Converse{
  
 		// if($server != 'fs.yiipro.com')
 		// 	return true;
+
 		$node = config('app.xmppHost');
 
 		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
 		echo 'XMPP responce: '; print_r($output);//exit;
+
 		return true;
 		
 	}

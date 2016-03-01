@@ -309,6 +309,59 @@ getcomment;
  	}
 
 
+
+	public function postcomment()
+	{
+			try
+			{
+				$arguments = Input::all();
+				// print_r($arguments);die('pawan');
+				$comments = new Comment;
+
+				$validator = Validator::make($arguments, $comments->rules, $comments->messages);
+
+				if($validator->fails()) {
+					
+					throw new Exception($this->getError($validator));
+
+				}else{
+
+					$user = User::find($arguments['commented_by']);
+					if( !$user )
+						throw new Exception('No record found of the user.');						
+
+					$feed = Feed::find($arguments['feed_id']);
+					if(!$feed)
+						throw new Exception('The post may have expired or does not exist.');
+					
+					$comments = new Comment;
+					$model = $comments->create($arguments);
+
+					$userid = Auth::User()->id;
+					$username = Auth::User()->first_name.' '.Auth::User()->last_name;
+					$comment = $model->comments;
+$comment = <<<comments
+<li>
+	<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
+	<a class="user-link" title="" href="profile/$userid">$username</a>
+	<div class="comment-text">$comment</div>
+</li>
+comments;
+
+					echo $comment;
+				}
+
+			}catch(Exception $e){
+
+				return $e->getMessage();
+
+			}
+
+		exit;
+	}
+
+
+
 	//Get states
 	public function getStates()
 	{

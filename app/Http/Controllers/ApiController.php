@@ -353,6 +353,17 @@ class ApiController extends Controller
 
 			$comments = Comment::where('feed_id', $arguments['feed_id'])->get();
 			
+
+/*			$per_page = 10; //$arguments['page_size'];
+			$page = 1;
+			$offset = ($page-1) * $per_page;			
+			// $this->data['current_page'] = $arguments['page'];
+			// $this->data['page_size'] = $arguments['page_size'];
+			// $this->data['records'] = $comments->count();
+			$this->data['pages'] = ceil($comments->count() / $per_page);
+			$this->data['data'] = $comments->skip($offset)->take($per_page)->get()->toArray();*/
+
+
 			$this->status = 'success';
 			$this->data = $comments;
 			$this->message = count($comments). ' comments found.';
@@ -400,26 +411,8 @@ class ApiController extends Controller
 
 					$this->message = 'Comment successfully posted.';
 					$this->status = 'success';
+					$this->data = $model;	
 
-if($arguments['ajaxrequest'] == 'true'){
-
-	$userid = Auth::User()->id;
-	$username = Auth::User()->first_name.' '.Auth::User()->last_name;
-	$comment = $model->comments;
-$comment = <<<comments
-<li>
-	<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
-	<a class="user-link" title="" href="profile/$userid">$username</a>
-	<div class="comment-text">$comment</div>
-</li>
-comments;
-
-$this->data['data'] = $comment;
-$this->data['comment'] = 'true';
-
-}else{
-$this->data = $model;	
-}
 				}
 
 			}catch(Exception $e){
