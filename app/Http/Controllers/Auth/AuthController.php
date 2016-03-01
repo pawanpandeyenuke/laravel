@@ -88,7 +88,7 @@ class AuthController extends Controller
 
         $converse = new Converse;
         $response = $converse->register($xmpp_username, $xmpp_password);        
-        // dd($response);exit;
+        
         
         return $userdata;
     }
