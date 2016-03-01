@@ -161,6 +161,7 @@
 												@foreach($data->comments as $commentsData)
 												<?php 
 													$username = DB::table('users')->where('id', $commentsData->commented_by)->get(['first_name', 'last_name']);
+													if(!empty($username)){
 
 													$name = $username[0]->first_name.' '.$username[0]->last_name; 
 
@@ -170,7 +171,7 @@
 														<a href="<?php echo 'profile/'.$commentsData->commented_by ?>" title="" class="user-link">{{$name}}</a>
 														<div class="comment-text">{{$commentsData->comments}}</div>
 													</li>
-												<?php }$counter++; ?>
+												<?php }$counter++; }?>
 												@endforeach
 											</ul>
 										</div><!--/comments list-->
