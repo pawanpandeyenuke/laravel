@@ -208,7 +208,6 @@ class ApiController extends Controller
 					$this->data = $success;					
 				}
 
-			}
 
 		}catch( Exception $e ){
 
