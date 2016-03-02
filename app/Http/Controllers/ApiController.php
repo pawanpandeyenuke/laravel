@@ -190,6 +190,16 @@ class ApiController extends Controller
 				if( ( $arguments['message'] == null ) && ( $arguments['image'] == null ) )
 					throw new Exception('Please provide a message or image.');
 
+/*				if(Request::has('image')){
+
+					$file = Input::file('image');
+					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+					$arguments['image'] = $image_name;
+					$file->move('uploads', $image_name);
+
+				}*/
+			}
+
 				$success = $feeds->create( $arguments );
 
 				if( $success ){
@@ -234,9 +244,9 @@ class ApiController extends Controller
 					$page = $arguments['page'];
 					$offset = ($page - 1) * $per_page;
 
-					/*$posts = Feed::orderBy('updated_at', 'desc')->skip($offset)->take($per_page)->with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get()->toArray();*/
+					$posts = Feed::orderBy('updated_at', 'desc')->skip($offset)->take($per_page)->with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get()->toArray();
 
-					$posts = Feed::where('user_by', $arguments['user_by'])->orderBy('updated_at', 'desc')->skip($offset)->take($per_page)->with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get()->toArray();
+					/*$posts = Feed::where('user_by', $arguments['user_by'])->orderBy('updated_at', 'desc')->skip($offset)->take($per_page)->with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get()->toArray();*/
 
 					$recordscount = Feed::where('user_by', $arguments['user_by'])->get();
 
