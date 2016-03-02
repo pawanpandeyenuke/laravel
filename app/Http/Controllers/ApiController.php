@@ -270,7 +270,7 @@ class ApiController extends Controller
 					if( $posts ){
 
 						$this->status = 'success';
-						$this->data['comments'] = $posts;
+						$this->data['feed'] = $posts;
 						$this->data['page_no'] = $arguments['page'];
 						$this->data['page_size'] = $arguments['page_size'];
 						$this->data['records'] = count($recordscount);
