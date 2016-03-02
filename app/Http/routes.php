@@ -23,6 +23,9 @@ Route::post('ajax/posts', 'AjaxController@posts');
 Route::post('ajax/like', 'AjaxController@like');
 Route::post('ajax/comments/get', 'AjaxController@getCommentBox');
 Route::post('ajax/comments/post', 'AjaxController@postcomment');
+Route::post('ajax/loadposts', 'AjaxController@loadposts');
+
+
 
 
 Route::post('/web/ajax/getposts', 'AjaxController@getAjaxPost');

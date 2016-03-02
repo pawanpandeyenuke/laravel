@@ -24,9 +24,12 @@ class DashboardController extends Controller
 	{
         try{
 
-            // $feeds = Feed::where('user_by', '=', Auth::User()->id)->get();
+
+            $per_page = 15;
+
             $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
             ->orderBy('news_feed.id','DESC')
+            ->take($per_page)
             ->get();
 
 

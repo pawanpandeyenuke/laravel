@@ -965,3 +965,6 @@ a:hover{
 	width: 31%;
 	margin: 0 1% 20px;
 }
+.dashboard-sidemenu .panel-title > a.without-arrow{
+	background: none;
+}
