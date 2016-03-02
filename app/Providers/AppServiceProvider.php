@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Auth, App\Country;
+use Auth, App\Country, App\Category;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,10 +14,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-		// $usr = Auth::check();
-  //       echo '<pre>';print_r($usr);die('Null');
-        view()->share('countries', self::prepare(Country::all(['country_id', 'country_name'])));
 
+        // echo '<pre>';print_r($data);die;
+
+        view()->share([
+                'countries' => self::prepare(Country::all(['country_id', 'country_name'])),
+                'parent_category' => Category::where('parent_id', '=', 0)->get()
+            ]);
 
     }
 

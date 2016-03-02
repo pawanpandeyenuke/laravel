@@ -27,4 +27,10 @@ class Comment extends Model
 		'commented_by' => 'required|numeric',
 		'feed_id' => 'required|numeric'
 	);
+
+	public function user()
+	{
+          return $this->belongsTo('App\User','commented_by','id')->select(['id','first_name', 'last_name', 'picture']);
+	}
+	
 }
