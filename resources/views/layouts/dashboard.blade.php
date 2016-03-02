@@ -71,7 +71,7 @@
 				<div class="dashboard-header-menu text-right">
 					<ul class="list-inline">
 						<li class="user-info-top">
-							<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+							<span class="user-thumb" style="background: url('/images/user-thumb.jpg');"></span>
 							{{Auth::User()->first_name}}
 						</li>
 						<li><div class="logout"><a href="{{ url('/logout') }}" title="">Logout</a></div></li>

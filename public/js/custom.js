@@ -187,7 +187,6 @@ $(document).ready(function(){
 	  	$('.status-img-up').hide();
 	  }
 	});
-
  
 });
 

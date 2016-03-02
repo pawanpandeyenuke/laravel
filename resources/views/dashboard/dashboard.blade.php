@@ -87,7 +87,7 @@
 									<div class="row">
 										<div class="col-md-7">
 											<a href="#" title="" class="user-thumb-link">
-												<span class="small-thumb" style="background: url('uploads/1456394309_POST_XZY0484L(1.JPG');"></span>
+												<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
 												{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}
 											</a>
 										</div>
@@ -181,7 +181,6 @@
 								</div><!--/post-footer-->
 							</div><!--/single post-->
 						@endforeach
-
 					<div id="commentajax" style="display: none;">	</div>
 					</div>
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
@@ -198,4 +197,28 @@
 		display:none !important;
 	}	
 </style>
+
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+/*var page = 1, ajax = 0, pages = 5;
+$(window).on('scroll', function() {
+   if($(window).scrollTop() + $(window).height() == $(document).height() && ajax == 0 && page<=pages)
+   {
+   		ajax = 1;
+   		console.log(page);
+        $.ajax({
+       		'url' : 'ajax/loadposts',
+       		'type' : 'post',
+       		'data' : {'page' : page},
+       		'success' : function(response){
+       			page++;
+       			if(page != pages) {
+       				ajax = 0;
+       			}
+       		}
+        });
+   }
+});*/
+
+</script>
 @endsection

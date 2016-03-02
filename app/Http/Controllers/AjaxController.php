@@ -362,6 +362,22 @@ comments;
 
 
 
+	public function loadposts()
+	{
+
+/*		$input = Input::all();
+        $per_page = 5;
+
+        $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
+        ->orderBy('news_feed.id','DESC')
+        ->take($per_page)
+        ->get();
+
+		return view('dashboard.newsfeed')->with(['feeds' => $feeds, 'page' => $input['page']]);*/
+
+	}
+
+
 	//Get states
 	public function getStates()
 	{
