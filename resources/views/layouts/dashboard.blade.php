@@ -12,10 +12,10 @@
 <link href="/css/fileinput.min.css" rel="stylesheet" media="all">
 <link href="/css/style.css" rel="stylesheet">
 <link href="/css/responsive.css" rel="stylesheet" media="all">
-
+<!--
 <link href="/css/converse.min.css" rel="stylesheet" type="text/css" media="screen" >
-<script type="text/javascript" src="/js/converse.min.custom.js"></script>
-
+<script type="text/javascript" src="/js/converse.min.js"></script>
+-->
 <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 </head>
 
@@ -108,7 +108,7 @@
 	        show_controlbox_by_default: true,
 	        roster_groups: true
 	    });
-	});*/
+	}); */
 </script>
 </body>
 </html>
