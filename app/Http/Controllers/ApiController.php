@@ -230,7 +230,7 @@ class ApiController extends Controller
 					if(!User::find($arguments['user_by']))
 						throw new Exception('The user id does not exists.');						
 
-					$per_page = 5;
+					$per_page = 15;
 					$page = $arguments['page'];
 					$offset = ($page - 1) * $per_page;
 
