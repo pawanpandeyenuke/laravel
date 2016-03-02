@@ -1,3 +1,5 @@
+<?php //echo '<pre>';print_r($subCat);die; ?>
+
 <div class="col-sm-3">
 	<div class="dashboard-sidemenu">
 		<div class="panel-group" id="side_acc_menu" role="tablist" aria-multiselectable="true">
@@ -35,14 +37,22 @@
 		    <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
 		      <div class="panel-body">
 		        <ul>
-		        	<li><a href="">Teenagers</a></li>
-		        	<li><a href="">Adults</a></li>
-		        	<li><a href="">Retired</a></li>
-		        	<li><a href="">Politics</a></li>
-		        	<li><a href="">Products</a></li>
-		        	<li><a href="">Auto</a></li>
-		        	<li><a href="">Travel</a></li>
-		        	<li><a href="">Movie Review</a></li>
+		        	@foreach($parent_category as $data)
+			        	<li class="dropdown keep-open">
+		        			<a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								{{ $data->title }}
+							</a>
+			        		<?php 
+			        			$subCat = DB::table('categories')->where(['parent_id' => $data->id])->get(); 
+			        			if(!empty($subCat)){ ?>
+								<ul class="dropdown-menu side-dd-menu" aria-labelledby="dLabel">
+				        			@foreach($subCat as $data1)
+				        				<li><a href="">{{ $data1->title }}</a></li>
+				        			@endforeach
+				        		</ul>
+							<?php } ?>
+			        	</li>
+			        @endforeach
 		        </ul>
 		      </div>
 		    </div>
