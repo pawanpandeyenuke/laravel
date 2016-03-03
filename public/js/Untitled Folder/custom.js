@@ -46,8 +46,7 @@ $(document).ready(function(){
 		if(response){
 			$('#newsfeed').val('');
 			$('#image-holder').hide();
-			$('#image-holder img').remove();
-			$('.group-span-filestyle label .badge').html('');
+			$('.group-span-filestyle label .badge').hide();
 
 			if(response != 'Post something to update.'){
 				$('#postlist').first('.single-post').prepend(response);
