@@ -190,14 +190,14 @@ class ApiController extends Controller
 				if( ( $arguments['message'] == null ) && ( $arguments['image'] == null ) )
 					throw new Exception('Please provide a message or image.');
 
-/*				if(Request::has('image')){
+				if(Request::hasFile('image')){
 
-					$file = Input::file('image');
+					$file = Request::file('image');
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 					$arguments['image'] = $image_name;
 					$file->move('uploads', $image_name);
 
-				}*/
+				}
 			}
 
 				$success = $feeds->create( $arguments );
@@ -205,7 +205,7 @@ class ApiController extends Controller
 				if( $success ){
 					$this->message = 'Your post has been saved successfully.';
 					$this->status = 'success';
-					$this->data = $success;					
+					$this->data = $success;
 				}
 
 

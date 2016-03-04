@@ -12,10 +12,10 @@
 <link href="/css/fileinput.min.css" rel="stylesheet" media="all">
 <link href="/css/style.css" rel="stylesheet">
 <link href="/css/responsive.css" rel="stylesheet" media="all">
-<!--
+
 <link href="/css/converse.min.css" rel="stylesheet" type="text/css" media="screen" >
 <script type="text/javascript" src="/js/converse.min.js"></script>
--->
+
 <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 </head>
 
@@ -101,14 +101,14 @@
 <script src="js/jquery.nicescroll.min.js"></script>
 <!--/Emoji-->
 <script type="text/javascript">
-/*	require(['converse'], function (converse) {
+	require(['converse'], function (converse) {
 	    converse.initialize({
 	        bosh_service_url: 'https://bind.conversejs.org', // Please use this connection manager only for testing purposes
 	        i18n: locales.en, // Refer to ./locale/locales.js to see which locales are supported
 	        show_controlbox_by_default: true,
 	        roster_groups: true
 	    });
-	}); */
+	}); 
 </script>
 </body>
 </html>
