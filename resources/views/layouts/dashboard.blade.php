@@ -13,6 +13,8 @@
 <link href="/css/style.css" rel="stylesheet">
 <link href="/css/responsive.css" rel="stylesheet" media="all">
 
+<!-- <script data-main="js/app" src="/js/lib/require.js"></script> -->
+
 <link href="/css/converse.min.css" rel="stylesheet" type="text/css" media="screen" >
 <script type="text/javascript" src="/js/converse.min.js"></script>
 
@@ -108,7 +110,8 @@
 	        show_controlbox_by_default: true,
 	        roster_groups: true
 	    });
-	}); 
+	});
+
 </script>
 </body>
 </html>

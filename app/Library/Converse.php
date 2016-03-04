@@ -10,7 +10,7 @@ class Converse{
  
 		// if($server != 'fs.yiipro.com')
 		// 	return true;
-		$node = config('app.xmppHost');
+		//$node = config('app.xmppHost');
 
 //$response = @exec('sudo -u ejabberd /usr/sbin/ejabberdctl register hemant1 fs.yiipro.com test123 2>&1', $output, $status);
 //$response = @exec('sudo /usr/sbin/ejabberdctl register hemant1 fs.yiipro.com test123 2>&1', $output, $status);
@@ -20,8 +20,12 @@ class Converse{
 
 //echo "UsrName= $username and Host= $node"; exit;
 
-		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
+//		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
 //		echo 'XMPP responce: '; print_r($output);exit;
+
+		$node = config('app.xmppHost');
+		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
+
 		dd($response);exit;
 		return true;
 		
