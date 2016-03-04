@@ -77,7 +77,7 @@ class AuthController extends Controller
  
 
         $tempPass = 'Enuke123';
-        $xmpp_username = $userdata->id.'@fs.yiipro.com';
+        $xmpp_username = $userdata->first_name.$userdata->id;
         $xmpp_password = md5($tempPass); //$userdata->password;
 
         $user = User::find($userdata->id);
