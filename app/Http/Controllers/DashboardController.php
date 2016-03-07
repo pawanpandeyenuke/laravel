@@ -101,4 +101,11 @@ class DashboardController extends Controller
         return view('dashboard.settings');
     }
 
+
+    public function chatroom()
+    {
+
+        return view('dashboard.chatroom');
+
+    }
 }

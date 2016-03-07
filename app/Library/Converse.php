@@ -9,9 +9,9 @@ class Converse{
 		$server = Request::server('HTTP_HOST'); 
 
 		$node = config('app.xmppHost');
-		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
+		$response = @exec('sudo /usr/sbin/ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
 
-		dd($response);exit;
+		// dd($response);exit;
 		return true;
 		
 	}

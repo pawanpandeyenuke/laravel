@@ -1,3 +1,5 @@
+
+
 $(document).ready(function(){
 
 	// $('.post-list').show();
@@ -190,6 +192,11 @@ $(document).ready(function(){
 	});
  
 });
+
+
+
+
+
 
 	//Emoji Picker
 /*	$(function() {

@@ -1,5 +1,3 @@
-<?php //echo '<pre>';print_r($subCat);die; ?>
-
 <div class="col-sm-3">
 	<div class="dashboard-sidemenu">
 		<div class="panel-group" id="side_acc_menu" role="tablist" aria-multiselectable="true">
@@ -12,6 +10,29 @@
 		      </h4>
 		    </div>
 		    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+		      <div class="panel-body">
+		        <ul>
+		        	<li><a href="">link title here</a></li>
+		        	<li><a href="">link title here</a></li>
+		        	<li><a href="">link title here</a></li>
+		        	<li><a href="">link title here</a></li>
+		        	<li><a href="">link title here</a></li>
+		        	<li><a href="">link title here</a></li>
+		        	<li><a href="">link title here</a></li>
+		        	<li><a href="">link title here</a></li>
+		        </ul>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingThree">
+		      <h4 class="panel-title">
+		        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#side_acc_menu" href="{{ url('chatroom') }}" aria-expanded="false" aria-controls="collapseThree">
+		          <i class="flaticon-balloon"></i>Chat with Friends
+		        </a>
+		      </h4>
+		    </div>
+		    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
 		      <div class="panel-body">
 		        <ul>
 		        	<li><a href="">link title here</a></li>
@@ -53,29 +74,6 @@
 							<?php } ?>
 			        	</li>
 			        @endforeach
-		        </ul>
-		      </div>
-		    </div>
-		  </div>
-		  <div class="panel panel-default">
-		    <div class="panel-heading" role="tab" id="headingThree">
-		      <h4 class="panel-title">
-		        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#side_acc_menu" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-		          <i class="flaticon-balloon"></i>Chat with Friends
-		        </a>
-		      </h4>
-		    </div>
-		    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-		      <div class="panel-body">
-		        <ul>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
 		        </ul>
 		      </div>
 		    </div>

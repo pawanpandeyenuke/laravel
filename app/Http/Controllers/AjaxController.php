@@ -5,6 +5,7 @@ use App\State, App\City, App\Like, App\Comment, App\User;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
+use XmppPrebind;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth;
@@ -359,6 +360,33 @@ comments;
 
 		exit;
 	}
+
+
+	public function getxmppuser(){
+
+		$status=0;
+		$user_id = Auth::User()->id;
+		$node = config('app.xmppHost');
+
+		$user = User::find($user_id);
+		
+		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
+		{
+
+			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', '', false, false);
+			$username = $user->xmpp_username;
+			$password = $user->xmpp_password;
+			$xmppPrebind->connect($username, $password);
+			$xmppPrebind->auth();
+			$sessionInfo = $xmppPrebind->getSessionInfo();
+			$status = 1;
+		}
+
+		$sessionInfo['status']=$status;	  
+		echo json_encode($sessionInfo); 
+		exit;	  
+
+ 	}
 
 
 
