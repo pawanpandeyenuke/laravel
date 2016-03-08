@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Auth, App\Feed, DB, App\Setting;
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend;
 use Request, Session, Validator, Input, Cookie;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -104,8 +104,27 @@ class DashboardController extends Controller
 
     public function chatroom()
     {
-
-        return view('dashboard.chatroom');
+        $groups = Group::where([
+                'owner_id' => Auth::User()->id,
+                'status' => 'Active'
+            ])->get();
+        // echo '<pre>';print_r($groups);die;
+        return view('dashboard.chatroom')
+            ->with('groups', $groups);
 
     }
+
+    public function friendRequests()
+    {
+        $friend = Friend::with('user')
+                ->where('user_id', '=', Auth::User()->id)
+                ->orWhere('friend_id', '=', Auth::User()->id)
+                ->get()
+                ->toArray();
+        // echo '<pre>';print_r($friend);die;
+        return view('dashboard.requests')
+                ->with('friends', $friend);
+
+    }
+
 }

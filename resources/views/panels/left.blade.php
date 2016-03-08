@@ -27,7 +27,7 @@
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingThree">
 		      <h4 class="panel-title">
-		        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#side_acc_menu" href="{{ url('chatroom') }}" aria-expanded="false" aria-controls="collapseThree">
+		        <a href="/chatroom" class="without-arrow">
 		          <i class="flaticon-balloon"></i>Chat with Friends
 		        </a>
 		      </h4>
@@ -50,55 +50,19 @@
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingTwo">
 		      <h4 class="panel-title">
-		        <a role="button" data-toggle="collapse" data-parent="#side_acc_menu" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+		        <a class="groupchatrooms without-arrow" id="groupchatrooms">
 		          <i class="flaticon-balloon"></i>Chat Room
 		        </a>
 		      </h4>
-		    </div>
-		    <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
-		      <div class="panel-body">
-		        <ul>
-		        	@foreach($parent_category as $data)
-			        	<li class="dropdown keep-open">
-		        			<a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-								{{ $data->title }}
-							</a>
-			        		<?php 
-			        			$subCat = DB::table('categories')->where(['parent_id' => $data->id])->get(); 
-			        			if(!empty($subCat)){ ?>
-								<ul class="dropdown-menu side-dd-menu" aria-labelledby="dLabel">
-				        			@foreach($subCat as $data1)
-				        				<li><a href="">{{ $data1->title }}</a></li>
-				        			@endforeach
-				        		</ul>
-							<?php } ?>
-			        	</li>
-			        @endforeach
-		        </ul>
-		      </div>
 		    </div>
 		  </div>
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingfour">
 		      <h4 class="panel-title">
-		        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#side_acc_menu" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+		        <a class="without-arrow" href="{{ url('requests')}}">
 		          <i class="flaticon-people"></i>Friends Request
 		        </a>
 		      </h4>
-		    </div>
-		    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingfour">
-		      <div class="panel-body">
-		        <ul>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        </ul>
-		      </div>
 		    </div>
 		  </div>
 		  <div class="panel panel-default">

@@ -103,55 +103,7 @@
 <script src="lib/js/emoji-picker.js"></script>
 <script src="js/jquery.nicescroll.min.js"></script>
 <!--/Emoji-->
-<script type="text/javascript">
 
-/*$(document).ready(function(){
- 
-	$.ajax({			
-		'url' : '/ajax/getxmppuser',
-		'type' : 'post',
-		'success' : function(response){				
-			respJson = jQuery.parseJSON(response)
-			// console.log(respJson.status);
-			if(respJson.status==1){
-				require(["converse"], function (converse) {
-					conObj=converse;
-					converse.initialize({
-						prebind: true,
-						rid: respJson.rid,
-						sid: respJson.sid,
-						jid: respJson.jid,
-						bosh_service_url: 'http://fs.yiipro.com:5280/http-bind',
-						show_controlbox_by_default: true,
-						image_upload_url: '/converse/sendimage',
-						allow_contact_requests:false,
-						xhr_user_search: false,
-						i18n: locales.en,
-						hide_muc_server: true,
-						debug: false ,
-						allow_otr: false,
-						auto_list_rooms: true,
-						auto_subscribe: true,
-						roster_groups:true
-					});
-				});
-			}
-			// require(['converse'], function (converse) {
-			//     converse.initialize({
-			//         bosh_service_url: 'http://fs.yiipro.com:5280/http-bind',
-			//         i18n: locales.en,
-			//         show_controlbox_by_default: true,
-			//         roster_groups: true
-			//     });
-			// });
-			// alert('asdfasfasdf');
-		}			
-	});	
- 
-});*/
-
-
-</script>
 </body>
 </html>
 

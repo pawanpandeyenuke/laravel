@@ -1,8 +1,8 @@
 
 
 $(document).ready(function(){
-
-	// $('.post-list').show();
+	
+	$('.StyleScroll').niceScroll();
 	
 	var myReader = new FileReader();
 
@@ -151,10 +151,91 @@ $(document).ready(function(){
 	});
 
 
+	/**
+	* Friend request tabs ajax call handling.
+	* Ajaxcontroller@getfriendslist
+	**/
+	$(document).on('click', '.friendstabs', function(){    
+		var type = $(this).data('reqtype');
+		var current = $(this);
+		$.ajax({
+			'url' : 'ajax/getfriendslist',
+			'data' : {'type' : type},
+			'type' : 'post',
+			'success' : function(response){
+				var type = response.type;
+				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response.data);
+			}
+		});
+	});
+
+
+	/**
+	*	Group chatrooms ajax call handling.
+	*	Ajaxcontroller@groupchatrooms
+	*/
+	$(document).on('click', '#groupchatrooms', function(){
+		var current = $(this);
+		$.ajax({
+			'url' : 'ajax/groupchatrooms',
+			'type' : 'post',
+			// 'data' : {},
+			'success' : function(response){
+				var html = current.closest('.dashboard-body').find('.col-sm-6').html(response);
+				// alert(html);
+			}
+		});
+	});
+
+
+	/**
+	*	Group sub chatrooms ajax call handling.
+	*	Ajaxcontroller@groupchatrooms
+	*/
+	$(document).on('click', '.groupnext', function(){
+		var current = $(this);
+		var groupid = $(this).data('parentid');
+		// alert(id);
+		$.ajax({
+			'url' : 'ajax/subgroupchats',
+			'type' : 'post',
+			'data' : { 'groupid' : groupid },
+			'success' : function(response){
+				var html = current.closest('.dashboard-body').find('.col-sm-6').html(response);
+				// alert(html);
+			}
+		});
+	});
+	
+
+	/**
+	*	Enter chatrooms ajax call handling.
+	*	Ajaxcontroller@enterchatroom
+	*/
+	$(document).on('click', '.enterchat', function(){
+		var current = $(this);
+		var groupid = $(this).data('parentid');
+		// alert(id);
+		$.ajax({
+			'url' : 'ajax/enterchatroom',
+			'type' : 'post',
+			// 'data' : { 'groupid' : groupid },
+			'success' : function(response){
+				var html = current.closest('.dashboard-body').find('.col-sm-6').html(response);
+				// alert(html);
+			}
+		});
+	});
+
+
 	$('#state').html('<option value="">State</option>');
 	$('#city').html('<option value="">City</option>');
 
-	//Get states ajax call.
+
+	/**
+	*	Get states ajax call handling.
+	*	Ajaxcontroller@enterchatroom
+	*/
 	$('#country').change(function(){
 		var countryId = $(this).val();
 		var _token = $('#searchform input[name=_token]').val();
@@ -168,7 +249,11 @@ $(document).ready(function(){
 		});	
 	});
 
-	//Get cities ajax call.
+
+	/**
+	*	Get cities ajax call handling.
+	*	Ajaxcontroller@getCities
+	*/
 	$('#state').change(function(){
 		var stateId = $(this).val();
 		var _token = $('#searchform input[name=_token]').val();

@@ -17,102 +17,15 @@
 							</div>
 							<div class="chat-user-list StyleScroll">
 								<ul>
+									@foreach($groups as $data)
 									<li>
 										<a href="#" title="">
 											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
+											<span class="title">{{ $data->title }}</span>
+											<span class="time">{{ $data->updated_at->diffForHumans() }}</span>
 										</a>
 									</li>
-									<li>
-										<a href="#" title="">
-											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
-										</a>
-									</li>
-									<li>
-										<a href="#" title="">
-											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
-										</a>
-									</li>
-									<li>
-										<a href="#" title="">
-											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
-										</a>
-									</li>
-									<li>
-										<a href="#" title="">
-											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
-										</a>
-									</li>
-									<li>
-										<a href="#" title="">
-											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
-										</a>
-									</li>
-									<li>
-										<a href="#" title="">
-											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
-										</a>
-									</li>
-									<li>
-										<a href="#" title="">
-											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
-										</a>
-									</li>
-									<li>
-										<a href="#" title="">
-											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
-										</a>
-									</li>
-									<li>
-										<a href="#" title="">
-											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
-										</a>
-									</li>
-									<li>
-										<a href="#" title="">
-											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
-										</a>
-									</li>
-									<li>
-										<a href="#" title="">
-											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">Username</span>
-											<span class="time">02:50 am</span>
-											<span class="msg">Hi, How r u?</span>
-										</a>
-									</li>
+									@endforeach
 								</ul>
 							</div><!--/chat user list-->
 							<div class="dropdown all-contact">

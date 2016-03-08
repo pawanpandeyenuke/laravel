@@ -14,8 +14,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-        // echo '<pre>';print_r($data);die;
+        
+        // echo '<pre>';print_r($grp);die;
 
         view()->share([
                 'countries' => self::prepare(Country::all(['country_id', 'country_name'])),

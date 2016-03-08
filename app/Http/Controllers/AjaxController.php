@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\State, App\City, App\Like, App\Comment, App\User;
+use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
@@ -389,24 +389,162 @@ comments;
  	}
 
 
-
-	public function loadposts()
+	/**
+	*	Get friend lists ajax call handling.
+	*	Ajaxcontroller@getfriendslist
+	*/
+	public function getfriendslist()
 	{
 
-/*		$input = Input::all();
-        $per_page = 5;
+		$input = Input::get('type');;
 
-        $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
-        ->orderBy('news_feed.id','DESC')
-        ->take($per_page)
-        ->get();
+		$model = Friend::with('user')->with('friends')->where( function( $query ) use ( $input ) {
+					self::queryBuilder( $query, $input );
+				})->get()->toArray();
+ 
+		$litag = array();
+		foreach ($model as $key => $value) {
 
-		return view('dashboard.newsfeed')->with(['feeds' => $feeds, 'page' => $input['page']]);*/
+			if($value['friend_id'] == Auth::User()->id)
+				$name = $value['user']['first_name'].' '.$value['user']['last_name'];
+			else
+				$name = $value['friends']['first_name'].' '.$value['friends']['last_name'];
 
+
+			if($input == 'sent'){
+				$permissionbutton = '<div class="text-right">
+								<button class="btn btn-primary btn-full" type="button">Sent Request</button>
+							</div>';
+			}elseif($input == 'recieved'){
+				$permissionbutton = '<div class="row">
+								<div class="col-sm-6">
+									<button class="btn btn-primary btn-full" type="button" class="accept">Accept</button>
+								</div>
+								<div class="col-sm-6">
+									<button class="btn btn-default btn-full" type="button" class="decline">Decline</button>
+								</div>
+							</div>';
+			}elseif($input == 'current'){
+				$permissionbutton = '<div class="text-right">
+								<button class="btn btn-default btn-full" type="button" class="remove">Remove</button>
+							</div>';
+			}elseif($input == 'all'){
+
+				if(($value['status'] == 'Pending') && ($value['user_id'] == Auth::User()->id)){
+					$permissionbutton = '<div class="row">
+							<div class="col-sm-6">
+								<button class="btn btn-primary btn-full" type="button" class="accept">Accept</button>
+							</div>
+							<div class="col-sm-6">
+								<button class="btn btn-default btn-full" type="button" class="decline">Decline</button>
+							</div>
+						</div>';
+				}elseif(($value['status'] == 'Pending') && ($value['friend_id'] == Auth::User()->id)){ 
+					$permissionbutton = '<div class="text-right">
+							<button class="btn btn-primary btn-full" type="button">Sent Request</button>
+						</div>';
+				}elseif(($value['status'] == 'Accepted') && ($value['user_id'] == Auth::User()->id)){ 
+					$permissionbutton = '<div class="text-right">
+						<button class="btn btn-default btn-full" type="button" class="remove">Remove</button>
+					</div>';
+				}
+
+			}
+
+			$litag[] = '<li>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="user-cont">
+										<a title="" href="#">
+											<span style="background: url(images/user-thumb.jpg);" class="user-thumb">
+											</span>
+											'.$name.'
+										</a>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									'.$permissionbutton.'
+								</div>
+							</div>
+						</li>';
+
+		}
+
+		$lisdata = array();
+		$lisdata['data'] = implode(' ', $litag);
+		$lisdata['type'] = ucwords($input);
+		// print_r($model);exit;
+		return $lisdata;
+ 
 	}
 
 
-	//Get states
+	/**
+	*	Query builderfor friend lists ajax call handling.
+	*	Ajaxcontroller@queryBuilder
+	*/
+	public function queryBuilder( &$query, $input ){
+		if($input == 'all'){
+            $query->where('user_id', '=', Auth::User()->id);
+            $query->orWhere('friend_id', '=', Auth::User()->id);
+        }elseif($input == 'sent'){
+            $query->where('user_id', '=', Auth::User()->id);
+            $query->where('status', '=', 'Pending');
+        }elseif($input == 'recieved'){
+            $query->where('friend_id', '=', Auth::User()->id);
+            $query->where('status', '=', 'Pending');
+        }elseif($input == 'current'){
+            $query->where('user_id', '=', Auth::User()->id)->where('status', '=', 'Accepted');
+            $query->orWhere('friend_id', '=', Auth::User()->id)->where('status', '=', 'Accepted');
+        } 
+	}
+
+
+	/**
+	*	Group chatrooms ajax call handling.
+	*	Ajaxcontroller@groupchatrooms
+	*/
+	public function groupchatrooms()
+	{
+		return view('dashboard.groupchatrooms');
+	}
+
+
+	/**
+	*	Group sub chatrooms ajax call handling.
+	*	Ajaxcontroller@groupchatrooms
+	*/
+	public function subgroupchats()
+	{
+
+		$input = Input::get('groupid');
+		if(!empty($input)){
+			$data = DB::table('categories')->where(['parent_id' => $input])->where(['status' => 'Active'])->get(); 
+			
+			if( !empty( $data ) ){
+				$subgroups = $data;
+			}
+		}
+		
+		return view('dashboard.subgroupchats')
+				->with('subgroups', $subgroups);
+	}
+
+
+	/**
+	*	Enter chatrooms ajax call handling.
+	*	Ajaxcontroller@enterchatroom
+	*/
+	public function enterchatroom()
+	{
+		return view('dashboard.enterchatroom');
+	}
+ 
+
+	/**
+	*	Get states ajax call handling.
+	*	Ajaxcontroller@getStates
+	*/
 	public function getStates()
 	{
 		$input = Input::all();
@@ -419,7 +557,10 @@ comments;
 	}
 
 
-	//Get cities
+	/**
+	*	Get cities ajax call handling.
+	*	Ajaxcontroller@getCities
+	*/
 	public function getCities()
 	{
 		$input = Input::all();
