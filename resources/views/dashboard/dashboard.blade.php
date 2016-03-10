@@ -117,39 +117,20 @@
 										<ul>
 											<li>
 												<div class="like-cont">
-									<?php 
-										$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $data['id']])->get(); 
+												<?php 
+													$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $data['id']])->get(); 
 
-										$likesdata1 = '';
-										if(isset($data['likes_count'][0]) && $data['likes_count'][0]['likescount'] > 0){
-												$likesdata1 = $data['likes_count'][0]['likescount'];
-											}
-
-										$likes = '';
-										if(!empty($likedata[0])){
-											$likes = 1;
-											$checkedstatus = 'checked';
-											if(isset($data['likes_count'][0])){
-												$roughcount = $data['likes_count'][0]['likescount'];
-												if( $roughcount > 0 ){
-													$likes = $roughcount;
-												}
-											}
-										}else{
-											$checkedstatus = '';
-										}
-										// echo '<pre>';print_r($likes);die;
-
-									?>
-													<input type="checkbox" name="" id="checkbox{{$data['id']}}" class="css-checkbox like" {{ $checkedstatus }}/>
+													$likecountdata = App\Like::where(['feed_id' => $data->id])->get()->count(); 
+												?>
+													<input type="checkbox" name="" id="checkbox{{$data['id']}}" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
 													<label for="checkbox{{$data['id']}}" class="css-label">
-														@if($likes > 0)
+														@if($likecountdata > 0)
 															<span class="countspan">
-																{{ $likes }}
+														 		{{ $likecountdata }}
 															</span>
 															<span>Likes</span>			
 														@else
-															<span class="firstlike">Like</span>
+															<span>Like</span>
 														@endif
 													</label>
 												</div>
