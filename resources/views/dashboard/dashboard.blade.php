@@ -117,19 +117,37 @@
 										<ul>
 											<li>
 												<div class="like-cont">
-													<?php 
-														$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $data['id']])->get(); 
-														// echo '<pre>';print_r($data);die;
-													?>
-													<input type="checkbox" name="" id="checkbox{{$data['id']}}" class="css-checkbox like" {{isset($likedata[0]) ? 'checked' : ''}}/>
+									<?php 
+										$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $data['id']])->get(); 
+
+										$likesdata1 = '';
+										if(isset($data['likes_count'][0]) && $data['likes_count'][0]['likescount'] > 0){
+												$likesdata1 = $data['likes_count'][0]['likescount'];
+											}
+
+										$likes = '';
+										if(!empty($likedata[0])){
+											$likes = 1;
+											$checkedstatus = 'checked';
+											if(isset($data['likes_count'][0])){
+												$roughcount = $data['likes_count'][0]['likescount'];
+												if( $roughcount > 0 ){
+													$likes = $roughcount;
+												}
+											}
+										}else{
+											$checkedstatus = '';
+										}
+										// echo '<pre>';print_r($likes);die;
+
+									?>
+													<input type="checkbox" name="" id="checkbox{{$data['id']}}" class="css-checkbox like" {{ $checkedstatus }}/>
 													<label for="checkbox{{$data['id']}}" class="css-label">
-														@if(isset($data['likes_count'][0]))
-															@if($data['likes_count'][0]['likescount'] > 0)
-																<span class="countspan">
-																	{{ $data['likes_count'][0]['likescount'] }}
-																</span>
-																<span>Likes</span>			
-															@endif
+														@if($likes > 0)
+															<span class="countspan">
+																{{ $likes }}
+															</span>
+															<span>Likes</span>			
 														@else
 															<span class="firstlike">Like</span>
 														@endif
@@ -185,7 +203,7 @@
 														<div class="comment-title-cont">
 															<div class="row">
 																<div class="col-sm-6">
-																	<a href="<?php echo 'profile/'.$commentsData['commented_by'] ?>" title="" class="user-link">{{$name}}</a>
+																	<a href="#" title="" class="user-link">{{$name}}</a>
 																</div>
 																<div class="col-sm-6">
 																	<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
