@@ -188,7 +188,7 @@
 																	<a href="<?php echo 'profile/'.$commentsData['commented_by'] ?>" title="" class="user-link">{{$name}}</a>
 																</div>
 																<div class="col-sm-6">
-																	<div class="comment-time text-right">2.45 PM</div>
+																	<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
 																</div>
 															</div>
 														</div>

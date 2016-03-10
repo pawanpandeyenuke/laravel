@@ -166,8 +166,7 @@ echo $postHtml;
  
 			$image = $feed[0]->image;
 			$message = $feed[0]->message;
-			$time = $feed[0]->updated_at->diffForHumans();
-
+			$time = $feed->updated_at->format('h:i A');
 
 			$likedata = Like::where(['user_id' => Auth::User()->id, 'feed_id' => $arguments['feed_id']])->get(); 
 			$checked = isset($likedata[0]) ? 'checked' : '';
@@ -366,12 +365,22 @@ getcomment;
 					$userid = Auth::User()->id;
 					$username = Auth::User()->first_name.' '.Auth::User()->last_name;
 					$comment = $model->comments;
+					$time = $model->updated_at->format('h:i A');
 
 $variable = array();				
 $variable['comment'] = <<<comments
 <li>
-	<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
-	<a class="user-link" title="" href="profile/$userid">$username</a>
+	<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+	<div class="comment-title-cont">
+		<div class="row">
+			<div class="col-sm-6">
+				<a href="#" title="" class="user-link">$username</a>
+			</div>
+			<div class="col-sm-6">
+				<div class="comment-time text-right">$time</div>
+			</div>
+		</div>
+	</div>
 	<div class="comment-text">$comment</div>
 </li>
 comments;
