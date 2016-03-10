@@ -4,24 +4,10 @@
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingOne">
 		      <h4 class="panel-title">
-		        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#side_acc_menu" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+		        <a href="{{ url('/') }}" class="without-arrow">
 		          <i class="flaticon-interface"></i>News/Friends Feed
 		        </a>
 		      </h4>
-		    </div>
-		    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-		      <div class="panel-body">
-		        <ul>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        </ul>
-		      </div>
 		    </div>
 		  </div>
 		  <div class="panel panel-default">
@@ -69,7 +55,7 @@
 		    <div class="panel-heading" role="tab" id="headingFive">
 		      <h4 class="panel-title">
 		        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#side_acc_menu" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-		          <i class="flaticon-avatar83"></i>Profile
+		          <i class="flaticon-social"></i>Profile
 		        </a>
 		      </h4>
 		    </div>
