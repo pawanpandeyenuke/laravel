@@ -1455,3 +1455,6 @@ button.edit-pr-img {
 .emoji-picker-icon{
 	cursor: pointer;
 }
+.status-up-cont textarea.form-control{
+	height: 50px;
+}
