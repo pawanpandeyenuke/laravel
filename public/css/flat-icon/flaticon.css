@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 16/02/2016 08:30
+  	Creation date: 02/03/2016 05:20
   	*/
 
 @font-face {
@@ -29,18 +29,26 @@ font-style: normal;
 }
 
 .flaticon-balloon:before { content: "\f100"; }
-.flaticon-days:before { content: "\f101"; }
-.flaticon-eye109:before { content: "\f102"; }
-.flaticon-interface:before { content: "\f103"; }
-.flaticon-interface-1:before { content: "\f104"; }
-.flaticon-letter133:before { content: "\f105"; }
-.flaticon-magnifyingglass138:before { content: "\f106"; }
-.flaticon-padlock50:before { content: "\f107"; }
-.flaticon-people:before { content: "\f108"; }
-.flaticon-profile5:before { content: "\f109"; }
-.flaticon-round:before { content: "\f10a"; }
-.flaticon-search74:before { content: "\f10b"; }
-.flaticon-avatar83:before { content: "\f10c"; }
-.flaticon-time:before { content: "\f10d"; }
-.flaticon-tool:before { content: "\f10e"; }
-.flaticon-web:before { content: "\f10f"; }
+.flaticon-black:before { content: "\f101"; }
+.flaticon-calendar:before { content: "\f102"; }
+.flaticon-city:before { content: "\f103"; }
+.flaticon-clip:before { content: "\f104"; }
+.flaticon-days:before { content: "\f105"; }
+.flaticon-eye109:before { content: "\f106"; }
+.flaticon-gps:before { content: "\f107"; }
+.flaticon-interface:before { content: "\f108"; }
+.flaticon-interface-1:before { content: "\f109"; }
+.flaticon-letter:before { content: "\f10a"; }
+.flaticon-letter133:before { content: "\f10b"; }
+.flaticon-magnifyingglass138:before { content: "\f10c"; }
+.flaticon-padlock50:before { content: "\f10d"; }
+.flaticon-people:before { content: "\f10e"; }
+.flaticon-profile5:before { content: "\f10f"; }
+.flaticon-round:before { content: "\f110"; }
+.flaticon-search74:before { content: "\f111"; }
+.flaticon-social:before { content: "\f112"; }
+.flaticon-technology:before { content: "\f113"; }
+.flaticon-time:before { content: "\f114"; }
+.flaticon-tool:before { content: "\f115"; }
+.flaticon-web:before { content: "\f116"; }
+.flaticon-web-1:before { content: "\f117"; }

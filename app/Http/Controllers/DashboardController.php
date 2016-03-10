@@ -30,7 +30,8 @@ class DashboardController extends Controller
             $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
             ->orderBy('news_feed.id','DESC')
             ->take($per_page)
-            ->get();
+            ->get()
+            ->toArray();
 
 
            // echo '<pre>';print_r($feeds);die;
@@ -117,6 +118,7 @@ class DashboardController extends Controller
     public function friendRequests()
     {
         $friend = Friend::with('user')
+                ->with('friends')
                 ->where('user_id', '=', Auth::User()->id)
                 ->orWhere('friend_id', '=', Auth::User()->id)
                 ->get()

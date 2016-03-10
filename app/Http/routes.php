@@ -28,6 +28,7 @@ Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
 Route::post('ajax/groupchatrooms', 'AjaxController@groupchatrooms');
 Route::post('ajax/subgroupchats', 'AjaxController@subgroupchats');
 Route::post('ajax/enterchatroom', 'AjaxController@enterchatroom');
+Route::post('ajax/webgetlikes', 'AjaxController@webgetlikes');
 
 Route::post('/web/ajax/getposts', 'AjaxController@getAjaxPost');
 

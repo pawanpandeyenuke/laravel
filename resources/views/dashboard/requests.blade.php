@@ -35,13 +35,19 @@
 							  			<div id="All" class="tab-pane active" role="tabpanel">
 												<ul>
 													@foreach($friends as $data) 
+													<?php 
+														if($data['friend_id'] == Auth::User()->id)
+															$name = $data['user']['first_name'].' '.$data['user']['last_name'];
+														else
+															$name = $data['friends']['first_name'].' '.$data['friends']['last_name'];
+													?>
 													<li>
 														<div class="row">
 															<div class="col-sm-6">
 																<div class="user-cont">
 																	<a title="" href="#">
 																		<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
-																	{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}
+																	{{ $name }}
 																	</a>
 																</div>
 															</div>
@@ -62,7 +68,7 @@
 																<div class="text-right">
 																	<button class="btn btn-primary btn-full" type="button">Sent Request</button>
 																</div>
-															<?php }elseif(($data['status'] == 'Accepted') && ($data['user_id'] == Auth::User()->id)){ 
+															<?php }elseif(($data['status'] == 'Accepted') && ($data['user_id'] == Auth::User()->id) || ($data['friend_id'] == Auth::User()->id)){ 
 															?>
 																<div class="text-right">
 																	<button class="btn btn-default btn-full" type="button" class="remove">Remove</button>

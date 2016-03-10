@@ -5,7 +5,7 @@ use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
-use XmppPrebind;
+use XmppPrebind, App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth;
@@ -278,23 +278,47 @@ $getcomment = <<<getcomment
 					</div>
 				</div>
 
-				<div class="pop-post-comment post-comment">
-					<div class="emoji-field-cont">
-						<textarea type="text" class="form-control comment-field" data-emojiable="true" placeholder="Type here..."></textarea>
-					</div>
+			<div class="pop-post-comment post-comment">
+				<div class="emoji-field-cont cmnt-field-cont">
+					<textarea type="text" class="form-control comment-field" data-emojiable="true" placeholder="Type here..."></textarea>
+					<input type="file" class="filestyle" data-input="false" data-iconName="flaticon-clip"  data-buttonName="btn-icon btn-cmnt-attach" multiple="multiple">
+					<!-- <button type="button" class="btn-icon btn-cmnt-attach"><i class="flaticon-clip"></i></button> -->
+					<button type="button" class="btn-icon btn-cmnt"><i class="flaticon-letter"></i></button>
 				</div>
+			</div>
 
 			</div>
 		</div>
 	</div>
 </div>
-<script src="js/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
+<script src="/lib/js/nanoscroller.min.js"></script>
+<script src="/lib/js/tether.min.js"></script>
+<script src="/lib/js/config.js"></script>
+<script src="/lib/js/util.js"></script>
+<script src="/lib/js/jquery.emojiarea.js"></script>
+<script src="/lib/js/emoji-picker.js"></script>
+<script src="/js/jquery.nicescroll.min.js"></script>
 <script>
 $('.pop-comment-side .post-comment-cont').niceScroll();
 var postsonajax = $('.postsonajax').html();
 if(postsonajax == ''){
 	$('.postsajax').remove();
 }
+
+	//Emoji Picker
+	$(function() {
+      // Initializes and creates emoji set from sprite sheet
+      window.emojiPicker = new EmojiPicker({
+        emojiable_selector: '[data-emojiable=true]',
+        assetsPath: 'lib/img/',
+        popupButtonClasses: 'fa fa-smile-o'
+      });
+      // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+      // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+      // It can be called as many times as necessary; previously converted input fields will not be converted again
+      window.emojiPicker.discover();
+    });
 </script>
 getcomment;
 
@@ -341,7 +365,9 @@ getcomment;
 					$userid = Auth::User()->id;
 					$username = Auth::User()->first_name.' '.Auth::User()->last_name;
 					$comment = $model->comments;
-$comment = <<<comments
+
+$variable = array();				
+$variable['comment'] = <<<comments
 <li>
 	<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
 	<a class="user-link" title="" href="profile/$userid">$username</a>
@@ -349,7 +375,13 @@ $comment = <<<comments
 </li>
 comments;
 
-					echo $comment;
+
+			$count = DB::table('comments')->where(['feed_id' => $arguments['feed_id']])->get();	
+			$variable['count'] = count($count);
+			$data = json_encode($variable);
+			echo $data;
+
+					// echo $comment;
 				}
 
 			}catch(Exception $e){
@@ -518,16 +550,19 @@ comments;
 	{
 
 		$input = Input::get('groupid');
+		$dataval = Input::get('dataval');
+		
 		if(!empty($input)){
-			$data = DB::table('categories')->where(['parent_id' => $input])->where(['status' => 'Active'])->get(); 
-			
+			$data = DB::table('categories')->where(['parent_id' => $input])->where(['status' => 'Active'])->get();
+
 			if( !empty( $data ) ){
 				$subgroups = $data;
 			}
 		}
 		
 		return view('dashboard.subgroupchats')
-				->with('subgroups', $subgroups);
+				->with('subgroups', $subgroups)
+				->with('dataval', $dataval);
 	}
 
 
@@ -537,7 +572,34 @@ comments;
 	*/
 	public function enterchatroom()
 	{
-		return view('dashboard.enterchatroom');
+
+		$arg = Input::get('dataval');
+
+		$defGroup = array();
+		$defGroup['group_name'] = $arg;
+		$defGroup['group_by'] = Auth::User()->id;
+		
+		$model = new DefaultGroup;
+
+		$updatecheck = $model->where('group_name', $arg)
+					->where('group_by', Auth::User()->id)
+					->get()->toArray();
+		
+		if(empty($updatecheck)){
+			$model = new DefaultGroup;
+			$response = $model->create($defGroup);
+		}else{
+			$id = $updatecheck[0]['id'];
+			$response = $model->find($id);
+		}
+		
+		//Get users of this group
+		$usersData = $model->with('user')->where('group_name', $arg)->get()->toArray();
+		// echo '<pre>';print_r($userids);die;
+
+		return view('dashboard.enterchatroom')
+					->with('groupname', $response)
+					->with('userdata', $usersData);
 	}
  
 
@@ -570,6 +632,47 @@ comments;
 			$city[] = '<option value="'.$query->city_id.'">'.$query->city_name.'</option>';
 		}		
 		echo implode('',$city);
+	}
+
+
+	/*
+	 * Managing likes on api request.
+	 */
+	public function webgetlikes()
+	{
+		try
+		{	
+			$arguments = Input::all();
+			$likes = new Like;
+
+			if( $arguments ){
+				$validator = Validator::make($arguments, $likes->rules, $likes->messages);
+				if($validator->fails()) {					
+					throw new Exception($this->getError($validator));					
+				}else{
+					$feed = Feed::find($arguments['feed_id']);
+					if( !$feed )
+						throw new Exception( 'Feed does not exists' );
+					
+					$like = Like::where([ 'feed_id' => $arguments['feed_id'], 'user_id' => $arguments['user_id'] ])->get()->toArray();
+
+					if( empty($like) ){
+						$model = new Like;
+						$response = $model->create( $arguments );
+					}else{
+						$model = Like::where([ 'feed_id' => $arguments['feed_id'], 'user_id' => $arguments['user_id']])->delete();
+						// echo '<pre>';print_r($response);exit;
+					}
+				}
+				$count = DB::table('likes')->where(['feed_id' => $arguments['feed_id']])->get();
+				// print_r();die;
+				echo $likes = count($count);
+				
+			}
+		}catch( Exception $e ){
+			return $e->getMessage();
+		}
+		exit;
 	}
 
 

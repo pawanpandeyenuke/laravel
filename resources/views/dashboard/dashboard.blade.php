@@ -1,4 +1,5 @@
 @extends('layouts.dashboard')
+<?php use Carbon\Carbon; ?>
 <?php  
 // echo '<pre>';print_r($feeds);die('view');
 ?>
@@ -43,11 +44,12 @@
 										<div class="col-md-12">
 											<div class="emoji-field-cont form-group">
 												<!-- <input type="text" class="form-control" data-emojiable="true" placeholder="What’s on your mind?"> -->
-											{!! Form::text('message', null, array(
+											{!! Form::textarea('message', null, array(
 													'id' => 'newsfeed', 
 													'class' => 'form-control',
 													'data-emojiable' => true,
-													'placeholder' => 'What’s on your mind?'
+													'placeholder' => 'What’s on your mind?',
+													'data-emojiable' => 'true',
 												)) !!}
 											</div>
 										</div>
@@ -81,8 +83,8 @@
 					    </div><!--/status tab-->
 					<div class="post-list" id="postlist">
 						@foreach($feeds as $data)		
-							<?php //echo '<pre>';print_r($data);die;  ?>					
-							<div class="single-post" data-value="{{ $data->id }}" id="post_{{ $data->id }}">
+							<?php //echo '<pre>';print_r($data['comments']);die;  ?>					
+							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 								<div class="post-header">
 									<div class="row">
 										<div class="col-md-7">
@@ -94,18 +96,20 @@
 										<div class="col-md-5">
 											<div class="post-time text-right">
 												<ul>
-													<li><span class="icon flaticon-time">{{ $data->updated_at->diffForHumans() }}</span></li>
-													<!-- <li><span class="icon flaticon-days">{{ $data->updated_at }}</span></li> -->
+													<li><span class="icon flaticon-time">4:15 PM</span></li>
+													<li><span class="icon flaticon-days">7 WED</span></li>
 												</ul>
 											</div>
 										</div>
 									</div>
 								</div><!--/post header-->
 								<div class="post-data">
-									<p>{{ $data->message }}</p>
-									@if($data->image)
+									<p>{{ $data['message'] }}</p>
+									@if($data['image'])
 										<div class="post-img-cont">
-											<img src="{{ url('uploads/'.$data->image) }}" class="post-img img-responsive">
+											<a href="{{ url('uploads/'.$data['image']) }}" class="popup">
+											<img src="{{ url('uploads/'.$data['image']) }}" class="post-img img-responsive">
+											</a>
 										</div>
 									@endif
 								</div><!--/post data-->
@@ -115,15 +119,20 @@
 											<li>
 												<div class="like-cont">
 													<?php 
-														$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $data->id])->get(); 
-														// echo '<pre>';print_r($likedata[0]);die;
+														$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $data['id']])->get(); 
+														// echo '<pre>';print_r($data);die;
 													?>
-													<input type="checkbox" name="" id="checkbox{{$data->id}}" class="css-checkbox like" {{isset($likedata[0]) ? 'checked' : ''}}/>
-													<label for="checkbox{{$data->id}}" class="css-label">
-														@if(count($data['likesCount']) > 0)
-															<span>{{ count($data['likesCount']) }} Likes</span>
+													<input type="checkbox" name="" id="checkbox{{$data['id']}}" class="css-checkbox like" {{isset($likedata[0]) ? 'checked' : ''}}/>
+													<label for="checkbox{{$data['id']}}" class="css-label">
+														@if(isset($data['likes_count'][0]))
+															@if($data['likes_count'][0]['likescount'] > 0)
+																<span class="countspan">
+																	{{ $data['likes_count'][0]['likescount'] }}
+																</span>
+																<span>Likes</span>			
+															@endif
 														@else
-															<span>Like</span>
+															<span class="firstlike">Like</span>
 														@endif
 													</label>
 												</div>
@@ -131,9 +140,9 @@
 											<li>
 												<a href="#AllComment" class="popup popupajax">
 													<span class="icon flaticon-interface-1"></span> 
-													@if(isset($data->commentsCount[0]))
-														@if($data->commentsCount[0]->commentscount > 0)
-															<span class="commentcount">{{ $data->commentsCount[0]->commentscount }} Comments</span>
+													@if(!empty($data['comments_count'][0]))
+														@if($data['comments_count'][0]['commentscount'] > 0)
+															<span class="commentcount">{{ $data['comments_count'][0]['commentscount'] }} Comments</span>
 														@else
 															<span class="commentcount">Comment</span>
 														@endif
@@ -148,7 +157,9 @@
 										<div class="post-comment">
 											<div class="row">
 												<div class="col-md-10">
-													<textarea type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
+													<div class="emoji-field-cont cmnt-field-cont">
+														<textarea data-emojiable="true" type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
+													</div>
 												</div>
 												<div class="col-md-2">
 													<button type="button" class="btn btn-primary btn-full comment">Post</button>
@@ -157,22 +168,36 @@
 										</div><!--/post comment-->
 										<div class="comments-list">
 											<ul>
-												<?php $counter = 1; ?>
-												@foreach($data->comments as $commentsData)
-												<?php 
-													$username = DB::table('users')->where('id', $commentsData->commented_by)->get(['first_name', 'last_name']);
-													if(!empty($username)){
+												@if(!empty($data['comments']))
+													<?php $counter = 1; ?>
+													@foreach($data['comments'] as $commentsData)
+													<?php 
+														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name']);
 
-													$name = $username[0]->first_name.' '.$username[0]->last_name; 
+														// print_r($username);die;
+														if(!empty($username)){
 
-												if($counter < 4){ ?>
-													<li>
+														$name = $username[0]->first_name.' '.$username[0]->last_name; 
+
+													if($counter < 4){ ?>
+
+														<li>
 														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
-														<a href="<?php echo 'profile/'.$commentsData->commented_by ?>" title="" class="user-link">{{$name}}</a>
-														<div class="comment-text">{{$commentsData->comments}}</div>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="<?php echo 'profile/'.$commentsData['commented_by'] ?>" title="" class="user-link">{{$name}}</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">2.45 PM</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">{{$commentsData['comments']}}</div>
 													</li>
-												<?php }$counter++; }?>
-												@endforeach
+													<?php }$counter++; }?>
+													@endforeach
+												@endif
 											</ul>
 										</div><!--/comments list-->
 									</div>
