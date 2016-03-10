@@ -85,10 +85,15 @@ $(document).ready(function(){
 
 				current.next('label.css-label').find('.countspan').html(response);
 
-				if(response == 0)
-					current.next('label.css-label').find('.firstlike').html('Like');
-				else
+				if(response == 0){
+					current.next().html('');
+					current.next().append('<span class="firstlike">Like</span>')
+					// alert('number');
+				}else{
 					current.next('label.css-label').find('.firstlike').html(response+' Likes');
+					// alert('not number');
+				}
+
 			}			
 		});	
 	});
