@@ -44,7 +44,7 @@ $(document).ready(function(){
 
 	// Post status updates via ajax call.
 	$("#postform").ajaxForm(function(response) { 
- 
+ 		var current = $("#postform")
 		if(response){
 			$('#newsfeed').val('');
 			$('#image-holder').hide();
@@ -53,6 +53,8 @@ $(document).ready(function(){
 
 			if(response != 'Post something to update.'){
 				$('#postlist').first('.single-post').prepend(response);
+				current.parents('.row').find('#newsfeed').text('');
+				current.parents('.row').find('.emoji-wysiwyg-editor').text('');
 			}
 
 		} 
@@ -115,7 +117,7 @@ $(document).ready(function(){
 					}
 
 					current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
-					
+					current.parents('.row').find('.comment-field').text('');
 				}			
 			});	
 		}
