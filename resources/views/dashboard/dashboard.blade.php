@@ -155,7 +155,7 @@
 												</div>
 											</li>
 											<li>
-												<a href="#AllComment" class="popup popupajax">
+												<a href="#" class="popup-popupajax">
 													<span class="icon flaticon-interface-1"></span> 
 													@if(!empty($data['comments_count'][0]))
 														@if($data['comments_count'][0]['commentscount'] > 0)
