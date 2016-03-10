@@ -75,7 +75,7 @@ $postHtml = <<<postHtml
 					<div class="row">
 						<div class="col-md-7">
 							<a href="#" title="" class="user-thumb-link">
-								<span class="small-thumb" style="background: url('uploads/1456394309_POST_XZY0484L(1.JPG');"></span>
+								<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
 								$name
 							</a>
 						</div>
@@ -103,6 +103,7 @@ $postHtml = <<<postHtml
 								<div class="like-cont">
 									<input type="checkbox" name="" id="checkbox<?php echo $feed->id ?>" class="css-checkbox like"/>
 									<label for="checkbox<?php echo $feed->id ?>" class="css-label">
+										<span class="countspan"></span>
 										<span>Like</span>
 									</label>
 								</div>
@@ -244,7 +245,7 @@ $getcomment = <<<getcomment
 					</div>
 					
 					<div class="post-data pop-post-img">
-						<img src="uploads/$image" class="pop-img">
+						<img src="images/user-thumb.jpg" class="pop-img">
 					</div>
 					<div class="post-footer pop-post-footer">
 						<div class="post-actions">

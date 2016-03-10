@@ -30,8 +30,7 @@ class DashboardController extends Controller
             $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
             ->orderBy('news_feed.id','DESC')
             ->take($per_page)
-            ->get()
-            ->toArray();
+            ->get();
 
 
            // echo '<pre>';print_r($feeds);die;

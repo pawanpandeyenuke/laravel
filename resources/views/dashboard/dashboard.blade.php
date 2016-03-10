@@ -1,5 +1,4 @@
 @extends('layouts.dashboard')
-<?php use Carbon\Carbon; ?>
 <?php  
 // echo '<pre>';print_r($feeds);die('view');
 ?>
@@ -83,21 +82,21 @@
 					    </div><!--/status tab-->
 					<div class="post-list" id="postlist">
 						@foreach($feeds as $data)		
-							<?php //echo '<pre>';print_r($data['comments']);die;  ?>					
+							<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>					
 							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 								<div class="post-header">
 									<div class="row">
 										<div class="col-md-7">
 											<a href="#" title="" class="user-thumb-link">
 												<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
-												{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}
+												{{ $data->user->first_name.' '.$data->user->last_name }}
 											</a>
 										</div>
 										<div class="col-md-5">
 											<div class="post-time text-right">
 												<ul>
-													<li><span class="icon flaticon-time">4:15 PM</span></li>
-													<li><span class="icon flaticon-days">7 WED</span></li>
+													<li><span class="icon flaticon-time">{{ $data->updated_at->format('h:i A') }}</span></li>
+													<li><span class="icon flaticon-days">{{ $data->updated_at->format('l jS') }}</span></li>
 												</ul>
 											</div>
 										</div>
