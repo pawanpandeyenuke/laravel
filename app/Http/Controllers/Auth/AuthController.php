@@ -75,10 +75,8 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
  
-
-        $tempPass = 'Enuke123';
         $xmpp_username = $userdata->first_name.$userdata->id;
-        $xmpp_password = md5($tempPass); //$userdata->password;
+        $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
 
         $user = User::find($userdata->id);
         $user->xmpp_username = $xmpp_username;
@@ -87,9 +85,8 @@ class AuthController extends Controller
 
 
         $converse = new Converse;
-        $response = $converse->register($xmpp_username, $xmpp_password);        
-        
-        
+        $response = $converse->register($xmpp_username, $xmpp_password);
+     
         return $userdata;
     }
 

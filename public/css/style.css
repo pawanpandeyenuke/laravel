@@ -1274,3 +1274,9 @@ a:hover{
 .dashboard-sidemenu .panel-title > a.without-arrow{
 	background: none;
 }
+#image-holder img{
+	width:100%;
+}
+#submit-btn{
+	margin-top: 20px;
+}

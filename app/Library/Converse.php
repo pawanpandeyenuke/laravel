@@ -25,8 +25,8 @@ class Converse{
 
 		$node = config('app.xmppHost');
 		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
-
-		dd($response);exit;
+echo $response;
+//		dd($response);exit;
 		return true;
 		
 	}
