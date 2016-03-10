@@ -130,13 +130,13 @@
 															</span>
 															<span>Likes</span>			
 														@else
-															<span>Like</span>
+															<span class="firstlike">Like</span>
 														@endif
 													</label>
 												</div>
 											</li>
 											<li>
-												<a href="#" class="popup-popupajax">
+												<a class="popup-popupajax">
 													<span class="icon flaticon-interface-1"></span> 
 													@if(!empty($data['comments_count'][0]))
 														@if($data['comments_count'][0]['commentscount'] > 0)

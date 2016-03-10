@@ -109,7 +109,7 @@ $postHtml = <<<postHtml
 								</div>
 							</li>
 							<li>
-								<a href="#" class="popups">
+								<a class="popups">
 									<span class="icon flaticon-interface-1"></span> 
 									<span class="commentcount">Comment</span>
 								</a>
