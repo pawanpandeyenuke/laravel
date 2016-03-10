@@ -1,6 +1,8 @@
-$(document).ready(function(){
 
-	// $('.post-list').show();
+
+$(document).ready(function(){
+	
+	$('.StyleScroll').niceScroll();
 	
 	var myReader = new FileReader();
 
@@ -57,41 +59,34 @@ $(document).ready(function(){
 
     }); 
 
+	
+	$(document).on('click', '.group-radio', function(){		
+
+		var current = $(this);
+		current.closest('.groupcat').find('.selectbox').show();
+		var nextcurrent = current.closest('.groupcat').next().find('.selectbox').hide();
+		var prevcurrent = current.closest('.groupcat').prev().find('.selectbox').hide();
+
+	});
 
 	$(document).on('click', '.like', function(){		
 		var _token = $('#postform input[name=_token]').val();
 		var feedId = $(this).closest('.single-post').data('value');
 		var user_id = $('#user_id').val();
 		var current = $(this);
-		// alert(id);
+
 		$.ajax({			
-			'url' : 'api/likes',
+			'url' : 'ajax/webgetlikes',
 			'data' : { '_token' : _token, 'feed_id' : feedId, 'user_id' : user_id, 'liked' : 'Yes' },
 			'type' : 'post',
 			'success' : function(response){
-				var responsedata = jQuery.parseJSON(response);
-				if(responsedata.data.status == 'liked'){
-					var prev = current.parents('.like-cont').find('span').html();
-					var value = prev.split(' ');
-					if(value[0] != '' && Number.isInteger(value[0])){
-						count = value[0];
-						likecount = ++count;
-						current.parents('.like-cont').find('span').html(likecount+' Likes');
-					}else{
-						current.parents('.like-cont').find('span').html('1 Like');
-					}
-				}else{
-					var prev = current.parents('.like-cont').find('span').html();
-					var value = prev.split(' ');
-					if(value != '' && Number.isInteger(value)){
-						count = value[0];
-						likecount = --count;
-						// alert(likecount);
-						current.parents('.like-cont').find('span').html(likecount+' Likes');
-					}else{
-						current.parents('.like-cont').find('span').html('Like');
-					}
-				}
+
+				current.next('label.css-label').find('.countspan').html(response);
+
+				if(response == 0)
+					current.next('label.css-label').find('.firstlike').html('Like');
+				else
+					current.next('label.css-label').find('.firstlike').html(response+' Likes');
 			}			
 		});	
 	});
@@ -107,22 +102,19 @@ $(document).ready(function(){
 				'url' : 'ajax/comments/post',
 				'data' : { '_token' : _token, 'feed_id' : feedId, 'commented_by' : commented_by, 'comments' : commentData },
 				'type' : 'post',
-				'success' : function(response){				
-					
+				'success' : function(response){
+					var parseresponse = jQuery.parseJSON(response);
+					// console.log(parseresponse.count);
 					current.closest('.row').find('textarea').val('');
 
-					var prev = current.parents('.post-footer').find('.commentcount').html();
-					var value = prev.split(' ');
-
-					count = value[0];
-					if(!count.trim()){
-						commentcount = ++count;
-						current.parents('.post-footer').find('.commentcount').html(commentcount+' Comments');
+					count = parseresponse.count;
+					if(count != 0){
+						current.parents('.post-footer').find('.commentcount').html(count+' Comments');
 					}else{
 						current.parents('.post-footer').find('.commentcount').html('1 Comment');
 					}
 
-					current.parents('.post-comment-cont').find('.comments-list ul').append(response);
+					current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
 					
 				}			
 			});	
@@ -149,10 +141,96 @@ $(document).ready(function(){
 	});
 
 
+	/**
+	* Friend request tabs ajax call handling.
+	* Ajaxcontroller@getfriendslist
+	**/
+	$(document).on('click', '.friendstabs', function(){    
+		var type = $(this).data('reqtype');
+		var current = $(this);
+		$.ajax({
+			'url' : 'ajax/getfriendslist',
+			'data' : {'type' : type},
+			'type' : 'post',
+			'success' : function(response){
+				var type = response.type;
+				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response.data);
+			}
+		});
+	});
+
+
+	/**
+	*	Group chatrooms ajax call handling.
+	*	Ajaxcontroller@groupchatrooms
+	*/
+	$(document).on('click', '#groupchatrooms', function(){
+		var current = $(this);
+		$.ajax({
+			'url' : 'ajax/groupchatrooms',
+			'type' : 'post',
+			// 'data' : {},
+			'success' : function(response){
+				var html = current.closest('.dashboard-body').find('.col-sm-6').html(response);
+				// alert(html);
+			}
+		});
+	});
+
+
+	/**
+	*	Group sub chatrooms ajax call handling.
+	*	Ajaxcontroller@groupchatrooms
+	*/
+	$(document).on('click', '.groupnext', function(){
+		var current = $(this);
+		var groupid = $(this).data('parentid');
+
+		var dataval = $(this).data('value');
+		// alert(dataval);
+		$.ajax({
+			'url' : 'ajax/subgroupchats',
+			'type' : 'post',
+			'data' : { 'groupid' : groupid, 'dataval' : dataval },
+			'success' : function(response){
+				var html = current.closest('.dashboard-body').find('.col-sm-6').html(response);
+				// alert(html);
+			}
+		});
+	});
+	
+
+	/**
+	*	Enter chatrooms ajax call handling.
+	*	Ajaxcontroller@enterchatroom
+	*/
+	$(document).on('click', '.enterchat', function(){
+		var current = $(this);
+		var groupid = $(this).data('parentid');
+		var dataval = $(this).data('value');
+		console.log(dataval);
+        if(dataval.length){
+			$.ajax({
+				'url' : 'ajax/enterchatroom',
+				'type' : 'post',
+				'data' : { 'dataval' : dataval },
+				'success' : function(response){
+					var html = current.closest('.dashboard-body').find('.col-sm-6').html(response);
+					// alert(dataval);
+				}
+			});
+        }
+	});
+
+
 	$('#state').html('<option value="">State</option>');
 	$('#city').html('<option value="">City</option>');
 
-	//Get states ajax call.
+
+	/**
+	*	Get states ajax call handling.
+	*	Ajaxcontroller@enterchatroom
+	*/
 	$('#country').change(function(){
 		var countryId = $(this).val();
 		var _token = $('#searchform input[name=_token]').val();
@@ -166,7 +244,11 @@ $(document).ready(function(){
 		});	
 	});
 
-	//Get cities ajax call.
+
+	/**
+	*	Get cities ajax call handling.
+	*	Ajaxcontroller@getCities
+	*/
 	$('#state').change(function(){
 		var stateId = $(this).val();
 		var _token = $('#searchform input[name=_token]').val();
@@ -191,8 +273,10 @@ $(document).ready(function(){
  
 });
 
+	$('.popup').fancybox();
+
 	//Emoji Picker
-/*	$(function() {
+	$(function() {
       // Initializes and creates emoji set from sprite sheet
       window.emojiPicker = new EmojiPicker({
         emojiable_selector: '[data-emojiable=true]',
@@ -203,5 +287,5 @@ $(document).ready(function(){
       // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
       // It can be called as many times as necessary; previously converted input fields will not be converted again
       window.emojiPicker.discover();
-    });*/
+    });
 	

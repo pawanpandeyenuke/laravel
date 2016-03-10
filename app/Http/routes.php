@@ -23,10 +23,12 @@ Route::post('ajax/posts', 'AjaxController@posts');
 Route::post('ajax/like', 'AjaxController@like');
 Route::post('ajax/comments/get', 'AjaxController@getCommentBox');
 Route::post('ajax/comments/post', 'AjaxController@postcomment');
-Route::post('ajax/loadposts', 'AjaxController@loadposts');
-
-
-
+Route::post('ajax/getfriendslist', 'AjaxController@getfriendslist');
+Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
+Route::post('ajax/groupchatrooms', 'AjaxController@groupchatrooms');
+Route::post('ajax/subgroupchats', 'AjaxController@subgroupchats');
+Route::post('ajax/enterchatroom', 'AjaxController@enterchatroom');
+Route::post('ajax/webgetlikes', 'AjaxController@webgetlikes');
 
 Route::post('/web/ajax/getposts', 'AjaxController@getAjaxPost');
 
@@ -77,8 +79,10 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('dashboard', 'DashboardController@dashboard');
 	Route::post('dashboard', 'DashboardController@dashboard');
 	Route::get('settings/privacy', 'DashboardController@settings');	
-	Route::post('settings/privacy', 'DashboardController@settings');	
+	Route::post('settings/privacy', 'DashboardController@settings');
 	Route::get('/', 'DashboardController@dashboard');	
+	Route::get('chatroom', 'DashboardController@chatroom');
+	Route::get('requests', 'DashboardController@friendRequests');
 
 	// Route::get('post/image', 'DashboardController@image');	
 

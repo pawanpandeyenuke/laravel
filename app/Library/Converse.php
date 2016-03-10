@@ -24,9 +24,13 @@ class Converse{
 //		echo 'XMPP responce: '; print_r($output);exit;
 
 		$node = config('app.xmppHost');
-		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
-echo $response;
+//		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
+
 //		dd($response);exit;
+		$response = @exec('sudo /usr/sbin/ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
+
+		// dd($response);exit;
+
 		return true;
 		
 	}

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Auth, App\Feed, DB, App\Setting;
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend;
 use Request, Session, Validator, Input, Cookie;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -30,7 +30,8 @@ class DashboardController extends Controller
             $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
             ->orderBy('news_feed.id','DESC')
             ->take($per_page)
-            ->get();
+            ->get()
+            ->toArray();
 
 
            // echo '<pre>';print_r($feeds);die;
@@ -99,6 +100,33 @@ class DashboardController extends Controller
         }
         
         return view('dashboard.settings');
+    }
+
+
+    public function chatroom()
+    {
+        $groups = Group::where([
+                'owner_id' => Auth::User()->id,
+                'status' => 'Active'
+            ])->get();
+        // echo '<pre>';print_r($groups);die;
+        return view('dashboard.chatroom')
+            ->with('groups', $groups);
+
+    }
+
+    public function friendRequests()
+    {
+        $friend = Friend::with('user')
+                ->with('friends')
+                ->where('user_id', '=', Auth::User()->id)
+                ->orWhere('friend_id', '=', Auth::User()->id)
+                ->get()
+                ->toArray();
+        // echo '<pre>';print_r($friend);die;
+        return view('dashboard.requests')
+                ->with('friends', $friend);
+
     }
 
 }

@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\State, App\City, App\Like, App\Comment, App\User;
+use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
+use XmppPrebind, App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth;
@@ -277,23 +278,47 @@ $getcomment = <<<getcomment
 					</div>
 				</div>
 
-				<div class="pop-post-comment post-comment">
-					<div class="emoji-field-cont">
-						<textarea type="text" class="form-control comment-field" data-emojiable="true" placeholder="Type here..."></textarea>
-					</div>
+			<div class="pop-post-comment post-comment">
+				<div class="emoji-field-cont cmnt-field-cont">
+					<textarea type="text" class="form-control comment-field" data-emojiable="true" placeholder="Type here..."></textarea>
+					<input type="file" class="filestyle" data-input="false" data-iconName="flaticon-clip"  data-buttonName="btn-icon btn-cmnt-attach" multiple="multiple">
+					<!-- <button type="button" class="btn-icon btn-cmnt-attach"><i class="flaticon-clip"></i></button> -->
+					<button type="button" class="btn-icon btn-cmnt"><i class="flaticon-letter"></i></button>
 				</div>
+			</div>
 
 			</div>
 		</div>
 	</div>
 </div>
-<script src="js/jquery.nicescroll.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
+<script src="/lib/js/nanoscroller.min.js"></script>
+<script src="/lib/js/tether.min.js"></script>
+<script src="/lib/js/config.js"></script>
+<script src="/lib/js/util.js"></script>
+<script src="/lib/js/jquery.emojiarea.js"></script>
+<script src="/lib/js/emoji-picker.js"></script>
+<script src="/js/jquery.nicescroll.min.js"></script>
 <script>
 $('.pop-comment-side .post-comment-cont').niceScroll();
 var postsonajax = $('.postsonajax').html();
 if(postsonajax == ''){
 	$('.postsajax').remove();
 }
+
+	//Emoji Picker
+	$(function() {
+      // Initializes and creates emoji set from sprite sheet
+      window.emojiPicker = new EmojiPicker({
+        emojiable_selector: '[data-emojiable=true]',
+        assetsPath: 'lib/img/',
+        popupButtonClasses: 'fa fa-smile-o'
+      });
+      // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+      // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+      // It can be called as many times as necessary; previously converted input fields will not be converted again
+      window.emojiPicker.discover();
+    });
 </script>
 getcomment;
 
@@ -340,7 +365,9 @@ getcomment;
 					$userid = Auth::User()->id;
 					$username = Auth::User()->first_name.' '.Auth::User()->last_name;
 					$comment = $model->comments;
-$comment = <<<comments
+
+$variable = array();				
+$variable['comment'] = <<<comments
 <li>
 	<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
 	<a class="user-link" title="" href="profile/$userid">$username</a>
@@ -348,7 +375,13 @@ $comment = <<<comments
 </li>
 comments;
 
-					echo $comment;
+
+			$count = DB::table('comments')->where(['feed_id' => $arguments['feed_id']])->get();	
+			$variable['count'] = count($count);
+			$data = json_encode($variable);
+			echo $data;
+
+					// echo $comment;
 				}
 
 			}catch(Exception $e){
@@ -361,24 +394,219 @@ comments;
 	}
 
 
+	public function getxmppuser(){
 
-	public function loadposts()
+		$status=0;
+		$user_id = Auth::User()->id;
+		$node = config('app.xmppHost');
+
+		$user = User::find($user_id);
+		
+		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
+		{
+
+			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', '', false, false);
+			$username = $user->xmpp_username;
+			$password = $user->xmpp_password;
+			$xmppPrebind->connect($username, $password);
+			$xmppPrebind->auth();
+			$sessionInfo = $xmppPrebind->getSessionInfo();
+			$status = 1;
+		}
+
+		$sessionInfo['status']=$status;	  
+		echo json_encode($sessionInfo); 
+		exit;	  
+
+ 	}
+
+
+	/**
+	*	Get friend lists ajax call handling.
+	*	Ajaxcontroller@getfriendslist
+	*/
+	public function getfriendslist()
 	{
 
-/*		$input = Input::all();
-        $per_page = 5;
+		$input = Input::get('type');;
 
-        $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
-        ->orderBy('news_feed.id','DESC')
-        ->take($per_page)
-        ->get();
+		$model = Friend::with('user')->with('friends')->where( function( $query ) use ( $input ) {
+					self::queryBuilder( $query, $input );
+				})->get()->toArray();
+ 
+		$litag = array();
+		foreach ($model as $key => $value) {
 
-		return view('dashboard.newsfeed')->with(['feeds' => $feeds, 'page' => $input['page']]);*/
+			if($value['friend_id'] == Auth::User()->id)
+				$name = $value['user']['first_name'].' '.$value['user']['last_name'];
+			else
+				$name = $value['friends']['first_name'].' '.$value['friends']['last_name'];
 
+
+			if($input == 'sent'){
+				$permissionbutton = '<div class="text-right">
+								<button class="btn btn-primary btn-full" type="button">Sent Request</button>
+							</div>';
+			}elseif($input == 'recieved'){
+				$permissionbutton = '<div class="row">
+								<div class="col-sm-6">
+									<button class="btn btn-primary btn-full" type="button" class="accept">Accept</button>
+								</div>
+								<div class="col-sm-6">
+									<button class="btn btn-default btn-full" type="button" class="decline">Decline</button>
+								</div>
+							</div>';
+			}elseif($input == 'current'){
+				$permissionbutton = '<div class="text-right">
+								<button class="btn btn-default btn-full" type="button" class="remove">Remove</button>
+							</div>';
+			}elseif($input == 'all'){
+
+				if(($value['status'] == 'Pending') && ($value['user_id'] == Auth::User()->id)){
+					$permissionbutton = '<div class="row">
+							<div class="col-sm-6">
+								<button class="btn btn-primary btn-full" type="button" class="accept">Accept</button>
+							</div>
+							<div class="col-sm-6">
+								<button class="btn btn-default btn-full" type="button" class="decline">Decline</button>
+							</div>
+						</div>';
+				}elseif(($value['status'] == 'Pending') && ($value['friend_id'] == Auth::User()->id)){ 
+					$permissionbutton = '<div class="text-right">
+							<button class="btn btn-primary btn-full" type="button">Sent Request</button>
+						</div>';
+				}elseif(($value['status'] == 'Accepted') && ($value['user_id'] == Auth::User()->id)){ 
+					$permissionbutton = '<div class="text-right">
+						<button class="btn btn-default btn-full" type="button" class="remove">Remove</button>
+					</div>';
+				}
+
+			}
+
+			$litag[] = '<li>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="user-cont">
+										<a title="" href="#">
+											<span style="background: url(images/user-thumb.jpg);" class="user-thumb">
+											</span>
+											'.$name.'
+										</a>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									'.$permissionbutton.'
+								</div>
+							</div>
+						</li>';
+
+		}
+
+		$lisdata = array();
+		$lisdata['data'] = implode(' ', $litag);
+		$lisdata['type'] = ucwords($input);
+		// print_r($model);exit;
+		return $lisdata;
+ 
 	}
 
 
-	//Get states
+	/**
+	*	Query builderfor friend lists ajax call handling.
+	*	Ajaxcontroller@queryBuilder
+	*/
+	public function queryBuilder( &$query, $input ){
+		if($input == 'all'){
+            $query->where('user_id', '=', Auth::User()->id);
+            $query->orWhere('friend_id', '=', Auth::User()->id);
+        }elseif($input == 'sent'){
+            $query->where('user_id', '=', Auth::User()->id);
+            $query->where('status', '=', 'Pending');
+        }elseif($input == 'recieved'){
+            $query->where('friend_id', '=', Auth::User()->id);
+            $query->where('status', '=', 'Pending');
+        }elseif($input == 'current'){
+            $query->where('user_id', '=', Auth::User()->id)->where('status', '=', 'Accepted');
+            $query->orWhere('friend_id', '=', Auth::User()->id)->where('status', '=', 'Accepted');
+        } 
+	}
+
+
+	/**
+	*	Group chatrooms ajax call handling.
+	*	Ajaxcontroller@groupchatrooms
+	*/
+	public function groupchatrooms()
+	{
+		return view('dashboard.groupchatrooms');
+	}
+
+
+	/**
+	*	Group sub chatrooms ajax call handling.
+	*	Ajaxcontroller@groupchatrooms
+	*/
+	public function subgroupchats()
+	{
+
+		$input = Input::get('groupid');
+		$dataval = Input::get('dataval');
+		
+		if(!empty($input)){
+			$data = DB::table('categories')->where(['parent_id' => $input])->where(['status' => 'Active'])->get();
+
+			if( !empty( $data ) ){
+				$subgroups = $data;
+			}
+		}
+		
+		return view('dashboard.subgroupchats')
+				->with('subgroups', $subgroups)
+				->with('dataval', $dataval);
+	}
+
+
+	/**
+	*	Enter chatrooms ajax call handling.
+	*	Ajaxcontroller@enterchatroom
+	*/
+	public function enterchatroom()
+	{
+
+		$arg = Input::get('dataval');
+
+		$defGroup = array();
+		$defGroup['group_name'] = $arg;
+		$defGroup['group_by'] = Auth::User()->id;
+		
+		$model = new DefaultGroup;
+
+		$updatecheck = $model->where('group_name', $arg)
+					->where('group_by', Auth::User()->id)
+					->get()->toArray();
+		
+		if(empty($updatecheck)){
+			$model = new DefaultGroup;
+			$response = $model->create($defGroup);
+		}else{
+			$id = $updatecheck[0]['id'];
+			$response = $model->find($id);
+		}
+		
+		//Get users of this group
+		$usersData = $model->with('user')->where('group_name', $arg)->get()->toArray();
+		// echo '<pre>';print_r($userids);die;
+
+		return view('dashboard.enterchatroom')
+					->with('groupname', $response)
+					->with('userdata', $usersData);
+	}
+ 
+
+	/**
+	*	Get states ajax call handling.
+	*	Ajaxcontroller@getStates
+	*/
 	public function getStates()
 	{
 		$input = Input::all();
@@ -391,7 +619,10 @@ comments;
 	}
 
 
-	//Get cities
+	/**
+	*	Get cities ajax call handling.
+	*	Ajaxcontroller@getCities
+	*/
 	public function getCities()
 	{
 		$input = Input::all();
@@ -401,6 +632,47 @@ comments;
 			$city[] = '<option value="'.$query->city_id.'">'.$query->city_name.'</option>';
 		}		
 		echo implode('',$city);
+	}
+
+
+	/*
+	 * Managing likes on api request.
+	 */
+	public function webgetlikes()
+	{
+		try
+		{	
+			$arguments = Input::all();
+			$likes = new Like;
+
+			if( $arguments ){
+				$validator = Validator::make($arguments, $likes->rules, $likes->messages);
+				if($validator->fails()) {					
+					throw new Exception($this->getError($validator));					
+				}else{
+					$feed = Feed::find($arguments['feed_id']);
+					if( !$feed )
+						throw new Exception( 'Feed does not exists' );
+					
+					$like = Like::where([ 'feed_id' => $arguments['feed_id'], 'user_id' => $arguments['user_id'] ])->get()->toArray();
+
+					if( empty($like) ){
+						$model = new Like;
+						$response = $model->create( $arguments );
+					}else{
+						$model = Like::where([ 'feed_id' => $arguments['feed_id'], 'user_id' => $arguments['user_id']])->delete();
+						// echo '<pre>';print_r($response);exit;
+					}
+				}
+				$count = DB::table('likes')->where(['feed_id' => $arguments['feed_id']])->get();
+				// print_r();die;
+				echo $likes = count($count);
+				
+			}
+		}catch( Exception $e ){
+			return $e->getMessage();
+		}
+		exit;
 	}
 
 

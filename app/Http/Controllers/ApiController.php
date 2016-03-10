@@ -247,10 +247,12 @@ class ApiController extends Controller
 
 					/*$posts = Feed::where('user_by', $arguments['user_by'])->orderBy('updated_at', 'desc')->skip($offset)->take($per_page)->with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get()->toArray();*/
 
+
 //					$recordscount = Feed::where('user_by', $arguments['user_by'])->get();
-$rcounts = Feed::all();
-$recordscount = count($rcounts);
+					$rcounts = Feed::all();
+					$recordscount = count($rcounts);
 //print_r($recordscount);die;
+
 					// $posts = Feed::with('user')->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')->groupBy('news_feed.id')->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments'),DB::raw('count(likes.id) as likes')]);
 
 /*					$posts = DB::table('users')
