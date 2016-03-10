@@ -96,7 +96,7 @@
 											<div class="post-time text-right">
 												<ul>
 													<li><span class="icon flaticon-time">{{ $data->updated_at->format('h:i A') }}</span></li>
-													<li><span class="icon flaticon-days">{{ $data->updated_at->format('l jS') }}</span></li>
+													<li><span class="icon flaticon-days">{{ $data->updated_at->format('D jS') }}</span></li>
 												</ul>
 											</div>
 										</div>
