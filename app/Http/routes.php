@@ -24,10 +24,10 @@ Route::post('ajax/like', 'AjaxController@like');
 Route::post('ajax/comments/get', 'AjaxController@getCommentBox');
 Route::post('ajax/comments/post', 'AjaxController@postcomment');
 Route::post('ajax/getfriendslist', 'AjaxController@getfriendslist');
+
 Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
-Route::post('ajax/groupchatrooms', 'AjaxController@groupchatrooms');
-Route::post('ajax/subgroupchats', 'AjaxController@subgroupchats');
-Route::post('ajax/enterchatroom', 'AjaxController@enterchatroom');
+Route::post('ajax/search-friend', 'AjaxController@searchfriend');
+
 Route::post('ajax/webgetlikes', 'AjaxController@webgetlikes');
 
 Route::post('/web/ajax/getposts', 'AjaxController@getAjaxPost');
@@ -84,6 +84,9 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('chatroom', 'DashboardController@chatroom');
 	Route::get('requests', 'DashboardController@friendRequests');
 
-	// Route::get('post/image', 'DashboardController@image');	
+	Route::get('group', 'DashboardController@group');
+	Route::get('subgroup/{parentgroup}/{parentid}', 'DashboardController@subgroup');
+	Route::get('groupchat/{parentgroup}/{subgroup}', 'DashboardController@groupchat');
+	Route::get('groupchat', 'DashboardController@groupchat');
 
 });

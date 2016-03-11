@@ -36,7 +36,7 @@
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingTwo">
 		      <h4 class="panel-title">
-		        <a class="groupchatrooms without-arrow" id="groupchatrooms">
+		        <a style="cursor:pointer" href="{{ url('group') }}" class="without-arrow">
 		          <i class="flaticon-balloon"></i>Chat Room
 		        </a>
 		      </h4>
@@ -86,24 +86,10 @@
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingSeven">
 		      <h4 class="panel-title">
-		        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#side_acc_menu" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+		        <a class="without-arrow" href="{{ url('groupchat') }}">
 		          <i class="flaticon-round"></i>More
 		        </a>
 		      </h4>
-		    </div>
-		    <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
-		      <div class="panel-body">
-		        <ul>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        </ul>
-		      </div>
 		    </div>
 		  </div>
 		</div>

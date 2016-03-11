@@ -1,55 +1,81 @@
+@extends('layouts.dashboard')
 
-<?php 
-// echo '<pre>';print_r($subgroups);die;
-?>
+@section('content')
 
-	@foreach($subgroups as $data)
+<div class="page-data dashboard-body">
+        <div class="container">
+            <div class="row">
 
-    <?php 
-        $titledata = explode(' ', $data->title);
-        if(is_array($titledata)){
-            $title = strtolower(implode('', $titledata));
-        }
-        // echo '<pre>';print_r($title);die;
-    ?>
-        <div class="groupcat">
-        	<div>    			
-    			<input class="group-radio" data-value="{{ $title }}" type="radio" name="radiobtn" id="{{ $title }}" data-id="{{ $data->title }}"></input>
-    			<label for="{{ $title }}">{{ $data->title }}</label>
-        	</div>
-            <?php $fieldsData = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); ?>
-            @if($fieldsData)
-            <select class="selectbox" style="display: none">
-                @foreach($fieldsData as $val)
-                    <option value="{{ $val->id }}">{{ $val->title }}</option>
-                @endforeach
-            </select>
-            @endif
+            @include('panels.left')
+
+            <div class="col-sm-6">
+                <div class="shadow-box page-center-data no-margin-top">
+                    <div class="page-title">
+                        <i class="flaticon-people"></i>Group Chatroom
+                        <div class="search-box">
+                            <input type="text" placeholder="Search" class="form-control">
+                            <button class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        {{ Form::open(array('url' => 'groupchat', 'method' => 'get')) }}
+
+                        <input type="hidden" name="parentgroup" value="{{ $parentgroup }}"></input>
+                        @foreach($subgroups as $data)
+
+                        <?php 
+                            $titledata = explode(' ', $data->title);
+                            if(is_array($titledata)){
+                                $title = strtolower(implode('', $titledata));
+                            }
+                            // echo '<pre>';print_r($title);die;
+                        ?>
+                            <div class="groupcat">
+                                <div>               
+                                    <input class="group-radio" data-value="{{ $title }}" type="radio" name="subcategory" id="{{ $title }}" data-id="{{ $data->title }}"></input>
+                                    <label for="{{ $title }}">{{ $data->title }}</label>
+                                </div>
+                                <?php $fieldsData = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); ?>
+                                @if($fieldsData)
+                                <select name="subgroup" class="selectbox" style="display: none">
+                                    @foreach($fieldsData as $val)
+                                        <?php 
+                                            $titledata1 = explode(' ', $val->title);
+                                            if(is_array($titledata1)){
+                                                $title2 = strtolower(implode('', $titledata1));
+                                            }else{
+                                                 $title2 = $val->title;
+                                            }
+                                            // echo '<pre>';print_r($title);die;
+                                        ?>
+                                        <option value="{{ $title2 }}">{{ $val->title }}</option>
+                                    @endforeach
+                                </select>
+                                @endif
+                            </div>
+                        @endforeach
+                    <br/><br/><br/>
+
+                        <button>Enter Chat</button>
+                        <a style="border:solid 1px;height:50px;width:auto;padding:5px;margin:5px;" class="enterchat" data-value="" data-parentid="{{ $data->id }} href="groupchat/{{$parentgroup}}/staticname"></a>
+
+
+                        {{ Form::close() }}
+                    </div>
+
+
+           
+    <div class="shadow-box bottom-ad"><img class="img-responsive" alt="" src="images/bottom-ad.jpg"></div>
+            </div></div>
+
+ @include('panels.right')
+            </div>
         </div>
-    @endforeach
-<br/><br/><br/>
-    <a style="border:solid 1px;height:50px;width:auto;padding:5px;margin:5px;" class="enterchat" data-value="{{ $dataval }}" data-parentid="{{ $data->id }}">Enter Chat</a>
+    </div><!--/pagedata-->
+  
+ 
+@endsection
 
-<script type="text/javascript">
 
-$(document).on('change', '.group-radio', function(){
-
-    if ( $('.group-radio').is(':checked')){
-        var dataval = $(this).data('value');
-        var preVal = $('.enterchat').data("value");
-        var newval = preVal+'-'+dataval;
-        $('.enterchat').attr("data-value",newval);
-    }
-
-});
-
-/*    $(document).on('click', '.enterchat', function(){
-        var atLeastOneIsChecked = false, dataval;
-            $('.group-radio').each(function () {
-            if ($(this).is(':checked')) {
-                atLeastOneIsChecked = true;
-                return false;
-            }
-        });
-    });*/    
-</script>
+ 

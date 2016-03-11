@@ -2,91 +2,25 @@
 
 @section('content')
 
-<div class="page-data dashboard-body">
-        <div class="container">
-            <div class="row">
+    <div class="profile-content">
+     <section>
+       <div class="container ">
 
-            @include('panels.left')
-
-            <div class="col-sm-6">
-                <div class="shadow-box page-center-data no-margin-top">
-                    <div class="page-title">
-                        <i class="flaticon-people"></i>{{ $grpname }}
-                        <div class="search-box">
-                            <input type="text" placeholder="Search" class="form-control">
-                            <button class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="container">
-
-
-<div class="shadow-box page-center-data no-margin-top no-bottom-padding">
-                    <div class="row">
-                        <div class="col-sm-4 padding-right-none chat-list-outer">
-                            <div class="chat-list-search">
-                                <div class="form-group">
-                                    <input type="text" placeholder="Search" id="search" class="form-control" >
-                                    <button class="search-btn" id="search-btn" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
-                                </div>
-                            </div>
-                            <div class="chat-user-list StyleScroll" id="friends" style="overflow: hidden;" tabindex="0">
-                                <ul>
-
-                                    @foreach($userdata as $data)
-                                    <?php //echo '<pre>';print_r($data);die;?>
-                                    <li>
-                                        <a title="" href="#" onclick="openChatbox(<?php echo "'".$data['user']['xmpp_username']."', '".$data['user']['xmpp_password']."'"?>);" >
-                                            <span style="background: url('images/user-thumb.jpg');" class="chat-thumb"></span>
-                                            <span class="title">{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}</span>
-                                            <span class="time">02:50 am</span>
-                                        </a>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </div><!--/chat user list-->
-                            <div class="dropdown all-contact">
-                              <button aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button" class="all-contact-btn" id="dLabel">
-                                All Contacts
-                              </button>
-                              <ul aria-labelledby="dLabel" class="dropdown-menu user-list-with-thumb StyleScroll" style="overflow: hidden;" tabindex="1">
-                                    @foreach($userdata as $data)
-                                    <li>
-                                        <a title="" href="#">
-                                            <span style="background: url('images/user-thumb.jpg');" class="chat-thumb"></span>
-                                            <span class="title">{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}</span>
-                                            <span class="time">02:50 am</span>
-                                            <!-- <span class="msg">Hi, How r u?</span> -->
-                                        </a>
-                                    </li>
-                                    @endforeach
-                              </ul>
-                            </div>
-                        </div>
-                        <div class="col-sm-8">
-                            <div class="col-sm-6" id="chat-system"> Search your friend and start chat.</div>
-                        </div>
-                    </div>
-                </div>
-
-
-                    </div>
-
-
-           
-    <div class="shadow-box bottom-ad"><img class="img-responsive" alt="" src="images/bottom-ad.jpg"></div>
-            </div></div>
-
- @include('panels.right')
+        <div class="row">
+    	<div style=""> <h1>Normal group</h1></div>
+            <div class="col-sm-3"> 
+          
+            <input type="text" id="search" />	
+                <input type="button" value="Search" id="search-btn"/>
+                <div  id="friends">     </div>			
+            </div>
+            <div class="col-sm-6" id="chat-system"> Search your friend and start chat.
             </div>
         </div>
-    </div><!--/pagedata-->
-  
- 
-@endsection
+    </div>
+    </section>
+    </div>
 
- 
-  
 <script type="text/javascript">
 
     var conObj; 
@@ -203,3 +137,5 @@
      }
 
 </script>
+
+@endsection

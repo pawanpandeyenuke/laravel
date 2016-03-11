@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend;
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup;
 use Request, Session, Validator, Input, Cookie;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -127,5 +127,92 @@ class DashboardController extends Controller
                 ->with('friends', $friend);
 
     }
+
+
+
+    /**
+    *   Group chatrooms ajax call handling.
+    *   Ajaxcontroller@groupchatrooms
+    */
+    public function group()
+    {
+        // die('asdfsadfa');
+        return view('dashboard.groupchatrooms');
+    }
+
+
+    /**
+    *   Group sub chatrooms ajax call handling.
+    *   Ajaxcontroller@groupchatrooms
+    */
+    public function subgroup( $parentgroup, $parentid )
+    {
+
+         if($parentgroup){
+            $data = DB::table('categories')->where(['parent_id' => $parentid])->where(['status' => 'Active'])->get();
+
+            if( !empty( $data ) ){
+                $subgroups = $data;
+            }
+        }
+        
+        return view('dashboard.subgroupchats')
+                ->with('subgroups', $subgroups)
+                ->with('parentgroup', $parentgroup);
+    }
+
+
+    /**
+    *   Enter chatrooms ajax call handling.
+    *   Ajaxcontroller@enterchatroom
+    */
+    public function groupchat( $parentgroup )
+    {
+ 
+
+
+        $groupname = $parentgroup;
+        if($groupname){
+            $grpname = $groupname;
+        }else{
+            $parentgroup = Request::get('parentgroup');
+            $subgroup = Request::get('subgroup');
+            if($subgroup)
+                $grpname = $parentgroup.'-'.$subgroup;
+            else
+                $grpname = $parentgroup;
+        }
+
+        print_r($grpname);die;
+ 
+        $model = new DefaultGroup;
+
+        $updatecheck = $model->where('group_name', $grpname)
+                    ->where('group_by', Auth::User()->id)
+                    ->get()->toArray();
+
+
+        $defGroup = array();
+        $defGroup['group_name'] = $grpname;
+        $defGroup['group_by'] = Auth::User()->id;
+
+        if(empty($updatecheck)){
+            $model = new DefaultGroup;
+            $response = $model->create($defGroup);
+        }else{
+            $id = $updatecheck[0]['id'];
+            $response = $model->find($id);
+        }
+        
+        //Get users of this group
+        $usersData = $model->with('user')->where('group_name', $grpname)->get()->toArray();
+        
+
+        return view('dashboard.enterchatroom')
+                    ->with('grpname', $grpname)
+                    ->with('groupname', $response)
+                    ->with('userdata', $usersData);
+    }
+
 
 }

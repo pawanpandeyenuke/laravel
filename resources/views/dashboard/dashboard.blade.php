@@ -120,7 +120,8 @@
 												<?php 
 													$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $data['id']])->get(); 
 
-													$likecountdata = App\Like::where(['feed_id' => $data->id])->get()->count(); 
+													$likecountdata = App\Like::where(['feed_id' => $data->id])->get()->count();
+													$commentscountdata = App\Comment::where(['feed_id' => $data->id])->get()->count();  
 												?>
 													<input type="checkbox" name="" id="checkbox{{$data['id']}}" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
 													<label for="checkbox{{$data['id']}}" class="css-label">
@@ -136,14 +137,10 @@
 												</div>
 											</li>
 											<li>
-												<a class="popup-popupajax">
+												<a class="popupajax" style="cursor:pointer">
 													<span class="icon flaticon-interface-1"></span> 
-													@if(!empty($data['comments_count'][0]))
-														@if($data['comments_count'][0]['commentscount'] > 0)
-															<span class="commentcount">{{ $data['comments_count'][0]['commentscount'] }} Comments</span>
-														@else
-															<span class="commentcount">Comment</span>
-														@endif
+													@if($commentscountdata > 0)
+														<span class="commentcount">{{ $commentscountdata }} Comments</span>
 													@else
 														<span class="commentcount">Comment</span>
 													@endif
@@ -151,54 +148,6 @@
 											</li>
 										</ul>
 									</div><!--/post actions-->
-									<div class="post-comment-cont">
-										<div class="post-comment">
-											<div class="row">
-												<div class="col-md-10">
-													<div class="emoji-field-cont cmnt-field-cont">
-														<textarea data-emojiable="true" type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
-													</div>
-												</div>
-												<div class="col-md-2">
-													<button type="button" class="btn btn-primary btn-full comment">Post</button>
-												</div>
-											</div>
-										</div><!--/post comment-->
-										<div class="comments-list">
-											<ul>
-												@if(!empty($data['comments']))
-													<?php $counter = 1; ?>
-													@foreach($data['comments'] as $commentsData)
-													<?php 
-														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name']);
-
-														// print_r($username);die;
-														if(!empty($username)){
-
-														$name = $username[0]->first_name.' '.$username[0]->last_name; 
-
-													if($counter < 4){ ?>
-
-														<li>
-														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
-														<div class="comment-title-cont">
-															<div class="row">
-																<div class="col-sm-6">
-																	<a href="#" title="" class="user-link">{{$name}}</a>
-																</div>
-																<div class="col-sm-6">
-																	<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
-																</div>
-															</div>
-														</div>
-														<div class="comment-text">{{$commentsData['comments']}}</div>
-													</li>
-													<?php }$counter++; }?>
-													@endforeach
-												@endif
-											</ul>
-										</div><!--/comments list-->
-									</div>
 								</div><!--/post-footer-->
 							</div><!--/single post-->
 						@endforeach
@@ -213,33 +162,6 @@
 		</div>
 	</div><!--/pagedata-->
 
-<style>
-	.file-error-message{
-		display:none !important;
-	}	
-</style>
-
 <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
-<script type="text/javascript">
-/*var page = 1, ajax = 0, pages = 5;
-$(window).on('scroll', function() {
-   if($(window).scrollTop() + $(window).height() == $(document).height() && ajax == 0 && page<=pages)
-   {
-   		ajax = 1;
-   		console.log(page);
-        $.ajax({
-       		'url' : 'ajax/loadposts',
-       		'type' : 'post',
-       		'data' : {'page' : page},
-       		'success' : function(response){
-       			page++;
-       			if(page != pages) {
-       				ajax = 0;
-       			}
-       		}
-        });
-   }
-});*/
 
-</script>
 @endsection

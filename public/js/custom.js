@@ -87,11 +87,9 @@ $(document).ready(function(){
 
 				if(response == 0){
 					current.next().html('');
-					current.next().append('<span class="firstlike">Like</span>')
-					// alert('number');
-				}else{
+					current.next().append('<span class="firstlike">Like</span>');
+				}else if(response >= 0){
 					current.next('label.css-label').find('.firstlike').html(response+' Likes');
-					// alert('not number');
 				}
 
 			}			
@@ -101,9 +99,14 @@ $(document).ready(function(){
 	$(document).on('click', '.comment', function(){
 		var current = $(this);
 		var _token = $('#postform input[name=_token]').val();
-		var feedId = $(this).closest('.single-post').data('value');
+		var feedId = $(this).closest('.post-list').data('value');
 		var commentData = $(this).closest('.row').find('textarea').val();
 		var commented_by = $('#user_id').val();
+
+		// alert(feedId);
+		// alert(commentData);
+		// alert(commented_by);
+
 		if(commentData){
 			$.ajax({			
 				'url' : 'ajax/comments/post',
@@ -111,17 +114,17 @@ $(document).ready(function(){
 				'type' : 'post',
 				'success' : function(response){
 					var parseresponse = jQuery.parseJSON(response);
-					// console.log(parseresponse.count);
+					// console.log(response);
 					current.closest('.row').find('textarea').val('');
 
 					count = parseresponse.count;
 					if(count != 0){
-						current.parents('.post-footer').find('.commentcount').html(count+' Comments');
+						current.parents('.post-list').find('.pop-post-footer').find('.commentcount').html(count+' Comments');
 					}else{
 						current.parents('.post-footer').find('.commentcount').html('1 Comment');
 					}
 
-					current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
+					current.parents('.pop-comment-side-outer').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('.row').find('.comment-field').text('');
 				}			
 			});	
@@ -171,7 +174,7 @@ $(document).ready(function(){
 	*	Group chatrooms ajax call handling.
 	*	Ajaxcontroller@groupchatrooms
 	*/
-	$(document).on('click', '#groupchatrooms', function(){
+/*	$(document).on('click', '#groupchatrooms', function(){
 		var current = $(this);
 		$.ajax({
 			'url' : 'ajax/groupchatrooms',
@@ -182,14 +185,14 @@ $(document).ready(function(){
 				// alert(html);
 			}
 		});
-	});
+	});*/
 
 
 	/**
 	*	Group sub chatrooms ajax call handling.
 	*	Ajaxcontroller@groupchatrooms
 	*/
-	$(document).on('click', '.groupnext', function(){
+/*	$(document).on('click', '.groupnext', function(){
 		var current = $(this);
 		var groupid = $(this).data('parentid');
 
@@ -204,14 +207,14 @@ $(document).ready(function(){
 				// alert(html);
 			}
 		});
-	});
+	});*/
 	
 
 	/**
 	*	Enter chatrooms ajax call handling.
 	*	Ajaxcontroller@enterchatroom
 	*/
-	$(document).on('click', '.enterchat', function(){
+/*	$(document).on('click', '.enterchat', function(){
 		var current = $(this);
 		var groupid = $(this).data('parentid');
 		var dataval = $(this).data('value');
@@ -227,7 +230,7 @@ $(document).ready(function(){
 				}
 			});
         }
-	});
+	});*/
 
 
 	$('#state').html('<option value="">State</option>');
