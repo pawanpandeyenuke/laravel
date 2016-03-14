@@ -58,6 +58,8 @@ Route::post('api/likes', 'ApiController@likes');
 Route::post('api/comments', 'ApiController@getComments');
 Route::post('api/comments/create', 'ApiController@postComments');
 
+Route::post('api/getprofile','ApiController@getProfile');
+
 
 /*
 |--------------------------------------------------------------------------
