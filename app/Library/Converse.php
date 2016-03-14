@@ -27,9 +27,9 @@ class Converse{
 //		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
 
 //		dd($response);exit;
-		$response = @exec('sudo /usr/sbin/ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
+		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
 
-		// dd($response);exit;
+//		dd($response);exit;
 
 		return true;
 		
