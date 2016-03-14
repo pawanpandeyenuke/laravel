@@ -90,7 +90,7 @@ Route::group(['middleware' => 'web'], function () {
 
 	Route::get('group', 'DashboardController@group');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
-	Route::get('subgroup/{parentid}/{parentname}', 'DashboardController@subgroup');
+	Route::get('subgroup/{parentid}/{name}', 'DashboardController@subgroup');
 	Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
 	Route::get('groupchat', 'DashboardController@groupchat');
 
