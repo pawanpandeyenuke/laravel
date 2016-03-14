@@ -37,25 +37,38 @@
 							</ul>
 
 							<!--Status Data-->
-							<div class="status-up-cont">
-								{!! Form::open(array('url' => 'ajax/posts', 'id' => 'postform', 'files' => true)) !!}
-									<div class="row">
-										<div class="col-md-12">
-											<div class="emoji-field-cont form-group">
-												<!-- <input type="text" class="form-control" data-emojiable="true" placeholder="What’s on your mind?"> -->
-											{!! Form::textarea('message', null, array(
-													'id' => 'newsfeed', 
-													'class' => 'form-control',
-													'data-emojiable' => true,
-													'placeholder' => 'What’s on your mind?',
-													'data-emojiable' => 'true',
-												)) !!}
-											</div>
-										</div>
-										<div class="col-md-12">
-											<div class="status-img-up">
+					<div class="status-up-cont">
+						{!! Form::open(array('url' => 'ajax/posts', 'id' => 'postform', 'files' => true)) !!}
+							<div class="row">
+								<div class="col-md-3 status-img-cont">
+									<div class="status-img-outer" id="image-holder"></div>
+								</div>
+								<div class="col-md-9">
+									<div class="emoji-field-cont form-group">
+										<!-- <input type="text" class="form-control" data-emojiable="true" placeholder="What’s on your mind?"> -->
+										{!! Form::textarea('message', null, array(
+												'id' => 'newsfeed', 
+												'class' => 'form-control',
+												'data-emojiable' => true,
+												'placeholder' => 'What’s on your mind?',
+												'data-emojiable' => 'true',
+											)) !!}
+									</div>
+								</div>
+								<div class="col-md-3 status-btn-cont">
+									<!-- <button type="button" class="btn btn-primary btn-post">Post</button> -->
+									{!! Form::submit('Post', array(
+											'id' => 'submit-btn', 
+											'class' => 'btn btn-primary btn-post'
+										))
+									!!}
+								</div>
+								<div class="col-md-12">
+									<div class="status-img-up">
+										<div class="row">
+											<div class="col-sm-3 text-center">
 												<div class="form-group">
-													<!-- <input type="file" class="filestyle" data-iconName="glyphicon glyphicon-camera" data-input="false" id="fileUpload" data-buttonName="btn-primary" multiple="multiple"> -->
+													<!-- <input type="file" class="filestyle" data-input="false" data-icon="false" data-buttonText="Browse"  data-buttonName="btn-primary" multiple="multiple"> -->
 												    {!! Form::file('image', array(
 												    	'id' => 'fileUpload',
 												    	'class' => 'filestyle',
@@ -66,19 +79,36 @@
 												    )) !!}
 												</div>
 											</div>
-											<div id="image-holder" class="img-cont clearfix fileinput"> </div>
+											<div class="col-sm-9">
+												<div class="btn-list">
+													<ul>
+														<li>
+															<!-- <button type="button" class="btn btn-primary">Upload</button> -->
+															{!! Form::submit('Upload', array(
+																	'id' => 'submit-btn', 
+																	'class' => 'btn btn-primary'
+																))
+															!!}
+														</li>
+														<li>
+															<button type="button" id="cancel-btn" class="btn btn-gray">Cancel</button>
+														</li>
+													</ul>
+												</div>
+											</div>
 										</div>
-										<div class="col-md-12">
-											<!-- <button type="button" class="btn btn-primary">Post</button> -->
-											{!! Form::submit('Post', array(
-													'id' => 'submit-btn', 
-													'class' => 'btn btn-primary'
-												))
-											!!}
 										</div>
-									</div>
-								{!! Form::close() !!}
+									<!-- <div class="status-img-up">
+										<div class="form-group">
+											<input type="file" class="filestyle" data-input="false" data-iconName="glyphicon glyphicon-camera"  data-buttonName="btn-primary" multiple="multiple">
+										</div>
+									</div> -->
+								</div>
+								
 							</div>
+						{!! Form::close() !!}
+					</div>
+
 					    </div><!--/status tab-->
 					<div class="post-list" id="postlist">
 						@foreach($feeds as $data)		
@@ -87,7 +117,7 @@
 								<div class="post-header">
 									<div class="row">
 										<div class="col-md-7">
-											<a href="#" title="" class="user-thumb-link">
+											<a href="profile/{{$data->user->id}}" title="" class="user-thumb-link">
 												<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
 												{{ $data->user->first_name.' '.$data->user->last_name }}
 											</a>

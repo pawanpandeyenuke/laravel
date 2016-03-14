@@ -17,7 +17,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 						<div class="post-header">
 							<div class="row">
 								<div class="col-md-7">
-									<a href="#" title="" class="user-thumb-link">
+									<a href="profile/{{$user->id}}" title="" class="user-thumb-link">
 										<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
 										{{ $user->first_name.' '.$user->last_name }}
 									</a>
@@ -37,15 +37,18 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 						</div>
 					</div>
 					
-					<div class="post-data pop-post-img">
-						<img src="{{ url("uploads/$feeddata->image") }}" class="pop-img">
-					</div><!--/post data-->
+					@if(!empty($feeddata->image))
+						<div class="post-data pop-post-img">
+							<img src="{{ url("uploads/$feeddata->image") }}" class="pop-img">
+						</div>
+					@endif
+					
 					<div class="post-footer pop-post-footer">
 						<div class="post-actions">
 							<ul>
 								<li>
 									<div class="like-cont">
-										<input type="checkbox" name="checkboxG4" id="checkboxG4" class="css-checkbox" {{ isset($likedata[0])?'checked':'' }}/>
+										<input type="checkbox" name="checkboxG4" id="checkboxG4" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
 										<label for="checkboxG4" class="css-label">
 											@if($likecountdata > 0)
 												<span class="countspan">
@@ -88,7 +91,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 										<div class="comment-title-cont">
 											<div class="row">
 												<div class="col-sm-6">
-													<a href="#" title="" class="user-link">{{ $username->first_name.' '.$username->last_name }}</a>
+													<a href="profile/{{$username->id}}" title="" class="user-link">{{ $username->first_name.' '.$username->last_name }}</a>
 												</div>
 												<div class="col-sm-6">
 													<div class="comment-time text-right">{{ $data->updated_at->format('h:i A') }}</div>

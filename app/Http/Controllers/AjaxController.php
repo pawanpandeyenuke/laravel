@@ -25,6 +25,7 @@ class AjaxController extends Controller
 			if( $arguments ){
 
 				$user = Auth::User();				
+				$userid = $user->id;
 				$arguments['user_by'] = $user->id;
 	
 				if( empty($arguments['message']) && empty($arguments['image']))
@@ -46,7 +47,8 @@ class AjaxController extends Controller
 					throw new Exception('Something went wrong.');
 
 				$name = Auth::User()->first_name.' '.Auth::User()->last_name;
-				$time = $feed->updated_at->diffForHumans();
+				$time = $feed->updated_at->format('h:i A');
+				$time1 = $feed->updated_at->format('D jS');
 				$picture = $feed->image;
 				$message = $feed->message;
 
@@ -74,7 +76,7 @@ $postHtml = <<<postHtml
 				<div class="post-header">
 					<div class="row">
 						<div class="col-md-7">
-							<a href="#" title="" class="user-thumb-link">
+							<a href="profile/$userid" title="" class="user-thumb-link">
 								<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
 								$name
 							</a>
@@ -82,11 +84,8 @@ $postHtml = <<<postHtml
 						<div class="col-md-5">
 							<div class="post-time text-right">
 								<ul>
-									<li>
-										<span class="icon flaticon-time">
-											$time
-										</span>
-									</li>
+									<li><span class="icon flaticon-time">$time</span></li>
+									<li><span class="icon flaticon-days">$time1</span></li>
 								</ul>
 							</div>
 						</div>
@@ -109,34 +108,19 @@ $postHtml = <<<postHtml
 								</div>
 							</li>
 							<li>
-								<a class="popups">
+								<a class="popupajax" style="cursor:pointer">
 									<span class="icon flaticon-interface-1"></span> 
 									<span class="commentcount">Comment</span>
 								</a>
 							</li>
 						</ul>
 					</div>
-					<div class="post-comment-cont">
-						<div class="post-comment">
-							<div class="row">
-								<div class="col-md-10">
-									<textarea type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
-								</div>
-								<div class="col-md-2">
-									<button type="button" class="btn btn-primary btn-full comment">Post</button>
-								</div>
-							</div>
-						</div>
-						<div class="comments-list">
-							<ul>
-							</ul>
-						</div>
-					</div>
 				</div>
 			</div>
 postHtml;
 
 echo $postHtml;
+
 
 			}
 
@@ -273,86 +257,14 @@ comments;
 	*/
 	public function getfriendslist()
 	{
+		
+		$input=Input::get('type');
 
-		$input = Input::get('type');;
-
-		$model = Friend::with('user')->with('friends')->where( function( $query ) use ( $input ) {
-					self::queryBuilder( $query, $input );
+		$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
+			    self::queryBuilder( $query, $input );
 				})->get()->toArray();
- 
-		$litag = array();
-		foreach ($model as $key => $value) {
 
-			if($value['friend_id'] == Auth::User()->id)
-				$name = $value['user']['first_name'].' '.$value['user']['last_name'];
-			else
-				$name = $value['friends']['first_name'].' '.$value['friends']['last_name'];
-
-
-			if($input == 'sent'){
-				$permissionbutton = '<div class="text-right">
-								<button class="btn btn-primary btn-full" type="button">Sent Request</button>
-							</div>';
-			}elseif($input == 'recieved'){
-				$permissionbutton = '<div class="row">
-								<div class="col-sm-6">
-									<button class="btn btn-primary btn-full" type="button" class="accept">Accept</button>
-								</div>
-								<div class="col-sm-6">
-									<button class="btn btn-default btn-full" type="button" class="decline">Decline</button>
-								</div>
-							</div>';
-			}elseif($input == 'current'){
-				$permissionbutton = '<div class="text-right">
-								<button class="btn btn-default btn-full" type="button" class="remove">Remove</button>
-							</div>';
-			}elseif($input == 'all'){
-
-				if(($value['status'] == 'Pending') && ($value['user_id'] == Auth::User()->id)){
-					$permissionbutton = '<div class="row">
-							<div class="col-sm-6">
-								<button class="btn btn-primary btn-full" type="button" class="accept">Accept</button>
-							</div>
-							<div class="col-sm-6">
-								<button class="btn btn-default btn-full" type="button" class="decline">Decline</button>
-							</div>
-						</div>';
-				}elseif(($value['status'] == 'Pending') && ($value['friend_id'] == Auth::User()->id)){ 
-					$permissionbutton = '<div class="text-right">
-							<button class="btn btn-primary btn-full" type="button">Sent Request</button>
-						</div>';
-				}elseif(($value['status'] == 'Accepted') && ($value['user_id'] == Auth::User()->id)){ 
-					$permissionbutton = '<div class="text-right">
-						<button class="btn btn-default btn-full" type="button" class="remove">Remove</button>
-					</div>';
-				}
-
-			}
-
-			$litag[] = '<li>
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="user-cont">
-										<a title="" href="#">
-											<span style="background: url(images/user-thumb.jpg);" class="user-thumb">
-											</span>
-											'.$name.'
-										</a>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									'.$permissionbutton.'
-								</div>
-							</div>
-						</li>';
-
-		}
-
-		$lisdata = array();
-		$lisdata['data'] = implode(' ', $litag);
-		$lisdata['type'] = ucwords($input);
-		// print_r($model);exit;
-		return $lisdata;
+		return view('dashboard.getfriendslist')->with('model',$model);
  
 	}
 
@@ -362,18 +274,19 @@ comments;
 	*	Ajaxcontroller@queryBuilder
 	*/
 	public function queryBuilder( &$query, $input ){
+		$user_id = Auth::User()->id;
 		if($input == 'all'){
-            $query->where('user_id', '=', Auth::User()->id);
-            $query->orWhere('friend_id', '=', Auth::User()->id);
+            $query->where('user_id', '=', $user_id);
+            $query->orWhere('friend_id', '=', $user_id);
         }elseif($input == 'sent'){
-            $query->where('user_id', '=', Auth::User()->id);
+            $query->where('user_id', '=', $user_id);
             $query->where('status', '=', 'Pending');
         }elseif($input == 'recieved'){
-            $query->where('friend_id', '=', Auth::User()->id);
+            $query->where('friend_id', '=', $user_id);
             $query->where('status', '=', 'Pending');
         }elseif($input == 'current'){
-            $query->where('user_id', '=', Auth::User()->id)->where('status', '=', 'Accepted');
-            $query->orWhere('friend_id', '=', Auth::User()->id)->where('status', '=', 'Accepted');
+            $query->where('user_id', '=', $user_id)->where('status', '=', 'Accepted');
+            $query->orWhere('friend_id', '=', $user_id)->where('status', '=', 'Accepted');
         } 
 	}
 
@@ -451,6 +364,81 @@ comments;
 			return $e->getMessage();
 		}
 		exit;
+	}
+
+
+	/*
+	* Accept request from another user.
+	*
+	**/
+	public function accept()
+	{
+		$input=Input::all();
+		
+     	$data = array(
+			'friend_id'=>$input['user_id'],
+			'user_id'=>$input['friend_id'],
+			'status'=>'Accepted'
+        );	
+	
+        Friend::where(['friend_id'=>$input['friend_id']])
+        			->where(['user_id'=>$input['user_id']])
+        			->update(['status'=>'Accepted']);
+
+		Friend::insert($data);
+
+	}
+
+	/*
+	* Reject request from another user.
+	*
+	**/
+	public function reject()
+	{
+
+       $input=Input::all();
+
+       Friend::where(['friend_id'=>$input['friend_id']])
+				->where(['user_id'=>$input['user_id']])
+				->update(['status'=>'Rejected']);
+
+	}
+
+
+	/*
+	* Resend request to user.
+	*
+	**/
+	public function resend()
+	{
+
+		$input=Input::all();
+		Friend::where(['friend_id'=>$input['friend_id']])
+			->where(['user_id'=>$input['user_id']])
+			->update(['status'=>'Pending']);       
+
+	}
+
+
+	/*
+	* Remove request from another user.
+	*
+	**/
+	public function remove()
+	{
+
+		$input=Input::all();
+	
+		Friend::where(['friend_id'=>$input['friend_id']])
+				->where(['user_id'=>$input['user_id']])
+				->update(['status'=>'Rejected']); 
+
+		Friend::where(['friend_id'=>$input['user_id']])
+				->where(['user_id'=>$input['friend_id']])
+				->update(['status'=>'Rejected']);      
+
+		Friend::where(['friend_id'=>$input['user_id']])->where(['status'=>'Rejected'])->delete();
+		
 	}
 
 

@@ -54,24 +54,11 @@
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingFive">
 		      <h4 class="panel-title">
-		        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#side_acc_menu" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+		      	<?php $uid = Auth::User()->id; ?>
+		        <a class="without-arrow" href="{{ url("profile/$uid") }}">
 		          <i class="flaticon-social"></i>Profile
 		        </a>
 		      </h4>
-		    </div>
-		    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-		      <div class="panel-body">
-		        <ul>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        </ul>
-		      </div>
 		    </div>
 		  </div>
 		  <div class="panel panel-default">
@@ -86,7 +73,7 @@
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingSeven">
 		      <h4 class="panel-title">
-		        <a class="without-arrow" href="{{ url('groupchat') }}">
+		        <a class="without-arrow" href="#">
 		          <i class="flaticon-round"></i>More
 		        </a>
 		      </h4>

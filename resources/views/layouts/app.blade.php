@@ -10,15 +10,6 @@
 <link href="/css/flat-icon/flaticon.css" rel="stylesheet" media="all">
 <link href="/css/style.css" rel="stylesheet">
 <link href="/css/responsive.css" rel="stylesheet" media="all">
-    <style>
-        body {
-            font-family: 'Lato';
-        }
-
-        .fa-btn {
-            margin-right: 6px;
-        }
-    </style>
 
 </head>
 	<body>
@@ -89,7 +80,7 @@
 		@yield('content')
 		<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>	
 		<script type="text/javascript" src="/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="/js/custom.js"></script>
+		<!-- <script type="text/javascript" src="/js/custom.js"></script> -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}

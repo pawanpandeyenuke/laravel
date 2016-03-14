@@ -32,6 +32,10 @@ Route::post('ajax/webgetlikes', 'AjaxController@webgetlikes');
 
 Route::post('/web/ajax/getposts', 'AjaxController@getAjaxPost');
 
+Route::post('ajax/accept','AjaxController@accept');
+Route::post('ajax/reject','AjaxController@reject');
+Route::post('ajax/resend','AjaxController@resend');
+Route::post('ajax/remove','AjaxController@remove');
 
 /**
  * @Api Routes..
@@ -85,8 +89,11 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('requests', 'DashboardController@friendRequests');
 
 	Route::get('group', 'DashboardController@group');
-	Route::get('subgroup/{parentgroup}/{parentid}', 'DashboardController@subgroup');
-	Route::get('groupchat/{parentgroup}/{subgroup}', 'DashboardController@groupchat');
+	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
+	Route::get('subgroup/{parentid}/{parentname}', 'DashboardController@subgroup');
+	Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
 	Route::get('groupchat', 'DashboardController@groupchat');
+
+	Route::get('profile/{id}', 'DashboardController@profile');
 
 });

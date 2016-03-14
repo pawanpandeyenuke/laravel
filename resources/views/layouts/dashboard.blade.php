@@ -91,6 +91,7 @@
 <script type="text/javascript" src="/js/fileinput.min.js"></script>
 <script type="text/javascript" src="/js/custom.js"></script>
 <script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
+<script src="/c-lib/lib/js/emojione.js"></script>
 <!--Emoji libraries-->
 <script src="/lib/js/nanoscroller.min.js"></script>
 <script src="/lib/js/tether.min.js"></script>

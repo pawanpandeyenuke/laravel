@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup;
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country;
 use Request, Session, Validator, Input, Cookie;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -109,7 +109,7 @@ class DashboardController extends Controller
                 'status' => 'Active'
             ])->get();
         // echo '<pre>';print_r($groups);die;
-        return view('dashboard.chatroom')
+        return view('chatroom.chatroom')
             ->with('groups', $groups);
 
     }
@@ -136,8 +136,7 @@ class DashboardController extends Controller
     */
     public function group()
     {
-        // die('asdfsadfa');
-        return view('dashboard.groupchatrooms');
+        return view('chatroom.groups');
     }
 
 
@@ -145,10 +144,12 @@ class DashboardController extends Controller
     *   Group sub chatrooms ajax call handling.
     *   Ajaxcontroller@groupchatrooms
     */
-    public function subgroup( $parentgroup, $parentid )
+    public function subgroup( $parentid = '', $parentname = '' )
     {
 
-         if($parentgroup){
+        // print_r($parentid.' '.$parentname);die;
+        $subgroups = '';
+         if($parentid){
             $data = DB::table('categories')->where(['parent_id' => $parentid])->where(['status' => 'Active'])->get();
 
             if( !empty( $data ) ){
@@ -156,9 +157,10 @@ class DashboardController extends Controller
             }
         }
         
-        return view('dashboard.subgroupchats')
-                ->with('subgroups', $subgroups)
-                ->with('parentgroup', $parentgroup);
+        return view('chatroom.subgroups')
+                ->with('parentname', $parentname)
+                ->with('subgroups', $subgroups);
+                // ->with('parentgroup', $parentgroup);
     }
 
 
@@ -166,52 +168,74 @@ class DashboardController extends Controller
     *   Enter chatrooms ajax call handling.
     *   Ajaxcontroller@enterchatroom
     */
-    public function groupchat( $parentgroup )
-    {
- 
+    public function groupchat( $input = '' )
+    {   
 
-
-        $groupname = $parentgroup;
-        if($groupname){
-            $grpname = $groupname;
-        }else{
-            $parentgroup = Request::get('parentgroup');
-            $subgroup = Request::get('subgroup');
-            if($subgroup)
-                $grpname = $parentgroup.'-'.$subgroup;
-            else
-                $grpname = $parentgroup;
-        }
-
-        print_r($grpname);die;
- 
         $model = new DefaultGroup;
+        // $groupname = '';
 
-        $updatecheck = $model->where('group_name', $grpname)
-                    ->where('group_by', Auth::User()->id)
-                    ->get()->toArray();
+        if(empty($input))        
+            $input = Request::all();
 
+        if(is_array($input)){
+            $groupnamedata = array();
+            foreach ($input as $key => $value)
+                $groupnamedata[] = $value;
 
-        $defGroup = array();
-        $defGroup['group_name'] = $grpname;
-        $defGroup['group_by'] = Auth::User()->id;
-
-        if(empty($updatecheck)){
-            $model = new DefaultGroup;
-            $response = $model->create($defGroup);
+            $groupname = implode('-', $groupnamedata); 
         }else{
-            $id = $updatecheck[0]['id'];
-            $response = $model->find($id);
+            $groupname = $input;
         }
         
-        //Get users of this group
-        $usersData = $model->with('user')->where('group_name', $grpname)->get()->toArray();
-        
+        if(Request::isMethod('get')){
 
-        return view('dashboard.enterchatroom')
-                    ->with('grpname', $grpname)
-                    ->with('groupname', $response)
+            $validator = Validator::make($input, [ 'subcategory' => 'required' ]); 
+
+            if($validator->fails()){
+
+                $error = $validator->messages()->first();
+                Session::put('error', $error);
+                return redirect()->back();
+
+            }else{
+
+                $updatecheck = $model->where('group_name', $groupname)
+                            ->where('group_by', Auth::User()->id)
+                            ->get()->toArray();
+
+                $defGroup = array();
+                $defGroup['group_name'] = $groupname;
+                $defGroup['group_by'] = Auth::User()->id;
+
+                if(empty($updatecheck)){
+                    $model = new DefaultGroup;
+                    $response = $model->create($defGroup);
+                }else{
+                    $id = $updatecheck[0]['id'];
+                    $response = $model->find($id);
+                }
+
+                //Get users of this group
+                $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();     
+ 
+            }
+
+        }
+
+        return view('chatroom.groupchat')
+                    ->with('groupname', $groupname)
                     ->with('userdata', $usersData);
+    }
+
+
+    public function profile( $id )
+    {
+        
+        $model = User::with('country')->where('id', $id)->get()->first();
+
+        return view('profile.profile')
+                ->with('model',$model)->with('id',User::find(Auth::User()->id));
+
     }
 
 
