@@ -453,6 +453,31 @@ class ApiController extends Controller
 		return $this->output();
 	}
 
+	public function  getProfile()
+	{
+		try{ 
+
+			$arguments=Request::all();
+			$user=new User;
+			
+			// if( !is_numeric($arguments['user_id'] ) )
+			// 	throw new Exception('Please insert valid user id.');	
+
+			if(!(User::find($arguments['user_id'])))
+				throw new Exception("This user id doesn't exist");
+
+			$details=User::with('country')->where(['id'=>$arguments['user_id']])->get()->toArray();
+			
+			$this->status='Success';
+			$this->data=$details;
+			$this->message = 'User profile data';
+		}
+		catch(Exception $e)
+		{
+			$this->message=$e->getMessage();
+		}
+		return $this->output();
+	}
 
 	/*
 	 * Get country on request.

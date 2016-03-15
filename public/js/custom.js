@@ -47,8 +47,10 @@ $(document).ready(function(){
  		var current = $("#postform")
 		if(response){
 			$('#newsfeed').val('');
-			$('#image-holder').hide();
+			// $('#image-holder').hide();
 			$('#image-holder img').remove();
+			$('#fileUpload').val('');
+			
 			$('.group-span-filestyle label .badge').html('');
 
 			if(response != 'Post something to update.'){
@@ -56,10 +58,18 @@ $(document).ready(function(){
 				current.parents('.row').find('#newsfeed').text('');
 				current.parents('.row').find('.emoji-wysiwyg-editor').text('');
 			}
-
 		} 
-
     }); 
+
+
+	$(document).on('click', '#cancel-btn', function(){
+		$('#newsfeed').val('');
+		$('.emoji-wysiwyg-editor').text('');
+		$('.badge').hide();
+		
+		$('#image-holder img').remove();
+		$('#fileUpload').val('');
+	});
 
 	
 	$(document).on('click', '.group-radio', function(){		
@@ -70,6 +80,15 @@ $(document).ready(function(){
 		var prevcurrent = current.closest('.groupcat').prev().find('.selectbox').hide();
 
 	});
+
+
+	$(".post-list .single-post p").each(function() {
+		var original = $(this).html();
+		// use .shortnameToImage if only converting shortnames (for slightly better performance)
+		var converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
+
 
 	$(document).on('click', '.like', function(){		
 		var _token = $('#postform input[name=_token]').val();
@@ -87,11 +106,9 @@ $(document).ready(function(){
 
 				if(response == 0){
 					current.next().html('');
-					current.next().append('<span class="firstlike">Like</span>')
-					// alert('number');
-				}else{
+					current.next().append('<span class="firstlike">Like</span>');
+				}else if(response >= 0){
 					current.next('label.css-label').find('.firstlike').html(response+' Likes');
-					// alert('not number');
 				}
 
 			}			
@@ -101,9 +118,14 @@ $(document).ready(function(){
 	$(document).on('click', '.comment', function(){
 		var current = $(this);
 		var _token = $('#postform input[name=_token]').val();
-		var feedId = $(this).closest('.single-post').data('value');
+		var feedId = $(this).closest('.post-list').data('value');
 		var commentData = $(this).closest('.row').find('textarea').val();
 		var commented_by = $('#user_id').val();
+
+		// alert(feedId);
+		// alert(commentData);
+		// alert(commented_by);
+
 		if(commentData){
 			$.ajax({			
 				'url' : 'ajax/comments/post',
@@ -111,17 +133,17 @@ $(document).ready(function(){
 				'type' : 'post',
 				'success' : function(response){
 					var parseresponse = jQuery.parseJSON(response);
-					// console.log(parseresponse.count);
+					// console.log(response);
 					current.closest('.row').find('textarea').val('');
 
 					count = parseresponse.count;
 					if(count != 0){
-						current.parents('.post-footer').find('.commentcount').html(count+' Comments');
+						current.parents('.post-list').find('.pop-post-footer').find('.commentcount').html(count+' Comments');
 					}else{
 						current.parents('.post-footer').find('.commentcount').html('1 Comment');
 					}
 
-					current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
+					current.parents('.pop-comment-side-outer').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('.row').find('.comment-field').text('');
 				}			
 			});	
@@ -160,18 +182,34 @@ $(document).ready(function(){
 			'data' : {'type' : type},
 			'type' : 'post',
 			'success' : function(response){
+				//alert(response);
+				//var type = response.type;
+				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+			}
+		});
+	});
+
+
+/*	$(document).on('click', '.friendstabs', function(){    
+		var type = $(this).data('reqtype');
+		var current = $(this);
+		$.ajax({
+			'url' : 'ajax/getfriendslist',
+			'data' : {'type' : type},
+			'type' : 'post',
+			'success' : function(response){
 				var type = response.type;
 				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response.data);
 			}
 		});
-	});
+	});*/
 
 
 	/**
 	*	Group chatrooms ajax call handling.
 	*	Ajaxcontroller@groupchatrooms
 	*/
-	$(document).on('click', '#groupchatrooms', function(){
+/*	$(document).on('click', '#groupchatrooms', function(){
 		var current = $(this);
 		$.ajax({
 			'url' : 'ajax/groupchatrooms',
@@ -182,14 +220,14 @@ $(document).ready(function(){
 				// alert(html);
 			}
 		});
-	});
+	});*/
 
 
 	/**
 	*	Group sub chatrooms ajax call handling.
 	*	Ajaxcontroller@groupchatrooms
 	*/
-	$(document).on('click', '.groupnext', function(){
+/*	$(document).on('click', '.groupnext', function(){
 		var current = $(this);
 		var groupid = $(this).data('parentid');
 
@@ -204,14 +242,14 @@ $(document).ready(function(){
 				// alert(html);
 			}
 		});
-	});
+	});*/
 	
 
 	/**
 	*	Enter chatrooms ajax call handling.
 	*	Ajaxcontroller@enterchatroom
 	*/
-	$(document).on('click', '.enterchat', function(){
+/*	$(document).on('click', '.enterchat', function(){
 		var current = $(this);
 		var groupid = $(this).data('parentid');
 		var dataval = $(this).data('value');
@@ -227,7 +265,7 @@ $(document).ready(function(){
 				}
 			});
         }
-	});
+	});*/
 
 
 	$('#state').html('<option value="">State</option>');
@@ -269,15 +307,118 @@ $(document).ready(function(){
 		});	
 	});
  
-	$('.status-r-btn').on('click',function(){
+	/*$('.status-r-btn').on('click',function(){
 		if ( $('#status_img_up').is(':checked') ) { 
 	    $('.status-img-up').show();
 	  }
 	  else{
 	  	$('.status-img-up').hide();
 	  }
+	});*/
+
+	$('.status-r-btn').on('click',function(){
+		if ( $('#status_img_up').is(':checked') ) { 
+	    $('.status-img-up').show();
+	    $('.status-btn-cont').hide();
+	    $('.status-img-cont').show();
+	  }
+	  else{
+	  	$('.status-img-up').hide();
+	  	$('.status-img-cont').hide();
+	  	$('.status-btn-cont').show();
+	  }
 	});
  
+
+	/*
+	* Accept request from another user.
+	*
+	**/
+	$(document).on('click','.accept',function()
+	{
+		var current = $(this);
+		var user_id=current.closest('.get_id').data('userid');
+		var friend_id=current.closest('.get_id').data('friendid');
+		
+		$.ajax({
+			'url' : '/ajax/accept',
+			'type' : 'post',
+			'data' : {'user_id' : user_id,'friend_id':friend_id },
+			'success' : function(data){
+				current.closest('.get_id').find('.accept').hide(200);
+				current.closest('.get_id').find('.decline').hide(200);
+				current.closest('.get_id').find('.remove').show(500);
+			}
+		});
+	});
+
+
+	/*
+	* Reject request from another user.
+	*
+	**/
+	$(document).on('click','.decline',function()
+	{
+		var current = $(this);
+		var user_id=current.closest('.get_id').data('userid');
+		var friend_id=current.closest('.get_id').data('friendid');
+		
+		$.ajax({
+			'url' : '/ajax/reject',
+			'type' : 'post',
+			'data' : {'user_id' : user_id,'friend_id':friend_id },
+			'success' : function(data){
+				current.closest('.get_id').find('.accept').hide(200);
+				current.closest('.get_id').find('.decline').hide(200);
+				current.closest('.get_id').find('.msg').show(500);
+			}
+		});
+	});
+
+
+	/*
+	* Resend request to user.
+	*
+	**/
+	$(document).on('click','.resend',function()
+	{
+		var current = $(this);
+		var user_id=current.closest('.get_id').data('userid');
+		var friend_id=current.closest('.get_id').data('friendid');
+		
+		$.ajax({
+			'url' : '/ajax/resend',
+			'type' : 'post',
+			'data' : {'user_id' : user_id,'friend_id':friend_id },
+			'success' : function(data){
+				current.closest('.get_id').find('.resend').hide(200);
+				current.closest('.get_id').find('.sent').show(500);
+			}
+		});
+	});
+
+
+	/*
+	* Remove request from another user.
+	*
+	**/
+	$(document).on('click','.remove',function()
+	{
+		var current = $(this);
+		var user_id=current.closest('.get_id').data('userid');
+		var friend_id=current.closest('.get_id').data('friendid');
+
+		$.ajax({
+			'url' : '/ajax/remove',
+			'type' : 'post',
+			'data' : {'user_id' : user_id,'friend_id':friend_id },
+			'success' : function(data){
+				current.closest('.get_id').find('.remove').hide(200);
+				current.closest('.get_id').find('.msg2').show(500);
+			}
+		});
+	});
+
 });
 
 	$('.popup').fancybox();

@@ -25,6 +25,7 @@ class AjaxController extends Controller
 			if( $arguments ){
 
 				$user = Auth::User();				
+				$userid = $user->id;
 				$arguments['user_by'] = $user->id;
 	
 				if( empty($arguments['message']) && empty($arguments['image']))
@@ -46,7 +47,8 @@ class AjaxController extends Controller
 					throw new Exception('Something went wrong.');
 
 				$name = Auth::User()->first_name.' '.Auth::User()->last_name;
-				$time = $feed->updated_at->diffForHumans();
+				$time = $feed->updated_at->format('h:i A');
+				$time1 = $feed->updated_at->format('D jS');
 				$picture = $feed->image;
 				$message = $feed->message;
 
@@ -74,7 +76,7 @@ $postHtml = <<<postHtml
 				<div class="post-header">
 					<div class="row">
 						<div class="col-md-7">
-							<a href="#" title="" class="user-thumb-link">
+							<a href="profile/$userid" title="" class="user-thumb-link">
 								<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
 								$name
 							</a>
@@ -82,11 +84,8 @@ $postHtml = <<<postHtml
 						<div class="col-md-5">
 							<div class="post-time text-right">
 								<ul>
-									<li>
-										<span class="icon flaticon-time">
-											$time
-										</span>
-									</li>
+									<li><span class="icon flaticon-time">$time</span></li>
+									<li><span class="icon flaticon-days">$time1</span></li>
 								</ul>
 							</div>
 						</div>
@@ -109,34 +108,19 @@ $postHtml = <<<postHtml
 								</div>
 							</li>
 							<li>
-								<a class="popups">
+								<a class="popupajax" style="cursor:pointer">
 									<span class="icon flaticon-interface-1"></span> 
 									<span class="commentcount">Comment</span>
 								</a>
 							</li>
 						</ul>
 					</div>
-					<div class="post-comment-cont">
-						<div class="post-comment">
-							<div class="row">
-								<div class="col-md-10">
-									<textarea type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
-								</div>
-								<div class="col-md-2">
-									<button type="button" class="btn btn-primary btn-full comment">Post</button>
-								</div>
-							</div>
-						</div>
-						<div class="comments-list">
-							<ul>
-							</ul>
-						</div>
-					</div>
 				</div>
 			</div>
 postHtml;
 
 echo $postHtml;
+
 
 			}
 
@@ -153,183 +137,13 @@ echo $postHtml;
 	//Get comment box
 	public function getCommentBox()
 	{
+
 		$arguments = Input::all();
 
-		try{
-
-			$likes = Like::where('feed_id', '=', $arguments['feed_id'])->get();
-			$comments = Comment::where('feed_id', '=', $arguments['feed_id'])->get();
-			$feed = Feed::where('id', '=', $arguments['feed_id'])->get();
-
-			$user = User::find($feed[0]->user_by);
-			$feedPostUserName = $user->first_name.' '.$user->last_name;
+		$feeddata = Feed::with('comments')->with('likes')->with('user')->where('id', '=', $arguments['feed_id'])->get()->first();
  
-			$image = $feed[0]->image;
-			$message = $feed[0]->message;
-			$time = $feed->updated_at->format('h:i A');
-
-			$likedata = Like::where(['user_id' => Auth::User()->id, 'feed_id' => $arguments['feed_id']])->get(); 
-			$checked = isset($likedata[0]) ? 'checked' : '';
-
-			$likescountData = Like::where(['feed_id' => $arguments['feed_id']])->get();
-			$likescount = count($likescountData);
-			if($likescount > 0){
-				$likespan = "<span>$likescount Likes</span>";
-			}else{
-				$likespan = "<span>Like</span>";
-			}
-
-			$commentscountData = Comment::where(['feed_id' => $arguments['feed_id']])->get();
-			$commentscount = count($commentscountData);
-			if($commentscount > 0){
-				$commentspan = "<span>$commentscount Comments</span>";
-			}else{
-				$commentspan = "<span>Comment</span>";
-			}
-
-			// echo '<pre>';print_r();die('pawan');
-
-$commentshtml = "";
-foreach($comments as $data){
-
-	$commentedBy = $data->commented_by;
-	$username = User::find($commentedBy);
-	$name = $username->first_name.' '.$username->last_name;
-
-$commentshtml .= '
-<li>
-	<span class="user-thumb" style="background: url(images/user-thumb.jpg)"></span>
-	<div class="comment-title-cont">
-		<div class="row">
-			<div class="col-sm-6">
-				<a href="#" title="" class="user-link">'.$name.'</a>
-			</div>
-			<div class="col-sm-6">
-				<div class="comment-time text-right">'.$time.'</div>
-			</div>
-		</div>
-	</div>
-	<div class="comment-text">'.$data->comments.'</div>
-</li>';
-}
-
-$getcomment = <<<getcomment
-
-<div id="AllComment" class="post-list">
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-8 pop-post-left-side">
-				<div class="single-post">
-					<div class="pop-post-header">
-						<div class="post-header">
-							<div class="row">
-								<div class="col-md-7">
-									<a href="#" title="" class="user-thumb-link">
-										<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
-										$feedPostUserName
-									</a>
-								</div>
-								<div class="col-md-5">
-									<div class="post-time text-right">
-										<ul>
-											<li><span class="icon flaticon-time">$time</span></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="pop-post-text clearfix postsajax">
-							<p class="postsonajax">$message</p>
-						</div>
-					</div>
-					
-					<div class="post-data pop-post-img">
-						<img src="images/user-thumb.jpg" class="pop-img">
-					</div>
-					<div class="post-footer pop-post-footer">
-						<div class="post-actions">
-							<ul>
-								<li>
-									<div class="like-cont">
-										<input type="checkbox" name="checkboxG4" id="checkboxG4" class="css-checkbox" $checked/>
-										<label for="checkboxG4" class="css-label">
-											$likespan
-										</label>
-									</div>
-								</li>
-								<li>
-									<span class="icon flaticon-interface-1">
-									</span>
-								 	$commentspan
-								 </li>
-							</ul>
-						</div><!--/post actions-->
-					</div><!--pop post footer-->
-				</div><!--/single post-->
-			</div>
-			<div class="col-sm-4 pop-comment-side-outer">
-				<div class="pop-comment-side">
-					<div class="post-comment-cont">
-						<div class="comments-list">
-							<ul>
-							$commentshtml
-							</ul>
-						</div>
-					</div>
-				</div>
-
-			<div class="pop-post-comment post-comment">
-				<div class="emoji-field-cont cmnt-field-cont">
-					<textarea type="text" class="form-control comment-field" data-emojiable="true" placeholder="Type here..."></textarea>
-					<input type="file" class="filestyle" data-input="false" data-iconName="flaticon-clip"  data-buttonName="btn-icon btn-cmnt-attach" multiple="multiple">
-					<!-- <button type="button" class="btn-icon btn-cmnt-attach"><i class="flaticon-clip"></i></button> -->
-					<button type="button" class="btn-icon btn-cmnt"><i class="flaticon-letter"></i></button>
-				</div>
-			</div>
-
-			</div>
-		</div>
-	</div>
-</div>
-<script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
-<script src="/lib/js/nanoscroller.min.js"></script>
-<script src="/lib/js/tether.min.js"></script>
-<script src="/lib/js/config.js"></script>
-<script src="/lib/js/util.js"></script>
-<script src="/lib/js/jquery.emojiarea.js"></script>
-<script src="/lib/js/emoji-picker.js"></script>
-<script src="/js/jquery.nicescroll.min.js"></script>
-<script>
-$('.pop-comment-side .post-comment-cont').niceScroll();
-var postsonajax = $('.postsonajax').html();
-if(postsonajax == ''){
-	$('.postsajax').remove();
-}
-
-	//Emoji Picker
-	$(function() {
-      // Initializes and creates emoji set from sprite sheet
-      window.emojiPicker = new EmojiPicker({
-        emojiable_selector: '[data-emojiable=true]',
-        assetsPath: 'lib/img/',
-        popupButtonClasses: 'fa fa-smile-o'
-      });
-      // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
-      // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
-      // It can be called as many times as necessary; previously converted input fields will not be converted again
-      window.emojiPicker.discover();
-    });
-</script>
-getcomment;
-
-			// print_r($arguments['feed_id']);die;		
-			echo $getcomment;
-
-		}catch(Exception $e){
-			return $e->getMessage();
-		}
-
-		exit;
+		return view('dashboard.getcommentbox')
+					->with('feeddata', $feeddata);
 
  	}
 
@@ -337,35 +151,26 @@ getcomment;
 
 	public function postcomment()
 	{
-			try
-			{
-				$arguments = Input::all();
-				// print_r($arguments);die('pawan');
-				$comments = new Comment;
 
-				$validator = Validator::make($arguments, $comments->rules, $comments->messages);
+		$arguments = Input::all();
 
-				if($validator->fails()) {
-					
-					throw new Exception($this->getError($validator));
+		$comments = new Comment;
 
-				}else{
+		$user = User::find($arguments['commented_by']);
+		if( !$user )
+			return 'No record found of the user.';
 
-					$user = User::find($arguments['commented_by']);
-					if( !$user )
-						throw new Exception('No record found of the user.');						
+		$feed = Feed::find($arguments['feed_id']);
+		if(!$feed)
+			return 'The post may have expired or does not exist.';
 
-					$feed = Feed::find($arguments['feed_id']);
-					if(!$feed)
-						throw new Exception('The post may have expired or does not exist.');
-					
-					$comments = new Comment;
-					$model = $comments->create($arguments);
+		$model = $comments->create($arguments);
 
-					$userid = Auth::User()->id;
-					$username = Auth::User()->first_name.' '.Auth::User()->last_name;
-					$comment = $model->comments;
-					$time = $model->updated_at->format('h:i A');
+		$userid = Auth::User()->id;
+		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
+		$comment = $model->comments;
+		$time = $model->updated_at->format('h:i A');
+		
 
 $variable = array();				
 $variable['comment'] = <<<comments
@@ -385,20 +190,10 @@ $variable['comment'] = <<<comments
 </li>
 comments;
 
-
-			$count = DB::table('comments')->where(['feed_id' => $arguments['feed_id']])->get();	
-			$variable['count'] = count($count);
-			$data = json_encode($variable);
-			echo $data;
-
-					// echo $comment;
-				}
-
-			}catch(Exception $e){
-
-				return $e->getMessage();
-
-			}
+		$count = DB::table('comments')->where(['feed_id' => $arguments['feed_id']])->get();	
+		$variable['count'] = count($count);
+		$data = json_encode($variable);
+		echo $data;
 
 		exit;
 	}
@@ -426,9 +221,34 @@ comments;
 
 		$sessionInfo['status']=$status;	  
 		echo json_encode($sessionInfo); 
-		exit;	  
-
+		exit;
  	}
+
+
+	public function searchfriend(){
+
+		$xmppusername = Input::get('xmpp_username');
+		$node = config('app.xmppHost');
+
+		$message="No Result Found";
+		if( count($xmppusername) && $xmppusername != ''){
+ 
+			$users = User::where('xmpp_username', 'LIKE', $xmppusername)->get();
+
+			if( count($users) > 0 )
+			{
+				$message="";
+				foreach ($users as $value) { 
+					$userdata = $value->toArray();
+					$name = $userdata['first_name'].' '.$userdata['last_name'];
+					$message .= '<div class="row"> <a href="javascript:void(0);" onclick="openChatbox(\''.$userdata['xmpp_username'].'\',\''.$userdata['xmpp_password'].'\');">'.$name.'</a></div>';
+				}	
+			}
+		}
+		echo $message; 
+		exit;
+ 	}
+ 	
 
 
 	/**
@@ -437,86 +257,14 @@ comments;
 	*/
 	public function getfriendslist()
 	{
+		
+		$input=Input::get('type');
 
-		$input = Input::get('type');;
-
-		$model = Friend::with('user')->with('friends')->where( function( $query ) use ( $input ) {
-					self::queryBuilder( $query, $input );
+		$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
+			    self::queryBuilder( $query, $input );
 				})->get()->toArray();
- 
-		$litag = array();
-		foreach ($model as $key => $value) {
 
-			if($value['friend_id'] == Auth::User()->id)
-				$name = $value['user']['first_name'].' '.$value['user']['last_name'];
-			else
-				$name = $value['friends']['first_name'].' '.$value['friends']['last_name'];
-
-
-			if($input == 'sent'){
-				$permissionbutton = '<div class="text-right">
-								<button class="btn btn-primary btn-full" type="button">Sent Request</button>
-							</div>';
-			}elseif($input == 'recieved'){
-				$permissionbutton = '<div class="row">
-								<div class="col-sm-6">
-									<button class="btn btn-primary btn-full" type="button" class="accept">Accept</button>
-								</div>
-								<div class="col-sm-6">
-									<button class="btn btn-default btn-full" type="button" class="decline">Decline</button>
-								</div>
-							</div>';
-			}elseif($input == 'current'){
-				$permissionbutton = '<div class="text-right">
-								<button class="btn btn-default btn-full" type="button" class="remove">Remove</button>
-							</div>';
-			}elseif($input == 'all'){
-
-				if(($value['status'] == 'Pending') && ($value['user_id'] == Auth::User()->id)){
-					$permissionbutton = '<div class="row">
-							<div class="col-sm-6">
-								<button class="btn btn-primary btn-full" type="button" class="accept">Accept</button>
-							</div>
-							<div class="col-sm-6">
-								<button class="btn btn-default btn-full" type="button" class="decline">Decline</button>
-							</div>
-						</div>';
-				}elseif(($value['status'] == 'Pending') && ($value['friend_id'] == Auth::User()->id)){ 
-					$permissionbutton = '<div class="text-right">
-							<button class="btn btn-primary btn-full" type="button">Sent Request</button>
-						</div>';
-				}elseif(($value['status'] == 'Accepted') && ($value['user_id'] == Auth::User()->id)){ 
-					$permissionbutton = '<div class="text-right">
-						<button class="btn btn-default btn-full" type="button" class="remove">Remove</button>
-					</div>';
-				}
-
-			}
-
-			$litag[] = '<li>
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="user-cont">
-										<a title="" href="#">
-											<span style="background: url(images/user-thumb.jpg);" class="user-thumb">
-											</span>
-											'.$name.'
-										</a>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									'.$permissionbutton.'
-								</div>
-							</div>
-						</li>';
-
-		}
-
-		$lisdata = array();
-		$lisdata['data'] = implode(' ', $litag);
-		$lisdata['type'] = ucwords($input);
-		// print_r($model);exit;
-		return $lisdata;
+		return view('dashboard.getfriendslist')->with('model',$model);
  
 	}
 
@@ -526,91 +274,24 @@ comments;
 	*	Ajaxcontroller@queryBuilder
 	*/
 	public function queryBuilder( &$query, $input ){
+		$user_id = Auth::User()->id;
 		if($input == 'all'){
-            $query->where('user_id', '=', Auth::User()->id);
-            $query->orWhere('friend_id', '=', Auth::User()->id);
+            $query->where('user_id', '=', $user_id);
+            $query->orWhere('friend_id', '=', $user_id);
         }elseif($input == 'sent'){
-            $query->where('user_id', '=', Auth::User()->id);
+            $query->where('user_id', '=', $user_id);
             $query->where('status', '=', 'Pending');
         }elseif($input == 'recieved'){
-            $query->where('friend_id', '=', Auth::User()->id);
+            $query->where('friend_id', '=', $user_id);
             $query->where('status', '=', 'Pending');
         }elseif($input == 'current'){
-            $query->where('user_id', '=', Auth::User()->id)->where('status', '=', 'Accepted');
-            $query->orWhere('friend_id', '=', Auth::User()->id)->where('status', '=', 'Accepted');
+            $query->where('user_id', '=', $user_id)->where('status', '=', 'Accepted');
+            $query->orWhere('friend_id', '=', $user_id)->where('status', '=', 'Accepted');
         } 
 	}
 
 
-	/**
-	*	Group chatrooms ajax call handling.
-	*	Ajaxcontroller@groupchatrooms
-	*/
-	public function groupchatrooms()
-	{
-		return view('dashboard.groupchatrooms');
-	}
 
-
-	/**
-	*	Group sub chatrooms ajax call handling.
-	*	Ajaxcontroller@groupchatrooms
-	*/
-	public function subgroupchats()
-	{
-
-		$input = Input::get('groupid');
-		$dataval = Input::get('dataval');
-		
-		if(!empty($input)){
-			$data = DB::table('categories')->where(['parent_id' => $input])->where(['status' => 'Active'])->get();
-
-			if( !empty( $data ) ){
-				$subgroups = $data;
-			}
-		}
-		
-		return view('dashboard.subgroupchats')
-				->with('subgroups', $subgroups)
-				->with('dataval', $dataval);
-	}
-
-
-	/**
-	*	Enter chatrooms ajax call handling.
-	*	Ajaxcontroller@enterchatroom
-	*/
-	public function enterchatroom()
-	{
-
-		$arg = Input::get('dataval');
-
-		$defGroup = array();
-		$defGroup['group_name'] = $arg;
-		$defGroup['group_by'] = Auth::User()->id;
-		
-		$model = new DefaultGroup;
-
-		$updatecheck = $model->where('group_name', $arg)
-					->where('group_by', Auth::User()->id)
-					->get()->toArray();
-		
-		if(empty($updatecheck)){
-			$model = new DefaultGroup;
-			$response = $model->create($defGroup);
-		}else{
-			$id = $updatecheck[0]['id'];
-			$response = $model->find($id);
-		}
-		
-		//Get users of this group
-		$usersData = $model->with('user')->where('group_name', $arg)->get()->toArray();
-		// echo '<pre>';print_r($userids);die;
-
-		return view('dashboard.enterchatroom')
-					->with('groupname', $response)
-					->with('userdata', $usersData);
-	}
  
 
 	/**
@@ -683,6 +364,81 @@ comments;
 			return $e->getMessage();
 		}
 		exit;
+	}
+
+
+	/*
+	* Accept request from another user.
+	*
+	**/
+	public function accept()
+	{
+		$input=Input::all();
+		
+     	$data = array(
+			'friend_id'=>$input['user_id'],
+			'user_id'=>$input['friend_id'],
+			'status'=>'Accepted'
+        );	
+	
+        Friend::where(['friend_id'=>$input['friend_id']])
+        			->where(['user_id'=>$input['user_id']])
+        			->update(['status'=>'Accepted']);
+
+		Friend::insert($data);
+
+	}
+
+	/*
+	* Reject request from another user.
+	*
+	**/
+	public function reject()
+	{
+
+       $input=Input::all();
+
+       Friend::where(['friend_id'=>$input['friend_id']])
+				->where(['user_id'=>$input['user_id']])
+				->update(['status'=>'Rejected']);
+
+	}
+
+
+	/*
+	* Resend request to user.
+	*
+	**/
+	public function resend()
+	{
+
+		$input=Input::all();
+		Friend::where(['friend_id'=>$input['friend_id']])
+			->where(['user_id'=>$input['user_id']])
+			->update(['status'=>'Pending']);       
+
+	}
+
+
+	/*
+	* Remove request from another user.
+	*
+	**/
+	public function remove()
+	{
+
+		$input=Input::all();
+	
+		Friend::where(['friend_id'=>$input['friend_id']])
+				->where(['user_id'=>$input['user_id']])
+				->update(['status'=>'Rejected']); 
+
+		Friend::where(['friend_id'=>$input['user_id']])
+				->where(['user_id'=>$input['friend_id']])
+				->update(['status'=>'Rejected']);      
+
+		Friend::where(['friend_id'=>$input['user_id']])->where(['status'=>'Rejected'])->delete();
+		
 	}
 
 

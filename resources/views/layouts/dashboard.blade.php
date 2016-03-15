@@ -10,17 +10,11 @@
 <link href="/fancybox/jquery.fancybox.css" rel="stylesheet" media="all">
 <link href="/css/flat-icon/flaticon.css" rel="stylesheet" media="all">
 <link href="/css/fileinput.min.css" rel="stylesheet" media="all">
-
+<!-- <link href="/converse/converse.min.css" rel="stylesheet" type="text/css" media="screen" > -->
 <link href="/lib/css/nanoscroller.css" rel="stylesheet">
 <link href="/lib/css/emoji.css" rel="stylesheet">
 <link href="/css/style.css" rel="stylesheet">
 <link href="/css/responsive.css" rel="stylesheet" media="all">
-
-<!-- <script data-main="js/app" src="/js/lib/require.js"></script> -->
-
-<!-- <link href="/css/converse.min.css" rel="stylesheet" type="text/css" media="screen" > -->
-<!-- <link href="/css/converse.min.css" rel="stylesheet" type="text/css" media="screen" >
-<script type="text/javascript" src="/js/converse.min.js"></script> -->
 
 <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 </head>
@@ -97,6 +91,7 @@
 <script type="text/javascript" src="/js/fileinput.min.js"></script>
 <script type="text/javascript" src="/js/custom.js"></script>
 <script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
+<script src="/c-lib/lib/js/emojione.js"></script>
 <!--Emoji libraries-->
 <script src="/lib/js/nanoscroller.min.js"></script>
 <script src="/lib/js/tether.min.js"></script>
@@ -106,20 +101,10 @@
 <script src="/lib/js/emoji-picker.js"></script>
 <script src="/js/jquery.nicescroll.min.js"></script>
 <!--/Emoji-->
-
-<script type="text/javascript">
-/*
-	require(['converse'], function (converse) {
-	    converse.initialize({
-	        bosh_service_url: 'http://fs.yiipro.com:5280/http-bind', // Please use this connection manager only for testing purposes
-	        i18n: locales.en, // Refer to ./locale/locales.js to see which locales are supported
-	        show_controlbox_by_default: true,
-	        roster_groups: true
-	    });
-	});
-*/
-</script>
-
+<!- chat system -->
+<!-- <script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
+<script type="text/javascript" src="/converse/jquery.form.js"></script> -->
+<!-- chat system -->
 </body>
 </html>
 

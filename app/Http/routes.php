@@ -24,14 +24,18 @@ Route::post('ajax/like', 'AjaxController@like');
 Route::post('ajax/comments/get', 'AjaxController@getCommentBox');
 Route::post('ajax/comments/post', 'AjaxController@postcomment');
 Route::post('ajax/getfriendslist', 'AjaxController@getfriendslist');
+
 Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
-Route::post('ajax/groupchatrooms', 'AjaxController@groupchatrooms');
-Route::post('ajax/subgroupchats', 'AjaxController@subgroupchats');
-Route::post('ajax/enterchatroom', 'AjaxController@enterchatroom');
+Route::post('ajax/search-friend', 'AjaxController@searchfriend');
+
 Route::post('ajax/webgetlikes', 'AjaxController@webgetlikes');
 
 Route::post('/web/ajax/getposts', 'AjaxController@getAjaxPost');
 
+Route::post('ajax/accept','AjaxController@accept');
+Route::post('ajax/reject','AjaxController@reject');
+Route::post('ajax/resend','AjaxController@resend');
+Route::post('ajax/remove','AjaxController@remove');
 
 /**
  * @Api Routes..
@@ -53,6 +57,8 @@ Route::post('api/likes', 'ApiController@likes');
 
 Route::post('api/comments', 'ApiController@getComments');
 Route::post('api/comments/create', 'ApiController@postComments');
+
+Route::post('api/getprofile','ApiController@getProfile');
 
 
 /*
@@ -84,6 +90,12 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('chatroom', 'DashboardController@chatroom');
 	Route::get('requests', 'DashboardController@friendRequests');
 
-	// Route::get('post/image', 'DashboardController@image');	
+	Route::get('group', 'DashboardController@group');
+	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
+	Route::get('subgroup/{parentid}/{parentname}', 'DashboardController@subgroup');
+	Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
+	Route::get('groupchat', 'DashboardController@groupchat');
+
+	Route::get('profile/{id}', 'DashboardController@profile');
 
 });

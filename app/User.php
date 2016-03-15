@@ -51,4 +51,8 @@ class User extends Authenticatable
 		'email' => 'required|email'
 	);
 
+	public function country()
+	{
+		return $this->hasOne('App\Country','country_id','country');
+	}
 }

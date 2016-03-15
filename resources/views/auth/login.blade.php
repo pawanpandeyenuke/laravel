@@ -60,7 +60,7 @@
 								</div>
 							</div>
 							<div class="col-md-6">
-								<a href="{{ url('password/reset') }}" title="">Forgot Password?</a>
+								<a class="fg-pw-link" href="{{ url('password/reset') }}" title="">Forgot Password?</a>
 							</div>
 						</div>
 
@@ -98,6 +98,15 @@
 					</div><!--/social login-->
 				</div>
 			</div>
+		</div>
+	</div>
+	<div class="page-footer">
+		<div class="text-center">
+			<ul>
+				<li><a href="#" title="">About</a></li>
+				<li><a href="#" title="">Terms Privacy</a></li>
+				<li><a href="#" title="">&copy; 2015 friendzsquare</a></li>
+			</ul>
 		</div>
 	</div>
 </div><!--/pagedata-->
