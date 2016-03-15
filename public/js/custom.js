@@ -102,30 +102,39 @@ $(document).ready(function(){
 			'type' : 'post',
 			'success' : function(response){
 
-				current.next('label.css-label').find('.countspan').html(response);
-
 				if(response == 0){
+					// current.prop('checked', 'false');
+					$(this).prop('checked', 'false');
+					jQuery("#page-"+feedId).html('');
+					jQuery("#popup-"+feedId).html('');
+				}else{
+					// current.prop('checked', 'false');
+					$(this).prop('checked', 'true');
+					jQuery("#page-"+feedId).html(response);
+					jQuery("#popup-"+feedId).html(response);					
+				}
+
+				//current.next('label.css-label').find('.countspan').html(response);
+
+/*				if(response == 0){
 					current.next().html('');
 					current.next().append('<span class="firstlike">Like</span>');
 				}else if(response >= 0){
 					current.next('label.css-label').find('.firstlike').html(response+' Likes');
-				}
+				}*/
 
 			}			
 		});	
 	});
 
 	$(document).on('click', '.comment', function(){
+
 		var current = $(this);
 		var _token = $('#postform input[name=_token]').val();
-		var feedId = $(this).closest('.post-list').data('value');
-		var commentData = $(this).closest('.row').find('textarea').val();
+		var feedId = $(this).closest('.post-comment').data('value');
+		var commentData = $(this).closest('.post-comment').find('textarea').val();
 		var commented_by = $('#user_id').val();
-
-		// alert(feedId);
-		// alert(commentData);
-		// alert(commented_by);
-
+ 
 		if(commentData){
 			$.ajax({			
 				'url' : 'ajax/comments/post',
@@ -139,12 +148,18 @@ $(document).ready(function(){
 					count = parseresponse.count;
 					if(count != 0){
 						current.parents('.post-list').find('.pop-post-footer').find('.commentcount').html(count+' Comments');
+						current.parents('.post-footer').find('.commentcount').html(count+' Comments');
+						current.parents('#AllCommentNew').find('.commentcount').html(count+' Comments');
 					}else{
-						current.parents('.post-footer').find('.commentcount').html('1 Comment');
+						current.parents('.post-footer').find('.commentcount').html('1 Comment'); 
 					}
-
+	
+					current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('.pop-comment-side-outer').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('.row').find('.comment-field').text('');
+					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
+					current.parents('#AllCommentNew').find('.comment-field').text('');
+					
 				}			
 			});	
 		}
@@ -163,6 +178,25 @@ $(document).ready(function(){
 				$('#commentajax').html(response);
 		        $.fancybox([
 		            { href : '#commentajax' }
+		        ]);
+			}
+		});
+
+	});
+ 
+
+	$(document).on('click', '.postpopupajax', function(){    
+
+		var feedId = $(this).closest('.single-post').data('value');
+		var _token = $('#postform input[name=_token]').val();
+		$.ajax({
+			'url' : 'ajax/post/get',
+			'data' : { 'feed_id' : feedId, '_token' : _token },
+			'type' : 'post',
+			'success' : function(response){
+				$('#AllCommentNew').html(response);
+		        $.fancybox([
+		            { href : '#AllCommentNew' }
 		        ]);
 			}
 		});
@@ -190,82 +224,41 @@ $(document).ready(function(){
 	});
 
 
-/*	$(document).on('click', '.friendstabs', function(){    
-		var type = $(this).data('reqtype');
-		var current = $(this);
-		$.ajax({
-			'url' : 'ajax/getfriendslist',
-			'data' : {'type' : type},
-			'type' : 'post',
-			'success' : function(response){
-				var type = response.type;
-				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response.data);
-			}
-		});
-	});*/
-
 
 	/**
-	*	Group chatrooms ajax call handling.
-	*	Ajaxcontroller@groupchatrooms
+	*	Delete posts on ajax call handling.
+	*	Ajaxcontroller@deletepost
 	*/
-/*	$(document).on('click', '#groupchatrooms', function(){
+	$(document).on('click', '.post-delete', function(){
 		var current = $(this);
+		var postId = $(this).closest('.post-header').data('value'); 
 		$.ajax({
-			'url' : 'ajax/groupchatrooms',
+			'url' : 'ajax/deletepost',
+			'data' : { 'postId' : postId },
 			'type' : 'post',
-			// 'data' : {},
 			'success' : function(response){
-				var html = current.closest('.dashboard-body').find('.col-sm-6').html(response);
-				// alert(html);
+				current.closest('.single-post').remove();
 			}
 		});
-	});*/
-
+	});
 
 	/**
-	*	Group sub chatrooms ajax call handling.
-	*	Ajaxcontroller@groupchatrooms
+	*	Delete comments on ajax call handling.
+	*	Ajaxcontroller@deletecomments
 	*/
-/*	$(document).on('click', '.groupnext', function(){
+	$(document).on('click', '.comment-delete', function(){
 		var current = $(this);
-		var groupid = $(this).data('parentid');
-
-		var dataval = $(this).data('value');
-		// alert(dataval);
+		var commentId = $(this).closest('li').data('value'); 
+		// alert(commentId);
 		$.ajax({
-			'url' : 'ajax/subgroupchats',
+			'url' : 'ajax/deletecomments',
+			'data' : { 'commentId' : commentId },
 			'type' : 'post',
-			'data' : { 'groupid' : groupid, 'dataval' : dataval },
 			'success' : function(response){
-				var html = current.closest('.dashboard-body').find('.col-sm-6').html(response);
-				// alert(html);
+				current.closest('li').remove();
 			}
 		});
-	});*/
-	
-
-	/**
-	*	Enter chatrooms ajax call handling.
-	*	Ajaxcontroller@enterchatroom
-	*/
-/*	$(document).on('click', '.enterchat', function(){
-		var current = $(this);
-		var groupid = $(this).data('parentid');
-		var dataval = $(this).data('value');
-		console.log(dataval);
-        if(dataval.length){
-			$.ajax({
-				'url' : 'ajax/enterchatroom',
-				'type' : 'post',
-				'data' : { 'dataval' : dataval },
-				'success' : function(response){
-					var html = current.closest('.dashboard-body').find('.col-sm-6').html(response);
-					// alert(dataval);
-				}
-			});
-        }
-	});*/
+	});
 
 
 	$('#state').html('<option value="">State</option>');
@@ -418,6 +411,15 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+
+
+	/*
+	* Profile data save on edit of profile.
+	*
+	**/
+
+
 
 });
 

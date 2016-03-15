@@ -18,7 +18,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 							<div class="row">
 								<div class="col-md-7">
 									<a href="profile/{{$user->id}}" title="" class="user-thumb-link">
-										<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
+										<span class="small-thumb" style="background: url('/images/user-thumb.jpg');"></span>
 										{{ $user->first_name.' '.$user->last_name }}
 									</a>
 								</div>
@@ -51,11 +51,12 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 										<input type="checkbox" name="checkboxG4" id="checkboxG4" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
 										<label for="checkboxG4" class="css-label">
 											@if($likecountdata > 0)
-												<span class="countspan">
+												<span class="countspan" id="popup-{{$feeddata->id}}">
 											 		{{ $likecountdata }}
 												</span>
 												<span>Likes</span>			
 											@else
+												<span class="countspan" id="popup-{{$feeddata->id}}"></span>
 												<span class="firstlike">Like</span>
 											@endif
 										</label>
@@ -80,13 +81,10 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 						<div class="comments-list">
 							<ul>
 								@foreach($comments as $data)
-									<?php 
-										
-										// $username = DB::table('users')->where(['id' => $data->commented_by])->get()->first();
-										$username = App\User::find($data->commented_by)->get()->first();
-										// echo '<pre>';print_r();die;
-									?>
-									<li>
+									<?php $username = App\User::find($data->commented_by)->get()->first(); ?>
+									<li data-value="{{ $data->id }}" id="post_{{ $data->id }}">
+										<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+
 										<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
 										<div class="comment-title-cont">
 											<div class="row">
@@ -101,15 +99,18 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 										<div class="comment-text">{{ $data->comments }}</div>
 									</li>
 								@endforeach
+  
 							</ul>
+
 						</div>
 					</div>
 				</div>
 
-				<div class="pop-post-comment post-comment">
+				<div class="pop-post-comment post-comment" data-value="{{ $feeddata->id }}" id="post_{{ $feeddata->id }}">
+
 					<div class="emoji-field-cont cmnt-field-cont">
 						<textarea type="text" class="form-control comment-field" data-emojiable="true" placeholder="Type here..."></textarea>
-						<input type="file" class="filestyle" data-input="false" data-iconName="flaticon-clip"  data-buttonName="btn-icon btn-cmnt-attach" multiple="multiple">
+						<!-- <input type="file" class="filestyle" data-input="false" data-iconName="flaticon-clip"  data-buttonName="btn-icon btn-cmnt-attach" multiple="multiple"> -->
 						<!-- <button type="button" class="btn-icon btn-cmnt-attach"><i class="flaticon-clip"></i></button> -->
 						<button type="button" class="btn-icon btn-cmnt comment"><i class="flaticon-letter"></i></button>
 					</div>
