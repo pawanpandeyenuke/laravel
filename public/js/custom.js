@@ -57,7 +57,9 @@ $(document).ready(function(){
 				$('#postlist').first('.single-post').prepend(response);
 				current.parents('.row').find('#newsfeed').text('');
 				current.parents('.row').find('.emoji-wysiwyg-editor').text('');
+				loadImg();
 			}
+			
 		} 
     }); 
 
@@ -141,8 +143,9 @@ $(document).ready(function(){
 				'data' : { '_token' : _token, 'feed_id' : feedId, 'commented_by' : commented_by, 'comments' : commentData },
 				'type' : 'post',
 				'success' : function(response){
+
 					var parseresponse = jQuery.parseJSON(response);
-					// console.log(response);
+					jQuery("#pagecomment-"+feedId).append(parseresponse.comment);
 					current.closest('.row').find('textarea').val('');
 
 					count = parseresponse.count;
@@ -159,7 +162,7 @@ $(document).ready(function(){
 					current.parents('.row').find('.comment-field').text('');
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
-					
+					loadImg();
 				}			
 			});	
 		}
@@ -428,7 +431,12 @@ $(document).ready(function(){
 	//Emoji Picker
 	$(function() {
       // Initializes and creates emoji set from sprite sheet
-      window.emojiPicker = new EmojiPicker({
+     loadImg();
+    });
+	
+	function loadImg()
+	{
+		 window.emojiPicker = new EmojiPicker({
         emojiable_selector: '[data-emojiable=true]',
         assetsPath: 'lib/img/',
         popupButtonClasses: 'fa fa-smile-o'
@@ -437,5 +445,5 @@ $(document).ready(function(){
       // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
       // It can be called as many times as necessary; previously converted input fields will not be converted again
       window.emojiPicker.discover();
-    });
-	
+      //alert(6);
+	}
