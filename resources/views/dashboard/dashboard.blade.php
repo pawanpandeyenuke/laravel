@@ -178,8 +178,7 @@
  														$popupclass = 'popupajax';
  													}else{
  														$popupclass = 'popupajax';
- 													}
- 													
+ 													} 													
 												?>
 
 												<a class="{{$popupclass}}" style="cursor:pointer">

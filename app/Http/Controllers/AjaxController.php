@@ -51,6 +51,17 @@ class AjaxController extends Controller
 				$time1 = $feed->updated_at->format('D jS');
 				$picture = $feed->image;
 				$message = $feed->message;
+				$feedid = $feed->id;
+
+		
+				if($arguments['message'] && empty($arguments['image'])){
+					$popupclass = 'postpopupajax';
+				}elseif($arguments['image'] && empty($arguments['message'])){
+					$popupclass = 'popupajax';
+				}else{
+					$popupclass = 'popupajax';
+				} 													
+												
 
 if(!empty($feed->message)){ 
 $message = <<<message
@@ -103,18 +114,37 @@ $postHtml = <<<postHtml
 								<div class="like-cont">
 									<input type="checkbox" name="" id="checkbox<?php echo $feed->id ?>" class="css-checkbox like"/>
 									<label for="checkbox<?php echo $feed->id ?>" class="css-label">
-										<span class="countspan"></span>
+										<span class="countspan" id="page-$feedid"></span>
 										<span>Like</span>
 									</label>
 								</div>
 							</li>
 							<li>
-								<a class="popupajax" style="cursor:pointer">
+								<a class="$popupclass" style="cursor:pointer">
 									<span class="icon flaticon-interface-1"></span> 
 									<span class="commentcount">Comment</span>
 								</a>
 							</li>
 						</ul>
+					</div>
+					<div class="post-comment-cont">
+						<div class="post-comment" data-value="$feedid" id="post_$feedid">
+							<div class="row">
+								<div class="col-md-10">
+									<div class="emoji-field-cont cmnt-field-cont">
+										<textarea data-emojiable="true" type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<button type="button" class="btn btn-primary btn-full comment">Post</button>
+								</div>
+							</div>
+						</div><!--/post comment-->
+						<div class="comments-list">
+							<ul>
+
+							</ul>
+						</div><!--/comments list-->
 					</div>
 				</div>
 			</div>
