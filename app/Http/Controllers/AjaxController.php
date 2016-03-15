@@ -73,7 +73,8 @@ $picture = '';
 $postHtml = <<<postHtml
 
 			<div class="single-post" data-value="$feed->id" id="post_$feed->id">
-				<div class="post-header">
+				<div class="post-header" data-value="$feed->id" id="post_$feed->id">
+					<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 					<div class="row">
 						<div class="col-md-7">
 							<a href="profile/$userid" title="" class="user-thumb-link">
@@ -170,11 +171,12 @@ echo $postHtml;
 		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
 		$comment = $model->comments;
 		$time = $model->updated_at->format('h:i A');
-		
+		$id = $model->id;
 
 $variable = array();				
 $variable['comment'] = <<<comments
-<li>
+<li data-value="$id" id="post_$id">
+	<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 	<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
 	<div class="comment-title-cont">
 		<div class="row">
@@ -440,6 +442,48 @@ comments;
 		Friend::where(['friend_id'=>$input['user_id']])->where(['status'=>'Rejected'])->delete();
 		
 	}
+
+ 
+	//Get post box
+	public function getPostBox()
+	{
+
+		$arguments = Input::all();
+
+		$feeddata = Feed::with('comments')->with('likes')->with('user')->where('id', '=', $arguments['feed_id'])->get()->first();
+ 
+		return view('dashboard.getpostbox')
+					->with('feeddata', $feeddata);
+
+ 	}
+
+
+	//delete post
+	public function deletepost()
+	{
+
+		$postId = Input::get('postId');
+		$userId = Auth::User()->id;
+		
+		$newsFeed = Feed::where('id', '=', $postId)->where('user_by', '=', $userId)->delete();
+		return $newsFeed; 
+
+ 	}
+
+
+	//delete comments
+	public function deletecomments()
+	{
+
+		$commentId = Input::get('commentId');
+		$userId = Auth::User()->id;
+
+		$newsFeed = Feed::where('id', '=', $commentId)->where('user_by', '=', $userId)->delete();
+		return $newsFeed; 
+
+ 	}
+ 	
+
 
 
 }

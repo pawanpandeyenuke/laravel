@@ -36,6 +36,33 @@
 														<div class="radio-cont radio-label-left">
 															<input class="group-radio" type="radio" name="subcategory" value="{{ $title }}" id="{{ $title }}" ></input>
 															<label for="{{ $title }}">{{ $data->title }}</label>
+
+															@if($title == 'country')
+																<div class="subs" style="display:none">
+																{!! Form::select('country', $countries, null, array(
+																	'class' => 'search-field',
+																	'id' => 'country',
+																	
+																)); !!}
+																</div>
+															@elseif($title == 'country,state,city')
+																<div class="subs" style="display:none">
+																	{!! Form::select('country', $countries, null, array(
+																		'class' => 'search-field',
+																		'id' => 'subcountry',
+																	)); !!}
+
+																	{!! Form::select('state', ['State'], null, array(
+																		'class' => 'search-field',
+																		'id' => 'substate',
+																	)); !!}
+
+																	{!! Form::select('city', ['City'], null, array(
+																		'class' => 'search-field',
+																		'id' => 'subcity',
+																	)); !!}
+																</div>
+															@endif
 														</div>
 
 
@@ -80,6 +107,49 @@
         </div>
     </div><!--/pagedata-->
  
+ <script type="text/javascript">
+ 	
+ $(document).on('click', '.group-radio', function(){
+
+ 	if($(this).is(':checked')){
+
+ 		// alert('asdfsa');
+		$(this).closest('.radio-cont').next().find('.subs').hide();
+		$(this).closest('.radio-cont').find('.subs').show();
+		$(this).closest('.radio-cont').prev().find('.subs').hide();
+
+ 	}
+
+ });
+
+	$('#subcountry').change(function(){
+		var countryId = $(this).val();
+		var _token = $('#searchform input[name=_token]').val();
+		$.ajax({			
+			'url' : '/ajax/getstates',
+			'data' : { 'countryId' : countryId, '_token' : _token },
+			'type' : 'post',
+			'success' : function(response){				
+				$('#substate').html(response);
+			}			
+		});	
+	});
+
+	$('#substate').change(function(){
+		var stateId = $(this).val();
+		var _token = $('#searchform input[name=_token]').val();
+		$.ajax({			
+			'url' : '/ajax/getcities',
+			'data' : { 'stateId' : stateId, '_token' : _token },
+			'type' : 'post',
+			'success' : function(response){
+				$('#subcity').html(response);
+			}			
+		});	
+	});
+ </script>
+
+
 @endsection
 
 {!! Session::forget('error') !!}

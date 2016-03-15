@@ -114,7 +114,9 @@
 						@foreach($feeds as $data)		
 							<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>					
 							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
-								<div class="post-header">
+								<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
+									<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+
 									<div class="row">
 										<div class="col-md-7">
 											<a href="profile/{{$data->user->id}}" title="" class="user-thumb-link">
@@ -134,6 +136,7 @@
 								</div><!--/post header-->
 								<div class="post-data">
 									<p>{{ $data['message'] }}</p>
+
 									@if($data['image'])
 										<div class="post-img-cont">
 											<a href="{{ url('uploads/'.$data['image']) }}" class="popup">
@@ -156,18 +159,30 @@
 													<input type="checkbox" name="" id="checkbox{{$data['id']}}" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
 													<label for="checkbox{{$data['id']}}" class="css-label">
 														@if($likecountdata > 0)
-															<span class="countspan">
+															<span class="countspan" id="page-{{$data['id']}}">
 														 		{{ $likecountdata }}
 															</span>
 															<span>Likes</span>			
 														@else
+															<span class="countspan" id="page-{{$data['id']}}"></span>
 															<span class="firstlike">Like</span>
 														@endif
 													</label>
 												</div>
 											</li>
 											<li>
-												<a class="popupajax" style="cursor:pointer">
+												<?php 
+ 													if($data['message'] && empty($data['image'])){
+ 														$popupclass = 'postpopupajax';
+ 													}elseif($data['image'] && empty($data['message'])){
+ 														$popupclass = 'popupajax';
+ 													}else{
+ 														$popupclass = 'popupajax';
+ 													}
+ 													
+												?>
+
+												<a class="{{$popupclass}}" style="cursor:pointer">
 													<span class="icon flaticon-interface-1"></span> 
 													@if($commentscountdata > 0)
 														<span class="commentcount">{{ $commentscountdata }} Comments</span>
@@ -178,10 +193,61 @@
 											</li>
 										</ul>
 									</div><!--/post actions-->
+									<div class="post-comment-cont">
+										<div class="post-comment" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
+											<div class="row">
+												<div class="col-md-10">
+													<div class="emoji-field-cont cmnt-field-cont">
+														<textarea data-emojiable="true" type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<button type="button" class="btn btn-primary btn-full comment">Post</button>
+												</div>
+											</div>
+										</div><!--/post comment-->
+										<div class="comments-list">
+											<ul>
+												@if(!empty($data['comments']))
+													<?php $counter = 1; ?>
+													@foreach($data['comments'] as $commentsData)
+													<?php 
+														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name']);
+
+														// print_r($username);die;
+														if(!empty($username)){
+
+														$name = $username[0]->first_name.' '.$username[0]->last_name; 
+
+													if($counter < 4){ ?>
+														<li>
+														<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-title-cont">
+															<div class="row">
+																<div class="col-sm-6">
+																	<a href="#" title="" class="user-link">{{$name}}</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
+																</div>
+															</div>
+														</div>
+														<div class="comment-text">{{$commentsData['comments']}}</div>
+													</li>
+													<?php }$counter++; }?>
+													@endforeach
+												@endif
+											</ul>
+
+										</div><!--/comments list-->
+									</div>
 								</div><!--/post-footer-->
 							</div><!--/single post-->
 						@endforeach
 					<div id="commentajax" style="display: none;">	</div>
+					<div id="AllCommentNew" class="post-list popup-list-without-img" style="display: none;"></div>
 					</div>
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 				</div>

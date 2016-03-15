@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country;
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State;
 use Request, Session, Validator, Input, Cookie;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -24,14 +24,13 @@ class DashboardController extends Controller
 	{
         try{
 
-
             $per_page = 15;
 
             $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
+            ->where('user_by', '=', Auth::User()->id)
             ->orderBy('news_feed.id','DESC')
             ->take($per_page)
             ->get();
-
 
            // echo '<pre>';print_r($feeds);die;
             /*$feeds = Feed::with('user')
@@ -260,15 +259,35 @@ class DashboardController extends Controller
     }
 
 
+
     public function profile( $id )
     {
         
+        // return 'asdfsadfsa';
         $model = User::with('country')->where('id', $id)->get()->first();
+        $states = State::where('country_id', '=', $model->country)->lists('state_name', 'state_id')->toArray();
+
+        
+        
+        $statesids = State::where('country_id', '=', $model->country)->lists('state_id')->toArray();
+        $cities = DB::table('city')->whereIn('state_id', $statesids)->lists('city_name', 'city_id');
+
+        if(Request::isMethod('post')){
+
+            $input = Request::all();
+            echo '<pre>';print_r($input);die;
+
+        }
+
 
         return view('profile.profile')
-                ->with('model',$model)->with('id',User::find(Auth::User()->id));
+                ->with('model',$model)
+                ->with('id',User::find(Auth::User()->id))
+                ->with('states', $states)
+                ->with('cities', $cities);
 
     }
 
+ 
 
 }
