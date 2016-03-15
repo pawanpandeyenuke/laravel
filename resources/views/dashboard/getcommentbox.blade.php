@@ -81,7 +81,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 						<div class="comments-list">
 							<ul>
 								@foreach($comments as $data)
-									<?php $username = App\User::find($data->commented_by)->get()->first(); ?>
+									<?php $username = App\User::where('id', '=', $data->commented_by)->get()->first(); ?>
 									<li data-value="{{ $data->id }}" id="post_{{ $data->id }}">
 										<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
