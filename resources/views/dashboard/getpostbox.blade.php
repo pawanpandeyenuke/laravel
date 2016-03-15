@@ -1,5 +1,5 @@
 <?php 
-// echo '<pre>';print_r($feeddata->id);die;
+// echo '<pre>';print_r($username);die;
 $user = $feeddata->user;
 $comments = $feeddata->comments;
 $likes = $feeddata->likes;
@@ -69,8 +69,8 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 		<div class="comments-list">
 			<ul id="popupcomment-{{$feeddata->id}}">
 				@foreach($comments as $data)
-					<?php $username = App\User::find($data->commented_by)->get()->first(); ?>
-
+					<?php $username = App\User::where('id', '=', $data->commented_by)->get()->first(); 
+					// echo '<pre>';print_r($username);die; ?>
 					<li data-value="{{ $data->id }}" id="post_{{ $data->id }}">
 						<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
