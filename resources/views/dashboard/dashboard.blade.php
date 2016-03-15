@@ -206,7 +206,7 @@
 											</div>
 										</div><!--/post comment-->
 										<div class="comments-list">
-											<ul>
+											<ul id="pagecomment-{{$data->id}}">
 												@if(!empty($data['comments']))
 													<?php $counter = 1; ?>
 													@foreach($data['comments'] as $commentsData)
