@@ -26,12 +26,12 @@
 
 												@if(!empty($subgroups))
 													@foreach($subgroups as $data)
-								                        <?php 
+								                        <?php  
 								                            $titledata = explode(' ', $data->title);
 								                            if(is_array($titledata)){
 								                                $title = strtolower(implode('', $titledata));
 								                            }
-								                            // echo '<pre>';print_r($title);die;
+								                            
 								                        ?>
 														<div class="radio-cont radio-label-left">
 															<input class="group-radio" type="radio" name="subcategory" value="{{ $title }}" id="{{ $title }}" ></input>
@@ -62,28 +62,30 @@
 																		'id' => 'subcity',
 																	)); !!}
 																</div>
+															@elseif($title == 'professionalcourse')
+
+																<div class="subs" style="display:none">
+																	<?php $courses = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->pluck('title'); ?>
+																	<select name="coursedata">
+																		<option value="">Select</option>
+																		@foreach($courses as $data)					
+																			<option value="{{$data}}">{{$data}}</option>
+																		@endforeach
+																	</select>
+																</div>
+															@elseif($title == 'subjects')
+																<div class="subs" style="display:none">
+																	<?php $courses = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->pluck('title'); ?>
+																	<select name="coursedata">
+																		<option value="">Select</option>
+																		@foreach($courses as $data)					
+																			<option value="{{$data}}">{{$data}}</option>
+																		@endforeach
+																	</select>
+																</div>
 															@endif
 														</div>
-
-
-						                                <?php $fieldsData = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); ?>
-						                                @if($fieldsData)
-						                                <select name="subgroupname" class="selectbox" style="display: none">
-						                                    @foreach($fieldsData as $val)
-						                                        <?php 
-						                                            $titledata1 = explode(' ', $val->title);
-						                                            if(is_array($titledata1)){
-						                                                $title2 = strtolower(implode('', $titledata1));
-						                                            }else{
-						                                                 $title2 = $val->title;
-						                                            }
-						                                            // echo '<pre>';print_r($title);die;
-						                                        ?>
-						                                        <option value="{{ $title2 }}">{{ $val->title }}</option>
-						                                    @endforeach
-						                                </select>
-						                                @endif
-
+  
 													@endforeach
 												@endif
 

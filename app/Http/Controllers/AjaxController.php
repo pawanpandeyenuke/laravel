@@ -141,7 +141,7 @@ $postHtml = <<<postHtml
 							</div>
 						</div><!--/post comment-->
 						<div class="comments-list">
-							<ul>
+							<ul id="pagecomment-$feedid">
 
 							</ul>
 						</div><!--/comments list-->

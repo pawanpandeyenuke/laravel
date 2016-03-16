@@ -157,7 +157,7 @@ $(document).ready(function(){
 						current.parents('.post-footer').find('.commentcount').html('1 Comment'); 
 					}
 	
-					current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
+					// current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('.pop-comment-side-outer').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('.row').find('.comment-field').text('');
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);

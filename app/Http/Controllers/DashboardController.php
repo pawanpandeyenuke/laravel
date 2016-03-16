@@ -183,6 +183,8 @@ class DashboardController extends Controller
         if(empty($input))        
             $input = Request::all();
 
+        print_r($input);die;
+
         if(is_array($input)){
             $groupnamedata = array();
             foreach ($input as $key => $value){
@@ -200,7 +202,7 @@ class DashboardController extends Controller
             $groupname = $input;
         }
 
-        // print_r($groupname);die;
+        
         
         if(Request::isMethod('get')){
 
