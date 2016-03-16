@@ -227,6 +227,7 @@ class ApiController extends Controller
 		{
 			$arguments = Request::all();
 			$feeds = new Feed;
+			// $userId = Auth::User()->id;
 			
 			if( $arguments )
 			{
@@ -243,13 +244,27 @@ class ApiController extends Controller
 					$page = $arguments['page'];
 					$offset = ($page - 1) * $per_page;
 
-					$posts = Feed::orderBy('updated_at', 'desc')->skip($offset)->take($per_page)->with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get()->toArray();
+					$posts = Feed::orderBy('updated_at', 'desc')
+								->where('user_by', '=', $arguments['user_by'])
+								->skip($offset)
+								->take($per_page)
+								->with('likesCount')
+								->with('commentsCount')
+								->with('user')
+								->with('likedornot')
+								->get()
+								->toArray();
+
+					$postscount = Feed::orderBy('updated_at', 'desc')
+								->where('user_by', '=', $arguments['user_by'])
+								->with('likesCount')
+								->with('commentsCount')
+								->with('user')
+								->with('likedornot')
+								->count();
 
 					/*$posts = Feed::where('user_by', $arguments['user_by'])->orderBy('updated_at', 'desc')->skip($offset)->take($per_page)->with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get()->toArray();*/
-
-					// $recordscount = Feed::where('user_by', $arguments['user_by'])->get();
-					$recordscount = Feed::all();
-
+ 
 					// $posts = Feed::with('user')->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')->groupBy('news_feed.id')->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments'),DB::raw('count(likes.id) as likes')]);
 
 /*					$posts = DB::table('users')
@@ -274,12 +289,9 @@ class ApiController extends Controller
 						$this->data['feed'] = $posts;
 						$this->data['page_no'] = $arguments['page'];
 						$this->data['page_size'] = $arguments['page_size'];
-						$this->data['records'] = count($recordscount);
-						$this->data['total_pages'] = ceil(count($recordscount) / $arguments['page_size']);
-						$this->message = count($posts). ' posts found.';
-/*						$this->status = 'success';
-						$this->message = count($posts). ' posts found.';
-						$this->data['feeds'] = $posts;*/
+						$this->data['records'] = $postscount;
+						$this->data['total_pages'] = ceil($postscount / $arguments['page_size']);
+						$this->message = count($postscount). ' posts found.';
 
 					}					
 					
@@ -450,83 +462,159 @@ class ApiController extends Controller
 		return $this->output();
 	}
 
+
+	/*
+	 * Get users profile.
+	 */
 	public function  getProfile()
 	{
 		try{ 
 
 			$arguments=Request::all();
 			$user=new User;
-			if($arguments)
-			{
-			 if(!(User::find($arguments['user_id'])))
-			 throw new Exception("This user id doesn't exist");
+// <<<<<<< HEAD
+// 			if($arguments)
+// 			{
+// 			 if(!(User::find($arguments['user_id'])))
+// 			 throw new Exception("This user id doesn't exist");
 			
-			$details=User::with('country')->where(['id'=>$arguments['user_id']])->get()->toArray();
+// 			$details=User::with('country')->where(['id'=>$arguments['user_id']])->get()->toArray();
 			
-			$this->status='Success';
-			$this->data=$details;
-			$this->message = 'User profile data';
-		}
-		else
-		{
-			throw new Exception('Please enter valid user id');
-		}
+// 			$this->status='Success';
+// 			$this->data=$details;
+// 			$this->message = 'User profile data';
+// 		}
+// 		else
+// 		{
+// 			throw new Exception('Please enter valid user id');
+// 		}
 		
+// 		}
+// 		catch(Exception $e)
+// 		{
+// 		$this->message=$e->getMessage();
+// =======
+			if($arguments){
+				if(!(User::find($arguments['user_id'])))
+					throw new Exception("This user id doesn't exist");
+
+				$details=User::with('country')->where(['id'=>$arguments['user_id']])->get()->toArray();
+
+				$this->status='Success';
+				$this->data=$details;
+				$this->message = 'User profile data';
+
+			}else{
+				throw new Exception('Please enter valid user id');
+			}
+		
+		}catch(Exception $e){	
+			$this->message=$e->getMessage();
+// >>>>>>> d57e74a36ac45c5d4e2682555fe078c7a615b84d
 		}
-		catch(Exception $e)
-		{
-		$this->message=$e->getMessage();
-		}
+
 		return $this->output();
 	
-		}
+// <<<<<<< HEAD
+// 		}
 		
  	
+//  	public function updateProfile()
+//  	{
+
+//  try{
+//  		$arguments=Request::all();
+//  		$user=new User();
+//  		print_r($arguments);die;
+//  		if($arguments)
+//  		{
+
+//  		if(!(User::find($arguments['user_id'])))
+// 		throw new Exception("This user id doesn't exist");
+
+		
+// 		foreach ($arguments as $key => $value) {
+//         if(!($key=='user_id'||$key=='id')){
+// 		if($key=='email'||$key=='password')
+// 		{
+// 			if($key=='email'){
+// 			$this->message="Email address can't be changed.";
+// 			break;}
+// 			if($key=='password'){
+// 			$this->message="Password can't be changed.";
+// 			break;}
+// 		}
+//         else{
+// 		User::where(['id'=>$arguments['user_id']])->update([$key=>$value]);
+// 		$changes = User::where(['id'=>$arguments['user_id']])->get()->toArray();
+
+// 		$this->status='Success';
+// 		$this->data=$changes;
+// 		$this->message='Profile updated';
+// 		}
+// 		}
+// 		}
+// 	}
+// 	else
+// 	{
+// 		throw new Exception('Please enter valid user id.');
+// 	}
+// }
+// 	catch(Exception $e)
+// 	{
+// 		$this->message=$e->getMessage();
+// =======
+// >>>>>>> d57e74a36ac45c5d4e2682555fe078c7a615b84d
+// 	}
+		
+
+	/*
+	 *  Edit users profile.
+	 */
  	public function updateProfile()
  	{
 
- try{
- 		$arguments=Request::all();
- 		$user=new User();
- 		print_r($arguments);die;
- 		if($arguments)
- 		{
+		try{
+			$arguments=Request::all();
+			$user=new User();
+			// print_r($arguments);die;
+			if($arguments){
 
- 		if(!(User::find($arguments['user_id'])))
-		throw new Exception("This user id doesn't exist");
+				if(!(User::find($arguments['id'])))
+					throw new Exception("This user id doesn't exist");
 
-		
-		foreach ($arguments as $key => $value) {
-        if(!($key=='user_id'||$key=='id')){
-		if($key=='email'||$key=='password')
-		{
-			if($key=='email'){
-			$this->message="Email address can't be changed.";
-			break;}
-			if($key=='password'){
-			$this->message="Password can't be changed.";
-			break;}
-		}
-        else{
-		User::where(['id'=>$arguments['user_id']])->update([$key=>$value]);
-		$changes = User::where(['id'=>$arguments['user_id']])->get()->toArray();
+				if(isset($arguments['email']))
+					throw new Exception("Email address cannot be changed.");
 
-		$this->status='Success';
-		$this->data=$changes;
-		$this->message='Profile updated';
+				if(isset($arguments['password']))
+					throw new Exception("Password cannot be changed.");
+
+				foreach ($arguments as $key => $value) {
+
+					User::where([ 'id' => $arguments['id'] ])
+							->update([ $key => $value ]);
+
+				}
+
+				$changes = User::where([ 'id' => $arguments['id'] ])->get()->toArray();
+
+				$this->status='Success';
+				$this->data=$changes;
+				$this->message='Profile updated';
+
+
+			}else{
+				throw new Exception('Please enter valid user id.');
+			}
+
+		}catch(Exception $e){
+			$this->message=$e->getMessage();
 		}
-		}
-		}
-	}
-	else
-	{
-		throw new Exception('Please enter valid user id.');
-	}
-}
-	catch(Exception $e)
-	{
-		$this->message=$e->getMessage();
-	}
+
+		return $this->output();	
+
+ 	}
+
 
 	return $this->output();	
 

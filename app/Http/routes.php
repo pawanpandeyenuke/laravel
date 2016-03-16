@@ -21,8 +21,12 @@ Route::post('ajax/getcities', 'AjaxController@getCities');
 
 Route::post('ajax/posts', 'AjaxController@posts');
 Route::post('ajax/like', 'AjaxController@like');
+
 Route::post('ajax/comments/get', 'AjaxController@getCommentBox');
 Route::post('ajax/comments/post', 'AjaxController@postcomment');
+Route::post('ajax/post/get', 'AjaxController@getPostBox');
+
+
 Route::post('ajax/getfriendslist', 'AjaxController@getfriendslist');
 
 Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
@@ -37,8 +41,12 @@ Route::post('ajax/reject','AjaxController@reject');
 Route::post('ajax/resend','AjaxController@resend');
 Route::post('ajax/remove','AjaxController@remove');
 
-Route::post('ajax/deletepost','AjaxController@deletePost');
-Route::post('ajax/deletecomment','AjaxController@deleteComment');
+Route::post('ajax/deletepost','AjaxController@deletepost');
+Route::post('ajax/deletecomments','AjaxController@deletecomments');
+// Route::post('ajax/profilesave','AjaxController@editProfile');
+
+
+
 
 /**
  * @Api Routes..
@@ -96,10 +104,11 @@ Route::group(['middleware' => 'web'], function () {
 
 	Route::get('group', 'DashboardController@group');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
-	Route::get('subgroup/{parentid}/{parentname}', 'DashboardController@subgroup');
+	Route::get('subgroup/{parentid}/{name}', 'DashboardController@subgroup');
 	Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
 	Route::get('groupchat', 'DashboardController@groupchat');
 
 	Route::get('profile/{id}', 'DashboardController@profile');
+	Route::post('profile/{id}', 'DashboardController@profile');
 
 });

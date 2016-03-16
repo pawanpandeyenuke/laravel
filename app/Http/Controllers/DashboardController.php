@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country;
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State;
 use Request, Session, Validator, Input, Cookie;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -24,14 +24,13 @@ class DashboardController extends Controller
 	{
         try{
 
-
             $per_page = 15;
 
             $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
+            ->where('user_by', '=', Auth::User()->id)
             ->orderBy('news_feed.id','DESC')
             ->take($per_page)
             ->get();
-
 
            // echo '<pre>';print_r($feeds);die;
             /*$feeds = Feed::with('user')
@@ -144,10 +143,10 @@ class DashboardController extends Controller
     *   Group sub chatrooms ajax call handling.
     *   Ajaxcontroller@groupchatrooms
     */
-    public function subgroup( $parentid = '', $parentname = '' )
+    public function subgroup( $parentid = '', $name = '' )
     {
 
-        // print_r($parentid.' '.$parentname);die;
+        // print_r();die;
         $subgroups = '';
          if($parentid){
             $data = DB::table('categories')->where(['parent_id' => $parentid])->where(['status' => 'Active'])->get();
@@ -157,10 +156,17 @@ class DashboardController extends Controller
             }
         }
         
-        return view('chatroom.subgroups')
-                ->with('parentname', $parentname)
-                ->with('subgroups', $subgroups);
-                // ->with('parentgroup', $parentgroup);
+        if($name){
+           $varexp =  explode('-', $name);
+           $name =  implode(' ', $varexp);
+        }
+
+        // print_r($name);die;
+
+        return view('chatroom.subgroups') 
+                ->with('subgroups', $subgroups)
+                ->with('group_name', $name);
+
     }
 
 
@@ -179,45 +185,70 @@ class DashboardController extends Controller
 
         if(is_array($input)){
             $groupnamedata = array();
-            foreach ($input as $key => $value)
-                $groupnamedata[] = $value;
+            foreach ($input as $key => $value){
+                $rawdata = explode(' ', $value);
+                if(is_array($rawdata)){
+                    $data = implode('', $rawdata);
+                    $groupnamedata[] = $data;
+                }else{
+                    $groupnamedata[] = $value;
+                }
+            }
 
             $groupname = implode('-', $groupnamedata); 
         }else{
             $groupname = $input;
         }
+
+        // print_r($groupname);die;
         
         if(Request::isMethod('get')){
 
-            $validator = Validator::make($input, [ 'subcategory' => 'required' ]); 
-
-            if($validator->fails()){
-
-                $error = $validator->messages()->first();
-                Session::put('error', $error);
-                return redirect()->back();
-
-            }else{
-
-                $updatecheck = $model->where('group_name', $groupname)
-                            ->where('group_by', Auth::User()->id)
-                            ->get()->toArray();
-
-                $defGroup = array();
-                $defGroup['group_name'] = $groupname;
-                $defGroup['group_by'] = Auth::User()->id;
-
-                if(empty($updatecheck)){
-                    $model = new DefaultGroup;
-                    $response = $model->create($defGroup);
+            if(is_array($input)){
+                $validator = Validator::make($input, [ 'subcategory' => 'required' ]); 
+                if($validator->fails()){
+                    $error = $validator->messages()->first();
+                    Session::put('error', $error);
+                    return redirect()->back();
                 }else{
-                    $id = $updatecheck[0]['id'];
-                    $response = $model->find($id);
-                }
+                    $updatecheck = $model->where('group_name', $groupname)
+                                ->where('group_by', Auth::User()->id)
+                                ->get()->toArray();
 
-                //Get users of this group
-                $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();     
- 
+                    $defGroup = array();
+                    $defGroup['group_name'] = $groupname;
+                    $defGroup['group_by'] = Auth::User()->id;
+
+                    if(empty($updatecheck)){
+                        $model = new DefaultGroup;
+                        $response = $model->create($defGroup);
+                    }else{
+                        $id = $updatecheck[0]['id'];
+                        $response = $model->find($id);
+                    }
+
+                    //Get users of this group
+                    $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();          
+                }
+            }else{
+                    $updatecheck = $model->where('group_name', $groupname)
+                                ->where('group_by', Auth::User()->id)
+                                ->get()->toArray();
+
+                    $defGroup = array();
+                    $defGroup['group_name'] = $groupname;
+                    $defGroup['group_by'] = Auth::User()->id;
+
+                    if(empty($updatecheck)){
+                        $model = new DefaultGroup;
+                        $response = $model->create($defGroup);
+                    }else{
+                        $id = $updatecheck[0]['id'];
+                        $response = $model->find($id);
+                    }
+
+                    //Get users of this group
+                    $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();  
             }
 
         }
@@ -228,15 +259,35 @@ class DashboardController extends Controller
     }
 
 
+
     public function profile( $id )
     {
         
+        // return 'asdfsadfsa';
         $model = User::with('country')->where('id', $id)->get()->first();
+        $states = State::where('country_id', '=', $model->country)->lists('state_name', 'state_id')->toArray();
+
+        
+        
+        $statesids = State::where('country_id', '=', $model->country)->lists('state_id')->toArray();
+        $cities = DB::table('city')->whereIn('state_id', $statesids)->lists('city_name', 'city_id');
+
+        if(Request::isMethod('post')){
+
+            $input = Request::all();
+            echo '<pre>';print_r($input);die;
+
+        }
+
 
         return view('profile.profile')
-                ->with('model',$model)->with('id',User::find(Auth::User()->id));
+                ->with('model',$model)
+                ->with('id',User::find(Auth::User()->id))
+                ->with('states', $states)
+                ->with('cities', $cities);
 
     }
 
+ 
 
 }

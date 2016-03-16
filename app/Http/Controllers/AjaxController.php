@@ -51,6 +51,17 @@ class AjaxController extends Controller
 				$time1 = $feed->updated_at->format('D jS');
 				$picture = $feed->image;
 				$message = $feed->message;
+				$feedid = $feed->id;
+
+		
+				if($arguments['message'] && empty($arguments['image'])){
+					$popupclass = 'postpopupajax';
+				}elseif($arguments['image'] && empty($arguments['message'])){
+					$popupclass = 'popupajax';
+				}else{
+					$popupclass = 'popupajax';
+				} 													
+												
 
 if(!empty($feed->message)){ 
 $message = <<<message
@@ -73,7 +84,8 @@ $picture = '';
 $postHtml = <<<postHtml
 
 			<div class="single-post" data-value="$feed->id" id="post_$feed->id">
-				<div class="post-header">
+				<div class="post-header" data-value="$feed->id" id="post_$feed->id">
+					<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 					<div class="row">
 						<div class="col-md-7">
 							<a href="profile/$userid" title="" class="user-thumb-link">
@@ -102,18 +114,37 @@ $postHtml = <<<postHtml
 								<div class="like-cont">
 									<input type="checkbox" name="" id="checkbox<?php echo $feed->id ?>" class="css-checkbox like"/>
 									<label for="checkbox<?php echo $feed->id ?>" class="css-label">
-										<span class="countspan"></span>
+										<span class="countspan" id="page-$feedid"></span>
 										<span>Like</span>
 									</label>
 								</div>
 							</li>
 							<li>
-								<a class="popupajax" style="cursor:pointer">
+								<a class="$popupclass" style="cursor:pointer">
 									<span class="icon flaticon-interface-1"></span> 
 									<span class="commentcount">Comment</span>
 								</a>
 							</li>
 						</ul>
+					</div>
+					<div class="post-comment-cont">
+						<div class="post-comment" data-value="$feedid" id="post_$feedid">
+							<div class="row">
+								<div class="col-md-10">
+									<div class="emoji-field-cont cmnt-field-cont">
+										<textarea data-emojiable="true" type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<button type="button" class="btn btn-primary btn-full comment">Post</button>
+								</div>
+							</div>
+						</div><!--/post comment-->
+						<div class="comments-list">
+							<ul>
+
+							</ul>
+						</div><!--/comments list-->
 					</div>
 				</div>
 			</div>
@@ -170,11 +201,12 @@ echo $postHtml;
 		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
 		$comment = $model->comments;
 		$time = $model->updated_at->format('h:i A');
-		
+		$id = $model->id;
 
 $variable = array();				
 $variable['comment'] = <<<comments
-<li>
+<li data-value="$id" id="post_$id">
+	<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 	<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
 	<div class="comment-title-cont">
 		<div class="row">
@@ -441,17 +473,48 @@ comments;
 		
 	}
 
-	public function deletePost()
-	{
-		$input=Input::all();
-		Feed::where(['user_by'=>Auth::User()->id])->where(['id'=>$input['feed_id']])->delete();
-	}
 
-	public function deleteComment()
+ 
+	//Get post box
+	public function getPostBox()
 	{
-		// $input=Input::all();
+
+		$arguments = Input::all();
+
+		$feeddata = Feed::with('comments')->with('likes')->with('user')->where('id', '=', $arguments['feed_id'])->get()->first();
+ 
+		return view('dashboard.getpostbox')
+					->with('feeddata', $feeddata);
+
+ 	}
+
+
+	//delete post
+	public function deletepost()
+	{
+
+		$postId = Input::get('postId');
+		$userId = Auth::User()->id;
 		
-	}
+		$newsFeed = Feed::where('id', '=', $postId)->where('user_by', '=', $userId)->delete();
+		return $newsFeed; 
+
+ 	}
+
+
+	//delete comments
+	public function deletecomments()
+	{
+
+		$commentId = Input::get('commentId');
+		$userId = Auth::User()->id;
+
+		$newsFeed = Feed::where('id', '=', $commentId)->where('user_by', '=', $userId)->delete();
+		return $newsFeed; 
+
+ 	}
+ 	
+
 
 
 }

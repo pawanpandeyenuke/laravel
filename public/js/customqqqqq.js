@@ -133,11 +133,11 @@ $(document).ready(function(){
 
 		var current = $(this);
 		var _token = $('#postform input[name=_token]').val();
+
 		var feedId = $(this).closest('.post-comment').data('value');
 		var commentData = $(this).closest('.post-comment').find('textarea').val();
+
 		var commented_by = $('#user_id').val();
-		
-		
  
 		if(commentData){
 			$.ajax({			
@@ -147,8 +147,6 @@ $(document).ready(function(){
 				'success' : function(response){
 
 					var parseresponse = jQuery.parseJSON(response);
-					
-					
 					jQuery("#pagecomment-"+feedId).append(parseresponse.comment);
 					current.closest('.row').find('textarea').val('');
 
@@ -161,8 +159,7 @@ $(document).ready(function(){
 						current.parents('.post-footer').find('.commentcount').html('1 Comment'); 
 					}
 	
-					//current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
-					
+					current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('.pop-comment-side-outer').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('.row').find('.comment-field').text('');
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
@@ -429,6 +426,7 @@ $(document).ready(function(){
 
 
 
+
 });
 
 	$('.popup').fancybox();
@@ -450,5 +448,7 @@ $(document).ready(function(){
       // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
       // It can be called as many times as necessary; previously converted input fields will not be converted again
       window.emojiPicker.discover();
+
       //alert(6);
 	}
+

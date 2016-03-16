@@ -18,7 +18,7 @@
 
 								    @foreach($parent_category as $data)
 
-							        <?php $titledata = explode(',', $data->title);
+							        <?php /*$titledata = explode(',', $data->title);
 							            if(is_array($titledata)){
 							                $title1 = strtolower(implode('', $titledata));
 
@@ -27,20 +27,25 @@
 							                    $title = implode('', $exp);
 							   	             else
 							                    $title = $title1;
-							            } // echo '<pre>';print_r($title);die;
+							            } */// echo '<pre>';print_r($title);die;
 
-							            $fieldsData = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); ?>
+							            $fieldsData = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); 
+
+							            $nameexp = explode(' ', $data->title);
+							            $catname = implode('-', $nameexp);
+							            $name = strtolower($catname);
+							            ?>
 
 		                                @if($fieldsData)
 											<div class="col-sm-4">
 												<div class="cat-btn-outer">
-													<a href="subgroup/{{$data->id}}/{{$title}}" title="" class="cat-btn">{{ $data->title }}</a>
+													<a href="subgroup/{{$data->id}}/{{$name}}" title="" class="cat-btn">{{ $data->title }}</a>
 												</div>
 											</div>
 										@else
 											<div class="col-sm-4">
 												<div class="cat-btn-outer">
-													<a href="groupchat/{{$title}}" title="" class="cat-btn">{{ $data->title }}</a>
+													<a href="groupchat/{{$name}}" title="" class="cat-btn">{{ $data->title }}</a>
 												</div>
 											</div>
 										@endif

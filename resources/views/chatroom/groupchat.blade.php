@@ -11,7 +11,7 @@
             <div class="col-sm-6">
                 <div class="shadow-box page-center-data no-margin-top">
                     <div class="page-title">
-                        <i class="flaticon-people"></i>{{ $groupname }}
+                        <i class="flaticon-people"></i>{{$groupname}}
 <!--                         <div class="search-box">
                             <input type="text" placeholder="Search" class="form-control">
                             <button class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
@@ -37,7 +37,7 @@
                                     <?php //echo '<pre>';print_r($data);die;?>
                                     <li>
                                         <a title="" href="#" onclick="openChatbox(<?php echo "'".$data['user']['xmpp_username']."', '".$data['user']['xmpp_password']."'"?>);" >
-                                            <span style="background: url('images/user-thumb.jpg');" class="chat-thumb"></span>
+                                            <span style="background: url('/images/user-thumb.jpg');" class="chat-thumb"></span>
                                             <span class="title">{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}</span>
                                             <span class="time">02:50 am</span>
                                         </a>

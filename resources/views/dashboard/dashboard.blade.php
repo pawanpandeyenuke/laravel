@@ -114,10 +114,11 @@
 						@foreach($feeds as $data)		
 							<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>					
 							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
-								<div class="post-header">
-								<button class="p-del-btn post-delete" data-target=".post-del-confrm" data-toggle="modal" type="button">
-								<span class="glyphicon glyphicon-remove"></span>
-								</button>
+
+								<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
+									<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+
+
 									<div class="row">
 										<div class="col-md-7">
 											<a href="profile/{{$data->user->id}}" title="" class="user-thumb-link">
@@ -137,6 +138,7 @@
 								</div><!--/post header-->
 								<div class="post-data">
 									<p>{{ $data['message'] }}</p>
+
 									@if($data['image'])
 										<div class="post-img-cont">
 											<a href="{{ url('uploads/'.$data['image']) }}" class="popup">
@@ -159,18 +161,29 @@
 													<input type="checkbox" name="" id="checkbox{{$data['id']}}" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
 													<label for="checkbox{{$data['id']}}" class="css-label">
 														@if($likecountdata > 0)
-															<span class="countspan">
+															<span class="countspan" id="page-{{$data['id']}}">
 														 		{{ $likecountdata }}
 															</span>
 															<span>Likes</span>			
 														@else
+															<span class="countspan" id="page-{{$data['id']}}"></span>
 															<span class="firstlike">Like</span>
 														@endif
 													</label>
 												</div>
 											</li>
 											<li>
-												<a class="popupajax" style="cursor:pointer">
+												<?php 
+ 													if($data['message'] && empty($data['image'])){
+ 														$popupclass = 'postpopupajax';
+ 													}elseif($data['image'] && empty($data['message'])){
+ 														$popupclass = 'popupajax';
+ 													}else{
+ 														$popupclass = 'popupajax';
+ 													} 													
+												?>
+
+												<a class="{{$popupclass}}" style="cursor:pointer">
 													<span class="icon flaticon-interface-1"></span> 
 													@if($commentscountdata > 0)
 														<span class="commentcount">{{ $commentscountdata }} Comments</span>
@@ -181,8 +194,10 @@
 											</li>
 										</ul>
 									</div><!--/post actions-->
-										<div class="post-comment-cont">
-										<div class="post-comment">
+
+									<div class="post-comment-cont">
+										<div class="post-comment" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
+
 											<div class="row">
 												<div class="col-md-10">
 													<div class="emoji-field-cont cmnt-field-cont">
@@ -195,7 +210,8 @@
 											</div>
 										</div><!--/post comment-->
 										<div class="comments-list">
-											<ul >
+							<ul id="pagecomment-{{$data->id}}" data-id="pagecomment-{{$data->id}}">
+
 												@if(!empty($data['comments']))
 													<?php $counter = 1; ?>
 													@foreach($data['comments'] as $commentsData)
@@ -209,9 +225,11 @@
 
 													if($counter < 4){ ?>
 
-														<li class='com' >
+														<li>
+														<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+
 														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
-														<div class="comment-text">
+														<div class="comment-title-cont">
 															<div class="row">
 																<div class="col-sm-6">
 
@@ -220,23 +238,24 @@
 																<div class="col-sm-6">
 																	<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
 																</div>
-																<button class="p-del-btn comment-delete" data-target=".post-del-confrm" data-toggle="modal" type="button">
-																<span class="glyphicon glyphicon-remove"></span>
-																</button>
+
 															</div>
 														</div>
-														<div class="comment-text" data-commentdata="{{ $commentsData['comments'] }}">{{$commentsData['comments']}}</div>
+														<div class="comment-text">{{$commentsData['comments']}}</div>
+
 													</li>
 													<?php }$counter++; }?>
 													@endforeach
 												@endif
 											</ul>
+
 										</div><!--/comments list-->
 									</div>
 								</div><!--/post-footer-->
 							</div><!--/single post-->
 						@endforeach
 					<div id="commentajax" style="display: none;">	</div>
+					<div id="AllCommentNew" class="post-list popup-list-without-img" style="display: none;"></div>
 					</div>
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 				</div>

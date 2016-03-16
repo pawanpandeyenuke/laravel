@@ -528,7 +528,6 @@ a:hover{
 .post-list .single-post .post-header{
   padding: 20px;
   border-bottom: 1px solid #efefef;
-  position:relative;
 }
 .post-list .single-post .user-thumb-link{
 	display: inline-block;
@@ -733,7 +732,7 @@ a:hover{
 .fancybox-skin{
 	padding: 0px !important;
 }
-.popup_list .single-post{
+#AllComment .single-post{
   margin: 0px;
   box-shadow: none;
   border-radius: 7px 0px 0px 7px;
@@ -989,9 +988,6 @@ a:hover{
 }
 .pop-post-comment .emoji-picker-icon{
 	top: 12px;
-}
-.emoji-picker-icon{
-	cursor: pointer;
 }
 .pop-post-comment .input-group{
 	position: absolute;
@@ -1593,82 +1589,15 @@ button.edit-pr-img {
 	font-size: 14px;
 	font-weight:500;
 }
-/* .fancybox-wrap{
+.fancybox-wrap{
 	width: 80% !important;
-} */
-.popup_list .container {
+}
+#AllComment .container {
     width: 100%;
 }
-/* .fancybox-inner{
+.fancybox-inner{
 	width:100% !important;
-} */
+}
 .post-list .single-post p img.emojione{
   width: 30px;
-}
-.profile-data-table .table td .inner-table{
-	border:0px;
-}
-.profile-data-table .table td .inner-table td{
-	border: 0px;
-}
-
-
-.popup-list-without-img {
-  max-width: 700px;
-}
-.popup-list-without-img .post-comment-cont{
-  margin: 0px 0 66px;
-  padding: 0px 20px;
-  position: relative;
-  background: #fff;
-  
-}
-.popup-list-without-img .comments-list{
-	padding: 0px;
-	border: 0px;
-	height: 260px;
-}
-.popup-list-without-img .single-post {
-  margin: 0px;
-  box-shadow: none;
-  border-radius: 7px 0px 0px 7px;
-  position: relative;
-  overflow: hidden;
-}
-.popup-list-without-img .comments-list ul{
-	padding: 0 15px;
-}
-.nicescroll-cursors{
-	z-index:999999;
-}
-.popup-list-without-img .pop-post-comment{
-  position: absolute;
-  bottom: -66px;
-  left: 0px;
-}
-.p-del-btn{
-
-}
-.p-del-btn {
-  position: absolute;
-  right: 8px;
-  top: 5px;
-  background: none;
-  border: 0px;
-  padding: 0px;
-  color: #CECECE;
-  font-size: 12px;
-  outline: none;
-}
-.p-del-btn:hover{
-	color: #B9B9B9;
-}
-.modal-footer.text-center{
-	text-align: center;
-}
-.comment-delete {
-  top: -2px;
-  right: -5px;
-  font-size: 10px;
-  color: #DCDCDC;
 }
