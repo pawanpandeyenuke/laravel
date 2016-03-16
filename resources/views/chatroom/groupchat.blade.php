@@ -39,29 +39,12 @@
                                         <a title="" href="#" onclick="openChatbox(<?php echo "'".$data['user']['xmpp_username']."', '".$data['user']['xmpp_password']."'"?>);" >
                                             <span style="background: url('/images/user-thumb.jpg');" class="chat-thumb"></span>
                                             <span class="title">{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}</span>
-                                            <span class="time">02:50 am</span>
+                                            
                                         </a>
                                     </li>
                                     @endforeach
                                 </ul>
                             </div><!--/chat user list-->
-                            <div class="dropdown all-contact">
-                              <button aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" type="button" class="all-contact-btn" id="dLabel">
-                                All Contacts
-                              </button>
-                              <ul aria-labelledby="dLabel" class="dropdown-menu user-list-with-thumb StyleScroll" style="overflow: hidden;" tabindex="1">
-                                    @foreach($userdata as $data)
-                                    <li>
-                                        <a title="" href="#">
-                                            <span style="background: url('images/user-thumb.jpg');" class="chat-thumb"></span>
-                                            <span class="title">{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}</span>
-                                            <span class="time">02:50 am</span>
-                                            <!-- <span class="msg">Hi, How r u?</span> -->
-                                        </a>
-                                    </li>
-                                    @endforeach
-                              </ul>
-                            </div>
                         </div>
                         <div class="col-sm-8">
                             <div class="col-sm-6" id="chat-system"> Search your friend and start chat.</div>
@@ -85,8 +68,10 @@
  
 @endsection
 
- 
-  
+<!-- chat system -->
+<script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
+<script type="text/javascript" src="/converse/jquery.form.js"></script>
+<!-- chat system -->
 <script type="text/javascript">
 
     var conObj; 

@@ -474,7 +474,10 @@ comments;
 	}
 
  
-	//Get post box
+	/**
+	*	Get postbox on ajax call handling.
+	*	Ajaxcontroller@getPostBox
+	*/
 	public function getPostBox()
 	{
 
@@ -488,7 +491,10 @@ comments;
  	}
 
 
-	//delete post
+	/**
+	*	Delete posts on ajax call handling.
+	*	Ajaxcontroller@deletepost
+	*/
 	public function deletepost()
 	{
 
@@ -501,19 +507,71 @@ comments;
  	}
 
 
-	//delete comments
+	/**
+	*	Delete comments on ajax call handling.
+	*	Ajaxcontroller@deletecomments
+	*/
 	public function deletecomments()
 	{
 
 		$commentId = Input::get('commentId');
+		$feedId = Input::get('feedId');
 		$userId = Auth::User()->id;
 
-		$newsFeed = Feed::where('id', '=', $commentId)->where('user_by', '=', $userId)->delete();
-		return $newsFeed; 
+		$newsFeed = Comment::where('id', '=', $commentId)->where('commented_by', '=', $userId)->delete();
+
+		$count = Comment::where('feed_id', '=', $feedId)->count();
+
+		return $count; 
 
  	}
  	
 
+	/**
+	*	Edit comments on ajax call handling.
+	*	Ajaxcontroller@editcomment
+	*/
+	public function editcomment()
+	{	
 
+		$commentid = Input::get('commentid');
+		return $commentid;
+
+	}
+
+
+	/**
+	*	Edit posts on ajax call handling.
+	*	Ajaxcontroller@editpost
+	*/
+	public function editpost()
+	{	
+
+		$postid = Input::get('postid');
+		$posts = Feed::where('id', $postid)->get()->first();
+
+		return view('ajax.editpost')->with('posts', $posts);
+
+	}
+
+
+
+	/**
+	*	Delet confirmation box on ajax call handling.
+	*	Ajaxcontroller@editcomment
+	*/
+	public function deletebox()
+	{	
+
+		$commentId = Input::get('commentId');
+		$feedId = Input::get('feedId');
+		$class = Input::get('class');
+		
+		return view('panels.deletebox')
+				->with('commentId', $commentId)
+				->with('feedId', $feedId)
+				->with('class', $class);
+
+	}
 
 }

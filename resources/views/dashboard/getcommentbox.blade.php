@@ -130,7 +130,23 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 <script src="/lib/js/jquery.emojiarea.js"></script>
 <script src="/lib/js/emoji-picker.js"></script>
 <script src="/js/jquery.nicescroll.min.js"></script>
+
 <script>
+
+	$(".post-list .single-post p").each(function() {
+		var original = $(this).html();
+		// use .shortnameToImage if only converting shortnames (for slightly better performance)
+		var converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
+
+	$(".post-list .single-post div").each(function() {
+		var original = $(this).html();
+		// use .shortnameToImage if only converting shortnames (for slightly better performance)
+		var converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
+
 $('.pop-comment-side .post-comment-cont').niceScroll();
 var postsonajax = $('.pop-post-text').find('p').html();
 if(postsonajax == ''){
