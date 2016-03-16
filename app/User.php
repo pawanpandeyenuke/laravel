@@ -40,6 +40,8 @@ class User extends Authenticatable
 		'email.email' => 'Please enter valid email',
 		'email.unique' => 'Email already exist',
 		'password.required' => 'Please enter password',
+		'id.required'=>'Please enter user id',
+		'id.numeric'=>'User id should be numeric'
 	);
 	
 	public $apiRules = array(
@@ -51,8 +53,14 @@ class User extends Authenticatable
 		'email' => 'required|email'
 	);
 
+	public $apiViewRules = array(
+			'id'=>'numeric|required'
+	);
+	
+  
 	public function country()
 	{
 		return $this->hasOne('App\Country','country_id','country');
 	}
+
 }

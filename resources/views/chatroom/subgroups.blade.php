@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
-
+<?php
+unset($countries[0]);
+?>
 @section('content')
 	<div class="page-data dashboard-body">
 	        <div class="container">
@@ -12,7 +14,7 @@
 
 							{{ Form::open(array('url' => 'groupchat', 'method' => 'get')) }}
 							<div class="page-title">
-								<i class="flaticon-balloon"></i>Select Category
+								<i class="flaticon-balloon"></i>
 							</div>
 							@if (Session::has('error'))
 								<div class="alert alert-danger">{!! Session::get('error') !!}</div>
@@ -30,13 +32,21 @@
 								                            $titledata = explode(' ', $data->title);
 								                            if(is_array($titledata)){
 								                                $title = strtolower(implode('', $titledata));
-								                            }
-								                            // echo '<pre>';print_r($title);die;
-								                        ?>
+								                             }
+								                          ?>
 														<div class="radio-cont radio-label-left">
-															<input class="group-radio" type="radio" name="subcategory" value="{{ $title }}" id="{{ $title }}" ></input>
+															<input class="group-radio" type="radio" name="subcategory" value="{{ $title }}" id="{{ $title }}"></input>
 															<label for="{{ $title }}">{{ $data->title }}</label>
-														</div>
+														<!-- 	<input class="group-selecbox country" type="select" style="display: none;"
+															value="Country"> -->
+															<?php if($title=='country'||$title=='country,state,city')
+															{?>
+															{{ Form::select('country', $countries,1,['class' => 'group-selecbox country','style'=>'display:none;']) }}
+															<input class="state" type="selecbox" style="display: none;"
+															value="State">
+															<input class="city" type="selecbox" style="display: none;"
+															value="City">
+												<?php}?>		</div>
 
 
 						                                <?php $fieldsData = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); ?>
@@ -53,6 +63,7 @@
 						                                            // echo '<pre>';print_r($title);die;
 						                                        ?>
 						                                        <option value="{{ $title2 }}">{{ $val->title }}</option>
+						                                        
 						                                    @endforeach
 						                                </select>
 						                                @endif

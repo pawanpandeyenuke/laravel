@@ -37,7 +37,7 @@ class AjaxController extends Controller
 
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 					$arguments['image'] = $image_name;
-					$file->move('uploads', $image_name);
+					$file->move(public_path('uploads'), $image_name);
 
 				}
 
@@ -438,6 +438,18 @@ comments;
 				->update(['status'=>'Rejected']);      
 
 		Friend::where(['friend_id'=>$input['user_id']])->where(['status'=>'Rejected'])->delete();
+		
+	}
+
+	public function deletePost()
+	{
+		$input=Input::all();
+		Feed::where(['user_by'=>Auth::User()->id])->where(['id'=>$input['feed_id']])->delete();
+	}
+
+	public function deleteComment()
+	{
+		// $input=Input::all();
 		
 	}
 

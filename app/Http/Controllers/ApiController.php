@@ -456,25 +456,82 @@ class ApiController extends Controller
 
 			$arguments=Request::all();
 			$user=new User;
+			if($arguments)
+			{
+			 if(!(User::find($arguments['user_id'])))
+			 throw new Exception("This user id doesn't exist");
 			
-			// if( !is_numeric($arguments['user_id'] ) )
-			// 	throw new Exception('Please insert valid user id.');	
-
-			if(!(User::find($arguments['user_id'])))
-				throw new Exception("This user id doesn't exist");
-
 			$details=User::with('country')->where(['id'=>$arguments['user_id']])->get()->toArray();
 			
 			$this->status='Success';
 			$this->data=$details;
 			$this->message = 'User profile data';
 		}
+		else
+		{
+			throw new Exception('Please enter valid user id');
+		}
+		
+		}
 		catch(Exception $e)
 		{
-			$this->message=$e->getMessage();
+		$this->message=$e->getMessage();
 		}
 		return $this->output();
+	
+		}
+		
+ 	
+ 	public function updateProfile()
+ 	{
+
+ try{
+ 		$arguments=Request::all();
+ 		$user=new User();
+ 		print_r($arguments);die;
+ 		if($arguments)
+ 		{
+
+ 		if(!(User::find($arguments['user_id'])))
+		throw new Exception("This user id doesn't exist");
+
+		
+		foreach ($arguments as $key => $value) {
+        if(!($key=='user_id'||$key=='id')){
+		if($key=='email'||$key=='password')
+		{
+			if($key=='email'){
+			$this->message="Email address can't be changed.";
+			break;}
+			if($key=='password'){
+			$this->message="Password can't be changed.";
+			break;}
+		}
+        else{
+		User::where(['id'=>$arguments['user_id']])->update([$key=>$value]);
+		$changes = User::where(['id'=>$arguments['user_id']])->get()->toArray();
+
+		$this->status='Success';
+		$this->data=$changes;
+		$this->message='Profile updated';
+		}
+		}
+		}
 	}
+	else
+	{
+		throw new Exception('Please enter valid user id.');
+	}
+}
+	catch(Exception $e)
+	{
+		$this->message=$e->getMessage();
+	}
+
+	return $this->output();	
+
+ 	}
+
 
 	/*
 	 * Get country on request.

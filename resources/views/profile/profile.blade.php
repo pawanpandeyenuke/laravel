@@ -65,12 +65,21 @@ $countryname = App\Country::where( 'country_id', '=', $model['country'])->value(
 											<tr>
 												<td><div class="p-data-title"><i class="flaticon-gps"></i>State</div></td>
 												<td><!-- <input type="text" class="pr-edit state" disabled="disabled" value=""> -->
+									{!! Form::text('state', null, array(
+										'class'=>'pr-edit pr-location state',
+										'disabled'=>'disabled',
+										)) !!}
 																						
 												</td>
 											</tr>
 											<tr>
 												<td><div class="p-data-title"><i class="flaticon-city"></i>City</div></td>
 												<td><!-- <input type="text" class="pr-edit city" disabled="disabled" value=""> -->
+												{!! Form::text('city', null, array(
+										'class'=>'pr-edit pr-location city',
+										'disabled'=>'disabled',
+										)) !!}
+													
 
 												</td>
 											</tr>

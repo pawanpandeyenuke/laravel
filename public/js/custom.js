@@ -118,7 +118,7 @@ $(document).ready(function(){
 	$(document).on('click', '.comment', function(){
 		var current = $(this);
 		var _token = $('#postform input[name=_token]').val();
-		var feedId = $(this).closest('.post-list').data('value');
+		var feedId = $(this).closest('.single-post').data('value');
 		var commentData = $(this).closest('.row').find('textarea').val();
 		var commented_by = $('#user_id').val();
 
@@ -418,6 +418,71 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+
+	$(document).on('click','.post-delete',function()
+	{
+		var current = $(this);
+		var feedId = $(this).closest('.single-post').data('value');
+		
+
+		$.ajax({
+			'url' : '/ajax/deletepost',
+			'type' : 'post',
+			'data' : {'feed_id' : feedId},
+			'success' : function(data){
+				current.closest('.single-post').hide(200);
+				
+			}
+		});
+	});
+
+	$(document).on('click','.comment-delete',function()
+	{
+		var current = $(this);
+		var feedId = $(this).closest('.single-post').data('value');
+		var commentData = $(this).closest('.comment-text').find('commentdata').val();
+		var commented_by = $('#user_id').val();
+
+		//alert(feedID);
+		alert(commentData);
+		alert(commented_by);	
+		$.ajax({
+			'url' : '/ajax/deletecomment',
+			'type' : 'post',
+			'data' : {'feed_id' : feedId,'comment_data':commentData,'commented_by':commented_by},
+			'success' : function(data){
+				//current.closest('.com').hide(200);
+			
+				
+			}
+		});
+	});
+
+	$(document).on('click','.group-radio',function()
+	{
+		var current = $(this);
+		var val=current.val();
+	
+
+		//alert(val);
+		
+		
+		$.ajax({
+			'url' : '/ajax/deletecomment',
+			'type' : 'post',
+			'data' : {},
+			'success' : function(data){
+                               $('#country,state,city').hide();
+				$('.country').show(200);
+			
+			
+				
+			}
+		});
+	});
+
+	
 
 });
 

@@ -115,6 +115,9 @@
 							<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>					
 							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 								<div class="post-header">
+								<button class="p-del-btn post-delete" data-target=".post-del-confrm" data-toggle="modal" type="button">
+								<span class="glyphicon glyphicon-remove"></span>
+								</button>
 									<div class="row">
 										<div class="col-md-7">
 											<a href="profile/{{$data->user->id}}" title="" class="user-thumb-link">
@@ -178,6 +181,58 @@
 											</li>
 										</ul>
 									</div><!--/post actions-->
+										<div class="post-comment-cont">
+										<div class="post-comment">
+											<div class="row">
+												<div class="col-md-10">
+													<div class="emoji-field-cont cmnt-field-cont">
+														<textarea data-emojiable="true" type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<button type="button" class="btn btn-primary btn-full comment">Post</button>
+												</div>
+											</div>
+										</div><!--/post comment-->
+										<div class="comments-list">
+											<ul >
+												@if(!empty($data['comments']))
+													<?php $counter = 1; ?>
+													@foreach($data['comments'] as $commentsData)
+													<?php 
+														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name']);
+
+														// print_r($username);die;
+														if(!empty($username)){
+
+														$name = $username[0]->first_name.' '.$username[0]->last_name; 
+
+													if($counter < 4){ ?>
+
+														<li class='com' >
+														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+														<div class="comment-text">
+															<div class="row">
+																<div class="col-sm-6">
+
+																	<a href="#" title="" class="user-link">{{$name}}</a>
+																</div>
+																<div class="col-sm-6">
+																	<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
+																</div>
+																<button class="p-del-btn comment-delete" data-target=".post-del-confrm" data-toggle="modal" type="button">
+																<span class="glyphicon glyphicon-remove"></span>
+																</button>
+															</div>
+														</div>
+														<div class="comment-text" data-commentdata="{{ $commentsData['comments'] }}">{{$commentsData['comments']}}</div>
+													</li>
+													<?php }$counter++; }?>
+													@endforeach
+												@endif
+											</ul>
+										</div><!--/comments list-->
+									</div>
 								</div><!--/post-footer-->
 							</div><!--/single post-->
 						@endforeach

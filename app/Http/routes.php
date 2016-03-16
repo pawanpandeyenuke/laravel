@@ -37,6 +37,9 @@ Route::post('ajax/reject','AjaxController@reject');
 Route::post('ajax/resend','AjaxController@resend');
 Route::post('ajax/remove','AjaxController@remove');
 
+Route::post('ajax/deletepost','AjaxController@deletePost');
+Route::post('ajax/deletecomment','AjaxController@deleteComment');
+
 /**
  * @Api Routes..
  *
@@ -59,6 +62,7 @@ Route::post('api/comments', 'ApiController@getComments');
 Route::post('api/comments/create', 'ApiController@postComments');
 
 Route::post('api/getprofile','ApiController@getProfile');
+Route::post('api/updateprofile','ApiController@updateProfile');
 
 
 /*
