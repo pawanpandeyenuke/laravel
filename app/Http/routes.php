@@ -20,6 +20,7 @@ Route::post('ajax/getstates', 'AjaxController@getStates');
 Route::post('ajax/getcities', 'AjaxController@getCities');
 
 Route::post('ajax/posts', 'AjaxController@posts');
+Route::post('ajax/editposts', 'AjaxController@editposts');
 Route::post('ajax/like', 'AjaxController@like');
 
 Route::post('ajax/comments/get', 'AjaxController@getCommentBox');
@@ -76,6 +77,14 @@ Route::post('api/comments/create', 'ApiController@postComments');
 
 Route::post('api/getprofile','ApiController@getProfile');
 Route::post('api/updateprofile','ApiController@updateProfile');
+
+Route::post('api/editpost','ApiController@editPost');
+Route::post('api/deletepost','ApiController@deletePost');
+Route::post('api/editcomment','ApiController@editComment');
+Route::post('api/deletecomment','ApiController@deleteComment');
+
+
+
 
 /*
 |--------------------------------------------------------------------------
