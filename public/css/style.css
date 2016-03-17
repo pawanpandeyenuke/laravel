@@ -1053,6 +1053,9 @@ a:hover{
 	list-style:none;
   padding: 0 3px;
 }
+.chat-user-list li a{
+	 min-height: 51px;
+}
 .chat-user-list li a, .user-list-with-thumb li a{
   display: block;
   position: relative;
@@ -1602,7 +1605,7 @@ button.edit-pr-img {
 /* .fancybox-inner{
 	width:100% !important;
 } */
-.post-list .single-post p img.emojione{
+.post-list .single-post p img.emojione, .post-list .single-post div img.emojione{
   width: 30px;
 }
 .status-up-cont textarea.form-control{
@@ -1653,7 +1656,7 @@ button.edit-pr-img {
 .p-del-btn {
   position: absolute;
   right: 8px;
-  top: 5px;
+  top: 0px;
   background: none;
   border: 0px;
   padding: 0px;
@@ -1672,4 +1675,7 @@ button.edit-pr-img {
   right: -5px;
   font-size: 10px;
   color: #DCDCDC;
+}
+.modal{
+	z-index: 999999999;
 }

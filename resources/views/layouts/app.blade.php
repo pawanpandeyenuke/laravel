@@ -94,6 +94,38 @@
 				 $('#showpassword').val($('#showpassword').val() + ' ');
 				 $('#showpassword').val($.trim($('#showpassword').val()));
 			});
+
+			$('#country').change(function(){
+				var countryId = $(this).val();
+				var _token = $('#searchform input[name=_token]').val();
+				$.ajax({			
+					'url' : '/ajax/getstates',
+					'data' : { 'countryId' : countryId, '_token' : _token },
+					'type' : 'post',
+					'success' : function(response){				
+						$('#state').html(response);
+					}			
+				});	
+			});
+
+
+			/**
+			*	Get cities ajax call handling.
+			*	Ajaxcontroller@getCities
+			*/
+			$('#state').change(function(){
+				var stateId = $(this).val();
+				var _token = $('#searchform input[name=_token]').val();
+				$.ajax({			
+					'url' : '/ajax/getcities',
+					'data' : { 'stateId' : stateId, '_token' : _token },
+					'type' : 'post',
+					'success' : function(response){
+						$('#city').html(response);
+					}			
+				});	
+			});
+			
 		</script>
 	</body>
 </html>

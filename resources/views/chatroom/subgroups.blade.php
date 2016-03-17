@@ -1,5 +1,9 @@
 @extends('layouts.dashboard')
-<?php $groupnamestr = ucwords($group_name); ?>
+
+<?php $groupnamestr = ucwords($group_name);
+unset($countries[0]);
+ ?>
+<?php //echo '<pre>' ;print_r($countries);die;?>
 @section('content')
 	<div class="page-data dashboard-body">
 	        <div class="container">
@@ -12,34 +16,35 @@
 
 							{{ Form::open(array('url' => 'groupchat', 'method' => 'get')) }}
 							<div class="page-title">
-								<i class="flaticon-balloon"></i>Select Category
+								<i class="flaticon-balloon"></i>{{$groupnamestr}}
 							</div>
 							@if (Session::has('error'))
 								<div class="alert alert-danger">{!! Session::get('error') !!}</div>
 							@endif	
 							<div class="row">
 								<div class="col-md-8 col-md-offset-3">
-									<h4>{{$groupnamestr}}</h4>
 									<div class="radio-outer-full">
 										<div class="row">
 											<div class="col-sm-8 col-sm-offset-3">
 
 												@if(!empty($subgroups))
 													@foreach($subgroups as $data)
-								                        <?php 
+								                        <?php  
 								                            $titledata = explode(' ', $data->title);
 								                            if(is_array($titledata)){
 								                                $title = strtolower(implode('', $titledata));
+
 								                            }
-								                            // echo '<pre>';print_r($title);die;
+								                            
 								                        ?>
+
 														<div class="radio-cont radio-label-left">
-															<input class="group-radio" type="radio" name="subcategory" value="{{ $title }}" id="{{ $title }}" ></input>
+															<input class="group-radio" type="radio" name="subcategory" value="{{ $title }}" id="{{ $title }}"></input>
 															<label for="{{ $title }}">{{ $data->title }}</label>
 
 															@if($title == 'country')
 																<div class="subs" style="display:none">
-																{!! Form::select('country', $countries, null, array(
+																{!! Form::select('country1', $countries, null, array(
 																	'class' => 'search-field',
 																	'id' => 'country',
 																	
@@ -62,27 +67,36 @@
 																		'id' => 'subcity',
 																	)); !!}
 																</div>
+
+															@elseif($title == 'professionalcourse')
+
+																<div class="subs" style="display:none">
+																	<?php $courses = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->pluck('title');
+																	 
+																	?>
+																	<select name="coursedata1">
+																		<option value="">Select</option>
+																		@foreach($courses as $data)					
+																			<option value="{{$data}}">{{$data}}</option>
+																		@endforeach
+																	</select>
+																</div>
+															@elseif($title == 'subjects')
+																<div class="subs" style="display:none">
+																	<?php $courses = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->pluck('title'); 
+																	
+																	
+																	?>
+																	<select name="coursedata">
+																		<option value="">Select</option>
+																		@foreach($courses as $data)					
+																			<option value="{{$data}}">{{$data}}</option>
+																		@endforeach
+																	</select>
+																</div>
+
 															@endif
 														</div>
-
-
-						                                <?php $fieldsData = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); ?>
-						                                @if($fieldsData)
-						                                <select name="subgroupname" class="selectbox" style="display: none">
-						                                    @foreach($fieldsData as $val)
-						                                        <?php 
-						                                            $titledata1 = explode(' ', $val->title);
-						                                            if(is_array($titledata1)){
-						                                                $title2 = strtolower(implode('', $titledata1));
-						                                            }else{
-						                                                 $title2 = $val->title;
-						                                            }
-						                                            // echo '<pre>';print_r($title);die;
-						                                        ?>
-						                                        <option value="{{ $title2 }}">{{ $val->title }}</option>
-						                                    @endforeach
-						                                </select>
-						                                @endif
 
 													@endforeach
 												@endif

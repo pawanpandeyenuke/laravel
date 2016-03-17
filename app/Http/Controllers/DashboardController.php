@@ -174,14 +174,59 @@ class DashboardController extends Controller
     *   Enter chatrooms ajax call handling.
     *   Ajaxcontroller@enterchatroom
     */
-    public function groupchat( $input = '' )
-    {   
+    public function groupchat( $input = '' ){   
 
         $model = new DefaultGroup;
-        // $groupname = '';
 
         if(empty($input))        
-            $input = Request::all();
+        $input = Request::all();
+
+        if(is_array($input)) {
+            
+            $validator = Validator::make($input, ['subcategory' => 'required']); 
+                
+            if($validator->fails())
+            {
+                $error = $validator->messages()->first();
+                Session::put('error', $error);
+                return redirect()->back();
+            }
+            else{
+
+                if($input['subcategory']=='international'){
+                
+                    unset($input['country']); 
+                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);
+                
+                }elseif($input['subcategory']=='professionalcourse'){
+                
+                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata1']]);
+
+                }elseif($input['subcategory']=='subjects'){
+
+                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata']]);
+
+                }elseif($input['subcategory']=='country,state,city'){
+               
+                    $newinput=(['parentname'=>$input['parentname'],
+                    'subcategory'=>'csc',
+                    'country'=>DB::table('country')->where('country_id',$input['country'])->value('country_name'),
+                    'state'=>DB::table('state')->where('state_id',$input['state'])->value('state_name'),
+                    'city'=>DB::table('city')->where('city_id',$input['city'])->value('city_name')]);       
+               
+                }elseif($input['subcategory']=='country'){
+                
+                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>'c','country'=>DB::table('country')->where('country_id',$input['country1'])->value('country_name')]);
+
+                }else{
+                
+                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);       
+                
+                }
+
+                $input=$newinput;
+            }   
+       }
 
         if(is_array($input)){
             $groupnamedata = array();
@@ -200,17 +245,12 @@ class DashboardController extends Controller
             $groupname = $input;
         }
 
-        // print_r($groupname);die;
+        
         
         if(Request::isMethod('get')){
 
             if(is_array($input)){
-                $validator = Validator::make($input, [ 'subcategory' => 'required' ]); 
-                if($validator->fails()){
-                    $error = $validator->messages()->first();
-                    Session::put('error', $error);
-                    return redirect()->back();
-                }else{
+                
                     $updatecheck = $model->where('group_name', $groupname)
                                 ->where('group_by', Auth::User()->id)
                                 ->get()->toArray();
@@ -229,8 +269,9 @@ class DashboardController extends Controller
 
                     //Get users of this group
                     $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();          
-                }
-            }else{
+                
+            }
+            else{
                     $updatecheck = $model->where('group_name', $groupname)
                                 ->where('group_by', Auth::User()->id)
                                 ->get()->toArray();
