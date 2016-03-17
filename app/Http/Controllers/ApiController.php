@@ -556,6 +556,197 @@ class ApiController extends Controller
 
 
 	/*
+	 * Edit post on request.
+	 */
+	public function editPost()
+	{
+		try{
+			$arguments = Request::all();
+
+ 			$validator = Validator::make($arguments, [
+	 						'id' => 'required|numeric',
+	 					]); 
+
+	        if($validator->fails())
+	        {
+
+	        	$this->message = $this->getError($validator);
+
+	        }else{
+
+				$newsFeed = Feed::find($arguments['id']);
+
+				if( empty($newsFeed) )
+					throw new Exception('Post does not exist.', 1);
+
+				if(Request::hasFile('image')){
+
+					$file = Request::file('image');
+					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+					$arguments['image'] = $image_name;
+					$file->move('uploads', $image_name);
+
+				}
+
+				$newsFeed->fill($arguments);
+				$saved = $newsFeed->push();
+
+				if( $saved ){
+					$this->status = 'Success';
+					$this->message = "Post updated successfully.";
+					$this->data = Feed::find($arguments['id']);				
+				}
+
+	        }
+
+		}catch(Exception $e){
+
+			$this->message = $e->getMessage();
+
+		}
+
+		return $this->output();	
+	}
+
+
+	/*
+	 * Delete post on request.
+	 */
+	public function deletePost()
+	{
+		try{
+			$arguments = Request::all();
+
+ 			$validator = Validator::make($arguments, [
+	 						'id' => 'required|numeric',
+	 					]); 
+
+	        if($validator->fails()) {
+
+	        	$this->message = $this->getError($validator);
+
+	        }else{
+
+				$newsFeed = Feed::find($arguments['id']);
+
+				if( empty($newsFeed) )
+					throw new Exception('Post does not exist.', 1);
+
+				$postdata = array(
+								'id' => $arguments['id'], 
+								'user_id' => $newsFeed->user_by
+							);
+
+				$deleteFeed = Feed::where('id', $arguments['id'])->delete();
+				
+				if( $deleteFeed ){
+					$this->status = 'Success';
+					$this->message = "Post deleted successfully.";
+					$this->data = $postdata;
+				}
+			}
+
+		}catch(Exception $e){
+
+			$this->message = $e->getMessage();
+
+		}
+
+		return $this->output();	
+	}
+
+
+	/*
+	 * Edit comment on request.
+	 */
+	public function editComment()
+	{
+		try{
+			$arguments = Request::all();
+
+ 			$validator = Validator::make($arguments, [
+	 						'id' => 'required|numeric',
+	 						'comments' => 'required'
+	 					]); 
+
+	        if($validator->fails()) {
+
+	        	$this->message = $this->getError($validator);
+
+	        }else{
+
+				$comment = Comment::find($arguments['id']);
+
+				if( empty($comment) )
+					throw new Exception("This comment does not exist", 1);
+
+				$comment->fill($arguments);
+				$saved = $comment->push();
+
+				if( $saved ){
+					$this->status = 'Success';
+					$this->message = "Comment updated successfully.";
+					$this->data = Comment::find($arguments['id']);
+				}
+	        }
+		}catch(Exception $e){
+
+			$this->message = $e->getMessage();
+
+		}
+
+		return $this->output();	
+	}
+
+
+	/*
+	 * Delete comment on request.
+	 */
+	public function deleteComment()
+	{
+		try{
+			$arguments = Request::all();
+
+ 			$validator = Validator::make($arguments, [
+	 						'id' => 'required|numeric',
+	 					]); 
+
+	        if($validator->fails()) {
+
+	        	$this->message = $this->getError($validator);
+
+	        }else{
+
+				$comment = Comment::find($arguments['id']);
+
+				if( empty($comment) )
+					throw new Exception('Comment does not exist.', 1);
+
+				$commentdata = array(
+								'id' => $arguments['id'], 
+								'commented_by' => $comment->commented_by
+							);
+
+				$deletecomment = Comment::where('id', $arguments['id'])->delete();
+				
+				if( $deletecomment ){
+					$this->status = 'Success';
+					$this->message = "Comment deleted successfully.";
+					$this->data = $commentdata;
+				}
+			}
+
+		}catch(Exception $e){
+
+			$this->message = $e->getMessage();
+
+		}
+
+		return $this->output();	
+	}
+
+
+	/*
 	 * Get country on request.
 	 */
 	public function getCountries()
