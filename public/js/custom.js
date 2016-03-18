@@ -161,8 +161,9 @@ $(document).ready(function(){
 						current.parents('.post-footer').find('.commentcount').html('1 Comment'); 
 					}
 	
-					//current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
-					
+
+					// current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
+
 					current.parents('.pop-comment-side-outer').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('.row').find('.comment-field').text('');
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
@@ -426,6 +427,91 @@ $(document).ready(function(){
 	* Profile data save on edit of profile.
 	*
 	**/
+
+$(document).on('click','.save-profile-changes',function()
+	{
+		var current = $(this);
+		var first_name=$('.name1').val();
+		var last_name=$('.name2').val();
+		var country=$('.country').val();
+		var state=$('.state').val();
+		var city=$('.city').val();
+		var birthday=$('.birthday').val();
+		var phone_no=$('.contact').val();
+var gender;
+		if ( $('#radio1').is(':checked') )
+		{
+			gender=$('#radio1').val();
+		}
+		if ( $('#radio2').is(':checked') )
+		{
+			gender=$('#radio2').val();
+		}
+		
+var marital_status;	
+			
+		if ( $('#radio3').is(':checked') )
+		{
+		   marital_status=$('#radio3').val();
+		}
+		if ( $('#radio4').is(':checked') )
+		{
+			marital_status=$('#radio4').val();
+		}
+		
+		var education_level=$('.educationlevel').val();//array index
+//alert(education_level);
+		var specialization=$('.specialization').val();//array index
+		var graduation_year_from=$('.gradyearfrom').val();//array index
+		var graduation_year_to=$('.gradyearto').val();//array index
+var currently_studying;//name
+		if ( $('#radios1').is(':checked') )
+		{
+		   currently_studying=$('#radios1').val();
+		}
+		if ( $('#radios2').is(':checked') )
+		{
+			currently_studying=$('#radios2').val();
+		}
+		var education_establishment=$('.educationestablishment').val();//name
+		var country_of_establishment=$('.educationcountry').val();//id
+		var job_area=$('.jobarea').val();//id
+		var job_category=$('.jobcategory').val();//name
+
+			
+		$.ajax({
+			'url' : '/ajax/profilesave',
+			'type' : 'post',
+			'data' : {'first_name':first_name,'last_name':last_name,'country':country,'state':state,'city':city,'birthday':birthday,
+                                 'gender':gender,'phone_no':phone_no,'marital_status':marital_status,'education_level':education_level,
+				'specialization':specialization,'graduation_year_from':graduation_year_from,'graduation_year_to':graduation_year_to,
+				'currently_studying':currently_studying,'education_establishment':education_establishment,
+				'country_of_establishment':country_of_establishment,
+				'job_area':job_area,
+				'job_category':job_category},
+			'success' : function(data){
+				
+			}
+		});
+	});
+
+
+$(document).on('click','.jobarea',function()
+	{
+		var current = $(this);
+		var jobarea=$('.jobarea').val();
+	
+		$.ajax({
+			'url' : '/ajax/jobcategory',
+			'type' : 'post',
+			'data' : {'jobarea':jobarea },
+			'success' : function(data){
+				$('#jobcategory').html(data);
+			}	
+		});
+	});
+
+
 
 
 

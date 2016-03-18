@@ -10,7 +10,7 @@
 <link href="/fancybox/jquery.fancybox.css" rel="stylesheet" media="all">
 <link href="/css/flat-icon/flaticon.css" rel="stylesheet" media="all">
 <link href="/css/fileinput.min.css" rel="stylesheet" media="all">
-<!-- <link href="/converse/converse.min.css" rel="stylesheet" type="text/css" media="screen" > -->
+
 <link href="/lib/css/nanoscroller.css" rel="stylesheet">
 <link href="/lib/css/emoji.css" rel="stylesheet">
 <link href="/css/style.css" rel="stylesheet">
@@ -102,8 +102,8 @@
 <script src="/js/jquery.nicescroll.min.js"></script>
 <!--/Emoji-->
 <!-- chat system -->
-<!-- <script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
-<script type="text/javascript" src="/converse/jquery.form.js"></script> -->
+<script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
+<script type="text/javascript" src="/converse/jquery.form.js"></script>
 <!-- chat system -->
 </body>
 </html>

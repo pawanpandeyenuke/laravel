@@ -1,7 +1,9 @@
 @extends('layouts.dashboard')
 
 @section('content')
-
+<?php 
+// echo '<pre>';print_r($friendid);die; 
+?>
 <div class="page-data dashboard-body">
         <div class="container">
             <div class="row">
@@ -34,12 +36,24 @@
                                 <ul>
 
                                     @foreach($userdata as $data)
-                                    <?php //echo '<pre>';print_r($data);die;?>
+                                    <?php //echo '<pre>';print_r($data['user']['id']);die;?>
                                     <li>
-                                        <a title="" href="#" onclick="openChatbox(<?php echo "'".$data['user']['xmpp_username']."', '".$data['user']['xmpp_password']."'"?>);" >
+                                        <a title="" href="#" onload="openChatGroup(<?php echo "'".$groupname."', '".$groupname."'"?>)" onclick="openChatbox(<?php echo "'".$data['user']['xmpp_username']."', '".$data['user']['xmpp_password']."'"?>);" >
                                             <span style="background: url('/images/user-thumb.jpg');" class="chat-thumb"></span>
                                             <span class="title">{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}</span>
-                                            <span class="time">02:50 am</span>
+
+                                            
+                                             <?php
+                                            foreach ($friendid as $abc) {
+                                            if($data['user']['id']==$abc)
+                                            {?>
+                                           
+                                            <button class='time'>Chat</button>
+                                            <?php }else{ if($data['user']['id']!=$authid){
+                                              ?>
+                                            
+                                            <button class='time'>Invite</button>
+                                            <?php } }}?>
                                         </a>
                                     </li>
                                     @endforeach
@@ -55,8 +69,9 @@
                                         <a title="" href="#">
                                             <span style="background: url('images/user-thumb.jpg');" class="chat-thumb"></span>
                                             <span class="title">{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}</span>
-                                            <span class="time">02:50 am</span>
+                                           
                                             <!-- <span class="msg">Hi, How r u?</span> -->
+                                           
                                         </a>
                                     </li>
                                     @endforeach
@@ -85,55 +100,60 @@
  
 @endsection
 
- 
-  
+  <link href="{{url('/converse/converse.min.css')}}" rel="stylesheet" type="text/css" media="screen" >
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script type="text/javascript">
 
-    var conObj; 
-    $.noConflict();
+   var userImage="{{url('images/logo.png')}}";
+    var defaultImage="{{url('images/logo.png')}}";
+ var image_upload_url="{{url('site/send-image')}}";
+ var chatserver='@fs.yiipro.com';
+    var conObj;
+    
 
     jQuery(document).ready(function(){
 
         jQuery.ajax({
-            'url' : 'ajax/getxmppuser',
+            'url' : "{{url('/ajax/getxmppuser')}}",
             'type' : 'post',
+            'dataType':'json',
             'success' : function(data){
                 if(data.status==1){
-
+                    console.log('abc');
             require(['converse'], function (converse) {
-             (function () {
-                /* XXX: This function initializes jquery.easing for the https://conversejs.org
-                * website. This code is only useful in the context of the converse.js
-                * website and converse.js itself is NOT dependent on it.
-                */
-                var $ = converse.env.jQuery;
-                $.extend( $.easing, {
-                    easeInOutExpo: function (x, t, b, c, d) {
-                        if (t==0) return b;
-                        if (t==d) return b+c;
-                        if ((t/=d/2) < 1) return c/2 * Math.pow(2, 10 * (t - 1)) + b;
-                        return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
-                    },
-                });
+            //  (function () {
+            //     /* XXX: This function initializes jquery.easing for the https://conversejs.org
+            //     * website. This code is only useful in the context of the converse.js
+            //     * website and converse.js itself is NOT dependent on it.
+            //     */
+            //     var $ = converse.env.jQuery;
+            //     $.extend( $.easing, {
+            //         easeInOutExpo: function (x, t, b, c, d) {
+            //             if (t==0) return b;
+            //             if (t==d) return b+c;
+            //             if ((t/=d/2) < 1) return c/2 * Math.pow(2, 10 * (t - 1)) + b;
+            //             return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
+            //         },
+            //     });
 
-                $(window).scroll(function() {
-                    if ($(".navbar").offset().top > 50) {
-                        $(".navbar-fixed-top").addClass("top-nav-collapse");
-                    } else {
-                        $(".navbar-fixed-top").removeClass("top-nav-collapse");
-                    }
-                });
-                //jQuery for page scrolling feature - requires jQuery Easing plugin
-                $('.page-scroll a').bind('click', function(event) {
-                    var $anchor = $(this);
-                    $('html, body').stop().animate({
-                        scrollTop: $($anchor.attr('href')).offset().top
-                    }, 700, 'easeInOutExpo');
-                    event.preventDefault();
-                });
-            })();           
-            
-                   conObj=converse;
+            //     $(window).scroll(function() {
+            //         if ($(".navbar").offset().top > 50) {
+            //             $(".navbar-fixed-top").addClass("top-nav-collapse");
+            //         } else {
+            //             $(".navbar-fixed-top").removeClass("top-nav-collapse");
+            //         }
+            //     });
+            //     //jQuery for page scrolling feature - requires jQuery Easing plugin
+            //     $('.page-scroll a').bind('click', function(event) {
+            //         var $anchor = $(this);
+            //         $('html, body').stop().animate({
+            //             scrollTop: $($anchor.attr('href')).offset().top
+            //         }, 700, 'easeInOutExpo');
+            //         event.preventDefault();
+            //     });
+            // })(); 
+
+            conObj=converse;
                     converse.initialize({
                         prebind: true,
                         rid: data.rid,
@@ -149,9 +169,10 @@
                           allow_otr: false,
                          auto_list_rooms: true,
                          auto_subscribe: true,
+       auto_join_on_invite:true,
                          roster_groups:true,
-                         allow_logout: false,
-                         allow_chat_pending_contacts:true
+          allow_logout: false,
+       allow_chat_pending_contacts:true
                     });
                     jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                     jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
@@ -190,9 +211,6 @@
      function openChatbox(xmpusername,username)
      {
          conObj=converse;
-        // xmpusername='appuser_8119';
-        console.log(xmpusername);   
-        console.log(username);   
         var ss=conObj.contacts.get(xmpusername+'@fs.yiipro.com');
          if(ss==null)
          {  
@@ -201,5 +219,10 @@
          }
         conObj.chats.open(xmpusername+'@fs.yiipro.com');
      }
+
+      function openChatGroup(grpname,grpjid)
+    {
+     var chatView=conObj.rooms.open(grpjid+chatserver,grpname);
+    }
 
 </script>

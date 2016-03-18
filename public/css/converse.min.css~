@@ -11,7 +11,13 @@
  * Licensed under the Mozilla Public License
  */
 
-
+@font-face {
+    font-family: Converse-js;
+    src: url(../fonts/icomoon.eot?-mnoxh0);
+    src: url(../fonts/icomoon.eot?#iefix-mnoxh0) format("embedded-opentype"), url(../fonts/icomoon.woff?-mnoxh0) format("woff"), url(../fonts/icomoon.ttf?-mnoxh0) format("truetype"), url(../fonts/icomoon.svg?-mnoxh0#icomoon) format("svg");
+    font-weight: 400;
+    font-style: normal
+}
 .icon-conversejs {
     font-family: Converse-js;
     speak: none;

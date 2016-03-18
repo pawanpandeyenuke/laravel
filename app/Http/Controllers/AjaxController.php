@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB;
+use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
@@ -141,7 +141,7 @@ $postHtml = <<<postHtml
 							</div>
 						</div><!--/post comment-->
 						<div class="comments-list">
-							<ul>
+							<ul id="pagecomment-$feedid">
 
 							</ul>
 						</div><!--/comments list-->
@@ -241,7 +241,6 @@ comments;
 		
 		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
 		{
-
 			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', '', false, false);
 			$username = $user->xmpp_username;
 			$password = $user->xmpp_password;
@@ -513,7 +512,57 @@ comments;
 		return $newsFeed; 
 
  	}
+
+ 	//edit profile
+ 	public function editProfile()
+ 	{
+ 		$input=Input::all();
+ 		$id=Auth::User()->id;
+     //print_r($input);die;
+ 		$input['state']=DB::table('state')->where('state_id',$input['state'])->value('state_name');
+ 		$input['city']=DB::table('city')->where('city_id',$input['city'])->value('city_name');
+ 			$profile = User::find($id);
+			$profile->fill($input);
+		   	$profile->push();
+       if(EducationDetails::find($id))
+       		{
+    	    $edu=EducationDetails::find($id);
+   			$edu->fill($input);
+   			$edu->push();
+
+       		}
+       else
+       		{
+       			DB::table('education_details')
+       			->insert([
+       			 'id' => $id,
+       			 'education_level'=>$input['education_level'],
+       			 'specialization'=>$input['specialization'],
+       			 'graduation_year_from'=>$input['graduation_year_from'],
+       			 'graduation_year_to'=>$input['graduation_year_to'],
+       			 'currently_studying'=>$input['currently_studying'],
+       			 'education_establishment'=>$input['education_establishment'],
+       			 'country_of_establishment'=>$input['country_of_establishment'],
+       			 'job_area'=>$input['job_area'],
+       			 'job_category'=>$input['job_category']
+       			 ]);
+
+       		}
+
+ 	}
  	
+ 	public function getJobcategory()
+ 	{
+ 		$input=Input::all();
+ 		$data = DB::table('job_category')->where('job_area_id',$input['jobarea'])->pluck('job_category');
+
+		$jcategory = array('<option value="">Category</option>');
+		foreach($data as $query){			
+			$jcategory[] = '<option value="'.$query.'">'.$query.'</option>';
+		}		
+		echo implode('',$jcategory);
+
+ 	}
 
 
 

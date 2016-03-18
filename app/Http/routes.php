@@ -43,7 +43,9 @@ Route::post('ajax/remove','AjaxController@remove');
 
 Route::post('ajax/deletepost','AjaxController@deletepost');
 Route::post('ajax/deletecomments','AjaxController@deletecomments');
-// Route::post('ajax/profilesave','AjaxController@editProfile');
+Route::post('/ajax/profilesave','AjaxController@editProfile');
+Route::post('/ajax/jobcategory','AjaxController@getJobcategory');
+
 
 
 

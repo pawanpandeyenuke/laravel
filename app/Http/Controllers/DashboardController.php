@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State;
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State,App\JobArea,App\JobCategory,App\EducationDetails;
 use Request, Session, Validator, Input, Cookie;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -177,11 +177,68 @@ class DashboardController extends Controller
     public function groupchat( $input = '' )
     {   
 
-        $model = new DefaultGroup;
-        // $groupname = '';
 
+
+        $model = new DefaultGroup;
+      
         if(empty($input))        
-            $input = Request::all();
+         $input = Request::all();
+
+if(is_array($input)) 
+    {
+        $validator = Validator::make($input, ['subcategory' => 'required']); 
+        
+        if($validator->fails())
+        {
+            $error = $validator->messages()->first();
+            Session::put('error', $error);
+            return redirect()->back();
+        }
+else{
+        if($input['subcategory']=='international')
+        {
+
+          unset($input['country']); 
+          $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);
+          
+        }
+
+        elseif($input['subcategory']=='professionalcourse')
+        {
+          
+          $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata1']]);
+         
+        }
+        elseif($input['subcategory']=='subjects')
+        {
+          
+          $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata']]);
+           
+        }
+
+        elseif($input['subcategory']=='country,state,city')
+        {
+          $newinput=(['parentname'=>$input['parentname'],
+          'subcategory'=>'csc',
+          'country'=>DB::table('country')->where('country_id',$input['country'])->value('country_name'),
+          'state'=>DB::table('state')->where('state_id',$input['state'])->value('state_name'),
+          'city'=>DB::table('city')->where('city_id',$input['city'])->value('city_name')]);       
+        }
+
+      elseif($input['subcategory']=='country')
+      {
+        $newinput=(['parentname'=>$input['parentname'],'subcategory'=>'c','country'=>DB::table('country')->where('country_id',$input['country1'])->value('country_name')]);
+      }
+
+      else
+      {   
+        $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);       
+      }
+
+    $input=$newinput;
+   }
+
+   }
 
         if(is_array($input)){
             $groupnamedata = array();
@@ -200,17 +257,12 @@ class DashboardController extends Controller
             $groupname = $input;
         }
 
-        // print_r($groupname);die;
+        
         
         if(Request::isMethod('get')){
 
             if(is_array($input)){
-                $validator = Validator::make($input, [ 'subcategory' => 'required' ]); 
-                if($validator->fails()){
-                    $error = $validator->messages()->first();
-                    Session::put('error', $error);
-                    return redirect()->back();
-                }else{
+                
                     $updatecheck = $model->where('group_name', $groupname)
                                 ->where('group_by', Auth::User()->id)
                                 ->get()->toArray();
@@ -229,8 +281,9 @@ class DashboardController extends Controller
 
                     //Get users of this group
                     $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();          
-                }
-            }else{
+                
+            }
+            else{
                     $updatecheck = $model->where('group_name', $groupname)
                                 ->where('group_by', Auth::User()->id)
                                 ->get()->toArray();
@@ -253,9 +306,14 @@ class DashboardController extends Controller
 
         }
 
+$id=Auth::User()->id;
+        $friendid=DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
         return view('chatroom.groupchat')
                     ->with('groupname', $groupname)
-                    ->with('userdata', $usersData);
+                    ->with('userdata', $usersData)
+                    ->with('friendid',$friendid)
+                    ->with('authid',$id)
+                    ;
     }
 
 
@@ -272,21 +330,78 @@ class DashboardController extends Controller
         $statesids = State::where('country_id', '=', $model->country)->lists('state_id')->toArray();
         $cities = DB::table('city')->whereIn('state_id', $statesids)->lists('city_name', 'city_id');
 
-        if(Request::isMethod('post')){
+        // if(Request::isMethod('post')){
 
-            $input = Request::all();
-            echo '<pre>';print_r($input);die;
+        //     $input = Request::all();
+             
 
-        }
+        // }
 
+    if(EducationDetails::find($id)){
+        $education=EducationDetails::where('id',$id)->get()->first()->toArray();
+    }
+    else{
+        $education=(['education_level'=>'','specialization'=>'','graduation_year_from'=>'','graduation_year_to'=>'','currently_studying'=>'','education_establishment'=>'','country_of_establishment'=>'','job_area'=>'','job_category'=>'']);
+    }
+        $job_category=JobCategory::lists('job_category')->toArray();
 
+        $jcategory = array_combine(range(1, count($job_category)), array_values($job_category));
+        $job_category=$jcategory;
+
+        
+
+    	$job_area=JobArea::pluck('job_area')->toArray();   
         return view('profile.profile')
                 ->with('model',$model)
                 ->with('id',User::find(Auth::User()->id))
                 ->with('states', $states)
-                ->with('cities', $cities);
+                ->with('cities', $cities)
+                ->with('jobarea',$job_area)
+                ->with('education',$education)
+                ->with('job_category',$job_category)
+                ;
 
     }
+
+     public function actionSendImage(){
+     $status=0;
+  $message="";
+  $url=url();
+
+      $image = $_FILES["chatsendimage"]["name"];
+   //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
+      $uploadedfile = $_FILES['chatsendimage']['tmp_name'];
+      $name = $_FILES['chatsendimage']['name'];
+      $size = $_FILES['chatsendimage']['size'];
+      $valid_formats = array("jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF");
+      if (strlen($name)) {
+       list($txt, $ext) = explode(".", $name);
+       if (in_array($ext, $valid_formats)) {
+        $actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
+        $tmp = $uploadedfile;
+        if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
+           // $rootFolder=dirname( Yii::$app->basePath);
+            // $image = Yii::$app->image->load($path.$actual_image_name);
+           // $image->resize(140, 100);
+           // $image->save();
+  
+        //   ========== $data = Yii::$app->request->baseUrl.'/images/media/chat_images/'. $actual_image_name;
+            $chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
+            if ($chatType == "group"){}//chat type check
+            else{           
+             $message="IMAGE---".$_SERVER['HTTP_HOST'].$data;
+    $status=1;
+            }                              
+        } else
+         $message= "Failed to send try again.";    
+       } else
+        $message= "Invalid file format.";
+      }else {
+       $message="Please select an image to send.";
+       }
+    echo json_encode(array('status'=>$status,'message'=>$message));
+       die(); 
+       }
 
  
 
