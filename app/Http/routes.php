@@ -83,7 +83,11 @@ Route::post('api/deletepost','ApiController@deletePost');
 Route::post('api/editcomment','ApiController@editComment');
 Route::post('api/deletecomment','ApiController@deleteComment');
 
-
+Route::post('api/getfriends','ApiController@getFriends');
+Route::post('api/getusers','ApiController@getUsers');
+Route::post('api/addfriend','ApiController@addFriend');
+Route::post('api/acceptrequest','ApiController@acceptRequest');
+Route::post('api/declinerequest','ApiController@declineRequest');
 
 
 /*
