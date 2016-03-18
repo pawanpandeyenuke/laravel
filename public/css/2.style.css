@@ -1053,6 +1053,9 @@ a:hover{
 	list-style:none;
   padding: 0 3px;
 }
+.chat-user-list li a{
+	 min-height: 51px;
+}
 .chat-user-list li a, .user-list-with-thumb li a{
   display: block;
   position: relative;
@@ -1602,7 +1605,7 @@ button.edit-pr-img {
 /* .fancybox-inner{
 	width:100% !important;
 } */
-.post-list .single-post p img.emojione{
+.post-list .single-post p img.emojione, .post-list .single-post div img.emojione{
   width: 30px;
 }
 .profile-data-table .table td .inner-table{
@@ -1646,10 +1649,13 @@ button.edit-pr-img {
   bottom: -66px;
   left: 0px;
 }
+.p-del-btn{
+
+}
 .p-del-btn {
   position: absolute;
   right: 8px;
-  top: 5px;
+  top: 0px;
   background: none;
   border: 0px;
   padding: 0px;
@@ -1657,19 +1663,8 @@ button.edit-pr-img {
   font-size: 12px;
   outline: none;
 }
-.p-del-btn:hover, .p-edit-btn:hover{
+.p-del-btn:hover{
 	color: #B9B9B9;
-}
-.p-edit-btn{
-	position: absolute;
-  right: 28px;
-  top: 3px;
-  background: none;
-  border: 0px;
-  padding: 0px;
-  color: #CECECE;
-  font-size: 12px;
-  outline: none;
 }
 .modal-footer.text-center{
 	text-align: center;
@@ -1680,42 +1675,7 @@ button.edit-pr-img {
   font-size: 10px;
   color: #DCDCDC;
 }
-.edit-post-textarea{
-  position: relative;
-  text-align: left;
-}
-.edit-post-textarea .form-control{
-	height: 100px;
-  padding-right: 50px;
-}
-.edit-post-textarea .emoji-picker-icon{
-  right: 20px;
-}
-.edit-img-outer {
-  margin: 15px 0 0;
-  position: relative;
-}
-.edit-img-outer:hover .img-update-cont{
-	display: block;
-}
-.img-update-cont{
-	position:absolute;
-	left:0px;
-	top: 0px;
-	width: 100%;
-	height: 100%;
-  background: rgba(0, 0, 0, 0.51);
-  display: none;
-}
-.img-update-cont .btn{
-  height: auto;
-  line-height: 20px;
-  padding: 0px;
-  color: #fff;
-  font-size: 20px;
-  background: #000;
-  padding: 10px;
-}
-.img-update-cont .input-group{
-  float: right;
+
+.modal{
+	z-index: 999999999;
 }

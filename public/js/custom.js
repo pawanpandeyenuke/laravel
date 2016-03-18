@@ -335,14 +335,29 @@ $(document).ready(function(){
 			'data' : { 'postid' : postid },
 			'type' : 'post',
 			'success' : function(response){
-				$('#editstatus').html(response);
-		        $.fancybox([
-		            { href : '#editstatus' }
-		        ]);
+				$('#edit-modal').append(response);
+				$("#edit-modal").modal();
 			}
 		});
-		$('#editstatus').html('');
+		$('#edit-modal').html('');
 	});
+
+/*	$(document).on('click', '#editpostdata', function(){
+		var current = $(this);
+		var postid = current.closest('.modal-content').data('value'); 
+		var postid = current.closest('.modal-content').find('#imageholder img').data('value'); 
+		
+		$.ajax({
+			'url' : 'ajax/editpost',
+			'data' : { 'postid' : postid,  },
+			'type' : 'post',
+			'success' : function(response){
+				$('#edit-modal').append(response);
+				$("#edit-modal").modal();
+			}
+		});
+		$('#edit-modal').html('');
+	});*/
 
 
 

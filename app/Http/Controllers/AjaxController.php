@@ -20,6 +20,7 @@ class AjaxController extends Controller
 		try
 		{
 			$arguments = Input::all();
+			// print_r($arguments);exit;
 			$model = new Feed;
 
 			if( $arguments ){
@@ -85,6 +86,7 @@ $postHtml = <<<postHtml
 
 			<div class="single-post" data-value="$feed->id" id="post_$feed->id">
 				<div class="post-header" data-value="$feed->id" id="post_$feed->id">
+					<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
 					<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 					<div class="row">
 						<div class="col-md-7">
@@ -162,6 +164,43 @@ echo $postHtml;
 		}		
 
 		exit;
+	}
+
+
+	public function editposts()
+	{
+		$arguments = Input::all();
+		$user = Auth::User();
+
+		$file = Input::file('image');
+
+		if( isset($arguments['image']) && $file != null ){
+
+			$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+			$arguments['image'] = $image_name;
+			$file->move('uploads', $image_name);
+
+		}
+
+		$newsFeed = Feed::find($arguments['id']);
+		$newsFeed->fill($arguments);
+		$saved = $newsFeed->push();
+
+		$postdata = Feed::where('id', $arguments['id'])->select('image', 'message', 'id')->get();
+		echo $postdata;
+
+/*		if( $arguments['message'] && empty( $arguments['image'] ) )
+			$popupclass = 'postpopupajax';
+		elseif( $arguments['image'] && empty( $arguments['message'] ) )
+			$popupclass = 'popupajax';
+		else
+			$popupclass = 'popupajax';
+ 
+		return view('ajax.returnpost')
+				->with('postdata', Feed::find($arguments['id']))
+				->with('user', $user)
+				->with('popupclass', $popupclass);*/
+
 	}
 
 
@@ -555,9 +594,8 @@ comments;
 	}
 
 
-
 	/**
-	*	Delet confirmation box on ajax call handling.
+	*	Delete confirmation box on ajax call handling.
 	*	Ajaxcontroller@editcomment
 	*/
 	public function deletebox()
@@ -574,4 +612,20 @@ comments;
 
 	}
 
+
+	/**
+	*	Group delete on ajax call handling.
+	*	Ajaxcontroller@groupdelete
+	*/
+	public function groupdelete()
+	{
+
+		$arguments = Input::all();
+		$groupName = $arguments['group_name'];
+		$groupBy = $arguments['group_by'];
+		
+		
+		
+		exit;
+	}
 }
