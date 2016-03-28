@@ -55,4 +55,10 @@ class User extends Authenticatable
 	{
 		return $this->hasOne('App\Country','country_id','country');
 	}
+
+	public function education()
+	{
+		return $this->hasOne('App\EducationDetails','id','id');
+	}
+
 }

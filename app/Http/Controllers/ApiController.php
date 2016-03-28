@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Mail;
-use App\User, App\Feed, App\Like, App\Comment, Auth;
+use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City;
 use Validator, Input, Redirect, Request, Session, Hash, DB;
@@ -482,16 +482,20 @@ class ApiController extends Controller
 	{
 		try{ 
 
-			$arguments=Request::all();
-			$user=new User;
+			$arguments = Request::all();
+			$user = new User;
+
 			if($arguments){
-				if(!(User::find($arguments['user_id'])))
+
+				if( !( User::find( $arguments['id'] ) ) )
 					throw new Exception("This user id doesn't exist");
 
-				$details=User::with('country')->where(['id'=>$arguments['user_id']])->get()->toArray();
+				$userProfile = User::with('education')->with('country')->where(['id'=>$arguments['id']])->get()->toArray();
 
-				$this->status='Success';
-				$this->data=$details;
+				// print_r($userProfile);die;
+
+				$this->status = 'Success';
+				$this->data = $userProfile;
 				$this->message = 'User profile data';
 
 			}else{
@@ -514,9 +518,48 @@ class ApiController extends Controller
  	{
 
 		try{
-			$arguments=Request::all();
-			$user=new User();
-			// print_r($arguments);die;
+			$arguments = Request::all();
+			$user = new User;
+			$id = $arguments['id'];
+			//multiple image uploading
+			$getCommonEduArgs = array_intersect_key( $arguments, [
+									'id' => 'null',
+									'education_level' => 'null',
+									'specialization' => 'null',
+									'graduation_year_from' => 'null',
+									'graduation_year_to' => 'null',
+									'currently_studying' => 'null',
+									'education_establishment' => 'null',
+									'country_of_establishment' => 'null',
+									'city_of_establishment' => 'null',
+									'job_area' => 'null',
+									'job_category' => 'null'
+								]);
+
+			if( !empty($getCommonEduArgs) ){
+
+			$eduExists = EducationDetails::where('id', '=', $getCommonEduArgs['id'])->get()->toArray();
+
+				if(!empty($eduExists)){
+
+					$eduExists = EducationDetails::find($getCommonEduArgs['id']);
+					$eduExists->fill($getCommonEduArgs);
+					$saved = $eduExists->push();
+
+				}else{
+
+					$education = new EducationDetails;
+					$education->create($getCommonEduArgs);
+
+				}
+
+				foreach ($getCommonEduArgs as $key => $value)
+					unset($arguments[$key]);
+
+			}
+			
+			$arguments['id'] = $id;
+
 			if($arguments){
 
 				if(!(User::find($arguments['id'])))
@@ -535,11 +578,11 @@ class ApiController extends Controller
 
 				}
 
-				$changes = User::where([ 'id' => $arguments['id'] ])->get()->toArray();
+				$changes = User::with('education')->where([ 'id' => $arguments['id'] ])->get()->toArray();
 
-				$this->status='Success';
-				$this->data=$changes;
-				$this->message='Profile updated';
+				$this->status = 'Success';
+				$this->data = $changes;
+				$this->message = 'Profile updated';
 
 
 			}else{
@@ -745,6 +788,211 @@ class ApiController extends Controller
 		return $this->output();	
 	}
 
+
+	/*
+	 * Get friend list on request.
+	 */
+	public function getFriends()
+	{
+		try{
+			$arguments = Request::all();
+			$user = User::find($arguments['id']);
+
+			if(empty($user))
+				throw new Exception("This user does not exist", 1);
+
+			$friends = Friend::where('user_id', '=', $arguments['id'])
+					->orWhere('friend_id', '=', $arguments['id'])
+					->where('status', '=', 'Accepted')
+					->get();
+			
+			// print_r($friends);exit;
+
+			$this->data = $friends;
+			$this->status = 'success';
+			$this->message = count($friends).' friends found.';
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+		
+	}
+
+
+	/*
+	 * Get users list to send friend request.
+	 */
+	public function getUsers()
+	{
+		try{
+			$arguments = Request::all();
+			$user = User::find($arguments['id']);
+
+			if(empty($user))
+				throw new Exception("This user does not exist", 1);
+
+			$userslist = User::where('id', '!=', $arguments['id'])
+					->select('first_name', 'last_name', 'id')
+					->get();
+			
+			// print_r($friends);exit;
+
+			$this->data = $userslist;
+			$this->status = 'success';
+			$this->message = count($userslist).' users found.';
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+		
+	}
+
+
+	/*
+	 * Add friend on request.
+	 */
+	public function addFriend()
+	{
+		try{
+			$arguments = Request::all();
+
+			$user = User::where('id', '=', $arguments['user_id'])->get();
+			$friend = User::where('id', '=', $arguments['friend_id'])->get();
+
+			if(empty($user))
+				throw new Exception("This user does not exist", 1);
+
+			if(empty($friend))
+				throw new Exception("This user does not exist", 1);
+
+			$friendcheck = Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->get()
+							->toArray();
+
+			if( !empty($friendcheck)){
+	
+				$this->data = $friendcheck;
+				$this->status = 'success';
+				$this->message = 'Friend request has already been sent.';
+
+			}else{
+
+				$friend = new Friend;
+				$friend->status = 'Pending';
+				$request = $friend->create($arguments);
+
+				$this->data = $request;
+				$this->status = 'success';
+				$this->message = 'Friend request sent.';
+
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+		
+	}
+
+
+	/*
+	 * Accept friend request.
+	 */
+	public function acceptRequest()
+	{
+		try{
+			$arguments = Request::all();
+
+			$user = User::where('id', '=', $arguments['user_id'])->get();
+			$friend = User::where('id', '=', $arguments['friend_id'])->get();
+
+			if(empty($user))
+				throw new Exception("This user does not exist", 1);
+
+			if(empty($friend))
+				throw new Exception("This user does not exist", 1);
+
+			$friendcheck = Friend::where('user_id', '=', $arguments['friend_id'])
+							->where('friend_id', '=', $arguments['user_id'])
+							->where('status', '=', 'Pending')
+							->get();
+			
+			if( !empty($friendcheck)){
+
+				DB::table('friends')
+					->where('user_id', '=', $arguments['user_id'])
+					->where('friend_id', '=', $arguments['friend_id'])
+					->update(['status' => 'Accepted']);
+
+				$friend = new Friend;
+				$friend->status = 'Accepted';
+				$friend->friend_id = $arguments['user_id'];
+				$friend->user_id = $arguments['friend_id'];
+				$request = $friend->save();
+
+				$this->data = $request;
+				$this->status = 'success';
+				$this->message = 'Friend request accepted.';
+
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+		
+	}
+
+
+	/*
+	 * Decline friend request.
+	 */
+	public function declineRequest()
+	{
+		try{
+			$arguments = Request::all();
+
+			$user = User::where('id', '=', $arguments['user_id'])->get();
+			$friend = User::where('id', '=', $arguments['friend_id'])->get();
+
+			if(empty($user))
+				throw new Exception("This user does not exist", 1);
+
+			if(empty($friend))
+				throw new Exception("This user does not exist", 1);
+
+			$friendcheck = Friend::where('user_id', '=', $arguments['friend_id'])
+							->where('friend_id', '=', $arguments['user_id'])
+							->where('status', '=', 'Pending')
+							->get();
+			
+			if( !empty($friendcheck)){
+
+				$request = DB::table('friends')
+					->where('user_id', '=', $arguments['user_id'])
+					->where('friend_id', '=', $arguments['friend_id'])
+					->update(['status' => 'Rejected']);
+
+				$this->data = $request;
+				$this->status = 'success';
+				$this->message = 'Friend request declined.';
+
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+		
+	}
 
 	/*
 	 * Get country on request.

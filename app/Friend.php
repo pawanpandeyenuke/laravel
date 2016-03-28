@@ -10,6 +10,8 @@ class Friend extends Model
 
 	protected $primaryKey = 'id';
 
+	protected $fillable = ['user_id', 'friend_id', 'status' ];
+
 	public $timestamps = true;
 
 	public function user()
