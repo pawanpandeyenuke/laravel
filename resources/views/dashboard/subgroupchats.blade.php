@@ -58,7 +58,7 @@
                     <br/><br/><br/>
 
                         <button>Enter Chat</button>
-                        <a style="border:solid 1px;height:50px;width:auto;padding:5px;margin:5px;" class="enterchat" data-value="" data-parentid="{{ $data->id }} href="groupchat/{{$parentgroup}}/staticname"></a>
+                        <a style="border:solid 1px;height:50px;width:auto;padding:5px;margin:5px;" class="enterchat" data-value="" data-parentid="{{ $data->id }}" href="groupchat/{{$parentgroup}}/staticname"></a>
 
 
                         {{ Form::close() }}

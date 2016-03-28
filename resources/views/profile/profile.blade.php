@@ -8,11 +8,11 @@
 
 	$all_states = DB::table('state')->where('country_id', '=', $user->country)->pluck('state_name','state_id'); 
 
-
-	$stateid = DB::table('city')->where('city_id', '=', $user->city)->value('state_id'); 
+	$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
 
  	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 
- 	// echo '<pre>';print_r($all_cities);die;
+ 	// echo '<pre>';print_r($all_states);die;
+
 	$gender = $user->gender;
 	$maritalstatus = $user->marital_status; 
   ?>
@@ -48,7 +48,7 @@
 								<div class="pr-field">
 									<select name="city" class="pr-edit" disabled="disabled">
 										<?php foreach ($all_cities as $key => $value) { 
-											if($key == $user->city)
+											if($value == $user->city)
 												$selected = 'Selected'; 
 											else
 												$selected = ''; 
@@ -81,7 +81,7 @@
 													<td>
 														<select name="state" id="profile_state" class="pr-edit" disabled="disabled">
 															<?php foreach ($all_states as $key => $value) { 
-																if($key == $user->state)
+																if($value == $user->state)
 																	$selected = 'Selected'; 
 																else
 																	$selected = ''; 
@@ -96,7 +96,7 @@
 													<td>
 														<select name="city" id="profile_city" class="pr-edit" disabled="disabled">
 															<?php foreach ($all_cities as $key => $value) { 
-																if($key == $user->city)
+																if($value == $user->city)
 																	$selected = 'Selected'; 
 																else
 																	$selected = ''; 
@@ -181,9 +181,9 @@
 													<td>
 														<table class="inner-table">
 															<tr>
-																<td><input type="text" name="graduation_year_from" class="pr-edit datepicker" disabled="disabled" value="<?php isset($education)?$education->graduation_year_from:''?>"></td>
+																<td><input type="text" name="graduation_year_from" class="pr-edit datepicker" disabled="disabled" value="<?php echo isset($education)?$education->graduation_year_from:''?>"></td>
 																<td>To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-																<td><input type="text" name="graduation_year_to" class="pr-edit datepicker" disabled="disabled" value="<?php isset($education)?$education->graduation_year_to:''?>"></td>
+																<td><input type="text" name="graduation_year_to" class="pr-edit datepicker" disabled="disabled" value="<?php echo isset($education)?$education->graduation_year_to:''?>"></td>
 															</tr>
 														</table>
 													</td>
@@ -206,11 +206,11 @@
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-graduation"></i>Name of Education Establishment</div></td>
-													<td><input type="text" name="education_establishment" class="pr-edit" disabled="disabled" value="<?php isset($education)?$education->education_establishment:''?>"></td>
+													<td><input type="text" name="education_establishment" class="pr-edit" disabled="disabled" value="<?php echo isset($education)?$education->education_establishment:''?>"></td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country of Establishment</div></td>
-													<td><input type="text" name="country_of_establishment" class="pr-edit" disabled="disabled" value="<?php isset($education)?$education->country_of_establishment:''?>"></td>
+													<td><input type="text" name="country_of_establishment" class="pr-edit" disabled="disabled" value="<?php echo isset($education)?$education->country_of_establishment:''?>"></td>
 												</tr>
 <!-- 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-city"></i>City of Establishment</div></td>
@@ -220,15 +220,15 @@
 													<td><div class="p-data-title"><i class="flaticon-vintage"></i>Current profession Industry</div></td>
 													<td>
 														<div class="slt-cont">
-															<select name="job_area" class="pr-edit" disabled="disabled">
+															<select name="job_area" class="pr-edit" id="jobarea" disabled="disabled">
 																<option>Current Job Area</option>
 																<?php 
 																	if(isset($jobarea) && isset($education)){
 																	foreach ($jobarea as $key => $value) { ?>
-																		<option value="{{ $value }}" <?php echo ($value == $education->job_area)?'Selected':''; ?> >{{ $value }}</option>";
+																		<option value="{{ $key }}" data-value="{{ $key }}" <?php echo ($value == $education->job_area)?'Selected':''; ?> >{{ $value }}</option>";
 																<?php } } ?>
 															</select>
-															<select name="job_category" class="pr-edit" disabled="disabled">
+															<select name="job_category" id="jobcategory" class="pr-edit" disabled="disabled">
 																<option >Job Category</option>
 															</select>
 														</div>
@@ -300,7 +300,8 @@
 			});	
 		});
 
-		$('.datepicker').datepicker();
+		$('.datepicker').datepicker({ dateFormat: "yy/mm/dd"});
+	
 	});
 </script>
 @endsection

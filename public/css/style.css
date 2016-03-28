@@ -1052,6 +1052,7 @@ a:hover{
 .chat-user-list li{
 	list-style:none;
   padding: 0 3px;
+  min-height: 45px;
 }
 .chat-user-list li a, .user-list-with-thumb li a{
   display: block;
@@ -1059,6 +1060,7 @@ a:hover{
   padding-left: 40px;
   padding: 8px 5px 8px 45px;
   border-bottom: 1px solid #EFEFEF;
+  min-height: 35px;
 }
 .user-list-with-thumb li a{
 	padding: 8px 5px 8px 55px;
@@ -1718,4 +1720,73 @@ button.edit-pr-img {
 }
 .img-update-cont .input-group{
   float: right;
+}
+
+
+/******Chat Style********/
+
+#chat-system #conversejs{
+	position: relative;
+}
+#chat-system .profile-pic{
+	overflow: hidden;
+}
+#chat-system .profile-pic img{
+	width: 100%;
+}
+#conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom{
+	margin: 0 5px 10px 0;
+	background: #92e7dc !important;
+	border-bottom: 1px solid #000;
+	color: #000 !important;
+}
+#conversejs .chat-title, #conversejs a.restore-chat{
+	color: #000;
+	text-shadow: none;
+}
+#conversejs .chat-head, #conversejs .chat-head{
+	background: none !important;
+	border-bottom: 1px solid #000;
+}
+#conversejs .chat-message-me, #conversejs .chat-message-room, #conversejs .chat-message-them{
+	font-size: 11px !important;
+    font-weight: 400;
+    max-width: 100px;
+    overflow: hidden;
+    padding-right: 3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#conversejs .chat-message.pic-them .chat-message-content{
+	color: #000;
+    font-size: 13px;
+    font-weight: 400 !important;
+    margin-left: 60px !important;
+    margin-right: 0 !important;
+}
+#conversejs .chat-message.pic-me .chat-message-content, #conversejs .chat-message.pic-them .chat-message-content{
+	color: #000 !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+#conversejs a.close-chatbox-button, #conversejs a.configure-chatroom-button, #conversejs a.toggle-chatbox-button{
+	color: #000 !important;
+	border: 1px solid #000 !important;
+}
+#conversejs .chat-title, #conversejs a.restore-chat{
+	color: #000 !important;
+	font-weight: 400 !important;
+}
+
+
+#conversejs .chatroom-topic, #conversejs .user-custom-message {
+    left: 37px;
+    position: absolute;
+    top: 23px;
+}
+#conversejs .chat-title {
+    margin: -6px 0 0;
+}
+#conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom{
+   margin: 0 5px 10px 0;
 }

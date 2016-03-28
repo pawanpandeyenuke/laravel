@@ -491,13 +491,15 @@ class ApiController extends Controller
 			}
 		
 		}catch(Exception $e){	
+
 			$this->message=$e->getMessage();
+
 		}
 
 		return $this->output();
 	
-	}
-		
+		}
+
 
 	/*
 	 *  Edit users profile.
@@ -582,6 +584,11 @@ class ApiController extends Controller
 		}
 
 		return $this->output();	
+
+ 	}
+
+
+	return $this->output();	
 
  	}
 

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB;
+use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Feed, Auth;
 use Intervention\Image\Image;
 use \Exception;
+use App\Library\Converse;
 
 class AjaxController extends Controller
 {
@@ -40,7 +41,7 @@ class AjaxController extends Controller
 
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 					$arguments['image'] = $image_name;
-					$file->move('uploads', $image_name);
+					$file->move(public_path('uploads'), $image_name);
 
 				}
 
@@ -182,7 +183,6 @@ comments;
 		
 		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
 		{
-
 			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', '', false, false);
 			$username = $user->xmpp_username;
 			$password = $user->xmpp_password;
@@ -360,8 +360,17 @@ comments;
 
 		Friend::insert($data);
 
-	}
+   		$udetail=User::whereIn('id',$input)->get()->toArray();
 
+		  if(count($udetail)==2)
+			{
+			$converse = new Converse;
+			$converse->addFriend($udetail[0]['xmpp_username'],$udetail[1]['xmpp_username'],
+								$udetail[0]['first_name'],$udetail[1]['first_name']);       
+			}
+
+			
+	}
 	/*
 	* Reject request from another user.
 	*
@@ -413,6 +422,7 @@ comments;
 		Friend::where(['friend_id'=>$input['user_id']])->where(['status'=>'Rejected'])->delete();
 		
 	}
+
 
  
 	/**
@@ -466,7 +476,58 @@ comments;
 		return $count; 
 
  	}
+
+ 	//edit profile
+ 	public function editProfile()
+ 	{
+ 		$input=Input::all();
+ 		$id=Auth::User()->id;
+     //print_r($input);die;
+ 		$input['state']=DB::table('state')->where('state_id',$input['state'])->value('state_name');
+ 		$input['city']=DB::table('city')->where('city_id',$input['city'])->value('city_name');
+ 			
+ 			$profile = User::find($id);
+			$profile->fill($input);
+		   	$profile->push();
+       if(EducationDetails::find($id))
+       		{
+    	    $edu=EducationDetails::find($id);
+   			$edu->fill($input);
+   			$edu->push();
+
+       		}
+       else
+       		{
+       			DB::table('education_details')
+       			->insert([
+       			 'id' => $id,
+       			 'education_level'=>$input['education_level'],
+       			 'specialization'=>$input['specialization'],
+       			 'graduation_year_from'=>$input['graduation_year_from'],
+       			 'graduation_year_to'=>$input['graduation_year_to'],
+       			 'currently_studying'=>$input['currently_studying'],
+       			 'education_establishment'=>$input['education_establishment'],
+       			 'country_of_establishment'=>$input['country_of_establishment'],
+       			 'job_area'=>$input['job_area'],
+       			 'job_category'=>$input['job_category']
+       			 ]);
+
+       		}
+
+ 	}
  	
+ 	public function getJobcategory()
+ 	{
+ 		$input=Input::all();
+ 		$data = DB::table('job_category')->where('job_area_id',$input['jobarea'])->pluck('job_category');
+
+		$jcategory = array('<option value="">Category</option>');
+		foreach($data as $query){			
+			$jcategory[] = '<option value="'.$query.'">'.$query.'</option>';
+		}		
+		echo implode('',$jcategory);
+
+ 	}
 
 	/**
 	*	Edit comments on ajax call handling.
@@ -515,45 +576,117 @@ comments;
 	}
 
 
-	/**
-	*	Group delete on ajax call handling.
-	*	Ajaxcontroller@groupdelete
-	*/
-	public function editProfile()
- 	{	
+	
 
- 		$input = Input::all();
-   		print_r($input);die;
-/* 		$input['state']=DB::table('state')->where('state_id',$input['state'])->value('state_name');
- 		$input['city']=DB::table('city')->where('city_id',$input['city'])->value('city_name');
- 			
- 			$profile = User::find($id);
-			$profile->fill($input);
-		   	$profile->push();
-       if(EducationDetails::find($id))
-       		{
-    	    $edu=EducationDetails::find($id);
-   			$edu->fill($input);
-   			$edu->push();
 
-       		}
-       else
-       		{
-       			DB::table('education_details')
-       			->insert([
-       			 'id' => $id,
-       			 'education_level'=>$input['education_level'],
-       			 'specialization'=>$input['specialization'],
-       			 'graduation_year_from'=>$input['graduation_year_from'],
-       			 'graduation_year_to'=>$input['graduation_year_to'],
-       			 'currently_studying'=>$input['currently_studying'],
-       			 'education_establishment'=>$input['education_establishment'],
-       			 'country_of_establishment'=>$input['country_of_establishment'],
-       			 'job_area'=>$input['job_area'],
-       			 'job_category'=>$input['job_category']
-       			 ]);
+	public function sendRequest()
+	{
+		$input=Input::all();
+		$id=Auth::User()->id;
+		$friend=$input['user_id'];
+		$abc=DB::table('friends')->where('user_id',$id)->where('friend_id',$friend)->value('status');
+		$xyz=DB::table('friends')->where('user_id',$friend)->where('friend_id',$id)->value('status');
+		if($abc==null && $xyz==null)
+		{
+			DB::table('friends')->insert(['user_id'=>$id,'friend_id'=>$friend,'status'=>'Pending']);
+		}
+	
+	}
 
-       		}*/
+	   public function sendImage(){
+     $status=0;
+     $message="";
+     //$url=url();
+// echo '<pre>'; print_r($_FILES);die;
 
- 	}
+      $image = $_FILES["chatsendimage"]["name"];
+      //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
+      
+      $path=public_path().''.'/images/media/chat_images/';
+
+
+			$uploadedfile = $_FILES['chatsendimage']['tmp_name'];
+			$name = $_FILES['chatsendimage']['name'];
+			$size = $_FILES['chatsendimage']['size'];
+			$valid_formats = array("jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF");
+				if (strlen($name)) {
+			list($txt, $ext) = explode(".", $name);
+				if (in_array($ext, $valid_formats)) {
+			$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
+			$tmp = $uploadedfile;
+				if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
+            //$rootFolder=base_path();
+            // $image = Yii::$app->image->load($path.$actual_image_name);
+            
+        	
+            //$image->resize(200, 200);
+            //$image->save();
+
+
+            $image= Image::make($path.$actual_image_name);
+            $image->resize(200,200);
+            $image->save();
+
+        //   ========== $data = Yii::$app->request->baseUrl.'/images/media/chat_images/'. $actual_image_name;
+           
+            $data='/images/media/chat_images/'.$actual_image_name;
+           
+
+            $chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
+            if ($chatType == "group"){}//chat type check
+            else{           
+             $message=$_SERVER['HTTP_HOST'].$data;
+    $status=1;
+            }                              
+        } else
+         $message= "Failed to send try again.";    
+       } else
+        $message= "Invalid file format.";
+      }else {
+       $message="Please select an image to send.";
+       }
+    echo json_encode(array('status'=>$status,'message'=>$message,'type'=>'image'));
+       die(); 
+       }
+
+
+       public function searchfriendlist()
+       {
+
+  			    $input=Input::get('name');
+
+				$friend = Friend::with('friends')->with('user')
+						->where('user_id', '=', Auth::User()->id)
+						->where('status','Accepted')
+						->get()
+     					->toArray();
+              
+                $data=array();
+
+foreach ($friend as $key => $value) 
+		
+		{
+
+		$name=$value['friends']['first_name']." ".$value['friends']['last_name'];
+		$xmpp_username="'".$value['friends']['xmpp_username']."'";
+		$first_name="'".$value['friends']['first_name']."'";
+
+		if (stripos($name, $input) !== false) {
+			  $data[] = '<li > 
+				<a href="#" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
+					<span class="chat-thumb"style="background: url(images/user-thumb.jpg);"></span>
+					<span class="title">'.$name.'</span>
+				</a>
+				</li>';
+			}
+		}
+
+		$html = implode('',$data);
+		echo $html;
+
+	}
+
+ 	
+
 }
+	

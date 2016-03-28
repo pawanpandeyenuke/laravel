@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
-use Auth, App\Country, App\Category, App\JobArea;
+
+use Auth, App\Country, App\Category,App\JobArea;
+
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,9 +17,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         
-        // $ja = JobArea::pluck('job_area')->toArray();
-        // echo '<pre>';print_r($ja);die;
-        $educationLevel = array('High school','Certifciate/diploma','Associate degree','3 or 4 year undergraduate program','Post graduate degree','Post graduate degree - MBA','Post graduate degree - Masters','Post graduate degree - JD','Post graduate degree - PHD/Doctrate','Professional','Other degree');
+        // $a = JobArea::lists('job_area','job_area_id')->toArray() ;
+        // echo '<pre>';print_r($a);die;
+
+     $educationLevel = array('High school','Certifciate/diploma','Associate degree','3 or 4 year undergraduate program','Post graduate degree','Post graduate degree - MBA','Post graduate degree - Masters','Post graduate degree - JD','Post graduate degree - PHD/Doctrate','Professional','Other degree');
+
 
         $specialization = array('Accounting','Arts','Economics','Engineer','English','Finance','HR','IT','Marketing','Mathematics','Medicine','Operations','Others');
 
@@ -30,9 +34,8 @@ class AppServiceProvider extends ServiceProvider
                 'educationLevel' => $educationLevel,
                 'specialization' => $specialization,
                 'gradYear' => $gradYear,
-                'jobarea' => JobArea::pluck('job_area')->toArray()                
+                'jobarea' => JobArea::lists('job_area','job_area_id')->toArray()                
             ]);
-
     }
 
     /**

@@ -114,11 +114,13 @@
 						@foreach($feeds as $data)		
 							<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>					
 							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
+
 								<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 								
 									<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
 
 									<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+
 
 									<div class="row">
 										<div class="col-md-7">
@@ -195,8 +197,10 @@
 											</li>
 										</ul>
 									</div><!--/post actions-->
+
 									<div class="post-comment-cont">
 										<div class="post-comment" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
+
 											<div class="row">
 												<div class="col-md-10">
 													<div class="emoji-field-cont cmnt-field-cont">
@@ -209,12 +213,14 @@
 											</div>
 										</div><!--/post comment-->
 										<div class="comments-list">
-											<ul id="pagecomment-{{$data->id}}">
+							<ul id="pagecomment-{{$data->id}}" data-id="pagecomment-{{$data->id}}">
+
 												@if(!empty($data['comments']))
 
 													<?php 
 														$counter = 1;
 														$offset = count($data['comments']) - 3;
+														// echo $offset;die;
 													foreach($data['comments'] as $commentsData){
 													
 														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name']);
