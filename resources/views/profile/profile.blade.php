@@ -6,13 +6,13 @@
 
 	$country = DB::table('country')->where('country_id', '=', $user->country)->value('country_name'); 
 
-	$all_states = DB::table('state')->where('country_id', '=', $user->country)->pluck('state_name'); 
+	$all_states = DB::table('state')->where('country_id', '=', $user->country)->pluck('state_name','state_id'); 
 
 
-	$stateid = DB::table('state')->where('state_name', '=', $user->state)->value('state_id'); 
- 
- 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name'); 
-	// echo '<pre>';print_r($all_cities);die;
+	$stateid = DB::table('city')->where('city_id', '=', $user->city)->value('state_id'); 
+
+ 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 
+ 	// echo '<pre>';print_r($all_cities);die;
 	$gender = $user->gender;
 	$maritalstatus = $user->marital_status; 
   ?>
@@ -47,8 +47,13 @@
 								</div>
 								<div class="pr-field">
 									<select name="city" class="pr-edit" disabled="disabled">
-										<?php foreach ($all_cities as $key => $value) { ?>
-												<option value="{{$value}}" <?php echo ($value == $user->city)?'Selected':''; ?> >{{$value}}</option>	
+										<?php foreach ($all_cities as $key => $value) { 
+											if($key == $user->city)
+												$selected = 'Selected'; 
+											else
+												$selected = ''; 
+											?>
+												<option value="{{$value}}" <?php echo $selected; ?> >{{$value}}</option>	
 										<?php } ?>
 									</select>
 								</div>
@@ -75,8 +80,13 @@
 													<td><div class="p-data-title"><i class="flaticon-gps"></i>State</div></td>
 													<td>
 														<select name="state" id="profile_state" class="pr-edit" disabled="disabled">
-															<?php foreach ($all_states as $key => $value) { ?>
-																	<option value="{{$value}}" <?php echo ($value == $user->state)?'Selected':''; ?> >{{$value}}</option>	
+															<?php foreach ($all_states as $key => $value) { 
+																if($key == $user->state)
+																	$selected = 'Selected'; 
+																else
+																	$selected = ''; 
+																?>
+																	<option value="{{$key}}" <?php echo $selected; ?> >{{$value}}</option>	
 															<?php } ?>
 														</select>
 													</td>
@@ -84,9 +94,14 @@
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-city"></i>City</div></td>
 													<td>
-														<select name="state" id="profile_city" class="pr-edit" disabled="disabled">
-															<?php foreach ($all_cities as $key => $value) { ?>
-																	<option value="{{$value}}" <?php echo ($value == $user->city)?'Selected':''; ?> >{{$value}}</option>	
+														<select name="city" id="profile_city" class="pr-edit" disabled="disabled">
+															<?php foreach ($all_cities as $key => $value) { 
+																if($key == $user->city)
+																	$selected = 'Selected'; 
+																else
+																	$selected = ''; 
+																?>
+																	<option value="{{$key}}" <?php echo $selected; ?> >{{$value}}</option>	
 															<?php } ?>
 														</select>
 													</td>
@@ -101,7 +116,7 @@
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-calendar"></i>Date of Birth</div></td>
-													<td><input type="text" name="birthday" class="pr-edit" disabled="disabled" value="{{ $user->birthday }}"></td>
+													<td><input type="text" name="birthday" class="pr-edit datepicker" disabled="disabled" value="{{ $user->birthday }}"></td>
 												</tr>
 <!-- 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-padlock50"></i>Change Password</div></td>
@@ -144,16 +159,19 @@
 															<select name="education_level" class="pr-edit" disabled="disabled">
 																<option>Education level</option>
 																<?php 
+																	if(isset($education)){
 																	$eduLevel = $education->education_level;
 																	foreach ($educationLevel as $key => $value) { ?>
 																		<option value="{{$value}}" <?php echo ($value == $eduLevel)?'Selected':''; ?> >{{ $value }}</option>
-																<?php } ?>
+																<?php } } ?>
 															</select>
 															<select name="specialization" class="pr-edit" disabled="disabled">
 																<option >Specialization</option>
-																<?php foreach ($specialization as $key => $value) { ?>
+																<?php
+																if(isset($education)){
+																 foreach ($specialization as $key => $value) { ?>
 																		<option value="{{$value}}" <?php echo ($value == $education->specialization)?'Selected':''; ?> >{{$value}}</option>	
-																<?php } ?>
+																<?php } } ?>
 															</select>
 														</div>
 													</td>
@@ -163,16 +181,16 @@
 													<td>
 														<table class="inner-table">
 															<tr>
-																<td><input type="text" name="graduation_year_from" class="pr-edit datepicker" disabled="disabled" value="{{ $education->graduation_year_from }}"></td>
+																<td><input type="text" name="graduation_year_from" class="pr-edit datepicker" disabled="disabled" value="<?php isset($education)?$education->graduation_year_from:''?>"></td>
 																<td>To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-																<td><input type="text" name="graduation_year_to" class="pr-edit datepicker" disabled="disabled" value="{{ $education->graduation_year_to }}"></td>
+																<td><input type="text" name="graduation_year_to" class="pr-edit datepicker" disabled="disabled" value="<?php isset($education)?$education->graduation_year_to:''?>"></td>
 															</tr>
 														</table>
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-graduation"></i>Currently Studing or Not</div></td>
-													<?php $currentlystudy = $education->currently_studying; ?>
+													<?php $currentlystudy = isset($education)?$education->currently_studying:''; ?>
 													<td>
 														<div class="clearfix">
 															<div class="radio-cont pull-left center-label">
@@ -188,11 +206,11 @@
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-graduation"></i>Name of Education Establishment</div></td>
-													<td><input type="text" name="education_establishment" class="pr-edit" disabled="disabled" value="{{ $education->education_establishment }}"></td>
+													<td><input type="text" name="education_establishment" class="pr-edit" disabled="disabled" value="<?php isset($education)?$education->education_establishment:''?>"></td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country of Establishment</div></td>
-													<td><input type="text" name="country_of_establishment" class="pr-edit" disabled="disabled" value="{{ $education->country_of_establishment }}"></td>
+													<td><input type="text" name="country_of_establishment" class="pr-edit" disabled="disabled" value="<?php isset($education)?$education->country_of_establishment:''?>"></td>
 												</tr>
 <!-- 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-city"></i>City of Establishment</div></td>
@@ -204,9 +222,11 @@
 														<div class="slt-cont">
 															<select name="job_area" class="pr-edit" disabled="disabled">
 																<option>Current Job Area</option>
-																<?php foreach ($jobarea as $key => $value) { ?>
+																<?php 
+																	if(isset($jobarea) && isset($education)){
+																	foreach ($jobarea as $key => $value) { ?>
 																		<option value="{{ $value }}" <?php echo ($value == $education->job_area)?'Selected':''; ?> >{{ $value }}</option>";
-																<?php } ?>
+																<?php } } ?>
 															</select>
 															<select name="job_category" class="pr-edit" disabled="disabled">
 																<option >Job Category</option>

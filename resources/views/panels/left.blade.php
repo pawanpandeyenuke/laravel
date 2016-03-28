@@ -18,20 +18,6 @@
 		        </a>
 		      </h4>
 		    </div>
-		    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-		      <div class="panel-body">
-		        <ul>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        	<li><a href="">link title here</a></li>
-		        </ul>
-		      </div>
-		    </div>
 		  </div>
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingTwo">
@@ -74,7 +60,16 @@
 		    <div class="panel-heading" role="tab" id="headingSeven">
 		      <h4 class="panel-title">
 		        <a class="without-arrow" href="#">
-		          <i class="flaticon-round"></i>More
+		          <i class="flaticon-balloon"></i>Broadcast
+		        </a>
+		      </h4>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingSeven">
+		      <h4 class="panel-title">
+		        <a class="without-arrow" href="#">
+		          <i class="flaticon-balloon"></i>Private Chat
 		        </a>
 		      </h4>
 		    </div>

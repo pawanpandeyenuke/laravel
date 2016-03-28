@@ -29,10 +29,10 @@ class DashboardController extends Controller
             $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
             ->where('user_by', '=', Auth::User()->id)
             ->orderBy('news_feed.id','DESC')
-            ->take($per_page)
+            // ->take($per_page)
             ->get();
 
-           // echo '<pre>';print_r($feeds);die;
+           // echo '<pre>';print_r($feeds[0]->comments);die;
             /*$feeds = Feed::with('user')
                         ->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')
                         ->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')
@@ -306,7 +306,7 @@ class DashboardController extends Controller
         
         $arguments = Request::all();
         $user = new User();
-
+// print_r($id);die;
         if(Request::isMethod('post')){
 
             $getCommonEduArgs = array_intersect_key( $arguments, [
@@ -324,9 +324,9 @@ class DashboardController extends Controller
                                 ]);
             
             if( !empty($getCommonEduArgs) ){
-
-                $eduExists = EducationDetails::where('id', '=', $id)->get();
-                
+                $getCommonEduArgs['id'] = $id;
+                $eduExists = EducationDetails::where('id', '=', $id)->get()->toArray();
+                // print_r($eduExists);die;
 
                 if(!empty($eduExists)){
 
@@ -359,7 +359,7 @@ class DashboardController extends Controller
 
         $user = User::where('id', $id)->get()->first();
         $education = EducationDetails::where('id', $id)->get()->first();
-        // echo '<pre>';print_r($user);die;
+        // echo '<pre>';print_r($education);die;
 
         return view('profile.profile')
                 ->with('user', $user)
