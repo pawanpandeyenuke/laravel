@@ -9,6 +9,7 @@ use XmppPrebind, App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth;
+use Intervention\Image\Image;
 use \Exception;
 
 class AjaxController extends Controller
@@ -76,15 +77,20 @@ class AjaxController extends Controller
 	{
 		$arguments = Input::all();
 		$user = Auth::User();
-
 		$file = Input::file('image');
 
 		if( isset($arguments['image']) && $file != null ){
 
+       /* $file = Request::file('file');
+        $image_name = time()."-".$file->getClientOriginalName();
+        $file->move('uploads', $image_name);
+        $image = Image::make(sprintf('uploads/%s', $image_name))->resize(200, 200)->save();*/
 			$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 			$arguments['image'] = $image_name;
 			$file->move('uploads', $image_name);
 
+		}else{
+			unset($arguments['image']);
 		}
 
 		$newsFeed = Feed::find($arguments['id']);
@@ -513,15 +519,41 @@ comments;
 	*	Group delete on ajax call handling.
 	*	Ajaxcontroller@groupdelete
 	*/
-/*	public function groupdelete()
-	{
+	public function editProfile()
+ 	{	
 
-		$arguments = Input::all();
-		$groupName = $arguments['group_name'];
-		$groupBy = $arguments['group_by'];
-		
-		DefaultGroup::where('group_name')
+ 		$input = Input::all();
+   		print_r($input);die;
+/* 		$input['state']=DB::table('state')->where('state_id',$input['state'])->value('state_name');
+ 		$input['city']=DB::table('city')->where('city_id',$input['city'])->value('city_name');
+ 			
+ 			$profile = User::find($id);
+			$profile->fill($input);
+		   	$profile->push();
+       if(EducationDetails::find($id))
+       		{
+    	    $edu=EducationDetails::find($id);
+   			$edu->fill($input);
+   			$edu->push();
 
-		exit;
-	}*/
+       		}
+       else
+       		{
+       			DB::table('education_details')
+       			->insert([
+       			 'id' => $id,
+       			 'education_level'=>$input['education_level'],
+       			 'specialization'=>$input['specialization'],
+       			 'graduation_year_from'=>$input['graduation_year_from'],
+       			 'graduation_year_to'=>$input['graduation_year_to'],
+       			 'currently_studying'=>$input['currently_studying'],
+       			 'education_establishment'=>$input['education_establishment'],
+       			 'country_of_establishment'=>$input['country_of_establishment'],
+       			 'job_area'=>$input['job_area'],
+       			 'job_category'=>$input['job_category']
+       			 ]);
+
+       		}*/
+
+ 	}
 }

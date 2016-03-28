@@ -47,10 +47,9 @@ Route::post('ajax/deletecomments','AjaxController@deletecomments');
 
 
 Route::post('ajax/deletebox','AjaxController@deletebox');
-
 Route::post('ajax/editpost','AjaxController@editpost');
 
-// Route::post('ajax/profilesave','AjaxController@editProfile');
+Route::post('ajax/profilesave','AjaxController@editProfile');
 
 
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State;
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails;
 use Request, Session, Validator, Input, Cookie;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -304,28 +304,66 @@ class DashboardController extends Controller
     public function profile( $id )
     {
         
-        // return 'asdfsadfsa';
-        $model = User::with('country')->where('id', $id)->get()->first();
-        $states = State::where('country_id', '=', $model->country)->lists('state_name', 'state_id')->toArray();
-
-        
-        
-        $statesids = State::where('country_id', '=', $model->country)->lists('state_id')->toArray();
-        $cities = DB::table('city')->whereIn('state_id', $statesids)->lists('city_name', 'city_id');
+        $arguments = Request::all();
+        $user = new User();
 
         if(Request::isMethod('post')){
 
-            $input = Request::all();
-            echo '<pre>';print_r($input);die;
+            $getCommonEduArgs = array_intersect_key( $arguments, [
+                                    'id' => 'null',
+                                    'education_level' => 'null',
+                                    'specialization' => 'null',
+                                    'graduation_year_from' => 'null',
+                                    'graduation_year_to' => 'null',
+                                    'currently_studying' => 'null',
+                                    'education_establishment' => 'null',
+                                    'country_of_establishment' => 'null',
+                                    'city_of_establishment' => 'null',
+                                    'job_area' => 'null',
+                                    'job_category' => 'null'
+                                ]);
+            
+            if( !empty($getCommonEduArgs) ){
 
+                $eduExists = EducationDetails::where('id', '=', $id)->get();
+                
+
+                if(!empty($eduExists)){
+
+                    $eduExists = EducationDetails::find($id);
+
+                    $eduExists->fill($getCommonEduArgs);
+                    $saved = $eduExists->push();
+                }else{
+                    $education = new EducationDetails;
+                    $education->create($getCommonEduArgs);
+                }
+                foreach ($getCommonEduArgs as $key => $value)
+                    unset($arguments[$key]);
+            }
+// echo '<pre>';print_r($arguments);die;
+            if($arguments){
+                unset($arguments['_token']);
+                foreach ($arguments as $key => $value) {
+                    if( $key != 'email' && $key != 'password' ){
+                        User::where([ 'id' => $id ])
+                            ->update([ $key => $value ]);
+                    }
+                }
+                Session::put('success', 'Profile saved successfully');
+            }
+
+            return redirect()->back();
         }
 
 
+        $user = User::where('id', $id)->get()->first();
+        $education = EducationDetails::where('id', $id)->get()->first();
+        // echo '<pre>';print_r($user);die;
+
         return view('profile.profile')
-                ->with('model',$model)
-                ->with('id',User::find(Auth::User()->id))
-                ->with('states', $states)
-                ->with('cities', $cities);
+                ->with('user', $user)
+                ->with('education', $education);
 
     }
 
