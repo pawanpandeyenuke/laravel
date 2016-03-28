@@ -49,7 +49,7 @@
 					<div class="like-cont">
 						<input type="checkbox" name="" id="checkbox{{$postdata->id}}" class="css-checkbox like"/>
 						<label for="checkbox{{$postdata->id}}" class="css-label">
-							<span class="countspan" id="page-$feedid"></span>
+							<span class="countspan" id="page-{{$postdata->id}}"></span>
 							<span class="firstlike">Like</span>
 						</label>
 					</div>

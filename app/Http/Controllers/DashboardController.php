@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State,App\JobArea,App\JobCategory,App\EducationDetails;
-use Request, Session, Validator, Cookie;
+
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory;
+use Request, Session, Validator, Input, Cookie;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
+// use Illuminate\Support\Facades\Input;
 
 class DashboardController extends Controller
 {
@@ -356,48 +358,86 @@ else {
 
 
 
-
-    public function profile( $id )
+ public function profile( $id )
     {
         
-        // return 'asdfsadfsa';
-        $model = User::with('country')->where('id', $id)->get()->first();
-        $states = State::where('country_id', '=', $model->country)->lists('state_name', 'state_id')->toArray();
+        $arguments = Request::all();
+        $user = new User();
 
-        
-        
-        $statesids = State::where('country_id', '=', $model->country)->lists('state_id')->toArray();
-        $cities = DB::table('city')->whereIn('state_id', $statesids)->lists('city_name', 'city_id');
+        if(Request::isMethod('post')){
 
-        // if(Request::isMethod('post')){
+            $getCommonEduArgs = array_intersect_key( $arguments, [
+                                    'id' => 'null',
+                                    'education_level' => 'null',
+                                    'specialization' => 'null',
+                                    'graduation_year_from' => 'null',
+                                    'graduation_year_to' => 'null',
+                                    'currently_studying' => 'null',
+                                    'education_establishment' => 'null',
+                                    'country_of_establishment' => 'null',
+                                    'city_of_establishment' => 'null',
+                                    'job_area' => 'null',
+                                    'job_category' => 'null'
+                                ]);
+            
+            if( !empty($getCommonEduArgs) ){
 
-        //     $input = Request::all();
-             
+                $eduExists = EducationDetails::where('id', '=', $id)->get();
+                
+                //print_r($getCommonEduArgs['graduation_year_from']);die;
 
-        // }
+                $time=strtotime($getCommonEduArgs['graduation_year_from']);
+                $getCommonEduArgs['graduation_year_from']=date('Y-m-d',$time);
 
-    if(EducationDetails::find($id)){
-        $education=EducationDetails::where('id',$id)->get()->first()->toArray();
-    }
-    else{
-        $education=(['education_level'=>'','specialization'=>'','graduation_year_from'=>'','graduation_year_to'=>'','currently_studying'=>'','education_establishment'=>'','country_of_establishment'=>'','job_area'=>'','job_category'=>'']);
-    }
-        $job_category=JobCategory::lists('job_category')->toArray();
+                $time=strtotime($getCommonEduArgs['graduation_year_to']);
+                $getCommonEduArgs['graduation_year_to']=date('Y-m-d',$time);
 
-        $jcategory = array_combine(range(1, count($job_category)), array_values($job_category));
-        $job_category=$jcategory;
 
-        
 
-    	$job_area=JobArea::pluck('job_area')->toArray();   
+
+                //print_r($newformat);die;
+
+                if(!empty($eduExists)){
+
+                    $eduExists = EducationDetails::find($id);
+
+                    $eduExists->fill($getCommonEduArgs);
+                    $saved = $eduExists->push();
+                }else{
+                    $education = new EducationDetails;
+                    $education->create($getCommonEduArgs);
+                }
+                foreach ($getCommonEduArgs as $key => $value)
+                    unset($arguments[$key]);
+            }
+echo '<pre>';print_r($arguments);die;
+
+
+            $time=strtotime($arguments['birthday']);
+            $arguments['birthday']=date('Y-m-d',$time);
+
+            if($arguments){
+                unset($arguments['_token']);
+                foreach ($arguments as $key => $value) {
+                    if( $key != 'email' && $key != 'password' ){
+                        User::where([ 'id' => $id ])
+                            ->update([ $key => $value ]);
+                    }
+                }
+                Session::put('success', 'Profile saved successfully');
+            }
+
+            return redirect()->back();
+        }
+
+
+        $user = User::where('id', $id)->get()->first();
+        $education = EducationDetails::where('id', $id)->get()->first();
+        // echo '<pre>';print_r($user);die;
+
         return view('profile.profile')
-                ->with('model',$model)
-                ->with('id',User::find(Auth::User()->id))
-                ->with('states', $states)
-                ->with('cities', $cities)
-                ->with('jobarea',$job_area)
-                ->with('education',$education)
-                ->with('job_category',$job_category);
+                ->with('user', $user)
+                ->with('education', $education);
 
     }
 

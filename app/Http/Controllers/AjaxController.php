@@ -9,6 +9,7 @@ use XmppPrebind, App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth;
+use Intervention\Image\Image;
 use \Exception;
 use App\Library\Converse;
 
@@ -22,6 +23,7 @@ class AjaxController extends Controller
 		{
 			$arguments = Input::all();
 			// print_r($arguments);exit;
+			$user = Auth::User();
 			$model = new Feed;
 
 			if( $arguments ){
@@ -48,113 +50,17 @@ class AjaxController extends Controller
 				if( !$feed )
 					throw new Exception('Something went wrong.');
 
-				$name = Auth::User()->first_name.' '.Auth::User()->last_name;
-				$time = $feed->updated_at->format('h:i A');
-				$time1 = $feed->updated_at->format('D jS');
-				$picture = $feed->image;
-				$message = $feed->message;
-				$feedid = $feed->id;
-
-		
-				if($arguments['message'] && empty($arguments['image'])){
+				if( $arguments['message'] && empty( $arguments['image'] ) )
 					$popupclass = 'postpopupajax';
-				}elseif($arguments['image'] && empty($arguments['message'])){
+				elseif( $arguments['image'] && empty( $arguments['message'] ) )
 					$popupclass = 'popupajax';
-				}else{
+				else
 					$popupclass = 'popupajax';
-				} 													
-												
-
-if(!empty($feed->message)){ 
-$message = <<<message
-<p>$message</p>
-message;
-}else{
-$message = '';
-}
-
-if(!empty($feed->image)){ 
-$picture = <<<image
-	<div class="post-img-cont">
-		<img src="uploads/$picture" class="post-img img-responsive">
-	</div>
-image;
-}else{
-$picture = '';
-}
-
-$postHtml = <<<postHtml
-
-			<div class="single-post" data-value="$feed->id" id="post_$feed->id">
-				<div class="post-header" data-value="$feed->id" id="post_$feed->id">
-					<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
-					<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
-					<div class="row">
-						<div class="col-md-7">
-							<a href="profile/$userid" title="" class="user-thumb-link">
-								<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
-								$name
-							</a>
-						</div>
-						<div class="col-md-5">
-							<div class="post-time text-right">
-								<ul>
-									<li><span class="icon flaticon-time">$time</span></li>
-									<li><span class="icon flaticon-days">$time1</span></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="post-data">
-					$message
-					$picture
-				</div>
-				<div class="post-footer">
-					<div class="post-actions">
-						<ul>
-							<li>
-								<div class="like-cont">
-									<input type="checkbox" name="" id="checkbox<?php echo $feed->id ?>" class="css-checkbox like"/>
-									<label for="checkbox<?php echo $feed->id ?>" class="css-label">
-										<span class="countspan" id="page-$feedid"></span>
-										<span>Like</span>
-									</label>
-								</div>
-							</li>
-							<li>
-								<a class="$popupclass" style="cursor:pointer">
-									<span class="icon flaticon-interface-1"></span> 
-									<span class="commentcount">Comment</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-					<div class="post-comment-cont">
-						<div class="post-comment" data-value="$feedid" id="post_$feedid">
-							<div class="row">
-								<div class="col-md-10">
-									<div class="emoji-field-cont cmnt-field-cont">
-										<textarea data-emojiable="true" type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
-									</div>
-								</div>
-								<div class="col-md-2">
-									<button type="button" class="btn btn-primary btn-full comment">Post</button>
-								</div>
-							</div>
-						</div><!--/post comment-->
-						<div class="comments-list">
-							<ul id="pagecomment-$feedid">
-
-							</ul>
-						</div><!--/comments list-->
-					</div>
-				</div>
-			</div>
-postHtml;
-
-echo $postHtml;
-
+		 
+				return view('ajax.returnpost')
+						->with('postdata', $feed)
+						->with('user', $user)
+						->with('popupclass', $popupclass);
 
 			}
 
@@ -172,15 +78,20 @@ echo $postHtml;
 	{
 		$arguments = Input::all();
 		$user = Auth::User();
-
 		$file = Input::file('image');
 
 		if( isset($arguments['image']) && $file != null ){
 
+       /* $file = Request::file('file');
+        $image_name = time()."-".$file->getClientOriginalName();
+        $file->move('uploads', $image_name);
+        $image = Image::make(sprintf('uploads/%s', $image_name))->resize(200, 200)->save();*/
 			$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 			$arguments['image'] = $image_name;
 			$file->move('uploads', $image_name);
 
+		}else{
+			unset($arguments['image']);
 		}
 
 		$newsFeed = Feed::find($arguments['id']);
@@ -188,20 +99,11 @@ echo $postHtml;
 		$saved = $newsFeed->push();
 
 		$postdata = Feed::where('id', $arguments['id'])->select('image', 'message', 'id')->get();
+
 		echo $postdata;
 
-/*		if( $arguments['message'] && empty( $arguments['image'] ) )
-			$popupclass = 'postpopupajax';
-		elseif( $arguments['image'] && empty( $arguments['message'] ) )
-			$popupclass = 'popupajax';
-		else
-			$popupclass = 'popupajax';
- 
-		return view('ajax.returnpost')
-				->with('postdata', Feed::find($arguments['id']))
-				->with('user', $user)
-				->with('popupclass', $popupclass);*/
-
+		exit;
+		
 	}
 
 
@@ -674,18 +576,8 @@ comments;
 	}
 
 
-	/**
-	*	Group delete on ajax call handling.
-	*	Ajaxcontroller@groupdelete
-	*/
-	public function groupdelete()
-	{
+	
 
-		$arguments = Input::all();
-		$groupName = $arguments['group_name'];
-		$groupBy = $arguments['group_by'];
-		exit;
-	}
 
 	public function sendRequest()
 	{
@@ -793,5 +685,8 @@ foreach ($friend as $key => $value)
 		echo $html;
 
 	}
+
+ 	
+
 }
 	

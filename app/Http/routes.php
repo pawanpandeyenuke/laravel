@@ -47,11 +47,10 @@ Route::post('ajax/deletecomments','AjaxController@deletecomments');
 
 
 Route::post('ajax/deletebox','AjaxController@deletebox');
+//<<<<<<< HEAD
 Route::post('/ajax/jobcategory','AjaxController@getJobcategory');
 
-Route::post('ajax/editpost','AjaxController@editpost');
 
-Route::post('ajax/profilesave','AjaxController@editProfile');
 
 Route::post('ajax/sendrequest','AjaxController@sendRequest');
 
@@ -59,8 +58,12 @@ Route::post('ajax/sendimage','AjaxController@sendImage');
 
 Route::post('ajax/searchfriend','AjaxController@searchfriendlist');
 
-Route::get('search/autocomplete', 'AjaxController@autocomplete');
 
+//=======
+Route::post('ajax/editpost','AjaxController@editpost');
+
+//Route::post('ajax/profilesave','AjaxController@editProfile');
+//>>>>>>> 515d826e2b696d0393cb7b4c1fa383b778042ea7
 
 
 
@@ -94,7 +97,11 @@ Route::post('api/deletepost','ApiController@deletePost');
 Route::post('api/editcomment','ApiController@editComment');
 Route::post('api/deletecomment','ApiController@deleteComment');
 
-
+Route::post('api/getfriends','ApiController@getFriends');
+Route::post('api/getusers','ApiController@getUsers');
+Route::post('api/addfriend','ApiController@addFriend');
+Route::post('api/acceptrequest','ApiController@acceptRequest');
+Route::post('api/declinerequest','ApiController@declineRequest');
 
 
 /*
