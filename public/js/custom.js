@@ -91,6 +91,14 @@ $(document).ready(function(){
 		$(this).html(converted);
 	});
 
+	$(".post-list .single-post div").each(function() {
+		var original = $(this).html();
+		// use .shortnameToImage if only converting shortnames (for slightly better performance)
+		var converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
+
+
 
 	$(document).on('click', '.like', function(){		
 		var _token = $('#postform input[name=_token]').val();
@@ -238,36 +246,125 @@ $(document).ready(function(){
 	*	Delete posts on ajax call handling.
 	*	Ajaxcontroller@deletepost
 	*/
+
 	$(document).on('click', '.post-delete', function(){
-		var current = $(this);
-		var postId = $(this).closest('.post-header').data('value'); 
+		var commentId = $(this).closest('li').data('value'); 
+		var feedId = $(this).closest('.single-post').data('value');
 		$.ajax({
-			'url' : 'ajax/deletepost',
-			'data' : { 'postId' : postId },
+			'url' : 'ajax/deletebox',
+			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'postdelete'},
 			'type' : 'post',
 			'success' : function(response){
-				current.closest('.single-post').remove();
+				if(response){
+					$("#modal").append(response);
+					$("#modal").modal();
+				}
+			}
+		});
+		$("#modal").html('');
+	});
+	
+	$(document).on('click', '.postdelete', function(){
+		var current = $('.postdelete');
+		var feedId = current.closest('.modal-content').data('feedid');
+		// alert(feedId);
+		$.ajax({
+			'url' : 'ajax/deletepost',
+			'data' : { 'postId' : feedId },
+			'type' : 'post',
+			'success' : function(response){
+				jQuery("#post_"+feedId).hide(200);
 			}
 		});
 	});
 
+
 	/**
 	*	Delete comments on ajax call handling.
 	*	Ajaxcontroller@deletecomments
-	*/
+	*/	
 	$(document).on('click', '.comment-delete', function(){
-		var current = $(this);
 		var commentId = $(this).closest('li').data('value'); 
-		// alert(commentId);
+		var feedId = $('.single-post').data('value');
+		// alert(feedId);
 		$.ajax({
-			'url' : 'ajax/deletecomments',
-			'data' : { 'commentId' : commentId },
+			'url' : 'ajax/deletebox',
+			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'deletecomment'},
 			'type' : 'post',
 			'success' : function(response){
-				current.closest('li').remove();
+				if(response){
+					$("#modal").append(response);
+					$("#modal").modal();
+				}
+			}
+		});
+		$("#modal").html('');
+	});
+
+	$(document).on('click', '.deletecomment', function(){		
+		var current = $('.deletecomment');
+		var commentId = current.closest('.modal-content').data('value');
+		var feedId = current.closest('.modal-content').data('feedid');
+		$.ajax({
+			'url' : 'ajax/deletecomments',
+			'data' : { 'commentId' : commentId, 'feedId' : feedId },
+			'type' : 'post',
+			'success' : function(response){
+				jQuery("#post_"+commentId).remove();
+				jQuery("#AllCommentNew").find("#post_"+commentId).remove();
+				jQuery("#AllComment").find("#post_"+commentId).remove();				
+
+				if(response != 0){
+					jQuery("#AllCommentNew").find(".commentcount").html(response+' Comments');
+					jQuery("#AllComment").find(".commentcount").html(response+' Comments');
+					jQuery("#post_"+feedId).find('.commentcount').html(response+' Comments');
+				}else{
+					jQuery("#post_"+feedId).find('.commentcount').html('Comment'); 
+					jQuery("#AllCommentNew").find(".commentcount").html('Comment');
+					jQuery("#AllComment").find(".commentcount").html('Comment');
+				}
 			}
 		});
 	});
+
+
+	/**
+	*	Edit posts on ajax call handling.
+	*	Ajaxcontroller@editpost
+	*/
+	$(document).on('click', '.edit-post', function(){
+		var current = $(this);
+		var postid = current.closest('.single-post').data('value'); 
+		
+		$.ajax({
+			'url' : 'ajax/editpost',
+			'data' : { 'postid' : postid },
+			'type' : 'post',
+			'success' : function(response){
+				$('#edit-modal').append(response);
+				$("#edit-modal").modal();
+			}
+		});
+		$('#edit-modal').html('');
+	});
+
+/*	$(document).on('click', '#editpostdata', function(){
+		var current = $(this);
+		var postid = current.closest('.modal-content').data('value'); 
+		var postid = current.closest('.modal-content').find('#imageholder img').data('value'); 
+		
+		$.ajax({
+			'url' : 'ajax/editpost',
+			'data' : { 'postid' : postid,  },
+			'type' : 'post',
+			'success' : function(response){
+				$('#edit-modal').append(response);
+				$("#edit-modal").modal();
+			}
+		});
+		$('#edit-modal').html('');
+	});*/
+
 
 
 	$('#state').html('<option value="">State</option>');
@@ -350,6 +447,28 @@ $(document).ready(function(){
 				current.closest('.get_id').find('.accept').hide(200);
 				current.closest('.get_id').find('.decline').hide(200);
 				current.closest('.get_id').find('.remove').show(500);
+			}
+		});
+	});
+
+
+	/*
+	* Invite user to chat by sending friend request.
+	*
+	**/
+	$(document).on('click','.invite',function()
+	{
+		var current = $(this);
+		var user_id=current.closest('.info').data('id');
+		//var friend_id=current.closest('.get_id').data('friendid');
+		
+		$.ajax({
+			'url' : 'ajax/sendrequest',
+			'type' : 'post',
+			'data' : {'user_id' : user_id },
+			'success' : function(data){
+				current.closest('.info').find('.invite').hide(200);
+				current.closest('.info').find('.sentinvite').show(200);
 			}
 		});
 	});
@@ -511,7 +630,42 @@ $(document).on('click','.jobarea',function()
 		});
 	});
 
+$(document).on('click','.search',function()
+	{
+		var current=$(this);
+		
+		var name=$('.searchtxt').val();
 
+	       $.ajax({
+			'url' : 'ajax/searchfriend',
+			'type' : 'post',
+			'data' : {'name':name},
+			'success' : function(data){
+				$("#userslist").html(data);
+			}		
+		});
+	});
+
+
+
+/*
+$(document).on('click','.chatsendimage',function()
+	{
+		var current=$(this);
+		alert('Sending Image');
+	
+	       $.ajax({
+			'url' : 'ajax/sendimage',
+			'type' : 'post',
+			'data' : {},
+			'success' : function(data){
+
+					//alert(data);
+				
+			}	
+		});
+	});
+*/
 
 
 

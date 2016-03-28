@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth;
 use \Exception;
+use App\Library\Converse;
 
 class AjaxController extends Controller
 {
@@ -20,6 +21,7 @@ class AjaxController extends Controller
 		try
 		{
 			$arguments = Input::all();
+			// print_r($arguments);exit;
 			$model = new Feed;
 
 			if( $arguments ){
@@ -85,6 +87,7 @@ $postHtml = <<<postHtml
 
 			<div class="single-post" data-value="$feed->id" id="post_$feed->id">
 				<div class="post-header" data-value="$feed->id" id="post_$feed->id">
+					<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
 					<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 					<div class="row">
 						<div class="col-md-7">
@@ -162,6 +165,43 @@ echo $postHtml;
 		}		
 
 		exit;
+	}
+
+
+	public function editposts()
+	{
+		$arguments = Input::all();
+		$user = Auth::User();
+
+		$file = Input::file('image');
+
+		if( isset($arguments['image']) && $file != null ){
+
+			$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+			$arguments['image'] = $image_name;
+			$file->move('uploads', $image_name);
+
+		}
+
+		$newsFeed = Feed::find($arguments['id']);
+		$newsFeed->fill($arguments);
+		$saved = $newsFeed->push();
+
+		$postdata = Feed::where('id', $arguments['id'])->select('image', 'message', 'id')->get();
+		echo $postdata;
+
+/*		if( $arguments['message'] && empty( $arguments['image'] ) )
+			$popupclass = 'postpopupajax';
+		elseif( $arguments['image'] && empty( $arguments['message'] ) )
+			$popupclass = 'popupajax';
+		else
+			$popupclass = 'popupajax';
+ 
+		return view('ajax.returnpost')
+				->with('postdata', Feed::find($arguments['id']))
+				->with('user', $user)
+				->with('popupclass', $popupclass);*/
+
 	}
 
 
@@ -418,8 +458,17 @@ comments;
 
 		Friend::insert($data);
 
-	}
+   		$udetail=User::whereIn('id',$input)->get()->toArray();
 
+		  if(count($udetail)==2)
+			{
+			$converse = new Converse;
+			$converse->addFriend($udetail[0]['xmpp_username'],$udetail[1]['xmpp_username'],
+								$udetail[0]['first_name'],$udetail[1]['first_name']);       
+			}
+
+			
+	}
 	/*
 	* Reject request from another user.
 	*
@@ -474,7 +523,10 @@ comments;
 
 
  
-	//Get post box
+	/**
+	*	Get postbox on ajax call handling.
+	*	Ajaxcontroller@getPostBox
+	*/
 	public function getPostBox()
 	{
 
@@ -488,7 +540,10 @@ comments;
  	}
 
 
-	//delete post
+	/**
+	*	Delete posts on ajax call handling.
+	*	Ajaxcontroller@deletepost
+	*/
 	public function deletepost()
 	{
 
@@ -501,15 +556,22 @@ comments;
  	}
 
 
-	//delete comments
+	/**
+	*	Delete comments on ajax call handling.
+	*	Ajaxcontroller@deletecomments
+	*/
 	public function deletecomments()
 	{
 
 		$commentId = Input::get('commentId');
+		$feedId = Input::get('feedId');
 		$userId = Auth::User()->id;
 
-		$newsFeed = Feed::where('id', '=', $commentId)->where('user_by', '=', $userId)->delete();
-		return $newsFeed; 
+		$newsFeed = Comment::where('id', '=', $commentId)->where('commented_by', '=', $userId)->delete();
+
+		$count = Comment::where('feed_id', '=', $feedId)->count();
+
+		return $count; 
 
  	}
 
@@ -521,6 +583,7 @@ comments;
      //print_r($input);die;
  		$input['state']=DB::table('state')->where('state_id',$input['state'])->value('state_name');
  		$input['city']=DB::table('city')->where('city_id',$input['city'])->value('city_name');
+ 			
  			$profile = User::find($id);
 			$profile->fill($input);
 		   	$profile->push();
@@ -564,6 +627,171 @@ comments;
 
  	}
 
+	/**
+	*	Edit comments on ajax call handling.
+	*	Ajaxcontroller@editcomment
+	*/
+	public function editcomment()
+	{	
+
+		$commentid = Input::get('commentid');
+		return $commentid;
+
+	}
 
 
+	/**
+	*	Edit posts on ajax call handling.
+	*	Ajaxcontroller@editpost
+	*/
+	public function editpost()
+	{	
+
+		$postid = Input::get('postid');
+		$posts = Feed::where('id', $postid)->get()->first();
+
+		return view('ajax.editpost')->with('posts', $posts);
+
+	}
+
+
+	/**
+	*	Delete confirmation box on ajax call handling.
+	*	Ajaxcontroller@editcomment
+	*/
+	public function deletebox()
+	{	
+
+		$commentId = Input::get('commentId');
+		$feedId = Input::get('feedId');
+		$class = Input::get('class');
+		
+		return view('panels.deletebox')
+				->with('commentId', $commentId)
+				->with('feedId', $feedId)
+				->with('class', $class);
+
+	}
+
+
+	/**
+	*	Group delete on ajax call handling.
+	*	Ajaxcontroller@groupdelete
+	*/
+	public function groupdelete()
+	{
+
+		$arguments = Input::all();
+		$groupName = $arguments['group_name'];
+		$groupBy = $arguments['group_by'];
+		exit;
+	}
+
+	public function sendRequest()
+	{
+		$input=Input::all();
+		$id=Auth::User()->id;
+		$friend=$input['user_id'];
+		$abc=DB::table('friends')->where('user_id',$id)->where('friend_id',$friend)->value('status');
+		$xyz=DB::table('friends')->where('user_id',$friend)->where('friend_id',$id)->value('status');
+		if($abc==null && $xyz==null)
+		{
+			DB::table('friends')->insert(['user_id'=>$id,'friend_id'=>$friend,'status'=>'Pending']);
+		}
+	
+	}
+
+	   public function sendImage(){
+     $status=0;
+     $message="";
+     //$url=url();
+// echo '<pre>'; print_r($_FILES);die;
+
+      $image = $_FILES["chatsendimage"]["name"];
+      //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
+      
+      $path=public_path().''.'/images/media/chat_images/';
+
+
+			$uploadedfile = $_FILES['chatsendimage']['tmp_name'];
+			$name = $_FILES['chatsendimage']['name'];
+			$size = $_FILES['chatsendimage']['size'];
+			$valid_formats = array("jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF");
+				if (strlen($name)) {
+			list($txt, $ext) = explode(".", $name);
+				if (in_array($ext, $valid_formats)) {
+			$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
+			$tmp = $uploadedfile;
+				if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
+            //$rootFolder=base_path();
+            // $image = Yii::$app->image->load($path.$actual_image_name);
+            
+        	
+            //$image->resize(200, 200);
+            //$image->save();
+
+
+            $image= Image::make($path.$actual_image_name);
+            $image->resize(200,200);
+            $image->save();
+
+        //   ========== $data = Yii::$app->request->baseUrl.'/images/media/chat_images/'. $actual_image_name;
+           
+            $data='/images/media/chat_images/'.$actual_image_name;
+           
+
+            $chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
+            if ($chatType == "group"){}//chat type check
+            else{           
+             $message=$_SERVER['HTTP_HOST'].$data;
+    $status=1;
+            }                              
+        } else
+         $message= "Failed to send try again.";    
+       } else
+        $message= "Invalid file format.";
+      }else {
+       $message="Please select an image to send.";
+       }
+    echo json_encode(array('status'=>$status,'message'=>$message,'type'=>'image'));
+       die(); 
+       }
+
+
+       public function searchfriendlist()
+       {
+
+  			    $input=Input::get('name');
+
+				$friend = Friend::with('friends')->with('user')
+						->where('user_id', '=', Auth::User()->id)
+						->where('status','Accepted')
+						->get()
+     					->toArray();
+              
+                $data=array();
+
+foreach ($friend as $key => $value) 
+		
+		{
+
+		$name=$value['friends']['first_name']." ".$value['friends']['last_name'];
+		$xmpp_username="'".$value['friends']['xmpp_username']."'";
+		$first_name="'".$value['friends']['first_name']."'";
+
+		if (stripos($name, $input) !== false) {
+			  $data[] = '<li > 
+				<a href="#" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
+					<span class="chat-thumb"style="background: url(images/user-thumb.jpg);"></span>
+					<span class="title">'.$name.'</span>
+				</a>
+				</li>';
+			}
+		}
+
+		$html = implode('',$data);
+		echo $html;
+
+	}
 }
+	

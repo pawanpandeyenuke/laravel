@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State,App\JobArea,App\JobCategory,App\EducationDetails;
-use Request, Session, Validator, Input, Cookie;
+use Request, Session, Validator, Cookie;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 
 class DashboardController extends Controller
 {
@@ -22,7 +23,10 @@ class DashboardController extends Controller
 
 	public function dashboard()
 	{
+
         try{
+  
+            DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
 
             $per_page = 15;
 
@@ -108,8 +112,10 @@ class DashboardController extends Controller
                 'status' => 'Active'
             ])->get();
         // echo '<pre>';print_r($groups);die;
+
+
         return view('chatroom.chatroom')
-            ->with('groups', $groups);
+            ->with('groups', $groups) ;
 
     }
 
@@ -135,6 +141,8 @@ class DashboardController extends Controller
     */
     public function group()
     {
+       DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
+
         return view('chatroom.groups');
     }
 
@@ -157,8 +165,8 @@ class DashboardController extends Controller
         }
         
         if($name){
-           $varexp =  explode('-', $name);
-           $name =  implode(' ', $varexp);
+           $varexp =explode('-', $name);
+           $name =implode(' ', $varexp);
         }
 
         // print_r($name);die;
@@ -174,77 +182,103 @@ class DashboardController extends Controller
     *   Enter chatrooms ajax call handling.
     *   Ajaxcontroller@enterchatroom
     */
-    public function groupchat( $input = '' )
-    {   
+    public function groupchat( $input = '' ){   
 
-
-
+    
+$flag2=0;
         $model = new DefaultGroup;
       
         if(empty($input))        
-         $input = Request::all();
 
-if(is_array($input)) 
-    {
-        $validator = Validator::make($input, ['subcategory' => 'required']); 
-        
-        if($validator->fails())
-        {
-            $error = $validator->messages()->first();
-            Session::put('error', $error);
-            return redirect()->back();
-        }
-else{
-        if($input['subcategory']=='international')
-        {
-
-          unset($input['country']); 
-          $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);
-          
-        }
-
-        elseif($input['subcategory']=='professionalcourse')
-        {
-          
-          $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata1']]);
+        $input = Request::all();
+ 
+    if($input==null){
+        $flag2=1;
          
-        }
-        elseif($input['subcategory']=='subjects')
-        {
-          
-          $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata']]);
-           
-        }
+    }
+if(isset($input['subcategory']))
+{
 
-        elseif($input['subcategory']=='country,state,city')
-        {
-          $newinput=(['parentname'=>$input['parentname'],
-          'subcategory'=>'csc',
-          'country'=>DB::table('country')->where('country_id',$input['country'])->value('country_name'),
-          'state'=>DB::table('state')->where('state_id',$input['state'])->value('state_name'),
-          'city'=>DB::table('city')->where('city_id',$input['city'])->value('city_name')]);       
-        }
+                    $res=DB::table('categories')->where('parent_id','!=',0)->pluck('title');
+                    $res1=DB::table('categories')->where('parent_id','=',0)->pluck('title');
 
-      elseif($input['subcategory']=='country')
-      {
-        $newinput=(['parentname'=>$input['parentname'],'subcategory'=>'c','country'=>DB::table('country')->where('country_id',$input['country1'])->value('country_name')]);
-      }
+                    $par=array_unique($res1);
+                    $res1=array_map('strtolower',$par);
+                    $par=$res1;
 
-      else
-      {   
-        $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);       
-      }
+                    
 
-    $input=$newinput;
-   }
+                    $sub=array_unique($res);
+                    $res=array_map('strtolower',$sub);
+                    $sub=$res;
+                 
+                    $flag=0;
+                    $flag1=0; 
+          // print_r($sub);die;
+                    foreach ($sub as $key) {
+       $key = str_replace(" ","", $key);
+                    if($input['subcategory']==$key)
+                    {
+                    $flag=1;
+                    }
+                    }
 
-   }
+                    foreach ($par as $key) {
+                      $key = str_replace("-", " ", $key);
+                    if($input['parentname']==$key)
+                    {
+                    $flag1=1;
+                    }
+                    }
+
+                    if($flag==0 || $flag1==0)
+                    {
+                return redirect('group');
+            }
+else {
+                if($input['subcategory']=='international'){
+                
+                    unset($input['country']); 
+                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);
+                
+                }elseif($input['subcategory']=='professionalcourse'){
+                
+                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata1']]);
+
+                }elseif($input['subcategory']=='subjects'){
+
+                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata']]);
+
+                }elseif($input['subcategory']=='country,state,city'){
+               
+                    $newinput=(['parentname'=>$input['parentname'],
+                    'subcategory'=>'csc',
+                    'country'=>DB::table('country')->where('country_id',$input['country'])->value('country_name'),
+                    'state'=>DB::table('state')->where('state_id',$input['state'])->value('state_name'),
+                    'city'=>DB::table('city')->where('city_id',$input['city'])->value('city_name')]);       
+               
+                }elseif($input['subcategory']=='country'){
+                
+                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>'c','country'=>DB::table('country')->where('country_id',$input['country1'])->value('country_name')]);
+
+                }else{
+                   
+                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);       
+                
+                }
+
+                $input=$newinput;
+            
+ }      
+}
+
 
         if(is_array($input)){
             $groupnamedata = array();
             foreach ($input as $key => $value){
                 $rawdata = explode(' ', $value);
-                if(is_array($rawdata)){
+                if(is_array($rawdata)){ 
+
                     $data = implode('', $rawdata);
                     $groupnamedata[] = $data;
                 }else{
@@ -306,15 +340,20 @@ else{
 
         }
 
-$id=Auth::User()->id;
+        $id=Auth::User()->id;
         $friendid=DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+        $pendingfriend=DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
         return view('chatroom.groupchat')
                     ->with('groupname', $groupname)
                     ->with('userdata', $usersData)
                     ->with('friendid',$friendid)
                     ->with('authid',$id)
+                    ->with('pendingfriend',$pendingfriend)
+                    ->with('exception',$input)
+                    ->with('flag',$flag2)
                     ;
     }
+
 
 
 
@@ -358,19 +397,23 @@ $id=Auth::User()->id;
                 ->with('cities', $cities)
                 ->with('jobarea',$job_area)
                 ->with('education',$education)
-                ->with('job_category',$job_category)
-                ;
+                ->with('job_category',$job_category);
 
     }
 
-     public function actionSendImage(){
+     public function sendImage(){
      $status=0;
-  $message="";
-  $url=url();
+     $message="";
+     //$url=url();
+// echo '<pre>'; print_r($_FILES);die;
 
       $image = $_FILES["chatsendimage"]["name"];
-   //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
-      $uploadedfile = $_FILES['chatsendimage']['tmp_name'];
+      //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
+      
+      $path=public_path().''.'/images/media/chat_images';
+
+
+     $uploadedfile = $_FILES['chatsendimage']['tmp_name'];
       $name = $_FILES['chatsendimage']['name'];
       $size = $_FILES['chatsendimage']['size'];
       $valid_formats = array("jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF");
@@ -380,16 +423,19 @@ $id=Auth::User()->id;
         $actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
         $tmp = $uploadedfile;
         if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
-           // $rootFolder=dirname( Yii::$app->basePath);
+            //$rootFolder=base_path();
             // $image = Yii::$app->image->load($path.$actual_image_name);
            // $image->resize(140, 100);
            // $image->save();
   
         //   ========== $data = Yii::$app->request->baseUrl.'/images/media/chat_images/'. $actual_image_name;
+           
+            $data=public_path().''.'/images/media/chat_images'.$actual_image_name;
+           
             $chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
             if ($chatType == "group"){}//chat type check
             else{           
-             $message="IMAGE---".$_SERVER['HTTP_HOST'].$data;
+             $message=$_SERVER['HTTP_HOST'].$data;
     $status=1;
             }                              
         } else
@@ -399,10 +445,10 @@ $id=Auth::User()->id;
       }else {
        $message="Please select an image to send.";
        }
-    echo json_encode(array('status'=>$status,'message'=>$message));
+    echo json_encode(array('status'=>$status,'message'=>$message,'type'=>'image'));
        die(); 
        }
 
- 
+
 
 }

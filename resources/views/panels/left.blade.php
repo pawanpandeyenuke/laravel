@@ -13,7 +13,7 @@
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingThree">
 		      <h4 class="panel-title">
-		        <a href="/chatroom" class="without-arrow">
+		        <a href="/groupchat" class="without-arrow">
 		          <i class="flaticon-balloon"></i>Chat with Friends
 		        </a>
 		      </h4>

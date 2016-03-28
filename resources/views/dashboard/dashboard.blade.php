@@ -108,14 +108,17 @@
 							</div>
 						{!! Form::close() !!}
 					</div>
+				</div><!--/status tab-->
 
-					    </div><!--/status tab-->
 					<div class="post-list" id="postlist">
 						@foreach($feeds as $data)		
 							<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>					
 							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 
 								<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
+								
+									<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
+
 									<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
 
@@ -225,7 +228,9 @@
 
 													if($counter < 4){ ?>
 
-														<li>
+														<li data-value="{{ $commentsData['id'] }}" id="post_{{ $commentsData['id'] }}">
+														
+
 														<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
 														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
@@ -254,6 +259,15 @@
 								</div><!--/post-footer-->
 							</div><!--/single post-->
 						@endforeach
+
+						<!-- Delete comment confirmation box -->
+						<div class="modal fade comment-del-confrm" id="modal" tabindex="-1" role="dialog" aria-labelledby="DeletePost"></div>
+						<!-- Delete comment confirmation box -->
+
+						<div class="modal fade edit-post-popup" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost">	</div>
+
+
+
 					<div id="commentajax" style="display: none;">	</div>
 					<div id="AllCommentNew" class="post-list popup-list-without-img" style="display: none;"></div>
 					</div>

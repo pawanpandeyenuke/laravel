@@ -88,6 +88,7 @@ unset($countries[0]);
 												<td><div class="p-data-title"><i class="flaticon-technology"></i>Contact</div></td>
 												<td>
 													<!-- <input type="text" class="pr-edit" disabled="disabled" value="9955512345"> -->
+													{!! Form::text('country', null, array('class'=>'countrycode', 'disabled'=>'disabled',)) !!}
 													{!! Form::text('phone_no', null, array('class'=>'pr-edit contact','disabled'=>'disabled',)) !!}
 												</td>
 											</tr>
@@ -289,7 +290,7 @@ unset($countries[0]);
 		$('button.edit-pr-img').hide();
 	});
 
-		$('#changecountry').change(function(){
+		$('#changecountry').click(function(){
 		var countryId = $(this).val();
 		var _token = $('#searchform input[name=_token]').val();
 		$.ajax({			
@@ -302,7 +303,7 @@ unset($countries[0]);
 		});	
 	});
 
-	$('#changestate').change(function(){
+	$('#changestate').click(function(){
 		var stateId = $(this).val();
 		var _token = $('#searchform input[name=_token]').val();
 		$.ajax({			
@@ -315,7 +316,7 @@ unset($countries[0]);
 		});	
 	});
 
-	$('#educationcountry').change(function(){
+	$('#educationcountry').click(function(){
 		var countryId = $(this).val();
 		var _token = $('#searchform input[name=_token]').val();
 		$.ajax({			

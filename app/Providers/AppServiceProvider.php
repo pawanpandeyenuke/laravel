@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+
 use Auth, App\Country, App\Category,App\JobArea;
+
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,7 +17,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         
+
      $educationLevel = array('High school','Certifciate/diploma','Associate degree','3 or 4 year undergraduate program','Post graduate degree','Post graduate degree - MBA','Post graduate degree - Masters','Post graduate degree - JD','Post graduate degree - PHD/Doctrate','Professional','Other degree');
+
 
         $specialization = array('Accounting','Arts','Economics','Engineer','English','Finance','HR','IT','Marketing','Mathematics','Medicine','Operations','Others');
 

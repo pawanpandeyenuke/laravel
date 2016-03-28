@@ -63,4 +63,6 @@ class User extends Authenticatable
 		return $this->hasOne('App\Country','country_id','country');
 	}
 
+
+
 }

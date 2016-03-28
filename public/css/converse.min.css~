@@ -11,6 +11,9 @@
  * Licensed under the Mozilla Public License
  */
 
+<<<<<<< HEAD
+
+=======
 @font-face {
     font-family: Converse-js;
     src: url(../fonts/icomoon.eot?-mnoxh0);
@@ -18,6 +21,7 @@
     font-weight: 400;
     font-style: normal
 }
+>>>>>>> f8a27db6d4bb4c1d75d5fb8e64712269ef6a450d
 .icon-conversejs {
     font-family: Converse-js;
     speak: none;
@@ -1596,6 +1600,7 @@ display:none !important;
 #conversejs .box-flyout, #conversejs .minimized-chats-flyout{
 left:0px;
 top:0px;
+<<<<<<< HEAD
 }
 
 
@@ -1705,3 +1710,6 @@ top:0px;
     overflow-y: scroll;
     margin: 0 -20px 0px;
 }
+=======
+}
+>>>>>>> f8a27db6d4bb4c1d75d5fb8e64712269ef6a450d
