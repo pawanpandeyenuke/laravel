@@ -11,9 +11,12 @@
 	$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
 
  	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 
-
-
- 	$all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
+ 	
+ 	if($education->job_area){
+ 	
+ 		$all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
+ 		
+ 	}
  	// echo '<pre>';print_r($all_states);die;
 
 	$gender = $user->gender;
@@ -38,8 +41,11 @@
 					{!! Form::open() !!}
 
 						<div class="p-header-outer">
-							<button type="button" class="edit-profile" title="Edit Profile"><i class="fa fa-pencil"></i></button>
 
+							@if( Auth::User()->id == $user->id )
+								<button type="button" class="edit-profile" title="Edit Profile"><i class="fa fa-pencil"></i></button>
+							@endif
+							
 							<!-- <button type="submit" class="save-profile-changes" title="Save Profile"><i class="fa fa-check-circle"></i></button> -->
 							<div class="profile-header">
 								<div class="profile-img" style="background: url('/images/user-thumb.jpg');">
