@@ -11,6 +11,9 @@
 	$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
 
  	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 
+
+
+ 	$all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
  	// echo '<pre>';print_r($all_states);die;
 
 	$gender = $user->gender;
@@ -224,12 +227,25 @@
 																<option>Current Job Area</option>
 																<?php 
 																	if(isset($jobarea) && isset($education)){
-																	foreach ($jobarea as $key => $value) { ?>
-																		<option value="{{ $key }}" data-value="{{ $key }}" <?php echo ($value == $education->job_area)?'Selected':''; ?> >{{ $value }}</option>";
+																	foreach ($jobarea as $key => $value) { 
+																		if($key == $education->job_area)
+																			$selected = 'Selected'; 
+																		else
+																			$selected = ''; 
+																		?>
+																		<option value="{{ $key }}" data-value="{{ $key }}" <?php echo $selected; ?> >{{ $value }}</option>";
 																<?php } } ?>
 															</select>
 															<select name="job_category" id="jobcategory" class="pr-edit" disabled="disabled">
 																<option >Job Category</option>
+																<?php foreach ($all_job_cat as $key => $value) { 
+																	if($value == $education->job_category)
+																		$selected = 'Selected'; 
+																	else
+																		$selected = ''; 
+																	?>
+																		<option value="{{$key}}" <?php echo $selected; ?> >{{$value}}</option>	
+																<?php } ?>
 															</select>
 														</div>
 													</td>
