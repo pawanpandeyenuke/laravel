@@ -88,11 +88,14 @@
 														<select name="country" style="max-width: 180px;" id="profile_country" class="pr-edit" disabled="disabled">
 															<option value="">Country</option>	
 															<?php 
-															if(isset($country) && isset($countries)){
-																foreach ($countries as $key => $value) { ?>
-
-																	<option value="{{$key}}" <?php echo ($value == $country)?'Selected':''; ?> >{{$value}}</option>	
-															<?php } } ?>
+																foreach ($countries as $key => $value) { 
+																	if(isset($country))
+																		$selected = 'Selected'; 
+																	else
+																		$selected = ''; 
+																	?>
+																	<option value="{{$key}}" {{$selected}} >{{$value}}</option>	
+															<?php } // } ?>
 														</select>
 													</td>
 												</tr>
