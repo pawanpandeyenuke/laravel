@@ -16,24 +16,22 @@ class Converse{
 		// 	return true;
 		//$node = config('app.xmppHost');
 
-//$response = @exec('sudo -u ejabberd /usr/sbin/ejabberdctl register hemant1 fs.yiipro.com test123 2>&1', $output, $status);
-//$response = @exec('sudo /usr/sbin/ejabberdctl register hemant1 fs.yiipro.com test123 2>&1', $output, $status);
-//$response = @exec('sudo ejabberdctl register hemant1 fs.yiipro.com test123 2>&1', $output, $status);
-//$response = @exec('sudo -u ejabberd ejabberdctl register hemant1 fs.yiipro.com test123 2>&1', $output, $status);
-//$responace = @exec('sudo -u ejabberd /usr/sbin/ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
+		//$response = @exec('sudo -u ejabberd /usr/sbin/ejabberdctl register hemant1 fs.yiipro.com test123 2>&1', $output, $status);
+		//$response = @exec('sudo /usr/sbin/ejabberdctl register hemant1 fs.yiipro.com test123 2>&1', $output, $status);
+		//$response = @exec('sudo ejabberdctl register hemant1 fs.yiipro.com test123 2>&1', $output, $status);
+		//$response = @exec('sudo -u ejabberd ejabberdctl register hemant1 fs.yiipro.com test123 2>&1', $output, $status);
+		//$responace = @exec('sudo -u ejabberd /usr/sbin/ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
 
-//echo "UsrName= $username and Host= $node"; exit;
+		//echo "UsrName= $username and Host= $node"; exit;
 
-//		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
-//		echo 'XMPP responce: '; print_r($output);exit;
+		//$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
+		//echo 'XMPP responce: '; print_r($output);exit;
 
 		$node = config('app.xmppHost');
-//		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
 
-//		dd($response);exit;
+		//$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
+
 		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
-
-//		dd($response);exit;
 
 		return true;
 	}
@@ -46,7 +44,7 @@ class Converse{
 	static function createGroup($roomname) {
 
 		$node=config('app.xmppHost');
-		$response=@exec('sudo/usr/sbin/ejabberdctl create_room' .$roomname.'muc_service' .$node);
+		$response=@exec('sudo ejabberdctl create_room ' .$roomname.'muc_service' .$node);
 
 	}
 
@@ -58,7 +56,7 @@ class Converse{
 	static function deleteGroup($roomname){
 
 		$node=config('app.xmppHost');
-		$response=@exec('sudo/usr/sbin/ejabberdctl destroy_room' .$roomname.'muc_service' .$node);
+		$response=@exec('sudo ejabberdctl destroy_room ' .$roomname.'muc_service' .$node);
 
 	}
 
@@ -76,11 +74,11 @@ class Converse{
 		$res1 = @exec('sudo ejabberdctl add_rosteritem '. $data_from .' 2>&1', $output1, $status1);
 		$res2 = @exec('sudo ejabberdctl add_rosteritem '. $data_to .' 2>&1', $output2, $status2);
 
-// print_r($res1);die;
+		// print_r($res1);die;
 
 		return true;
     
-    }
+	}
 
 
 	/**
@@ -91,7 +89,9 @@ class Converse{
 
 		$node = config('app.xmppHost');
 
-		//@exec('sudo/usr/sbin/ejabberdctl set_room_affiliation'.$roomname.''.$node.''.$username.' outcast');
+		@exec('sudo ejabberdctl set_room_affiliation '.$roomname.' conference.'.$node.''.$username.' outcast');
+		return true;
+		
 
 		//ejabberdctl set_room_affiliation room conference.localhost user123@localhost outcast	
 

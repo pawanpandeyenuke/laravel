@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory;
+use App\Library\Converse;
 use Request, Session, Validator, Input, Cookie;
 
 use App\Http\Requests;
@@ -27,6 +28,16 @@ class DashboardController extends Controller
 	{
 
         try{
+
+            $xmppusername = User::where('id',Auth::User()->id)->value('xmpp_username');
+
+            $defGroup = DefaultGroup::where('group_by',Auth::User()->id)->lists('group_name');
+
+            foreach ($defGroup as $value) {
+                $converse = new Converse;
+                $response = $converse->removeUserGroup($value, $xmppusername);    
+                // print_r($response);die;
+            }
   
             DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
 
@@ -143,9 +154,21 @@ class DashboardController extends Controller
     */
     public function group()
     {
-       DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
+
+        $xmppusername = User::where('id',Auth::User()->id)->value('xmpp_username');
+
+        $defGroup = DefaultGroup::where('group_by',Auth::User()->id)->lists('group_name');
+
+        foreach ($defGroup as $value) {
+            $converse = new Converse;
+            $response = $converse->removeUserGroup($value, $xmppusername);    
+            // print_r($response);die;
+        }
+
+        DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
 
         return view('chatroom.groups');
+
     }
 
 

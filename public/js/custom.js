@@ -630,7 +630,7 @@ $(document).on('change','#jobarea',function()
 	{
 		var current = $(this);
 		var jobarea = current.val();
-		alert(jobarea);
+		
 		$.ajax({
 			'url' : '/ajax/jobcategory',
 			'type' : 'post',
@@ -638,22 +638,6 @@ $(document).on('change','#jobarea',function()
 			'success' : function(data){
 				$('#jobcategory').html(data);
 			}	
-		});
-	});
-
-$(document).on('click','.search',function()
-	{
-		var current=$(this);
-		
-		var name=$('.searchtxt').val();
-
-	       $.ajax({
-			'url' : 'ajax/searchfriend',
-			'type' : 'post',
-			'data' : {'name':name},
-			'success' : function(data){
-				$("#userslist").html(data);
-			}		
 		});
 	});
 

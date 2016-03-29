@@ -361,7 +361,7 @@ comments;
 		Friend::insert($data);
 
    		$udetail=User::whereIn('id',$input)->get()->toArray();
-
+   		// echo '<pre>';print_r($udetail);die;
 		  if(count($udetail)==2)
 			{
 			$converse = new Converse;
