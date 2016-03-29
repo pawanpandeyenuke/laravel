@@ -503,13 +503,15 @@ class ApiController extends Controller
 			}
 		
 		}catch(Exception $e){	
+
 			$this->message=$e->getMessage();
+
 		}
 
 		return $this->output();
 	
-	}
-		
+		}
+
 
 	/*
 	 *  Edit users profile.

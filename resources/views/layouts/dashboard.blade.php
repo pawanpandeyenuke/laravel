@@ -10,7 +10,10 @@
 <link href="/fancybox/jquery.fancybox.css" rel="stylesheet" media="all">
 <link href="/css/flat-icon/flaticon.css" rel="stylesheet" media="all">
 <link href="/css/fileinput.min.css" rel="stylesheet" media="all">
+
+<link href="/css/bootstrap-datepicker.css" rel="stylesheet" media="all">
 <!-- <link href="/converse/converse.min.css" rel="stylesheet" type="text/css" media="screen" > -->
+
 <link href="/lib/css/nanoscroller.css" rel="stylesheet">
 <link href="/lib/css/emoji.css" rel="stylesheet">
 <link href="/css/style.css" rel="stylesheet">
@@ -91,6 +94,7 @@
 <script type="text/javascript" src="/js/fileinput.min.js"></script>
 <script type="text/javascript" src="/js/custom.js"></script>
 <script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-datepicker.min.js"></script>
 <script src="/c-lib/lib/js/emojione.js"></script>
 <!--Emoji libraries-->
 <script src="/lib/js/nanoscroller.min.js"></script>
@@ -102,10 +106,16 @@
 <script src="/js/jquery.nicescroll.min.js"></script>
 <!--/Emoji-->
 
+
 <!- chat system -->
 <!-- <script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
 <script type="text/javascript" src="/converse/jquery.form.js"></script> -->
-<!-- chat system -->
+
+<!-- 
+<script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
+<script type="text/javascript" src="/converse/jquery.form.js"></script>
+
+-->
 
 </body>
 </html>

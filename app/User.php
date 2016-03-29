@@ -24,7 +24,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'gender', 'dob', 'mobile_no', 'country', 'state', 'city', 'fb_id', 'linked_id', 'twitter_id', 'google_id', 'push_token', 'device_type', 'xmpp_username', 'xmpp_password', 'is_email_verified', 'status' ];
+    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'gender', 'birthday', 'phone_no', 'country', 'state', 'city', 'fb_id', 'linked_id', 'twitter_id', 'google_id', 'push_token', 'device_type', 'xmpp_username', 'xmpp_password', 'is_email_verified', 'status','marital_status' ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -40,6 +40,8 @@ class User extends Authenticatable
 		'email.email' => 'Please enter valid email',
 		'email.unique' => 'Email already exist',
 		'password.required' => 'Please enter password',
+		'id.required'=>'Please enter user id',
+		'id.numeric'=>'User id should be numeric'
 	);
 	
 	public $apiRules = array(
@@ -51,14 +53,21 @@ class User extends Authenticatable
 		'email' => 'required|email'
 	);
 
+	public $apiViewRules = array(
+			'id'=>'numeric|required'
+	);
+	
+  
 	public function country()
 	{
 		return $this->hasOne('App\Country','country_id','country');
 	}
 
+
 	public function education()
 	{
 		return $this->hasOne('App\EducationDetails','id','id');
 	}
+
 
 }

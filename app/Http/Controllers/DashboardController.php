@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State;
+
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory;
 use Request, Session, Validator, Input, Cookie;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+// use Illuminate\Support\Facades\Input;
 
 class DashboardController extends Controller
 {
@@ -22,17 +25,20 @@ class DashboardController extends Controller
 
 	public function dashboard()
 	{
+
         try{
+  
+            DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
 
             $per_page = 15;
 
             $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
             ->where('user_by', '=', Auth::User()->id)
             ->orderBy('news_feed.id','DESC')
-            ->take($per_page)
+            // ->take($per_page)
             ->get();
 
-           // echo '<pre>';print_r($feeds);die;
+           // echo '<pre>';print_r($feeds[0]->comments);die;
             /*$feeds = Feed::with('user')
                         ->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')
                         ->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')
@@ -108,8 +114,10 @@ class DashboardController extends Controller
                 'status' => 'Active'
             ])->get();
         // echo '<pre>';print_r($groups);die;
+
+
         return view('chatroom.chatroom')
-            ->with('groups', $groups);
+            ->with('groups', $groups) ;
 
     }
 
@@ -135,6 +143,8 @@ class DashboardController extends Controller
     */
     public function group()
     {
+       DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
+
         return view('chatroom.groups');
     }
 
@@ -157,8 +167,8 @@ class DashboardController extends Controller
         }
         
         if($name){
-           $varexp =  explode('-', $name);
-           $name =  implode(' ', $varexp);
+           $varexp =explode('-', $name);
+           $name =implode(' ', $varexp);
         }
 
         // print_r($name);die;
@@ -176,23 +186,58 @@ class DashboardController extends Controller
     */
     public function groupchat( $input = '' ){   
 
-        $model = new DefaultGroup;
+    
+                $flag2=0;
+                        $model = new DefaultGroup;
+                      
+                        if(empty($input))        
 
-        if(empty($input))        
-        $input = Request::all();
+                        $input = Request::all();
+                 
+                    if($input==null){
+                        $flag2=1;
+                         
+                    }
+                if(isset($input['subcategory']))
+                {
 
-        if(is_array($input)) {
-            
-            $validator = Validator::make($input, ['subcategory' => 'required']); 
-                
-            if($validator->fails())
-            {
-                $error = $validator->messages()->first();
-                Session::put('error', $error);
-                return redirect()->back();
+                    $res=DB::table('categories')->where('parent_id','!=',0)->pluck('title');
+                    $res1=DB::table('categories')->where('parent_id','=',0)->pluck('title');
+
+                    $par=array_unique($res1);
+                    $res1=array_map('strtolower',$par);
+                    $par=$res1;
+
+                    
+
+                    $sub=array_unique($res);
+                    $res=array_map('strtolower',$sub);
+                    $sub=$res;
+                 
+                    $flag=0;
+                    $flag1=0; 
+          // print_r($sub);die;
+                    foreach ($sub as $key) {
+       $key = str_replace(" ","", $key);
+                    if($input['subcategory']==$key)
+                    {
+                    $flag=1;
+                    }
+                    }
+
+                    foreach ($par as $key) {
+                      $key = str_replace("-", " ", $key);
+                    if($input['parentname']==$key)
+                    {
+                    $flag1=1;
+                    }
+                    }
+
+                    if($flag==0 || $flag1==0)
+                    {
+                return redirect('group');
             }
-            else{
-
+else {
                 if($input['subcategory']=='international'){
                 
                     unset($input['country']); 
@@ -219,20 +264,25 @@ class DashboardController extends Controller
                     $newinput=(['parentname'=>$input['parentname'],'subcategory'=>'c','country'=>DB::table('country')->where('country_id',$input['country1'])->value('country_name')]);
 
                 }else{
-                
+                   
                     $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);       
                 
                 }
 
                 $input=$newinput;
-            }   
-       }
+            
+ }      
+}
+elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'])||isset($input['city'])){
+    return redirect('group');
+}
 
         if(is_array($input)){
             $groupnamedata = array();
             foreach ($input as $key => $value){
                 $rawdata = explode(' ', $value);
-                if(is_array($rawdata)){
+                if(is_array($rawdata)){ 
+
                     $data = implode('', $rawdata);
                     $groupnamedata[] = $data;
                 }else{
@@ -249,7 +299,7 @@ class DashboardController extends Controller
         
         if(Request::isMethod('get')){
 
-            if(is_array($input)){
+            if(is_array($groupname)){
                 
                     $updatecheck = $model->where('group_name', $groupname)
                                 ->where('group_by', Auth::User()->id)
@@ -279,56 +329,167 @@ class DashboardController extends Controller
                     $defGroup = array();
                     $defGroup['group_name'] = $groupname;
                     $defGroup['group_by'] = Auth::User()->id;
-
-                    if(empty($updatecheck)){
-                        $model = new DefaultGroup;
-                        $response = $model->create($defGroup);
-                    }else{
-                        $id = $updatecheck[0]['id'];
-                        $response = $model->find($id);
+                    // print_r($defGroup);die;
+                    if($defGroup['group_name'] != ''){
+                        if(empty($updatecheck)){
+                            $model = new DefaultGroup;
+                            $response = $model->create($defGroup);
+                        }else{
+                            $id = $updatecheck[0]['id'];
+                            $response = $model->find($id);
+                        }
                     }
-
                     //Get users of this group
                     $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();  
             }
 
         }
 
+        $id=Auth::User()->id;
+        $friendid=DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+        $pendingfriend=DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
         return view('chatroom.groupchat')
                     ->with('groupname', $groupname)
-                    ->with('userdata', $usersData);
+                    ->with('userdata', $usersData)
+                    ->with('friendid',$friendid)
+                    ->with('authid',$id)
+                    ->with('pendingfriend',$pendingfriend)
+                    ->with('exception',$input)
+                    ->with('flag',$flag2)
+                    ;
     }
 
 
 
-    public function profile( $id )
+ public function profile( $id )
     {
         
-        // return 'asdfsadfsa';
-        $model = User::with('country')->where('id', $id)->get()->first();
-        $states = State::where('country_id', '=', $model->country)->lists('state_name', 'state_id')->toArray();
-
-        
-        
-        $statesids = State::where('country_id', '=', $model->country)->lists('state_id')->toArray();
-        $cities = DB::table('city')->whereIn('state_id', $statesids)->lists('city_name', 'city_id');
-
+        $arguments = Request::all();
+        $user = new User();
+// print_r($id);die;
         if(Request::isMethod('post')){
 
-            $input = Request::all();
-            echo '<pre>';print_r($input);die;
+            $getCommonEduArgs = array_intersect_key( $arguments, [
+                                    'id' => 'null',
+                                    'education_level' => 'null',
+                                    'specialization' => 'null',
+                                    'graduation_year_from' => 'null',
+                                    'graduation_year_to' => 'null',
+                                    'currently_studying' => 'null',
+                                    'education_establishment' => 'null',
+                                    'country_of_establishment' => 'null',
+                                    'city_of_establishment' => 'null',
+                                    'job_area' => 'null',
+                                    'job_category' => 'null'
+                                ]);
+            
+            if( !empty($getCommonEduArgs) ){
 
+                $getCommonEduArgs['id'] = $id;
+                $eduExists = EducationDetails::where('id', '=', $id)->get()->toArray();
+
+                $time=strtotime($getCommonEduArgs['graduation_year_from']);
+                $getCommonEduArgs['graduation_year_from']=date('Y-m-d',$time);
+
+                $time=strtotime($getCommonEduArgs['graduation_year_to']);
+                $getCommonEduArgs['graduation_year_to']=date('Y-m-d',$time);
+
+
+                if(!empty($eduExists)){
+
+                    $eduExists = EducationDetails::find($id);
+
+                    $eduExists->fill($getCommonEduArgs);
+                    $saved = $eduExists->push();
+                }else{
+                    $education = new EducationDetails;
+                    $education->create($getCommonEduArgs);
+                }
+                foreach ($getCommonEduArgs as $key => $value)
+                    unset($arguments[$key]);
+            }
+            
+            // echo '<pre>';print_r($arguments);die;
+
+            $time=strtotime($arguments['birthday']);
+            $arguments['birthday']=date('Y-m-d',$time);
+
+            $arguments['state'] = DB::table('state')->where('state_id', $arguments['state'])->value('state_name');
+            $arguments['city'] = DB::table('city')->where('city_id', $arguments['city'])->value('city_name');
+
+            if($arguments){
+                unset($arguments['_token']);
+                foreach ($arguments as $key => $value) {
+                    if( $key != 'email' && $key != 'password' ){
+                        User::where([ 'id' => $id ])
+                            ->update([ $key => $value ]);
+                    }
+                }
+                Session::put('success', 'Profile saved successfully');
+            }
+
+            return redirect()->back();
         }
 
 
+        $user = User::where('id', $id)->get()->first();
+        $education = EducationDetails::where('id', $id)->get()->first();
+        // echo '<pre>';print_r($education);die;
+
         return view('profile.profile')
-                ->with('model',$model)
-                ->with('id',User::find(Auth::User()->id))
-                ->with('states', $states)
-                ->with('cities', $cities);
+                ->with('user', $user)
+                ->with('education', $education);
 
     }
 
- 
+     public function sendImage(){
+     $status=0;
+     $message="";
+     //$url=url();
+// echo '<pre>'; print_r($_FILES);die;
+
+      $image = $_FILES["chatsendimage"]["name"];
+      //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
+      
+      $path=public_path().''.'/images/media/chat_images';
+
+
+     $uploadedfile = $_FILES['chatsendimage']['tmp_name'];
+      $name = $_FILES['chatsendimage']['name'];
+      $size = $_FILES['chatsendimage']['size'];
+      $valid_formats = array("jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF");
+      if (strlen($name)) {
+       list($txt, $ext) = explode(".", $name);
+       if (in_array($ext, $valid_formats)) {
+        $actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
+        $tmp = $uploadedfile;
+        if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
+            //$rootFolder=base_path();
+            // $image = Yii::$app->image->load($path.$actual_image_name);
+           // $image->resize(140, 100);
+           // $image->save();
+  
+        //   ========== $data = Yii::$app->request->baseUrl.'/images/media/chat_images/'. $actual_image_name;
+           
+            $data=public_path().''.'/images/media/chat_images'.$actual_image_name;
+           
+            $chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
+            if ($chatType == "group"){}//chat type check
+            else{           
+             $message=$_SERVER['HTTP_HOST'].$data;
+    $status=1;
+            }                              
+        } else
+         $message= "Failed to send try again.";    
+       } else
+        $message= "Invalid file format.";
+      }else {
+       $message="Please select an image to send.";
+       }
+    echo json_encode(array('status'=>$status,'message'=>$message,'type'=>'image'));
+       die(); 
+       }
+
+
 
 }

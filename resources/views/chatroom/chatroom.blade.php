@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+ <?php // echo '<pre>';print_r($friend);die;?>
 @section('content')
 <div class="page-data dashboard-body">
 	<div class="container">
@@ -11,24 +11,33 @@
 						<div class="col-sm-4 padding-right-none chat-list-outer">
 							<div class="chat-list-search">
 								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Search">
-									<button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
-								</div>
-							</div>
+									<input type="text" class="form-control searchtxt" placeholder="Search">
+									<button type="button" class="search-btn "><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+							
 							<div class="chat-user-list StyleScroll">
-								<ul>
-									@foreach($groups as $data)
-									<li>
-										<a href="#" title="">
+								<ul id="userslist">
+								
+							   <?php 
+							  // 	$fname=$data['friends']['first_name'];
+							  // 	$lname=$data['friends']['last_name'];
+							  // 	$name=$fname.' '.$lname;
+							  // echo '<pre>';print_r($data);die;
+							   ?>
+<!-- 							   	<li > 
+										<a href="#" title="" class='list'>
 											<span class="chat-thumb"style="background: url('images/user-thumb.jpg');"></span>
-											<span class="title">{{ $data->title }}</span>
-											<span class="time">{{ $data->updated_at->diffForHumans() }}</span>
+											<span class="title"></span>
+											<span class="time"></span>
 										</a>
-									</li>
-									@endforeach
+									</li> -->
+								
 								</ul>
-							</div><!--/chat user list-->
-							<div class="dropdown all-contact">
+							</div>
+	</div>
+							</div>
+
+							<!--/chat user list-->
+						<!-- 	<div class="dropdown all-contact">
 							  <button id="dLabel" class="all-contact-btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							    All Contacts
 							  </button>
@@ -91,7 +100,7 @@
 									</li>
 
 							  </ul>
-							</div>
+							</div> -->
 						</div>
 						<div class="col-sm-8">
 							<div class="chatting-outer">
@@ -200,5 +209,23 @@
 		</div>
 	</div>
 </div><!--/pagedata-->
+
+  <link href="{{url('/converse/converse.min.css')}}" rel="stylesheet" type="text/css" media="screen" >
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+<script  type="text/javascript">
+
+  function openChatbox(xmpusername,username)
+     {
+         conObj=converse;
+        var ss=conObj.contacts.get(xmpusername+'@fs.yiipro.com');
+         if(ss==null)
+         {  
+      console.log(ss);   
+             conObj.contacts.add(xmpusername+'@fs.yiipro.com', username);             
+         }
+        conObj.chats.open(xmpusername+'@fs.yiipro.com');
+     }
+</script>
 
 @endsection

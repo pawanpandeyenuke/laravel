@@ -39,7 +39,9 @@ class Feed extends Model
 
 	public function comments()
 	{
-		return $this->hasMany('App\Comment'); //->orderBy('comments.id','DESC');
+
+		return $this->hasMany('App\Comment');//->orderBy('comments.id','DESC');
+
 	}
 
 	public function commentsCount()

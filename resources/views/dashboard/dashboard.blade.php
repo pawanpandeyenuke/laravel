@@ -114,11 +114,13 @@
 						@foreach($feeds as $data)		
 							<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>					
 							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
+
 								<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 								
 									<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
 
 									<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+
 
 									<div class="row">
 										<div class="col-md-7">
@@ -195,8 +197,10 @@
 											</li>
 										</ul>
 									</div><!--/post actions-->
+
 									<div class="post-comment-cont">
 										<div class="post-comment" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
+
 											<div class="row">
 												<div class="col-md-10">
 													<div class="emoji-field-cont cmnt-field-cont">
@@ -209,38 +213,48 @@
 											</div>
 										</div><!--/post comment-->
 										<div class="comments-list">
-											<ul id="pagecomment-{{$data->id}}">
+							<ul id="pagecomment-{{$data->id}}" data-id="pagecomment-{{$data->id}}">
+
 												@if(!empty($data['comments']))
-													<?php $counter = 1; ?>
-													@foreach($data['comments'] as $commentsData)
+
 													<?php 
+														$counter = 1;
+														$offset = count($data['comments']) - 3;
+														// echo $offset;die;
+													foreach($data['comments'] as $commentsData){
+													
 														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name']);
 
 														// print_r($username);die;
 														if(!empty($username)){
 
-														$name = $username[0]->first_name.' '.$username[0]->last_name; 
+															$name = $username[0]->first_name.' '.$username[0]->last_name; 
 
-													if($counter < 4){ ?>
-														<li data-value="{{ $commentsData['id'] }}" id="post_{{ $commentsData['id'] }}">
-														
-														<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+															if($counter > $offset){ ?>
+																<li data-value="{{ $commentsData['id'] }}" id="post_{{ $commentsData['id'] }}">
+																
+																<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
-														<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
-														<div class="comment-title-cont">
-															<div class="row">
-																<div class="col-sm-6">
-																	<a href="#" title="" class="user-link">{{$name}}</a>
+																<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+																<div class="comment-title-cont">
+																	<div class="row">
+																		<div class="col-sm-6">
+																			<a href="#" title="" class="user-link">{{$name}}</a>
+																		</div>
+																		<div class="col-sm-6">
+																			<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
+																		</div>
+																	</div>
 																</div>
-																<div class="col-sm-6">
-																	<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
-																</div>
-															</div>
-														</div>
-														<div class="comment-text">{{$commentsData['comments']}}</div>
-													</li>
-													<?php }$counter++; }?>
-													@endforeach
+																<div class="comment-text">{{$commentsData['comments']}}</div>
+															</li>
+															<?php 
+															}
+															$counter++; 
+														}
+													}
+													?>
+													
 												@endif
 											</ul>
 

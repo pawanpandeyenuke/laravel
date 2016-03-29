@@ -16,7 +16,9 @@ unset($countries[0]);
 
 							{{ Form::open(array('url' => 'groupchat', 'method' => 'get')) }}
 							<div class="page-title">
+
 								<i class="flaticon-balloon"></i>{{$groupnamestr}}
+
 							</div>
 							@if (Session::has('error'))
 								<div class="alert alert-danger">{!! Session::get('error') !!}</div>

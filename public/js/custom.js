@@ -2,7 +2,7 @@
 
 $(document).ready(function(){
 	
-	$('.StyleScroll').niceScroll();
+	// $('.StyleScroll').niceScroll();
 	
 	var myReader = new FileReader();
 
@@ -44,7 +44,7 @@ $(document).ready(function(){
 
 	// Post status updates via ajax call.
 	$("#postform").ajaxForm(function(response) { 
- 		var current = $("#postform")
+ 		var current = $("#postform");
 		if(response){
 			$('#newsfeed').val('');
 			// $('#image-holder').hide();
@@ -63,6 +63,14 @@ $(document).ready(function(){
 		} 
     }); 
 
+
+/*	// Update profile fields via ajax call.
+	$("#profilesave").ajaxForm(function(response) { 
+ 		var current = $("#profilesave");
+		if(response){
+			// alert('custom.js');
+		} 
+    }); */
 
 	$(document).on('click', '#cancel-btn', function(){
 		$('#newsfeed').val('');
@@ -144,6 +152,8 @@ $(document).ready(function(){
 		var feedId = $(this).closest('.post-comment').data('value');
 		var commentData = $(this).closest('.post-comment').find('textarea').val();
 		var commented_by = $('#user_id').val();
+		
+		
  
 		if(commentData){
 			$.ajax({			
@@ -153,6 +163,8 @@ $(document).ready(function(){
 				'success' : function(response){
 
 					var parseresponse = jQuery.parseJSON(response);
+					
+					
 					jQuery("#pagecomment-"+feedId).append(parseresponse.comment);
 					current.closest('.row').find('textarea').val('');
 
@@ -165,7 +177,10 @@ $(document).ready(function(){
 						current.parents('.post-footer').find('.commentcount').html('1 Comment'); 
 					}
 	
+					// var commCount = current.parents('.pop-comment-side-outer').find('.comments-list ul li').length;
+					// console.log(commCount);
 					// current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
+
 					current.parents('.pop-comment-side-outer').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('.row').find('.comment-field').text('');
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
@@ -400,6 +415,8 @@ $(document).ready(function(){
 		});	
 	});
  
+
+
 	/*$('.status-r-btn').on('click',function(){
 		if ( $('#status_img_up').is(':checked') ) { 
 	    $('.status-img-up').show();
@@ -441,6 +458,28 @@ $(document).ready(function(){
 				current.closest('.get_id').find('.accept').hide(200);
 				current.closest('.get_id').find('.decline').hide(200);
 				current.closest('.get_id').find('.remove').show(500);
+			}
+		});
+	});
+
+
+	/*
+	* Invite user to chat by sending friend request.
+	*
+	**/
+	$(document).on('click','.invite',function()
+	{
+		var current = $(this);
+		var user_id=current.closest('.info').data('id');
+		//var friend_id=current.closest('.get_id').data('friendid');
+		
+		$.ajax({
+			'url' : 'ajax/sendrequest',
+			'type' : 'post',
+			'data' : {'user_id' : user_id },
+			'success' : function(data){
+				current.closest('.info').find('.invite').hide(200);
+				current.closest('.info').find('.sentinvite').show(200);
 			}
 		});
 	});
@@ -519,28 +558,149 @@ $(document).ready(function(){
 	*
 	**/
 
+$(document).on('click','.save-profile-changes',function()
+	{
+		var current = $(this);
+		var first_name=$('.name1').val();
+		var last_name=$('.name2').val();
+		var country=$('.country').val();
+		var state=$('.state').val();
+		var city=$('.city').val();
+		var birthday=$('.birthday').val();
+		var phone_no=$('.contact').val();
+var gender;
+		if ( $('#radio1').is(':checked') )
+		{
+			gender=$('#radio1').val();
+		}
+		if ( $('#radio2').is(':checked') )
+		{
+			gender=$('#radio2').val();
+		}
+		
+var marital_status;	
+			
+		if ( $('#radio3').is(':checked') )
+		{
+		   marital_status=$('#radio3').val();
+		}
+		if ( $('#radio4').is(':checked') )
+		{
+			marital_status=$('#radio4').val();
+		}
+		
+		var education_level=$('.educationlevel').val();//array index
+//alert(education_level);
+		var specialization=$('.specialization').val();//array index
+		var graduation_year_from=$('.gradyearfrom').val();//array index
+		var graduation_year_to=$('.gradyearto').val();//array index
+var currently_studying;//name
+		if ( $('#radios1').is(':checked') )
+		{
+		   currently_studying=$('#radios1').val();
+		}
+		if ( $('#radios2').is(':checked') )
+		{
+			currently_studying=$('#radios2').val();
+		}
+		var education_establishment=$('.educationestablishment').val();//name
+		var country_of_establishment=$('.educationcountry').val();//id
+		var job_area=$('.jobarea').val();//id
+		var job_category=$('.jobcategory').val();//name
+
+			
+		$.ajax({
+			'url' : '/ajax/profilesave',
+			'type' : 'post',
+			'data' : {'first_name':first_name,'last_name':last_name,'country':country,'state':state,'city':city,'birthday':birthday,
+                                 'gender':gender,'phone_no':phone_no,'marital_status':marital_status,'education_level':education_level,
+				'specialization':specialization,'graduation_year_from':graduation_year_from,'graduation_year_to':graduation_year_to,
+				'currently_studying':currently_studying,'education_establishment':education_establishment,
+				'country_of_establishment':country_of_establishment,
+				'job_area':job_area,
+				'job_category':job_category},
+			'success' : function(data){
+				
+			}
+		});
+	});
+
+
+$(document).on('change','#jobarea',function()
+	{
+		var current = $(this);
+		var jobarea = current.val();
+		alert(jobarea);
+		$.ajax({
+			'url' : '/ajax/jobcategory',
+			'type' : 'post',
+			'data' : {'jobarea':jobarea },
+			'success' : function(data){
+				$('#jobcategory').html(data);
+			}	
+		});
+	});
+
+$(document).on('click','.search',function()
+	{
+		var current=$(this);
+		
+		var name=$('.searchtxt').val();
+
+	       $.ajax({
+			'url' : 'ajax/searchfriend',
+			'type' : 'post',
+			'data' : {'name':name},
+			'success' : function(data){
+				$("#userslist").html(data);
+			}		
+		});
+	});
+
+
+
+/*
+$(document).on('click','.chatsendimage',function()
+	{
+		var current=$(this);
+		alert('Sending Image');
+	
+	       $.ajax({
+			'url' : 'ajax/sendimage',
+			'type' : 'post',
+			'data' : {},
+			'success' : function(data){
+
+					//alert(data);
+				
+			}	
+		});
+	});
+*/
+
+
+
+
+
+
 
 
 });
 
 	$('.popup').fancybox();
 
-	//Emoji Picker
 	$(function() {
-      // Initializes and creates emoji set from sprite sheet
-     loadImg();
+		loadImg();
     });
 	
 	function loadImg()
 	{
-		 window.emojiPicker = new EmojiPicker({
-        emojiable_selector: '[data-emojiable=true]',
-        assetsPath: 'lib/img/',
-        popupButtonClasses: 'fa fa-smile-o'
-      });
-      // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
-      // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
-      // It can be called as many times as necessary; previously converted input fields will not be converted again
+		window.emojiPicker = new EmojiPicker({
+			emojiable_selector: '[data-emojiable=true]',
+			assetsPath: 'lib/img/',
+			popupButtonClasses: 'fa fa-smile-o'
+      	});
       window.emojiPicker.discover();
       //alert(6);
 	}
+
