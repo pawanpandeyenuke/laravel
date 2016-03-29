@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use Auth;
 use Mail;
 use Hash;
 use App\User;
 use Socialite;
+use Illuminate\Http\Request;
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
-class SocialAuthController extends Controller
+class SocialController extends Controller
 {
-	
 	/**
 	 *  @Commom Social Login Function
 	 */
@@ -54,7 +51,6 @@ class SocialAuthController extends Controller
 	 */
     public function redirect( $provider )
     {	
-    	 echo '<pre>';print_r($provider);die;
         return Socialite::driver( $provider )->redirect();   
     }
 
@@ -66,7 +62,7 @@ class SocialAuthController extends Controller
     {		
  
         $providerUser = \Socialite::driver( $provider )->user();
-        //~ echo '<pre>';print_r($providerUser);die;
+        // echo '<pre>';print_r($providerUser);die;
         switch( $provider ){
 			
 			case 'facebook':

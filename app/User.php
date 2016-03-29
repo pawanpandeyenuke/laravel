@@ -66,7 +66,7 @@ class User extends Authenticatable
 
 	public function education()
 	{
-		return $this->hasOne('App\EducationDetails','id','id');
+		return $this->hasMany('App\EducationDetails','user_id','id');
 	}
 
 
