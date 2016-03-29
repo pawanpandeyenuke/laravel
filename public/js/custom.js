@@ -630,7 +630,7 @@ $(document).on('change','#jobarea',function()
 	{
 		var current = $(this);
 		var jobarea = current.val();
-		
+
 		$.ajax({
 			'url' : '/ajax/jobcategory',
 			'type' : 'post',

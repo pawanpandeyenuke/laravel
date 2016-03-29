@@ -79,7 +79,7 @@ class AuthController extends Controller
         $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
 
         $user = User::find($userdata->id);
-        $user->xmpp_username = $xmpp_username;
+        $user->xmpp_username = strtolower($xmpp_username);
         $user->xmpp_password = $xmpp_password;
         $user->save();
 

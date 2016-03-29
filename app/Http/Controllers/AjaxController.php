@@ -366,7 +366,7 @@ comments;
 			{
 			$converse = new Converse;
 			$converse->addFriend($udetail[0]['xmpp_username'],$udetail[1]['xmpp_username'],
-								$udetail[0]['first_name'],$udetail[1]['first_name']);       
+								$udetail[1]['first_name'],$udetail[0]['first_name']);       
 			}
 
 			
