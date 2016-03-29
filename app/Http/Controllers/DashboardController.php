@@ -461,7 +461,7 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
         $user = User::where('id', $id)->get()->first();
         $education = EducationDetails::where('id', $id)->get()->first();
         // echo '<pre>';print_r($education);die;
-
+        
         return view('profile.profile')
                 ->with('user', $user)
                 ->with('education', $education);
