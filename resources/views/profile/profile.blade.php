@@ -4,23 +4,26 @@
 
 <?php
 
-	$country = DB::table('country')->where('country_id', '=', $user->country)->value('country_name'); 
+//dd($user->country);die;
+	if($user->country != null){
+		$country = DB::table('country')->where('country_id', '=', $user->country)->value('country_name'); 
 
-	$all_states = DB::table('state')->where('country_id', '=', $user->country)->pluck('state_name','state_id'); 
+		$all_states = DB::table('state')->where('country_id', '=', $user->country)->pluck('state_name','state_id'); 
 
-	$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
+		$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
+		//print_r($user->country);die;
+	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 
+	}
 
- 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 
- 	
  	if($education->job_area){
- 	
+ 
  		$all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
- 		
+ 
  	}
  	// echo '<pre>';print_r($all_states);die;
 
-	$gender = $user->gender;
-	$maritalstatus = $user->marital_status; 
+	$gender = isset($user->gender) ? $user->gender : '';
+	$maritalstatus = isset($user->marital_status) ? $user->marital_status : '';
   ?>
 <div class="page-data dashboard-body">
 		<div class="container">
