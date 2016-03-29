@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.chat')
 
 @section('content')
 <?php 
@@ -40,7 +40,7 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
                                 <div class="form-group">
 <?php if($exception==null){ ?>
                                     <input type="text" class="form-control searchtxt" placeholder="Search Friends">
-                                    <button type="button" class="search-btn search"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+                                    <button type="button" class="search-btn" id="search"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
                                     <?php } else { ?>
                          
                                             <i class="flaticon-people"></i> <b>{{$groupname}}</b>
@@ -207,7 +207,7 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
                     //jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
 
 
-        if( groupname.length != '' || groupid.length != '' )
+        if( groupname != '' || groupid != '' )
         {         
              openChatGroup(groupid,groupname);
         }
@@ -229,7 +229,7 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
             }
         });
 
-        jQuery('#search-btn').click(function(){
+/*        jQuery('#search-btn').click(function(){
 
             var val = jQuery('#search').val();
             if(val.length>2)
@@ -250,7 +250,24 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
                 alert("Please enter more than 2 char");
             }
   
-        });
+        });*/
+
+
+            $(document).on('click','#search',function() {
+
+                var current=$(this);
+                
+                var name=$('.searchtxt').val();
+
+                   $.ajax({
+                    'url' : 'ajax/searchfriend',
+                    'type' : 'post',
+                    'data' : {'name':name},
+                    'success' : function(data){
+                        $("#userslist").html(data);
+                    }       
+                });
+            });
 
     });
 

@@ -588,11 +588,6 @@ class ApiController extends Controller
  	}
 
 
-	return $this->output();	
-
- 	}
-
-
 	/*
 	 * Edit post on request.
 	 */

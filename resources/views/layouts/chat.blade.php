@@ -92,8 +92,8 @@
 <script type="text/javascript" src="/fancybox/jquery.fancybox.js"></script>
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/fileinput.min.js"></script>
-<script type="text/javascript" src="/js/custom.js"></script>
-<script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
+<!-- <script type="text/javascript" src="/js/custom.js"></script>
+ --><script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap-datepicker.min.js"></script>
 <script src="/c-lib/lib/js/emojione.js"></script>
 <!--Emoji libraries-->
@@ -107,8 +107,8 @@
 <!--/Emoji-->
 
 <!-- chat system -->
-<!-- <script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
-<script type="text/javascript" src="/converse/jquery.form.js"></script> -->
+<script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
+<script type="text/javascript" src="/converse/jquery.form.js"></script>
 <!-- chat system -->
 
 </body>

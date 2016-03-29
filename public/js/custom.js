@@ -641,22 +641,6 @@ $(document).on('change','#jobarea',function()
 		});
 	});
 
-$(document).on('click','.search',function()
-	{
-		var current=$(this);
-		
-		var name=$('.searchtxt').val();
-
-	       $.ajax({
-			'url' : 'ajax/searchfriend',
-			'type' : 'post',
-			'data' : {'name':name},
-			'success' : function(data){
-				$("#userslist").html(data);
-			}		
-		});
-	});
-
 
 
 /*
