@@ -4,8 +4,6 @@
 
 <?php
 
-	// $user = DB::table('users')->where('id', '=', $user->id)->get();
-	// dd();exit;
 	if(!empty($user->country)){
 		
 		$country = DB::table('country')->where('country_id', '=', $user->country)->value('country_name'); 
@@ -17,7 +15,7 @@
 	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 	
 
 	}
-	// dd($education);exit;
+
 	$gender = isset($user->gender) ? $user->gender : '';
 	$maritalstatus = isset($user->marital_status) ? $user->marital_status : ''; 
 
@@ -26,9 +24,8 @@
  		$all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
 
  	}
- 	// echo '<pre>';print_r($all_states);die;
 
-  ?>
+?>
 <div class="page-data dashboard-body">
 		<div class="container">
 			<div class="row">
