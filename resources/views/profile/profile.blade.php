@@ -49,7 +49,7 @@
 									<input type="text" class="pr-edit pr-name" disabled="disabled" value="{{ $user->first_name.' '.$user->last_name }}">
 								</div>
 								<div class="pr-field">
-									<select name="city" class="pr-edit" disabled="disabled">
+									<select name="city" style="max-width: 180px;" class="pr-edit" disabled="disabled">
 										<?php foreach ($all_cities as $key => $value) { 
 											if($value == $user->city)
 												$selected = 'Selected'; 
@@ -72,7 +72,7 @@
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country</div></td>
 													<td>
-														<select name="country" id="profile_country" class="pr-edit" disabled="disabled">
+														<select name="country" style="max-width: 180px;" id="profile_country" class="pr-edit" disabled="disabled">
 															<?php foreach ($countries as $key => $value) { ?>
 																	<option value="{{$key}}" <?php echo ($value == $country)?'Selected':''; ?> >{{$value}}</option>	
 															<?php } ?>
@@ -82,7 +82,7 @@
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-gps"></i>State</div></td>
 													<td>
-														<select name="state" id="profile_state" class="pr-edit" disabled="disabled">
+														<select name="state" style="max-width: 180px;" id="profile_state" class="pr-edit" disabled="disabled">
 															<?php foreach ($all_states as $key => $value) { 
 																if($value == $user->state)
 																	$selected = 'Selected'; 
@@ -97,7 +97,7 @@
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-city"></i>City</div></td>
 													<td>
-														<select name="city" id="profile_city" class="pr-edit" disabled="disabled">
+														<select name="city" style="max-width: 180px;" id="profile_city" class="pr-edit" disabled="disabled">
 															<?php foreach ($all_cities as $key => $value) { 
 																if($value == $user->city)
 																	$selected = 'Selected'; 
@@ -159,7 +159,7 @@
 													<td><div class="p-data-title"><i class="flaticon-education"></i>Qualification</div></td>
 													<td>
 														<div class="slt-cont">
-															<select name="education_level" class="pr-edit" disabled="disabled">
+															<select name="education_level" style="max-width: 180px;" class="pr-edit" disabled="disabled">
 																<option>Education level</option>
 																<?php 
 																	if(isset($education)){
@@ -168,7 +168,7 @@
 																		<option value="{{$value}}" <?php echo ($value == $eduLevel)?'Selected':''; ?> >{{ $value }}</option>
 																<?php } } ?>
 															</select>
-															<select name="specialization" class="pr-edit" disabled="disabled">
+															<select name="specialization" style="max-width: 180px;" class="pr-edit" disabled="disabled">
 																<option >Specialization</option>
 																<?php
 																if(isset($education)){
@@ -209,11 +209,11 @@
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-graduation"></i>Name of Education Establishment</div></td>
-													<td><input type="text" name="education_establishment" class="pr-edit" disabled="disabled" value="<?php echo isset($education)?$education->education_establishment:''?>"></td>
+													<td><input type="text" style="max-width: 180px;" name="education_establishment" class="pr-edit" disabled="disabled" value="<?php echo isset($education)?$education->education_establishment:''?>"></td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country of Establishment</div></td>
-													<td><input type="text" name="country_of_establishment" class="pr-edit" disabled="disabled" value="<?php echo isset($education)?$education->country_of_establishment:''?>"></td>
+													<td><input type="text" style="max-width: 180px;" name="country_of_establishment" class="pr-edit" disabled="disabled" value="<?php echo isset($education)?$education->country_of_establishment:''?>"></td>
 												</tr>
 <!-- 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-city"></i>City of Establishment</div></td>
@@ -223,7 +223,7 @@
 													<td><div class="p-data-title"><i class="flaticon-vintage"></i>Current profession Industry</div></td>
 													<td>
 														<div class="slt-cont">
-															<select name="job_area" class="pr-edit" id="jobarea" disabled="disabled">
+															<select name="job_area" style="max-width: 180px;" class="pr-edit" id="jobarea" disabled="disabled">
 																<option>Current Job Area</option>
 																<?php 
 																	if(isset($jobarea) && isset($education)){
@@ -236,7 +236,7 @@
 																		<option value="{{ $key }}" data-value="{{ $key }}" <?php echo $selected; ?> >{{ $value }}</option>";
 																<?php } } ?>
 															</select>
-															<select name="job_category" id="jobcategory" class="pr-edit" disabled="disabled">
+															<select name="job_category" style="max-width: 180px;" id="jobcategory" class="pr-edit" disabled="disabled">
 																<option >Job Category</option>
 																<?php foreach ($all_job_cat as $key => $value) { 
 																	if($value == $education->job_category)
@@ -244,7 +244,7 @@
 																	else
 																		$selected = ''; 
 																	?>
-																		<option value="{{$key}}" <?php echo $selected; ?> >{{$value}}</option>	
+																		<option value="{{$value}}" <?php echo $selected; ?> >{{$value}}</option>	
 																<?php } ?>
 															</select>
 														</div>
@@ -256,10 +256,12 @@
 								</div>
 							</div>
 						</div><!--/profile detail-->
-						<button class="btn btn-primary btn-lg pr-edit" type="submit" value="Save">Save</button>
+						<div class="btn-cont text-center">
+							<button class="btn btn-primary btn-lg subbtn" style="display:none;" type="submit" value="">Save</button>
+						</div>
 					{!!Form::close()!!}
 				</div><!--/page center data-->
-				<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
+				<div class="shadow-box bottom-ad"><img src="/images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 			</div>
 			@include('panels.right')
 
@@ -272,6 +274,7 @@
 		$(this).hide();
 		$('.save-profile-changes').show();
 		$('button.edit-pr-img').show();
+		$('.subbtn').show();
 	});
 	$(document).on('click','.save-profile-changes',function(){
 		$('.pr-edit').prop('disabled', true);
@@ -316,7 +319,7 @@
 			});	
 		});
 
-		$('.datepicker').datepicker({ dateFormat: "yy/mm/dd"});
+		$('.datepicker').datepicker();
 	
 	});
 </script>
