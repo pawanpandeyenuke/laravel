@@ -114,7 +114,10 @@ class DashboardController extends Controller
             return redirect()->back();
         }
         
-        return view('dashboard.settings');
+        $settinguser = Setting::where('user_id', '=', Auth::User()->id)->pluck('setting_value', 'setting_title')->toArray();
+        // echo '<pre>';print_r($settinguser);die;
+        return view('dashboard.settings')
+                ->with('setting', $settinguser);
     }
 
 
@@ -124,7 +127,7 @@ class DashboardController extends Controller
                 'owner_id' => Auth::User()->id,
                 'status' => 'Active'
             ])->get();
-        // echo '<pre>';print_r($groups);die;
+        
 
 
         return view('chatroom.chatroom')

@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 <?php  
-// echo '<pre>';print_r($feeds);die('view');
+// echo '<pre>';print_r($setting['contact-request']);die;
 ?>
 @section('content')
 
@@ -30,27 +30,27 @@
 								<div class="row">
 									<div class="col-sm-8 col-sm-offset-3">
 										<div class="radio-cont radio-label-left">
-											<!-- <input type="radio" name="contact-request" id="radio1" checked="checked" class="css-checkbox" value="Friends of friends"/> -->
-											{!! Form::radio('contact-request', 'Friends of friends', true,[
+											<input type="radio" name="contact-request" id="radio1" class="css-checkbox" value="Friends of friends" <?php echo ($setting['contact-request'] == 'Friends of friends'? 'checked':'') ?>/>
+											<!-- {!! Form::radio('contact-request', 'Friends of friends', true,[
 												'class'=>'css-checkbox',
 												'id'=>'radio1',
-											]) !!}
+											]) !!} -->
 											<label for="radio1" class="css-label radGroup1">Friends of friends</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<!-- <input type="radio" name="contact-request" id="radio2" class="css-checkbox" value="Nearby app user"/> -->
-											{!! Form::radio('contact-request', 'Nearby app user', false,[
+											<input type="radio" name="contact-request" id="radio2" class="css-checkbox" value="Nearby app user" <?php echo ($setting['contact-request'] == 'Nearby app user'? 'checked':'') ?>/>
+<!-- 											{!! Form::radio('contact-request', 'Nearby app user', false,[
 												'class'=>'css-checkbox',
 												'id'=>'radio2', 
-											]) !!}
+											]) !!} -->
 											<label for="radio2" class="css-label radGroup1">Nearby app user</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<!-- <input type="radio" name="contact-request" id="radio3" class="css-checkbox" value="All"/> -->
-											{!! Form::radio('contact-request', 'All', false,[
+											<input type="radio" name="contact-request" id="radio3" class="css-checkbox" value="All" <?php echo ($setting['contact-request'] == 'All'? 'checked':'') ?>/>
+										<!-- 	{!! Form::radio('contact-request', 'All', false,[
 												'class'=>'css-checkbox',
 												'id'=>'radio3',
-											]) !!}
+											]) !!} -->
 											<label for="radio3" class="css-label radGroup1">All</label>
 										</div>
 									</div>
@@ -62,27 +62,27 @@
 								<div class="row">
 									<div class="col-sm-8 col-sm-offset-3">
 										<div class="radio-cont radio-label-left">
-											<!-- <input type="radio" name="friend-request" id="radior1" checked="checked" class="css-checkbox" value="Friends of friends"/> -->
-											{!! Form::radio('friend-request', 'Friends of friends', true, [
+											<input type="radio" name="friend-request" id="radior1" class="css-checkbox" value="Friends of friends" <?php echo ($setting['friend-request'] == 'Friends of friends'? 'checked':'') ?>/>
+											<!-- {!! Form::radio('friend-request', 'Friends of friends', true, [
 												'class' => 'css-checkbox',
 												'id' => 'radior1',
-											])!!}
+											])!!} -->
 											<label for="radior1" class="css-label radGroup1">Friends of friends</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<!-- <input type="radio" name="friend-request" id="radior2" class="css-checkbox" value="Nearby app user"/> -->
-											{!! Form::radio('friend-request', 'Nearby app user', false, [
+											<input type="radio" name="friend-request" id="radior2" class="css-checkbox" value="Nearby app user" <?php echo ($setting['friend-request'] == 'Nearby app user'? 'checked':'') ?>/>
+											<!-- {!! Form::radio('friend-request', 'Nearby app user', false, [
 												'class' => 'css-checkbox',
 												'id' => 'radior2',
-											])!!}
+											])!!} -->
 											<label for="radior2" class="css-label radGroup1">Nearby app user</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<!-- <input type="radio" name="friend-request" id="radior3" class="css-checkbox" value="All"/> -->
-											{!! Form::radio('friend-request', 'All', false, [
+											<input type="radio" name="friend-request" id="radior3" class="css-checkbox" value="All" <?php echo ($setting['friend-request'] == 'All'? 'checked':'') ?>/>
+											<!-- {!! Form::radio('friend-request', 'All', false, [
 												'class' => 'css-checkbox',
 												'id' => 'radior3',
-											])!!}
+											])!!} -->
 											<label for="radior3" class="css-label radGroup1">All</label>
 										</div>
 									</div>
