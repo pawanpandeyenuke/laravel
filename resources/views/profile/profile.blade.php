@@ -15,12 +15,12 @@
 		//print_r($user->country);die;
 	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 
 
-		$gender = $user->gender;
-		$maritalstatus = $user->marital_status; 
-
 	}
 
- 	if($education != null){
+	$gender = isset($user->gender) ? $user->gender : '';
+	$maritalstatus = isset($user->marital_status) ? $user->marital_status : ''; 
+
+	if($education != null){
 
  		$all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
 
@@ -61,6 +61,10 @@
 								</div>
 								<div class="pr-field">
 									<select name="city" style="max-width: 180px;" class="pr-edit" disabled="disabled">
+<<<<<<< HEAD
+=======
+										<option value="">City</option>	
+>>>>>>> d502fa01978f2df8ce4a9d3a345e46c57f6c7bb6
 										<?php 
 										if(isset($all_cities)){
 											foreach ($all_cities as $key => $value) { 
@@ -86,9 +90,16 @@
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country</div></td>
 													<td>
 														<select name="country" style="max-width: 180px;" id="profile_country" class="pr-edit" disabled="disabled">
+<<<<<<< HEAD
 															<?php
 															if(isset($countries)){
 																 foreach ($countries as $key => $value) { ?>
+=======
+															<option value="">Country</option>	
+															<?php 
+															if(isset($country) && isset($countries)){
+																foreach ($countries as $key => $value) { ?>
+>>>>>>> d502fa01978f2df8ce4a9d3a345e46c57f6c7bb6
 																	<option value="{{$key}}" <?php echo ($value == $country)?'Selected':''; ?> >{{$value}}</option>	
 															<?php } } ?>
 														</select>
@@ -98,14 +109,17 @@
 													<td><div class="p-data-title"><i class="flaticon-gps"></i>State</div></td>
 													<td>
 														<select name="state" style="max-width: 180px;" id="profile_state" class="pr-edit" disabled="disabled">
-															<?php foreach ($all_states as $key => $value) { 
+															<option value="">State</option>	
+															<?php 
+															if(isset($all_states) && isset($user->state)){
+																foreach ($all_states as $key => $value) { 
 																if($value == $user->state)
 																	$selected = 'Selected'; 
 																else
 																	$selected = ''; 
 																?>
 																	<option value="{{$key}}" <?php echo $selected; ?> >{{$value}}</option>	
-															<?php } ?>
+															<?php } } ?>
 														</select>
 													</td>
 												</tr>
@@ -113,14 +127,17 @@
 													<td><div class="p-data-title"><i class="flaticon-city"></i>City</div></td>
 													<td>
 														<select name="city" style="max-width: 180px;" id="profile_city" class="pr-edit" disabled="disabled">
-															<?php foreach ($all_cities as $key => $value) { 
+															<option value="">City</option>	
+															<?php 
+															if(isset($all_cities) && isset($user->city)){
+																foreach ($all_cities as $key => $value) { 
 																if($value == $user->city)
 																	$selected = 'Selected'; 
 																else
 																	$selected = ''; 
 																?>
 																	<option value="{{$key}}" <?php echo $selected; ?> >{{$value}}</option>	
-															<?php } ?>
+															<?php } } ?>
 														</select>
 													</td>
 												</tr>
