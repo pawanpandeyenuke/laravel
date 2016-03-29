@@ -4,27 +4,29 @@
 
 <?php
 
-//dd($user->country);die;
-	if($user->country != null){
+	if(!empty($user->country)){
+
 		$country = DB::table('country')->where('country_id', '=', $user->country)->value('country_name'); 
 
 		$all_states = DB::table('state')->where('country_id', '=', $user->country)->pluck('state_name','state_id'); 
 
 		$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
+
 		//print_r($user->country);die;
 	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 
+
+		$gender = $user->gender;
+		$maritalstatus = $user->marital_status; 
+
 	}
 
- 	if($education->job_area){
- 
+ 	if($education != null){
+
  		$all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
- 
+
  	}
  	// echo '<pre>';print_r($all_states);die;
-
-	$gender = isset($user->gender) ? $user->gender : '';
-	$maritalstatus = isset($user->marital_status) ? $user->marital_status : '';
-  ?>
+?>
 <div class="page-data dashboard-body">
 		<div class="container">
 			<div class="row">
@@ -59,14 +61,16 @@
 								</div>
 								<div class="pr-field">
 									<select name="city" style="max-width: 180px;" class="pr-edit" disabled="disabled">
-										<?php foreach ($all_cities as $key => $value) { 
+										<?php 
+										if(isset($all_cities)){
+											foreach ($all_cities as $key => $value) { 
 											if($value == $user->city)
 												$selected = 'Selected'; 
 											else
 												$selected = ''; 
 											?>
 												<option value="{{$value}}" <?php echo $selected; ?> >{{$value}}</option>	
-										<?php } ?>
+										<?php } } ?>
 									</select>
 								</div>
 							</div>
@@ -82,9 +86,11 @@
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country</div></td>
 													<td>
 														<select name="country" style="max-width: 180px;" id="profile_country" class="pr-edit" disabled="disabled">
-															<?php foreach ($countries as $key => $value) { ?>
+															<?php
+															if(isset($countries)){
+																 foreach ($countries as $key => $value) { ?>
 																	<option value="{{$key}}" <?php echo ($value == $country)?'Selected':''; ?> >{{$value}}</option>	
-															<?php } ?>
+															<?php } } ?>
 														</select>
 													</td>
 												</tr>
@@ -247,14 +253,16 @@
 															</select>
 															<select name="job_category" style="max-width: 180px;" id="jobcategory" class="pr-edit" disabled="disabled">
 																<option >Job Category</option>
-																<?php foreach ($all_job_cat as $key => $value) { 
-																	if($value == $education->job_category)
-																		$selected = 'Selected'; 
-																	else
-																		$selected = ''; 
-																	?>
-																		<option value="{{$value}}" <?php echo $selected; ?> >{{$value}}</option>	
-																<?php } ?>
+																<?php 
+																if(isset($jobarea) && isset($education)){
+																	foreach ($all_job_cat as $key => $value) { 
+																		if($value == $education->job_category)
+																			$selected = 'Selected'; 
+																		else
+																			$selected = ''; 
+																		?>
+																			<option value="{{$value}}" <?php echo $selected; ?> >{{$value}}</option>	
+																<?php } } ?>
 															</select>
 														</div>
 													</td>
