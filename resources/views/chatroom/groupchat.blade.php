@@ -15,6 +15,9 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
             ,"Emergency Blood Donation","Study Questions","Seek Help","","","");
 
  $groupname=str_replace($old,$new,$groupname);
+
+$groupid=strtolower($groupid);
+$groupid=str_replace('-','_',$groupid);
 ?>
 <div class="page-data dashboard-body">
         <div class="container">
@@ -25,14 +28,6 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
             <div class="col-sm-6">
 
                 <div class="shadow-box page-center-data no-margin-top no-bottom-padding">
-                    <!-- <div class="page-title"> -->
-                        <!-- <i class="flaticon-people"></i>{{$groupname}} -->
-<!--                         <div class="search-box">
-                            <input type="text" placeholder="Search" class="form-control">
-                            <button class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
-                        </div> -->
-                   <!--  </div> -->
-                  
                     <div class="row">
                         <div class="col-sm-4 padding-right-none chat-list-outer">
                             
@@ -142,10 +137,6 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
 <script type="text/javascript" src="/converse/jquery.form.js"></script>
-<!-- chat system -->
-<!-- <script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
-<script type="text/javascript" src="/converse/jquery.form.js"></script> -->
-<!-- chat system -->
 
 <script type="text/javascript">
 
@@ -209,7 +200,7 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
 
         if( groupname != '' || groupid != '' )
         {         
-             openChatGroup(groupid,groupname);
+             openChatGroup(groupname,groupid);
         }
                     $(".chatroom:visible").each(function()  {
                           checkChatboxAndChatRoom(this);
@@ -309,9 +300,9 @@ function openChatbox(xmpusername,username)
       var ss=conObj.contacts.get(xmpusername+chatserver);
       if(ss==null)
    { 
-    conObj.contacts.add(xmpusername+chatserver, username);
+    // conObj.contacts.add(xmpusername+chatserver, username);
      //conObj.chats.add(xmpusername+chatserver,username)
-     alert(username+' is not your friend.We are adding to your friend list. So please wait.');
+     // alert(username+' is not your friend.We are adding to your friend list. So please wait.');
                    
    }
    else if(minbox.length>0)
