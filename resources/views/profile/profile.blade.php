@@ -25,7 +25,6 @@
  		$all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
 
  	}
- 	// echo '<pre>';print_r($all_states);die;
 ?>
 <div class="page-data dashboard-body">
 		<div class="container">
@@ -61,10 +60,7 @@
 								</div>
 								<div class="pr-field">
 									<select name="city" style="max-width: 180px;" class="pr-edit" disabled="disabled">
-<<<<<<< HEAD
-=======
 										<option value="">City</option>	
->>>>>>> d502fa01978f2df8ce4a9d3a345e46c57f6c7bb6
 										<?php 
 										if(isset($all_cities)){
 											foreach ($all_cities as $key => $value) { 
@@ -90,16 +86,11 @@
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country</div></td>
 													<td>
 														<select name="country" style="max-width: 180px;" id="profile_country" class="pr-edit" disabled="disabled">
-<<<<<<< HEAD
-															<?php
-															if(isset($countries)){
-																 foreach ($countries as $key => $value) { ?>
-=======
 															<option value="">Country</option>	
 															<?php 
 															if(isset($country) && isset($countries)){
 																foreach ($countries as $key => $value) { ?>
->>>>>>> d502fa01978f2df8ce4a9d3a345e46c57f6c7bb6
+
 																	<option value="{{$key}}" <?php echo ($value == $country)?'Selected':''; ?> >{{$value}}</option>	
 															<?php } } ?>
 														</select>
