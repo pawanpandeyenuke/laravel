@@ -148,7 +148,7 @@ class ApiController extends Controller
 					$arguments['linked_id'] = $arguments['id'];
 
 				
-				$controller = app()->make('App\Http\Controllers\SocialAuthController')->socialLogin($arguments);
+				$controller = app()->make('App\Http\Controllers\SocialController')->socialLogin($arguments);
 				
 				if( $controller ){
 					$this->message = 'Successfully logged in';

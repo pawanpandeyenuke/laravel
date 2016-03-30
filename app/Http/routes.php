@@ -115,8 +115,8 @@ Route::post('api/declinerequest','ApiController@declineRequest');
 |
 */
 	
-Route::get('/redirect/{provider}', 'SocialAuthController@redirect');
-Route::get('/callback/{provider}', 'SocialAuthController@callback');
+Route::get('/redirect/{provider}', 'SocialController@redirect');
+Route::get('/callback/{provider}', 'SocialController@callback');
 
 Route::get('home', 'HomeController@index');
 
