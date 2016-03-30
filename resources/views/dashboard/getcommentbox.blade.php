@@ -92,7 +92,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 													<a href="profile/{{$username->id}}" title="" class="user-link">{{ $username->first_name.' '.$username->last_name }}</a>
 												</div>
 												<div class="col-sm-6">
-													<div class="comment-time text-right">{{ $data->updated_at->format('h:i A') }}</div>
+					<div class="comment-time text-right">{{ ($data->updated_at->format('h:i A') }}</div>
 												</div>
 											</div>
 										</div>

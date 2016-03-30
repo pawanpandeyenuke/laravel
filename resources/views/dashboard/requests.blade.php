@@ -21,7 +21,7 @@
 						    <li class="active" role="presentation"><a class="friendstabs" data-reqtype="all" data-toggle="tab" role="tab" aria-controls="All" href="#All">All</a></li>
 						    <li role="presentation"><a class="friendstabs" data-reqtype="sent" data-toggle="tab" role="tab" aria-controls="Send" href="#Send">Sent</a></li>
 						    <li role="presentation"><a class="friendstabs" data-reqtype="recieved" data-toggle="tab" role="tab" aria-controls="Recieved" href="#Recieved">Recieved</a></li>
-						    <li role="presentation"><a class="friendstabs" data-reqtype="current" data-toggle="tab" role="tab" aria-controls="Current" href="#Current">Current</a></li>
+						    <li role="presentation"><a class="friendstabs" data-reqtype="current" data-toggle="tab" role="tab" aria-controls="Current" href="#Current">Friends</a></li>
 						  </ul>
 
 						  <!-- Tab panes -->
