@@ -33,7 +33,7 @@
 		    <div class="panel-heading" role="tab" id="headingfour">
 		      <h4 class="panel-title">
 		        <a class="without-arrow" href="{{ url('requests')}}">
-		          <i class="flaticon-people"></i>Friends Request
+		          <i class="flaticon-people"></i>Friends
 		        </a>
 		      </h4>
 		    </div>
