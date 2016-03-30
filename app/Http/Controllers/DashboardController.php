@@ -430,7 +430,18 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
             $arguments['city'] = DB::table('city')->where('city_id', $arguments['city'])->value('city_name');
 
             if($arguments){
+
+                $temp = explode(' ', $arguments['username']);
+                if(is_array($temp)){
+                    $arguments['first_name'] = $temp[0];
+                    $arguments['last_name'] = $temp[1];
+                }else{
+                    $arguments['first_name'] = $temp;
+                }
+                
+                unset($arguments['username']);
                 unset($arguments['_token']);
+                
                 foreach ($arguments as $key => $value) {
                     if( $key != 'email' && $key != 'password' ){
                         User::where([ 'id' => $id ])
