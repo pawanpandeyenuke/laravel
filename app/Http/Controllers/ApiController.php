@@ -148,7 +148,7 @@ class ApiController extends Controller
 					$arguments['linked_id'] = $arguments['id'];
 
 				
-				$controller = app()->make('App\Http\Controllers\socialLogin')->socialLogin($arguments);
+				$controller = app()->make('App\Http\Controllers\SocialController')->socialLogin($arguments);
 				
 				if( $controller ){
 					$this->message = 'Successfully logged in';
@@ -506,49 +506,24 @@ class ApiController extends Controller
 	 */
  	public function updateProfile()
  	{
-
 		try{
 			$arguments = Request::all();
+
 			$user = new User();
-			$id = $arguments['id'];
-			//multiple image uploading
-			$getCommonEduArgs = array_intersect_key( $arguments, [
-									'id' => 'null',
-									'education_level' => 'null',
-									'specialization' => 'null',
-									'graduation_year_from' => 'null',
-									'graduation_year_to' => 'null',
-									'currently_studying' => 'null',
-									'education_establishment' => 'null',
-									'country_of_establishment' => 'null',
-									'city_of_establishment' => 'null',
-									'job_area' => 'null',
-									'job_category' => 'null'
-								]);
 
-			if( !empty($getCommonEduArgs) ){
+			if(isset($arguments['education'])){
 
-				$eduExists = EducationDetails::where('id', '=', $getCommonEduArgs['id'])->get();
-
-				if(!empty($eduExists)){
-
-					$eduExists = EducationDetails::find($getCommonEduArgs['id']);
-					$eduExists->fill($getCommonEduArgs);
-					$saved = $eduExists->push();
-
-				}else{
-
+				$delete = EducationDetails::where('user_id', '=', Auth::User()->id)->delete();
+				$data = array();
+				$educationdata = $arguments['education'];
+				foreach ($educationdata as $key => $value) {
+					
 					$education = new EducationDetails;
-					$education->create($getCommonEduArgs);
-
+					$data[] = $education->create($value);
 				}
-
-				foreach ($getCommonEduArgs as $key => $value)
-					unset($arguments[$key]);
-
 			}
-			
-			$arguments['id'] = $id;
+
+			unset($arguments['education']);
 
 			if($arguments){
 

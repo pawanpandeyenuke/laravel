@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails;
+use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
@@ -274,7 +274,9 @@ comments;
 	public function getStates()
 	{
 		$input = Input::all();
-		$statequeries = State::where(['country_id' => $input['countryId']])->get();		
+		
+		$countryid = Country::where(['country_name' => $input['countryId']])->value('country_id');		
+		$statequeries = State::where(['country_id' => $countryid])->get();		
 		$states = array('<option value="">State</option>');
 		foreach($statequeries as $query){			
 			$states[] = '<option value="'.$query->state_id.'">'.$query->state_name.'</option>';
@@ -290,7 +292,8 @@ comments;
 	public function getCities()
 	{
 		$input = Input::all();
-		$cityqueries = City::where(['state_id' => $input['stateId']])->get();
+		$cityid = State::where(['state_id' => $input['stateId']])->value('state_id');
+		$cityqueries = City::where(['state_id' => $cityid])->get();
 		$city = array('<option value="">City</option>');
 		foreach($cityqueries as $query){			
 			$city[] = '<option value="'.$query->city_id.'">'.$query->city_name.'</option>';
@@ -519,7 +522,10 @@ comments;
  	public function getJobcategory()
  	{
  		$input=Input::all();
- 		$data = DB::table('job_category')->where('job_area_id',$input['jobarea'])->pluck('job_category');
+ 		// print_r($input);die;
+
+ 		$categoryid = DB::table('job_area')->where('job_area',$input['jobarea'])->value('job_area_id');
+ 		$data = DB::table('job_category')->where('job_area_id',$categoryid)->pluck('job_category');
 
 		$jcategory = array('<option value="">Category</option>');
 		foreach($data as $query){			

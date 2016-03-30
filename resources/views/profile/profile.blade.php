@@ -6,22 +6,23 @@
 
 	if(!empty($user->country)){
 		
-		$country = DB::table('country')->where('country_id', '=', $user->country)->value('country_name'); 
-
-		$all_states = DB::table('state')->where('country_id', '=', $user->country)->pluck('state_name','state_id'); 
-
+		$countryid = DB::table('country')->where('country_name', '=', $user->country)->value('country_id'); 
+		$all_states = DB::table('state')->where('country_id', '=', $countryid)->pluck('state_name','state_id'); 
+		
 		$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
-
 	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 	
-
+	 	// echo '<pre>';print_r($all_cities);die;
 	}
 
 	$gender = isset($user->gender) ? $user->gender : '';
 	$maritalstatus = isset($user->marital_status) ? $user->marital_status : ''; 
 
-	if($education != null){
+	if(!empty($user->job_category)){
 
- 		$all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
+ 		$categoryid = DB::table('job_area')->where('job_area',$user->job_area)->value('job_area_id');
+ 		$all_job_cat = DB::table('job_category')->where('job_area_id',$categoryid)->pluck('job_category');
+ 		// echo '<pre>';print_r($data);die;
+ 		// $all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
 
  	}
 
@@ -85,17 +86,16 @@
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country</div></td>
 													<td>
-														<select name="country" style="max-width: 180px;" id="profile_country" class="pr-edit" disabled="disabled">
-															<option value="">Country</option>	
+														<select name="country" style="max-width: 180px;" id="profile_country" class="pr-edit" disabled="disabled">	
 															<?php 
 															// if(isset($country) && isset($countries)){
 																foreach ($countries as $key => $value) { 
-																	if(isset($country))
+																	if($user->country == $value)
 																		$selected = 'Selected'; 
 																	else
 																		$selected = ''; 
 																	?>
-																	<option value="{{$key}}" {{$selected}} >{{$value}}</option>	
+																	<option value="{{$value}}" {{$selected}} >{{$value}}</option>	
 															<?php } // } ?>
 														</select>
 													</td>
@@ -240,7 +240,22 @@
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country of Establishment</div></td>
-													<td><input type="text" style="max-width: 180px;" name="country_of_establishment" class="pr-edit" disabled="disabled" value="<?php echo isset($education)?$education->country_of_establishment:''?>"></td>
+													<td>
+														<!-- <input type="text" style="max-width: 180px;" name="country_of_establishment" class="pr-edit" disabled="disabled" value="<?php echo isset($education)?$education->country_of_establishment:''?>"> -->
+														<select name="country_of_establishment" style="max-width: 180px;" id="" class="pr-edit" disabled="disabled">
+															<option value="">Country</option>	
+															<?php 
+															// if(isset($education)){
+																foreach ($countries as $key => $value) { 
+																	if($education->country_of_establishment == $value)
+																		$selected = 'Selected'; 
+																	else
+																		$selected = ''; 
+																	?>
+																	<option value="{{$value}}" {{$selected}} >{{$value}}</option>	
+															<?php } // } ?>
+														</select>
+													</td>
 												</tr>
 <!-- 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-city"></i>City of Establishment</div></td>
@@ -253,14 +268,14 @@
 															<select name="job_area" style="max-width: 180px;" class="pr-edit" id="jobarea" disabled="disabled">
 																<option>Current Job Area</option>
 																<?php 
-																	if(isset($jobarea) && isset($education)){
+																	if(isset($jobarea)){
 																	foreach ($jobarea as $key => $value) { 
-																		if($key == $education->job_area)
+																		if($value == $user->job_area)
 																			$selected = 'Selected'; 
 																		else
 																			$selected = ''; 
 																		?>
-																		<option value="{{ $key }}" data-value="{{ $key }}" <?php echo $selected; ?> >{{ $value }}</option>";
+																		<option value="{{ $value }}" data-value="{{ $key }}" <?php echo $selected; ?> >{{ $value }}</option>";
 																<?php } } ?>
 															</select>
 															<select name="job_category" style="max-width: 180px;" id="jobcategory" class="pr-edit" disabled="disabled">
@@ -268,7 +283,7 @@
 																<?php 
 																if(isset($jobarea) && isset($education)){
 																	foreach ($all_job_cat as $key => $value) { 
-																		if($value == $education->job_category)
+																		if($value == $user->job_category)
 																			$selected = 'Selected'; 
 																		else
 																			$selected = ''; 

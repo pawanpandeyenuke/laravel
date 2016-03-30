@@ -396,7 +396,7 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
         if(Request::isMethod('post')){
 
             $getCommonEduArgs = array_intersect_key( $arguments, [
-                                    'id' => 'null',
+                                    'user_id' => 'null',
                                     'education_level' => 'null',
                                     'specialization' => 'null',
                                     'graduation_year_from' => 'null',
@@ -404,15 +404,13 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
                                     'currently_studying' => 'null',
                                     'education_establishment' => 'null',
                                     'country_of_establishment' => 'null',
-                                    'city_of_establishment' => 'null',
-                                    'job_area' => 'null',
-                                    'job_category' => 'null'
+                                    'city_of_establishment' => 'null'
                                 ]);
             
             if( !empty($getCommonEduArgs) ){
 
-                $getCommonEduArgs['id'] = $id;
-                $eduExists = EducationDetails::where('id', '=', $id)->get()->toArray();
+                $getCommonEduArgs['user_id'] = $id;
+                $eduExists = EducationDetails::where('user_id', '=', $id)->get()->toArray();
 
                 $time=strtotime($getCommonEduArgs['graduation_year_from']);
                 $getCommonEduArgs['graduation_year_from']=date('Y-m-d',$time);
@@ -459,7 +457,7 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
 
 
         $user = User::where('id', $id)->get()->first();
-        $education = EducationDetails::where('id', $id)->get()->first();
+        $education = EducationDetails::where('user_id', $id)->get()->first();
         // echo '<pre>';print_r($education);die;
         
         return view('profile.profile')
