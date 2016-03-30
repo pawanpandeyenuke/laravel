@@ -137,15 +137,10 @@ class DashboardController extends Controller
 
     public function friendRequests()
     {
-        $friend = Friend::with('user')
-                ->with('friends')
-                ->where('user_id', '=', Auth::User()->id)
-                ->orWhere('friend_id', '=', Auth::User()->id)
-                ->get()
-                ->toArray();
-        // echo '<pre>';print_r($friend);die;
+        $model1=User::where('id','!=',Auth::User()->id)->get()->toArray();
+
         return view('dashboard.requests')
-                ->with('friends', $friend);
+                ->with('model1', $model1);
 
     }
 

@@ -223,7 +223,6 @@ comments;
  	}
  	
 
-
 	/**
 	*	Get friend lists ajax call handling.
 	*	Ajaxcontroller@getfriendslist
@@ -232,12 +231,20 @@ comments;
 	{
 		
 		$input=Input::get('type');
+		$model1=array();
+		$model=array();
+
+			if($input=='all')
+			{
+			  $model1=User::where('id','!=',Auth::User()->id)->get()->toArray();
+			}
+			else{
 
 		$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
 			    self::queryBuilder( $query, $input );
 				})->get()->toArray();
-
-		return view('dashboard.getfriendslist')->with('model',$model);
+			}
+		return view('dashboard.getfriendslist')->with('model',$model)->with('model1',$model1);
  
 	}
 
@@ -247,11 +254,9 @@ comments;
 	*	Ajaxcontroller@queryBuilder
 	*/
 	public function queryBuilder( &$query, $input ){
-		$user_id = Auth::User()->id;
-		if($input == 'all'){
-            $query->where('user_id', '=', $user_id);
-            $query->orWhere('friend_id', '=', $user_id);
-        }elseif($input == 'sent'){
+		//$user_id1 = DB::table('users')->pluck('id');
+		$user_id=Auth::User()->id;
+		if($input == 'sent'){
             $query->where('user_id', '=', $user_id);
             $query->where('status', '=', 'Pending');
         }elseif($input == 'recieved'){
@@ -394,12 +399,12 @@ comments;
 	* Resend request to user.
 	*
 	**/
-	public function resend()
-	{
+	public function resend() {
 
 		$input=Input::all();
-		Friend::where(['friend_id'=>$input['friend_id']])
-			->where(['user_id'=>$input['user_id']])
+
+		Friend::where(['friend_id'=>$input['user_id']])
+			->where(['user_id'=>$input['friend_id']])
 			->update(['status'=>'Pending']);       
 
 	}
@@ -582,24 +587,28 @@ comments;
 	}
 
 
-	
-
 
 	public function sendRequest()
 	{
 		$input=Input::all();
 		$id=Auth::User()->id;
 		$friend=$input['user_id'];
-		$abc=DB::table('friends')->where('user_id',$id)->where('friend_id',$friend)->value('status');
-		$xyz=DB::table('friends')->where('user_id',$friend)->where('friend_id',$id)->value('status');
-		if($abc==null && $xyz==null)
-		{
+	
+		$status1=DB::table('friends')->where('user_id',$id)->where('friend_id',$friend)->value('status');
+		$status2=DB::table('friends')->where('user_id',$friend)->where('friend_id',$id)->value('status');
+		
+		if($status1==null && $status2==null){
 			DB::table('friends')->insert(['user_id'=>$id,'friend_id'=>$friend,'status'=>'Pending']);
+		}elseif($status1==null){
+			DB::table('friends')->where('user_id',$friend)->where('friend_id',$id)->update(['status'=>'Pending','user_id'=>$id,'friend_id'=>$friend]);
+		}elseif($status2==null){
+			DB::table('friends')->where('user_id',$id)->where('friend_id',$friend)->update(['status'=>'Pending','user_id'=>$friend,'friend_id'=>$id]);	
 		}
 	
 	}
+ 
 
-	   public function sendImage(){
+	public function sendImage(){
      $status=0;
      $message="";
      //$url=url();
@@ -692,7 +701,35 @@ foreach ($friend as $key => $value)
 
 	}
 
- 	
+
+	public function searchTabFriend()
+	{
+		$input=Input::all();
+
+		$type=$input['type'];
+		$name=$input['name'];
+		$model1=array();
+		$model= '';
+		$model2=array();
+
+		if($type=='all'){
+			$model1=User::where('id','!=',Auth::User()->id)->where('first_name','LIKE','%'.$name.'%')->get()->toArray();
+		}else{
+			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $type ) {
+							self::queryBuilder( $query, $type );
+						})->get()->toArray();
+		}
+
+		if($model!=null){
+			foreach ($model as $key => $value) {
+				$n=$value['friends']['first_name']." ".$value['friends']['last_name'];
+				if (stripos($n, $name) !== false) {
+					$model2[] =$value;
+				}
+			}
+		}
+		return view('dashboard.friendlist2')->with('model',$model2)->with('model1',$model1);
+	}
 
 }
 	

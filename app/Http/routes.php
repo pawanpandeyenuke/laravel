@@ -27,7 +27,6 @@ Route::post('ajax/comments/get', 'AjaxController@getCommentBox');
 Route::post('ajax/comments/post', 'AjaxController@postcomment');
 Route::post('ajax/post/get', 'AjaxController@getPostBox');
 
-
 Route::post('ajax/getfriendslist', 'AjaxController@getfriendslist');
 
 Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
@@ -58,14 +57,9 @@ Route::post('ajax/sendimage','AjaxController@sendImage');
 
 Route::post('ajax/searchfriend','AjaxController@searchfriendlist');
 
-
-//=======
-Route::post('ajax/editpost','AjaxController@editpost');
-
 //Route::post('ajax/profilesave','AjaxController@editProfile');
-//>>>>>>> 515d826e2b696d0393cb7b4c1fa383b778042ea7
 
-
+Route::post('ajax/searchtabfriend','AjaxController@searchTabFriend');
 
 /**
  * @Api Routes..

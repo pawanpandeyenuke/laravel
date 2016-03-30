@@ -2,15 +2,15 @@
 
 		if($model1!=null)
 		{
-			$id1=Auth::User()->id;
-	
-		?>
-	
-	@foreach($model1 as $data)
+			$id1 = Auth::User()->id;
 
+		?>
+
+@foreach($model1 as $data) 
 	<?php 
+			
 			$name = $data['first_name'].' '.$data['last_name'];
-		
+
 	?>
 	<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="{{$id1}}">
 		<div class="row">
@@ -23,10 +23,9 @@
 				</div>
 			</div>
 			<div class="col-sm-6">
-	<?php 
-		
-		$status1=DB::table('friends')->where('user_id',$data['id'])->where('friend_id',Auth::User()->id)->value('status');
-		$status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',Auth::User()->id)->value('status');
+			<?php 
+$status1=DB::table('friends')->where('user_id',$data['id'])->where('friend_id',Auth::User()->id)->value('status');
+$status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',Auth::User()->id)->value('status');
 
 
 				if($status1 == 'Pending'){
@@ -90,7 +89,7 @@
          ?>
 @foreach($model as $data) 
 	<?php 
-
+//print_r($model);die;
 		if($data['friend_id'] == Auth::User()->id)
 			$name = $data['user']['first_name'].' '.$data['user']['last_name'];
 		else

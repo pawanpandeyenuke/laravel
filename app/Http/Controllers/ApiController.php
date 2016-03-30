@@ -525,8 +525,10 @@ class ApiController extends Controller
 			if(isset($arguments['education'])){
 
 				$delete = EducationDetails::where('user_id', '=', $arguments['id'])->delete();
+
 				$data = array();
 				$educationdata = $arguments['education'];
+
 				foreach ($educationdata as $key => $value) {
 
 					$education = new EducationDetails;
