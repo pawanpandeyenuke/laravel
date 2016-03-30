@@ -508,14 +508,16 @@ class ApiController extends Controller
  	{
 		try{
 			$arguments = Request::all();
-
+// echo '<pre>';print_r($arguments['id']);die;
 			$user = new User();
 
 			if(isset($arguments['education'])){
 
-				$delete = EducationDetails::where('user_id', '=', Auth::User()->id)->delete();
+				$delete = EducationDetails::where('user_id', '=', $arguments['id'])->delete();
+
 				$data = array();
 				$educationdata = $arguments['education'];
+
 				foreach ($educationdata as $key => $value) {
 					
 					$education = new EducationDetails;

@@ -467,10 +467,9 @@ $(document).ready(function(){
 	* Invite user to chat by sending friend request.
 	*
 	**/
-	$(document).on('click','.invite',function()
-	{
+	$(document).on('click','.invite',function(){
 		var current = $(this);
-		var user_id=current.closest('.info').data('id');
+		var user_id=current.closest('.get_id').data('userid');
 		//var friend_id=current.closest('.get_id').data('friendid');
 		
 		$.ajax({
@@ -478,8 +477,33 @@ $(document).ready(function(){
 			'type' : 'post',
 			'data' : {'user_id' : user_id },
 			'success' : function(data){
-				current.closest('.info').find('.invite').hide(200);
-				current.closest('.info').find('.sentinvite').show(200);
+				current.closest('.get_id').find('.invite').hide(200);
+				current.closest('.get_id').find('.sent').show(500);
+			}
+		});
+	});
+
+
+	/*
+	* Search friends tab wise.
+	*
+	**/
+	$(document).on('click', '.search-btn-small', function(){    
+			
+		var type = $(this).data('reqtype');
+		var current = $(this);
+		var name=current.closest('.search-box').find('.searchtabtext').val();
+
+		//alert('Hello');
+		
+		$.ajax({
+			'url' : 'ajax/searchtabfriend',
+			'data' : {'type' : type,'name' : name},
+			'type' : 'post',
+			'success' : function(response){
+				//alert(response);
+				//var type = response.type;
+				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
 			}
 		});
 	});
