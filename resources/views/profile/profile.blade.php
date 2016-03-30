@@ -57,7 +57,7 @@
 									<button type="button" class="edit-pr-img" title="Edit Image"><i class="glyphicon glyphicon-camera"></i></button>
 								</div><!--Profile-img-->
 								<div class="pr-field">
-									<input type="text" class="pr-edit pr-name" disabled="disabled" value="{{ $user->first_name.' '.$user->last_name }}">
+									<input type="text" name="username" class="pr-edit pr-name" disabled="disabled" value="{{ $user->first_name.' '.$user->last_name }}">
 								</div>
 								<div class="pr-field">
 									<select name="city" style="max-width: 180px;" class="pr-edit" disabled="disabled">
