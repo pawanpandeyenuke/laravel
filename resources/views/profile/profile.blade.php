@@ -17,14 +17,14 @@
 	$gender = isset($user->gender) ? $user->gender : '';
 	$maritalstatus = isset($user->marital_status) ? $user->marital_status : ''; 
 
-	if(!empty($user->job_category)){
+	// if(!empty($user->job_category)){
 
  		$categoryid = DB::table('job_area')->where('job_area',$user->job_area)->value('job_area_id');
  		$all_job_cat = DB::table('job_category')->where('job_area_id',$categoryid)->pluck('job_category');
  		// echo '<pre>';print_r($data);die;
  		// $all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
 
- 	}
+ 	// }
 
 ?>
 <div class="page-data dashboard-body">
@@ -186,22 +186,28 @@
 													<td><div class="p-data-title"><i class="flaticon-education"></i>Qualification</div></td>
 													<td>
 														<div class="slt-cont">
+															<?php //echo '<pre>';print_r($eduLevelsData);die; ?>
 															<select name="education_level" style="max-width: 180px;" class="pr-edit" disabled="disabled">
 																<option>Education level</option>
-																<?php 
-																	if(isset($education)){
-																	$eduLevel = $education->education_level;
-																	foreach ($educationLevel as $key => $value) { ?>
-																		<option value="{{$value}}" <?php echo ($value == $eduLevel)?'Selected':''; ?> >{{ $value }}</option>
-																<?php } } ?>
+																<?php foreach ($educationLevel as $key => $value) { 
+																		if(isset($education->education_level) == $value)
+																			$selected = 'Selected';
+																		else
+																			$selected = '';
+																		?>
+																		<option value="{{$value}}" <?php echo $selected; ?> >{{ $value }}</option>
+																<?php } ?>
 															</select>
 															<select name="specialization" style="max-width: 180px;" class="pr-edit" disabled="disabled">
 																<option >Specialization</option>
-																<?php
-																if(isset($education)){
-																 foreach ($specialization as $key => $value) { ?>
-																		<option value="{{$value}}" <?php echo ($value == $education->specialization)?'Selected':''; ?> >{{$value}}</option>	
-																<?php } } ?>
+																<?php foreach ($specialization as $key => $value) { 
+																	if(isset($education->specialization) == $value)
+																		$selected = 'Selected';
+																	else
+																		$selected = '';
+																	?>
+																		<option value="{{$value}}" <?php echo $selected; ?> >{{$value}}</option>	
+																<?php } ?>
 															</select>
 														</div>
 													</td>
@@ -245,15 +251,14 @@
 														<select name="country_of_establishment" style="max-width: 180px;" id="" class="pr-edit" disabled="disabled">
 															<option value="">Country</option>	
 															<?php 
-															// if(isset($education)){
 																foreach ($countries as $key => $value) { 
-																	if($education->country_of_establishment == $value)
+																	if(isset($education->country_of_establishment) == $value)
 																		$selected = 'Selected'; 
 																	else
 																		$selected = ''; 
 																	?>
 																	<option value="{{$value}}" {{$selected}} >{{$value}}</option>	
-															<?php } // } ?>
+															<?php } ?>
 														</select>
 													</td>
 												</tr>
