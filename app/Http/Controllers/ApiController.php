@@ -492,7 +492,7 @@ class ApiController extends Controller
 
 				$userProfile = User::with('education')->where(['id'=>$arguments['id']])->get()->toArray();
 
-				// print_r($userProfile);die;
+				//print_r($userProfile);die;
 
 				$this->status = 'Success';
 				$this->data = $userProfile;
@@ -524,7 +524,7 @@ class ApiController extends Controller
 
 			if(isset($arguments['education'])){
 
-				$delete = EducationDetails::where('user_id', '=', Auth::User()->id)->delete();
+				$delete = EducationDetails::where('user_id', '=', $arguments['id'])->delete();
 				$data = array();
 				$educationdata = $arguments['education'];
 				foreach ($educationdata as $key => $value) {
