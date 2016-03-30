@@ -1,9 +1,7 @@
-<?php 
-// echo '<pre>';print_r($comments);die;
+<?php  
 $user = $feeddata->user;
 $comments = $feeddata->comments;
-$likes = $feeddata->likes;
-// echo '<pre>';print_r($comments);die;
+$likes = $feeddata->likes; 
 $likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $feeddata->id])->get(); 
 $likecountdata = App\Like::where(['feed_id' => $feeddata->id])->get()->count(); 
 $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->count(); 
