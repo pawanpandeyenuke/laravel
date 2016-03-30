@@ -490,7 +490,7 @@ class ApiController extends Controller
 				if( !( User::find( $arguments['id'] ) ) )
 					throw new Exception("This user id doesn't exist");
 
-				$userProfile = User::with('education')->with('country')->where(['id'=>$arguments['id']])->get()->toArray();
+				$userProfile = User::with('education')->where(['id'=>$arguments['id']])->get()->toArray();
 
 				// print_r($userProfile);die;
 
@@ -533,7 +533,7 @@ class ApiController extends Controller
 					$data[] = $education->create($value);
 				}
 			}
-
+			
 			unset($arguments['education']);
 
 			if($arguments){

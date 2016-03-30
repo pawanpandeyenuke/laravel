@@ -392,7 +392,7 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
         
         $arguments = Request::all();
         $user = new User();
-// print_r($id);die;
+
         if(Request::isMethod('post')){
 
             $getCommonEduArgs = array_intersect_key( $arguments, [
@@ -410,25 +410,18 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
             if( !empty($getCommonEduArgs) ){
 
                 $getCommonEduArgs['user_id'] = $id;
-                $eduExists = EducationDetails::where('user_id', '=', $id)->get()->toArray();
+                $delete = EducationDetails::where('user_id', '=', Auth::User()->id)->delete();
+                // $eduExists = EducationDetails::where('user_id', '=', $id)->get()->toArray();
 
                 $time=strtotime($getCommonEduArgs['graduation_year_from']);
                 $getCommonEduArgs['graduation_year_from']=date('Y-m-d',$time);
 
                 $time=strtotime($getCommonEduArgs['graduation_year_to']);
                 $getCommonEduArgs['graduation_year_to']=date('Y-m-d',$time);
-
-
-                if(!empty($eduExists)){
-
-                    $eduExists = EducationDetails::find($id);
-
-                    $eduExists->fill($getCommonEduArgs);
-                    $saved = $eduExists->push();
-                }else{
-                    $education = new EducationDetails;
-                    $education->create($getCommonEduArgs);
-                }
+ 
+                $education = new EducationDetails;
+                $education->create($getCommonEduArgs);
+ 
                 foreach ($getCommonEduArgs as $key => $value)
                     unset($arguments[$key]);
             }
