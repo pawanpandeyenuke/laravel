@@ -98,10 +98,8 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 										</div>
 										<div class="comment-text">{{ $data->comments }}</div>
 									</li>
-								@endforeach
-  
-							</ul>
-
+								@endforeach 
+							</ul> 
 						</div>
 					</div>
 				</div>
@@ -109,9 +107,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 				<div class="pop-post-comment post-comment" data-value="{{ $feeddata->id }}" id="post_{{ $feeddata->id }}">
 
 					<div class="emoji-field-cont cmnt-field-cont">
-						<textarea type="text" class="form-control comment-field" data-emojiable="true" placeholder="Type here..."></textarea>
-						<!-- <input type="file" class="filestyle" data-input="false" data-iconName="flaticon-clip"  data-buttonName="btn-icon btn-cmnt-attach" multiple="multiple"> -->
-						<!-- <button type="button" class="btn-icon btn-cmnt-attach"><i class="flaticon-clip"></i></button> -->
+						<textarea type="text" class="form-control comment-field" data-emojiable="true" placeholder="Type here..."></textarea> 
 						<button type="button" class="btn-icon btn-cmnt comment"><i class="flaticon-letter"></i></button>
 					</div>
 				</div>
