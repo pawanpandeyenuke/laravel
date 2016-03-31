@@ -135,8 +135,9 @@ $groupid=str_replace('-','_',$groupid);
 
 <link href="{{url('/converse/converse.min.css')}}" rel="stylesheet" type="text/css" media="screen" >
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
 <script type="text/javascript" src="/converse/jquery.form.js"></script>
+<script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
+
 
 <script type="text/javascript">
 
@@ -219,6 +220,10 @@ $groupid=str_replace('-','_',$groupid);
 
             }
         });
+
+
+    // Send image over chat.
+
 
 /*        jQuery('#search-btn').click(function(){
 

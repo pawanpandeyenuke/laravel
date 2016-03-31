@@ -19,7 +19,7 @@
 <link href="/css/style.css" rel="stylesheet">
 <link href="/css/responsive.css" rel="stylesheet" media="all">
 
-<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<!-- <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script> -->
 </head>
 
 <body class="dashboard">
