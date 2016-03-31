@@ -685,26 +685,6 @@ $(document).on('change','#jobarea',function()
 	});
 
 
-
-/*
-$(document).on('click','.chatsendimage',function()
-	{
-		var current=$(this);
-		alert('Sending Image');
-	
-	       $.ajax({
-			'url' : 'ajax/sendimage',
-			'type' : 'post',
-			'data' : {},
-			'success' : function(data){
-
-					//alert(data);
-				
-			}	
-		});
-	});
-*/
-
 	//disabling texts for mobile fields
 	$(document).on('keypress','.numeric,input[type="number"]', function(evt){
 		evt = (evt) ? evt : window.event;
