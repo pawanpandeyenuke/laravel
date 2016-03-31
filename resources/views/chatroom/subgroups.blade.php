@@ -59,20 +59,20 @@ unset($countries[0]);
 																</div>
 															@elseif($title == 'country,state,city')
 																<div class="subs" style="display:none">
-																	{!! Form::select('country', $countries, null, array(
-																		'class' => 'search-field boxsize',
-																		'id' => 'subcountry',
-																	)); !!}
+																	<select name="country" class="search-field boxsize" id="subcountry">
+																		<option value="">Country</option>
+																		@foreach($countries as $data)					
+																			<option value="{{$data}}">{{$data}}</option>
+																		@endforeach
+																	</select>
 
-																	{!! Form::select('state', ['State'], null, array(
-																		'class' => 'search-field boxsize',
-																		'id' => 'substate',
-																	)); !!}
-
-																	{!! Form::select('city', ['City'], null, array(
-																		'class' => 'search-field boxsize',
-																		'id' => 'subcity',
-																	)); !!}
+																	<select name="state" class="search-field boxsize" id="substate">
+																		<option value="">State</option>
+																	</select>
+																	
+																	<select name="city" class="search-field boxsize" id="subcity">
+																		<option value="">City</option>
+																	</select>
 																</div>
 
 															@elseif($title == 'professionalcourse')
