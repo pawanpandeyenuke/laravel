@@ -18,10 +18,10 @@
 
 						  <!-- Nav tabs -->
 						  <ul role="tablist" class="nav nav-tabs">
-						    <li class="active" role="presentation"><a class="friendstabs" data-reqtype="all" data-toggle="tab" role="tab" aria-controls="All" href="#All">All</a></li>
+						    <li class="active" role="presentation"><a class="friendstabs" data-reqtype="all" data-toggle="tab" role="tab" aria-controls="All" href="#All">All Users</a></li>
 						    <li role="presentation"><a class="friendstabs" data-reqtype="sent" data-toggle="tab" role="tab" aria-controls="Send" href="#Send">Sent</a></li>
 						    <li role="presentation"><a class="friendstabs" data-reqtype="recieved" data-toggle="tab" role="tab" aria-controls="Recieved" href="#Recieved">Recieved</a></li>
-						    <li role="presentation"><a class="friendstabs" data-reqtype="current" data-toggle="tab" role="tab" aria-controls="Current" href="#Current">Current</a></li>
+						    <li role="presentation"><a class="friendstabs" data-reqtype="current" data-toggle="tab" role="tab" aria-controls="Current" href="#Current">Friends</a></li>
 						  </ul>
 
 						  <!-- Tab panes -->
@@ -30,12 +30,12 @@
 						  			<div class="tab-content friends-list">
 							  			<div id="All" class="tab-pane active" role="tabpanel">
 
-							  <div class="page-title">
-							  <div class="search-box">
-							<input type="text" placeholder="Search" class="form-control searchtabtext">
-							<button data-reqtype="all" class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+							  <div class="page-title req-search">
+							<div class="search-box">
+								<input type="text" placeholder="Search" class="form-control searchtabtext">
+								<button data-reqtype="all" class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
 
-						</div>
+							</div>
 						</div>
 							<ul>
 														
@@ -120,7 +120,7 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 												</ul>
 							  			</div>
 					    				<div id="Send" class="tab-pane" role="tabpanel">
-					    				 <div class="page-title">
+					    				 <div class="page-title req-search">
 							  <div class="search-box">
 							<input type="text" placeholder="Search" class="form-control searchtabtext">
 							<button data-reqtype="sent" class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
@@ -131,7 +131,7 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 											</ul>
 					    				</div>
 									    <div id="Recieved" class="tab-pane" role="tabpanel">
-									    <div class="page-title">
+									    <div class="page-title req-search">
 							  <div class="search-box">
 							<input type="text" placeholder="Search" class="form-control searchtabtext">
 							<button data-reqtype="recieved" class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
@@ -142,7 +142,7 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 											</ul>
 									    </div>
 									    <div id="Current" class="tab-pane" role="tabpanel">
-									    <div class="page-title">
+									    <div class="page-title req-search">
 							  <div class="search-box">
 							<input type="text" placeholder="Search" class="form-control searchtabtext">
 							<button data-reqtype="current" class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
