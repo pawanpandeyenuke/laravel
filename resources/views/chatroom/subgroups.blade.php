@@ -3,6 +3,11 @@
 <?php $groupnamestr = ucwords($group_name);
 unset($countries[0]);
  ?>
+
+<style type="text/css">
+	.boxsize{width:200px;}
+</style>
+
 <?php //echo '<pre>' ;print_r($countries);die;?>
 @section('content')
 	<div class="page-data dashboard-body">
@@ -47,7 +52,7 @@ unset($countries[0]);
 															@if($title == 'country')
 																<div class="subs" style="display:none">
 																{!! Form::select('country1', $countries, null, array(
-																	'class' => 'search-field',
+																	'class' => 'search-field boxsize',
 																	'id' => 'country',
 																	
 																)); !!}
@@ -55,17 +60,17 @@ unset($countries[0]);
 															@elseif($title == 'country,state,city')
 																<div class="subs" style="display:none">
 																	{!! Form::select('country', $countries, null, array(
-																		'class' => 'search-field',
+																		'class' => 'search-field boxsize',
 																		'id' => 'subcountry',
 																	)); !!}
 
 																	{!! Form::select('state', ['State'], null, array(
-																		'class' => 'search-field',
+																		'class' => 'search-field boxsize',
 																		'id' => 'substate',
 																	)); !!}
 
 																	{!! Form::select('city', ['City'], null, array(
-																		'class' => 'search-field',
+																		'class' => 'search-field boxsize',
 																		'id' => 'subcity',
 																	)); !!}
 																</div>
@@ -76,7 +81,7 @@ unset($countries[0]);
 																	<?php $courses = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->pluck('title');
 																	 
 																	?>
-																	<select name="coursedata1">
+																	<select name="coursedata1" class="boxsize">
 																		<option value="">Select</option>
 																		@foreach($courses as $data)					
 																			<option value="{{$data}}">{{$data}}</option>
@@ -89,7 +94,7 @@ unset($countries[0]);
 																	
 																	
 																	?>
-																	<select name="coursedata">
+																	<select name="coursedata" class="boxsize">
 																		<option value="">Select</option>
 																		@foreach($courses as $data)					
 																			<option value="{{$data}}">{{$data}}</option>

@@ -244,12 +244,22 @@ $groupid=str_replace('-','_',$groupid);
         });*/
 
 
-            $(document).on('click','#search',function() {
+        $(document).on('click','#search',function() {
+            var name=$('.searchtxt').val();
+               $.ajax({
+                'url' : 'ajax/searchfriend',
+                'type' : 'post',
+                'data' : {'name':name},
+                'success' : function(data){
+                    $("#userslist").html(data);
+                }       
+            });
+        });
 
-                var current=$(this);
-                
+        $(document).on('keypress', '.searchtxt', function(e){
+            var key = e.which;
+            if(key == 13){
                 var name=$('.searchtxt').val();
-
                    $.ajax({
                     'url' : 'ajax/searchfriend',
                     'type' : 'post',
@@ -258,7 +268,9 @@ $groupid=str_replace('-','_',$groupid);
                         $("#userslist").html(data);
                     }       
                 });
-            });
+            }
+        });   
+
 
 	$(document).on('click','.invite',function()
 	{

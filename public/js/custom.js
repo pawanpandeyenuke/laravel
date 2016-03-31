@@ -509,6 +509,25 @@ $(document).ready(function(){
 	});
 
 
+	$(document).on('keypress', '.searchtabtext', function(e){
+		var key = e.which;
+		if(key == 13){
+			var type = $(this).next('.search-btn-small').data('reqtype');
+			var current = $(this);
+			var name=current.val();
+	
+			$.ajax({
+				'url' : 'ajax/searchtabfriend',
+				'data' : {'type' : type,'name' : name},
+				'type' : 'post',
+				'success' : function(response){
+					var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+				}
+			});
+		}
+	});   
+
+
 	/*
 	* Reject request from another user.
 	*

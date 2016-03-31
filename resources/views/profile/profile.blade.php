@@ -199,10 +199,12 @@
 															<select name="education_level" style="max-width: 180px;" class="pr-edit" disabled="disabled">
 																<option>Education level</option>
 																<?php foreach ($educationLevel as $key => $value) { 
-																		if(isset($education->education_level) == $value)
+																	if(isset($education->education_level)){
+																		if($education->education_level == $value)
 																			$selected = 'Selected';
 																		else
 																			$selected = '';
+																	}
 																		?>
 																		<option value="{{$value}}" <?php echo $selected; ?> >{{ $value }}</option>
 																<?php } ?>
@@ -210,10 +212,12 @@
 															<select name="specialization" style="max-width: 180px;" class="pr-edit" disabled="disabled">
 																<option >Specialization</option>
 																<?php foreach ($specialization as $key => $value) { 
-																	if(isset($education->specialization) == $value)
+																	if(isset($education->specialization)){
+																	if($education->specialization == $value)
 																		$selected = 'Selected';
 																	else
 																		$selected = '';
+																}
 																	?>
 																		<option value="{{$value}}" <?php echo $selected; ?> >{{$value}}</option>	
 																<?php } ?>
@@ -261,10 +265,13 @@
 															<option value="">Country</option>	
 															<?php 
 																foreach ($countries as $key => $value) { 
-																	if(isset($education->country_of_establishment) == $value)
+																	if(isset($education->country_of_establishment))
+																	{
+																	if($education->country_of_establishment == $value)
 																		$selected = 'Selected'; 
 																	else
 																		$selected = ''; 
+																	}
 																	?>
 																	<option value="{{$value}}" {{$selected}} >{{$value}}</option>	
 															<?php } ?>

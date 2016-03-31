@@ -146,9 +146,9 @@ header{
 }
 span.field-icon:before{
   position: absolute;
-  top: 50%;
-  margin-top: -14px;
-  left: 10px;
+	top: 12px;
+	margin-top: 0;
+	left: 10px;
 }
 input.form-control.icon-field {
   padding-left: 40px;
@@ -613,8 +613,9 @@ a:hover{
   padding: 0px 10px;
 }
 .post-comment .comment-field{
-  border: 1px solid #D6D6D6;
+	border: 1px solid #D6D6D6;
   height: 45px;
+  overflow-y: scroll;
 }
 .post-footer .post-actions {
   padding-bottom: 10px;
@@ -985,7 +986,10 @@ a:hover{
 .post-comment .btn-cmnt{
 	position: absolute;
   top: 8px;
-  right: 30px;
+  right: 40px;
+}
+.emoji-wysiwyg-editor{
+    padding-right: 75px !important;
 }
 .pop-post-comment .emoji-picker-icon{
 	top: 12px;
@@ -1677,9 +1681,9 @@ button.edit-pr-img {
 .modal-footer.text-center{
 	text-align: center;
 }
-.comment-delete {
-  top: -2px;
-  right: -5px;
+.comments-list .comment-delete {
+	 top: 8px !important;
+  right: -5px !important;
   font-size: 10px;
   color: #DCDCDC;
 }
@@ -1696,6 +1700,9 @@ button.edit-pr-img {
 }
 .edit-post-textarea .emoji-picker-icon{
   right: 20px;
+}
+.emoji-picker-icon{
+    right: 20px !important;
 }
 .edit-img-outer {
   margin: 15px 0 0;
@@ -1792,4 +1799,15 @@ button.edit-pr-img {
 }
 #conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom{
    margin: 0 5px 10px 0;
+}
+.page-title.req-search {
+  position: relative;
+  height: 50px;
+  margin: 6px 0 0;
+}
+.page-title.req-search .search-box{
+	right: 0;
+}
+.modal{
+  z-index: 9999999999999999;
 }
