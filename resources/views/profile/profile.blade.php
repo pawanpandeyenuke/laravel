@@ -142,7 +142,7 @@
 												</tr> -->
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-technology"></i>Contact</div></td>
-													<td><input type="text" name="phone_no" class="pr-edit" disabled="disabled" value="{{ $user->phone_no }}"></td>
+													<td><input type="text" name="phone_no" class="pr-edit numeric" maxlength="15" disabled="disabled" value="{{ $user->phone_no }}"></td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-calendar"></i>Date of Birth</div></td>
