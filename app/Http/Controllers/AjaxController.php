@@ -114,7 +114,7 @@ class AjaxController extends Controller
 		$arguments = Input::all();
 
 		$feeddata = Feed::with('comments')->with('likes')->with('user')->where('id', '=', $arguments['feed_id'])->get()->first();
- 
+// print_r($feeddata);die;
 		return view('dashboard.getcommentbox')
 					->with('feeddata', $feeddata);
 
