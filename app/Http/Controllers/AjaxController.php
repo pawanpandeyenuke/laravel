@@ -617,7 +617,7 @@ comments;
       $image = $_FILES["chatsendimage"]["name"];
       //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
       
-      $path=public_path().''.'/images/media/chat_images/';
+      $path=public_path().''.'/uploads/media/chat_images/';
 
 
 			$uploadedfile = $_FILES['chatsendimage']['tmp_name'];
@@ -638,13 +638,13 @@ comments;
             //$image->save();
 
 
-            $image= Image::make($path.$actual_image_name);
-            $image->resize(200,200);
-            $image->save();
+            // $image= Image::make($path.$actual_image_name);
+            // $image->resize(200,200);
+            // $image->save();
 
         //   ========== $data = Yii::$app->request->baseUrl.'/images/media/chat_images/'. $actual_image_name;
            
-            $data='/images/media/chat_images/'.$actual_image_name;
+            $data='/uploads/media/chat_images/'.$actual_image_name;
            
 
             $chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
