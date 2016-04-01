@@ -61,6 +61,10 @@ Route::post('ajax/searchfriend','AjaxController@searchfriendlist');
 
 Route::post('ajax/searchtabfriend','AjaxController@searchTabFriend');
 
+Route::post('ajax/viewmorefriends','AjaxController@viewMoreFriends');
+Route::post('ajax/viewmoreposts','AjaxController@viewMorePosts');
+
+
 /**
  * @Api Routes..
  *
@@ -125,7 +129,7 @@ Route::group(['middleware' => 'web'], function () {
 	Route::post('settings/privacy', 'DashboardController@settings');
 	Route::get('/', 'DashboardController@dashboard');	
 	Route::get('chatroom', 'DashboardController@chatroom');
-	Route::get('requests', 'DashboardController@friendRequests');
+	Route::get('friends', 'DashboardController@friendRequests');
 
 	Route::get('group', 'DashboardController@group');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');

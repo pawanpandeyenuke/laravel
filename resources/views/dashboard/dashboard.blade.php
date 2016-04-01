@@ -1,7 +1,19 @@
 @extends('layouts.dashboard')
-<?php  
-// echo '<pre>';print_r($feeds);die('view');
-?>
+
+<style type="text/css"> 
+	.dashboard-load {
+	    background: none repeat scroll 0 0 #fbfbfb;
+	    border: 1px solid #ddd;
+	    border-radius: 4px;
+	    cursor: pointer;
+	    font-size: 20px;
+	    font-weight: 500;
+	    margin: 10px 0 0;
+	    padding: 10px 0;
+	    text-align: center;
+	} 
+</style>
+
 @section('content')
 
 	@if (Session::has('error'))
@@ -275,6 +287,12 @@
 					<div id="commentajax" style="display: none;">	</div>
 					<div id="AllCommentNew" class="post-list popup-list-without-img" style="display: none;"></div>
 					</div>
+
+			    	<div class="dashboard-load">
+				    	<span class="glyphicon glyphicon-download"></span>
+				    	<!-- <span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span> -->
+				    </div>
+
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 				</div>
 

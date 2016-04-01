@@ -245,7 +245,12 @@ class ApiController extends Controller
 					$offset = ($page - 1) * $per_page;
 
 					$posts = Feed::orderBy('updated_at', 'desc')
-								->where('user_by', '=', $arguments['user_by'])
+								// ->where('user_by', '=', $arguments['user_by'])
+				                ->whereIn('user_by', Friend::where('user_id', '=', $arguments['user_by'])
+				                        ->where('status', '=', 'Accepted')
+				                        ->pluck('friend_id')
+				                        ->toArray())
+				                ->orWhere('user_by', '=', $arguments['user_by'])
 								->skip($offset)
 								->take($per_page)
 								->with('likesCount')
@@ -256,7 +261,12 @@ class ApiController extends Controller
 								->toArray();
 
 					$postscount = Feed::orderBy('updated_at', 'desc')
-								->where('user_by', '=', $arguments['user_by'])
+								// ->where('user_by', '=', $arguments['user_by'])
+				                ->whereIn('user_by', Friend::where('user_id', '=', $arguments['user_by'])
+				                        ->where('status', '=', 'Accepted')
+				                        ->pluck('friend_id')
+				                        ->toArray())
+				                ->orWhere('user_by', '=', $arguments['user_by'])
 								->with('likesCount')
 								->with('commentsCount')
 								->with('user')

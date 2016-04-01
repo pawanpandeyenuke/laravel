@@ -41,15 +41,21 @@ class DashboardController extends Controller
   
             DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
 
-            $per_page = 15;
+
+            // echo '<pre>';print_r($friends);die;
+
+            $per_page = 5;
 
             $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
-            ->where('user_by', '=', Auth::User()->id)
-            ->orderBy('news_feed.id','DESC')
-            // ->take($per_page)
-            ->get();
+                ->whereIn('user_by', Friend::where('user_id', '=', Auth::User()->id)
+                        ->where('status', '=', 'Accepted')
+                        ->pluck('friend_id')
+                        ->toArray())
+                ->orWhere('user_by', '=', Auth::User()->id)
+                ->orderBy('news_feed.id','DESC')
+                ->take($per_page)
+                ->get();
 
-           // echo '<pre>';print_r($feeds[0]->comments);die;
             /*$feeds = Feed::with('user')
                         ->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')
                         ->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')
@@ -137,7 +143,7 @@ class DashboardController extends Controller
 
     public function friendRequests()
     {
-        $model1=User::where('id','!=',Auth::User()->id)->get()->toArray();
+        $model1=User::where('id','!=',Auth::User()->id)->take(10)->get()->toArray();
 
         return view('dashboard.requests')
                 ->with('model1', $model1);

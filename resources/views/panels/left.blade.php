@@ -31,7 +31,7 @@
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingfour">
 		      <h4 class="panel-title">
-		        <a class="without-arrow" href="{{ url('requests')}}">
+		        <a class="without-arrow" href="{{ url('friends')}}">
 		          <i class="flaticon-people"></i>Friends
 		        </a>
 		      </h4>
@@ -51,7 +51,7 @@
 		    <div class="panel-heading" role="tab" id="headingSix">
 		      <h4 class="panel-title">
 		        <a href="{{ url('settings/privacy') }}" class="without-arrow">
-		          <i class="flaticon-tool"></i>Privacy Setting
+		          <i class="flaticon-tool"></i>Privacy Settings
 		        </a>
 		      </h4>
 		    </div>

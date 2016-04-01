@@ -234,17 +234,109 @@ comments;
 		$model1=array();
 		$model=array();
 
-			if($input=='all')
-			{
-			  $model1=User::where('id','!=',Auth::User()->id)->get()->toArray();
-			}
-			else{
+		if($input=='all') {
+			$model1=User::where('id','!=',Auth::User()->id)->take(10)->get()->toArray();
+		} else {
+			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
+				    self::queryBuilder( $query, $input );
+					})->take(10)->get()->toArray();
+		}
 
-		$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
-			    self::queryBuilder( $query, $input );
-				})->get()->toArray();
-			}
 		return view('dashboard.getfriendslist')->with('model',$model)->with('model1',$model1);
+ 
+	}
+
+
+
+	/**
+	*	View more posts ajax call handling.
+	*	Ajaxcontroller@viewMorePosts
+	*/
+	public function viewMorePosts()
+	{
+        $per_page = 5;
+        $page = Input::get('pageid');
+        $offset = ($page - 1) * $per_page;
+		// echo $page;
+        $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
+            ->whereIn('user_by', Friend::where('user_id', '=', Auth::User()->id)
+                    ->where('status', '=', 'Accepted')
+                    ->pluck('friend_id')
+                    ->toArray())
+            ->orWhere('user_by', '=', Auth::User()->id)
+            ->orderBy('news_feed.id','DESC')
+            ->skip($offset)
+            ->take($per_page)
+            ->get();
+
+		return view('dashboard.newsfeed')->with('feeds', $feeds);
+
+    }
+
+
+	/**
+	*	View more friends ajax call handling.
+	*	Ajaxcontroller@viewMoreFriends
+	*/
+	public function viewMoreFriends()
+	{
+		$per_page = 10;
+		$page = Input::get('pageid');
+		$type = Input::get('reqType');
+		$offset = ($page - 1) * $per_page;
+		$user_id = Auth::User()->id;
+
+		switch ($type) {
+			case 'all':
+				$model = User::where('id', '!=', $user_id)
+							->skip($offset)
+							->take($per_page)
+				            ->get()->toArray();
+				break;
+			case 'sent':
+				$modeldata = Friend::with('user')->with('friends')->with('user')
+							->where('user_id', '=', $user_id)
+							->where('status', '=', 'Pending')
+							->skip($offset)
+							->take($per_page)
+							->get()->toArray();
+				break;
+			case 'recieved':
+				$modeldata = Friend::with('user')->with('friends')->with('user')
+				            ->where('friend_id', '=', $user_id)
+				            ->where('status', '=', 'Pending')
+							->skip($offset)
+							->take($per_page)
+				            ->get()->toArray();
+				break;
+			case 'current':
+				$modeldata = Friend::with('user')->with('friends')->with('user')
+							->where('friend_id', '=', $user_id)
+				            ->where('status', '=', 'Accepted')
+							->skip($offset)
+							->take($per_page)
+				            ->get()->toArray();
+				break;
+		}
+
+		// echo '<pre>';print_r(count($model));die;
+
+		if($type == 'all') {
+			$model1 = $model;
+			$modelcount = count($model);
+		}else{
+			$model = $modeldata;
+			$modelcount = count($modeldata);
+			$model1 = '';
+		}
+
+		if($model || $model1)
+			return view('dashboard.getfriendslist')
+						->with('model',$model)
+						->with('model1',$model1)
+						->with('modelcount', $modelcount);
+		else
+			echo 'No more results';
  
 	}
 
@@ -263,8 +355,8 @@ comments;
             $query->where('friend_id', '=', $user_id);
             $query->where('status', '=', 'Pending');
         }elseif($input == 'current'){
-            $query->where('user_id', '=', $user_id)->where('status', '=', 'Accepted');
-            $query->orWhere('friend_id', '=', $user_id)->where('status', '=', 'Accepted');
+            // $query->where('user_id', '=', $user_id)->where('status', '=', 'Accepted');
+            $query->where('friend_id', '=', $user_id)->where('status', '=', 'Accepted');
         } 
 	}
 
@@ -722,7 +814,11 @@ foreach ($friend as $key => $value)
 
 		if($model!=null){
 			foreach ($model as $key => $value) {
-				$n=$value['friends']['first_name']." ".$value['friends']['last_name'];
+				if($type=='current')
+					$n=$value['user']['first_name']." ".$value['user']['last_name'];
+				else
+					$n=$value['friends']['first_name']." ".$value['friends']['last_name'];
+
 				if (stripos($n, $name) !== false) {
 					$model2[] =$value;
 				}
