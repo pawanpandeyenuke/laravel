@@ -5,7 +5,7 @@
 				<div class="row">
 					<div class="col-md-7">
 						<a href="#" title="" class="user-thumb-link">
-							<span class="small-thumb" style="background: url('uploads/1456394309_POST_XZY0484L(1.JPG');"></span>
+							<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
 							{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}
 						</a>
 					</div>
@@ -39,15 +39,28 @@
 								<input type="checkbox" name="" id="checkbox{{$data->id}}" class="css-checkbox like" {{isset($likedata[0]) ? 'checked' : ''}}/>
 								<label for="checkbox{{$data->id}}" class="css-label">
 									@if(count($data['likesCount']) > 0)
-										<span>{{ count($data['likesCount']) }} Likes</span>
+										<span class="countspan" id="page-{{$data['id']}}">
+											{{ count($data['likesCount']) }}
+										</span>
+										<span>Likes</span>	
 									@else
-										<span>Like</span>
+										<span class="countspan" id="page-{{$data['id']}}"></span>
+										<span class="firstlike">Like</span>
 									@endif
 								</label>
 							</div>
 						</li>
 						<li>
-							<a href="#AllComment" class="popup popupajax">
+						<?php 
+								if($data['message'] && empty($data['image'])){
+									$popupclass = 'postpopupajax';
+								}elseif($data['image'] && empty($data['message'])){
+									$popupclass = 'popupajax';
+								}else{
+									$popupclass = 'popupajax';
+								} 													
+						?>						
+							<a href="#AllComment" class="{{$popupclass}}">
 								<span class="icon flaticon-interface-1"></span> 
 								@if(isset($data->commentsCount[0]))
 									@if($data->commentsCount[0]->commentscount > 0)
@@ -97,4 +110,3 @@
 			</div><!--/post-footer-->
 		</div><!--/single post-->
 	@endforeach
-	<input type="text" class="pagecount" value="{{$page}}"></input>

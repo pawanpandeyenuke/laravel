@@ -60,9 +60,9 @@ class SocialController extends Controller
 	 */
     public function callback( $provider )
     {		
- 
+
         $providerUser = \Socialite::driver( $provider )->user();
-        // echo '<pre>';print_r($providerUser);die;
+        
         switch( $provider ){
 			
 			case 'facebook':

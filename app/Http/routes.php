@@ -20,7 +20,12 @@ Route::post('ajax/getstates', 'AjaxController@getStates');
 Route::post('ajax/getcities', 'AjaxController@getCities');
 
 Route::post('ajax/posts', 'AjaxController@posts');
+
+Route::post('ajax/editpost', 'AjaxController@editpost');
+
 Route::post('ajax/editposts', 'AjaxController@editposts');
+
+
 Route::post('ajax/like', 'AjaxController@like');
 
 Route::post('ajax/comments/get', 'AjaxController@getCommentBox');
@@ -59,6 +64,7 @@ Route::post('ajax/searchfriend','AjaxController@searchfriendlist');
 
 Route::post('ajax/searchtabfriend','AjaxController@searchTabFriend');
 
+
 Route::post('/ajax/delbroadcast','AjaxController@delBroadcast');
 
 Route::post('/ajax/sendbroadcast','AjaxController@sendBroadcast');
@@ -68,6 +74,11 @@ Route::post('/ajax/delprivategroup','AjaxController@delPrivateGroup');
 Route::post('/ajax/deluser','AjaxController@delUser');
 
 Route::post('/ajax/editgroupname','AjaxController@editGroupName');
+
+Route::post('ajax/viewmorefriends','AjaxController@viewMoreFriends');
+
+Route::post('ajax/viewmoreposts','AjaxController@viewMorePosts');
+
 
 /**
  * @Api Routes..
@@ -106,6 +117,9 @@ Route::post('api/acceptrequest','ApiController@acceptRequest');
 Route::post('api/declinerequest','ApiController@declineRequest');
 
 
+Route::post('api/chatsendimage','ApiController@chatSendImage');
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -133,7 +147,10 @@ Route::group(['middleware' => 'web'], function () {
 	Route::post('settings/privacy', 'DashboardController@settings');
 	Route::get('/', 'DashboardController@dashboard');	
 	Route::get('chatroom', 'DashboardController@chatroom');
-	Route::get('requests', 'DashboardController@friendRequests');
+	Route::get('friends', 'DashboardController@friendRequests');
+	Route::get('invite-friends', 'ContactImporter@inviteFriends');
+	Route::post('invite-friends', 'ContactImporter@inviteFriends');
+	Route::get('invite-contacts', 'ContactImporter@inviteContactList');
 
 	Route::get('group', 'DashboardController@group');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
@@ -145,6 +162,7 @@ Route::group(['middleware' => 'web'], function () {
 
 	Route::get('profile/{id}', 'DashboardController@profile');
 	Route::post('profile/{id}', 'DashboardController@profile');
+
 
 	Route::get('broadcast-list', 'DashboardController@broadcastList');
 	Route::post('broadcast-list', 'DashboardController@broadcastList');
@@ -165,6 +183,13 @@ Route::group(['middleware' => 'web'], function () {
 	//Route::post('private-group-detail', 'DashboardController@privateGroupDetail');
 
 
+
+	Route::get('google/client', 'ContactImporter@inviteFriends');
+	Route::get('google/client/callback', 'ContactImporter@inviteContactList');
+	Route::post('google/client/callback', 'ContactImporter@inviteContactList');
+
+	// Route::get('hotmail/client', 'ContactImporter@hotmail');
+	// Route::get('hotmail/client/callback', 'ContactImporter@callbackH');
 
 
 });

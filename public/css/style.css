@@ -1824,7 +1824,9 @@ button.edit-pr-img {
   padding: 0 20px 20px;
   margin: 0 0 40px;
 }
+
 .b-cast-name h5, .bcast-list h5{
+
 	font-size: 16px;
   color: #000;
   padding-left: 20px;
@@ -1922,6 +1924,7 @@ button.edit-pr-img {
   box-shadow: 0px 0px 5px 0px #B1B1B1;
 }
 
+
 .add-mem{
   width: 65px;
   height: 65px;
@@ -1935,6 +1938,7 @@ button.edit-pr-img {
 
 
 }
+
 .add-blist-btn:hover, .add-blist-btn:focus{
 	background: #5DF7E3;
   color: #000;
@@ -1993,7 +1997,10 @@ textarea{
 }
 .load-btn .loading-img img {
     width: 100px;
+       display: none;
 }
+/*<<<<<<< HEAD*/
+
 .load-btn span.loading-text {
     display: none;
 }
@@ -2073,3 +2080,33 @@ textarea{
 .grp-mem-list .bclist-detail .list-name {
   margin: 10px 0 5px;
 }
+/*=======*/
+ 
+.load-btn span.loading-text {
+    display: inline-block !important;
+}
+.social-btns {
+  margin: 30px 0 0;
+}
+.social-invite h5{
+	padding-left: 0px;
+}
+.checkbox-cont.label-right input[type=checkbox].css-checkbox + label.css-label{
+  background-position: right 0px;
+  padding-left: 0px;
+  padding-right: 30px;
+  min-width: 100px;
+}
+.checkbox-cont.label-right input[type=checkbox].css-checkbox:checked + label.css-label{
+	background-position: right -22px;
+}
+.checkbox-cont.label-right {
+  width: 100px;
+  float: right;
+}
+.invite-list-table {
+  height: 350px;
+  overflow-y: scroll;
+  border: 1px solid #ddd;
+}
+/*>>>>>>> 0a01c0ee86f18038c0735de20732a54fb9c88ea0*/

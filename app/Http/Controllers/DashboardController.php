@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 
 use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers;
-use App\Library\Converse;
+
+use App\Library\Converse, Google_Client, Mail;
+
 use Request, Session, Validator, Input, Cookie;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\MessageBag;
 // use Illuminate\Support\Facades\Input;
 
 class DashboardController extends Controller
@@ -28,7 +31,7 @@ class DashboardController extends Controller
 	{
 
         try{
-
+            
             $xmppusername = User::where('id',Auth::User()->id)->value('xmpp_username');
 
             $defGroup = DefaultGroup::where('group_by',Auth::User()->id)->lists('group_name');
@@ -41,15 +44,21 @@ class DashboardController extends Controller
   
             DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
 
-            $per_page = 15;
+
+            // echo '<pre>';print_r($friends);die;
+
+            $per_page = 5;
 
             $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
-            ->where('user_by', '=', Auth::User()->id)
-            ->orderBy('news_feed.id','DESC')
-            // ->take($per_page)
-            ->get();
+                ->whereIn('user_by', Friend::where('user_id', '=', Auth::User()->id)
+                        ->where('status', '=', 'Accepted')
+                        ->pluck('friend_id')
+                        ->toArray())
+                ->orWhere('user_by', '=', Auth::User()->id)
+                ->orderBy('news_feed.id','DESC')
+                ->take($per_page)
+                ->get();
 
-           // echo '<pre>';print_r($feeds[0]->comments);die;
             /*$feeds = Feed::with('user')
                         ->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')
                         ->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')
@@ -137,7 +146,7 @@ class DashboardController extends Controller
 
     public function friendRequests()
     {
-        $model1=User::where('id','!=',Auth::User()->id)->get()->toArray();
+        $model1=User::where('id','!=',Auth::User()->id)->take(10)->get()->toArray();
 
         return view('dashboard.requests')
                 ->with('model1', $model1);
@@ -426,7 +435,7 @@ if($input!=null && $gname!=null)
 
  
 
- public function profile( $id )
+    public function profile( $id )
     {
         
         $arguments = Request::all();
@@ -509,58 +518,59 @@ if($input!=null && $gname!=null)
 
     }
 
-     public function sendImage(){
-     $status=0;
-     $message="";
-     //$url=url();
-// echo '<pre>'; print_r($_FILES);die;
+     public function sendImage()
+     {
+         $status=0;
+         $message="";
+         //$url=url();
+        // echo '<pre>'; print_r($_FILES);die;
 
-      $image = $_FILES["chatsendimage"]["name"];
-      //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
+          $image = $_FILES["chatsendimage"]["name"];
+          //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
+          
+          $path=public_path().''.'/images/media/chat_images';
+
+         $uploadedfile = $_FILES['chatsendimage']['tmp_name'];
+          $name = $_FILES['chatsendimage']['name'];
+          $size = $_FILES['chatsendimage']['size'];
+          $valid_formats = array("jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF");
+          if (strlen($name)) {
+           list($txt, $ext) = explode(".", $name);
+           if (in_array($ext, $valid_formats)) {
+            $actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
+            $tmp = $uploadedfile;
+            if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
+                //$rootFolder=base_path();
+                // $image = Yii::$app->image->load($path.$actual_image_name);
+               // $image->resize(140, 100);
+               // $image->save();
       
-      $path=public_path().''.'/images/media/chat_images';
-
-
-     $uploadedfile = $_FILES['chatsendimage']['tmp_name'];
-      $name = $_FILES['chatsendimage']['name'];
-      $size = $_FILES['chatsendimage']['size'];
-      $valid_formats = array("jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF");
-      if (strlen($name)) {
-       list($txt, $ext) = explode(".", $name);
-       if (in_array($ext, $valid_formats)) {
-        $actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
-        $tmp = $uploadedfile;
-        if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
-            //$rootFolder=base_path();
-            // $image = Yii::$app->image->load($path.$actual_image_name);
-           // $image->resize(140, 100);
-           // $image->save();
-  
-        //   ========== $data = Yii::$app->request->baseUrl.'/images/media/chat_images/'. $actual_image_name;
-           
-            $data=public_path().''.'/images/media/chat_images'.$actual_image_name;
-           
-            $chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
-            if ($chatType == "group"){}//chat type check
-            else{           
-             $message=$_SERVER['HTTP_HOST'].$data;
-    $status=1;
-            }                              
-        } else
-         $message= "Failed to send try again.";    
-       } else
-        $message= "Invalid file format.";
-      }else {
-       $message="Please select an image to send.";
+            //   ========== $data = Yii::$app->request->baseUrl.'/images/media/chat_images/'. $actual_image_name;
+               
+                $data=public_path().''.'/images/media/chat_images'.$actual_image_name;
+               
+                $chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
+                if ($chatType == "group"){}//chat type check
+                else{           
+                 $message=$_SERVER['HTTP_HOST'].$data;
+        $status=1;
+                }                              
+            } else
+             $message= "Failed to send try again.";    
+           } else
+            $message= "Invalid file format.";
+          }else {
+           $message="Please select an image to send.";
+           }
+        echo json_encode(array('status'=>$status,'message'=>$message,'type'=>'image'));
+           die(); 
        }
-    echo json_encode(array('status'=>$status,'message'=>$message,'type'=>'image'));
-       die(); 
-       }
+
 
 
     public function broadcastList()
     {
-        $broadcast=Broadcast::where('user_id',Auth::User()->id)->get()->toArray();
+        $broadcast=Broadcast::where('user_id',Auth::User()->id)->orderBy('id','DESC')->get()->toArray();
         return view('broadcast.list')->with('broadcast',$broadcast);
     }
 

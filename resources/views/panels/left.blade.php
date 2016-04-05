@@ -11,6 +11,15 @@
 		    </div>
 		  </div>
 		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingfour">
+		      <h4 class="panel-title">
+		        <a class="without-arrow" href="{{ url('friends')}}">
+		          <i class="flaticon-people"></i>Friends
+		        </a>
+		      </h4>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingThree">
 		      <h4 class="panel-title">
 		        <a href="/groupchat" class="without-arrow">
@@ -29,15 +38,6 @@
 		    </div>
 		  </div>
 		  <div class="panel panel-default">
-		    <div class="panel-heading" role="tab" id="headingfour">
-		      <h4 class="panel-title">
-		        <a class="without-arrow" href="{{ url('requests')}}">
-		          <i class="flaticon-people"></i>Friends
-		        </a>
-		      </h4>
-		    </div>
-		  </div>
-		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingFive">
 		      <h4 class="panel-title">
 		      	<?php $uid = Auth::User()->id; ?>
@@ -51,7 +51,7 @@
 		    <div class="panel-heading" role="tab" id="headingSix">
 		      <h4 class="panel-title">
 		        <a href="{{ url('settings/privacy') }}" class="without-arrow">
-		          <i class="flaticon-tool"></i>Privacy Setting
+		          <i class="flaticon-tool"></i>Privacy Settings
 		        </a>
 		      </h4>
 		    </div>
@@ -70,6 +70,15 @@
 		      <h4 class="panel-title">
 		        <a class="without-arrow" href="{{url('private-group-list')}}">
 		          <i class="flaticon-balloon"></i>Private Chat
+		        </a>
+		      </h4>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingSeven">
+		      <h4 class="panel-title">
+		        <a class="without-arrow" href="{{ url('invite-friends') }}">
+		          <i class="flaticon-balloon"></i>Invite Friends
 		        </a>
 		      </h4>
 		    </div>

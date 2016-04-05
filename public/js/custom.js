@@ -1,5 +1,3 @@
-
-
 $(document).ready(function(){
 	
 	// $('.StyleScroll').niceScroll();
@@ -245,6 +243,9 @@ $(document).ready(function(){
 				//alert(response);
 				//var type = response.type;
 				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+				// var getelem2 = current.closest('.tab-style-no-border').find('.active').find('loading-text');
+				// console.log(getelem2);
+				// current.closest('.tab-style-no-border').find('.active').find('load-btn').find('.loading-text').show();
 			}
 		});
 	});
@@ -595,9 +596,8 @@ $(document).ready(function(){
 	});
 
 
+	$(document).on('change','#jobarea',function(){
 
-$(document).on('change','#jobarea',function()
-	{
 		var current = $(this);
 		var jobarea = current.val();
 
@@ -637,6 +637,35 @@ $(document).on('change','#jobarea',function()
 
 	$(".multiple-slt").select2();
 
+	/**
+	*	View more friends ajax call handling.
+	*	Ajaxcontroller@viewMoreFriends
+	*/
+	var pageid = 2;
+	$(document).on('click','.load-more-friend',function(){
+		$('.loading-text').hide();
+		$('.loading-img').show();
+		var current = $(this);
+		var reqType = current.closest('.friends-list').find('.active').data('value');
+		$.ajax({
+			'url' : '/ajax/viewmorefriends',
+			'type' : 'post',
+			'data' : { 'pageid': pageid, 'reqType': reqType },
+			'success' : function(data){
+				if(data != 'No more results'){
+					pageid = pageid + 1;
+					$('.loading-text').show();
+					$('.loading-img').hide();
+					current.closest('.friends-list').find('.active').find('ul').append(data);
+				}else{
+					var currentobj = current.find('.loading-text');
+					currentobj.text('No more results');
+					current.removeClass('load-more-friend');
+				}
+			}	
+		});
+	});
+
 	$("#up_imgs").fileinput({
     uploadUrl: "/file-upload-batch/2",
     allowedFileExtensions: ["jpg", "png", "gif"],
@@ -651,8 +680,32 @@ $(document).on('change','#jobarea',function()
 */
 		$('.bcast-message-list').niceScroll();
 
+	/**
+	*	View more posts ajax call handling.
+	*	Ajaxcontroller@viewMorePosts
+	*/
+	var pageid = 2;
+	$(document).on('click','.dashboard-load',function(){
+		var current = $(this);
+		$.ajax({
+			'url' : '/ajax/viewmoreposts',
+			'type' : 'post',
+			'data' : { 'pageid': pageid },
+			'success' : function(data){
+				if(data){
+					pageid = pageid + 1;
+					$('#postlist').last('.single-post').append(data);					
+				}else{
+					current.find('span').remove();
+					current.append('<span>No more posts</span>');
+				}
+			}	
+		});
+	});
 
-});
+
+
+}); 	// Document ready closed..
 
 /*
  Broadcast delete

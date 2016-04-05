@@ -245,7 +245,12 @@ class ApiController extends Controller
 					$offset = ($page - 1) * $per_page;
 
 					$posts = Feed::orderBy('updated_at', 'desc')
-								->where('user_by', '=', $arguments['user_by'])
+								// ->where('user_by', '=', $arguments['user_by'])
+				                ->whereIn('user_by', Friend::where('user_id', '=', $arguments['user_by'])
+				                        ->where('status', '=', 'Accepted')
+				                        ->pluck('friend_id')
+				                        ->toArray())
+				                ->orWhere('user_by', '=', $arguments['user_by'])
 								->skip($offset)
 								->take($per_page)
 								->with('likesCount')
@@ -256,7 +261,12 @@ class ApiController extends Controller
 								->toArray();
 
 					$postscount = Feed::orderBy('updated_at', 'desc')
-								->where('user_by', '=', $arguments['user_by'])
+								// ->where('user_by', '=', $arguments['user_by'])
+				                ->whereIn('user_by', Friend::where('user_id', '=', $arguments['user_by'])
+				                        ->where('status', '=', 'Accepted')
+				                        ->pluck('friend_id')
+				                        ->toArray())
+				                ->orWhere('user_by', '=', $arguments['user_by'])
 								->with('likesCount')
 								->with('commentsCount')
 								->with('user')
@@ -960,6 +970,53 @@ class ApiController extends Controller
 		return $this->output();
 		
 	}
+
+
+
+ 	/*
+	 * Send image on chat api.
+	 */
+	public function chatSendImage()
+	{
+		$status = 0;
+		$message = ""; 
+		$image = $_FILES["chatsendimage"]["name"];
+		$path = public_path().''.'/uploads/media/chat_images';
+		
+		$uploadedfile = $_FILES['chatsendimage']['tmp_name'];
+		$name = $_FILES['chatsendimage']['name'];
+		$size = $_FILES['chatsendimage']['size'];
+		$valid_formats = array("jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF");
+
+		if (strlen($name)) {
+			list($txt, $ext) = explode(".", $name);
+			if (in_array($ext, $valid_formats)) {
+				$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
+				$tmp = $uploadedfile;
+				// echo '<pre>'; print_r($actual_image_name);die;
+				if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
+					$data = public_path().''.'/uploads/media/chat_images/'.$actual_image_name;
+					$chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
+					if ($chatType == "group"){}//chat type check
+					else{           
+						$this->message = 'Image saved successfully.'; //$_SERVER['HTTP_HOST'].$data;
+						$status=1;
+					}                              
+				} else
+				$this->message= "Failed to send try again.";    
+			} else
+			$this->message= "Invalid file format.";
+		}else {
+			$this->message="Please select an image to send.";
+		}
+
+		$this->data['filename'] = $actual_image_name;
+		$this->status = 'Success';
+
+		return $this->output();
+
+	}
+
 
 	/*
 	 * Get country on request.
