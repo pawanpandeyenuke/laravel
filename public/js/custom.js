@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	
-	// $('.StyleScroll').niceScroll();
+	$('.StyleScroll').niceScroll();
 	
 	var myReader = new FileReader();
 
