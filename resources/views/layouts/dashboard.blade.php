@@ -70,13 +70,13 @@
 							</ul>
 							{!! Form::close() !!}
 				</div>
-			</div>
+			</div> 
 			<div class="col-sm-3">
 				<div class="dashboard-header-menu text-right">
 					<ul class="list-inline">
 						<li class="user-info-top">
-							<span class="user-thumb" style="background: url('/images/user-thumb.jpg');"></span>
-							{{Auth::User()->first_name}}
+							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('/images/user-thumb.jpg');"></span>
+							{{Auth::User()->first_name}}</a>
 						</li>
 						<li><div class="logout"><a href="{{ url('/logout') }}" title="">Logout</a></div></li>
 					</ul>

@@ -128,11 +128,11 @@
 							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 
 								<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
-								
+									@if($data->user->id == Auth::User()->id)
 									<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
 
 									<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
-
+									@endif
 
 									<div class="row">
 										<div class="col-md-7">
@@ -237,6 +237,8 @@
 													
 														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name']);
 
+														$userId = DB::table('users')->where('id', $commentsData['commented_by'])->get(['id']);
+
 														// print_r($username);die;
 														if(!empty($username)){
 
@@ -251,7 +253,7 @@
 																<div class="comment-title-cont">
 																	<div class="row">
 																		<div class="col-sm-6">
-																			<a href="#" title="" class="user-link">{{$name}}</a>
+																			<a href="profile/{{$commentsData['commented_by']}}" title="" class="user-link">{{$name}}</a>
 																		</div>
 																		<div class="col-sm-6">
 																			<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>

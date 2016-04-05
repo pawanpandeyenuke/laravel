@@ -154,7 +154,7 @@ $variable['comment'] = <<<comments
 	<div class="comment-title-cont">
 		<div class="row">
 			<div class="col-sm-6">
-				<a href="#" title="" class="user-link">$username</a>
+				<a href="profile/$userid" title="" class="user-link">$username</a>
 			</div>
 			<div class="col-sm-6">
 				<div class="comment-time text-right">$time</div>

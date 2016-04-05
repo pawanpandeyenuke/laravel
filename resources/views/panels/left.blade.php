@@ -60,7 +60,7 @@
 		    <div class="panel-heading" role="tab" id="headingSeven">
 		      <h4 class="panel-title">
 		        <a class="without-arrow" href="{{ url('broadcast-list')}}">
-		          <i class="flaticon-balloon"></i>Broadcast
+		          <i class="flaticon-icon-89571"></i>Broadcast
 		        </a>
 		      </h4>
 		    </div>
@@ -69,7 +69,7 @@
 		    <div class="panel-heading" role="tab" id="headingSeven">
 		      <h4 class="panel-title">
 		        <a class="without-arrow" href="{{url('private-group-list')}}">
-		          <i class="flaticon-balloon"></i>Private Chat
+		          <i class="flaticon-icon-98732"></i>Private Chat
 		        </a>
 		      </h4>
 		    </div>
@@ -78,7 +78,7 @@
 		    <div class="panel-heading" role="tab" id="headingSeven">
 		      <h4 class="panel-title">
 		        <a class="without-arrow" href="{{ url('invite-friends') }}">
-		          <i class="flaticon-balloon"></i>Invite Friends
+		          <i class="flaticon-icon-88206"></i>Invite Friends
 		        </a>
 		      </h4>
 		    </div>
