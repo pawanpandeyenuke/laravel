@@ -62,9 +62,8 @@ header{
 	height: 40px;
 	border:0px;
 	line-height: 40px;
-	padding: 0px 12px;
+	padding: 0px 30px;
 }
-
 .btn-primary{
 	background: #a0f0e6;
 	font-size: 15px;
@@ -147,9 +146,9 @@ header{
 }
 span.field-icon:before{
   position: absolute;
-	top: 12px;
-	margin-top: 0;
-	left: 10px;
+  top: 50%;
+  margin-top: -14px;
+  left: 10px;
 }
 input.form-control.icon-field {
   padding-left: 40px;
@@ -614,9 +613,8 @@ a:hover{
   padding: 0px 10px;
 }
 .post-comment .comment-field{
-	border: 1px solid #D6D6D6;
+  border: 1px solid #D6D6D6;
   height: 45px;
-  overflow-y: scroll;
 }
 .post-footer .post-actions {
   padding-bottom: 10px;
@@ -987,10 +985,7 @@ a:hover{
 .post-comment .btn-cmnt{
 	position: absolute;
   top: 8px;
-  right: 40px;
-}
-.emoji-wysiwyg-editor{
-    padding-right: 75px !important;
+  right: 30px;
 }
 .pop-post-comment .emoji-picker-icon{
 	top: 12px;
@@ -1057,7 +1052,6 @@ a:hover{
 .chat-user-list li{
 	list-style:none;
   padding: 0 3px;
-  min-height: 45px;
 }
 .chat-user-list li a, .user-list-with-thumb li a{
   display: block;
@@ -1065,7 +1059,6 @@ a:hover{
   padding-left: 40px;
   padding: 8px 5px 8px 45px;
   border-bottom: 1px solid #EFEFEF;
-  min-height: 35px;
 }
 .user-list-with-thumb li a{
 	padding: 8px 5px 8px 55px;
@@ -1331,10 +1324,6 @@ a:hover{
 }
 .pr-name {
   font-size: 24px;
-}
-.pr-gname{
-font-size: 20px;
-width:495px;
 }
 .pr-location {
   font-size: 12px;
@@ -1685,9 +1674,9 @@ button.edit-pr-img {
 .modal-footer.text-center{
 	text-align: center;
 }
-.comments-list .comment-delete {
-	 top: 8px !important;
-  right: -5px !important;
+.comment-delete {
+  top: -2px;
+  right: -5px;
   font-size: 10px;
   color: #DCDCDC;
 }
@@ -1701,9 +1690,6 @@ button.edit-pr-img {
 }
 .edit-post-textarea .emoji-picker-icon{
   right: 20px;
-}
-.emoji-picker-icon{
-    right: 20px !important;
 }
 .edit-img-outer {
   margin: 15px 0 0;
@@ -1734,85 +1720,7 @@ button.edit-pr-img {
   float: right;
 }
 
-
-/******Chat Style********/
-
-#chat-system #conversejs{
-	position: relative;
-}
-#chat-system .profile-pic{
-	overflow: hidden;
-}
-#chat-system .profile-pic img{
-	width: 100%;
-}
-#conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom{
-	margin: 0 5px 10px 0;
-	background: #92e7dc !important;
-	border-bottom: 1px solid #000;
-	color: #000 !important;
-}
-#conversejs .chat-title, #conversejs a.restore-chat{
-	color: #000;
-	text-shadow: none;
-}
-#conversejs .chat-head, #conversejs .chat-head{
-	background: none !important;
-	border-bottom: 1px solid #000;
-}
-#conversejs .chat-message-me, #conversejs .chat-message-room, #conversejs .chat-message-them{
-	font-size: 11px !important;
-    font-weight: 400;
-    max-width: 100px;
-    overflow: hidden;
-    padding-right: 3px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-#conversejs .chat-message.pic-them .chat-message-content{
-	color: #000;
-    font-size: 13px;
-    font-weight: 400 !important;
-    margin-left: 60px !important;
-    margin-right: 0 !important;
-}
-#conversejs .chat-message.pic-me .chat-message-content, #conversejs .chat-message.pic-them .chat-message-content{
-	color: #000 !important;
-    font-size: 13px !important;
-    font-weight: 400 !important;
-}
-#conversejs a.close-chatbox-button, #conversejs a.configure-chatroom-button, #conversejs a.toggle-chatbox-button{
-	color: #000 !important;
-	border: 1px solid #000 !important;
-}
-#conversejs .chat-title, #conversejs a.restore-chat{
-	color: #000 !important;
-	font-weight: 400 !important;
-}
-
-
-#conversejs .chatroom-topic, #conversejs .user-custom-message {
-    left: 37px;
-    position: absolute;
-    top: 23px;
-}
-#conversejs .chat-title {
-    margin: -6px 0 0;
-}
-#conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom{
-   margin: 0 5px 10px 0;
-}
-.page-title.req-search {
-  position: relative;
-  height: 50px;
-  margin: 6px 0 0;
-}
-.page-title.req-search .search-box{
-	right: 0;
-}
-.modal{
-  z-index: 9999999999999999;
-}
+/******* BROADCAST *******/
 .no-left-padding{
 	padding-left: 10px;
 }
@@ -1824,7 +1732,7 @@ button.edit-pr-img {
   padding: 0 20px 20px;
   margin: 0 0 40px;
 }
-.b-cast-name h5, .bcast-list h5{
+.b-cast-name h5{
 	font-size: 16px;
   color: #000;
   padding-left: 20px;
@@ -1921,20 +1829,6 @@ button.edit-pr-img {
   line-height: 65px;
   box-shadow: 0px 0px 5px 0px #B1B1B1;
 }
-
-.add-mem{
-  width: 65px;
-  height: 65px;
-  background: #92e7dc;
-  display: inline-block;
-  border-radius: 50%;
-  color: #000;
-  font-size: 32px;
-  line-height: 65px;
-  box-shadow: 0px 0px 5px 0px #B1B1B1;
-
-
-}
 .add-blist-btn:hover, .add-blist-btn:focus{
 	background: #5DF7E3;
   color: #000;
@@ -1978,98 +1872,101 @@ button.edit-pr-img {
 textarea{
 	resize: vertical;
 }
-.load-btn {
-	text-align: center;
-	cursor: pointer;
-	background: #A0F0E6;
-	padding: 10px 0;
-	border: 1px solid #4DE2D0;
-	border-radius: 4px;
-	margin: 10px 0 0;
-	font-weight: 500;
-}
-.load-btn .loading-img{
 
+
+/******Load More Button********/
+
+ .load-btn {
+    text-align: center;
+    cursor: pointer;
+    background: #A0F0E6;
+    padding: 10px 0;
+    border: 1px solid #4DE2D0;
+    border-radius: 4px;
+    margin: 10px 0 0;
+    font-weight: 500;
 }
-.load-btn .loading-img img {
-    width: 100px;
+
+
+/******Chat Style********/
+
+.no-left-padding{
+	padding-left: 10px;
 }
-.load-btn span.loading-text {
-    display: none;
+
+#chat-system #conversejs{
+	position: relative;
 }
-.group-img{
-	 height:250px;
-	 background: #000;
-	 padding: 0px;
-	 text-align:center;
-	 line-height:250px;
-	 overflow: hidden;
-	 position: relative;
-   margin: 0 0 30px;
+#chat-system .profile-pic{
+	overflow: hidden;
 }
-.g-img{
-	vertical-align:middle;
-	max-width:100%;
-	max-height:100%;
+#chat-system .profile-pic img{
+	width: 100%;
 }
-.group-img .filestyle {
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
+#conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom{
+	margin: 0 5px 10px 0;
+	background: #92e7dc !important;
+	border-bottom: 1px solid #000;
+	color: #000 !important;
 }
-.grp-img-outer{
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-}
-.grp-img-outer .input-group .glyphicon{
-  color: #fff;
-  font-size: 22px;
-  padding: 0px;
-}
-.grp-img-outer .input-group .btn{
-	padding: 0px;
-}
-.edit-grp-name {
-  padding: 0 20px;
-  margin: 0 0 30px;
-}
-.edit-grp-name .form-control{
-	border-color: #000;
+#conversejs .chat-title, #conversejs a.restore-chat{
 	color: #000;
+	text-shadow: none;
 }
-.edit-grp-name .editbtn-pencil{
-	background: none;
-  border: 0px;
-  color: #000;
-  padding: 0px;
-  font-size: 25px;
-  position: absolute;
-  right: 50px;
-  top: 5px;
-  outline: none;
+#conversejs .chat-head, #conversejs .chat-head{
+	background: none !important;
+	border-bottom: 1px solid #000;
 }
-.participants-list h5{
-  border-bottom: 1px solid #ddd;
-  padding: 0 80px 15px;
-  color: #000;
-  font-size: 16px;
-  font-weight: 600;
+#conversejs .chat-message-me, #conversejs .chat-message-room, #conversejs .chat-message-them{
+	font-size: 11px !important;
+    font-weight: 400;
+    max-width: 100px;
+    overflow: hidden;
+    padding-right: 3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-.grp-mem-list .single-list{
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+#conversejs .chat-message.pic-them .chat-message-content{
+	color: #000;
+    font-size: 13px;
+    font-weight: 400 !important;
+    margin-left: 60px !important;
+    margin-right: 0 !important;
 }
-.grp-mem-list .bclist-detail .bc-img{
-	width: 50px;
+#conversejs .chat-message.pic-me .chat-message-content, #conversejs .chat-message.pic-them .chat-message-content{
+	color: #000 !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+#conversejs a.close-chatbox-button, #conversejs a.configure-chatroom-button, #conversejs a.toggle-chatbox-button{
+	color: #000 !important;
+	border: 1px solid #000 !important;
+}
+#conversejs .chat-title, #conversejs a.restore-chat{
+	color: #000 !important;
+	font-weight: 400 !important;
+}
+
+
+#conversejs .chatroom-topic, #conversejs .user-custom-message {
+    left: 37px;
+    position: absolute;
+    top: 23px;
+}
+#conversejs .chat-title {
+    margin: -6px 0 0;
+}
+#conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom{
+   margin: 0 5px 10px 0;
+}
+.page-title.req-search {
+  position: relative;
   height: 50px;
+  margin: 6px 0 0;
 }
-.grp-mem-list .bclist-detail {
-	min-height: 50px;
+.page-title.req-search .search-box{
+	right: 0;
 }
-.grp-mem-list .bclist-detail .list-name {
-  margin: 10px 0 5px;
+.modal{
+  z-index: 9999999999999999;
 }

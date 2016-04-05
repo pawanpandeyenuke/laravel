@@ -10,6 +10,7 @@
 <link href="/fancybox/jquery.fancybox.css" rel="stylesheet" media="all">
 <link href="/css/flat-icon/flaticon.css" rel="stylesheet" media="all">
 <link href="/css/fileinput.min.css" rel="stylesheet" media="all">
+<link href="/css/select2.min.css" rel="stylesheet" media="all">
 
 <link href="/css/bootstrap-datepicker.css" rel="stylesheet" media="all">
 <!-- <link href="/converse/converse.min.css" rel="stylesheet" type="text/css" media="screen" > -->
@@ -96,6 +97,7 @@
 <script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap-datepicker.min.js"></script>
 <script src="/c-lib/lib/js/emojione.js"></script>
+<script src="/js/select2.min.js"></script>
 <!--Emoji libraries-->
 <script src="/lib/js/nanoscroller.min.js"></script>
 <script src="/lib/js/tether.min.js"></script>

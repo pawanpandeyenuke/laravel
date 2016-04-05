@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country;
+use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
+,App\BroadcastMessages,App\Group,App\GroupMembers;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
@@ -249,6 +250,7 @@ comments;
 	}
 
 
+        //} 
 	/**
 	*	Query builderfor friend lists ajax call handling.
 	*	Ajaxcontroller@queryBuilder
@@ -263,11 +265,10 @@ comments;
             $query->where('friend_id', '=', $user_id);
             $query->where('status', '=', 'Pending');
         }elseif($input == 'current'){
-            $query->where('user_id', '=', $user_id)->where('status', '=', 'Accepted');
-            $query->orWhere('friend_id', '=', $user_id)->where('status', '=', 'Accepted');
+            $query->where('friend_id', '=', $user_id);
+            $query->where('status', '=', 'Accepted');
         } 
 	}
-
 
 
  
@@ -722,14 +723,92 @@ foreach ($friend as $key => $value)
 
 		if($model!=null){
 			foreach ($model as $key => $value) {
+				if($type=='current')
+				$n=$value['user']['first_name']." ".$value['user']['last_name'];
+				else
 				$n=$value['friends']['first_name']." ".$value['friends']['last_name'];
 				if (stripos($n, $name) !== false) {
 					$model2[] =$value;
 				}
 			}
 		}
+		//print_r($model2);die;
 		return view('dashboard.friendlist2')->with('model',$model2)->with('model1',$model1);
 	}
 
+/**
+	BROADCAST DELETE AND SEND
+**/
+	public function delBroadcast()
+	{
+		$input=Input::get('bid');
+		Broadcast::where('id', '=', $input)->delete();
+		BroadcastMessages::where('broadcast_id',$input)->where('broadcast_by',Auth::User()->id)->delete();
+	}
+
+	public function sendBroadcast()
+	{
+		$input=Input::all();
+		$msg=$input['msg'];
+		$date = date('d M Y,h:i a', time());
+		     $data = array(
+		     			'broadcast_message'=>$input['msg'],
+                        'broadcast_id'=>$input['bid'],
+                        'broadcast_by'=>Auth::User()->id,
+                        'created_at'=>date('Y-m-d h:i:s',time()),
+                            );  
+                
+                BroadcastMessages::insert($data);
+				$model=new BroadcastMessages;
+
+			
+							
+
+						$data1 = '<div class="single-message">
+										<div class="clearfix">
+											<div class="bcast-msg">
+												'.$msg.'
+											</div>
+										</div>
+										<div class="bcast-msg-time">
+											'.$date.'
+										</div>
+									</div>';
+
+
+		echo $data1;
+	}
+
+
+/**
+	PRIVATE GROUP DELETE 
+**/
+
+	public function delPrivateGroup()
+	{
+		$input=Input::get('pid');
+		Group::where('id',$input)->where('owner_id',Auth::User()->id)->delete();
+		GroupMembers::where('group_id',$input)->delete();
+
+	}
+
+/**
+	 DELETE USER FROM PRIVATE GROUP 
+**/
+
+	public function delUser()
+	{
+		$input=Input::all();
+		GroupMembers::where('group_id',$input['gid'])->where('member_id',$input['uid'])->delete();
+	}
+
+/**
+	 EDIT PRIVATE GROUP NAME 
+**/
+	public function editGroupName()
+	{
+		$input=Input::all();
+		Group::where('id',$input['gid'])->update(['title'=>$input['gname']]);
+	}
 }
 	

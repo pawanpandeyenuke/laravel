@@ -57,9 +57,17 @@ Route::post('ajax/sendimage','AjaxController@sendImage');
 
 Route::post('ajax/searchfriend','AjaxController@searchfriendlist');
 
-//Route::post('ajax/profilesave','AjaxController@editProfile');
-
 Route::post('ajax/searchtabfriend','AjaxController@searchTabFriend');
+
+Route::post('/ajax/delbroadcast','AjaxController@delBroadcast');
+
+Route::post('/ajax/sendbroadcast','AjaxController@sendBroadcast');
+
+Route::post('/ajax/delprivategroup','AjaxController@delPrivateGroup');
+
+Route::post('/ajax/deluser','AjaxController@delUser');
+
+Route::post('/ajax/editgroupname','AjaxController@editGroupName');
 
 /**
  * @Api Routes..
@@ -133,7 +141,30 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
 	Route::get('groupchat', 'DashboardController@groupchat');
 
+	Route::get('groupchat/pg/{groupid}/{groupname}','DashboardController@groupchat');
+
 	Route::get('profile/{id}', 'DashboardController@profile');
 	Route::post('profile/{id}', 'DashboardController@profile');
+
+	Route::get('broadcast-list', 'DashboardController@broadcastList');
+	Route::post('broadcast-list', 'DashboardController@broadcastList');
+	
+	Route::get('broadcast-add', 'DashboardController@broadcastAdd');
+	Route::post('broadcast-add', 'DashboardController@broadcastAdd');
+
+	Route::get('broadcast-msg/{broadcastid}', 'DashboardController@broadcastMessage');
+	
+	Route::get('private-group-list/{privategroupid}', 'DashboardController@privateGroupList');
+	Route::get('private-group-list', 'DashboardController@privateGroupList');
+	Route::post('private-group-list/{privategroupid}', 'DashboardController@privateGroupList');
+	
+	Route::get('private-group-add', 'DashboardController@privateGroupAdd');
+	Route::post('private-group-add', 'DashboardController@privateGroupAdd');
+
+	Route::get('private-group-detail/{privategroupid}', 'DashboardController@privateGroupDetail');
+	//Route::post('private-group-detail', 'DashboardController@privateGroupDetail');
+
+
+
 
 });

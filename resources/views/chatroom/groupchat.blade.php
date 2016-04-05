@@ -157,7 +157,7 @@ $groupid=str_replace('-','_',$groupid);
     var conObj;
     var groupname="{{$groupname}}";
     var groupid="{{$groupid}}";
-  var exception="{{$flag}}";
+   
 
 
 
@@ -197,6 +197,7 @@ $groupid=str_replace('-','_',$groupid);
                     });
                     //jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                     //jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
+
 
 
         if( groupname != '' || groupid != '' )
@@ -355,12 +356,6 @@ function openChatbox(xmpusername,username)
             else{
                 conObj.rooms.open(grpjid+conferencechatserver);
             }
-           //var chatView=conObj.rooms.open(grpjid+conferencechatserver);
        }
-
-    //     function openChatGroup(grpname,grpjid)
-    // {
-    //  var chatView=conObj.rooms.open(grpjid+chatserver,grpname);
-    // }
 
 </script>
