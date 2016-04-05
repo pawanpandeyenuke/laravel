@@ -69,10 +69,27 @@ class ContactImporter extends Controller
 
         if(Request::isMethod('post')){
 
+  
+
             $requestemails = Request::get('emails');
 
             $emailsarray = explode(',', $requestemails);
-
+        
+        foreach ($emailsarray as $key => $value) {
+                $validator=null;
+            $validator = Validator::make($emailsarray, [
+                $key => 'required|email'
+            ]); 
+           $validator->each($key, ['required', 'email']);
+           
+           if($validator->fails()) {
+                   return redirect()->back()->withInput()->with('error', 'Please check email addresses entered and try again.');   
+         
+            }
+        }
+               
+            
+            
             $existingUser = array();
             $nonExistingUser = array();
             foreach ($emailsarray as $value) {                
@@ -109,7 +126,8 @@ class ContactImporter extends Controller
 
             // echo '<pre>';print_r($emailsarray);die;
 
-        }
+        
+    }
 
         return view('invite-friends.invite')
                 ->with('googleImportUrl', $googleImportUrl);

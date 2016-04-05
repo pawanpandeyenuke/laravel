@@ -1,5 +1,4 @@
-
-	  <div class="modal-dialog modal-md">
+  <div class="modal-dialog modal-md">
 	    <div class="modal-content" data-value="{{$posts->id}}">
 		    {!! Form::open(array('url' => 'ajax/editposts', 'id' => 'postform1', 'files' => true)) !!}
 		    	<div class="modal-body text-center">

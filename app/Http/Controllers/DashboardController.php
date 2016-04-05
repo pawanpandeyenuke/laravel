@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory;
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers;
+
 use App\Library\Converse, Google_Client, Mail;
+
 use Request, Session, Validator, Input, Cookie;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\MessageBag;
 // use Illuminate\Support\Facades\Input;
 
 class DashboardController extends Controller
@@ -211,26 +214,66 @@ class DashboardController extends Controller
     *   Enter chatrooms ajax call handling.
     *   Ajaxcontroller@enterchatroom
     */
-    public function groupchat( $input = '' ){   
+    public function groupchat( $input = '' ,$gname=''){   
+$groupid=null;
+if($input)
+{
+    if($input!=null && $gname!=null)
+    {
+        $groupid=$input;
+        $checkname=DB::table('groups')->where('id',$input)->value('title');
+        $checkname=strtolower($checkname);
+        $checkname=str_replace(" ","-",$checkname);
+        if($checkname!=$gname)
+        {
+            return redirect('private-group-list');           
+        }
+        else if($checkname==$gname)
+        {
+           $privategroup=Group::with('members')->where('id',$input)->get()->toArray();
 
-    
-                $flag2=0;
+                $count=0;
+                foreach ($privategroup[0]['members'] as $mem){
+                    if($mem['member_id']==Auth::User()->id)
+                         $count++;
+                }
+          if(($count==0) && $privategroup[0]['owner_id']!=Auth::User()->id){
+            return redirect('private-group-list');
+          }
+            
+        }
+        
+    }
+    else{
+$groupid=$input;
+$groupname = implode('-', array_map('ucfirst', explode('-', $groupid)));
+$groupname = implode(',', array_map('ucfirst', explode(',', $groupname)));
+$groupname =preg_replace('/(?<! )(?<!^)[A-Z]/',' $0', $groupname);
+$groupname=str_replace(', ',',',$groupname);
+$groupname=str_replace('-','',$groupname);
+$groupname=str_replace('It','IT',$groupname);
+
+$result=DB::table('categories')->where('title',$groupname)->value('id');
+if($result==null)
+{
+return redirect('group');
+}
+}
+}
                         $model = new DefaultGroup;
                       
                         if(empty($input))        
 
                         $input = Request::all();
                  
-                    if($input==null){
-                        $flag2=1;
-                         
-                    }
+                 
+               
                 if(isset($input['subcategory']))
                 {
 
                     $res=DB::table('categories')->where('parent_id','!=',0)->pluck('title');
                     $res1=DB::table('categories')->where('parent_id','=',0)->pluck('title');
-
+ 
                     $par=array_unique($res1);
                     $res1=array_map('strtolower',$par);
                     $par=$res1;
@@ -304,6 +347,10 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
     return redirect('group');
 }
 
+if($input!=null && $gname!=null)
+{
+    $input=$gname;
+}
         if(is_array($input)){
             $groupnamedata = array();
             foreach ($input as $key => $value){
@@ -322,8 +369,7 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
             $groupname = $input;
         }
 
-        
-        
+            
         if(Request::isMethod('get')){
 
             if(is_array($groupname)){
@@ -370,6 +416,7 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
                     $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();  
             }
 
+
         }
 
         $id=Auth::User()->id;
@@ -382,11 +429,11 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
                     ->with('authid',$id)
                     ->with('pendingfriend',$pendingfriend)
                     ->with('exception',$input)
-                    ->with('flag',$flag2)
+                    ->with('pgid',$groupid)
                     ;
-    }
+   }
 
-
+ 
 
     public function profile( $id )
     {
@@ -518,5 +565,171 @@ elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'
         echo json_encode(array('status'=>$status,'message'=>$message,'type'=>'image'));
            die(); 
        }
+
+
+
+    public function broadcastList()
+    {
+        $broadcast=Broadcast::where('user_id',Auth::User()->id)->orderBy('id','DESC')->get()->toArray();
+        return view('broadcast.list')->with('broadcast',$broadcast);
+    }
+
+    public function broadcastAdd()
+    {
+
+        if(Request::isMethod('post'))
+        {
+
+            $userid=Auth::User()->id;
+            $input=Request::all();
+        
+        if(isset($input['broadcastuser'])&&$input['broadcastname']!=null)
+            {
+
+                $members=implode(",",$input['broadcastuser']);
+                
+                $data = array(
+                        'title'=>$input['broadcastname'],
+                        'user_id'=>$userid,
+                        'members'=>$members
+                            );  
+                
+                Broadcast::insert($data);
+                
+              return redirect(url('broadcast-list'));  
+                
+            }
+            else
+            {
+                return redirect()->back();
+            }
+
+
+        }
+
+
+    $friends=Friend::with('user')
+                    ->with('user')
+                    ->where('friend_id', '=', Auth::User()->id)
+                    ->where('status', '=', 'Accepted')
+                    ->get()
+                    ->toArray();
+
+                return view('broadcast.add')->with('friends',$friends);   
+    }
+
+    public function broadcastMessage($broadcastid='')
+    {   
+        if($broadcastid)
+        {   
+            $broadcastdetail=DB::table('broadcast')->where('id',$broadcastid)->pluck('members','title');
+            $broadcastmessages=BroadcastMessages::where('broadcast_id',$broadcastid)->where('broadcast_by',Auth::User()->id)->get();
+           
+            foreach ($broadcastdetail as $key => $value) {
+                $mem=explode(",",$value);   
+                $name=DB::table('users')->whereIn('id',$mem)->pluck('first_name');
+                $namestr=implode(",",$name);
+                $title=$key;
+            }
+                return view('broadcast.message')
+                        ->with('name',$namestr)
+                        ->with('title',$title)
+                        ->with('id',$broadcastid)
+                        ->with('messages',$broadcastmessages);
+        }
+    }
+
+    
+    
+    public function privateGroupList($privategroupid='')
+    {
+
+        if($privategroupid)
+        {
+            GroupMembers::where('group_id',$privategroupid)->where('member_id',Auth::User()->id)->delete();
+        }
+        $privategroup=Group::with('members')->orderBy('id','DESC')->get()->toArray();
+
+        return view('privategroup.list')->with('privategroup',$privategroup);
+    }
+
+    public function privateGroupAdd()
+    {
+          if(Request::isMethod('post'))
+        {
+
+            $userid=Auth::User()->id;
+            $input=Request::all();
+            array_push($input['groupmembers'],$userid);
+        
+        
+        if(isset($input['groupmembers'])&&$input['groupname']!=null)
+            {
+
+                $members=implode(",",$input['groupmembers']);
+    
+                $data = array(
+                        'title'=>$input['groupname'],
+                        'status'=>'Active',
+                        'owner_id'=>$userid,
+                            );  
+                
+                $groupdata = Group::create($data);
+
+                foreach ($input['groupmembers'] as $data) {
+                    
+                
+                 $data1 = array(
+                        'group_id'=>$groupdata->id,
+                        'member_id'=>$data,
+                        'status'=>'Joined',
+                            );
+                        GroupMembers::insert($data1);  
+                }
+
+                return redirect(url('private-group-list'));       
+            }
+            else
+            {
+                return redirect()->back();
+            }
+    }
+
+     $friends=Friend::with('user')
+                    ->with('user')
+                    ->where('friend_id', '=', Auth::User()->id)
+                    ->where('status', '=', 'Accepted')
+                    ->get()
+                    ->toArray();
+
+                return view('privategroup.add')->with('friends',$friends);   
+
+  }
+
+  public function privateGroupDetail($privategroupid='')
+  {
+    if($privategroupid)
+    {
+        $title=DB::table('groups')->where('id',$privategroupid)->value('title');
+        $ownerid=DB::table('groups')->where('id',$privategroupid)->value('owner_id');
+        $members=DB::table('members')->where('group_id',$privategroupid)->pluck('member_id');
+        $name=User::whereIn('id',$members)->orWhere('id',$ownerid)->get()->toArray();
+
+        $friends=Friend::with('user')
+                    ->with('user')
+                    ->where('friend_id', '=', Auth::User()->id)
+                    ->where('status', '=', 'Accepted')
+                    ->get()
+                    ->toArray();
+
+        return view('privategroup.detail')
+               ->with('title',$title)
+               ->with('name',$name)
+               ->with('groupid',$privategroupid)
+               ->with('ownerid',$ownerid)
+               ->with('friends',$friends);   
+    }
+
+  }
 
 }

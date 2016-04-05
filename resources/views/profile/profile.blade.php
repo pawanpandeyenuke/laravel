@@ -50,7 +50,7 @@
 							@if( Auth::User()->id == $user->id )
 								<button type="button" class="edit-profile" title="Edit Profile"><i class="fa fa-pencil"></i></button>
 							@endif
-							
+								
 							<!-- <button type="submit" class="save-profile-changes" title="Save Profile"><i class="fa fa-check-circle"></i></button> -->
 							<div class="profile-header">
 								<div class="profile-img" style="background: url('/images/user-thumb.jpg');">
