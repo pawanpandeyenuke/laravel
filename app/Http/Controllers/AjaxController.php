@@ -704,13 +704,13 @@ comments;
      $status=0;
      $message="";
      //$url=url();
-// echo '<pre>'; print_r($_FILES);die;
+
 
       $image = $_FILES["chatsendimage"]["name"];
       //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
       
       $path=public_path().''.'/uploads/media/chat_images/';
-
+// echo '<pre>'; print_r($path);die;
 
 			$uploadedfile = $_FILES['chatsendimage']['tmp_name'];
 			$name = $_FILES['chatsendimage']['name'];

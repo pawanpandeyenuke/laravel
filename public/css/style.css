@@ -1979,3 +1979,27 @@ textarea{
 .load-btn span.loading-text {
     display: inline-block !important;
 }
+.social-btns {
+  margin: 30px 0 0;
+}
+.social-invite h5{
+	padding-left: 0px;
+}
+.checkbox-cont.label-right input[type=checkbox].css-checkbox + label.css-label{
+  background-position: right 0px;
+  padding-left: 0px;
+  padding-right: 30px;
+  min-width: 100px;
+}
+.checkbox-cont.label-right input[type=checkbox].css-checkbox:checked + label.css-label{
+	background-position: right -22px;
+}
+.checkbox-cont.label-right {
+  width: 100px;
+  float: right;
+}
+.invite-list-table {
+  height: 350px;
+  overflow-y: scroll;
+  border: 1px solid #ddd;
+}

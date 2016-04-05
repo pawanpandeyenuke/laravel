@@ -102,6 +102,9 @@ Route::post('api/acceptrequest','ApiController@acceptRequest');
 Route::post('api/declinerequest','ApiController@declineRequest');
 
 
+Route::post('api/chatsendimage','ApiController@chatSendImage');
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -130,6 +133,9 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('/', 'DashboardController@dashboard');	
 	Route::get('chatroom', 'DashboardController@chatroom');
 	Route::get('friends', 'DashboardController@friendRequests');
+	Route::get('invite-friends', 'ContactImporter@inviteFriends');
+	Route::post('invite-friends', 'ContactImporter@inviteFriends');
+	Route::get('invite-contacts', 'ContactImporter@inviteContactList');
 
 	Route::get('group', 'DashboardController@group');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
@@ -139,5 +145,12 @@ Route::group(['middleware' => 'web'], function () {
 
 	Route::get('profile/{id}', 'DashboardController@profile');
 	Route::post('profile/{id}', 'DashboardController@profile');
+
+	Route::get('google/client', 'ContactImporter@inviteFriends');
+	Route::get('google/client/callback', 'ContactImporter@inviteContactList');
+	Route::post('google/client/callback', 'ContactImporter@inviteContactList');
+
+	// Route::get('hotmail/client', 'ContactImporter@hotmail');
+	// Route::get('hotmail/client/callback', 'ContactImporter@callbackH');
 
 });

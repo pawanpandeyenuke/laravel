@@ -971,6 +971,53 @@ class ApiController extends Controller
 		
 	}
 
+
+
+ 	/*
+	 * Send image on chat api.
+	 */
+	public function chatSendImage()
+	{
+		$status = 0;
+		$message = ""; 
+		$image = $_FILES["chatsendimage"]["name"];
+		$path = public_path().''.'/uploads/media/chat_images';
+		
+		$uploadedfile = $_FILES['chatsendimage']['tmp_name'];
+		$name = $_FILES['chatsendimage']['name'];
+		$size = $_FILES['chatsendimage']['size'];
+		$valid_formats = array("jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "gif", "GIF");
+
+		if (strlen($name)) {
+			list($txt, $ext) = explode(".", $name);
+			if (in_array($ext, $valid_formats)) {
+				$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
+				$tmp = $uploadedfile;
+				// echo '<pre>'; print_r($actual_image_name);die;
+				if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
+					$data = public_path().''.'/uploads/media/chat_images/'.$actual_image_name;
+					$chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
+					if ($chatType == "group"){}//chat type check
+					else{           
+						$this->message = 'Image saved successfully.'; //$_SERVER['HTTP_HOST'].$data;
+						$status=1;
+					}                              
+				} else
+				$this->message= "Failed to send try again.";    
+			} else
+			$this->message= "Invalid file format.";
+		}else {
+			$this->message="Please select an image to send.";
+		}
+
+		$this->data['filename'] = $actual_image_name;
+		$this->status = 'Success';
+
+		return $this->output();
+
+	}
+
+
 	/*
 	 * Get country on request.
 	 */
