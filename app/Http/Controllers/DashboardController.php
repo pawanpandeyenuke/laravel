@@ -418,6 +418,22 @@ if($input!=null && $gname!=null)
 
 
         }
+        $counter=0;
+        if($groupid!=null)
+        {
+        	    $members=DB::table('members')->where('group_id',$groupid)->pluck('member_id');
+        	    foreach ($members as $key => $value) {
+        	    	if($value==Auth::User()->id)
+        	    	{
+        	    		$counter++;
+        	    	}
+        	    }
+        }
+
+        if($counter==0)
+        {
+        	return redirect('private-group-list');
+        }
 
         $id=Auth::User()->id;
         $friendid=DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
@@ -649,6 +665,14 @@ if($input!=null && $gname!=null)
 
         if($privategroupid)
         {
+			$groupname = DB::table('groups')->where('id',$privategroupid)->value('title');
+			$groupname=$groupname."_".$privategroupid;
+
+			$converse=new Converse;
+			$xmp=DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
+
+			$converse->removeUserGroup($groupname,$xmp);
+
             GroupMembers::where('group_id',$privategroupid)->where('member_id',Auth::User()->id)->delete();
         }
         $privategroup=Group::with('members')->orderBy('id','DESC')->get()->toArray();
@@ -658,7 +682,6 @@ if($input!=null && $gname!=null)
 
     public function privateGroupAdd()
     {
-die('sdafdsa');
 
           if(Request::isMethod('post'))
         {
@@ -666,7 +689,7 @@ die('sdafdsa');
             $userid=Auth::User()->id;
             $input=Request::all();
        
-        print_r($input);die;
+ 
         if(isset($input['groupmembers'])&&$input['groupname']!=null)
             {
                 array_push($input['groupmembers'],$userid);
@@ -678,13 +701,21 @@ die('sdafdsa');
                         'status'=>'Active',
                         'owner_id'=>$userid,
                             );  
-             print_r($input['groupname']);die; 
-	       $groupid=implode('_',$input['groupname']);
+
+
+
+                $groupid=str_replace(' ','_',$input['groupname']);
+
                 $groupid=strtolower($groupid);
+
                     $converse=new Converse;
-                    $converse->createGroup($groupid,$input['groupname']);
+
                 
                 $groupdata = Group::create($data);
+				
+                 $groupname=$input['groupname']."_".$groupdata->id;
+          
+                    $converse->createGroup($groupid,$groupname);
 
                 foreach ($input['groupmembers'] as $data) {
                     
@@ -703,7 +734,7 @@ die('sdafdsa');
        
         foreach ($xmp as $key => $value) {
             
-            $converse->addUserGroup($groupid,$value);
+            $converse->addUserGroup($groupname,$value);
 
         }
 

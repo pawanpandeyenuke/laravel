@@ -205,7 +205,7 @@ class ApiController extends Controller
 				if( $success ){
 					$this->message = 'Your post has been saved successfully.';
 					$this->status = 'success';
-					$this->data = $success;					
+					$this->data = $success;
 				}
 
 
@@ -274,7 +274,12 @@ class ApiController extends Controller
 								->count();
 
 					/*$posts = Feed::where('user_by', $arguments['user_by'])->orderBy('updated_at', 'desc')->skip($offset)->take($per_page)->with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get()->toArray();*/
- 
+//					$recordscount = Feed::where('user_by', $arguments['user_by'])->get();
+//					$rcounts = Feed::all();
+//					$recordscount = count($rcounts);
+//print_r($recordscount);die;
+
+
 					// $posts = Feed::with('user')->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')->groupBy('news_feed.id')->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments'),DB::raw('count(likes.id) as likes')]);
 
 /*					$posts = DB::table('users')
@@ -299,11 +304,18 @@ class ApiController extends Controller
 						$this->data['feed'] = $posts;
 						$this->data['page_no'] = $arguments['page'];
 						$this->data['page_size'] = $arguments['page_size'];
+/*
+						$this->data['records'] = $recordscount;
+						$this->data['total_pages'] = ceil($recordscount / $arguments['page_size']);
+						$this->message = count($posts). ' posts found.';
+						$this->status = 'success';
+						$this->message = count($posts). ' posts found.';
+						$this->data['feeds'] = $posts;*/
+
 						$this->data['records'] = $postscount;
 						$this->data['total_pages'] = ceil($postscount / $arguments['page_size']);
 						$this->message = count($postscount). ' posts found.';
-
-					}					
+					}
 					
 				}
 			}
@@ -404,7 +416,7 @@ class ApiController extends Controller
 			$page = $arguments['page'];
 			$offset = ($page - 1) * $per_page;
 
-			$comments = Comment::where('feed_id', $arguments['feed_id'])->with('user')->orderBy('updated_at', 'desc')->skip($offset)->take($per_page)->get()->toArray();
+			$comments = Comment::where('feed_id', $arguments['feed_id'])->orderBy('updated_at', 'desc')->with('user')->skip($offset)->take($per_page)->get()->toArray();
 
 			$recordscount = Comment::where('feed_id', $arguments['feed_id'])->get();
 
@@ -490,7 +502,7 @@ class ApiController extends Controller
 
 				$userProfile = User::with('education')->where(['id'=>$arguments['id']])->get()->toArray();
 
-				// print_r($userProfile);die;
+				//print_r($userProfile);die;
 
 				$this->status = 'Success';
 				$this->data = $userProfile;
@@ -518,7 +530,6 @@ class ApiController extends Controller
  	{
 		try{
 			$arguments = Request::all();
-// echo '<pre>';print_r($arguments['id']);die;
 			$user = new User();
 
 			if(isset($arguments['education'])){
@@ -530,7 +541,7 @@ class ApiController extends Controller
 				$educationdata = $arguments['education'];
 
 				foreach ($educationdata as $key => $value) {
-					
+
 					$education = new EducationDetails;
 					$data[] = $education->create($value);
 				}

@@ -108,10 +108,10 @@
 <script src="/js/jquery.nicescroll.min.js"></script>
 <!--/Emoji-->
 
-<!-- chat system -->
-<!-- <script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
-<script type="text/javascript" src="/converse/jquery.form.js"></script> -->
-<!-- chat system -->
+<!-- 
+<script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
+<script type="text/javascript" src="/converse/jquery.form.js"></script>
+-->
 
 </body>
 </html>

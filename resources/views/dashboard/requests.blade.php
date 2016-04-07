@@ -93,9 +93,9 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 						<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Decline</button>
 					</div>
 
-					<span class="btn btn-default btn-full msg" id='msg' style="display: none;">Request Rejected</span>
+					<span class="btn btn-default btn-full msg" disabled="disabled" id='msg' style="display: none;">Request Rejected</span>
 
-					<span class="btn btn-default btn-full msg2" id='msg2' style="display: none;">Friend Removed</span>
+					<span class="btn btn-default btn-full msg2" disabled="disabled" id='msg2' style="display: none;">Friend Removed</span>
 
 					<div class="text-right">
 
@@ -115,7 +115,7 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 				<?php }elseif($status2=='Rejected'){ 
 					?>
 					<div class="text-right">
-						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Re-Send</button>
+						<button type="button" class="btn btn-primary btn-full resend" disabled="disabled" id='resend'>Re-Send</button>
 					</div>
 					<div class="text-right">
 					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>

@@ -18,7 +18,7 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
 $groupid=strtolower($groupid);
 $groupid=str_replace('-','_',$groupid);
 if($pgid){
- $groupid=$groupid."_".$pgid;
+   $groupid=$groupid."_".$pgid;
 }
 
 ?>
@@ -201,12 +201,13 @@ if($pgid){
                     //jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                     //jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
 
-
-
-        if( (groupname != '' || groupid != '') && pgid==null)
+        if(groupname != '' || groupid != '')
         {         
              openChatGroup(groupname,groupid);
         }
+
+
+
                     $(".chatroom:visible").each(function()  {
                           checkChatboxAndChatRoom(this);
                      });                     
@@ -362,3 +363,4 @@ function openChatbox(xmpusername,username)
        }
 
 </script>
+

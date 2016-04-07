@@ -115,7 +115,7 @@ class AjaxController extends Controller
 		$arguments = Input::all();
 
 		$feeddata = Feed::with('comments')->with('likes')->with('user')->where('id', '=', $arguments['feed_id'])->get()->first();
- 
+// print_r($feeddata);die;
 		return view('dashboard.getcommentbox')
 					->with('feeddata', $feeddata);
 
@@ -471,7 +471,7 @@ comments;
 			{
 			$converse = new Converse;
 			$converse->addFriend($udetail[0]['xmpp_username'],$udetail[1]['xmpp_username'],
-								$udetail[0]['first_name'],$udetail[1]['first_name']);       
+								$udetail[1]['first_name'],$udetail[0]['first_name']);       
 			}
 
 			
@@ -901,11 +901,9 @@ foreach ($friend as $key => $value)
 	{
 		$input=Input::get('pid');
 		$groupname = DB::table('groups')->where('id',$input)->value('title');
-		$groupid=str_replace(" ","_",$groupname);
-		$groupid=strtolower($groupid);
-
+		$groupname=$groupname."_".$input;
 		$converse=new Converse;
-		$converse->deleteGroup($groupid);
+		$converse->deleteGroup($groupname);
 
 		Group::where('id',$input)->where('owner_id',Auth::User()->id)->delete();
 		GroupMembers::where('group_id',$input)->delete();
@@ -922,18 +920,13 @@ foreach ($friend as $key => $value)
 		$input=Input::all();
 
 		$groupname = DB::table('groups')->where('id',$input['gid'])->value('title');
-		$groupid=str_replace(" ","_",$groupname);
-		$groupid=strtolower($groupid);
-
+		$groupname=$groupname."_".$input['gid'];
+		
 		$converse=new Converse;
-		
+		$xmp=DB::table('users')->where('id',$input['uid'])->value('xmpp_username');            
+      
+        $converse->removeUserGroup($groupname,$xmp);
 
-		$xmp=DB::table('users')->where('id',$input['uid'])->pluck('xmpp_username');
-       
-            
-        $converse->removeUserGroup($groupid,$xmp);
-
-		
 		GroupMembers::where('group_id',$input['gid'])->where('member_id',$input['uid'])->delete();
 	}
 

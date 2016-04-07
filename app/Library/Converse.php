@@ -42,8 +42,9 @@ class Converse{
 	public static function createGroup($roomid,$roomname) {
 
 		$node=config('app.xmppHost');
-		$nodegroup='conference.'.$node;
-		$response=@exec('sudo  ejabberdctl srg_create '.$roomid.' '.$node.' '.$roomname.' Private_Group My_Group');
+		$roomname=str_replace(" ","_",$roomname);
+		@exec('sudo  ejabberdctl srg_create '.$roomname.' '.$node.' '.$roomid.' Private_Group My_Group');
+
 
 			//	srg-create group host name description display  
 	}
@@ -53,10 +54,11 @@ class Converse{
 	*	Delete group at ejabberd.
 	*
 	**/
-	public static function deleteGroup($roomid){
+	public static function deleteGroup($roomname){
 
 		$node=config('app.xmppHost');
-		$response=@exec('sudo  ejabberdctl srg_delete ' .$roomid.' ' .$node);
+		$roomname=str_replace(" ","_",$roomname);
+		$response=@exec('sudo  ejabberdctl srg_delete ' .$roomname.' ' .$node);
 			// srg-delete group host  
 	}
 
@@ -64,10 +66,10 @@ class Converse{
 	*	Add user from a group.
 	*
 	**/
-	public static function addUserGroup($roomid,$username){
+	public static function addUserGroup($roomname,$username){
 
 		$node = config('app.xmppHost');
-
+		$roomname=str_replace(" ","_",$roomname);
 		$response=@exec('sudo  ejabberdctl srg_user_add '.$username.' '.$node.' '.$roomname.' '.$node);
 		
 		
@@ -79,10 +81,10 @@ class Converse{
 	*	Remove user from a group.
 	*
 	**/
-	public static function removeUserGroup($roomid,$username){
+	public static function removeUserGroup($roomname,$username){
 
 		$node = config('app.xmppHost');
-
+		$roomname=str_replace(" ","_",$roomname);
 		$response=@exec('sudo  ejabberdctl srg_user_del '.$username.' '.$node.' '.$roomname.' '.$node);
 		
 		
