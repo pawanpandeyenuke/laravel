@@ -2,7 +2,6 @@
 
 @section('content')
 <?php 
-
 $groupid=$groupname;
 $groupname = implode('-', array_map('ucfirst', explode('-', $groupid)));
 $groupname = implode(',', array_map('ucfirst', explode(',', $groupname)));
@@ -18,6 +17,10 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
 
 $groupid=strtolower($groupid);
 $groupid=str_replace('-','_',$groupid);
+if($pgid){
+ $groupid=$groupid."_".$pgid;
+}
+
 ?>
 <div class="page-data dashboard-body">
         <div class="container">
@@ -111,7 +114,7 @@ $groupid=str_replace('-','_',$groupid);
                     </div>
                 </div>
 
-                <div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
+                <div class="shadow-box bottom-ad"><img src="/images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 
 
                </div>
@@ -121,7 +124,7 @@ $groupid=str_replace('-','_',$groupid);
                     <a href="#" title="" class="btn btn-lg btn-full btn-primary">Suggestions</a>
                 </div><!--/side btn-->
                 <div class="side-widget-cont">
-                    <img src="images/side-ad.jpg" alt="" class="img-responsive side-ad">
+                    <img src="/images/side-ad.jpg" alt="" class="img-responsive side-ad">
                 </div>
             </div>
 
@@ -141,8 +144,8 @@ $groupid=str_replace('-','_',$groupid);
 
 <script type="text/javascript">
 
-    var userImage="{{url('images/logo.png')}}";
-    var defaultImage="{{url('images/logo.png')}}";
+    var userImage="{{url('/images/logo.png')}}";
+    var defaultImage="{{url('/images/logo.png')}}";
     var image_upload_url="ajax/sendimage";
     var chatserver='@fs.yiipro.com';
     
@@ -157,7 +160,7 @@ $groupid=str_replace('-','_',$groupid);
     var conObj;
     var groupname="{{$groupname}}";
     var groupid="{{$groupid}}";
-   
+    var pgid="{{$pgid}}";
 
 
 
@@ -200,7 +203,7 @@ $groupid=str_replace('-','_',$groupid);
 
 
 
-        if( groupname != '' || groupid != '' )
+        if( (groupname != '' || groupid != '') && pgid==null)
         {         
              openChatGroup(groupname,groupid);
         }

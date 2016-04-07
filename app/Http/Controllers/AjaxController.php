@@ -848,6 +848,21 @@ foreach ($friend as $key => $value)
 	{
 		$input=Input::all();
 		$msg=$input['msg'];
+		$uid=Auth::User()->id;
+		$members=DB::table('broadcast')->where('id',$input['bid'])->value('members');
+        $mem=explode(",",$members);
+
+        $xmpu1=DB::table('users')->where('id',$uid)->value('xmpp_username');
+        $converse = new Converse;
+        $xmpu2=DB::table('users')->whereIn('id',$mem)->pluck('xmpp_username');
+        foreach ($xmpu2 as $key => $value) {
+        	
+        	$converse->broadcast($xmpu1,$xmpu2,$input['msg']);
+
+        }
+   //      	
+			// addFriend
+
 		$date = date('d M Y,h:i a', time());
 		     $data = array(
 		     			'broadcast_message'=>$input['msg'],
@@ -885,8 +900,16 @@ foreach ($friend as $key => $value)
 	public function delPrivateGroup()
 	{
 		$input=Input::get('pid');
+		$groupname = DB::table('groups')->where('id',$input)->value('title');
+		$groupid=str_replace(" ","_",$groupname);
+		$groupid=strtolower($groupid);
+
+		$converse=new Converse;
+		$converse->deleteGroup($groupid);
+
 		Group::where('id',$input)->where('owner_id',Auth::User()->id)->delete();
 		GroupMembers::where('group_id',$input)->delete();
+
 
 	}
 
@@ -897,6 +920,20 @@ foreach ($friend as $key => $value)
 	public function delUser()
 	{
 		$input=Input::all();
+
+		$groupname = DB::table('groups')->where('id',$input['gid'])->value('title');
+		$groupid=str_replace(" ","_",$groupname);
+		$groupid=strtolower($groupid);
+
+		$converse=new Converse;
+		
+
+		$xmp=DB::table('users')->whereIn('id',$input['uid'])->pluck('xmpp_username');
+       
+            
+        $converse->removeUserGroup($groupid,$xmp);
+
+		
 		GroupMembers::where('group_id',$input['gid'])->where('member_id',$input['uid'])->delete();
 	}
 
