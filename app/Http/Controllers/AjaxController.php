@@ -928,7 +928,7 @@ foreach ($friend as $key => $value)
 		$converse=new Converse;
 		
 
-		$xmp=DB::table('users')->whereIn('id',$input['uid'])->pluck('xmpp_username');
+		$xmp=DB::table('users')->where('id',$input['uid'])->pluck('xmpp_username');
        
             
         $converse->removeUserGroup($groupid,$xmp);

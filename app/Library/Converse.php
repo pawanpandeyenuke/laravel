@@ -42,7 +42,8 @@ class Converse{
 	public static function createGroup($roomid,$roomname) {
 
 		$node=config('app.xmppHost');
-		$response=@exec('sudo  ejabberdctl srg_create '.$roomid.' '.$node' '.$roomname'Private_Group My_Group');
+		$nodegroup='conference.'.$node;
+		$response=@exec('sudo  ejabberdctl srg_create '.$roomid.' '.$node.' '.$roomname.' Private_Group My_Group');
 
 			//	srg-create group host name description display  
 	}

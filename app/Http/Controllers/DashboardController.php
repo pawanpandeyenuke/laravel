@@ -658,13 +658,15 @@ if($input!=null && $gname!=null)
 
     public function privateGroupAdd()
     {
+die('sdafdsa');
+
           if(Request::isMethod('post'))
         {
 
             $userid=Auth::User()->id;
             $input=Request::all();
        
-        
+        print_r($input);die;
         if(isset($input['groupmembers'])&&$input['groupname']!=null)
             {
                 array_push($input['groupmembers'],$userid);
@@ -676,7 +678,8 @@ if($input!=null && $gname!=null)
                         'status'=>'Active',
                         'owner_id'=>$userid,
                             );  
-                $groupid=str_replace(' ','_',$input['groupname']);
+             print_r($input['groupname']);die; 
+	       $groupid=implode('_',$input['groupname']);
                 $groupid=strtolower($groupid);
                     $converse=new Converse;
                     $converse->createGroup($groupid,$input['groupname']);
