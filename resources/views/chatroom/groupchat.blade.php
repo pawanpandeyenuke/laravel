@@ -2,7 +2,6 @@
 
 @section('content')
 <?php 
-
 $groupid=$groupname;
 $groupname = implode('-', array_map('ucfirst', explode('-', $groupid)));
 $groupname = implode(',', array_map('ucfirst', explode(',', $groupname)));
@@ -18,6 +17,10 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
 
 $groupid=strtolower($groupid);
 $groupid=str_replace('-','_',$groupid);
+if($pgid){
+ $groupid=$groupid."_".$pgid;
+}
+
 ?>
 <div class="page-data dashboard-body">
         <div class="container">
@@ -111,7 +114,7 @@ $groupid=str_replace('-','_',$groupid);
                     </div>
                 </div>
 
-                <div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
+                <div class="shadow-box bottom-ad"><img src="/images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 
 
                </div>
@@ -121,7 +124,7 @@ $groupid=str_replace('-','_',$groupid);
                     <a href="#" title="" class="btn btn-lg btn-full btn-primary">Suggestions</a>
                 </div><!--/side btn-->
                 <div class="side-widget-cont">
-                    <img src="images/side-ad.jpg" alt="" class="img-responsive side-ad">
+                    <img src="/images/side-ad.jpg" alt="" class="img-responsive side-ad">
                 </div>
             </div>
 
@@ -141,8 +144,8 @@ $groupid=str_replace('-','_',$groupid);
 
 <script type="text/javascript">
 
-    var userImage="{{url('images/user-thumb.jpg')}}";
-    var defaultImage="{{url('images/user-thumb.jpg')}}";
+    var userImage="{{url('/images/logo.png')}}";
+    var defaultImage="{{url('/images/logo.png')}}";
     var image_upload_url="ajax/sendimage";
     var chatserver='@fs.yiipro.com';
     
@@ -157,7 +160,7 @@ $groupid=str_replace('-','_',$groupid);
     var conObj;
     var groupname="{{$groupname}}";
     var groupid="{{$groupid}}";
-  var exception="{{$flag}}";
+    var pgid="{{$pgid}}";
 
 
 
@@ -199,7 +202,8 @@ $groupid=str_replace('-','_',$groupid);
                     //jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
 
 
-        if( groupname != '' || groupid != '' )
+
+        if( (groupname != '' || groupid != '') && pgid==null)
         {         
              openChatGroup(groupname,groupid);
         }
@@ -277,23 +281,6 @@ $groupid=str_replace('-','_',$groupid);
         });   
 
 
-	$(document).on('click','.invite',function()
-	{
-		var current = $(this);
-		var user_id=current.closest('.info').data('id');
-		//var friend_id=current.closest('.get_id').data('friendid');
-		$.ajax({
-			'url' : 'ajax/sendrequest',
-			'type' : 'post',
-			'data' : {'user_id' : user_id },
-			'success' : function(data){
-				current.closest('.info').find('.invite').hide(200);
-				current.closest('.info').find('.sentinvite').show(200);
-			}
-		});
-	});
-
-
     });
 
      // function openChatbox(xmpusername,username)
@@ -327,11 +314,19 @@ $groupid=str_replace('-','_',$groupid);
 
 function openChatbox(xmpusername,username)
      {
-
+   //var chatbox=conObj.chats.get(xmpusername+chatserver);
+   //console.log(chatbox);
    var minbox=$("#min-"+xmpusername);
-
-   var ss=conObj.contacts.get(xmpusername+chatserver);
-   if(minbox.length>0)
+   //console.log(minbox.length);
+      var ss=conObj.contacts.get(xmpusername+chatserver);
+      if(ss==null)
+   { 
+    // conObj.contacts.add(xmpusername+chatserver, username);
+     //conObj.chats.add(xmpusername+chatserver,username)
+     // alert(username+' is not your friend.We are adding to your friend list. So please wait.');
+                   
+   }
+   else if(minbox.length>0)
    {
     hideOpendBox();
     minbox.click();
@@ -364,12 +359,7 @@ function openChatbox(xmpusername,username)
             else{
                 conObj.rooms.open(grpjid+conferencechatserver);
             }
-           //var chatView=conObj.rooms.open(grpjid+conferencechatserver);
        }
 
-    //     function openChatGroup(grpname,grpjid)
-    // {
-    //  var chatView=conObj.rooms.open(grpjid+chatserver,grpname);
-    // }
-
 </script>
+

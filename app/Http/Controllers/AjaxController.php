@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country;
+use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
+,App\BroadcastMessages,App\Group,App\GroupMembers;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
@@ -153,7 +154,7 @@ $variable['comment'] = <<<comments
 	<div class="comment-title-cont">
 		<div class="row">
 			<div class="col-sm-6">
-				<a href="#" title="" class="user-link">$username</a>
+				<a href="profile/$userid" title="" class="user-link">$username</a>
 			</div>
 			<div class="col-sm-6">
 				<div class="comment-time text-right">$time</div>
@@ -234,19 +235,111 @@ comments;
 		$model1=array();
 		$model=array();
 
-			if($input=='all')
-			{
-			  $model1=User::where('id','!=',Auth::User()->id)->get()->toArray();
-			}
-			else{
+		if($input=='all') {
+			$model1=User::where('id','!=',Auth::User()->id)->take(10)->get()->toArray();
+		} else {
+			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
+				    self::queryBuilder( $query, $input );
+					})->take(10)->get()->toArray();
+		}
 
-		$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
-			    self::queryBuilder( $query, $input );
-				})->get()->toArray();
-			}
 		return view('dashboard.getfriendslist')->with('model',$model)->with('model1',$model1);
  
 	}
+
+
+	/**
+	*	View more posts ajax call handling.
+	*	Ajaxcontroller@viewMorePosts
+	*/
+	public function viewMorePosts()
+	{
+        $per_page = 5;
+        $page = Input::get('pageid');
+        $offset = ($page - 1) * $per_page;
+		// echo $page;
+        $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
+            ->whereIn('user_by', Friend::where('user_id', '=', Auth::User()->id)
+                    ->where('status', '=', 'Accepted')
+                    ->pluck('friend_id')
+                    ->toArray())
+            ->orWhere('user_by', '=', Auth::User()->id)
+            ->orderBy('news_feed.id','DESC')
+            ->skip($offset)
+            ->take($per_page)
+            ->get();
+
+		return view('dashboard.newsfeed')->with('feeds', $feeds);
+
+    }
+
+
+	/**
+	*	View more friends ajax call handling.
+	*	Ajaxcontroller@viewMoreFriends
+	*/
+	public function viewMoreFriends()
+	{
+		$per_page = 10;
+		$page = Input::get('pageid');
+		$type = Input::get('reqType');
+		$offset = ($page - 1) * $per_page;
+		$user_id = Auth::User()->id;
+
+		switch ($type) {
+			case 'all':
+				$model = User::where('id', '!=', $user_id)
+							->skip($offset)
+							->take($per_page)
+				            ->get()->toArray();
+				break;
+			case 'sent':
+				$modeldata = Friend::with('user')->with('friends')->with('user')
+							->where('user_id', '=', $user_id)
+							->where('status', '=', 'Pending')
+							->skip($offset)
+							->take($per_page)
+							->get()->toArray();
+				break;
+			case 'recieved':
+				$modeldata = Friend::with('user')->with('friends')->with('user')
+				            ->where('friend_id', '=', $user_id)
+				            ->where('status', '=', 'Pending')
+							->skip($offset)
+							->take($per_page)
+				            ->get()->toArray();
+				break;
+			case 'current':
+				$modeldata = Friend::with('user')->with('friends')->with('user')
+							->where('friend_id', '=', $user_id)
+				            ->where('status', '=', 'Accepted')
+							->skip($offset)
+							->take($per_page)
+				            ->get()->toArray();
+				break;
+		}
+
+		// echo '<pre>';print_r(count($model));die;
+
+		if($type == 'all') {
+			$model1 = $model;
+			$modelcount = count($model);
+		}else{
+			$model = $modeldata;
+			$modelcount = count($modeldata);
+			$model1 = '';
+		}
+
+		if($model || $model1)
+			return view('dashboard.getfriendslist')
+						->with('model',$model)
+						->with('model1',$model1)
+						->with('modelcount', $modelcount);
+		else
+			echo 'No more results';
+ 
+	}
+
 
 
 	/**
@@ -263,11 +356,15 @@ comments;
             $query->where('friend_id', '=', $user_id);
             $query->where('status', '=', 'Pending');
         }elseif($input == 'current'){
-            $query->where('user_id', '=', $user_id)->where('status', '=', 'Accepted');
-            $query->orWhere('friend_id', '=', $user_id)->where('status', '=', 'Accepted');
+
+            $query->where('friend_id', '=', $user_id);
+            $query->where('status', '=', 'Accepted');
+
+            // $query->where('user_id', '=', $user_id)->where('status', '=', 'Accepted');
+           // $query->where('friend_id', '=', $user_id)->where('status', '=', 'Accepted');
+
         } 
 	}
-
 
 
  
@@ -612,13 +709,13 @@ comments;
      $status=0;
      $message="";
      //$url=url();
-// echo '<pre>'; print_r($_FILES);die;
+
 
       $image = $_FILES["chatsendimage"]["name"];
       //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
       
       $path=public_path().''.'/uploads/media/chat_images/';
-
+// echo '<pre>'; print_r($path);die;
 
 			$uploadedfile = $_FILES['chatsendimage']['tmp_name'];
 			$name = $_FILES['chatsendimage']['name'];
@@ -722,14 +819,126 @@ foreach ($friend as $key => $value)
 
 		if($model!=null){
 			foreach ($model as $key => $value) {
-				$n=$value['friends']['first_name']." ".$value['friends']['last_name'];
+				if($type=='current')
+
+					$n=$value['user']['first_name']." ".$value['user']['last_name'];
+				else
+					$n=$value['friends']['first_name']." ".$value['friends']['last_name'];
+
 				if (stripos($n, $name) !== false) {
 					$model2[] =$value;
 				}
 			}
 		}
+		//print_r($model2);die;
 		return view('dashboard.friendlist2')->with('model',$model2)->with('model1',$model1);
 	}
 
+/**
+	BROADCAST DELETE AND SEND
+**/
+	public function delBroadcast()
+	{
+		$input=Input::get('bid');
+		Broadcast::where('id', '=', $input)->delete();
+		BroadcastMessages::where('broadcast_id',$input)->where('broadcast_by',Auth::User()->id)->delete();
+	}
+
+	public function sendBroadcast()
+	{
+		$input=Input::all();
+		$msg=$input['msg'];
+		$uid=Auth::User()->id;
+		$members=DB::table('broadcast')->where('id',$input['bid'])->value('members');
+        $mem=explode(",",$members);
+
+        $xmpu1=DB::table('users')->where('id',$uid)->value('xmpp_username');
+        $converse = new Converse;
+        $xmpu2=DB::table('users')->whereIn('id',$mem)->pluck('xmpp_username');
+        foreach ($xmpu2 as $key => $value) {
+        	
+        	$converse->broadcast($xmpu1,$xmpu2,$input['msg']);
+
+        }
+   //      	
+			// addFriend
+
+		$date = date('d M Y,h:i a', time());
+		     $data = array(
+		     			'broadcast_message'=>$input['msg'],
+                        'broadcast_id'=>$input['bid'],
+                        'broadcast_by'=>Auth::User()->id,
+                        'created_at'=>date('Y-m-d h:i:s',time()),
+                            );  
+                
+                BroadcastMessages::insert($data);
+				$model=new BroadcastMessages;
+
+			
+							
+
+						$data1 = '<div class="single-message">
+										<div class="clearfix">
+											<div class="bcast-msg">
+												'.$msg.'
+											</div>
+										</div>
+										<div class="bcast-msg-time">
+											'.$date.'
+										</div>
+									</div>';
+
+
+		echo $data1;
+	}
+
+
+/**
+	PRIVATE GROUP DELETE 
+**/
+
+	public function delPrivateGroup()
+	{
+		$input=Input::get('pid');
+		$groupname = DB::table('groups')->where('id',$input)->value('title');
+		
+		$converse=new Converse;
+		$converse->deleteGroup($groupname);
+
+		Group::where('id',$input)->where('owner_id',Auth::User()->id)->delete();
+		GroupMembers::where('group_id',$input)->delete();
+
+
+	}
+
+/**
+	 DELETE USER FROM PRIVATE GROUP 
+**/
+
+	public function delUser()
+	{
+		$input=Input::all();
+
+		$groupname = DB::table('groups')->where('id',$input['gid'])->value('title');
+		$converse=new Converse;
+		
+
+		$xmp=DB::table('users')->where('id',$input['uid'])->value('xmpp_username');
+       
+        
+        $converse->removeUserGroup($groupname,$xmp);
+
+		
+		GroupMembers::where('group_id',$input['gid'])->where('member_id',$input['uid'])->delete();
+	}
+
+/**
+	 EDIT PRIVATE GROUP NAME 
+**/
+	public function editGroupName()
+	{
+		$input=Input::all();
+		Group::where('id',$input['gid'])->update(['title'=>$input['gname']]);
+	}
 }
 	

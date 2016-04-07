@@ -1,7 +1,19 @@
 @extends('layouts.dashboard')
-<?php  
-// echo '<pre>';print_r($feeds);die('view');
-?>
+
+<style type="text/css"> 
+	.dashboard-load {
+	    background: none repeat scroll 0 0 #fbfbfb;
+	    border: 1px solid #ddd;
+	    border-radius: 4px;
+	    cursor: pointer;
+	    font-size: 20px;
+	    font-weight: 500;
+	    margin: 10px 0 0;
+	    padding: 10px 0;
+	    text-align: center;
+	} 
+</style>
+
 @section('content')
 
 	@if (Session::has('error'))
@@ -116,11 +128,11 @@
 							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 
 								<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
-								
+									@if($data->user->id == Auth::User()->id)
 									<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
 
 									<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
-
+									@endif
 
 									<div class="row">
 										<div class="col-md-7">
@@ -225,6 +237,8 @@
 													
 														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name']);
 
+														$userId = DB::table('users')->where('id', $commentsData['commented_by'])->get(['id']);
+
 														// print_r($username);die;
 														if(!empty($username)){
 
@@ -239,7 +253,7 @@
 																<div class="comment-title-cont">
 																	<div class="row">
 																		<div class="col-sm-6">
-																			<a href="#" title="" class="user-link">{{$name}}</a>
+																			<a href="profile/{{$commentsData['commented_by']}}" title="" class="user-link">{{$name}}</a>
 																		</div>
 																		<div class="col-sm-6">
 																			<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
@@ -275,6 +289,12 @@
 					<div id="commentajax" style="display: none;">	</div>
 					<div id="AllCommentNew" class="post-list popup-list-without-img" style="display: none;"></div>
 					</div>
+
+			    	<div class="dashboard-load">
+				    	<span class="glyphicon glyphicon-download"></span>
+				    	<!-- <span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span> -->
+				    </div>
+
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 				</div>
 
