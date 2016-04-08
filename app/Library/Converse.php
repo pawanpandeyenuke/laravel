@@ -19,31 +19,6 @@ class Converse{
 		return true;
 	}
 
-
-	/**
-	*	Create group at ejabberd.
-	*
-	**/
-	static function createGroup($roomname) {
-
-		$node=config('app.xmppHost');
-		$response=@exec('sudo ejabberdctl create_room ' .$roomname.'muc_service' .$node);
-
-	}
-
-
-	/**
-	*	Delete group at ejabberd.
-	*
-	**/
-	static function deleteGroup($roomname){
-
-		$node=config('app.xmppHost');
-		$response=@exec('sudo ejabberdctl destroy_room ' .$roomname.'muc_service' .$node);
-
-	}
-
-
 	/**
 	*	Add friend at ejabberd.
 	*
@@ -60,6 +35,49 @@ class Converse{
     
     }
 
+	/**
+	*	Create group at ejabberd.
+	*
+	**/
+	public static function createGroup($roomid,$roomname) {
+
+		$node=config('app.xmppHost');
+	//	$node='conference.'.$node;
+		$roomname=str_replace(" ","_",$roomname);
+		@exec('sudo  ejabberdctl srg_create '.$roomname.' '.$node.' '.$roomid.' Private_Group My_Group');
+
+
+			//	srg-create group host name description display  
+	}
+
+
+	/**
+	*	Delete group at ejabberd.
+	*
+	**/
+	public static function deleteGroup($roomname){
+
+		$node=config('app.xmppHost');
+		$roomname=str_replace(" ","_",$roomname);
+		$response=@exec('sudo  ejabberdctl srg_delete ' .$roomname.' ' .$node);
+			// srg-delete group host  
+	}
+
+	/**
+	*	Add user from a group.
+	*
+	**/
+	public static function addUserGroup($roomname,$username){
+
+		$node = config('app.xmppHost');
+	//	$node='conference.'.$node;
+		$roomname=str_replace(" ","_",$roomname);
+		$response=@exec('sudo  ejabberdctl srg_user_add '.$username.' '.$node.' '.$roomname.' '.$node);
+		
+		
+		//srg-user-add user server group host                   Adds user@server to group on host
+
+	}
 
 	/**
 	*	Remove user from a group.
@@ -68,15 +86,31 @@ class Converse{
 	public static function removeUserGroup($roomname,$username){
 
 		$node = config('app.xmppHost');
+		$roomname=str_replace(" ","_",$roomname);
+		$response=@exec('sudo  ejabberdctl srg_user_del '.$username.' '.$node.' '.$roomname.' '.$node);
+		
+		
+		//srg-user-del user server group host                   Removes user@server from group on host
 
-		@exec('sudo ejabberdctl set_room_affiliation '.$roomname.' conference.'.$node.''.$username.' outcast');
-		return true;
+	}
+
+	/**
+	*   (Broadcast) Send message in chat to single user.
+	*
+	**/
+
+	public static function broadcast($userfrom,$userto,$msg){
+		$node=config('app.xmppHost');
+
+		$msg=str_replace(" ","_",$msg);
+		
+		//print_r(@exec('sudo ejabberdctl send_message chat '.$userfrom.'@'.' '.$node.'@'.$userto.' '.$node.' '.$msg));die;
+		$result=@exec('sudo ejabberdctl send_message_headline '.$userfrom.' '.$node.' '.$userto.' '.$node.' '.$msg);
 		
 
-		//ejabberdctl set_room_affiliation room conference.localhost user123@localhost outcast	
-
-		//srg-user-add user server group host                   Adds user@server to group on host
-		//srg-user-del user server group host                   Removes user@server from group on host
+		//ejabberdctl send_message_chat test2@localhost test1@localhost this_is_body_of_test_command
+		//ejabberdctl send_message_headline test2@localhost test1@localhost This_is_subject this_is_body_of_test_command
+		
 
 	}
 

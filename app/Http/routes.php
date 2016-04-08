@@ -160,6 +160,9 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('profile/{id}', 'DashboardController@profile');
 	Route::post('profile/{id}', 'DashboardController@profile');
 
+	Route::get('editprofile/{id}', 'DashboardController@editProfile');
+	Route::post('editprofile/{id}', 'DashboardController@editProfile');	
+
 
 	Route::get('broadcast-list', 'DashboardController@broadcastList');
 	Route::post('broadcast-list', 'DashboardController@broadcastList');

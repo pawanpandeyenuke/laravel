@@ -5,13 +5,23 @@
 <?php
 
 	if(!empty($user->country)){
-		
+
+		//$country = DB::table('country')->where('country_id', '=', $user->country)->value('country_name'); 
+
+		//$all_states = DB::table('state')->where('country_id', '=', $user->country)->pluck('state_name','state_id'); 
+
+		//$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
+
+		//print_r($user->country);die;
+	 	//$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 
+
 		$countryid = DB::table('country')->where('country_name', '=', $user->country)->value('country_id'); 
 		$all_states = DB::table('state')->where('country_id', '=', $countryid)->pluck('state_name','state_id'); 
-		
+
 		$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
 	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 	
 	 	// echo '<pre>';print_r($all_cities);die;
+
 	}
 
 	$gender = isset($user->gender) ? $user->gender : '';
@@ -88,7 +98,6 @@
 													<td>
 														<select name="country" style="max-width: 180px;" id="profile_country" class="pr-edit" disabled="disabled">	
 															<?php 
-															// if(isset($country) && isset($countries)){
 																foreach ($countries as $key => $value) { 
 																	if($user->country == $value)
 																		$selected = 'Selected'; 

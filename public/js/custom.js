@@ -126,6 +126,7 @@ $(document).ready(function(){
 				}else{
 					// current.prop('checked', 'false');
 					$(this).prop('checked', 'true');
+					$('.post-list').closest('single-post').find('.like').prop('checked','true');
 					jQuery("#page-"+feedId).html(response);
 					jQuery("#popup-"+feedId).html(response);					
 				}

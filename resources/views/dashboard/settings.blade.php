@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 <?php  
-// echo '<pre>';print_r($setting['contact-request']);die;
+ //echo '<pre>';print_r($setting);die;
 ?>
 @section('content')
 

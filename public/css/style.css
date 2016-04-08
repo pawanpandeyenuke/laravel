@@ -1616,14 +1616,15 @@ button.edit-pr-img {
 .post-list .single-post p img.emojione{
   width: 30px;
 }
+.status-up-cont textarea.form-control{
+	height: 50px;
+}
 .profile-data-table .table td .inner-table{
 	border:0px;
 }
 .profile-data-table .table td .inner-table td{
 	border: 0px;
 }
-
-
 .popup-list-without-img {
   max-width: 700px;
 }
@@ -1691,6 +1692,9 @@ button.edit-pr-img {
   font-size: 10px;
   color: #DCDCDC;
 }
+.modal{
+	z-index: 999999999;
+}
 .edit-post-textarea{
   position: relative;
   text-align: left;
@@ -1733,7 +1737,6 @@ button.edit-pr-img {
 .img-update-cont .input-group{
   float: right;
 }
-
 
 /******Chat Style********/
 
@@ -1999,8 +2002,6 @@ textarea{
     width: 100px;
        display: none;
 }
-/*<<<<<<< HEAD*/
-
 .load-btn span.loading-text {
     display: none;
 }
@@ -2080,8 +2081,6 @@ textarea{
 .grp-mem-list .bclist-detail .list-name {
   margin: 10px 0 5px;
 }
-/*=======*/
- 
 .load-btn span.loading-text {
     display: inline-block !important;
 }
@@ -2109,4 +2108,3 @@ textarea{
   overflow-y: scroll;
   border: 1px solid #ddd;
 }
-/*>>>>>>> 0a01c0ee86f18038c0735de20732a54fb9c88ea0*/

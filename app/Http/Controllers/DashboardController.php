@@ -215,9 +215,9 @@ class DashboardController extends Controller
     *   Ajaxcontroller@enterchatroom
     */
     public function groupchat( $input = '' ,$gname=''){   
-$groupid=null;
-if($input)
-{
+        $groupid=null;
+        if($input)
+        {
     if($input!=null && $gname!=null)
     {
         $groupid=$input;
@@ -418,7 +418,27 @@ if($input!=null && $gname!=null)
 
 
         }
+        $counter=0;
+        if($groupid!=null)
+        {
+        	    $members=DB::table('members')->where('group_id',$groupid)->pluck('member_id');
+        	    foreach ($members as $key => $value) {
+        	    	if($value==Auth::User()->id)
+        	    	{
+        	    		$counter++;
+        	    	}
+        	    }
+       
+		  
+      if($counter==0 && $input!=null)
+        {
+        	return redirect('private-group-list');
+        }
 
+
+	 }
+
+       
         $id=Auth::User()->id;
         $friendid=DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
         $pendingfriend=DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
@@ -514,9 +534,11 @@ if($input!=null && $gname!=null)
         
         return view('profile.profile')
                 ->with('user', $user)
-                ->with('education', $education);
+                ->with('education', $education);  
 
     }
+
+
 
      public function sendImage()
      {
@@ -593,7 +615,8 @@ if($input!=null && $gname!=null)
                         'user_id'=>$userid,
                         'members'=>$members
                             );  
-                
+
+
                 Broadcast::insert($data);
                 
               return redirect(url('broadcast-list'));  
@@ -646,6 +669,14 @@ if($input!=null && $gname!=null)
 
         if($privategroupid)
         {
+			$groupname = DB::table('groups')->where('id',$privategroupid)->value('title');
+			$groupname=$groupname."_".$privategroupid;
+
+			$converse=new Converse;
+			$xmp=DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
+
+			$converse->removeUserGroup($groupname,$xmp);
+
             GroupMembers::where('group_id',$privategroupid)->where('member_id',Auth::User()->id)->delete();
         }
         $privategroup=Group::with('members')->orderBy('id','DESC')->get()->toArray();
@@ -655,17 +686,18 @@ if($input!=null && $gname!=null)
 
     public function privateGroupAdd()
     {
+
           if(Request::isMethod('post'))
         {
 
             $userid=Auth::User()->id;
             $input=Request::all();
-            array_push($input['groupmembers'],$userid);
-        
-        
+       
+ 
         if(isset($input['groupmembers'])&&$input['groupname']!=null)
             {
-
+                array_push($input['groupmembers'],$userid);
+                
                 $members=implode(",",$input['groupmembers']);
     
                 $data = array(
@@ -673,8 +705,21 @@ if($input!=null && $gname!=null)
                         'status'=>'Active',
                         'owner_id'=>$userid,
                             );  
+
+
+
+                $groupid=str_replace(' ','_',$input['groupname']);
+
+                $groupid=strtolower($groupid);
+
+                    $converse=new Converse;
+
                 
                 $groupdata = Group::create($data);
+				
+                 $groupname=$input['groupname']."_".$groupdata->id;
+          
+                    $converse->createGroup($groupid,$groupname);
 
                 foreach ($input['groupmembers'] as $data) {
                     
@@ -684,8 +729,21 @@ if($input!=null && $gname!=null)
                         'member_id'=>$data,
                         'status'=>'Joined',
                             );
+               
                         GroupMembers::insert($data1);  
                 }
+
+       
+        $xmp=DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
+       
+        foreach ($xmp as $key => $value) {
+            
+            $converse->addUserGroup($groupname,$value);
+
+        }
+
+
+               
 
                 return redirect(url('private-group-list'));       
             }
