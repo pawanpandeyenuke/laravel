@@ -857,7 +857,7 @@ foreach ($friend as $key => $value)
         $xmpu2=DB::table('users')->whereIn('id',$mem)->pluck('xmpp_username');
         foreach ($xmpu2 as $key => $value) {
         	
-        	$converse->broadcast($xmpu1,$value,$input['msg']);
+        	$converse->broadcast($xmpu1,$val,$input['msg']);
 
         }
    //      	
