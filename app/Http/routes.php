@@ -189,7 +189,12 @@ Route::group(['middleware' => 'web'], function () {
 	Route::post('google/client/callback', 'ContactImporter@inviteContactList');
 
 	// Route::get('hotmail/client', 'ContactImporter@hotmail');
-	// Route::get('hotmail/client/callback', 'ContactImporter@callbackH');
+	Route::get('hotmail/client/callback', 'ContactImporter@hotmailCallback');
 
+	// Route::get('yoauth/client', 'ContactImporter@hotmail');
+	// Route::get('yoauth/client/callback', 'ContactImporter@callbackH');
+
+	Route::get('linkedin/client', 'ContactImporter@linkedin');
+	Route::get('linkedin/client/callback', 'ContactImporter@linkedinCallback');
 
 });
