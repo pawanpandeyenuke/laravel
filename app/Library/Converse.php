@@ -99,16 +99,10 @@ class Converse{
 	*
 	**/
 	public static function broadcast($userfrom,$userto,$msg){
+
 		$node=config('app.xmppHost');
-
 		$msg=str_replace(" ","_",$msg);
-		
-		//print_r(@exec('sudo ejabberdctl send_message chat '.$userfrom.'@'.' '.$node.'@'.$userto.' '.$node.' '.$msg));die;
-		$result=@exec('sudo ejabberdctl send_message_headline '.$userfrom.' '.$node.' '.$userto.' '.$node.' '.$msg);
-		
-
-		//ejabberdctl send_message_chat test2@localhost test1@localhost this_is_body_of_test_command
-		//ejabberdctl send_message_headline test2@localhost test1@localhost This_is_subject this_is_body_of_test_command
+		$result=@exec('sudo ejabberdctl send_message_chat '.$userfrom.'@'.$node.' '.$userto.'@'.$node.' '.$msg);
 
 	}
 
