@@ -790,7 +790,9 @@ class ApiController extends Controller
 			if(empty($user))
 				throw new Exception("This user does not exist", 1);
 
-			$friends = Friend::where('user_id', '=', $arguments['id'])
+			$friends = Friend::with('user')
+					->with('friends')
+					->where('user_id', '=', $arguments['id'])
 					->orWhere('friend_id', '=', $arguments['id'])
 					->where('status', '=', 'Accepted')
 					->get();
