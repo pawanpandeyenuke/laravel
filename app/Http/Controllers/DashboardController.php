@@ -428,13 +428,17 @@ if($input!=null && $gname!=null)
         	    		$counter++;
         	    	}
         	    }
-        }
-
-        if($counter==0)
+       
+		  
+      if($counter==0 && $input!=null)
         {
         	return redirect('private-group-list');
         }
 
+
+	 }
+
+       
         $id=Auth::User()->id;
         $friendid=DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
         $pendingfriend=DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
