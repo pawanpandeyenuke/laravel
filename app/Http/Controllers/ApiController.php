@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Mail;
+use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City;
@@ -67,17 +68,20 @@ class ApiController extends Controller
 			}else{
 				
 				$input['password'] = Hash::make($input['password']);
-				$userData = $user->create($input);
+				$userdata = $user->create($input);
 
-				$tempEmail = explode('@', $input['email']);
-				$tempId = ( isset( $userData->id ) && $userData->id != "" ) ? $userData->id : $userData->user_id;
+				//Saving xmpp-username and xmpp-pasword into database.
+		        $xmpp_username = $userdata->first_name.$userdata->id;
+		        $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
 
-				// Storing xmpp username and password.				
-				$user = User::find($userData->id);
-				$user->xmpp_username = $tempEmail[0].'_'.$tempId;
-				$user->xmpp_password = md5($tempEmail[0]);
-				$user->save();
+		        $user = User::find($userdata->id);
+		        $user->xmpp_username = strtolower($xmpp_username);
+		        $user->xmpp_password = $xmpp_password;
+		        $user->save();
 
+		        $converse = new Converse;
+		        $response = $converse->register($xmpp_username, $xmpp_password);
+		        // echo '<pre>';print_r($response);die;
 				$this->status = 'success';
 				$this->message = 'User registered successfully';				
 				$this->data = $user->toArray();
@@ -1030,6 +1034,20 @@ class ApiController extends Controller
 		return $this->output();
 
 	}
+
+
+	/*
+	 * update push notification details on user table on request.
+	 */
+	public function updatePushNotificationDetails()
+	{
+		$request = Request::all();
+
+		$newsFeed->fill($arguments);
+		$saved = $newsFeed->push();
+
+		// echo '<pre>';print_r($request);die;
+	}	
 
 
 	/*

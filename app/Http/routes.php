@@ -113,7 +113,7 @@ Route::post('api/addfriend','ApiController@addFriend');
 Route::post('api/acceptrequest','ApiController@acceptRequest');
 Route::post('api/declinerequest','ApiController@declineRequest');
 
-
+Route::post('api/push-notification','ApiController@updatePushNotificationDetails');
 Route::post('api/chatsendimage','ApiController@chatSendImage');
 
 
