@@ -21,6 +21,8 @@ class ContactImporter extends Controller
     public function inviteFriends()
     {
 
+        // echo urlencode("http://development.laravel.com/linkedin/client/callback");
+
 /*		$import = new ContactsImporter;
 
 		// set temp directory (necessary for storage Windows Live config)
@@ -37,24 +39,24 @@ class ContactImporter extends Controller
 		$import->WLLSecret = 'Slix9w3K19GByr-t5KBLUCYaEqYG1ntb';
 
 		// set API key for Yahoo application
-		$import->YahooAPIid = '<insert your API key here>';
+		$import->YahooAPIid = 'dj0yJmk9OTFGdFZraFROcWlkJmQ9WVdrOVpEZEdZazVhTXpJbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD02ZQ--';
 		// set secret phrase for Yahoo application
-		$import->YahooSecret = '<insert your secret phrase here>';
+		$import->YahooSecret = 'eda1bec4bc183fe22962814bc1c083a63a3855ee';
 
 
-		$wllurl = "https://login.live.com/oauth20_authorize.srf?client_id=".$import->WLLAPIid."&scope=wl.signin%20wl.basic%20wl.emails%20wl.contacts_emails&response_type=code&redirect_uri=".$import->returnURL;
+		// $wllurl = "https://login.live.com/oauth20_authorize.srf?client_id=".$import->WLLAPIid."&scope=wl.signin%20wl.basic%20wl.emails%20wl.contacts_emails&response_type=code&redirect_uri=".$import->returnURL;
 
 
 
 		//prints out authorization links for all 3 services
 		echo '<a href="'.$import->getGMailLink().'">GMail</a></br>';
-		echo '<a href="'.$wllurl.'">Hotmail</a></br>';
-		// echo '<a href="'.$import->getWLLLink().'">Hotmail</a></br>';
+		// echo '<a href="'.$wllurl.'">Hotmail</a></br>';
+		echo '<a href="'.$import->getWLLLink().'">Hotmail</a></br>';
 		// echo '<a href="'.$import->getYahooLink().'">Yahoo</a></br>';
-		// echo '<pre>';print_r($import);die;
-		// fetches contacts from authorized mail service
-		$contacts = $import->getContacts(); */
 		
+		// fetches contacts from authorized mail service
+		$contacts = $import->getContacts(); 
+		echo '<pre>';print_r($contacts);die;*/
 
         /* -------------------------------- Working Google Code -------------------------------- */
         $client = new Google_Client();
@@ -279,5 +281,18 @@ class ContactImporter extends Controller
         curl_close($curl);
         return $contents;
     }
+
+
+    public function hotmailCallback()
+    {
+
+        // $request = Request::get('access_token');
+        $request = Request::all();
+
+        return view('invite-friends.invite');
+        // echo '<pre>';print_r($request);die; 
+
+    }
+
 
 }

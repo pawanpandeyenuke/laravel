@@ -34,15 +34,19 @@
 									<h5>Choose a service provider to invite your contacts</h5>
 									<div class="social-btns">
 										<ul class="list-inline">
-											<li><a href="{{$googleImportUrl}}" title=""><img src="/images/gmail-btn.png" alt=""></li>
+											<li><a href="{{isset($googleImportUrl)}}" title=""><img src="/images/gmail-btn.png" alt=""></li>
 											<li><a href="#" title=""><img src="/images/yahoomail-btn.png" alt=""></li>
-											<li><a href="#" title=""><img src="/images/hotmail-btn.png" alt=""></li>
+											<li><a href="#" id="import"><img src="/images/hotmail-btn.png" alt=""></li>
+											<li><a href="#try" onclick="FacebookInviteFriends();"><img src="/images/facebook-btn.png" alt=""></li>
+											<li><a href="#" title=""><img src="/images/linkedin-btn.png" alt=""></li>
 										</ul>
 									</div>
 								</div>
+								<!-- <a href="#" id="import">Import contacts</a> -->
 							</div>
 						</div>
-
+<table class="table table-striped" id="table-contacts">
+</table>
 					</div><!--/page center data-->
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 				</div>
@@ -52,3 +56,63 @@
 	</div>
 </div>
 @endsection
+
+<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script src="//js.live.net/v5.0/wl.js"></script>
+<script type="text/javascript">
+	WL.init({
+	    client_id: '0000000044183F60',
+	    redirect_uri: 'http://development.laravel.com/hotmail/client/callback',
+	    scope: ["wl.basic", "wl.contacts_emails"],
+	    response_type: "token"
+	});
+
+	jQuery( document ).ready(function() {
+		//live.com api
+		// alert('import');
+		jQuery('#import').click(function(e) {
+		    e.preventDefault();
+		    WL.login({
+		        scope: ["wl.basic", "wl.contacts_emails"]
+		    }).then(function (response) 
+		    {
+				WL.api({
+		            path: "me/contacts",
+		            method: "GET"
+		        }).then(
+		            function (response) {
+	                        //your response data with contacts 
+		            	console.log(response.data);
+		            },
+		            function (responseFailed) {
+		            	//console.log(responseFailed);
+		            }
+		        );		        
+		    },
+		    function (responseFailed) 		    {
+		        //console.log("Error signing in: " + responseFailed.error_description);
+		    });
+		});
+	});
+</script>
+
+
+
+
+<script>
+	FB.init({
+		appId:'254486034889306',
+		cookie:true,
+		status:true,
+		xfbml:true
+	});
+
+	function FacebookInviteFriends()
+	{
+		FB.ui({
+			method: 'apprequests',
+			message: 'Welcome to Friendzsquare',
+		});
+	}
+</script>

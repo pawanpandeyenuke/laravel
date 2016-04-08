@@ -25,12 +25,12 @@
 /**
  * Include Windows Live Login library
  **/
-include ('hotmail/windowslivelogin.php');
+include ('windowslivelogin.php');
 
 /**
  * Include yahoo library
  **/
-include ('yahoo/ybrowserauth.class.php5');
+include ('ybrowserauth.class.php5');
   
 class ContactsImporter {
 	
@@ -88,7 +88,7 @@ class ContactsImporter {
   * @var resource
   * @access public
   */
-  public $WLLAPIid = '0000000000000000';
+  public $WLLAPIid = '0000000044183F60';
   
  /**
   * Windows Live Login secret
@@ -96,7 +96,7 @@ class ContactsImporter {
   * @var resource
   * @access public
   */
-  public $WLLSecret = '0000000000000000';
+  public $WLLSecret = 'Slix9w3K19GByr-t5KBLUCYaEqYG1ntb';
   
  /**
   * Yahoo API id
@@ -104,7 +104,7 @@ class ContactsImporter {
   * @var resource
   * @access public
   */
-  public $YahooAPIid = '0000000000000000';
+  public $YahooAPIid = 'dj0yJmk9OTFGdFZraFROcWlkJmQ9WVdrOVpEZEdZazVhTXpJbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD02ZQ--';
   
  /**
   * Yahoo secret
@@ -112,7 +112,7 @@ class ContactsImporter {
   * @var resource
   * @access public
   */
-  public $YahooSecret = '0000000000000000';
+  public $YahooSecret = 'eda1bec4bc183fe22962814bc1c083a63a3855ee';
 
  /**
   * Yahoo timestamp
