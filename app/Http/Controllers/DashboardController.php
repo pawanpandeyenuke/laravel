@@ -429,15 +429,15 @@ if($input!=null && $gname!=null)
         	    	}
         	    }
        
-        	      if($counter==0 && $input!=null)
+      	if($counter==0 && $input!=null)
+
         {
         	return redirect('private-group-list');
         }
+	 }
 
+       
 
-        }
-
-      
         $id=Auth::User()->id;
         $friendid=DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
         $pendingfriend=DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
@@ -528,7 +528,7 @@ if($input!=null && $gname!=null)
 
 
         $user = User::where('id', $id)->get()->first();
-        $education = EducationDetails::where('user_id', $id)->get()->first();
+        $education = EducationDetails::where('user_id', $id)->get();
         // echo '<pre>';print_r($education);die;
         
         return view('profile.profile')

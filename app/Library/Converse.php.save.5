@@ -42,7 +42,8 @@ class Converse{
 	public static function createGroup($roomid,$roomname) {
 
 		$node=config('app.xmppHost');
-	//	$node='conference.'.$node;
+	$node='conference.
+
 		$roomname=str_replace(" ","_",$roomname);
 		@exec('sudo  ejabberdctl srg_create '.$roomname.' '.$node.' '.$roomid.' Private_Group My_Group');
 
@@ -70,9 +71,9 @@ class Converse{
 	public static function addUserGroup($roomname,$username){
 
 		$node = config('app.xmppHost');
-	//	$node='conference.'.$node;
+		$nodegroup='conference.'.$node;
 		$roomname=str_replace(" ","_",$roomname);
-		$response=@exec('sudo  ejabberdctl srg_user_add '.$username.' '.$node.' '.$roomname.' '.$node);
+		$response=@exec('sudo  ejabberdctl srg_user_add '.$username.' '.$node.' '.$roomname.' '.$nodegroup);
 		
 		
 		//srg-user-add user server group host                   Adds user@server to group on host
@@ -86,8 +87,10 @@ class Converse{
 	public static function removeUserGroup($roomname,$username){
 
 		$node = config('app.xmppHost');
+		$nodegroup='conference.'$node;
+	
 		$roomname=str_replace(" ","_",$roomname);
-		$response=@exec('sudo  ejabberdctl srg_user_del '.$username.' '.$node.' '.$roomname.' '.$node);
+		$response=@exec('sudo  ejabberdctl srg_user_del '.$username.' '.$node.' '.$roomname.' '.$nodegroup);
 		
 		
 		//srg-user-del user server group host                   Removes user@server from group on host
@@ -105,12 +108,8 @@ class Converse{
 		$msg=str_replace(" ","_",$msg);
 		
 		//print_r(@exec('sudo ejabberdctl send_message chat '.$userfrom.'@'.' '.$node.'@'.$userto.' '.$node.' '.$msg));die;
-
+		$result=@exec('sudo ejabberdctl send_message_chat '.$userfrom.' '.$node.' '.$userto.' '.$node.' '.$msg);
 		
-		$result=@exec('sudo ejabberdctl send_message_chat '.$userfrom.'@'.$node.' '.$userto.'@'.$node.' '.$msg);
-
-
-	  
 
 		//ejabberdctl send_message_chat test2@localhost test1@localhost this_is_body_of_test_command
 		//ejabberdctl send_message_headline test2@localhost test1@localhost This_is_subject this_is_body_of_test_command
