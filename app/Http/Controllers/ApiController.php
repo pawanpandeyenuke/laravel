@@ -6,7 +6,7 @@ use Mail;
 use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend;
 use App\Http\Controllers\Controller;
-use App\Country, App\State, App\City;
+use App\Country, App\State, App\City, App\Category, App\DefaultGroup;
 use Validator, Input, Redirect, Request, Session, Hash, DB;
 use \Exception;
 
@@ -1041,14 +1041,113 @@ class ApiController extends Controller
 	 */
 	public function updatePushNotificationDetails()
 	{
-		$request = Request::all();
+		try{
+			
+			$arguments = Request::all();
 
-		$newsFeed->fill($arguments);
-		$saved = $newsFeed->push();
+			$user = User::where('id', '=', $arguments['id'])->get()->toArray();
 
-		// echo '<pre>';print_r($request);die;
-	}	
+			if(empty($user))
+				throw new Exception("This user does not exist", 1);
 
+			$user = User::find($arguments['id']);
+
+			//Removing the unique credentials of user from requests.
+			unset($arguments['id']);
+			if($arguments['email'] || $arguments['password']){
+				unset($arguments['email']);
+				unset($arguments['password']);
+			}
+
+			if($arguments['device_type'] == 'ANDROID' || $arguments['device_type'] == 'IPHONE' || $arguments['device_type'] == 'NONE'){
+				$user->fill($arguments);
+				$saved = $user->push();
+			}
+			
+			$this->data = User::find(Request::get('id'));
+			$this->status = 'success';
+			$this->message = null;
+
+		}catch(Exception $e){
+
+			$this->message = $e->getMessage();
+
+		}
+
+		return $this->output();
+	}
+
+ 
+	/*
+	 * Get chat category on request.
+	 */
+	public function getChatCategories()
+	{
+		
+		$this->data = Category::all();
+		$this->status = 'success';
+		$this->message = null;
+		
+		return $this->output();
+		
+	}
+
+
+	/*
+	 * Get public groups on request.
+	 */
+	public function getPublicGroups()
+	{
+		try{
+			
+			$groupname = Request::get('group_name');
+
+			if( !empty( $groupname ) ){				
+			
+				$groupcheck = DefaultGroup::where('group_name', '=', $groupname)->get()->toArray();
+			
+				if(empty($groupcheck)){
+
+					$groupby = Request::get('group_by');
+
+					if(!isset($groupby))
+						throw new Exception("Group by is a required field.", 1);
+					
+					$arguments = Request::all();
+					$defaultgroup = new DefaultGroup;
+					$defaultgroup->create($arguments);
+
+					// $this->data = DefaultGroup::where('group_name', '=', $groupname);
+					// $count = DefaultGroup::where('group_name', '=', $groupname)->count();
+
+				}/*else{
+
+					$this->data = DefaultGroup::where('group_name', '=', $groupname);
+					$count = DefaultGroup::where('group_name', '=', $groupname)->count();
+
+				}*/
+			}else{
+
+				throw new Exception("Groupname is a required field.", 1);
+
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		
+		$count = DefaultGroup::where('group_name', '=', $groupname)->count();
+
+		$this->data = DefaultGroup::with('user')->where('group_name', '=', $groupname)->get();
+		$this->status = 'success';
+		$this->message = $count.' Results were found.';
+		
+		return $this->output();
+		
+	}
+
+ 
 
 	/*
 	 * Get country on request.
