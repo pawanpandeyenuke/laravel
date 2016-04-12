@@ -22,11 +22,6 @@
 							}
 								$namestr=implode(",",$name);
 
-							// $members=$data['members'];
-							// $mem=explode(",",$members);	
-							// $name=DB::table('users')->whereIn('id',$mem)->pluck('first_name');
-							// $namestr=implode(",",$name);
-							
 							 ?>
 								<div class="single-list" data-broadcastid="{{$data['id']}}">
 									<div class="row">
