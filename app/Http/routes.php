@@ -76,6 +76,8 @@ Route::post('ajax/viewmorefriends','AjaxController@viewMoreFriends');
 
 Route::post('ajax/viewmoreposts','AjaxController@viewMorePosts');
 
+Route::post('ajax/remove-education','AjaxController@removeEducationDetails');
+
 
 /**
  * @Api Routes..
@@ -163,8 +165,8 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('profile/{id}', 'DashboardController@profile');
 	Route::post('profile/{id}', 'DashboardController@profile');
 
-	Route::get('editprofile/{id}', 'DashboardController@editProfile');
-	Route::post('editprofile/{id}', 'DashboardController@editProfile');	
+	Route::get('editprofile/{id}', 'DashboardController@editUserProfile');
+	Route::post('editprofile/{id}', 'DashboardController@editUserProfile');	
 
 
 	Route::get('broadcast-list', 'DashboardController@broadcastList');

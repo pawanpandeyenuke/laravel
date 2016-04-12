@@ -39,7 +39,6 @@ class DashboardController extends Controller
             foreach ($defGroup as $value) {
                 $converse = new Converse;
                 $response = $converse->removeUserGroup($value, $xmppusername);    
-                // print_r($response);die;
             }
   
             DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
@@ -325,7 +324,7 @@ else {
                
                     $newinput=(['parentname'=>$input['parentname'],
                     'subcategory'=>'csc',
-                    'country'=>DB::table('country')->where('country_id',$input['country'])->value('country_name'),
+                    'country'=>DB::table('country')->where('country_name',$input['country'])->value('country_name'),
                     'state'=>DB::table('state')->where('state_id',$input['state'])->value('state_name'),
                     'city'=>DB::table('city')->where('city_id',$input['city'])->value('city_name')]);       
                
@@ -340,10 +339,10 @@ else {
                 }
 
                 $input=$newinput;
-            
+            // echo '<pre>';print_r($input);die;
  }      
 }
-elseif(isset($input['country1'])||isset($input['country'])||isset($input['state'])||isset($input['city'])){
+elseif(isset($input['country'])||isset($input['country'])||isset($input['state'])||isset($input['city'])){
     return redirect('group');
 }
 
@@ -364,7 +363,8 @@ if($input!=null && $gname!=null)
                 }
             }
 
-            $groupname = implode('-', $groupnamedata); 
+            $groupname = implode('_', $groupnamedata); 
+            $groupname=strtolower($groupname);
         }else{
             $groupname = $input;
         }
@@ -457,62 +457,76 @@ if($input!=null && $gname!=null)
 
     public function profile( $id )
     {
-        
+
+        $user = User::where('id', $id)->get()->first();
+        $education = EducationDetails::where('user_id', $id)->get();
+                    
+        // echo '<pre>';print_r($education);die;
+
+        return view('profile.profile')
+                ->with('user', $user)
+                ->with('education', $education);  
+
+    }
+
+
+	public function editUserProfile( $id )
+	{	        
         $arguments = Request::all();
         $user = new User();
 
         if(Request::isMethod('post')){
-
+        
             $getCommonEduArgs = array_intersect_key( $arguments, [
                                     'user_id' => 'null',
                                     'education_level' => 'null',
                                     'specialization' => 'null',
-                                    'graduation_year_from' => 'null',
-                                    'graduation_year_to' => 'null',
-                                    'currently_studying' => 'null',
+                                    'graduation_year' => 'null',
                                     'education_establishment' => 'null',
                                     'country_of_establishment' => 'null',
+                                    'state_of_establishment' => 'null',
                                     'city_of_establishment' => 'null'
                                 ]);
-            
+
             if( !empty($getCommonEduArgs) ){
-
-                $getCommonEduArgs['user_id'] = $id;
-                $delete = EducationDetails::where('user_id', '=', Auth::User()->id)->delete();
-                // $eduExists = EducationDetails::where('user_id', '=', $id)->get()->toArray();
-
-                $time=strtotime($getCommonEduArgs['graduation_year_from']);
-                $getCommonEduArgs['graduation_year_from']=date('Y-m-d',$time);
-
-                $time=strtotime($getCommonEduArgs['graduation_year_to']);
-                $getCommonEduArgs['graduation_year_to']=date('Y-m-d',$time);
+            	$delete = EducationDetails::where('user_id', '=', Auth::User()->id)->delete();
+            	foreach ($getCommonEduArgs['education_level'] as $key => $value) {
  
-                $education = new EducationDetails;
-                $education->create($getCommonEduArgs);
- 
-                foreach ($getCommonEduArgs as $key => $value)
-                    unset($arguments[$key]);
+            		$education = new EducationDetails;
+
+            		$education->user_id = Auth::User()->id;
+            		$education->education_level = $value;
+            		$education->specialization = $getCommonEduArgs['specialization'][$key];
+            		$education->graduation_year = $getCommonEduArgs['graduation_year'][$key];
+            		$education->education_establishment = $getCommonEduArgs['education_establishment'][$key];
+            		$education->country_of_establishment = $getCommonEduArgs['country_of_establishment'][$key];
+            		$education->state_of_establishment = $getCommonEduArgs['state_of_establishment'][$key];
+            		$education->city_of_establishment = $getCommonEduArgs['city_of_establishment'][$key];
+
+            		$education->save(); 
+            	}
+
             }
-            
-            // echo '<pre>';print_r($arguments);die;
+
+            $unsetarray = [ 'user_id' => 'null',
+                            'education_level' => 'null',
+                            'specialization' => 'null',
+                            'graduation_year' => 'null',
+                            'education_establishment' => 'null',
+                            'country_of_establishment' => 'null',
+                            'state_of_establishment' => 'null',
+                            'city_of_establishment' => 'null'
+                        ];
+ 
+            foreach ($unsetarray as $key => $value) {
+            	unset($arguments[$key]);
+            } 
 
             $time=strtotime($arguments['birthday']);
             $arguments['birthday']=date('Y-m-d',$time);
-
-            $arguments['state'] = DB::table('state')->where('state_id', $arguments['state'])->value('state_name');
-            $arguments['city'] = DB::table('city')->where('city_id', $arguments['city'])->value('city_name');
-
+ 
             if($arguments){
 
-                $temp = explode(' ', $arguments['username']);
-                if(is_array($temp)){
-                    $arguments['first_name'] = $temp[0];
-                    $arguments['last_name'] = $temp[1];
-                }else{
-                    $arguments['first_name'] = $temp;
-                }
-                
-                unset($arguments['username']);
                 unset($arguments['_token']);
                 
                 foreach ($arguments as $key => $value) {
@@ -524,19 +538,17 @@ if($input!=null && $gname!=null)
                 Session::put('success', 'Profile saved successfully');
             }
 
-            return redirect()->back();
+            return redirect("/profile/$id");
         }
 
-
         $user = User::where('id', $id)->get()->first();
-        $education = EducationDetails::where('user_id', $id)->get()->first();
-        // echo '<pre>';print_r($education);die;
-        
-        return view('profile.profile')
+        $education = EducationDetails::where('user_id', $id)->get();
+		
+        return view('profile.editProfile')
                 ->with('user', $user)
                 ->with('education', $education);  
 
-    }
+	}
 
 
 

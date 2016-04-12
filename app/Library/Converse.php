@@ -111,7 +111,7 @@ class Converse{
 	*   push notification for android.
 	*
 	**/
-/*	public static function _callPushNotificationAndroid($senderName, $dToken, $msgType, $msgId) {
+	public static function _callPushNotificationAndroid($senderName, $dToken, $msgType, $msgId) {
         if ($msgType == 'location') {
             $message = $senderName . ' has sent ' . $msgType;
         } else
@@ -151,7 +151,7 @@ class Converse{
         else
             error_log($response);
         return $response;
-    }*/
+    }
 
 
 	/**

@@ -2,8 +2,9 @@
 
 @section('content')
 <?php 
+
 $groupid=$groupname;
-$groupname = implode('-', array_map('ucfirst', explode('-', $groupid)));
+$groupname = implode(' ', array_map('ucfirst', explode('_', $groupid)));
 $groupname = implode(',', array_map('ucfirst', explode(',', $groupname)));
 $groupname =preg_replace('/(?<! )(?<!^)[A-Z]/',' $0', $groupname);
 $old=array('Moviereview','Schoolreviews','Coachingclass',"It,","Collegereview ","Singlesfemales","Singlesmale","Legalquestions"
@@ -15,8 +16,7 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
 
  $groupname=str_replace($old,$new,$groupname);
 
-$groupid=strtolower($groupid);
-$groupid=str_replace('-','_',$groupid);
+
 if($pgid){
    $groupid=$groupid."_".$pgid;
 }

@@ -1116,7 +1116,7 @@ class ApiController extends Controller
 					$arguments = Request::all();
 					$defaultgroup = new DefaultGroup;
 					$defaultgroup->create($arguments);
-
+					
 					// $this->data = DefaultGroup::where('group_name', '=', $groupname);
 					// $count = DefaultGroup::where('group_name', '=', $groupname)->count();
 

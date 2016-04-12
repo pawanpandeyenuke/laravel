@@ -367,8 +367,28 @@ comments;
 	}
 
 
- 
 
+	/**
+	*	Remove education details on ajax call handling.
+	*	Ajaxcontroller@removeEducationDetails
+	*/
+	public function removeEducationDetails()
+	{
+		
+		$educationid = Input::get('educationid');
+		
+		if($educationid)
+			$del = EducationDetails::find($educationid)->delete();
+/*		$countryid = Country::where(['country_name' => $input['countryId']])->value('country_id');		
+		$statequeries = State::where(['country_id' => $countryid])->get();		
+		$states = array('<option value="">State</option>');
+		foreach($statequeries as $query){			
+			$states[] = '<option value="'.$query->state_name.'">'.$query->state_name.'</option>';
+		}		
+		echo implode('',$states);*/
+	}
+
+ 
 	/**
 	*	Get states ajax call handling.
 	*	Ajaxcontroller@getStates
@@ -381,7 +401,7 @@ comments;
 		$statequeries = State::where(['country_id' => $countryid])->get();		
 		$states = array('<option value="">State</option>');
 		foreach($statequeries as $query){			
-			$states[] = '<option value="'.$query->state_id.'">'.$query->state_name.'</option>';
+			$states[] = '<option value="'.$query->state_name.'">'.$query->state_name.'</option>';
 		}		
 		echo implode('',$states);
 	}
@@ -394,11 +414,12 @@ comments;
 	public function getCities()
 	{
 		$input = Input::all();
-		$cityid = State::where(['state_id' => $input['stateId']])->value('state_id');
+		// echo $input['stateId'];die;
+		$cityid = State::where(['state_name' => $input['stateId']])->value('state_id');
 		$cityqueries = City::where(['state_id' => $cityid])->get();
 		$city = array('<option value="">City</option>');
 		foreach($cityqueries as $query){			
-			$city[] = '<option value="'.$query->city_id.'">'.$query->city_name.'</option>';
+			$city[] = '<option value="'.$query->city_name.'">'.$query->city_name.'</option>';
 		}		
 		echo implode('',$city);
 	}
