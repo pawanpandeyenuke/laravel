@@ -113,8 +113,18 @@ Route::post('api/addfriend','ApiController@addFriend');
 Route::post('api/acceptrequest','ApiController@acceptRequest');
 Route::post('api/declinerequest','ApiController@declineRequest');
 
-
+Route::post('api/push-notification','ApiController@updatePushNotificationDetails');
 Route::post('api/chatsendimage','ApiController@chatSendImage');
+
+Route::post('api/get-chat-category','ApiController@getChatCategories');
+Route::post('api/get-public-groups','ApiController@getPublicGroups');
+
+Route::post('api/get-chat-category','ApiController@getChatCategories');
+Route::post('api/get-public-groups','ApiController@getPublicGroups');
+
+Route::post('api/get-broacast-list','ApiController@getBroadcastList');
+Route::post('api/broacast-add','ApiController@broadcastAdd');
+
 
 
 /*
@@ -189,7 +199,12 @@ Route::group(['middleware' => 'web'], function () {
 	Route::post('google/client/callback', 'ContactImporter@inviteContactList');
 
 	// Route::get('hotmail/client', 'ContactImporter@hotmail');
-	// Route::get('hotmail/client/callback', 'ContactImporter@callbackH');
+	Route::get('hotmail/client/callback', 'ContactImporter@hotmailCallback');
 
+	// Route::get('yoauth/client', 'ContactImporter@hotmail');
+	// Route::get('yoauth/client/callback', 'ContactImporter@callbackH');
+
+	Route::get('linkedin/client', 'ContactImporter@linkedin');
+	Route::get('linkedin/client/callback', 'ContactImporter@linkedinCallback');
 
 });

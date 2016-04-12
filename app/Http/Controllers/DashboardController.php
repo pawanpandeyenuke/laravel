@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers;
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers,App\BroadcastMembers;
 
 use App\Library\Converse, Google_Client, Mail;
 
@@ -591,7 +591,8 @@ if($input!=null && $gname!=null)
 
     public function broadcastList()
     {
-        $broadcast=Broadcast::where('user_id',Auth::User()->id)->orderBy('id','DESC')->get()->toArray();
+
+        $broadcast=Broadcast::with('members')->where('user_id',Auth::User()->id)->orderBy('id','DESC')->get()->toArray();
         return view('broadcast.list')->with('broadcast',$broadcast);
     }
 
@@ -603,6 +604,7 @@ if($input!=null && $gname!=null)
 
             $userid=Auth::User()->id;
             $input=Request::all();
+           
         
         if(isset($input['broadcastuser'])&&$input['broadcastname']!=null)
             {
@@ -611,13 +613,20 @@ if($input!=null && $gname!=null)
                 
                 $data = array(
                         'title'=>$input['broadcastname'],
-                        'user_id'=>$userid,
-                        'members'=>$members
+                        'user_id'=>$userid
                             );  
 
 
-                Broadcast::insert($data);
+                $br=Broadcast::create($data);
                 
+                foreach ($input['broadcastuser'] as $key => $value) {
+                   
+                $data1 = array(
+                        'broadcast_id'=>$br['id'],
+                        'member_id'=>$value
+                            );  
+                    BroadcastMembers::create($data1);
+                }
               return redirect(url('broadcast-list'));  
                 
             }
@@ -644,18 +653,19 @@ if($input!=null && $gname!=null)
     {   
         if($broadcastid)
         {   
-            $broadcastdetail=DB::table('broadcast')->where('id',$broadcastid)->pluck('members','title');
+            $broadcastdetail=Broadcast::with('members')->where('id',$broadcastid)->get()->toArray();
+           
             $broadcastmessages=BroadcastMessages::where('broadcast_id',$broadcastid)->where('broadcast_by',Auth::User()->id)->get();
            
-            foreach ($broadcastdetail as $key => $value) {
-                $mem=explode(",",$value);   
-                $name=DB::table('users')->whereIn('id',$mem)->pluck('first_name');
-                $namestr=implode(",",$name);
-                $title=$key;
-            }
+                $namestr='';
+                $name=array();
+                foreach ($broadcastdetail[0]['members'] as $mem) {
+                 $name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+                }
+                  $namestr=implode(",",$name);
                 return view('broadcast.message')
                         ->with('name',$namestr)
-                        ->with('title',$title)
+                        ->with('title',$broadcastdetail[0]['title'])
                         ->with('id',$broadcastid)
                         ->with('messages',$broadcastmessages);
         }
@@ -740,9 +750,6 @@ if($input!=null && $gname!=null)
             $converse->addUserGroup($groupname,$value);
 
         }
-
-
-               
 
                 return redirect(url('private-group-list'));       
             }

@@ -93,7 +93,7 @@
 																		$selected = ''; 
 																	?>
 																	<option value="{{$value}}" {{$selected}} >{{$value}}</option>	
-															<?php } // } ?>
+															<?php } ?>
 														</select>
 													</td>
 												</tr>
@@ -183,7 +183,6 @@
 													<td><div class="p-data-title"><i class="flaticon-education"></i>Qualification</div></td>
 													<td>
 														<div class="slt-cont">
-															<?php //echo '<pre>';print_r($eduLevelsData);die; ?>
 															<select name="education_level" style="max-width: 180px;" class="pr-edit" disabled="disabled">
 																<option>Education level</option>
 																<?php foreach ($educationLevel as $key => $value) { 

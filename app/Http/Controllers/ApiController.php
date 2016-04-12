@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Mail;
-use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend;
+use App\Library\Converse;
+use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend,App\Broadcast,App\BroadcastMembers,App\BroadcastMessages;
 use App\Http\Controllers\Controller;
-use App\Country, App\State, App\City;
+use App\Country, App\State, App\City, App\Category, App\DefaultGroup;
 use Validator, Input, Redirect, Request, Session, Hash, DB;
 use \Exception;
 
@@ -67,17 +68,20 @@ class ApiController extends Controller
 			}else{
 				
 				$input['password'] = Hash::make($input['password']);
-				$userData = $user->create($input);
+				$userdata = $user->create($input);
 
-				$tempEmail = explode('@', $input['email']);
-				$tempId = ( isset( $userData->id ) && $userData->id != "" ) ? $userData->id : $userData->user_id;
+				//Saving xmpp-username and xmpp-pasword into database.
+		        $xmpp_username = $userdata->first_name.$userdata->id;
+		        $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
 
-				// Storing xmpp username and password.				
-				$user = User::find($userData->id);
-				$user->xmpp_username = $tempEmail[0].'_'.$tempId;
-				$user->xmpp_password = md5($tempEmail[0]);
-				$user->save();
+		        $user = User::find($userdata->id);
+		        $user->xmpp_username = strtolower($xmpp_username);
+		        $user->xmpp_password = $xmpp_password;
+		        $user->save();
 
+		        $converse = new Converse;
+		        $response = $converse->register($xmpp_username, $xmpp_password);
+		        // echo '<pre>';print_r($response);die;
 				$this->status = 'success';
 				$this->message = 'User registered successfully';				
 				$this->data = $user->toArray();
@@ -790,7 +794,9 @@ class ApiController extends Controller
 			if(empty($user))
 				throw new Exception("This user does not exist", 1);
 
-			$friends = Friend::where('user_id', '=', $arguments['id'])
+			$friends = Friend::with('user')
+					->with('friends')
+					->where('user_id', '=', $arguments['id'])
 					->orWhere('friend_id', '=', $arguments['id'])
 					->where('status', '=', 'Accepted')
 					->get();
@@ -1028,6 +1034,189 @@ class ApiController extends Controller
 		return $this->output();
 
 	}
+
+
+	/*
+	 * update push notification details on user table on request.
+	 */
+	public function updatePushNotificationDetails()
+	{
+		try{
+			
+			$arguments = Request::all();
+
+			$user = User::where('id', '=', $arguments['id'])->get()->toArray();
+
+			if(empty($user))
+				throw new Exception("This user does not exist", 1);
+
+			$user = User::find($arguments['id']);
+
+			//Removing the unique credentials of user from requests.
+			unset($arguments['id']);
+			if($arguments['email'] || $arguments['password']){
+				unset($arguments['email']);
+				unset($arguments['password']);
+			}
+
+			if($arguments['device_type'] == 'ANDROID' || $arguments['device_type'] == 'IPHONE' || $arguments['device_type'] == 'NONE'){
+				$user->fill($arguments);
+				$saved = $user->push();
+			}
+			
+			$this->data = User::find(Request::get('id'));
+			$this->status = 'success';
+			$this->message = null;
+
+		}catch(Exception $e){
+
+			$this->message = $e->getMessage();
+
+		}
+
+		return $this->output();
+	}
+
+ 
+	/*
+	 * Get chat category on request.
+	 */
+	public function getChatCategories()
+	{
+		
+		$this->data = Category::all();
+		$this->status = 'success';
+		$this->message = null;
+		
+		return $this->output();
+		
+	}
+
+
+	/*
+	 * Get public groups on request.
+	 */
+	public function getPublicGroups()
+	{
+		try{
+			
+			$groupname = Request::get('group_name');
+
+			if( !empty( $groupname ) ){				
+			
+				$groupcheck = DefaultGroup::where('group_name', '=', $groupname)->get()->toArray();
+			
+				if(empty($groupcheck)){
+
+					$groupby = Request::get('group_by');
+
+					if(!isset($groupby))
+						throw new Exception("Group by is a required field.", 1);
+					
+					$arguments = Request::all();
+					$defaultgroup = new DefaultGroup;
+					$defaultgroup->create($arguments);
+
+					// $this->data = DefaultGroup::where('group_name', '=', $groupname);
+					// $count = DefaultGroup::where('group_name', '=', $groupname)->count();
+
+				}/*else{
+
+					$this->data = DefaultGroup::where('group_name', '=', $groupname);
+					$count = DefaultGroup::where('group_name', '=', $groupname)->count();
+
+				}*/
+			}else{
+
+				throw new Exception("Groupname is a required field.", 1);
+
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		
+		$count = DefaultGroup::where('group_name', '=', $groupname)->count();
+
+		$this->data = DefaultGroup::with('user')->where('group_name', '=', $groupname)->get();
+		$this->status = 'success';
+		$this->message = $count.' Results were found.';
+		
+		return $this->output();
+		
+	}
+
+ 	
+	/*
+	 * Add new broadcast.
+	 */
+    public function broadcastAdd()
+    {
+ 	 	try{
+    	$input=Request::all();
+
+    	if(isset($input['broadcastmembers'])&& isset($input['user_id']) && $input['broadcastname']!=null )
+            {
+            	$user = User::find($input['user_id']);
+            	if(!($user)){
+            	throw new Exception("No user found");					
+            	}
+            	else{
+            		$error=0;
+            		$members=explode(',',$input['broadcastmembers']);
+
+            		foreach ($members as $key => $value) {
+            		$row=null;
+            		$row=DB::table('friends')->where('user_id',$input['user_id'])->where('friend_id',$value)->where('status','Accepted')->value('id');
+
+            		if($row==null)
+            		{
+            		 $error=$value;
+            	    	break;
+            		}
+            		}
+            		if($error!=0)
+            		{
+            			throw new Exception($error." is not a friend and can't be added to broadcast");	
+            		}
+            		else
+            		{
+            			 $data = array(
+                        'title'=>$input['broadcastname'],
+                        'user_id'=>$input['user_id'],
+                       		);
+                              
+		                $bid=Broadcast::create($data);
+
+		                foreach ($members as $key => $value) {
+                   
+                		$data1 = array(
+                        'broadcast_id'=>$bid['id'],
+                        'member_id'=>$value
+                            );  
+                    	BroadcastMembers::create($data1);
+                }
+
+		                $this->status="success";
+		                $this->message="Broadcast created.";
+		                $this->data=Broadcast::where('id',$bid['id'])->get()->toArray();
+            		}
+            		
+            	}
+    		}
+    	else
+    	{
+    		throw new Exception("All three fields required.");	
+    	}
+	}
+	catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+		return $this->output();
+	}
+
+
 
 
 	/*
