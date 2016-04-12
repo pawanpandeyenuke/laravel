@@ -121,6 +121,13 @@ Route::post('api/chatsendimage','ApiController@chatSendImage');
 Route::post('api/get-chat-category','ApiController@getChatCategories');
 Route::post('api/get-public-groups','ApiController@getPublicGroups');
 
+Route::post('api/get-chat-category','ApiController@getChatCategories');
+Route::post('api/get-public-groups','ApiController@getPublicGroups');
+
+Route::post('api/get-broacast-list','ApiController@getBroadcastList');
+Route::post('api/broacast-add','ApiController@broadcastAdd');
+
+
 
 /*
 |--------------------------------------------------------------------------

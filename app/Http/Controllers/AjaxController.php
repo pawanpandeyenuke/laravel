@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
-,App\BroadcastMessages,App\Group,App\GroupMembers;
+,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
@@ -862,6 +862,7 @@ foreach ($friend as $key => $value)
 	{
 		$input=Input::get('bid');
 		Broadcast::where('id', '=', $input)->delete();
+		BroadcastMembers::where('broadcast_id',$input)->delete();
 		BroadcastMessages::where('broadcast_id',$input)->where('broadcast_by',Auth::User()->id)->delete();
 	}
 
@@ -870,15 +871,16 @@ foreach ($friend as $key => $value)
 		$input=Input::all();
 		$msg=$input['msg'];
 		$uid=Auth::User()->id;
-		$members=DB::table('broadcast')->where('id',$input['bid'])->value('members');
-        $mem=explode(",",$members);
+		$members=DB::table('broadcast_members')->where('broadcast_id',$input['bid'])->pluck('member_id');
+        //$mem=explode(",",$members);
 
         $xmpu1=DB::table('users')->where('id',$uid)->value('xmpp_username');
         $converse = new Converse;
-        $xmpu2=DB::table('users')->whereIn('id',$mem)->pluck('xmpp_username');
+        $xmpu2=DB::table('users')->whereIn('id',$members)->pluck('xmpp_username');
+
         foreach ($xmpu2 as $key => $value) {
         	
-        	$converse->broadcast($xmpu1,$xmpu2,$input['msg']);
+        	$converse->broadcast($xmpu1,$value,$input['msg']);
 
         }
    //      	

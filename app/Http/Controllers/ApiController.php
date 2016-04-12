@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Mail;
 use App\Library\Converse;
-use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend;
+use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend,App\Broadcast,App\BroadcastMembers,App\BroadcastMessages;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City, App\Category, App\DefaultGroup;
 use Validator, Input, Redirect, Request, Session, Hash, DB;
@@ -1147,7 +1147,77 @@ class ApiController extends Controller
 		
 	}
 
- 
+ 	
+	/*
+	 * Add new broadcast.
+	 */
+    public function broadcastAdd()
+    {
+ 	 	try{
+    	$input=Request::all();
+
+    	if(isset($input['broadcastmembers'])&& isset($input['user_id']) && $input['broadcastname']!=null )
+            {
+            	$user = User::find($input['user_id']);
+            	if(!($user)){
+            	throw new Exception("No user found");					
+            	}
+            	else{
+            		$error=0;
+            		$members=explode(',',$input['broadcastmembers']);
+
+            		foreach ($members as $key => $value) {
+            		$row=null;
+            		$row=DB::table('friends')->where('user_id',$input['user_id'])->where('friend_id',$value)->where('status','Accepted')->value('id');
+
+            		if($row==null)
+            		{
+            		 $error=$value;
+            	    	break;
+            		}
+            		}
+            		if($error!=0)
+            		{
+            			throw new Exception($error." is not a friend and can't be added to broadcast");	
+            		}
+            		else
+            		{
+            			 $data = array(
+                        'title'=>$input['broadcastname'],
+                        'user_id'=>$input['user_id'],
+                       		);
+                              
+		                $bid=Broadcast::create($data);
+
+		                foreach ($members as $key => $value) {
+                   
+                		$data1 = array(
+                        'broadcast_id'=>$bid['id'],
+                        'member_id'=>$value
+                            );  
+                    	BroadcastMembers::create($data1);
+                }
+
+		                $this->status="success";
+		                $this->message="Broadcast created.";
+		                $this->data=Broadcast::where('id',$bid['id'])->get()->toArray();
+            		}
+            		
+            	}
+    		}
+    	else
+    	{
+    		throw new Exception("All three fields required.");	
+    	}
+	}
+	catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+		return $this->output();
+	}
+
+
+
 
 	/*
 	 * Get country on request.

@@ -69,5 +69,10 @@ class User extends Authenticatable
 		return $this->hasMany('App\EducationDetails','user_id','id');
 	}
 
+	public function broadcast()
+	{
+		return $this->hasMany('App\Broadcast','user_id','id');
+	}
+
 
 }

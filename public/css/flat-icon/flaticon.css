@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 05/04/2016 12:47
+  	Creation date: 14/03/2016 08:51
   	*/
 
 @font-face {
@@ -39,23 +39,20 @@ font-style: normal;
 .flaticon-eye109:before { content: "\f108"; }
 .flaticon-gps:before { content: "\f109"; }
 .flaticon-graduation:before { content: "\f10a"; }
-.flaticon-icon-88206:before { content: "\f10b"; }
-.flaticon-icon-89571:before { content: "\f10c"; }
-.flaticon-icon-98732:before { content: "\f10d"; }
-.flaticon-interface:before { content: "\f10e"; }
-.flaticon-interface-1:before { content: "\f10f"; }
-.flaticon-letter:before { content: "\f110"; }
-.flaticon-letter133:before { content: "\f111"; }
-.flaticon-magnifying-glass138:before { content: "\f112"; }
-.flaticon-padlock50:before { content: "\f113"; }
-.flaticon-people:before { content: "\f114"; }
-.flaticon-profile5:before { content: "\f115"; }
-.flaticon-round:before { content: "\f116"; }
-.flaticon-search74:before { content: "\f117"; }
-.flaticon-social:before { content: "\f118"; }
-.flaticon-technology:before { content: "\f119"; }
-.flaticon-time:before { content: "\f11a"; }
-.flaticon-tool:before { content: "\f11b"; }
-.flaticon-vintage:before { content: "\f11c"; }
-.flaticon-web:before { content: "\f11d"; }
-.flaticon-web-1:before { content: "\f11e"; }
+.flaticon-interface:before { content: "\f10b"; }
+.flaticon-interface-1:before { content: "\f10c"; }
+.flaticon-letter:before { content: "\f10d"; }
+.flaticon-letter133:before { content: "\f10e"; }
+.flaticon-magnifyingglass138:before { content: "\f10f"; }
+.flaticon-padlock50:before { content: "\f110"; }
+.flaticon-people:before { content: "\f111"; }
+.flaticon-profile5:before { content: "\f112"; }
+.flaticon-round:before { content: "\f113"; }
+.flaticon-search74:before { content: "\f114"; }
+.flaticon-social:before { content: "\f115"; }
+.flaticon-technology:before { content: "\f116"; }
+.flaticon-time:before { content: "\f117"; }
+.flaticon-tool:before { content: "\f118"; }
+.flaticon-vintage:before { content: "\f119"; }
+.flaticon-web:before { content: "\f11a"; }
+.flaticon-web-1:before { content: "\f11b"; }

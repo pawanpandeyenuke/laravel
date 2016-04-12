@@ -102,7 +102,9 @@ class Converse{
 
 		$node=config('app.xmppHost');
 		$msg=str_replace(" ","_",$msg);
+
 		$result=@exec('sudo ejabberdctl send_message_chat '.$userfrom.'@'.$node.' '.$userto.'@'.$node.' '.$msg);
+
 
 	}
 
