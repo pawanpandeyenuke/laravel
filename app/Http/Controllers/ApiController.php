@@ -1054,10 +1054,10 @@ class ApiController extends Controller
 
 			//Removing the unique credentials of user from requests.
 			unset($arguments['id']);
-			if($arguments['email'] || $arguments['password']){
+/*			if($arguments['email'] || $arguments['password']){
 				unset($arguments['email']);
 				unset($arguments['password']);
-			}
+			}*/
 
 			if($arguments['device_type'] == 'ANDROID' || $arguments['device_type'] == 'IPHONE' || $arguments['device_type'] == 'NONE'){
 				$user->fill($arguments);
@@ -1105,27 +1105,58 @@ class ApiController extends Controller
 			if( !empty( $groupname ) ){				
 			
 				$groupcheck = DefaultGroup::where('group_name', '=', $groupname)->get()->toArray();
-			
+				
 				if(empty($groupcheck)){
 
 					$groupby = Request::get('group_by');
 
 					if(!isset($groupby))
 						throw new Exception("Group by is a required field.", 1);
+
+					$finduser = User::find($groupby);
 					
+					if(empty($finduser))
+						throw new Exception("This user does not exist.", 1);
+					
+					$groupname = Request::get('group_name');
+					$findgroup = User::find($groupname);
+					if(empty($findgroup))
+						throw new Exception("This group does not exist.", 1);					
+
 					$arguments = Request::all();
 					$defaultgroup = new DefaultGroup;
 					$defaultgroup->create($arguments);
-					
-					// $this->data = DefaultGroup::where('group_name', '=', $groupname);
-					// $count = DefaultGroup::where('group_name', '=', $groupname)->count();
 
-				}/*else{
-
-					$this->data = DefaultGroup::where('group_name', '=', $groupname);
 					$count = DefaultGroup::where('group_name', '=', $groupname)->count();
 
-				}*/
+					$this->data = DefaultGroup::with('user')->where('group_name', '=', $groupname)->get();
+					$this->status = 'success';
+					$this->message = $count.' Results were found.';
+ 
+				}else{ 
+
+					$groupby = Request::get('group_by');
+
+					if(!isset($groupby))
+						throw new Exception("Group by is a required field.", 1);
+
+					$finduser = User::find($groupby);
+					
+					if(empty($finduser))
+						throw new Exception("This user does not exist.", 1);
+
+					$groupname = Request::get('group_name');
+					$findgroup = User::find($groupname);
+					if(empty($findgroup))
+						throw new Exception("This group does not exist.", 1);	
+
+					$count = DefaultGroup::where('group_name', '=', $groupname)->count();
+
+					$this->data = DefaultGroup::with('user')->where('group_name', '=', $groupname)->get();
+					$this->status = 'success';
+					$this->message = $count.' Results were found.';
+
+				}
 			}else{
 
 				throw new Exception("Groupname is a required field.", 1);
@@ -1135,14 +1166,7 @@ class ApiController extends Controller
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
-
-		
-		$count = DefaultGroup::where('group_name', '=', $groupname)->count();
-
-		$this->data = DefaultGroup::with('user')->where('group_name', '=', $groupname)->get();
-		$this->status = 'success';
-		$this->message = $count.' Results were found.';
-		
+ 
 		return $this->output();
 		
 	}
@@ -1279,6 +1303,56 @@ class ApiController extends Controller
 	public function exitGroup()
 	{
 		try{
+
+			$arguments = Request::all();
+
+			if(isset($arguments['group_name']) && isset($arguments['group_by'])){
+
+				if(!empty($arguments['group_name']) && !empty($arguments['group_by'])){
+
+					$groupcheck = DefaultGroup::where([
+									'group_name' => $arguments['group_name'],
+									'group_by' => $arguments['group_by']
+									])
+								->get()->toArray();
+
+					if(empty($groupcheck))
+						throw new Exception("Group does not exist.", 1);
+						
+					$group = DefaultGroup::where([
+									'group_name' => $arguments['group_name'],
+									'group_by' => $arguments['group_by']
+									])
+								->delete();
+
+					$this->data = $arguments;
+					$this->message = $arguments['group_name'].' successfully deleted.' ;
+					$this->status = 'success';
+					// echo '<pre>';print_r($group);die;
+				}else{
+					throw new Exception("Group by id or Group name cannot be empty.", 1);
+				}
+			}else{
+				throw new Exception("Either the group name or group by id is missing.", 1);
+				
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
+
+
+	/*
+	 * Delete broadcast api on request.
+	 */
+	public function deleteBroadcast()
+	{
+/*		try{
 			
 			$arguments = Request::all();
 
@@ -1307,9 +1381,11 @@ class ApiController extends Controller
 			$this->message = $e->getMessage();
 		}
 
-		return $this->output();
+		return $this->output();*/
 
 	}
+
+
 
 	/*
 	 * Get country on request.
