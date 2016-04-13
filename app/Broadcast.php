@@ -16,6 +16,7 @@ class Broadcast extends Model
 
  	public function members()
 	{
+
 		return $this->hasMany('App\BroadcastMembers','broadcast_id','id')->select(['broadcast_id','member_id']);
 	}
 
