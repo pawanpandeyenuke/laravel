@@ -1101,15 +1101,15 @@ class ApiController extends Controller
 		try{
 			
 			$groupname = Request::get('group_name');
-
+			$group_by=Request::get('group_by');
 			if( !empty( $groupname ) ){				
-			
-				$groupcheck = DefaultGroup::where('group_name', '=', $groupname)->get()->toArray();
+//echo 'asdfsa';die;
+			$groupcheck = DefaultGroup::where('group_name', '=', $groupname)->where('group_by', '=', $group_by)->get()->toArray();
 			
 				if(empty($groupcheck)){
 
 					$groupby = Request::get('group_by');
-
+//echo $groupby;die;
 					if(!isset($groupby))
 						throw new Exception("Group by is a required field.", 1);
 					
