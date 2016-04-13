@@ -123,9 +123,11 @@ Route::post('api/get-public-groups','ApiController@getPublicGroups');
 
 Route::post('api/get-chat-category','ApiController@getChatCategories');
 Route::post('api/get-public-groups','ApiController@getPublicGroups');
+Route::post('api/exit-group','ApiController@exitGroup');
 
+Route::post('api/broadcast-add','ApiController@broadcastAdd');
 Route::post('api/get-broacast-list','ApiController@getBroadcastList');
-Route::post('api/broacast-add','ApiController@broadcastAdd');
+
 
 
 
