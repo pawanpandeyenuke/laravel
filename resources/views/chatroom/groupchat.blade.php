@@ -2,7 +2,6 @@
 
 @section('content')
 <?php 
-
 $groupid=$groupname;
 $groupname = implode(' ', array_map('ucfirst', explode('_', $groupid)));
 $groupname = implode(',', array_map('ucfirst', explode(',', $groupname)));
@@ -33,26 +32,27 @@ if($pgid){
                 <div class="shadow-box page-center-data no-margin-top no-bottom-padding">
                     <div class="row">
                         <div class="col-sm-4 padding-right-none chat-list-outer">
-                            
-                            <div class="chat-list-search">
+                <!-- <div class="chat-list-search">
                                 <div class="form-group">
-<?php if($exception==null){ ?>
-                                    <input type="text" class="form-control searchtxt" placeholder="Search Friends">
-                                    <button type="button" class="search-btn" id="search"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
-                                    <?php } else { ?>
-                         
-                                            <i class="flaticon-people"></i> <b>{{$groupname}}</b>
-
-                                          
-                                            <?php } ?>
+                                    <input type="text" class="form-control" placeholder="Search">
+                                    <button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
                                 </div>
-                            </div>
-
-                            <div class="chat-user-list StyleScroll" id="friends" style="overflow: hidden;" tabindex="0">
-                             
-                                
-                                   <?php if($exception!=null) { ?>
-                                   <ul>
+                            </div> -->
+                            <div class="group-chat-cont">
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="gcheadingOne">
+                                      <h4 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseOne" aria-expanded="true" aria-controls="gccollapseOne">
+                                          Public group chat
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="gccollapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="gcheadingOne">
+                                      <div class="panel-body">
+                                        <div class="chat-user-list StyleScroll">
+                                         <i class="flaticon-people"></i> <b>{{$groupname}}</b>
+                                                    <ul>
                                     @foreach($userdata as $data)
                                     <?php //echo '<pre>';print_r($data['user']['id']);die;
 
@@ -73,7 +73,7 @@ if($pgid){
                                         if($status!=null || $status1!=null){
                                             if($status=='Accepted'){
                                          ?>
-                                          <button class='time' onclick="openChatbox(<?php echo "'".$data['user']['xmpp_username']."', '".$data['user']['first_name']."'"?>);">Chat</button>          
+                                          <button class='time' onclick="openChatbox(<?php echo "'".$data['user']['xmpp_username']."', '".$data['user']['first_name']."'"?>);">Chat</button>         
                                                 <?php } 
                                             elseif($status=='Pending')
                                             {
@@ -90,7 +90,7 @@ if($pgid){
                                                             else 
                                                             { 
                                                                 ?>
-                                                                <button class='time invite' >Invite</button>
+                                                                <button type="button" class="time invite">Invite</button>
                                                                 <span class='time sentinvite' style="display: none;">Sent</span>
                                                                 <?php 
                                                                 }
@@ -100,19 +100,99 @@ if($pgid){
                                     </li>
                                     @endforeach
                                     </ul>
-                                    <?php } else {?>
-                                    <ul id="userslist">
+                                                </div><!--/chat user list-->
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="gcheadingTwo">
+                                      <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseTwo" aria-expanded="false" aria-controls="gccollapseTwo">
+                                          Chat with friends
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="gccollapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="gcheadingTwo">
+                                      <div class="panel-body">
+                                        <div class="chat-list-search">
+                                            <div class="form-group">
+                                               <input type="text" class="form-control searchtxt" placeholder="Search Friends">
+                                        <button type="button" class="search-btn" id="search"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="chat-user-list StyleScroll">
+                                        <ul id="userslist"></ul>
+                                            </div><!--/chat user list-->
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="gcheadingThree">
+                                      <h4 class="panel-title">
+                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseThree" aria-expanded="false" aria-controls="gccollapseThree">
+                                          Private group chat
+                                        </a>
+                                      </h4>
+                                    </div>
+                                    <div id="gccollapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="gcheadingThree">
+                                      <div class="panel-body">
+                                        <div class="chat-user-list StyleScroll">
+                                <ul>
+                    @foreach($privategroup as $data)
+                    <?php  
 
-                                    <ul>
-                                    <?php } ?>
-                                
-                            </div><!--/chat user list-->
-                        </div>
-                        <div class="col-sm-8">
+                        $privategroupname=$data['title'];
+                        $privategroupid=strtolower($privategroupname);
+                        $privategroupid=str_replace(" ","_",$privategroupid); 
+                            $namestr='';
+                            $name=array();
+                            $count=0;
+                        foreach ($data['members'] as $mem) {
+                                if($mem['member_id']==Auth::User()->id)
+                                {
+                                    $name[]="You";
+                                    $count++;
+                                }
+                                else{
+                                $name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+                                }
+                            }
+
+                            $namestr=implode(",",$name);
+
+                            if(!($count==0) || $data['owner_id']==Auth::User()->id)
+                            {          
+                            ?>
+                               
+                                        <li>                           
+                                                <a href="#" class="chat-user-outer"  title="" onclick="openChatGroup(<?php echo "'".$privategroupname."', '".$privategroupid."'"?>);">
+                                                <span class="chat-thumb" style="background: url('/images/user-thumb.jpg');"></span>
+                                                <span class="title">
+                                                    {{$data['title']}} 
+                                                </span>
+                                                   </a>
+                                          
+                                                  
+                                                </li>
+                                                <?php } ?>
+                                        @endforeach
+                                        </ul>
+                         
+                                     </div><!--/chat user list-->
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                            
+                        </div>                        <div class="col-sm-8">
                             <div id="chat-system"></div>
                         </div>
                     </div>
                 </div>
+
+<!--END-->
 
                 <div class="shadow-box bottom-ad"><img src="/images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 
@@ -140,6 +220,8 @@ if($pgid){
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script type="text/javascript" src="/converse/jquery.form.js"></script>
 <script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+
 
 
 <script type="text/javascript">
@@ -361,6 +443,21 @@ function openChatbox(xmpusername,username)
                 conObj.rooms.open(grpjid+conferencechatserver);
             }
        }
+
+    $('.status-r-btn').on('click',function(){
+        if ( $('#status_img_up').is(':checked') ) { 
+        $('.status-img-up').show();
+      }
+      else{
+        $('.status-img-up').hide();
+      }
+    });
+
+    $('.dropdown.keep-open').on({
+    "shown.bs.dropdown": function() { this.closable = false; },
+    "click":             function() { this.closable = true; },
+    "hide.bs.dropdown":  function() { return this.closable; }
+    });
 
 </script>
 

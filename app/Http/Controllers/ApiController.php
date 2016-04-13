@@ -1146,8 +1146,68 @@ class ApiController extends Controller
 		return $this->output();
 		
 	}
-
+	
+	/*
+	 * Get broadcast list.
+	 */
  	
+    public function getBroadcastList()
+    {
+
+
+    	try{
+    	$id=Request::get('user_id');
+
+    	if($id)
+    	{
+
+    		$bids=Broadcast::where('user_id',$id)->pluck('id')->toArray();
+    		//$data1=BroadcastMembers::with('name')->with('user')->whereIn('broadcast_id',$bids)->get();
+    		// $data=$data1;
+
+    		
+    $shares = DB::table('broadcast')
+    ->join('users', 'users.id', '=', 'broadcast.user_id')
+    ->join('broadcast_members', 'broadcast_members.member_id', '=', 'users.id')
+    ->whereIn('broadcast_members.broadcast_id',$bids)
+    ->get();
+    // 		$shares = DB::table('shares')
+    // ->join('users', 'users.id', '=', 'shares.user_id')
+    // ->join('follows', 'follows.user_id', '=', 'users.id')
+    // ->where('follows.follower_id', '=', 3)
+    // ->get();
+
+     $data=$shares;	
+    		$data=User::with('broadcastmembers','BroadcastMembers.broadcast')->get();
+
+    		if($data)
+    		{
+				$this->data=$data;
+				//Broadcast::where('user_id',$id)->orderBy('id','DESC')->get()->toArray();
+				$this->status='Success';
+				$this->message="Results found";
+			}
+			else
+			{
+				$this->status='Error';
+				throw new Exception("No result found");
+			}
+		}
+		else
+		{
+			$this->status='Error';
+			throw new Exception("ID is required");
+		}
+	}
+	catch(Exception $e)
+		{
+			$this->message=$e->getMessage();
+		}
+
+    	return $this->output();
+		}
+    
+
 	/*
 	 * Add new broadcast.
 	 */

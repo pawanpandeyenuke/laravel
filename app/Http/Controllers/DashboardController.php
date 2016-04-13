@@ -441,6 +441,7 @@ if($input!=null && $gname!=null)
         $id=Auth::User()->id;
         $friendid=DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
         $pendingfriend=DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+        $privategroup=Group::with('members')->orderBy('id','DESC')->get()->toArray();
         return view('chatroom.groupchat')
                     ->with('groupname', $groupname)
                     ->with('userdata', $usersData)
@@ -449,6 +450,7 @@ if($input!=null && $gname!=null)
                     ->with('pendingfriend',$pendingfriend)
                     ->with('exception',$input)
                     ->with('pgid',$groupid)
+                    ->with('privategroup',$privategroup)
                     ;
    }
 

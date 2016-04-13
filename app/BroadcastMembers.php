@@ -14,13 +14,10 @@ class BroadcastMembers extends Model
 
 	public $timestamps = true;
 
-   	public function user()
+   	public function broadcast()
 	{
-	return $this->hasOne('App\User','id','member_id')->select(['id','first_name','last_name','xmpp_username']);
+	return $this->belongsTo('App\User', 'member_id');
 	}
 
-	public function name()
-	{
-	return $this->hasMany('App\Broadcast','id','broadcast_id')->select(['id','title']);	
-	}
+	
 }
