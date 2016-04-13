@@ -16,15 +16,13 @@ class BroadcastMembers extends Model
 
    	public function user()
 	{
-	return $this->hasOne('App\User','id','member_id')->select(['id','first_name','last_name','xmpp_username']);
+		return $this->hasOne('App\User','id','member_id')->select(['id','first_name','last_name','xmpp_username']);
 	}
+
 
 	public function name()
 	{
 	return $this->hasMany('App\Broadcast','id','broadcast_id')->select(['id','title']);	
 	}
-
-
-
 
 }
