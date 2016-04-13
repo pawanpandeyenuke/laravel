@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Mail;
 use App\Library\Converse;
-use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend;
+use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend,App\Broadcast,App\BroadcastMembers,App\BroadcastMessages;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City, App\Category, App\DefaultGroup;
 use Validator, Input, Redirect, Request, Session, Hash, DB;
@@ -1116,7 +1116,7 @@ class ApiController extends Controller
 					$arguments = Request::all();
 					$defaultgroup = new DefaultGroup;
 					$defaultgroup->create($arguments);
-
+					
 					// $this->data = DefaultGroup::where('group_name', '=', $groupname);
 					// $count = DefaultGroup::where('group_name', '=', $groupname)->count();
 
@@ -1147,7 +1147,169 @@ class ApiController extends Controller
 		
 	}
 
+ 	
+	/*
+	 * Add new broadcast.
+	 */
+    public function broadcastAdd()
+    {
+ 	 	try{
+	    	$input = Request::all();
+
+	    	if(isset($input['broadcast_members'])&& isset($input['user_id']) && $input['broadcast_name']!=null )
+	            {
+	            	$user = User::find($input['user_id']);
+	            	if(!($user))
+	            		throw new Exception("No user found");					
+	            	else {
+
+	            		$error=0;
+	            		// $members=explode(',',$input['broadcast_members']);
+
+	            		$row1=DB::table('broadcast')->where('user_id',$input['user_id'])->where('title',$input['broadcast_name'])->value('id');
+		            		
+			    		if($row1!=null)
+			    			throw new Exception("Broadcast Name already exists!");
+		            
+	            		foreach ($input['broadcast_members'] as $key => $value) {
+		            		$row=null;
+		            		$row=DB::table('friends')->where('user_id',$input['user_id'])->where('friend_id',$value)->where('status','Accepted')->value('id');
+		            		if($row==null) {
+		            		 	$error=$value;
+		            	    	break;
+		            		}
+
+	            		}
+
+	            		if($error!=0)
+	            			throw new Exception($error." is not a friend and can't be added to broadcast");	
+	            		else {
+	            			$data = array(
+				                        'title'=>$input['broadcast_name'],
+				                        'user_id'=>$input['user_id'],
+	                       			);
+	                              
+			                $bid=Broadcast::create($data);
+
+			                foreach ($input['broadcast_members'] as $key => $value) {
+		                		$data1 = array(
+					                        'broadcast_id'=>$bid['id'],
+					                        'member_id'=>$value
+			                            );  
+		                    	BroadcastMembers::create($data1);
+	               			}
+
+			                $this->status="success";
+			                $this->message="Broadcast created.";
+			                $this->data=Broadcast::where('id',$bid['id'])->get()->toArray();
+	            		}            		
+	            	}
+	    		}
+	    	else
+	    	{
+	    		throw new Exception("All three fields required.");	
+	    	}
+		}
+		catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
+
+	/*
+	 * Get broadcast list on request.
+	 */
+	public function getBroadcastList()
+	{
+		try{
+			
+			$arguments = Request::all();
+
+			if(isset($arguments['user_id'])){
+
+				$finduser = User::find($arguments['user_id']);
+
+				if(empty($finduser))
+					throw new Exception("User does not exist.", 1);
+					
+				$broadcast = Broadcast::where('user_id', $arguments['user_id'])->get()->toArray();
+
+				if(empty($broadcast))
+					throw new Exception("No records found.", 1);
+				
+/*				$broadcastIds = Broadcast::where('user_id', $arguments['user_id'])->lists('id')->toArray();
+
+				$broadcastMemberIds = BroadcastMembers::whereIn('broadcast_id', $broadcastIds)
+										->join('broadcast', 'broadcast.id', '=', 'broadcast_members.broadcast_id')
+										->join('users', 'users.id', '=', 'broadcast_members.member_id')
+										->select('broadcast.user_id' ,'broadcast.title' ,'member_id', 'broadcast_id', 'users.first_name', 'users.last_name', 'users.xmpp_username')
+										->get()
+										->toArray();*/
+
+
+				$broadcastIdsData = Broadcast::with('broadcastMembers')
+									->where('user_id', Auth::User()->id)
+									->get()
+									->toArray();
+
+				
+				$this->data = $broadcastIdsData;
+				$this->message = count($broadcastIdsData).' results found.';
+				$this->status = 'success';
  
+			}else{
+				throw new Exception("User id is required.", 1);				
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
+
+	/*
+	 * Exit group api on request.
+	 */
+	public function exitGroup()
+	{
+		try{
+			
+			$arguments = Request::all();
+
+			if(isset($arguments['group_name']) && isset($arguments['group_by'])){
+
+				if(!empty($arguments['group_name']) && !empty($arguments['group_by'])){
+					$group = DefaultGroup::where([
+									'group_name' => $arguments['group_name'],
+									'group_by' => $arguments['group_by']
+									])
+								->delete();
+
+					$this->data = $arguments;
+					$this->message = $arguments['group_name'].' successfully deleted.' ;
+					$this->status = 'success';
+					// echo '<pre>';print_r($group);die;
+				}else{
+					throw new Exception("Group by id or Group name cannot be empty.", 1);
+				}
+			}else{
+				throw new Exception("Either the group name or group by id is missing.", 1);
+				
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
 
 	/*
 	 * Get country on request.

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+<?php //print_r($broadcast);die; ?>
 @section('content')
 <div class="page-data dashboard-body">
 	<div class="container">
@@ -15,11 +15,13 @@
 								
 							@foreach($broadcast as $data)
 							<?php
-							$members=$data['members'];
-							$mem=explode(",",$members);	
-							$name=DB::table('users')->whereIn('id',$mem)->pluck('first_name');
-							$namestr=implode(",",$name);
-							
+							$namestr='';
+							$name=array();
+							foreach ($data['members'] as $mem) {
+								$name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+							}
+								$namestr=implode(",",$name);
+
 							 ?>
 								<div class="single-list" data-broadcastid="{{$data['id']}}">
 									<div class="row">

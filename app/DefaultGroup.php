@@ -16,7 +16,7 @@ class DefaultGroup extends Model
 
 	public function user()
 	{
-          return $this->belongsTo('App\User','group_by','id')->select(['id','first_name', 'last_name', 'picture', 'xmpp_username', 'xmpp_password']);
+          return $this->belongsTo('App\User','group_by','id')->select(['id','first_name', 'last_name', 'picture', 'xmpp_username']);
 	}
 
 }

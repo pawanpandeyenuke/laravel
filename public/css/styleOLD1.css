@@ -64,7 +64,6 @@ header{
 	line-height: 40px;
 	padding: 0px 30px;
 }
-
 .btn-primary{
 	background: #a0f0e6;
 	font-size: 15px;
@@ -1332,10 +1331,6 @@ a:hover{
 .pr-name {
   font-size: 24px;
 }
-.pr-gname{
-font-size: 20px;
-width:495px;
-}
 .pr-location {
   font-size: 12px;
 }
@@ -1616,15 +1611,14 @@ button.edit-pr-img {
 .post-list .single-post p img.emojione{
   width: 30px;
 }
-.status-up-cont textarea.form-control{
-	height: 50px;
-}
 .profile-data-table .table td .inner-table{
 	border:0px;
 }
 .profile-data-table .table td .inner-table td{
 	border: 0px;
 }
+
+
 .popup-list-without-img {
   max-width: 700px;
 }
@@ -1692,9 +1686,6 @@ button.edit-pr-img {
   font-size: 10px;
   color: #DCDCDC;
 }
-.modal{
-	z-index: 999999999;
-}
 .edit-post-textarea{
   position: relative;
   text-align: left;
@@ -1737,6 +1728,7 @@ button.edit-pr-img {
 .img-update-cont .input-group{
   float: right;
 }
+
 
 /******Chat Style********/
 
@@ -1827,9 +1819,7 @@ button.edit-pr-img {
   padding: 0 20px 20px;
   margin: 0 0 40px;
 }
-
 .b-cast-name h5, .bcast-list h5{
-
 	font-size: 16px;
   color: #000;
   padding-left: 20px;
@@ -1926,22 +1916,6 @@ button.edit-pr-img {
   line-height: 65px;
   box-shadow: 0px 0px 5px 0px #B1B1B1;
 }
-
-
-.add-mem{
-  width: 65px;
-  height: 65px;
-  background: #92e7dc;
-  display: inline-block;
-  border-radius: 50%;
-  color: #000;
-  font-size: 32px;
-  line-height: 65px;
-  box-shadow: 0px 0px 5px 0px #B1B1B1;
-
-
-}
-
 .add-blist-btn:hover, .add-blist-btn:focus{
 	background: #5DF7E3;
   color: #000;
@@ -2000,7 +1974,6 @@ textarea{
 }
 .load-btn .loading-img img {
     width: 100px;
-       display: none;
 }
 .load-btn span.loading-text {
     display: none;
@@ -2081,8 +2054,11 @@ textarea{
 .grp-mem-list .bclist-detail .list-name {
   margin: 10px 0 5px;
 }
-.load-btn span.loading-text {
-    display: inline-block !important;
+.field-info{
+  color: #AFAFAF;
+  font-size: 13px;
+  display: block;
+  margin: 5px 0 0;
 }
 .social-btns {
   margin: 30px 0 0;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
-,App\BroadcastMessages,App\Group,App\GroupMembers;
+,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers;
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
@@ -367,8 +367,28 @@ comments;
 	}
 
 
- 
 
+	/**
+	*	Remove education details on ajax call handling.
+	*	Ajaxcontroller@removeEducationDetails
+	*/
+	public function removeEducationDetails()
+	{
+		
+		$educationid = Input::get('educationid');
+		
+		if($educationid)
+			$del = EducationDetails::find($educationid)->delete();
+/*		$countryid = Country::where(['country_name' => $input['countryId']])->value('country_id');		
+		$statequeries = State::where(['country_id' => $countryid])->get();		
+		$states = array('<option value="">State</option>');
+		foreach($statequeries as $query){			
+			$states[] = '<option value="'.$query->state_name.'">'.$query->state_name.'</option>';
+		}		
+		echo implode('',$states);*/
+	}
+
+ 
 	/**
 	*	Get states ajax call handling.
 	*	Ajaxcontroller@getStates
@@ -381,7 +401,7 @@ comments;
 		$statequeries = State::where(['country_id' => $countryid])->get();		
 		$states = array('<option value="">State</option>');
 		foreach($statequeries as $query){			
-			$states[] = '<option value="'.$query->state_id.'">'.$query->state_name.'</option>';
+			$states[] = '<option value="'.$query->state_name.'">'.$query->state_name.'</option>';
 		}		
 		echo implode('',$states);
 	}
@@ -394,11 +414,12 @@ comments;
 	public function getCities()
 	{
 		$input = Input::all();
-		$cityid = State::where(['state_id' => $input['stateId']])->value('state_id');
+		// echo $input['stateId'];die;
+		$cityid = State::where(['state_name' => $input['stateId']])->value('state_id');
 		$cityqueries = City::where(['state_id' => $cityid])->get();
 		$city = array('<option value="">City</option>');
 		foreach($cityqueries as $query){			
-			$city[] = '<option value="'.$query->city_id.'">'.$query->city_name.'</option>';
+			$city[] = '<option value="'.$query->city_name.'">'.$query->city_name.'</option>';
 		}		
 		echo implode('',$city);
 	}
@@ -841,6 +862,7 @@ foreach ($friend as $key => $value)
 	{
 		$input=Input::get('bid');
 		Broadcast::where('id', '=', $input)->delete();
+		BroadcastMembers::where('broadcast_id',$input)->delete();
 		BroadcastMessages::where('broadcast_id',$input)->where('broadcast_by',Auth::User()->id)->delete();
 	}
 
@@ -849,12 +871,13 @@ foreach ($friend as $key => $value)
 		$input=Input::all();
 		$msg=$input['msg'];
 		$uid=Auth::User()->id;
-		$members=DB::table('broadcast')->where('id',$input['bid'])->value('members');
-        $mem=explode(",",$members);
+		$members=DB::table('broadcast_members')->where('broadcast_id',$input['bid'])->pluck('member_id');
+        //$mem=explode(",",$members);
 
         $xmpu1=DB::table('users')->where('id',$uid)->value('xmpp_username');
         $converse = new Converse;
-        $xmpu2=DB::table('users')->whereIn('id',$mem)->pluck('xmpp_username');
+        $xmpu2=DB::table('users')->whereIn('id',$members)->pluck('xmpp_username');
+
         foreach ($xmpu2 as $key => $value) {
         	
         	$converse->broadcast($xmpu1,$value,$input['msg']);

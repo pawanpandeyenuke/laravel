@@ -76,6 +76,8 @@ Route::post('ajax/viewmorefriends','AjaxController@viewMoreFriends');
 
 Route::post('ajax/viewmoreposts','AjaxController@viewMorePosts');
 
+Route::post('ajax/remove-education','AjaxController@removeEducationDetails');
+
 
 /**
  * @Api Routes..
@@ -118,6 +120,15 @@ Route::post('api/chatsendimage','ApiController@chatSendImage');
 
 Route::post('api/get-chat-category','ApiController@getChatCategories');
 Route::post('api/get-public-groups','ApiController@getPublicGroups');
+
+Route::post('api/get-chat-category','ApiController@getChatCategories');
+Route::post('api/get-public-groups','ApiController@getPublicGroups');
+Route::post('api/exit-group','ApiController@exitGroup');
+
+Route::post('api/broadcast-add','ApiController@broadcastAdd');
+Route::post('api/get-broacast-list','ApiController@getBroadcastList');
+
+
 
 
 /*
@@ -163,8 +174,8 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('profile/{id}', 'DashboardController@profile');
 	Route::post('profile/{id}', 'DashboardController@profile');
 
-	Route::get('editprofile/{id}', 'DashboardController@editProfile');
-	Route::post('editprofile/{id}', 'DashboardController@editProfile');	
+	Route::get('editprofile/{id}', 'DashboardController@editUserProfile');
+	Route::post('editprofile/{id}', 'DashboardController@editUserProfile');	
 
 
 	Route::get('broadcast-list', 'DashboardController@broadcastList');
