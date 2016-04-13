@@ -610,6 +610,14 @@ if($input!=null && $gname!=null)
     public function broadcastAdd()
     {
 
+/*        $array = [
+                    "user_id"=> 88,
+                    "members"=> [12,32,35,46,57,989,809],
+                    "broadcast_message"=> "Hey! this is a sample broadcast message."
+                ];
+
+        echo '<pre>';print_r(json_encode($array));die;*/
+
         if(Request::isMethod('post'))
         {
 
