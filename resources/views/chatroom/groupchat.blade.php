@@ -43,12 +43,39 @@ if($pgid){
                                   <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="gcheadingOne">
                                       <h4 class="panel-title">
-                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseOne" aria-expanded="true" aria-controls="gccollapseOne">
+                                      <?php
+                                      	if($exception==null)
+                                      	{
+                                      		$pubclass="class=collapsed";
+                                      		$pubexpand="false";
+                                      		$pubdivid="panel-collapse collapse";
+
+                                      		$priclass="";
+                                      		$priexpand="true";
+                                      		$pridivid="panel-collapse collapse in";
+                                      
+
+
+                                      	}
+                                      	else
+                                      	{
+                                      		$pubclass="";
+                                      		$pubexpand="true";
+                                      		$pubdivid="panel-collapse collapse in";
+                                      	
+                                      		$priclass="class=collapsed";
+                                      		$priexpand="false";
+                                      		$pridivid="panel-collapse collapse";
+                                      	}
+
+                                       ?>
+                                        <a {{$pubclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseOne" aria-expanded=
+                                        "{{$pubexpand}}" aria-controls="gccollapseOne">
                                           Public group chat
                                         </a>
                                       </h4>
                                     </div>
-                                    <div id="gccollapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="gcheadingOne">
+                                    <div id="gccollapseOne" class="{{$pubdivid}}" role="tabpanel" aria-labelledby="gcheadingOne">
                                       <div class="panel-body">
                                         <div class="chat-user-list StyleScroll">
                                          <i class="flaticon-people"></i> <b>{{$groupname}}</b>
@@ -107,12 +134,12 @@ if($pgid){
                                   <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="gcheadingTwo">
                                       <h4 class="panel-title">
-                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseTwo" aria-expanded="false" aria-controls="gccollapseTwo">
+                                        <a {{$priclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseTwo" aria-expanded="{{$priexpand}}" aria-controls="gccollapseTwo">
                                           Chat with friends
                                         </a>
                                       </h4>
                                     </div>
-                                    <div id="gccollapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="gcheadingTwo">
+                                    <div id="gccollapseTwo" class="{{$pridivid}}" role="tabpanel" aria-labelledby="gcheadingTwo">
                                       <div class="panel-body">
                                         <div class="chat-list-search">
                                             <div class="form-group">
