@@ -127,6 +127,7 @@ Route::post('api/exit-group','ApiController@exitGroup');
 
 Route::post('api/broadcast-add','ApiController@broadcastAdd');
 Route::post('api/get-broacast-list','ApiController@getBroadcastList');
+Route::post('api/delete-broadcast','ApiController@deleteBroadcast');
 
 
 
