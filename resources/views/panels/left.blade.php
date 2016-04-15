@@ -60,7 +60,7 @@
 		    <div class="panel-heading" role="tab" id="headingSeven">
 		      <h4 class="panel-title">
 		        <a class="without-arrow" href="{{ url('broadcast-list')}}">
-		          <i class="flaticon-web"></i>Broadcast
+		          <i class="flaticon-icon-89571"></i>Broadcast
 		        </a>
 		      </h4>
 		    </div>

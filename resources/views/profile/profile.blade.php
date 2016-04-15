@@ -123,7 +123,10 @@
 																	<br/>
 																	<span>from </span><span style="font-weight:500">{{$value->education_establishment}}</span> 
 																	<br/>
-																	<span style="font-weight:500">{{$value->country_of_establishment}}, {{$value->state_of_establishment}}, {{$value->city_of_establishment}}</span> 
+																	<span style="font-weight:500">
+												{{$value->country_of_establishment}}, {{$value->state_of_establishment}}, 
+												{{$value->city_of_establishment}}
+												</span> 
 
 																</div>
 																</td>
