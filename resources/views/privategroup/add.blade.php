@@ -21,6 +21,7 @@
 							</div>
 			
 							<div class="bcast-list">
+								<h5>Add Friends</h5>
 								<select class="multiple-slt form-control" name="groupmembers[]" multiple="multiple">
 						@foreach($friends as $data)
 							<?php 

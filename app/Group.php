@@ -18,4 +18,10 @@ class Group extends Model
 	{
 		return $this->hasMany('App\GroupMembers','group_id','id')->select(['group_id','member_id']);
 	}
+
+   	public function groupMembers()
+	{
+		return $this->hasMany('App\GroupMembers', 'group_id', 'id')->join('users', 'users.id', '=', 'members.member_id')->select('members.group_id', 'members.member_id', 'users.first_name','users.last_name','users.xmpp_username');
+	}
+
 }
