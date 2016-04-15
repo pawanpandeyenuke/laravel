@@ -78,6 +78,8 @@ Route::post('ajax/viewmoreposts','AjaxController@viewMorePosts');
 
 Route::post('ajax/remove-education','AjaxController@removeEducationDetails');
 
+Route::post('ajax/send-hotmail-invitation','AjaxController@sendHotmailInvitation');
+
 
 /**
  * @Api Routes..

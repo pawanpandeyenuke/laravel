@@ -54,7 +54,7 @@
 								</div>
 								<div class="btn-cont text-center">
 									<!-- <a href="#" title="" class="btn btn-primary">Invite</a> -->
-									<button class="btn btn-primary btn-lg" type="submit">Invite</button>
+									<button class="btn btn-primary btn-lg" id="sent-invitation-btn" disabled="disabled" type="submit">Invite</button>
 								</div>
 								{{Form::close()}}
 							</div>
@@ -74,5 +74,24 @@
 	$("#checkboxG1").change(function () {
 	    $("input:checkbox").prop('checked', $(this).prop("checked"));
 	});
+
+	$(document).on('change', '.checkbox', function(){
+		if($('.checkbox').is(':checked')){
+			$("#sent-invitation-btn").removeAttr('disabled');
+		}
+
+		if(!$(this).is(':checked')){
+			var checkbox =  $("input:checkbox").is(':checked');
+			if(checkbox == false)
+				$("#sent-invitation-btn").attr("disabled", true);
+			// else{
+			// 	alert('enable please');
+			// }
+			// console.log(checkbox);
+			// $("#sent-invitation-btn").prop('disabled');
+			// $("#sent-invitation-btn").attr("disabled", true);
+		}
+	});
+
 </script>
 @endsection
