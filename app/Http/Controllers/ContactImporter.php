@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 // use Illuminate\Http\Request;
 
 // use App\Http\Requests;
-use App\Library\ContactsImporter;
+use App\Library\ContactsImporter, Mail;
 use Google_Client, Auth, App\User, App\Friend;
 use Request, Session, Validator, Input, Cookie;
 
@@ -201,18 +201,27 @@ class ContactImporter extends Controller
 
     }
 
-
     public function mail($email = '', $message, $subject, $type) {
+		// $mailsent = mail($email, $subject, $message);
+        if($email != ''){
+  			$mailsent = Mail::send('emails.invite', ['email'=> 'pawanpandey392@gmail.com','message_text'=> 'checkout this new site. Friendz Square!'], function ($m)  {
+            	$m->from('no-reply@friendzsquare.com', 'FriendzSquare!');
+                $m->to('aditya.i.singh@enukesoftware.com', 'Aditya Singh')->subject('Invitation');
+            });
+			//print_r($mailsent);die;
+        }
+    }
+/*    public function mail($email = '', $message, $subject, $type) {
   
         $mailsent = mail($email, $subject, $message);
 
-/*        if($email != ''){
+        if($email != ''){
             Mail::send($type, ['email'=>$email,'message_text'=> $message], function ($m)  {
                 $m->from('no-reply@friendzsquare.com', 'FriendzSquare!');
                 $m->to($email)->subject($subject);
             });
-        }*/
-    }
+        }
+    }*/
 
     public function curl($url, $post = "") {
         $curl = curl_init();
