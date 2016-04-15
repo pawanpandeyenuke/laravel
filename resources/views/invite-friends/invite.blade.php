@@ -1,6 +1,19 @@
 @extends('layouts.dashboard')
+<head>
+	<meta property="og:url" content="http://fs.yiipro.com/" />
+	<meta property="og:type" content="Friendz Square" />
+	<meta property="og:title" content="get connected" />
+	<meta property="og:description" content="Friendz Square is a social networking site." />
+	<meta property="og:image" content="http://development.laravel.com/images/post-img-big.jpg" />
+</head>
 
 @section('content')
+
+<?php
+	$servername = Request::root();
+	// echo '<pre>';print_r($servername);die;
+?>
+
 <div class="page-data dashboard-body">
 	<div class="container">
 		<div class="row">
@@ -34,19 +47,21 @@
 									<h5>Choose a service provider to invite your contacts</h5>
 									<div class="social-btns">
 										<ul class="list-inline">
-											<li><a href="{{isset($googleImportUrl)}}" title=""><img src="/images/gmail-btn.png" alt=""></li>
+											<?php $googleurl = isset($googleImportUrl) ? $googleImportUrl : ''; ?>
+											<li><a href="<?php echo $googleurl; ?>" title=""><img src="/images/gmail-btn.png" alt=""></li>
 											<li><a href="#" title=""><img src="/images/yahoomail-btn.png" alt=""></li>
 											<li><a href="#" id="import"><img src="/images/hotmail-btn.png" alt=""></li>
 											<li><a href="#try" onclick="FacebookInviteFriends();"><img src="/images/facebook-btn.png" alt=""></li>
-											<li><a href="#" title=""><img src="/images/linkedin-btn.png" alt=""></li>
+											<li><a href="" title="" onclick="myFunction()"><img src="/images/linkedin-btn.png" alt=""></li>
 										</ul>
 									</div>
 								</div>
 								<!-- <a href="#" id="import">Import contacts</a> -->
 							</div>
 						</div>
-<table class="table table-striped" id="table-contacts">
-</table>
+<div class="fb-share-button" data-href="{{$servername}}" data-layout="button_count" data-mobile-iframe="true"></div>
+<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+<script type="IN/Share" data-url="http://fs.yiipro.com/"></script>
 					</div><!--/page center data-->
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 				</div>
@@ -55,11 +70,37 @@
 		</div>
 	</div>
 </div>
+
+
+
+ 
 @endsection
 
 <script src="http://connect.facebook.net/en_US/all.js"></script>
 <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 <script src="//js.live.net/v5.0/wl.js"></script>
+
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.6";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<script>
+function myFunction() {
+
+	// var url = "http://www.linkedin.com/shareArticle?mini=true&url=<?php echo $servername ?>";
+	// alert(url);
+    // var myWindow = window.open(url, "", "toolbar=no,scrollbars=yes,resizable=no,top=200,left=600,width=500,height=500");
+}
+</script>
+
 <script type="text/javascript">
 	WL.init({
 	    client_id: '0000000044183F60',
@@ -82,8 +123,27 @@
 		            method: "GET"
 		        }).then(
 		            function (response) {
-	                        //your response data with contacts 
-		            	console.log(response.data);
+
+	                    //your response data with contacts 
+		            	
+		            	var people = response.data, emailsObj = [];
+
+		            	$.each(people, function(index, value){
+		            		emailsObj.push(value.emails.preferred);		            		
+		            	});
+
+		            	if(emailsObj.length > 0){
+		            		// alert('have something');
+		            		$.ajax({
+		            			'url': 'ajax/send-hotmail-invitation',
+		            			'type': 'post',
+		            			'data': {'emails': emailsObj},
+		            			'success': function(response){
+		            				alert(response);
+		            			}
+		            		});
+		            	}
+		            	// console.log(emailsObj);
 		            },
 		            function (responseFailed) {
 		            	//console.log(responseFailed);
@@ -96,10 +156,7 @@
 		});
 	});
 </script>
-
-
-
-
+ 
 <script>
 	FB.init({
 		appId:'254486034889306',

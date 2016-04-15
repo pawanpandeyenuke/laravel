@@ -1433,7 +1433,7 @@ class ApiController extends Controller
 	               			}
 
 			                $this->status="success";
-			                $this->message="Broadcast created.";
+			                $this->message="Group created.";
 			                $this->data=Group::where('id',$bid['id'])->get()->toArray();
 	            		}            		
 	            	}

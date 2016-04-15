@@ -65,7 +65,7 @@
 									<!-- {!! Form::button('', array(
 										'class' => 'search-btn',
 										'id' => '',
-									)) !!}	 -->								
+									)) !!}	 -->
 								</li>
 							</ul>
 							{!! Form::close() !!}
