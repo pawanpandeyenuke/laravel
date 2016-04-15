@@ -145,7 +145,7 @@ class DashboardController extends Controller
 
     public function friendRequests()
     {
-        $model1=User::where('id','!=',Auth::User()->id)->take(10)->get()->toArray();
+        $model1=User::where('id','!=',Auth::User()->id)->take(10)->orderBy('id','desc')->get()->toArray();
 
         return view('dashboard.requests')
                 ->with('model1', $model1);
@@ -815,6 +815,11 @@ if($input!=null && $gname!=null)
                ->with('friends',$friends);   
     }
 
+  }
+
+  public function demopage()
+  {
+    return view('dashboard.demopage');
   }
 
 }

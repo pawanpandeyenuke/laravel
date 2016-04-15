@@ -236,7 +236,7 @@ comments;
 		$model=array();
 
 		if($input=='all') {
-			$model1=User::where('id','!=',Auth::User()->id)->take(10)->get()->toArray();
+			$model1=User::where('id','!=',Auth::User()->id)->take(10)->orderBy('id','desc')->get()->toArray();
 		} else {
 			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
 				    self::queryBuilder( $query, $input );
@@ -291,6 +291,7 @@ comments;
 				$model = User::where('id', '!=', $user_id)
 							->skip($offset)
 							->take($per_page)
+							->orderby('id','desc')
 				            ->get()->toArray();
 				break;
 			case 'sent':
@@ -298,7 +299,7 @@ comments;
 							->where('user_id', '=', $user_id)
 							->where('status', '=', 'Pending')
 							->skip($offset)
-							->take($per_page)
+							->take($per_page)		
 							->get()->toArray();
 				break;
 			case 'recieved':
@@ -795,14 +796,15 @@ comments;
      					->toArray();
               
                 $data=array();
-
-foreach ($friend as $key => $value) 
+	$count=0;
+	foreach ($friend as $key => $value) 
 		
 		{
 
 		$name=$value['friends']['first_name']." ".$value['friends']['last_name'];
 		$xmpp_username="'".$value['friends']['xmpp_username']."'";
 		$first_name="'".$value['friends']['first_name']."'";
+		$msg="No friend found!";
 
 		if (stripos($name, $input) !== false) {
 			  $data[] = '<li > 
@@ -811,8 +813,15 @@ foreach ($friend as $key => $value)
 					<span class="title">'.$name.'</span>
 				</a>
 				</li>';
+				$count++;
 			}
+
 		}
+			if($count==0) {
+				$data[] = '<li > 
+				<span style="color:black;font-weight:bold">'.$msg.'</span>
+				</li>';
+			}
 
 		$html = implode('',$data);
 		echo $html;

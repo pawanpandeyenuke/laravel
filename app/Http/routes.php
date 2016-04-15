@@ -212,4 +212,7 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('linkedin/client', 'ContactImporter@linkedin');
 	Route::get('linkedin/client/callback', 'ContactImporter@linkedinCallback');
 
+		Route::get('/demopage', 'DashboardController@demopage');
+		Route::post('/demopage', 'DashboardController@demopage');
+
 });

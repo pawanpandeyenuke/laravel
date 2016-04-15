@@ -53,8 +53,6 @@ if($pgid){
                                       		$priclass="";
                                       		$priexpand="true";
                                       		$pridivid="panel-collapse collapse in";
-                                      
-
 
                                       	}
                                       	else

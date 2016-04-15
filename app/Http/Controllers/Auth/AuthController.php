@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 	
 use Auth;
+use DB;
 use App\Library\Converse;
 use Socialite;
 use App\User;
@@ -74,7 +75,6 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
- 
         $xmpp_username = $userdata->first_name.$userdata->id;
         $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
 
@@ -84,6 +84,8 @@ class AuthController extends Controller
         $user->save();
 
 
+        DB::table('settings')->insert(['setting_title'=>'contact-request','setting_value'=>'All','user_id'=>$userdata->id]);
+        DB::table('settings')->insert(['setting_title'=>'friend-request','setting_value'=>'All','user_id'=>$userdata->id]);
         $converse = new Converse;
         $response = $converse->register($xmpp_username, $xmpp_password);
      
