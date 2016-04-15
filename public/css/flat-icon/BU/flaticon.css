@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 02/03/2016 05:20
+  	Creation date: 14/03/2016 08:51
   	*/
 
 @font-face {
@@ -31,24 +31,28 @@ font-style: normal;
 .flaticon-balloon:before { content: "\f100"; }
 .flaticon-black:before { content: "\f101"; }
 .flaticon-calendar:before { content: "\f102"; }
-.flaticon-city:before { content: "\f103"; }
-.flaticon-clip:before { content: "\f104"; }
-.flaticon-days:before { content: "\f105"; }
-.flaticon-eye109:before { content: "\f106"; }
-.flaticon-gps:before { content: "\f107"; }
-.flaticon-interface:before { content: "\f108"; }
-.flaticon-interface-1:before { content: "\f109"; }
-.flaticon-letter:before { content: "\f10a"; }
-.flaticon-letter133:before { content: "\f10b"; }
-.flaticon-magnifyingglass138:before { content: "\f10c"; }
-.flaticon-padlock50:before { content: "\f10d"; }
-.flaticon-people:before { content: "\f10e"; }
-.flaticon-profile5:before { content: "\f10f"; }
-.flaticon-round:before { content: "\f110"; }
-.flaticon-search74:before { content: "\f111"; }
-.flaticon-social:before { content: "\f112"; }
-.flaticon-technology:before { content: "\f113"; }
-.flaticon-time:before { content: "\f114"; }
-.flaticon-tool:before { content: "\f115"; }
-.flaticon-web:before { content: "\f116"; }
-.flaticon-web-1:before { content: "\f117"; }
+.flaticon-circle:before { content: "\f103"; }
+.flaticon-city:before { content: "\f104"; }
+.flaticon-clip:before { content: "\f105"; }
+.flaticon-days:before { content: "\f106"; }
+.flaticon-education:before { content: "\f107"; }
+.flaticon-eye109:before { content: "\f108"; }
+.flaticon-gps:before { content: "\f109"; }
+.flaticon-graduation:before { content: "\f10a"; }
+.flaticon-interface:before { content: "\f10b"; }
+.flaticon-interface-1:before { content: "\f10c"; }
+.flaticon-letter:before { content: "\f10d"; }
+.flaticon-letter133:before { content: "\f10e"; }
+.flaticon-magnifyingglass138:before { content: "\f10f"; }
+.flaticon-padlock50:before { content: "\f110"; }
+.flaticon-people:before { content: "\f111"; }
+.flaticon-profile5:before { content: "\f112"; }
+.flaticon-round:before { content: "\f113"; }
+.flaticon-search74:before { content: "\f114"; }
+.flaticon-social:before { content: "\f115"; }
+.flaticon-technology:before { content: "\f116"; }
+.flaticon-time:before { content: "\f117"; }
+.flaticon-tool:before { content: "\f118"; }
+.flaticon-vintage:before { content: "\f119"; }
+.flaticon-web:before { content: "\f11a"; }
+.flaticon-web-1:before { content: "\f11b"; }

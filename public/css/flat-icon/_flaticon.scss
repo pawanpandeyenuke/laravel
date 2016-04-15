@@ -1,9 +1,9 @@
-	/*
-  	Flaticon icon font: Flaticon
-  	Creation date: 15/04/2016 07:37
-  	*/
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 15/04/2016 07:37
+    */
 
-@font-face {
+    @font-face {
   font-family: "Flaticon";
   src: url("./Flaticon.eot");
   src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
@@ -21,14 +21,22 @@
   }
 }
 
-[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
-[class^="flaticon-"]:after, [class*=" flaticon-"]:after {   
-  font-family: Flaticon;
-        font-size: 20px;
-font-style: normal;
-}
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
 
-.flaticon-balloon:before { content: "\f100"; }
+    .flaticon-balloon:before { content: "\f100"; }
 .flaticon-black:before { content: "\f101"; }
 .flaticon-calendar:before { content: "\f102"; }
 .flaticon-circle:before { content: "\f103"; }
@@ -59,3 +67,35 @@ font-style: normal;
 .flaticon-vintage:before { content: "\f11c"; }
 .flaticon-web:before { content: "\f11d"; }
 .flaticon-web-1:before { content: "\f11e"; }
+    
+    $font-Flaticon-balloon: "\f100";
+    $font-Flaticon-black: "\f101";
+    $font-Flaticon-calendar: "\f102";
+    $font-Flaticon-circle: "\f103";
+    $font-Flaticon-city: "\f104";
+    $font-Flaticon-clip: "\f105";
+    $font-Flaticon-days: "\f106";
+    $font-Flaticon-education: "\f107";
+    $font-Flaticon-eye109: "\f108";
+    $font-Flaticon-gps: "\f109";
+    $font-Flaticon-graduation: "\f10a";
+    $font-Flaticon-icon-88206: "\f10b";
+    $font-Flaticon-icon-89571: "\f10c";
+    $font-Flaticon-icon-98732: "\f10d";
+    $font-Flaticon-interface: "\f10e";
+    $font-Flaticon-interface-1: "\f10f";
+    $font-Flaticon-letter: "\f110";
+    $font-Flaticon-letter133: "\f111";
+    $font-Flaticon-magnifying-glass138: "\f112";
+    $font-Flaticon-padlock50: "\f113";
+    $font-Flaticon-people: "\f114";
+    $font-Flaticon-profile5: "\f115";
+    $font-Flaticon-round: "\f116";
+    $font-Flaticon-search74: "\f117";
+    $font-Flaticon-social: "\f118";
+    $font-Flaticon-technology: "\f119";
+    $font-Flaticon-time: "\f11a";
+    $font-Flaticon-tool: "\f11b";
+    $font-Flaticon-vintage: "\f11c";
+    $font-Flaticon-web: "\f11d";
+    $font-Flaticon-web-1: "\f11e";

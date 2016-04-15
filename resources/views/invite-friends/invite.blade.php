@@ -49,40 +49,41 @@
 										<ul class="list-inline">
 											<?php $googleurl = isset($googleImportUrl) ? $googleImportUrl : ''; ?>
 											<li><a href="<?php echo $googleurl; ?>" title=""><img src="/images/gmail-btn.png" alt=""></li>
-											<li><a href="#" title=""><img src="/images/yahoomail-btn.png" alt=""></li>
+											<!-- <li><a href="#" title=""><img src="/images/yahoomail-btn.png" alt=""></li> -->
 											<li><a href="#" id="import"><img src="/images/hotmail-btn.png" alt=""></li>
-											<li><a href="#try" onclick="FacebookInviteFriends();"><img src="/images/facebook-btn.png" alt=""></li>
-											<li><a href="" title="" onclick="myFunction()"><img src="/images/linkedin-btn.png" alt=""></li>
+											<!-- <li><a href="#try" onclick="FacebookInviteFriends();"><img src="/images/facebook-btn.png" alt=""></li>
+											<li><a href="" title="" onclick="myFunction()"><img src="/images/linkedin-btn.png" alt=""></li> -->
 										</ul>
 									</div>
 								</div>
-								<!-- <a href="#" id="import">Import contacts</a> -->
+								<div class="bcast-list social-invite text-center">
+									<h5>Choose a service provider to share a post</h5>
+									<div class="social-btns">
+										<ul class="list-inline"> 
+											<li><div class="fb-share-button" data-href="{{$servername}}" data-layout="button_count" data-mobile-iframe="true"></div></li>
+											<li>
+												<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+												<script type="IN/Share" data-url="http://fs.yiipro.com/" data-counter="right"></script>
+											</li>
+										</ul>
+									</div>
+								</div>
 							</div>
 						</div>
-<div class="fb-share-button" data-href="{{$servername}}" data-layout="button_count" data-mobile-iframe="true"></div>
-<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
-<script type="IN/Share" data-url="http://fs.yiipro.com/"></script>
-					</div><!--/page center data-->
+					</div>
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 				</div>
-
 			@include('panels.right')
 		</div>
 	</div>
 </div>
-
-
-
  
 @endsection
 
 <script src="http://connect.facebook.net/en_US/all.js"></script>
 <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 <script src="//js.live.net/v5.0/wl.js"></script>
-
-
-
-
+ 
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -91,16 +92,7 @@
   js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.6";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
-
-<script>
-function myFunction() {
-
-	// var url = "http://www.linkedin.com/shareArticle?mini=true&url=<?php echo $servername ?>";
-	// alert(url);
-    // var myWindow = window.open(url, "", "toolbar=no,scrollbars=yes,resizable=no,top=200,left=600,width=500,height=500");
-}
-</script>
-
+ 
 <script type="text/javascript">
 	WL.init({
 	    client_id: '0000000044183F60',
