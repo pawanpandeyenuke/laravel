@@ -46,11 +46,10 @@
 									<button type="button" class="edit-pr-img" title="Edit Image"><i class="glyphicon glyphicon-camera"></i></button>
 								</div><!--Profile-img-->
 								<div class="pr-field">
-							<span style="font-size: xx-large;">{{ $user->first_name.' '.$user->last_name }}</span>
+										<span style="font-size: xx-large;">{{ $user->first_name.' '.$user->last_name }}</span>
 								</div>
 								<div class="pr-field">
-
-							 <span style="font-size: large;">{{$user->city}}</span>
+									 <span style="font-size: large;">{{$user->city}}</span>
 								</div>
 							</div>
 								<div class="profile-detail">
@@ -68,43 +67,43 @@
 														<tr>
 															<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country</div></td>
 															<td>
-																<span>{{$user->country}}</span>
+																<span style="font-weight:500">{{$user->country}}</span>
 															</td>
 														</tr>
 														<tr>
 															<td><div class="p-data-title"><i class="flaticon-gps"></i>State</div></td>
 															<td>
-																<span>{{$user->state}}</span>
+																<span style="font-weight:500">{{$user->state}}</span>
 															</td>
 														</tr>
 														<tr>
 															<td><div class="p-data-title"><i class="flaticon-city"></i>City</div></td>
 															<td>
-																<span>{{$user->city}}</span>
+																<span style="font-weight:500">{{$user->city}}</span>
 															</td>
 														</tr>
 														<tr>
 															<td><div class="p-data-title"><i class="flaticon-technology"></i>Contact</div></td>
 															<td>
-																<span>{{$user->phone_no}}</span>
+																<span style="font-weight:500">{{$user->phone_no}}</span>
 															</td>
 														</tr>
 														<tr>
 															<td><div class="p-data-title"><i class="flaticon-calendar"></i>Date of Birth</div></td>
 															<td>
-																<span>{{$user->birthday}}</span>
+																<span style="font-weight:500">{{$user->birthday}}</span>
 															</td>
 														</tr>
 														<tr>
 															<td><div class="p-data-title"><i class="flaticon-black"></i>I am</div></td>
 															<td>
-																<span>{{$gender}}</span>
+																<span style="font-weight:500">{{$gender}}</span>
 															</td>
 														</tr>
 														<tr>
 															<td><div class="p-data-title"><i class="flaticon-circle"></i>Status</div></td>
 															<td>
-																<span>{{$maritalstatus}}</span>
+																<span style="font-weight:500">{{$maritalstatus}}</span>
 															</td>
 														</tr>
 														<?php $customcounter = 1; ?>
@@ -117,13 +116,15 @@
 																</td>
 																<td>
 																<div class="slt-cont">
-																<span style="font-weight:500">{{$value->education_level}}</span> in <span style="font-weight:500">{{$value->specialization}}</span>  
-																<br/>
-																<span>Batch of </span><span style="font-weight:500">{{$value->graduation_year}}</span> 
-																<br/>
-																<span>from </span><span style="font-weight:500">{{$value->education_establishment}}</span> 
-																<br/>
-																<span style="font-weight:500">{{$value->country_of_establishment}}, {{$value->state_of_establishment}}, {{$value->city_of_establishment}}</span> 
+
+																	<span style="font-weight:500">{{$value->education_level}}</span> in <span style="font-weight:500">{{$value->specialization}}</span>  
+																	<br/>
+																	<span>Batch of </span><span style="font-weight:500">{{$value->graduation_year}}</span> 
+																	<br/>
+																	<span>from </span><span style="font-weight:500">{{$value->education_establishment}}</span> 
+																	<br/>
+																	<span style="font-weight:500">{{$value->country_of_establishment}}, {{$value->state_of_establishment}}, {{$value->city_of_establishment}}</span> 
+
 																</div>
 																</td>
 															</tr>
@@ -132,12 +133,14 @@
 														<tr>
 															<td><div class="p-data-title"><i class="flaticon-graduation"></i>Currently Studing</div></td>
 															<td>
-																<span>{{$currentlystudy}}</span>
+																<span style="font-weight:500">{{$currentlystudy}}</span>
 															</td>
 														</tr>
 														<tr>
 															<td><div class="p-data-title"><i class="flaticon-vintage"></i>Current profession Industry</div></td>
-															<td>
+
+														<td>
+
 															<span style="font-weight:500">{{$user->job_category}},</span>
 													   </br><span style="font-weight:500">{{$user->job_area}}</span> 
 															</td>

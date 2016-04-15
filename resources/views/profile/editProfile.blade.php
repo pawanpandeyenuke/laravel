@@ -20,7 +20,7 @@
 
 		$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
 	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 	
-	 	// echo '<pre>';print_r($all_cities);die;
+
 
 	}
 
@@ -227,7 +227,13 @@
 											@if(count($education) > 0 )
 												<?php $customcount = 1; ?>
 												@foreach($education as $data)
-												<?php // echo '<pre>'; print_r($data);die; ?>
+<?php 
+		$countryidestab = DB::table('country')->where('country_name', '=', $data->country_of_establishment)->value('country_id'); 
+		$all_states_estab = DB::table('state')->where('country_id', '=', $countryidestab)->pluck('state_name','state_id'); 
+
+		$stateidestab = DB::table('city')->where('city_name', '=', $data->city_of_establishment)->value('state_id'); 
+	 	$all_cities_estab = DB::table('city')->where('state_id', '=', $stateidestab)->pluck('city_name', 'city_id'); 	
+?>
 													<div class="pe-row" data-id="<?php echo $data->id; ?>">
 														@if($customcount > 1)
 															<button type="button" class="btn add-study-btn removeme"><span class="glyphicon glyphicon-trash"></span></button>
@@ -286,20 +292,36 @@
 																	
 																	<select name="country_of_establishment[]" class="country" id="edu_country" data-put="#state">
 																		@foreach($countries as $countrydata)
-																			<option value="<?php echo $countrydata; ?>"><?php echo $countrydata; ?></option>
+																			<?php if($data->country_of_establishment == $countrydata)
+																					$selected = 'Selected'; 
+																				else
+																					$selected = ''; ?>
+																			<option value="<?php echo $countrydata; ?>" <?php echo $selected; ?>><?php echo $countrydata; ?></option>
 																		@endforeach
 																	</select>
 																</div>
 																<div class="col-sm-4">
 																	<div class="p-data-title"><i class="flaticon-gps"></i>State of Establishment</div>
 																	<select name="state_of_establishment[]" class="state" data-put="#city">
-																		<option>Option</option>
+																		@foreach($all_states_estab as $value)
+																		<?php if($data->state_of_establishment == $value)
+																				$selected = 'Selected'; 
+																			else
+																				$selected = ''; ?>
+																		<option value="{{$value}}" <?php echo $selected; ?> >{{$value}}</option>	
+																		@endforeach
 																	</select>
 																</div>
 																<div class="col-sm-4">
 																	<div class="p-data-title"><i class="flaticon-city"></i>City of Establishment</div>
 																	<select name="city_of_establishment[]" class="city" >
-																		<option>Option</option>
+																		@foreach($all_cities_estab as $value)
+																		<?php if($data->city_of_establishment == $value)
+																				$selected = 'Selected'; 
+																			else
+																				$selected = ''; ?>
+																		<option value="{{$value}}" <?php echo $selected; ?> >{{$value}}</option>	
+																		@endforeach
 																	</select>
 																</div>
 															</div>
@@ -362,7 +384,7 @@
 														<div class="p-data-title"><i class="flaticon-web-1"></i>Country of Establishment</div>
 														<select name="country_of_establishment[]" class="country" data-put="#state">
 															@foreach($countries as $countrydata)
-																<option value="<?php echo $countrydata; ?>"><?php echo $countrydata; ?></option>
+																<option value="<?php echo $countrydata; ?>" <?php echo $selected; ?> ><?php echo $countrydata; ?></option>
 															@endforeach
 														</select>
 													</div>
@@ -455,27 +477,29 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
-
-		$('.country').change(function(){
-			var countryId = $(this).val();
+		$(document).on('change', '.country', function(){
+			var current = $(this);
+			var countryId = current.val();
 			$.ajax({			
 				'url' : '/ajax/getstates',
 				'data' : { 'countryId' : countryId },
 				'type' : 'post',
-				'success' : function(response){				
-					$('.state').html(response);
+				'success' : function(response){	
+					current.closest('.pe-row').find('.state').html(response);
+					// $('.state').html(response);
 				}			
 			});	
 		});
-
-		$('.state').change(function(){
-			var stateId = $(this).val();
+		$(document).on('change', '.state', function(){
+			var current = $(this);
+			var stateId = current.val();
 			$.ajax({			
 				'url' : '/ajax/getcities',
 				'data' : { 'stateId' : stateId },
 				'type' : 'post',
-				'success' : function(response){				
-					$('.city').html(response);
+				'success' : function(response){	
+					current.closest('.pe-row').find('.city').html(response);			
+					// $('.city').html(response);
 				}			
 			});	
 		});

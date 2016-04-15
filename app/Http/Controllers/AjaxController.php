@@ -970,5 +970,49 @@ comments;
 		$input=Input::all();
 		Group::where('id',$input['gid'])->update(['title'=>$input['gname']]);
 	}
+
+
+	/**
+	*  Send mails to hotmail contacts.
+	*/
+	public function sendHotmailInvitation()
+	{
+		$emailIds = Input::get('emails');
+
+		$invalid = array();
+		$valid = array();
+		foreach ($emailIds as $key => $value) {
+
+			$validator = Validator::make($emailIds, [
+				$key => 'email'
+			]); 
+
+			$validator->each($key, 'email');
+			
+           if($validator->fails()) {
+                $invalid[] = $value;
+            }else{
+            	$valid[] = $value;
+				$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
+				$subject = 'FriendzSquare Invitation';
+				
+				$mailsent = mail($value, $subject, $message);
+			}
+
+		}
+
+		if(!empty($invalid)){
+			if(count($invalid) > 1){
+				$emails = implode(',', $invalid);
+				echo $emails.' are the invalid email addresses and counld not be invited.';
+			}else{
+				$emails = $invalid[0];
+				echo $emails.' is an invalid email address and counld not be invited.';
+			}
+		}
+		// echo '<pre>';print_r($invalid);
+		// echo '<pre>';print_r($valid);die;		
+	}
+
 }
 	
