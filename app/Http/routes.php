@@ -129,7 +129,9 @@ Route::post('api/broadcast-add','ApiController@broadcastAdd');
 Route::post('api/get-broacast-list','ApiController@getBroadcastList');
 Route::post('api/delete-broadcast','ApiController@deleteBroadcast');
 
-
+Route::post('api/private-group-add','ApiController@privateGroupAdd');
+Route::post('api/get-group-list','ApiController@getGroupList');
+Route::post('api/delete-private-group','ApiController@deletePrivateGroup');
 
 
 /*
@@ -211,5 +213,6 @@ Route::group(['middleware' => 'web'], function () {
 
 	Route::get('linkedin/client', 'ContactImporter@linkedin');
 	Route::get('linkedin/client/callback', 'ContactImporter@linkedinCallback');
-
+        Route::get('/demopage', 'DashboardController@demopage');
+		Route::post('/demopage', 'DashboardController@demopage');
 });

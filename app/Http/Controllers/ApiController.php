@@ -6,7 +6,7 @@ use Mail;
 use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend,App\Broadcast,App\BroadcastMembers,App\BroadcastMessages;
 use App\Http\Controllers\Controller;
-use App\Country, App\State, App\City, App\Category, App\DefaultGroup;
+use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers;
 use Validator, Input, Redirect, Request, Session, Hash, DB;
 use \Exception;
 
@@ -535,7 +535,7 @@ class ApiController extends Controller
 		try{
 			$arguments = Request::all();
 			$user = new User();
-
+//			echo '<pre>';print_r($arguments);die;
 			if(isset($arguments['education'])){
 
 				$delete = EducationDetails::where('user_id', '=', $arguments['id'])->delete();
@@ -543,7 +543,7 @@ class ApiController extends Controller
 				$data = array();
 
 				$educationdata = $arguments['education'];
-
+				// echo '<pre>';print_r($educationdata);die;
 				foreach ($educationdata as $key => $value) {
 
 					$education = new EducationDetails;
@@ -1044,7 +1044,7 @@ class ApiController extends Controller
 		try{
 			
 			$arguments = Request::all();
-
+			
 			$user = User::where('id', '=', $arguments['id'])->get()->toArray();
 
 			if(empty($user))
@@ -1274,7 +1274,7 @@ class ApiController extends Controller
 
 
 				$broadcastIdsData = Broadcast::with('broadcastMembers')
-									->where('user_id', Auth::User()->id)
+									->where('user_id', $arguments['user_id'])
 									->get()
 									->toArray();
 
@@ -1345,45 +1345,187 @@ class ApiController extends Controller
 	}
 
 
-
 	/*
 	 * Delete broadcast api on request.
 	 */
 	public function deleteBroadcast()
 	{
-/*		try{
+		try{
+			
+			$broadcastid = Request::get('broadcast_id');
+
+			if(empty($broadcastid))
+				throw new Exception("Broadcast id is required.", 1);
+				
+			$findbroadcast = Broadcast::find($broadcastid);
+
+			if(empty($findbroadcast))
+				throw new Exception("Broadcast does not exist.", 1);
+				
+			$findbroadcast = Broadcast::find($broadcastid)->delete();
+
+			$this->data = $findbroadcast;
+			$this->message = 'Broadcast successfully deleted.' ;
+			$this->status = 'success';
+			// echo '<pre>';print_r($group);die;
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+ 
+
+	/*
+	 * Private group add api on request.
+	 */
+    public function privateGroupAdd()
+    {
+ 	 	try{
+	    	$input = Request::all();
+
+	    	if(isset($input['member_id'])&& isset($input['owner_id']) && $input['title']!=null )
+	            {
+	            	$user = User::find($input['owner_id']);
+	            	if(!($user))
+	            		throw new Exception("No user found");					
+	            	else {
+
+	            		$error=0;
+	            		// $members=explode(',',$input['broadcast_members']);
+
+	            		$row1=DB::table('groups')->where('owner_id',$input['owner_id'])->where('title',$input['title'])->value('id');
+		            		
+			    		if($row1!=null)
+			    			throw new Exception("Group Name already exists!");
+		            
+	            		foreach ($input['member_id'] as $key => $value) {
+		            		$row=null;
+		            		$row=DB::table('friends')->where('user_id',$input['owner_id'])->where('friend_id',$value)->where('status','Accepted')->value('id');
+		            		if($row==null) {
+		            		 	$error=$value;
+		            	    	break;
+		            		}
+
+	            		}
+
+	            		if($error!=0)
+	            			throw new Exception($error." is not a friend and can't be added to group");	
+	            		else {
+	            			array_push($input['member_id'],$input['owner_id']);
+	            			$data = array(
+				                        'title'=>$input['title'],
+				                        'owner_id'=>$input['owner_id'],
+	                       			);
+	                              
+			                $bid = Group::create($data);
+
+			                foreach ($input['member_id'] as $key => $value) {
+		                		$data1 = array(
+					                        'group_id'=>$bid['id'],
+					                        'member_id'=>$value,
+					                        'status' => 'Joined'
+			                            );  
+		                    	GroupMembers::create($data1);
+	               			}
+
+			                $this->status="success";
+			                $this->message="Group created.";
+			                $this->data=Group::where('id',$bid['id'])->get()->toArray();
+	            		}            		
+	            	}
+	    		}
+	    	else
+	    	{
+	    		throw new Exception("All three fields required.");	
+	    	}
+		}
+		catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
+
+	/*
+	 * Get group list on request.
+	 */
+	public function getGroupList()
+	{
+		try{
 			
 			$arguments = Request::all();
 
-			if(isset($arguments['group_name']) && isset($arguments['group_by'])){
+			if(isset($arguments['owner_id'])){
 
-				if(!empty($arguments['group_name']) && !empty($arguments['group_by'])){
-					$group = DefaultGroup::where([
-									'group_name' => $arguments['group_name'],
-									'group_by' => $arguments['group_by']
-									])
-								->delete();
+				$finduser = User::find($arguments['owner_id']);
 
-					$this->data = $arguments;
-					$this->message = $arguments['group_name'].' successfully deleted.' ;
-					$this->status = 'success';
-					// echo '<pre>';print_r($group);die;
-				}else{
-					throw new Exception("Group by id or Group name cannot be empty.", 1);
-				}
-			}else{
-				throw new Exception("Either the group name or group by id is missing.", 1);
+				if(empty($finduser))
+					throw new Exception("User does not exist.", 1);
+					
+				$groupowner = Group::where('owner_id', $arguments['owner_id'])->get()->toArray();
+
+				if(empty($groupowner))
+					throw new Exception("No records found.", 1);
+
+				$groupIdsData = Group::with('groupMembers')
+									->where('owner_id', $arguments['owner_id'])
+									->get()
+									->toArray();
+
 				
+				$this->data = $groupIdsData;
+				$this->message = count($groupIdsData).' results found.';
+				$this->status = 'success';
+ 
+			}else{
+				throw new Exception("User id is required.", 1);				
 			}
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
 
-		return $this->output();*/
+		return $this->output();
 
 	}
 
+
+	/*
+	 * Delete private group api on request.
+	 */
+	public function deletePrivateGroup()
+	{
+		try{
+			
+			$group_id = Request::get('group_id');
+
+			if(empty($group_id))
+				throw new Exception("Group id is required.", 1);
+				
+			$findgroup = Group::find($group_id);
+
+			if(empty($findgroup))
+				throw new Exception("Group does not exist.", 1);
+				
+			$findgroup = Group::find($group_id)->delete();
+
+			$this->data = $findgroup;
+			$this->message = 'Group successfully deleted.' ;
+			$this->status = 'success';
+			// echo '<pre>';print_r($group);die;
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
 
 
 	/*

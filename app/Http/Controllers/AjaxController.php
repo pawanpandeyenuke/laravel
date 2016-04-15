@@ -795,8 +795,9 @@ comments;
      					->toArray();
               
                 $data=array();
-
-foreach ($friend as $key => $value) 
+	$count=0;
+	$msg="Sorry, no such friend found.";
+	foreach ($friend as $key => $value) 
 		
 		{
 
@@ -811,9 +812,15 @@ foreach ($friend as $key => $value)
 					<span class="title">'.$name.'</span>
 				</a>
 				</li>';
+			$count++;
 			}
 		}
 
+		if($count==0) {
+				$data[] = '<li > 
+				<span style="color:black;font-weight:bold">'.$msg.'</span>
+				</li>';
+			}
 		$html = implode('',$data);
 		echo $html;
 
