@@ -131,7 +131,10 @@
 		            			'type': 'post',
 		            			'data': {'emails': emailsObj},
 		            			'success': function(response){
-		            				alert(response);
+		            				if(response == '')
+		            					alert('An invitation is sent to all your contacts!');
+		            				else
+		            					alert(response);
 		            			}
 		            		});
 		            	}

@@ -20,45 +20,7 @@ class ContactImporter extends Controller
 
     public function inviteFriends()
     {
-
-        // echo urlencode("http://development.laravel.com/linkedin/client/callback");
-
-/*		$import = new ContactsImporter;
-
-		// set temp directory (necessary for storage Windows Live config)
-		$import->TempDir = '/tmp/';
-
-		// set URL to which script will return after authorization (GMail and Windows Live)
-		$import->returnURL = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF'];
-
-		// Windows Live requires policy file, it could be anything
-		$import->WLLPolicy = 'http://'.$_SERVER['SERVER_NAME'].'policy.php';
-		// set API key for created application on Windows Live
-		$import->WLLAPIid = '0000000044183F60';
-		// set your secret phrase for Windows Live application
-		$import->WLLSecret = 'Slix9w3K19GByr-t5KBLUCYaEqYG1ntb';
-
-		// set API key for Yahoo application
-		$import->YahooAPIid = 'dj0yJmk9OTFGdFZraFROcWlkJmQ9WVdrOVpEZEdZazVhTXpJbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD02ZQ--';
-		// set secret phrase for Yahoo application
-		$import->YahooSecret = 'eda1bec4bc183fe22962814bc1c083a63a3855ee';
-
-
-		// $wllurl = "https://login.live.com/oauth20_authorize.srf?client_id=".$import->WLLAPIid."&scope=wl.signin%20wl.basic%20wl.emails%20wl.contacts_emails&response_type=code&redirect_uri=".$import->returnURL;
-
-
-
-		//prints out authorization links for all 3 services
-		echo '<a href="'.$import->getGMailLink().'">GMail</a></br>';
-		// echo '<a href="'.$wllurl.'">Hotmail</a></br>';
-		echo '<a href="'.$import->getWLLLink().'">Hotmail</a></br>';
-		// echo '<a href="'.$import->getYahooLink().'">Yahoo</a></br>';
-		
-		// fetches contacts from authorized mail service
-		$contacts = $import->getContacts(); 
-		echo '<pre>';print_r($contacts);die;*/
-
-        /* -------------------------------- Working Google Code -------------------------------- */
+ 
         $client = new Google_Client();
         $client -> setApplicationName('FriendzSquare');
         $client -> setClientid($this->google_client_id);
@@ -71,65 +33,60 @@ class ContactImporter extends Controller
 
         if(Request::isMethod('post')){
 
-  
-
             $requestemails = Request::get('emails');
 
-            $emailsarray = explode(',', $requestemails);
-        
-        foreach ($emailsarray as $key => $value) {
-                $validator=null;
-            $validator = Validator::make($emailsarray, [
-                $key => 'required|email'
-            ]); 
-           $validator->each($key, ['required', 'email']);
-           
-           if($validator->fails()) {
-                   return redirect()->back()->withInput()->with('error', 'Please check email addresses entered and try again.');   
-         
+            if($requestemails){
+
+                $emailsarray = explode(',', $requestemails);
+            
+                foreach ($emailsarray as $key => $value) {
+                        $validator=null;
+                    $validator = Validator::make($emailsarray, [
+                        $key => 'required|email'
+                    ]); 
+                   $validator->each($key, ['required', 'email']);
+                   
+                   if($validator->fails()) {
+                           return redirect()->back()->withInput()->with('error', 'Please check email addresses entered and try again.');   
+                 
+                    }
+                }
+                    
+                $existingUser = array();
+                $nonExistingUser = array();
+                foreach ($emailsarray as $value) {                
+                    if($value != Auth::User()->email){
+                        $userData = User::where('email', '=', $value)->get()->toArray();
+                        if(!empty($userData))
+                            $existingUser[] = $value;
+                        else
+                            // $nonExistingUser[] = $value;
+                            $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
+                            self::mail($value, $message, 'Invitation', 'emails.invite');
+                    }
+                }
+
+                $friends = array();
+                foreach ($existingUser as $value) {
+
+                    $id = User::where('email', '=', $value)->value('id');
+                    $frienddata = Friend::where('user_id', '=', Auth::User()->id)
+                                        ->where('friend_id', '=', $id)
+                                        ->where('status', '=', 'Accepted')
+                                        ->get()
+                                        ->toArray();
+
+                    if(empty($frienddata)){
+                        $message = 'Please add me on FriendzSquare!';
+                        self::mail($value, $message, 'Friend Request', 'emails.friend');
+                    }
+                }
+
+                Session::put('success', 'Invitation sent successfully.'); 
+            }else{
+                return redirect()->back()->with('error', 'Please enter an email address.');  
             }
         }
-               
-            
-            
-            $existingUser = array();
-            $nonExistingUser = array();
-            foreach ($emailsarray as $value) {                
-                if($value != Auth::User()->email){
-                    $userData = User::where('email', '=', $value)->get()->toArray();
-                    if(!empty($userData))
-                        $existingUser[] = $value;
-                    else
-                        // $nonExistingUser[] = $value;
-                        $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
-                        self::mail($value, $message, 'Invitation', 'emails.invite');
-                }
-            }
-
-            $friends = array();
-            foreach ($existingUser as $value) {
-                // $friends[$value]
-                $id = User::where('email', '=', $value)->value('id');
-
-                $frienddata = Friend::where('user_id', '=', Auth::User()->id)
-                                    ->where('friend_id', '=', $id)
-                                    ->where('status', '=', 'Accepted')
-                                    ->get()
-                                    ->toArray();
-
-                if(empty($frienddata))
-                    // $friends[] = $value;
-                    $message = 'Please add me on FriendzSquare!';
-                    self::mail($value, $message, 'Friend Request', 'emails.friend');
-
-            }
-
-            Session::put('success', 'Invitation sent successfully.'); 
-
-            // echo '<pre>';print_r($emailsarray);die;
-
-        
-    }
 
         return view('invite-friends.invite')
                 ->with('googleImportUrl', $googleImportUrl);
@@ -198,42 +155,45 @@ class ContactImporter extends Controller
             unset($request['_token']);
             unset($request['selectall']);
 
-            $existingUser = array();
-            $nonExistingUser = array();
-            foreach ($request as $value) {                
-                if($value != Auth::User()->email){
-                    $userData = User::where('email', '=', $value)->get()->toArray();
-                    if(!empty($userData))
-                        $existingUser[] = $value;
-                    else
-                        // $nonExistingUser[] = $value;
-                        $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
-                        self::mail($value, $message, 'Invitation', 'emails.invite');
+            // echo '<pre>';print_r($request);die; 
+            if($request){
+
+                $existingUser = array();
+                $nonExistingUser = array();
+                foreach ($request as $value) {                
+                    if($value != Auth::User()->email){
+                        $userData = User::where('email', '=', $value)->get()->toArray();
+                        if(!empty($userData))
+                            $existingUser[] = $value;
+                        else
+                            // $nonExistingUser[] = $value;
+                            $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
+                            self::mail($value, $message, 'Invitation', 'emails.invite');
+                    }
                 }
+
+                $friends = array();
+                foreach ($existingUser as $value) {
+                    // $friends[$value]
+                    $id = User::where('email', '=', $value)->value('id');
+
+                    $frienddata = Friend::where('user_id', '=', Auth::User()->id)
+                                        ->where('friend_id', '=', $id)
+                                        ->where('status', '=', 'Accepted')
+                                        ->get()
+                                        ->toArray();
+
+                    if(empty($frienddata))
+                        // $friends[] = $value;
+                        $message = 'Please add me on FriendzSquare!';
+                        self::mail($value, $message, 'Friend Request', 'emails.friend');
+
+                }
+
+                return redirect('invite-friends')->with('success', 'Invitation sent successfully!');
+            }else{
+                return redirect()->back()->withInput()->with('error', 'No contact was selected. please try again!');
             }
-
-            $friends = array();
-            foreach ($existingUser as $value) {
-                // $friends[$value]
-                $id = User::where('email', '=', $value)->value('id');
-
-                $frienddata = Friend::where('user_id', '=', Auth::User()->id)
-                                    ->where('friend_id', '=', $id)
-                                    ->where('status', '=', 'Accepted')
-                                    ->get()
-                                    ->toArray();
-
-                if(empty($frienddata))
-                    // $friends[] = $value;
-                    $message = 'Please add me on FriendzSquare!';
-                    self::mail($value, $message, 'Friend Request', 'emails.friend');
-
-            }
-
-            return redirect('invite-friends')->with('success', 'Invitation sent successfully!');
-            // return redirect('invite-friends');
-            // echo '<pre>';print_r($friends);die; 
-
         }
 
         return view('invite-friends.contact-list')
