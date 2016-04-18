@@ -695,7 +695,8 @@ $(document).ready(function(){
 			'success' : function(data){
 				if(data){
 					pageid = pageid + 1;
-					$('#postlist').last('.single-post').append(data);					
+					$('#postlist').last('.single-post').append(data);
+                     loadImg();					
 				}else{
 					current.find('span').remove();
 					current.append('<span>No more posts</span>');
