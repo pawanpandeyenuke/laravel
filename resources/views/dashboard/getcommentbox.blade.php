@@ -46,8 +46,8 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 							<ul>
 								<li>
 									<div class="like-cont">
-										<input type="checkbox" name="checkboxG4" id="checkboxG4" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
-										<label for="checkboxG4" class="css-label">
+										<input type="checkbox" name="checkboxG4" id="popup-checkboxG4" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
+										<label for="popup-checkboxG4" class="css-label">
 											@if($likecountdata > 0)
 												<span class="countspan" id="popup-{{$feeddata->id}}">
 											 		{{ $likecountdata }}
@@ -154,3 +154,4 @@ if(postsonajax == ''){
       window.emojiPicker.discover();
     });
 </script>
+
