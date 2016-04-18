@@ -115,14 +115,14 @@ $(document).ready(function(){
 					jQuery("#popup-"+feedId).html(response);	
 					check=true;								
 				}				
-                 var idlike=current.attr('id'); 
+                     var idlike=current.attr('id'); 
                      if(idlike!='')    
                      {
                      	var id1=idlike.split('-');
-                     	if(id1[0]=='popup')
+                     	if(id1[0]=='popup1')
                      	{
-                     		jQuery('#checkbox'+feedId).prop('checked', check);
-                     		//alert(jQuery('#checkbox'+feedId).html());
+                     		jQuery('#'+id1[1]).prop('checked', check);
+                     		alert('#'+id1[1]);
                      	}
                      }               
 
@@ -699,7 +699,11 @@ $(document).ready(function(){
 			'success' : function(data){
 				if(data){
 					pageid = pageid + 1;
-					$('#postlist').last('.single-post').append(data);					
+					$('#postlist').last('.single-post').append(data);
+					loadImg();
+					loadOrgionalImogi();
+
+
 				}else{
 					current.find('span').remove();
 					current.append('<span>No more posts</span>');
@@ -855,17 +859,17 @@ $(document).on('click','.savegroupname',function()
 	function loadOrgionalImogi()
 	{
 
-		$(".post-list .single-post p").each(function() {
+		$(".single-post .post-data p, .single-post .comment-text").each(function() {
 		var original = $(this).html();
 		// use .shortnameToImage if only converting shortnames (for slightly better performance)
 		var converted = emojione.toImage(original);
 		$(this).html(converted);
 	});
 
-	$(".post-list .single-post div").each(function() {
+	/*$(".post-list .single-post div").each(function() {
 		var original = $(this).html();
 		// use .shortnameToImage if only converting shortnames (for slightly better performance)
 		var converted = emojione.toImage(original);
 		$(this).html(converted);
-	});
+	});*/
 	}
