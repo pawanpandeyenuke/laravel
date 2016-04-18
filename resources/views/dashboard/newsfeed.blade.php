@@ -79,7 +79,9 @@
 					<div class="post-comment">
 						<div class="row">
 							<div class="col-md-10">
-								<textarea type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
+								<div class="emoji-field-cont cmnt-field-cont">
+								<textarea type="text" class="form-control comment-field" placeholder="Type here..." data-emojiable="true"></textarea>
+							</div>
 							</div>
 							<div class="col-md-2">
 								<button type="button" class="btn btn-primary btn-full comment">Post</button>
