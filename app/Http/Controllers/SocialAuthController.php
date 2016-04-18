@@ -23,7 +23,7 @@ class SocialAuthController extends Controller
 		
 		//~ echo '<pre>';print_r($providerUser);die;
 		
-		if( !empty( $providerUser ) ){			
+		if( !empty( $providerUser ) ){		
 			if( isset( $providerUser['email']) ){
 				$userDbObj = User::whereEmail($providerUser['email'])->first();
 				if(!$userDbObj){	
@@ -66,16 +66,16 @@ class SocialAuthController extends Controller
     {		
  
         $providerUser = \Socialite::driver( $provider )->user();
-        //~ echo '<pre>';print_r($providerUser);die;
+        // echo '<pre>';print_r($providerUser);die;
         switch( $provider ){
 			
 			case 'facebook':
-			
+		
 				$userData = array(
 					'fb_id' => $providerUser->getId(),
 					'nickname' => $providerUser->getNickname(),
-					'first_name' => $providerUser->user['first_name'],
-					'last_name' => $providerUser->user['last_name'],
+					'first_name' =>$providerUser->user['first_name'],
+					'last_name' => " $providerUser->user['last_name'],
 					'email' => $providerUser->getEmail(),
 					'avatar' => $providerUser->getAvatar()
 				);

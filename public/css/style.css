@@ -1639,7 +1639,7 @@ button.edit-pr-img {
 .popup-list-without-img .comments-list{
 	padding: 0px;
 	border: 0px;
-	height: 260px;
+	height: 180px;
 }
 .popup-list-without-img .single-post {
   margin: 0px;
@@ -2243,4 +2243,14 @@ textarea{
   border-radius: 50%;
   top: -6px;
   background: #92e7dc;
+}
+#edit-modal{
+	z-index: 1111;
+}
+.fancybox-wrap{
+	top: 30px !important;
+}
+.comment-text img.emojione{
+	margin: 0 5px 0 0;
+    width: 25px;
 }

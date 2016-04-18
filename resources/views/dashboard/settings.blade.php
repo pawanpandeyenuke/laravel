@@ -1,5 +1,10 @@
 @extends('layouts.dashboard')
 <?php  
+if($setting==null)
+{
+$setting['contact-request']="Friends of friends";
+$setting['friend-request'] ="Friends of friends";
+}
  //echo '<pre>';print_r($setting);die;
 ?>
 @section('content')

@@ -10,7 +10,7 @@ return array(
     'App\\BroadcastMembers' => $baseDir . '/app/BroadcastMembers.php',
     'App\\BroadcastMessages' => $baseDir . '/app/BroadcastMessages.php',
     'App\\Category' => $baseDir . '/app/Category.php',
-    'App\\City' => $baseDir . '/app/city.php',
+    'App\\City' => $baseDir . '/app/City.php',
     'App\\Comment' => $baseDir . '/app/Comment.php',
     'App\\Console\\Commands\\Inspire' => $baseDir . '/app/Console/Commands/Inspire.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
