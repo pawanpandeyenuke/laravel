@@ -39,8 +39,8 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 				<ul>
 					<li>
 						<div class="like-cont">
-							<input type="checkbox" name="checkboxG4" id="checkbox{{$feeddata->id}}" class="like css-checkbox" {{ isset($likedata[0])?'checked':'' }}/>
-							<label for="checkbox{{$feeddata->id}}" class="css-label">
+							<input type="checkbox" name="checkboxG4" id="popup-checkbox{{$feeddata->id}}" class="like css-checkbox" {{ isset($likedata[0])?'checked':'' }}/>
+							<label for="popup-checkbox{{$feeddata->id}}" class="css-label">
 								@if($likecountdata > 0)
 									<span class="countspan" id="popup-{{$feeddata->id}}">
 								 		{{ $likecountdata }}
