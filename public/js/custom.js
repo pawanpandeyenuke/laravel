@@ -56,6 +56,10 @@ $(document).ready(function(){
 				current.parents('.row').find('#newsfeed').text('');
 				current.parents('.row').find('.emoji-wysiwyg-editor').text('');
 				loadImg();
+				var original =$('.single-post .post-data').first('p').html();		
+		        var converted = emojione.toImage(original);
+		        $('.single-post .post-data').first('p').html(converted);	
+
 			}
 			
 		} 
@@ -89,47 +93,39 @@ $(document).ready(function(){
 
 	});
 
-
-	$(".post-list .single-post p").each(function() {
-		var original = $(this).html();
-		// use .shortnameToImage if only converting shortnames (for slightly better performance)
-		var converted = emojione.toImage(original);
-		$(this).html(converted);
-	});
-
-	$(".post-list .single-post div").each(function() {
-		var original = $(this).html();
-		// use .shortnameToImage if only converting shortnames (for slightly better performance)
-		var converted = emojione.toImage(original);
-		$(this).html(converted);
-	});
-
-
+	loadOrgionalImogi();
 
 	$(document).on('click', '.like', function(){		
 		var _token = $('#postform input[name=_token]').val();
 		var feedId = $(this).closest('.single-post').data('value');
 		var user_id = $('#user_id').val();
 		var current = $(this);
-
 		$.ajax({			
 			'url' : 'ajax/webgetlikes',
 			'data' : { '_token' : _token, 'feed_id' : feedId, 'user_id' : user_id, 'liked' : 'Yes' },
 			'type' : 'post',
 			'success' : function(response){
-
+				 var check="";
 				if(response == 0){
-					// current.prop('checked', 'false');
-					$(this).prop('checked', 'false');
 					jQuery("#page-"+feedId).html('');
 					jQuery("#popup-"+feedId).html('');
-				}else{
-					// current.prop('checked', 'false');
-					$(this).prop('checked', 'true');
-					$('.post-list').closest('single-post').find('.like').prop('checked','true');
+				    check=false;
+				}else{					
 					jQuery("#page-"+feedId).html(response);
-					jQuery("#popup-"+feedId).html(response);					
-				}
+					jQuery("#popup-"+feedId).html(response);	
+					check=true;								
+				}				
+                 var idlike=current.attr('id'); 
+                     if(idlike!='')    
+                     {
+                     	var id1=idlike.split('-');
+                     	if(id1[0]=='popup')
+                     	{
+                     		jQuery('#checkbox'+feedId).prop('checked', check);
+                     		//alert(jQuery('#checkbox'+feedId).html());
+                     	}
+                     }               
+
 
 				//current.next('label.css-label').find('.countspan').html(response);
 
@@ -184,7 +180,12 @@ $(document).ready(function(){
 					current.parents('.row').find('.comment-field').text('');
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
-					loadImg();
+					//loadImg();
+					var original =current.parents('.post-footer').last('.comment-text').html();
+					//alert(original);
+						//var original =$('.single-post .post-data').first('p').html();		
+						var converted = emojione.toImage(original);
+						current.parents('.post-footer').last('.comment-text').html(converted);
 				}			
 			});	
 		}
@@ -647,7 +648,10 @@ $(document).ready(function(){
 		$('.loading-text').hide();
 		$('.loading-img').show();
 		var current = $(this);
+		//var
 		var reqType = current.closest('.friends-list').find('.active').data('value');
+		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
+		//alert(abc);
 		$.ajax({
 			'url' : '/ajax/viewmorefriends',
 			'type' : 'post',
@@ -695,8 +699,7 @@ $(document).ready(function(){
 			'success' : function(data){
 				if(data){
 					pageid = pageid + 1;
-					$('#postlist').last('.single-post').append(data);
-                     loadImg();					
+					$('#postlist').last('.single-post').append(data);					
 				}else{
 					current.find('span').remove();
 					current.append('<span>No more posts</span>');
@@ -849,3 +852,20 @@ $(document).on('click','.savegroupname',function()
       //alert(6);
 	}
 
+	function loadOrgionalImogi()
+	{
+
+		$(".post-list .single-post p").each(function() {
+		var original = $(this).html();
+		// use .shortnameToImage if only converting shortnames (for slightly better performance)
+		var converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
+
+	$(".post-list .single-post div").each(function() {
+		var original = $(this).html();
+		// use .shortnameToImage if only converting shortnames (for slightly better performance)
+		var converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
+	}
