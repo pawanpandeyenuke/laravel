@@ -90,7 +90,9 @@
 					</div><!--/post comment-->
 					<div class="comments-list">
 						<ul id="pagecomment-{{$data->id}}" data-id="pagecomment-{{$data->id}}">
-							<?php $counter = 1; ?>
+							<?php $counter = 1;
+							      $offset = count($data->comments) - 3;
+							 ?>
 							@foreach($data->comments as $commentsData)
 							<?php 
 								$username = DB::table('users')->where('id', $commentsData->commented_by)->get(['first_name', 'last_name']);
@@ -98,7 +100,7 @@
 
 								$name = $username[0]->first_name.' '.$username[0]->last_name; 
 
-							if($counter < 4){ ?>
+							if($counter > $offset){ ?>
 								<li>
 									<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
 									<a href="<?php echo 'profile/'.$commentsData->commented_by ?>" title="" class="user-link">{{$name}}</a>

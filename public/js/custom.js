@@ -147,7 +147,7 @@ $(document).ready(function(){
 		var feedId = $(this).closest('.post-comment').data('value');
 		var commentData = $(this).closest('.post-comment').find('textarea').val();
 		var commented_by = $('#user_id').val();
-		
+		var popup=current.closest('.pop-post-comment').data('value');
 		
  
 		if(commentData){
@@ -183,7 +183,14 @@ $(document).ready(function(){
 					
 					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
 				    	var converted = emojione.toImage(original);
-					jQuery("#pagecomment-"+feedId+" li .comment-text").last().html(converted)
+					jQuery("#pagecomment-"+feedId+" li .comment-text").last().html(converted);
+
+			if(popup==feedId)
+				{
+					var original1=jQuery("#popupcomment-"+feedId+" li .comment-text").last().html();
+					var converted1 = emojione.toImage(original1);
+					jQuery("#popupcomment-"+feedId+" li .comment-text").last().html(converted1);
+				}
 
 				}			
 			});	
