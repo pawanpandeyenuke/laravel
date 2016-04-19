@@ -122,7 +122,7 @@ $(document).ready(function(){
                      	if(id1[0]=='popup1')
                      	{
                      		jQuery('#'+id1[1]).prop('checked', check);
-                     		alert('#'+id1[1]);
+                     		//alert('#'+id1[1]);
                      	}
                      }               
 
@@ -149,11 +149,6 @@ $(document).ready(function(){
 		var commented_by = $('#user_id').val();
 		var popup=current.closest('.pop-post-comment').data('value');
 
-		// alert(feedId);
-		// alert(commentData);
-		// alert(commented_by);
-
-			
  
 		if(commentData){
 			$.ajax({			
@@ -182,19 +177,19 @@ $(document).ready(function(){
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
 
+					
 					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
-				    var converted = emojione.toImage(original);
+				    	var converted = emojione.toImage(original);
 					jQuery("#pagecomment-"+feedId+" li .comment-text").last().html(converted);
-					
-					
-					
-				if(popup==feedId)
+
+			if(popup==feedId)
+
 				{
 					var original1=jQuery("#popupcomment-"+feedId+" li .comment-text").last().html();
 					var converted1 = emojione.toImage(original1);
 					jQuery("#popupcomment-"+feedId+" li .comment-text").last().html(converted1);
 				}
-					
+
 				}			
 			});	
 		}
@@ -307,7 +302,7 @@ $(document).ready(function(){
 	$(document).on('click', '.comment-delete', function(){
 		var commentId = $(this).closest('li').data('value'); 
 		var feedId = $('.single-post').data('value');
-		 alert(feedId);
+		// alert(feedId);
 		$.ajax({
 			'url' : 'ajax/deletebox',
 			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'deletecomment'},
@@ -380,6 +375,7 @@ $(document).ready(function(){
 			'data' : {'commentId':commentId, 'feedId' : feedId},
 			'type' : 'post',
 			'success' : function(response){
+				$('.fancybox-overlay').hide();
 				$('#edit-modal').append(response);
 				$("#edit-modal").modal();
 			}
@@ -387,6 +383,7 @@ $(document).ready(function(){
 		$('#edit-modal').html('');
 	});
 
+	
 
 /*	$(document).on('click', '#editpostdata', function(){
 		var current = $(this);

@@ -1,7 +1,7 @@
   <div class="modal-dialog modal-md">
-  <?php //echo '<pre>';print_r($comment);die;  ?>
+  
 	    <div class="modal-content" data-value="{{$comment->id}}">
-		    {!! Form::open(array('url' => 'ajax/editcomments', 'id' => 'postform1', 'files' => true)) !!}
+		    {!! Form::open(array('url' => 'ajax/editcomments', 'id' => 'postform2', 'files' => true)) !!}
 		    	<div class="modal-body text-center">
 		        <div class="" id="">
 		        	@if(!empty($comment->comments))
@@ -20,7 +20,7 @@
 		      <input type="hidden" value="{{$comment->id}}" name="id"></input>
 		      <div class="modal-footer">
 				{!! Form::button('Cancel', array('id' => 'submit-btn', 'class' => 'btn btn-default', 'data-dismiss' => 'modal')) !!}
-				{!! Form::submit('Upload', array('id' => 'submit-btn', 'class' => 'btn btn-primary')) !!}
+				{!! Form::submit('Upload', array('id' => 'submit-btn', 'class' => 'subcomment btn btn-primary')) !!}
 		      </div>
 	      	{!! Form::close() !!}
 	    </div>
@@ -41,10 +41,12 @@ $(document).ready(function(){
 
 	var myReader = new FileReader();
 
-
+// $('.subcomment').click(function(){
+//  $('#edit-modal').modal('hide');
+// });
 	// Post status updates via ajax call.
-	$("#postform1").ajaxForm(function(response) { 
- 		var current = $("#postform1");
+	$("#postform2").ajaxForm(function(response) { 
+ 		var current = $("#postform2");
  		var feedId = current.closest('.edit-post-textarea').data('feed');
 
 		if(response){
@@ -55,13 +57,17 @@ $(document).ready(function(){
 			var comment = data[0].comments;
 			var commentid=data[0].id;
 
-			if(comment)
+			if(comment!='')
 			{
 
 			jQuery('#postlist').find('#post_'+commentid).find('.comment-text').text(comment);
 			var original =jQuery('#postlist').find('#post_'+commentid).find('.comment-text').html();
 			var converted = emojione.toImage(original);
 			jQuery('#postlist').find('#post_'+commentid).find('.comment-text').html(converted);
+			}
+			else
+			{
+				alert("Comment not updated.Comment field can't eb empty");
 			}
 
 			 $('#edit-modal').modal('hide');

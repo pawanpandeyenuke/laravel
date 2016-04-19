@@ -817,7 +817,8 @@ if($input!=null && $gname!=null)
 
   }
 
-  public function demopage()
+
+public function demopage()
   {
     return view('dashboard.demopage');
   }

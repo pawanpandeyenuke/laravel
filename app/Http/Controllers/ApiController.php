@@ -535,7 +535,7 @@ class ApiController extends Controller
 		try{
 			$arguments = Request::all();
 			$user = new User();
-			
+//			echo '<pre>';print_r($arguments);die;
 			if(isset($arguments['education'])){
 
 				$delete = EducationDetails::where('user_id', '=', $arguments['id'])->delete();
@@ -1168,7 +1168,6 @@ class ApiController extends Controller
 		}
  
 		return $this->output();
-		
 	}
 
 	

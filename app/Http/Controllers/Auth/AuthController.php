@@ -85,6 +85,8 @@ class AuthController extends Controller
 
 
         DB::table('settings')->insert(['setting_title'=>'contact-request','setting_value'=>'All','user_id'=>$userdata->id]);
+
+
         DB::table('settings')->insert(['setting_title'=>'friend-request','setting_value'=>'All','user_id'=>$userdata->id]);
         $converse = new Converse;
         $response = $converse->register($xmpp_username, $xmpp_password);

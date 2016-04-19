@@ -51,7 +51,7 @@ Route::post('ajax/deletecomments','AjaxController@deletecomments');
 
 
 Route::post('ajax/deletebox','AjaxController@deletebox');
-//<<<<<<< HEAD
+
 Route::post('/ajax/jobcategory','AjaxController@getJobcategory');
 
 
@@ -219,7 +219,7 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('linkedin/client', 'ContactImporter@linkedin');
 	Route::get('linkedin/client/callback', 'ContactImporter@linkedinCallback');
 
-		Route::get('/demopage', 'DashboardController@demopage');
+        Route::get('/demopage', 'DashboardController@demopage');
 		Route::post('/demopage', 'DashboardController@demopage');
 
 });

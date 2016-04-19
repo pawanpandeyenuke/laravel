@@ -622,14 +622,14 @@ a:hover{
   padding-bottom: 10px;
 }
 .comments-list{
-  padding: 15px 0 0;
+  padding: 0px 0 0;
   border-top: 1px solid #ECECEC;
   margin-top: 15px;
 }
 .comments-list li{
   display: block !important;
   position: relative;
-  padding: 10px 0 0px 50px;
+  padding: 18px 0 0px 50px;
   font-size: 12px;
   border-top: 1px solid #ECECEC;
   margin-top: 10px;
@@ -645,7 +645,7 @@ a:hover{
   background-size: cover !important;
   border-radius: 50%;
   left: 0px;
-  top: 10px;
+  top: 17px;
 }
 .comments-list .user-link{
   font-weight: 500;
@@ -731,6 +731,7 @@ a:hover{
   color: #A0A0A0;
   font-weight: 100;
   font-size: 11px;
+  margin-right: -15px;
 }
 .fancybox-skin{
 	padding: 0px !important;
@@ -1688,10 +1689,16 @@ button.edit-pr-img {
 	text-align: center;
 }
 .comments-list .comment-delete {
-	 top: 8px !important;
-  right: -5px !important;
+	 top: 4px !important;
+  right: 0px !important;
   font-size: 10px;
   color: #DCDCDC;
+}
+.comments-list .p-edit-btn{
+	font-size: 10px;
+    color: #DCDCDC;
+    right: 17px;
+    top: 4px;
 }
 .edit-post-textarea{
   position: relative;
@@ -2253,4 +2260,8 @@ textarea{
 .comment-text img.emojione{
 	margin: 0 5px 0 0;
     width: 25px;
+}
+.cmt-data {
+    position: relative;
+    top: -16px;
 }

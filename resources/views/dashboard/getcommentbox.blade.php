@@ -46,6 +46,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 							<ul>
 								<li>
 									<div class="like-cont">
+
 										<input type="checkbox" name="checkboxG4" id="popup1-checkboxG4" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
 										<label for="popup1-checkboxG4" class="css-label">
 											@if($likecountdata > 0)
@@ -81,11 +82,19 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 								@foreach($comments as $data)
 									<?php $username = App\User::where('id', '=', $data->commented_by)->get()->first(); ?>
 									<li data-value="{{ $data->id }}" id="post_{{ $data->id }}">
-										<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+						<?php if($data->commented_by==Auth::User()->id)
+						{ 
+						$divadd="cmt-data"
+						?>
+							<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 										<br>
-						<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>
+							<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>
+					<?php } else {
+						$divadd="";
+						} ?>
 
 										<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+										<div class="{{$divadd}}">
 										<div class="comment-title-cont">
 											<div class="row">
 												<div class="col-sm-6">
@@ -97,6 +106,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 											</div>
 										</div>
 										<div class="comment-text">{{ $data->comments }}</div>
+									</div>
 									</li>
 								@endforeach 
 							</ul> 
@@ -156,3 +166,4 @@ if(postsonajax == ''){
       window.emojiPicker.discover();
     });
 </script>
+

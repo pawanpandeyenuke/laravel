@@ -246,12 +246,12 @@
 
 															if($counter > $offset){ ?>
 																<li data-value="{{ $commentsData['id'] }}" id="post_{{ $commentsData['id'] }}">
-
+									<?php if($commentsData['commented_by']==Auth::User()->id){ ?>
 																<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>	
 
 																<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
-														
+													<?php } ?>
 																<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
 																<div class="comment-title-cont">
 																	<div class="row">
@@ -286,8 +286,6 @@
 						<!-- Delete comment confirmation box -->
 
 						<div class="modal fade edit-post-popup" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost">	</div>
-
-
 
 					<div id="commentajax" style="display: none;">	</div>
 					<div id="AllCommentNew" class="post-list popup-list-without-img" style="display: none;"></div>

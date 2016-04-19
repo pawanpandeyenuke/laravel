@@ -66,12 +66,12 @@ class SocialController extends Controller
         switch( $provider ){
 			
 			case 'facebook':
-			
+			$nameRaw = explode(' ', $providerUser->getName());
 				$userData = array(
 					'fb_id' => $providerUser->getId(),
 					'nickname' => $providerUser->getNickname(),
-					'first_name' => $providerUser->user['first_name'],
-					'last_name' => $providerUser->user['last_name'],
+					'first_name' =>$nameRaw[0],// $providerUser->user['first_name'],
+					'last_name' =>$nameRaw[1],// $providerUser->user['last_name'],
 					'email' => $providerUser->getEmail(),
 					'avatar' => $providerUser->getAvatar()
 				);

@@ -112,7 +112,8 @@ class AjaxController extends Controller
 	{
 		$arguments = Input::all();
 		$user = Auth::User();
-
+		if($arguments['comments']!='')
+		{
 		$comments = Comment::find($arguments['id']);
 		$comments->fill($arguments);
 		$saved = $comments->push();
@@ -122,7 +123,7 @@ class AjaxController extends Controller
 		echo $commentdata;
 
 		exit;
-
+	}
 	}
 
 
@@ -172,6 +173,7 @@ $variable['comment'] = <<<comments
 		<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>
 
 	<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+	<div class="cmt-data">
 	<div class="comment-title-cont">
 		<div class="row">
 			<div class="col-sm-6">
@@ -183,6 +185,7 @@ $variable['comment'] = <<<comments
 		</div>
 	</div>
 	<div class="comment-text">$comment</div>
+	</div>
 </li>
 comments;
 
@@ -688,7 +691,6 @@ comments;
 	{	
 
 		$commentid = Input::get('commentId');
-		print_r($commentid);
 		$comment=Comment::where('id',$commentid)->get()->first();
 
 		return view('ajax.editcomment')->with('comment', $comment);
@@ -821,6 +823,8 @@ comments;
               
                 $data=array();
 	$count=0;
+
+	$msg="Sorry, no such friend found.";
 	foreach ($friend as $key => $value) 
 		
 		{
@@ -837,7 +841,9 @@ comments;
 					<span class="title">'.$name.'</span>
 				</a>
 				</li>';
-				$count++;
+
+			$count++;
+
 			}
 
 		}
@@ -847,6 +853,11 @@ comments;
 				</li>';
 			}
 
+		if($count==0) {
+				$data[] = '<li > 
+				<span style="color:black;font-weight:bold">'.$msg.'</span>
+				</li>';
+			}
 		$html = implode('',$data);
 		echo $html;
 

@@ -1,7 +1,13 @@
 	@foreach($feeds as $data)		
 		<?php //echo '<pre>';print_r($data);die;  ?>					
 		<div class="single-post" data-value="{{ $data->id }}" id="post_{{ $data->id }}">
-			<div class="post-header">
+			<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
+			@if($data->user->id == Auth::User()->id)
+									<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
+
+									<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+									@endif
+
 				<div class="row">
 					<div class="col-md-7">
 						<a href="#" title="" class="user-thumb-link">
@@ -79,7 +85,9 @@
 					<div class="post-comment" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 						<div class="row">
 							<div class="col-md-10">
-							<div class="emoji-field-cont cmnt-field-cont">
+
+								<div class="emoji-field-cont cmnt-field-cont">
+
 								<textarea type="text" class="form-control comment-field" placeholder="Type here..." data-emojiable="true"></textarea>
 							</div>
 							</div>
@@ -90,9 +98,10 @@
 					</div><!--/post comment-->
 					<div class="comments-list">
 						<ul id="pagecomment-{{$data->id}}" data-id="pagecomment-{{$data->id}}">
-							<?php $counter = 1; 
-								$offset = count($data->comments) - 3;
-							?>
+
+							<?php $counter = 1;
+							      $offset = count($data->comments) - 3;
+							 ?>
 							@foreach($data->comments as $commentsData)
 							<?php 
 								$username = DB::table('users')->where('id', $commentsData->commented_by)->get(['first_name', 'last_name']);
@@ -101,7 +110,13 @@
 								$name = $username[0]->first_name.' '.$username[0]->last_name; 
 
 							if($counter > $offset){ ?>
-								<li>
+								<li data-value="{{ $commentsData['id'] }}" id="post_{{ $commentsData['id'] }}">
+								<?php if($commentsData['commented_by']==Auth::User()->id){ ?>
+									<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>	
+
+									<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+
+													<?php } ?>
 									<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
 									<a href="<?php echo 'profile/'.$commentsData->commented_by ?>" title="" class="user-link">{{$name}}</a>
 									<div class="comment-text">{{$commentsData->comments}}</div>
