@@ -3,28 +3,29 @@
 		if($model1!=null)
 		{
 			$id1=Auth::User()->id;
-	
+$count=0;	
 		?>
 	
 	@foreach($model1 as $data)
 
 	<?php 
+
 			$name = $data['first_name'].' '.$data['last_name'];
 		
 	?>
-	<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="{{$id1}}">
+	<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="{{$id1}}" >
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-sm-6" value="hello">
 				<div class="user-cont">
 					<a title="" href="#">
-						<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
+						<span class="hello" value="hello" style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
 					{{ $name }}
 					</a>
 				</div>
 			</div>
 			<div class="col-sm-6">
 	<?php 
-		
+		$count++;
 		$status1=DB::table('friends')->where('user_id',$data['id'])->where('friend_id',Auth::User()->id)->value('status');
 		$status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',Auth::User()->id)->value('status');
 

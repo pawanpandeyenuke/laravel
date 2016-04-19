@@ -109,7 +109,14 @@ $(document).ready(function(){
 				var postid = data[0].id;
 				// console.log(data[0].message);
 				if(message)
+				{
 					jQuery('#postlist').find('#post_'+postid).find('.post-data p').text(message);
+
+						var original =$('#post_'+postid+' .post-data').first('p').html();		
+						var converted = emojione.toImage(original);
+						$('#post_'+postid+' .post-data').first('p').html(converted);	
+				}
+
 				if(image){
 					var url = document.location.origin+'/uploads/'+image;
 					jQuery('#postlist').find('#post_'+postid).find('.post-data img').prop('src', url);

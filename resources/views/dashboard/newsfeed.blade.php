@@ -76,10 +76,12 @@
 					</ul>
 				</div><!--/post actions-->
 				<div class="post-comment-cont">
-					<div class="post-comment">
+					<div class="post-comment" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 						<div class="row">
 							<div class="col-md-10">
-								<textarea type="text" class="form-control comment-field" placeholder="Type here..."></textarea>
+							<div class="emoji-field-cont cmnt-field-cont">
+								<textarea type="text" class="form-control comment-field" placeholder="Type here..." data-emojiable="true"></textarea>
+							</div>
 							</div>
 							<div class="col-md-2">
 								<button type="button" class="btn btn-primary btn-full comment">Post</button>
@@ -87,8 +89,10 @@
 						</div>
 					</div><!--/post comment-->
 					<div class="comments-list">
-						<ul>
-							<?php $counter = 1; ?>
+						<ul id="pagecomment-{{$data->id}}" data-id="pagecomment-{{$data->id}}">
+							<?php $counter = 1; 
+								$offset = count($data->comments) - 3;
+							?>
 							@foreach($data->comments as $commentsData)
 							<?php 
 								$username = DB::table('users')->where('id', $commentsData->commented_by)->get(['first_name', 'last_name']);
@@ -96,7 +100,7 @@
 
 								$name = $username[0]->first_name.' '.$username[0]->last_name; 
 
-							if($counter < 4){ ?>
+							if($counter > $offset){ ?>
 								<li>
 									<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
 									<a href="<?php echo 'profile/'.$commentsData->commented_by ?>" title="" class="user-link">{{$name}}</a>

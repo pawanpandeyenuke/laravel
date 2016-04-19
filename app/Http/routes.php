@@ -23,6 +23,9 @@ Route::post('ajax/posts', 'AjaxController@posts');
 Route::post('ajax/editpost', 'AjaxController@editpost');
 Route::post('ajax/editposts', 'AjaxController@editposts');
 
+Route::post('ajax/editcomment','AjaxController@editcomment');
+Route::post('ajax/editcomments','AjaxController@editcomments');
+
 Route::post('ajax/like', 'AjaxController@like');
 
 Route::post('ajax/comments/get', 'AjaxController@getCommentBox');

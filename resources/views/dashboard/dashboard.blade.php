@@ -246,9 +246,12 @@
 
 															if($counter > $offset){ ?>
 																<li data-value="{{ $commentsData['id'] }}" id="post_{{ $commentsData['id'] }}">
-																
+
+																<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>	
+
 																<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
+														
 																<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
 																<div class="comment-title-cont">
 																	<div class="row">

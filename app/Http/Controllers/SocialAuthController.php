@@ -70,7 +70,7 @@ class SocialAuthController extends Controller
         switch( $provider ){
 			
 			case 'facebook':
-			
+			print_r($provideruser);die;
 				$userData = array(
 					'fb_id' => $providerUser->getId(),
 					'nickname' => $providerUser->getNickname(),

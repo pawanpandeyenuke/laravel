@@ -56,6 +56,10 @@ $(document).ready(function(){
 				current.parents('.row').find('#newsfeed').text('');
 				current.parents('.row').find('.emoji-wysiwyg-editor').text('');
 				loadImg();
+				var original =$('.single-post .post-data').first('p').html();		
+		        var converted = emojione.toImage(original);
+		        $('.single-post .post-data').first('p').html(converted);	
+
 			}
 			
 		} 
@@ -89,47 +93,39 @@ $(document).ready(function(){
 
 	});
 
-
-	$(".post-list .single-post p").each(function() {
-		var original = $(this).html();
-		// use .shortnameToImage if only converting shortnames (for slightly better performance)
-		var converted = emojione.toImage(original);
-		$(this).html(converted);
-	});
-
-	$(".post-list .single-post div").each(function() {
-		var original = $(this).html();
-		// use .shortnameToImage if only converting shortnames (for slightly better performance)
-		var converted = emojione.toImage(original);
-		$(this).html(converted);
-	});
-
-
+	loadOrgionalImogi();
 
 	$(document).on('click', '.like', function(){		
 		var _token = $('#postform input[name=_token]').val();
 		var feedId = $(this).closest('.single-post').data('value');
 		var user_id = $('#user_id').val();
 		var current = $(this);
-
 		$.ajax({			
 			'url' : 'ajax/webgetlikes',
 			'data' : { '_token' : _token, 'feed_id' : feedId, 'user_id' : user_id, 'liked' : 'Yes' },
 			'type' : 'post',
 			'success' : function(response){
-
+				 var check="";
 				if(response == 0){
-					// current.prop('checked', 'false');
-					$(this).prop('checked', 'false');
 					jQuery("#page-"+feedId).html('');
 					jQuery("#popup-"+feedId).html('');
-				}else{
-					// current.prop('checked', 'false');
-					$(this).prop('checked', 'true');
-					$('.post-list').closest('single-post').find('.like').prop('checked','true');
+				    check=false;
+				}else{					
 					jQuery("#page-"+feedId).html(response);
-					jQuery("#popup-"+feedId).html(response);					
-				}
+					jQuery("#popup-"+feedId).html(response);	
+					check=true;								
+				}				
+                     var idlike=current.attr('id'); 
+                     if(idlike!='')    
+                     {
+                     	var id1=idlike.split('-');
+                     	if(id1[0]=='popup1')
+                     	{
+                     		jQuery('#'+id1[1]).prop('checked', check);
+                     		alert('#'+id1[1]);
+                     	}
+                     }               
+
 
 				//current.next('label.css-label').find('.countspan').html(response);
 
@@ -144,15 +140,20 @@ $(document).ready(function(){
 		});	
 	});
 
-	$(document).on('click', '.comment', function(){
+		$(document).on('click', '.comment', function(){
 
 		var current = $(this);
 		var _token = $('#postform input[name=_token]').val();
 		var feedId = $(this).closest('.post-comment').data('value');
 		var commentData = $(this).closest('.post-comment').find('textarea').val();
 		var commented_by = $('#user_id').val();
-		
-		
+		var popup=current.closest('.pop-post-comment').data('value');
+
+		// alert(feedId);
+		// alert(commentData);
+		// alert(commented_by);
+
+			
  
 		if(commentData){
 			$.ajax({			
@@ -174,17 +175,26 @@ $(document).ready(function(){
 						current.parents('#AllCommentNew').find('.commentcount').html(count+' Comments');
 					}else{
 						current.parents('.post-footer').find('.commentcount').html('1 Comment'); 
-					}
-	
-					// var commCount = current.parents('.pop-comment-side-outer').find('.comments-list ul li').length;
-					// console.log(commCount);
-					// current.parents('.post-comment-cont').find('.comments-list ul').append(parseresponse.comment);
+					}	
 
 					current.parents('.pop-comment-side-outer').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('.row').find('.comment-field').text('');
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
-					loadImg();
+
+					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
+				    var converted = emojione.toImage(original);
+					jQuery("#pagecomment-"+feedId+" li .comment-text").last().html(converted);
+					
+					
+					
+				if(popup==feedId)
+				{
+					var original1=jQuery("#popupcomment-"+feedId+" li .comment-text").last().html();
+					var converted1 = emojione.toImage(original1);
+					jQuery("#popupcomment-"+feedId+" li .comment-text").last().html(converted1);
+				}
+					
 				}			
 			});	
 		}
@@ -297,7 +307,7 @@ $(document).ready(function(){
 	$(document).on('click', '.comment-delete', function(){
 		var commentId = $(this).closest('li').data('value'); 
 		var feedId = $('.single-post').data('value');
-		// alert(feedId);
+		 alert(feedId);
 		$.ajax({
 			'url' : 'ajax/deletebox',
 			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'deletecomment'},
@@ -358,6 +368,25 @@ $(document).ready(function(){
 		});
 		$('#edit-modal').html('');
 	});
+
+
+		$(document).on('click', '.edit-comment', function(){
+		var commentId = $(this).closest('li').data('value'); 
+		var feedId = $('.single-post').data('value');
+
+	
+		$.ajax({
+			'url' : 'ajax/editcomment',
+			'data' : {'commentId':commentId, 'feedId' : feedId},
+			'type' : 'post',
+			'success' : function(response){
+				$('#edit-modal').append(response);
+				$("#edit-modal").modal();
+			}
+		});
+		$('#edit-modal').html('');
+	});
+
 
 /*	$(document).on('click', '#editpostdata', function(){
 		var current = $(this);
@@ -647,7 +676,10 @@ $(document).ready(function(){
 		$('.loading-text').hide();
 		$('.loading-img').show();
 		var current = $(this);
+		//var
 		var reqType = current.closest('.friends-list').find('.active').data('value');
+		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
+		//alert(abc);
 		$.ajax({
 			'url' : '/ajax/viewmorefriends',
 			'type' : 'post',
@@ -695,7 +727,11 @@ $(document).ready(function(){
 			'success' : function(data){
 				if(data){
 					pageid = pageid + 1;
-					$('#postlist').last('.single-post').append(data);					
+					$('#postlist').last('.single-post').append(data);
+					loadImg();
+					loadOrgionalImogi();
+
+
 				}else{
 					current.find('span').remove();
 					current.append('<span>No more posts</span>');
@@ -846,5 +882,23 @@ $(document).on('click','.savegroupname',function()
       	});
       window.emojiPicker.discover();
       //alert(6);
+	}
+
+	function loadOrgionalImogi()
+	{
+
+		$(".single-post .post-data p, .single-post .comment-text").each(function() {
+		var original = $(this).html();
+		// use .shortnameToImage if only converting shortnames (for slightly better performance)
+		var converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
+
+	/*$(".post-list .single-post div").each(function() {
+		var original = $(this).html();
+		// use .shortnameToImage if only converting shortnames (for slightly better performance)
+		var converted = emojione.toImage(original);
+		$(this).html(converted);
+	});*/
 	}
 

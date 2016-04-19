@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
 ,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers;
+
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
@@ -107,6 +108,23 @@ class AjaxController extends Controller
 		
 	}
 
+	public function editcomments()
+	{
+		$arguments = Input::all();
+		$user = Auth::User();
+
+		$comments = Comment::find($arguments['id']);
+		$comments->fill($arguments);
+		$saved = $comments->push();
+
+		$commentdata = Comment::where('id', $arguments['id'])->get();
+
+		echo $commentdata;
+
+		exit;
+
+	}
+
 
 	//Get comment box
 	public function getCommentBox()
@@ -150,6 +168,9 @@ $variable = array();
 $variable['comment'] = <<<comments
 <li data-value="$id" id="post_$id">
 	<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+		<br>
+		<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>
+
 	<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
 	<div class="comment-title-cont">
 		<div class="row">
@@ -666,8 +687,11 @@ comments;
 	public function editcomment()
 	{	
 
-		$commentid = Input::get('commentid');
-		return $commentid;
+		$commentid = Input::get('commentId');
+		print_r($commentid);
+		$comment=Comment::where('id',$commentid)->get()->first();
+
+		return view('ajax.editcomment')->with('comment', $comment);
 
 	}
 

@@ -204,8 +204,9 @@ class ContactImporter extends Controller
     public function mail($email = '', $message, $subject, $type) {
 		// $mailsent = mail($email, $subject, $message);
         if($email != ''){
-  			$mailsent = Mail::send('emails.invite', ['email'=> 'pawanpandey392@gmail.com','message_text'=> 'checkout this new site. Friendz Square!'], function ($m)  {
-            	$m->from('no-reply@friendzsquare.com', 'FriendzSquare!');
+  			$mailsent = //Mail::send('emails.invite', ['email'=> 'pawanpandey392@gmail.com','message_text'=> 'checkout this new site. Friendz Square!'], 
+                Mail::raw('This is a demo email',function ($m)  {
+            	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
                 $m->to('aditya.i.singh@enukesoftware.com', 'Aditya Singh')->subject('Invitation');
             });
 			//print_r($mailsent);die;

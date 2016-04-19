@@ -39,8 +39,8 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 				<ul>
 					<li>
 						<div class="like-cont">
-							<input type="checkbox" name="checkboxG4" id="checkbox{{$feeddata->id}}" class="like css-checkbox" {{ isset($likedata[0])?'checked':'' }}/>
-							<label for="checkbox{{$feeddata->id}}" class="css-label">
+							<input type="checkbox" name="checkboxG4" id="popup1-checkbox{{$feeddata->id}}" class="like css-checkbox" {{ isset($likedata[0])?'checked':'' }}/>
+							<label for="popup1-checkbox{{$feeddata->id}}" class="css-label">
 								@if($likecountdata > 0)
 									<span class="countspan" id="popup-{{$feeddata->id}}">
 								 		{{ $likecountdata }}
@@ -73,6 +73,9 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 					// echo '<pre>';print_r($username);die; ?>
 					<li data-value="{{ $data->id }}" id="post_{{ $data->id }}">
 						<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+						<br>
+						<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>
+
 
 						<span class="user-thumb" style="background: url('/images/user-thumb.jpg');"></span>
 						<div class="comment-title-cont">
