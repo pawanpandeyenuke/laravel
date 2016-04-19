@@ -180,12 +180,11 @@ $(document).ready(function(){
 					current.parents('.row').find('.comment-field').text('');
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
-					//loadImg();
-					var original =current.parents('.post-footer').last('.comment-text').html();
-					//alert(original);
-						//var original =$('.single-post .post-data').first('p').html();		
-						var converted = emojione.toImage(original);
-						current.parents('.post-footer').last('.comment-text').html(converted);
+					
+					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
+				    	var converted = emojione.toImage(original);
+					jQuery("#pagecomment-"+feedId+" li .comment-text").last().html(converted)
+
 				}			
 			});	
 		}

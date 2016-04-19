@@ -76,7 +76,7 @@
 					</ul>
 				</div><!--/post actions-->
 				<div class="post-comment-cont">
-					<div class="post-comment">
+					<div class="post-comment" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 						<div class="row">
 							<div class="col-md-10">
 								<div class="emoji-field-cont cmnt-field-cont">
@@ -89,7 +89,7 @@
 						</div>
 					</div><!--/post comment-->
 					<div class="comments-list">
-						<ul>
+						<ul id="pagecomment-{{$data->id}}" data-id="pagecomment-{{$data->id}}">
 							<?php $counter = 1; ?>
 							@foreach($data->comments as $commentsData)
 							<?php 
