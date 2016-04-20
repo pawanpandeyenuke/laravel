@@ -40,10 +40,9 @@
 $(document).ready(function(){
 
 	var myReader = new FileReader();
-
-// $('.subcomment').click(function(){
-//  $('#edit-modal').modal('hide');
-// });
+ $('.subcomment').click(function(){
+  $('#edit-modal').modal('hide');
+ });
 	// Post status updates via ajax call.
 	$("#postform2").ajaxForm(function(response) { 
  		var current = $("#postform2");
