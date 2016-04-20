@@ -182,16 +182,19 @@ $(document).ready(function(){
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
 
+					//On text popup change emoji
+					var popupemoji = jQuery('#AllCommentNew').find('.comments-list ul li .comment-text').last().html();
+					var popupemojidata = emojione.toImage(popupemoji);
+					jQuery('#AllCommentNew').find('.comments-list ul li .comment-text').last().html(popupemojidata);
+
+
+
 					//Image popup emoji fix.
 					var allcommentsnew = current.parents('#AllComment').find('.comments-list ul li .comment-text').last().html();
 					var convertednew = emojione.toImage(allcommentsnew);
 					jQuery('#AllComment').find('.comments-list ul li .comment-text').last().html(convertednew);
 
-					//Popup caption emoji fix.
-					// var popupcaption = current.parents('#AllComment').find('.pop-post-text p').html();
-					// var caption = emojione.toImage(popupcaption);
-					// jQuery('#AllComment').find('.pop-post-text p').html(caption);					
-
+ 
 					//Dashboard emoji fix.
 					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
 				    var converted = emojione.toImage(original);
