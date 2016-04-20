@@ -3,7 +3,7 @@
 @section('content')
 
 <?php
-
+// print_r($user->country);die;
 	if(!empty($user->country)){
 
 		//$country = DB::table('country')->where('country_id', '=', $user->country)->value('country_name'); 
@@ -12,7 +12,6 @@
 
 		//$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
 
-		//print_r($user->country);die;
 	 	//$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 
 
 		$countryid = DB::table('country')->where('country_name', '=', $user->country)->value('country_id'); 
@@ -21,6 +20,7 @@
 		$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
 	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 	
 
+		
 
 	}
 
@@ -89,8 +89,13 @@
 																$selected = 'Selected'; 
 															else
 																$selected = ''; 
+
+															if($value == 'Country')
+																$foption = '';
+															else
+																$foption = $value;
 															?>
-															<option value="{{$value}}" {{$selected}} >{{$value}}</option>	
+															<option value="{{$foption}}" {{$selected}} >{{$value}}</option>	
 													<?php } // } ?>
 												</select>
 											</div>
@@ -505,30 +510,43 @@
 		});
 
 		/*  -------------------------  country state city  -------------------------  */ 
-		$('#profile_country').change(function(){
+
+		$(document).on('change', '#profile_country', function(){
 			var countryId = $(this).val();
 			var _token = $('#searchform input[name=_token]').val();
-			$.ajax({			
-				'url' : '/ajax/getstates',
-				'data' : { 'countryId' : countryId, '_token' : _token },
-				'type' : 'post',
-				'success' : function(response){				
-					$('#profile_state').html(response);
-				}			
-			});	
+
+			if(countryId != ''){
+				// alert(countryId);
+				$.ajax({			
+					'url' : '/ajax/getstates',
+					'data' : { 'countryId' : countryId, '_token' : _token },
+					'type' : 'post',
+					'success' : function(response){				
+						$('#profile_state').html(response);
+					}			
+				});	
+			}else{
+				$('#profile_state').html('<option>State</option>');
+				$('#profile_city').html('<option>City</option>');
+			}
 		});
 
-		$('#profile_state').change(function(){
+		$(document).on('change', '#profile_state', function(){
 			var stateId = $(this).val();
 			var _token = $('#searchform input[name=_token]').val();
-			$.ajax({			
-				'url' : '/ajax/getcities',
-				'data' : { 'stateId' : stateId, '_token' : _token },
-				'type' : 'post',
-				'success' : function(response){
-					$('#profile_city').html(response);
-				}			
-			});	
+
+			if(stateId != ''){
+				$.ajax({			
+					'url' : '/ajax/getcities',
+					'data' : { 'stateId' : stateId, '_token' : _token },
+					'type' : 'post',
+					'success' : function(response){
+						$('#profile_city').html(response);
+					}			
+				});	
+			}else{
+				$('#profile_city').html('<option>City</option>');
+			}
 		});
 
 		$('.datepicker').datepicker();

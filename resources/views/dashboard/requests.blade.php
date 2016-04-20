@@ -137,7 +137,7 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 		</div>
 	</li>
 	@endforeach
-
+<?php // echo '<pre>';print_r($model1);die; ?>
 
 												</ul>
 	

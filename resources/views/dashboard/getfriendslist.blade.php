@@ -17,8 +17,8 @@ $count=0;
 		<div class="row">
 			<div class="col-sm-6" value="hello">
 				<div class="user-cont">
-					<a title="" href="#">
-						<span class="hello" value="hello" style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
+					<a title="" href="profile/{{$data['id']}}">
+						<span class="hello user-thumb" value="hello" style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
 					{{ $name }}
 					</a>
 				</div>
@@ -90,6 +90,7 @@ $count=0;
 		{
          ?>
 @foreach($model as $data) 
+<?php //echo '<pre>';print_r($data['friends']['id']);//die; ?>
 	<?php 
 
 		if($data['friend_id'] == Auth::User()->id)
@@ -103,7 +104,7 @@ $count=0;
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="user-cont">
-					<a title="" href="#">
+					<a title="" href="profile/{{$data['friends']['id']}}">
 						<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
 					{{ $name }}
 					</a>

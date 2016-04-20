@@ -140,16 +140,20 @@ $(document).ready(function(){
 		});	
 	});
 
-		$(document).on('click', '.comment', function(){
+	$(document).on('click', '.comment', function(){
 
 		var current = $(this);
 		var _token = $('#postform input[name=_token]').val();
 		var feedId = $(this).closest('.post-comment').data('value');
-		var commentData = $(this).closest('.post-comment').find('textarea').val();
+		var commentData = current.closest('.post-comment').find('textarea').val();
 		var commented_by = $('#user_id').val();
-		var popup=current.closest('.pop-post-comment').data('value');
+		var popup = current.closest('.pop-post-comment').data('value');
 
- 
+		if(commentData == ''){
+			var nextdata = current.closest('.post-footer').find('.comment-field').text();
+			commentData = nextdata;
+		}
+
 		if(commentData){
 			$.ajax({			
 				'url' : 'ajax/comments/post',
@@ -167,6 +171,7 @@ $(document).ready(function(){
 					if(count != 0){
 						current.parents('.post-list').find('.pop-post-footer').find('.commentcount').html(count+' Comments');
 						current.parents('.post-footer').find('.commentcount').html(count+' Comments');
+						$('#post_'+feedId).find('.commentcount').html(count+' Comments'); 
 						current.parents('#AllCommentNew').find('.commentcount').html(count+' Comments');
 					}else{
 						current.parents('.post-footer').find('.commentcount').html('1 Comment'); 
@@ -246,9 +251,12 @@ $(document).ready(function(){
 			'data' : {'type' : type},
 			'type' : 'post',
 			'success' : function(response){
+				if(response != '')
+					var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+				// else
+					// var getelem = current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').hide();
 				//alert(response);
-				//var type = response.type;
-				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+				//var type = response.type;				
 				// var getelem2 = current.closest('.tab-style-no-border').find('.active').find('loading-text');
 				// console.log(getelem2);
 				// current.closest('.tab-style-no-border').find('.active').find('load-btn').find('.loading-text').show();

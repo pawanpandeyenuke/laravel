@@ -50,6 +50,7 @@ class DashboardController extends Controller
 
             $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
                 ->whereIn('user_by', Friend::where('user_id', '=', Auth::User()->id)
+                        // ->where('friend_id', '=', Auth::User()->id)
                         ->where('status', '=', 'Accepted')
                         ->pluck('friend_id')
                         ->toArray())
