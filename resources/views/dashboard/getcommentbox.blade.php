@@ -139,6 +139,14 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 <script src="c-lib/lib/js/emojione.js"></script>
 <script>
 
+	$(document).ready(function(){
+		//Popup caption emoji fix.
+		var popupcaption = jQuery('#AllComment').find('.pop-post-text p').html();
+		// alert(popupcaption);
+		var caption = emojione.toImage(popupcaption);
+		jQuery('#AllComment').find('.pop-post-text p').html(caption);	
+	});
+
 $(".comment-text").each(function() {
 	var original = $(this).html();
 	// use .shortnameToImage if only converting shortnames (for slightly better performance)
