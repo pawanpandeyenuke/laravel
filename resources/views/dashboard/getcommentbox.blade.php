@@ -78,7 +78,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 				<div class="pop-comment-side">
 					<div class="post-comment-cont">
 						<div class="comments-list">
-							<ul>
+							<ul id="popupcomment-{{$feeddata->id}}">
 								@foreach($comments as $data)
 									<?php $username = App\User::where('id', '=', $data->commented_by)->get()->first(); ?>
 									<li data-value="{{ $data->id }}" id="post_{{ $data->id }}">
