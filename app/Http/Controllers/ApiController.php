@@ -1146,10 +1146,14 @@ class ApiController extends Controller
 					if(empty($finduser))
 						throw new Exception("This user does not exist.", 1);
 
-					$groupname = Request::get('group_name');
-					$findgroup = User::find($groupname);
-					if(empty($findgroup))
-						throw new Exception("This group does not exist.", 1);	
+					$arguments = Request::all();
+					$defaultgroup = new DefaultGroup;
+					$defaultgroup->create($arguments);
+
+//					$groupname = Request::get('group_name');
+//					$findgroup = User::find($groupname);
+//					if(empty($findgroup))
+//						throw new Exception("This group does not exist.", 1);	
 
 					$count = DefaultGroup::where('group_name', '=', $groupname)->count();
 
