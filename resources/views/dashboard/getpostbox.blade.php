@@ -36,7 +36,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 		</div>
 		<div class="post-footer pop-post-footer">
 			<div class="post-actions">
-				<ul>
+				<ul class="popupcomment-{{$feeddata->id}}">
 					<li>
 						<div class="like-cont">
 
@@ -149,18 +149,12 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 		$(this).html(converted);
 	});
 
-	$(".post-list .single-post div").each(function() {
-		var original = $(this).html();
-		// use .shortnameToImage if only converting shortnames (for slightly better performance)
-		var converted = emojione.toImage(original);
-		$(this).html(converted);
-	});
 
-$('.popup-list-without-img .comments-list').niceScroll();
-var postsonajax = $('.pop-post-text').find('p').html();
-if(postsonajax == ''){
-	$('.pop-post-text').remove();
-}
+	$('.popup-list-without-img .comments-list').niceScroll();
+	var postsonajax = $('.pop-post-text').find('p').html();
+	if(postsonajax == ''){
+		$('.pop-post-text').remove();
+	}
 
 	//Emoji Picker
 	$(function() {
