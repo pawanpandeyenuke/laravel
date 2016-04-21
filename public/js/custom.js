@@ -105,24 +105,38 @@ $(document).ready(function(){
 			'data' : { '_token' : _token, 'feed_id' : feedId, 'user_id' : user_id, 'liked' : 'Yes' },
 			'type' : 'post',
 			'success' : function(response){
+				console.log(response);
+				var parseresponse = jQuery.parseJSON(response);
 				 var check="";
 				if(response == 0){
 					jQuery("#page-"+feedId).html('');
 					jQuery("#popup-"+feedId).html('');
-				    check=false;
-				}else{					
-					jQuery("#page-"+feedId).html(response);
-					jQuery("#popup-"+feedId).html(response);	
-					check=true;								
-				}				
+
+				} else{					
+					jQuery("#page-"+feedId).html(parseresponse.count);
+					jQuery("#popup-"+feedId).html(parseresponse.count);	
+	
+				}	
+
+				if(parseresponse.likecheck == null)
+				{
+					check=false;
+				}
+				else{
+					check=true;
+				}			
                      var idlike=current.attr('id'); 
+         
                      if(idlike!='')    
                      {
-                     	var id1=idlike.split('-');
+                        var id1=idlike.split('-');
+                     
+					    jQuery('#'+id1).prop('checked', check);
+
                      	if(id1[0]=='popup1')
                      	{
                      		jQuery('#'+id1[1]).prop('checked', check);
-                     		//alert('#'+id1[1]);
+                     	
                      	}
                      }               
 
@@ -397,7 +411,7 @@ $(document).ready(function(){
 			'data' : {'commentId':commentId, 'feedId' : feedId},
 			'type' : 'post',
 			'success' : function(response){
-				$('.fancybox-overlay').hide();
+				$.fancybox.close();
 				$('#edit-modal').append(response);
 				$("#edit-modal").modal();
 			}
