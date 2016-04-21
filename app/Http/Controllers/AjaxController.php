@@ -481,8 +481,13 @@ comments;
 				}
 				$count = DB::table('likes')->where(['feed_id' => $arguments['feed_id']])->get();
 				// print_r();die;
-				echo $likes = count($count);
-				
+				// $likes[] = count($count);
+// 
+				$likecheck = DB::table('likes')->where('feed_id',$arguments['feed_id'])->where('user_id',Auth::User()->id)->value('id');
+
+				$likes['count'] = count($count);
+				$likes['likecheck'] = $likecheck;
+				echo $likes;
 			}
 		}catch( Exception $e ){
 			return $e->getMessage();
