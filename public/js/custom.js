@@ -132,7 +132,7 @@ $(document).ready(function(){
                         var id1=idlike.split('-');
                      
 					    jQuery('#'+id1).prop('checked', check);
-					    
+
                      	if(id1[0]=='popup1')
                      	{
                      		jQuery('#'+id1[1]).prop('checked', check);
@@ -238,7 +238,6 @@ $(document).ready(function(){
 			'data' : { 'feed_id' : feedId, '_token' : _token },
 			'type' : 'post',
 			'success' : function(response){
-				alert(response);
 				$('#commentajax').html(response);
 		        $.fancybox([
 		            { href : '#commentajax' }
@@ -258,7 +257,6 @@ $(document).ready(function(){
 			'data' : { 'feed_id' : feedId, '_token' : _token },
 			'type' : 'post',
 			'success' : function(response){
-				alert(response);
 				$('#AllCommentNew').html(response);
 		        $.fancybox([
 		            { href : '#AllCommentNew' }
