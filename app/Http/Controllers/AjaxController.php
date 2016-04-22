@@ -160,6 +160,7 @@ class AjaxController extends Controller
 		$model = $comments->create($arguments);
 
 		$userid = Auth::User()->id;
+		$user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : 'images/user-thumb.jpg';
 		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
 		$comment = $model->comments;
 		$time = $model->updated_at->format('h:i A');
@@ -172,7 +173,7 @@ $variable['comment'] = <<<comments
 		<br>
 		<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>
 
-	<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+	<span class="user-thumb" style="background: url($user_picture);"></span>
 	<div class="cmt-data">
 	<div class="comment-title-cont">
 		<div class="row">
@@ -481,8 +482,13 @@ comments;
 				}
 				$count = DB::table('likes')->where(['feed_id' => $arguments['feed_id']])->get();
 				// print_r();die;
-				echo $likes = count($count);
-				
+				// $likes[] = count($count);
+// 
+				$likecheck = DB::table('likes')->where('feed_id',$arguments['feed_id'])->where('user_id',Auth::User()->id)->value('id');
+
+				$likes['count'] = count($count);
+				$likes['likecheck'] = $likecheck;
+				echo $likes;
 			}
 		}catch( Exception $e ){
 			return $e->getMessage();
@@ -832,12 +838,13 @@ comments;
 		$name=$value['friends']['first_name']." ".$value['friends']['last_name'];
 		$xmpp_username="'".$value['friends']['xmpp_username']."'";
 		$first_name="'".$value['friends']['first_name']."'";
+		$user_picture = !empty($value['friends']['picture']) ? $value['friends']['picture'] : '/images/user-thumb.jpg';
 		$msg="No friend found!";
 
 		if (stripos($name, $input) !== false) {
 			  $data[] = '<li > 
 				<a href="#" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
-					<span class="chat-thumb"style="background: url(images/user-thumb.jpg);"></span>
+					<span class="chat-thumb"style="background: url('.$user_picture.');"></span>
 					<span class="title">'.$name.'</span>
 				</a>
 				</li>';

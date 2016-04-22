@@ -28,6 +28,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-3">
+
 				<a href="{{ url('/') }}" title="" class="logo"><img src="{{ url('images/logo.png') }}" alt="Friendz Square"></a>
 			</div>
 			<div class="col-sm-6">
@@ -75,7 +76,8 @@
 				<div class="dashboard-header-menu text-right">
 					<ul class="list-inline">
 						<li class="user-info-top">
-							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('/images/user-thumb.jpg');"></span>
+							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : 'images/user-thumb.jpg'; ?>
+							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
 							{{Auth::User()->first_name}}</a>
 						</li>
 						<li><div class="logout"><a href="{{ url('/logout') }}" title="">Logout</a></div></li>

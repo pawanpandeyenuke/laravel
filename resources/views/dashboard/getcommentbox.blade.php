@@ -1,4 +1,4 @@
-<?php  
+ <?php  
 $user = $feeddata->user;
 $comments = $feeddata->comments;
 $likes = $feeddata->likes; 
@@ -16,8 +16,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 							<div class="row">
 								<div class="col-md-7">
 									<a href="profile/{{$user->id}}" title="" class="user-thumb-link">
-										<?php $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg' ?>
-										<span class="small-thumb" style="background: url('{{$profileimage}}');"></span>
+										<span class="small-thumb" style="background: url('/images/user-thumb.jpg');"></span>
 										{{ $user->first_name.' '.$user->last_name }}
 									</a>
 								</div>
@@ -48,8 +47,8 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 								<li>
 									<div class="like-cont">
 
-										<input type="checkbox" name="checkboxG4" id="popup1-checkboxG4" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
-										<label for="popup1-checkboxG4" class="css-label">
+										<input type="checkbox" name="checkboxG4" id="popup1-checkbox{{$feeddata->id}}" class="like css-checkbox" {{ isset($likedata[0])?'checked':'' }}/>
+							<label for="popup1-checkbox{{$feeddata->id}}" class="css-label">
 											@if($likecountdata > 0)
 												<span class="countspan" id="popup-{{$feeddata->id}}">
 											 		{{ $likecountdata }}
@@ -79,7 +78,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 				<div class="pop-comment-side">
 					<div class="post-comment-cont">
 						<div class="comments-list">
-							<ul>
+							<ul id="popupcomment-{{$feeddata->id}}">
 								@foreach($comments as $data)
 									<?php $username = App\User::where('id', '=', $data->commented_by)->get()->first(); ?>
 									<li data-value="{{ $data->id }}" id="post_{{ $data->id }}">
@@ -93,7 +92,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 					<?php } else {
 						$divadd="";
 						} ?>
-						<?php $profileimage = !empty($username->picture) ? $username->picture : '/images/user-thumb.jpg' ?>
+
 										<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
 										<div class="{{$divadd}}">
 										<div class="comment-title-cont">
@@ -174,5 +173,6 @@ if(postsonajax == ''){
       // It can be called as many times as necessary; previously converted input fields will not be converted again
       window.emojiPicker.discover();
     });
+
 </script>
 

@@ -430,7 +430,7 @@ if($input!=null && $gname!=null)
         	    	}
         	    }
        
-      	if($counter==0 && $input!=null)
+      	if($counter==0 && $input==null)
 
         {
         	return redirect('private-group-list');

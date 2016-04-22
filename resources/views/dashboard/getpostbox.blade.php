@@ -8,7 +8,7 @@ $likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' 
 $likecountdata = App\Like::where(['feed_id' => $feeddata->id])->get()->count(); 
 $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->count(); 
 
- $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+
 ?>					
 	<div class="single-post" data-value="{{ $feeddata->id }}" id="post_{{ $feeddata->id }}">
 		<div class="pop-post-header">
@@ -16,7 +16,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 				<div class="row">
 					<div class="col-md-7">
 						<a href="#" title="" class="user-thumb-link">
-							<span class="small-thumb" style="background: url('{{$profileimage}}');"></span>
+							<span class="small-thumb" style="background: url('/images/user-thumb.jpg');"></span>
 							{{ $user->first_name.' '.$user->last_name }}
 						</a>
 					</div>
@@ -36,7 +36,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 		</div>
 		<div class="post-footer pop-post-footer">
 			<div class="post-actions">
-				<ul>
+				<ul class="popupcomment-{{$feeddata->id}}">
 					<li>
 						<div class="like-cont">
 
@@ -85,8 +85,8 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 					<?php } else {
 						$divadd="";
 						} ?>
-						<?php $profileimage = !empty($username->picture) ? $username->picture : '/images/user-thumb.jpg'; ?>
-						<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
+
+						<span class="user-thumb" style="background: url('/images/user-thumb.jpg');"></span>
 				
 						<div class="{{$divadd}}">
 				
@@ -149,18 +149,12 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 		$(this).html(converted);
 	});
 
-	$(".post-list .single-post div").each(function() {
-		var original = $(this).html();
-		// use .shortnameToImage if only converting shortnames (for slightly better performance)
-		var converted = emojione.toImage(original);
-		$(this).html(converted);
-	});
 
-$('.popup-list-without-img .comments-list').niceScroll();
-var postsonajax = $('.pop-post-text').find('p').html();
-if(postsonajax == ''){
-	$('.pop-post-text').remove();
-}
+	$('.popup-list-without-img .comments-list').niceScroll();
+	var postsonajax = $('.pop-post-text').find('p').html();
+	if(postsonajax == ''){
+		$('.pop-post-text').remove();
+	}
 
 	//Emoji Picker
 	$(function() {

@@ -45,12 +45,13 @@ $title1=str_replace(" ","-",$title1);
 											}else{
 											$fname=$data['first_name']." ".$data['last_name'];
 											}
+											$user_picture = !empty($data['picture']) ? $data['picture'] : '/images/user-thumb.jpg';
 											 ?>
 											<div class="single-list">
 												<div class="row" data-gid={{$groupid}}>
 													<div class="col-sm-9">
 														<div class="bclist-detail">
-															<div class="bc-img" style="background: url('/images/user-thumb.jpg');"></div>
+															<div class="bc-img" style="background: url('{{$user_picture}}');"></div>
 															<div class="list-name">
 																<a href="{{url("profile/".$data['id'])}}" class="bc-name" title="" >{{$fname}}</a>
 
