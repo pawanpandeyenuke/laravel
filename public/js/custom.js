@@ -40,17 +40,17 @@ $(document).ready(function(){
 	     }
 	});
 
-
+	 $('.edit-pr-img').find(".badge").remove();
 	//Profile Pic Upload Js
 	 $("#profilepicture").on('change', function () {
-	 
+	 	 
 	     //Get count of selected files
 	     var countFiles = $(this)[0].files.length;
-	 
+	 	 
 	     var imgPath = $(this)[0].value;
 	     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
 	     var image_holder = $("#profile-pic-holder");
-	     image_holder.empty();
+	     //image_holder.empty();
 	 
 	     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
 	         if (typeof (FileReader) != "undefined") {
@@ -60,10 +60,10 @@ $(document).ready(function(){
 	 
 	                 var reader = new FileReader();
 	                 reader.onload = function (e) {
-	                     $("<img />", {
-	                         "src": e.target.result,
-	                             "class": "thumb-image"
-	                     }).appendTo(image_holder);
+	                 	
+	                 	$('.edit-pr-img').find(".badge").remove();
+	                 	$('.profile-img').css("background",	"url("+e.target.result+") no-repeat");
+
 	                 }
 	 
 	                 image_holder.show();
