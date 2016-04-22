@@ -18,7 +18,8 @@ $count=0;
 			<div class="col-sm-6" value="hello">
 				<div class="user-cont">
 					<a title="" href="profile/{{$data['id']}}">
-						<span class="hello user-thumb" value="hello" style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
+						<?php $profileimage = !empty($data['picture']) ? $data['picture'] : '/images/user-thumb.jpg'; ?>
+						<span class="hello user-thumb" value="hello" style="background: url('{{$profileimage}}');" class="user-thumb"></span>
 					{{ $name }}
 					</a>
 				</div>
@@ -90,13 +91,20 @@ $count=0;
 		{
          ?>
 @foreach($model as $data) 
-<?php //echo '<pre>';print_r($data['friends']['id']);//die; ?>
-	<?php 
+<?php //echo '<pre>';print_r($data['friends']);die; ?>
 
-		if($data['friend_id'] == Auth::User()->id)
+	<?php 
+ 		
+ 		$profileimage = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; 
+
+		if($data['friend_id'] == Auth::User()->id){
 			$name = $data['user']['first_name'].' '.$data['user']['last_name'];
-		else
+			$profileimage = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; 
+		}else{
 			$name = $data['friends']['first_name'].' '.$data['friends']['last_name'];
+			$profileimage = !empty($data['friends']['picture']) ? $data['friends']['picture'] : '/images/user-thumb.jpg'; 
+		}
+
 		if(!(($data['user_id']==Auth::User()->id && $data['status']=="Accepted")||($data['friend_id']==Auth::User()->id && $data['status']=='Rejected')))
 		{
 	?>
@@ -105,7 +113,7 @@ $count=0;
 			<div class="col-sm-6">
 				<div class="user-cont">
 					<a title="" href="profile/{{$data['friends']['id']}}">
-						<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
+						<span style="background: url('{{$profileimage}}');" class="user-thumb"></span>
 					{{ $name }}
 					</a>
 				</div>

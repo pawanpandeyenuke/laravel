@@ -1,18 +1,22 @@
+
 @foreach($feeds as $data)		
 							<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>					
 							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 
 								<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 									@if($data->user->id == Auth::User()->id)
+
 									<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
 
 									<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 									@endif
 
+
 									<div class="row">
 										<div class="col-md-7">
+									<?php $user_picture = !empty($data->user->picture) ? $data->user->picture : 'images/user-thumb.jpg'; ?>
 											<a href="profile/{{$data->user->id}}" title="" class="user-thumb-link">
-												<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
+												<span class="small-thumb" style="background: url('{{$user_picture}}');"></span>
 												{{ $data->user->first_name.' '.$data->user->last_name }}
 											</a>
 										</div>
@@ -110,7 +114,7 @@
 														// echo $offset;die;
 													foreach($data['comments'] as $commentsData){
 													
-														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name']);
+														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name', 'picture']);
 
 														$userId = DB::table('users')->where('id', $commentsData['commented_by'])->get(['id']);
 
@@ -118,6 +122,8 @@
 														if(!empty($username)){
 
 															$name = $username[0]->first_name.' '.$username[0]->last_name; 
+															
+															$user_picture = !empty($username[0]->picture) ? $username[0]->picture : 'images/user-thumb.jpg';
 
 															if($counter > $offset){ ?>
 																<li data-value="{{ $commentsData['id'] }}" id="post_{{ $commentsData['id'] }}">
@@ -127,7 +133,7 @@
 																<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
 													<?php } ?>
-																<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+																<span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
 																<div class="comment-title-cont">
 																	<div class="row">
 																		<div class="col-sm-6">
@@ -155,3 +161,4 @@
 								</div><!--/post-footer-->
 							</div><!--/single post-->
 						@endforeach
+

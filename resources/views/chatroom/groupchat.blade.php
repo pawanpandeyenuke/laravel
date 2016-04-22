@@ -80,11 +80,11 @@ if($pgid){
                                                     <ul>
                                     @foreach($userdata as $data)
                                     <?php //echo '<pre>';print_r($data['user']['id']);die;
-
+                                  $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg';
                                     ?>
                                     <li>
                                         <a title="" href="#" class='info' data-id="{{$data['user']['id']}}" >
-                                            <span style="background: url('/images/user-thumb.jpg');" class="chat-thumb"></span>
+                                            <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
                                             <span class="title">{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}</span>
                         
 

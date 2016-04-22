@@ -40,6 +40,45 @@ $(document).ready(function(){
 	     }
 	});
 
+
+	//Profile Pic Upload Js
+	 $("#profilepicture").on('change', function () {
+	 
+	     //Get count of selected files
+	     var countFiles = $(this)[0].files.length;
+	 
+	     var imgPath = $(this)[0].value;
+	     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+	     var image_holder = $("#profile-pic-holder");
+	     image_holder.empty();
+	 
+	     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+	         if (typeof (FileReader) != "undefined") {
+	 
+	             //loop for each file selected for uploaded.
+	             for (var i = 0; i < countFiles; i++) {
+	 
+	                 var reader = new FileReader();
+	                 reader.onload = function (e) {
+	                     $("<img />", {
+	                         "src": e.target.result,
+	                             "class": "thumb-image"
+	                     }).appendTo(image_holder);
+	                 }
+	 
+	                 image_holder.show();
+	                 reader.readAsDataURL($(this)[0].files[i]);
+	             }
+	 
+	         } else {
+	             alert("This browser does not support FileReader.");
+	         }
+	     } else {
+	         alert("Please select only images");
+	     }
+	});
+ 
+
 	// Post status updates via ajax call.
 	$("#postform").ajaxForm(function(response) { 
  		var current = $("#postform");
@@ -105,10 +144,10 @@ $(document).ready(function(){
 			'data' : { '_token' : _token, 'feed_id' : feedId, 'user_id' : user_id, 'liked' : 'Yes' },
 			'type' : 'post',
 			'success' : function(response){
-				console.log(response);
+				//console.log(response);
 				var parseresponse = jQuery.parseJSON(response);
 				 var check="";
-				if(response == 0){
+				if(parseresponse.count == 0){
 					jQuery("#page-"+feedId).html('');
 					jQuery("#popup-"+feedId).html('');
 
@@ -196,19 +235,6 @@ $(document).ready(function(){
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
 
-					//On text popup change emoji
-					//var popupemoji = jQuery('#AllCommentNew').find('.comments-list ul li .comment-text').last().html();
-					//var popupemojidata = emojione.toImage(popupemoji);
-					//jQuery('#AllCommentNew').find('.comments-list ul li .comment-text').last().html(popupemojidata);
-
-
-
-					//Image popup emoji fix.
-					//var allcommentsnew = current.parents('#AllComment').find('.comments-list ul li .comment-text').last().html();
-					//var convertednew = emojione.toImage(allcommentsnew);
-					//jQuery('#AllComment').find('.comments-list ul li .comment-text').last().html(convertednew);
-
- 
 					//Dashboard emoji fix.
 					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
 				    var converted = emojione.toImage(original);

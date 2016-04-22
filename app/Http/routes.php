@@ -107,6 +107,7 @@ Route::post('api/comments/create', 'ApiController@postComments');
 
 Route::post('api/getprofile','ApiController@getProfile');
 Route::post('api/updateprofile','ApiController@updateProfile');
+Route::post('api/update-picture','ApiController@updateProfilePicture');
 
 
 Route::post('api/editpost','ApiController@editPost');

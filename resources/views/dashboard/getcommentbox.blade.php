@@ -1,4 +1,4 @@
-<?php  
+ <?php  
 $user = $feeddata->user;
 $comments = $feeddata->comments;
 $likes = $feeddata->likes; 
@@ -173,5 +173,6 @@ if(postsonajax == ''){
       // It can be called as many times as necessary; previously converted input fields will not be converted again
       window.emojiPicker.discover();
     });
+
 </script>
 
