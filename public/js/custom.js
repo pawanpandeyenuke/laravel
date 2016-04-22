@@ -22,6 +22,7 @@ $(document).ready(function(){
 	 
 	                 var reader = new FileReader();
 	                 reader.onload = function (e) {
+
 	                     $("<img />", {
 	                         "src": e.target.result,
 	                             "class": "thumb-image"
@@ -30,6 +31,44 @@ $(document).ready(function(){
 	 
 	                 image_holder.show();
 	                 reader.readAsDataURL($(this)[0].files[i]);
+	             }
+	 
+	         } else {
+	             alert("This browser does not support FileReader.");
+	         }
+	     } else {
+	         alert("Please select only images");
+	     }
+	});
+
+ $("#profilepicture").on('change', function () {
+	 
+	     //Get count of selected files
+	    // var countFiles = $(this)[0].files.length;
+	 
+	     var imgPath = $(this)[0].value;
+
+	     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+
+	     var image_holder = $("#profile");
+	     image_holder.empty();
+	 
+	     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+
+	         if (typeof (FileReader) != "undefined") {
+	 		
+	                 var dp = new FileReader();
+
+	                 dp.onload = function (e) {
+	                 	alert("Here");
+	                     $("<img />", {
+	                         "src": e.target.result,
+	                             "class": "thumb-image"
+	                     }).appendTo(image_holder);
+	                 
+	
+	                 image_holder.show();
+	                 dp.readAsDataURL($(this)[0].files[0]);
 	             }
 	 
 	         } else {
@@ -108,7 +147,7 @@ $(document).ready(function(){
 				console.log(response);
 				var parseresponse = jQuery.parseJSON(response);
 				 var check="";
-				if(response == 0){
+				if(parseresponse.count==0){
 					jQuery("#page-"+feedId).html('');
 					jQuery("#popup-"+feedId).html('');
 
@@ -196,17 +235,17 @@ $(document).ready(function(){
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
 
-					//On text popup change emoji
-					var popupemoji = jQuery('#AllCommentNew').find('.comments-list ul li .comment-text').last().html();
-					var popupemojidata = emojione.toImage(popupemoji);
-					jQuery('#AllCommentNew').find('.comments-list ul li .comment-text').last().html(popupemojidata);
+					// //On text popup change emoji
+					// var popupemoji = jQuery('#AllCommentNew').find('.comments-list ul li .comment-text').last().html();
+					// var popupemojidata = emojione.toImage(popupemoji);
+					// jQuery('#AllCommentNew').find('.comments-list ul li .comment-text').last().html(popupemojidata);
 
 
 
-					//Image popup emoji fix.
-					var allcommentsnew = current.parents('#AllComment').find('.comments-list ul li .comment-text').last().html();
-					var convertednew = emojione.toImage(allcommentsnew);
-					jQuery('#AllComment').find('.comments-list ul li .comment-text').last().html(convertednew);
+					// //Image popup emoji fix.
+					// var allcommentsnew = current.parents('#AllComment').find('.comments-list ul li .comment-text').last().html();
+					//  var convertednew = emojione.toImage(allcommentsnew);
+					//  jQuery('#AllComment').find('.comments-list ul li .comment-text').last().html(convertednew);
 
  
 					//Dashboard emoji fix.
@@ -215,13 +254,13 @@ $(document).ready(function(){
 					jQuery("#pagecomment-"+feedId+" li .comment-text").last().html(converted);
 
 	 
-			if(popup==feedId)
+		if(popup==feedId)
 
-				{
-					var original1=jQuery("#popupcomment-"+feedId+" li .comment-text").last().html();
-					var converted1 = emojione.toImage(original1);
-					jQuery("#popupcomment-"+feedId+" li .comment-text").last().html(converted1);
-				}
+			{
+				var original1=jQuery("#popupcomment-"+feedId+" li .comment-text").last().html();
+				var converted1 = emojione.toImage(original1);
+				jQuery("#popupcomment-"+feedId+" li .comment-text").last().html(converted1);
+			}
 
 				}			
 			});	

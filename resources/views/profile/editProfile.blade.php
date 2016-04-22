@@ -58,9 +58,12 @@
 					
 					<div class="p-header-outer">
 						<div class="profile-header">
-							<div class="profile-img" style="background: url('/images/user-thumb.jpg');">
-								<button type="button" class="edit-pr-img" title="Edit Image"><i class="glyphicon glyphicon-camera"></i></button>
-							</div><!--Profile-img-->
+							<div class="profile-img" id="profile" style="background: url('/images/user-thumb.jpg');"></div>
+								<!-- <button type="button" class="edit-pr-img" title="Edit Image"><i class="glyphicon glyphicon-camera"></i></button> -->
+
+								<input type="file" id="profilepicture" class="filestyle" data-input="false" data-iconName="glyphicon glyphicon-camera" data-buttonText="" data-buttonName="edit-pr-img">
+
+							<!--Profile-img-->
 							<div class="pr-field">
 								<input type="text" class="pr-edit pr-name" value="{{ $user->first_name }}" name="first_name">
 								<input type="text" class="pr-edit pr-name" value="{{ $user->last_name }}" name="last_name">

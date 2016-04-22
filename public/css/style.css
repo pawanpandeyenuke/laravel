@@ -70,6 +70,21 @@ header{
 	font-size: 15px;
 	color: #000;
 }
+.btn-primary1{
+	position: absolute;
+  right: 0px;
+  bottom: 0px;
+  background: #92e7dc;
+  border: 0px;
+  width: 25px;
+  height: 25px;
+  padding: 0px;
+  text-align: center;
+  line-height: 25px;
+  border-radius: 50%;
+  font-size: 13px;
+  outline:none;
+}
 .btn-primary:hover{
 	background: #5DF7E3;
 	color: #000;
@@ -1369,7 +1384,7 @@ width:495px;
   color: #4CBB5B;
   display:none;
 }
-button.edit-pr-img {
+.edit-pr-img {
   position: absolute;
   right: 0px;
   bottom: 0px;
@@ -1383,8 +1398,8 @@ button.edit-pr-img {
   border-radius: 50%;
   font-size: 13px;
   outline:none;
-  display:none;
 }
+
 .p-data-title {
   position: relative;
   padding-left: 30px;
@@ -2264,4 +2279,12 @@ textarea{
 .cmt-data {
     position: relative;
     top: -16px;
+}
+.profile-img .input-group{
+	bottom: 0;
+    display: block;
+    height: 25px;
+    position: absolute;
+    right: 0;
+    width: 25px;
 }

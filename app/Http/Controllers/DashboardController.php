@@ -252,8 +252,9 @@ $groupname =preg_replace('/(?<! )(?<!^)[A-Z]/',' $0', $groupname);
 $groupname=str_replace(', ',',',$groupname);
 $groupname=str_replace('-','',$groupname);
 $groupname=str_replace('It','IT',$groupname);
-
+//print_r($groupname);die;
 $result=DB::table('categories')->where('title',$groupname)->value('id');
+
 if($result==null)
 {
 return redirect('group');
@@ -288,7 +289,7 @@ return redirect('group');
                     $flag1=0; 
           // print_r($sub);die;
                     foreach ($sub as $key) {
-       $key = str_replace(" ","", $key);
+                    $key = str_replace(" ","", $key);
                     if($input['subcategory']==$key)
                     {
                     $flag=1;
@@ -303,7 +304,7 @@ return redirect('group');
                     }
                     }
 
-                    if($flag==0 || $flag1==0)
+                    if(($flag==0 || $flag1==0) && $result==null)
                     {
                 return redirect('group');
             }
@@ -430,7 +431,7 @@ if($input!=null && $gname!=null)
         	    	}
         	    }
        
-      	if($counter==0 && $input!=null)
+      	if($counter==0 && $input==null)
 
         {
         	return redirect('private-group-list');
