@@ -8,7 +8,7 @@ $likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' 
 $likecountdata = App\Like::where(['feed_id' => $feeddata->id])->get()->count(); 
 $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->count(); 
 
-
+ $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 ?>					
 	<div class="single-post" data-value="{{ $feeddata->id }}" id="post_{{ $feeddata->id }}">
 		<div class="pop-post-header">
@@ -16,7 +16,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 				<div class="row">
 					<div class="col-md-7">
 						<a href="#" title="" class="user-thumb-link">
-							<span class="small-thumb" style="background: url('/images/user-thumb.jpg');"></span>
+							<span class="small-thumb" style="background: url('{{$profileimage}}');"></span>
 							{{ $user->first_name.' '.$user->last_name }}
 						</a>
 					</div>
@@ -85,8 +85,8 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 					<?php } else {
 						$divadd="";
 						} ?>
-
-						<span class="user-thumb" style="background: url('/images/user-thumb.jpg');"></span>
+						<?php $profileimage = !empty($username->picture) ? $username->picture : '/images/user-thumb.jpg'; ?>
+						<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 				
 						<div class="{{$divadd}}">
 				

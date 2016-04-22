@@ -1,5 +1,6 @@
 	@foreach($feeds as $data)		
-		<?php //echo '<pre>';print_r($data);die;  ?>					
+		<?php //echo '<pre>';print_r($username);die;  ?>					
+		<?php $profileimage = !empty($data->user->picture) ? $data->user->picture : '/images/user-thumb.jpg'; ?>
 		<div class="single-post" data-value="{{ $data->id }}" id="post_{{ $data->id }}">
 			<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 			@if($data->user->id == Auth::User()->id)
@@ -11,7 +12,7 @@
 				<div class="row">
 					<div class="col-md-7">
 						<a href="#" title="" class="user-thumb-link">
-							<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
+							<span class="small-thumb" style="background: url('{{$profileimage}}');"></span>
 							{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}
 						</a>
 					</div>
@@ -103,8 +104,12 @@
 							      $offset = count($data->comments) - 3;
 							 ?>
 							@foreach($data->comments as $commentsData)
+
 							<?php 
-								$username = DB::table('users')->where('id', $commentsData->commented_by)->get(['first_name', 'last_name']);
+								$username = DB::table('users')->where('id', $commentsData->commented_by)->get(['first_name', 'last_name', 'picture']);
+
+								$profileimage = !empty($username[0]->picture) ? $username[0]->picture : '/images/user-thumb.jpg';
+								// echo '<pre>';print_r($username);die;
 								if(!empty($username)){
 
 								$name = $username[0]->first_name.' '.$username[0]->last_name; 
@@ -117,7 +122,7 @@
 									<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
 													<?php } ?>
-									<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+									<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 									<a href="<?php echo 'profile/'.$commentsData->commented_by ?>" title="" class="user-link">{{$name}}</a>
 									<div class="comment-text">{{$commentsData->comments}}</div>
 								</li>

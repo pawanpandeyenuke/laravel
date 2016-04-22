@@ -476,9 +476,9 @@ if($input!=null && $gname!=null)
 	{	        
         $arguments = Request::all();
         $user = new User();
-        // echo '<pre>'; print_r($arguments);die;
-        if(Request::isMethod('post')){
         
+        if(Request::isMethod('post')){
+            
             $getCommonEduArgs = array_intersect_key( $arguments, [
                                     'user_id' => 'null',
                                     'education_level' => 'null',
@@ -530,7 +530,16 @@ if($input!=null && $gname!=null)
             if($arguments){
 
                 unset($arguments['_token']);
-                
+
+                //Check for image upload.
+                $file = Request::file('picture');
+                if( isset($arguments['picture']) && $file != null ){
+                    $image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+                    $arguments['picture'] = '/uploads/user_img/'.$image_name;
+                    $file->move(public_path('uploads/user_img'), $image_name);
+                }
+                // echo '<pre>';print_r($arguments);die;
+                // $arguments['picture'] = 'uploads/user_img/'.$arguments['picture'];
                 foreach ($arguments as $key => $value) {
                     if( $key != 'email' && $key != 'password' ){
                         User::where([ 'id' => $id ])

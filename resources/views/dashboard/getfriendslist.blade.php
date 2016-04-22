@@ -18,7 +18,8 @@ $count=0;
 			<div class="col-sm-6" value="hello">
 				<div class="user-cont">
 					<a title="" href="profile/{{$data['id']}}">
-						<span class="hello user-thumb" value="hello" style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
+						<?php $profileimage = !empty($data['picture']) ? $data['picture'] : '/images/user-thumb.jpg'; ?>
+						<span class="hello user-thumb" value="hello" style="background: url('/images/user-thumb.jpg');" class="user-thumb"></span>
 					{{ $name }}
 					</a>
 				</div>
@@ -90,8 +91,11 @@ $count=0;
 		{
          ?>
 @foreach($model as $data) 
-<?php //echo '<pre>';print_r($data['friends']['id']);//die; ?>
+<?php //echo '<pre>';print_r($data['friends']);die; ?>
+
 	<?php 
+ 		
+ 		$profileimage = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; 
 
 		if($data['friend_id'] == Auth::User()->id)
 			$name = $data['user']['first_name'].' '.$data['user']['last_name'];
@@ -105,7 +109,7 @@ $count=0;
 			<div class="col-sm-6">
 				<div class="user-cont">
 					<a title="" href="profile/{{$data['friends']['id']}}">
-						<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
+						<span style="background: url('/images/user-thumb.jpg');" class="user-thumb"></span>
 					{{ $name }}
 					</a>
 				</div>

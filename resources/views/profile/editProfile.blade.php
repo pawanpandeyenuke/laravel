@@ -46,7 +46,7 @@
 			@include('panels.left')
 
 			<div class="col-sm-6">
-				{!! Form::open() !!}
+				{!! Form::open(array('files' => true)) !!}
 				<div class="shadow-box page-center-data no-margin-top">
 					@if (Session::has('success'))
 						<div class="alert alert-success">{!! Session::get('success') !!}</div>
@@ -58,9 +58,10 @@
 					
 					<div class="p-header-outer">
 						<div class="profile-header">
-							<div class="profile-img" style="background: url('/images/user-thumb.jpg');">
-								<button type="button" class="edit-pr-img" title="Edit Image"><i class="glyphicon glyphicon-camera"></i></button>
+							<div id="profile-pic-holder" class="profile-img" style="background: url('{{ $user->picture }}');">
+								<!-- <button type="button" class="edit-pr-img" title="Edit Image"><i class="glyphicon glyphicon-camera"></i></button> -->
 							</div><!--Profile-img-->
+							<input type="file" id="profilepicture" name="picture" class="filestyle" data-input="false" data-iconName="glyphicon glyphicon-camera" data-buttonText="" data-buttonName="edit-pr-img">
 							<div class="pr-field">
 								<input type="text" class="pr-edit pr-name" value="{{ $user->first_name }}" name="first_name">
 								<input type="text" class="pr-edit pr-name" value="{{ $user->last_name }}" name="last_name">

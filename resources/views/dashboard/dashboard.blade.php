@@ -137,7 +137,8 @@
 									<div class="row">
 										<div class="col-md-7">
 											<a href="profile/{{$data->user->id}}" title="" class="user-thumb-link">
-												<span class="small-thumb" style="background: url('images/user-thumb.jpg');"></span>
+												<?php $profileimage = !empty($data->user->picture) ? $data->user->picture : '/images/user-thumb.jpg' ?>
+												<span class="small-thumb" style="background: url('{{ $profileimage }}');"></span>
 												{{ $data->user->first_name.' '.$data->user->last_name }}
 											</a>
 										</div>
@@ -235,7 +236,9 @@
 														// echo $offset;die;
 													foreach($data['comments'] as $commentsData){
 													
-														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name']);
+														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name', 'picture']);
+
+														$profileimage = !empty($username[0]->picture) ? $username[0]->picture : '/images/user-thumb.jpg';
 
 														$userId = DB::table('users')->where('id', $commentsData['commented_by'])->get(['id']);
 
@@ -252,7 +255,8 @@
 																<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
 													<?php } ?>
-																<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
+															
+																<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 																<div class="comment-title-cont">
 																	<div class="row">
 																		<div class="col-sm-6">

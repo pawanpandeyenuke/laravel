@@ -16,7 +16,8 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 							<div class="row">
 								<div class="col-md-7">
 									<a href="profile/{{$user->id}}" title="" class="user-thumb-link">
-										<span class="small-thumb" style="background: url('/images/user-thumb.jpg');"></span>
+										<?php $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg' ?>
+										<span class="small-thumb" style="background: url('{{$profileimage}}');"></span>
 										{{ $user->first_name.' '.$user->last_name }}
 									</a>
 								</div>
@@ -92,7 +93,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 					<?php } else {
 						$divadd="";
 						} ?>
-
+						<?php $profileimage = !empty($username->picture) ? $username->picture : '/images/user-thumb.jpg' ?>
 										<span class="user-thumb" style="background: url('images/user-thumb.jpg');"></span>
 										<div class="{{$divadd}}">
 										<div class="comment-title-cont">
