@@ -41,34 +41,35 @@ $(document).ready(function(){
 	     }
 	});
 
- $("#profilepicture").on('change', function () {
-	 
+
+	 $('.edit-pr-img').find(".badge").remove();
+	//Profile Pic Upload Js
+	 $("#profilepicture").on('change', function () {
+	 	 
 	     //Get count of selected files
-	    // var countFiles = $(this)[0].files.length;
-	 
+	     var countFiles = $(this)[0].files.length;
+	 	 
 	     var imgPath = $(this)[0].value;
-
 	     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-
-	     var image_holder = $("#profile");
-	     image_holder.empty();
+	     var image_holder = $("#profile-pic-holder");
+	     //image_holder.empty();
 	 
 	     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
-
 	         if (typeof (FileReader) != "undefined") {
-	 		
-	                 var dp = new FileReader();
+	 
+	             //loop for each file selected for uploaded.
+	             for (var i = 0; i < countFiles; i++) {
+	 
+	                 var reader = new FileReader();
+	                 reader.onload = function (e) {
+	                 	
+	                 	$('.edit-pr-img').find(".badge").remove();
+	                 	$('.profile-img').css("background",	"url("+e.target.result+") no-repeat");
 
-	                 dp.onload = function (e) {
-	                 	alert("Here");
-	                     $("<img />", {
-	                         "src": e.target.result,
-	                             "class": "thumb-image"
-	                     }).appendTo(image_holder);
-	                 
-	
+	                 }
+	 
 	                 image_holder.show();
-	                 dp.readAsDataURL($(this)[0].files[0]);
+	                 reader.readAsDataURL($(this)[0].files[i]);
 	             }
 	 
 	         } else {
@@ -78,6 +79,7 @@ $(document).ready(function(){
 	         alert("Please select only images");
 	     }
 	});
+
 
 	// Post status updates via ajax call.
 	$("#postform").ajaxForm(function(response) { 
@@ -144,10 +146,12 @@ $(document).ready(function(){
 			'data' : { '_token' : _token, 'feed_id' : feedId, 'user_id' : user_id, 'liked' : 'Yes' },
 			'type' : 'post',
 			'success' : function(response){
-				console.log(response);
+				//console.log(response);
 				var parseresponse = jQuery.parseJSON(response);
 				 var check="";
-				if(parseresponse.count==0){
+
+				if(parseresponse.count == 0){
+
 					jQuery("#page-"+feedId).html('');
 					jQuery("#popup-"+feedId).html('');
 
@@ -234,19 +238,6 @@ $(document).ready(function(){
 					current.parents('.row').find('.comment-field').text('');
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
-
-					// //On text popup change emoji
-					// var popupemoji = jQuery('#AllCommentNew').find('.comments-list ul li .comment-text').last().html();
-					// var popupemojidata = emojione.toImage(popupemoji);
-					// jQuery('#AllCommentNew').find('.comments-list ul li .comment-text').last().html(popupemojidata);
-
-
-
-					// //Image popup emoji fix.
-					// var allcommentsnew = current.parents('#AllComment').find('.comments-list ul li .comment-text').last().html();
-					//  var convertednew = emojione.toImage(allcommentsnew);
-					//  jQuery('#AllComment').find('.comments-list ul li .comment-text').last().html(convertednew);
-
  
 					//Dashboard emoji fix.
 					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
@@ -318,8 +309,18 @@ $(document).ready(function(){
 			'data' : {'type' : type},
 			'type' : 'post',
 			'success' : function(response){
+				pageid=2;
+				current.closest('.tab-style-no-border').find('.active').find('.load-btn').addClass('load-more-friend');
+				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('View More');
 				if(response != '')
-					var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+				{
+				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+				}
+				if(response=='')
+				{
+				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('No results found');
+				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').prop('disabled',true);
+				}
 				// else
 					// var getelem = current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').hide();
 				//alert(response);
@@ -757,7 +758,7 @@ $(document).ready(function(){
 			'type' : 'post',
 			'data' : { 'pageid': pageid, 'reqType': reqType },
 			'success' : function(data){
-				if(data != 'No more results'){
+				if(data != 'No more results'){		
 					pageid = pageid + 1;
 					$('.loading-text').show();
 					$('.loading-img').hide();
@@ -766,6 +767,7 @@ $(document).ready(function(){
 					var currentobj = current.find('.loading-text');
 					currentobj.text('No more results');
 					current.removeClass('load-more-friend');
+					$('.load-btn').text('No more results')
 				}
 			}	
 		});

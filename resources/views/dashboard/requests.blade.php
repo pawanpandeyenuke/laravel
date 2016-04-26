@@ -62,7 +62,8 @@
 														
 @foreach($model1 as $data) 
 	<?php 
-	// print_r();die;
+	$user_picture = !empty($data['picture']) ? $data['picture'] : 'images/user-thumb.jpg';
+	// print_r($data);die;
 	$id1=Auth::User()->id;
 			$name = $data['first_name'].' '.$data['last_name'];
 		
@@ -72,7 +73,7 @@
 			<div class="col-sm-6">
 				<div class="user-cont">
 					<a title="" href="profile/{{$data['id']}}">
-						<span style="background: url('images/user-thumb.jpg');" class="user-thumb"></span>
+						<span style="background: url('{{$user_picture}}');" class="user-thumb"></span>
 					{{ $name }}
 					</a>
 				</div>
@@ -187,10 +188,10 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 											<ul>
 
 											</ul>
-									    	<!-- <div class="load-btn load-more-friend">
-										    	<span class="loading-text">View more</span>
-										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
-										    </div> -->
+									    	<div class="load-btn load-more-friend">
+											    	<span class="loading-text">View more</span>
+											    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+											    </div>
 									    </div>
 
 								    </div>

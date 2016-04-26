@@ -528,6 +528,51 @@ class ApiController extends Controller
 
 
 	/*
+	 *  Edit users profile picture.
+	 */
+ 	public function updateProfilePicture()
+ 	{
+		try{
+
+			$arguments = Request::all();
+			$user = new User();
+
+			if(!empty($arguments)){
+
+				$userfind = $user->find($arguments['id']);
+
+				if(empty($userfind))
+					throw new Exception("User does not exist.", 1);
+					
+				if(empty($arguments['picture']))
+					throw new Exception("Picture is required.", 1);
+
+	            $file = Request::file('picture');
+ 				
+	            if( isset($arguments['picture']) && $file != null ){
+	                $image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+	                $arguments['picture'] = '/uploads/user_img/'.$image_name;
+	                $file->move(public_path('uploads/user_img'), $image_name);
+	            }
+ 
+				User::where([ 'id' => $arguments['id'] ])->update([ 'picture' => $arguments['picture'] ]);
+				$userfind = User::find(Request::get('id'));
+ 
+				$this->status = 'Success';
+				$this->data = $userfind;
+				$this->message = 'Profile picture updated';
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+
+	}
+
+
+	/*
 	 *  Edit users profile.
 	 */
  	public function updateProfile()
@@ -563,7 +608,7 @@ class ApiController extends Controller
 
 				if(isset($arguments['password']))
 					throw new Exception("Password cannot be changed.");
-
+ 
 				foreach ($arguments as $key => $value) {
 
 					User::where([ 'id' => $arguments['id'] ])
@@ -1118,10 +1163,10 @@ class ApiController extends Controller
 					if(empty($finduser))
 						throw new Exception("This user does not exist.", 1);
 					
-					$groupname = Request::get('group_name');
+/*					$groupname = Request::get('group_name');
 					$findgroup = User::find($groupname);
 					if(empty($findgroup))
-						throw new Exception("This group does not exist.", 1);					
+						throw new Exception("This group does not exist.", 1);					*/
 
 					$arguments = Request::all();
 					$defaultgroup = new DefaultGroup;
@@ -1145,10 +1190,14 @@ class ApiController extends Controller
 					if(empty($finduser))
 						throw new Exception("This user does not exist.", 1);
 
-					$groupname = Request::get('group_name');
+					$arguments = Request::all();
+					$defaultgroup = new DefaultGroup;
+					$defaultgroup->create($arguments);
+
+/*					$groupname = Request::get('group_name');
 					$findgroup = User::find($groupname);
 					if(empty($findgroup))
-						throw new Exception("This group does not exist.", 1);	
+						throw new Exception("This group does not exist.", 1);	*/
 
 					$count = DefaultGroup::where('group_name', '=', $groupname)->count();
 
