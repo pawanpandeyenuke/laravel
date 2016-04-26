@@ -44,7 +44,6 @@
 							<div class="profile-header">
 								<?php $userpic = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg'; ?>
 								<div class="profile-img" style="background: url('{{ $userpic }}');">
-									<button type="button" class="edit-pr-img" title="Edit Image"><i class="glyphicon glyphicon-camera"></i></button>
 								</div><!--Profile-img-->
 								<div class="pr-field">
 										<span style="font-size: xx-large;">{{ $user->first_name.' '.$user->last_name }}</span>
@@ -164,7 +163,5 @@
 		</div>
 	</div>
 </div>
-<!-- <<<<<<< HEAD -->
- 
 @endsection
  
