@@ -34,7 +34,7 @@
 										</span>
 									@endif
 									
-									<span class="field-icon flaticon-avatar83"></span>
+									<span class="field-icon flaticon-profile5"></span>
 								</div>
 								
 								<div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">

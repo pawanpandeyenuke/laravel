@@ -119,7 +119,8 @@ $(document).ready(function(){
 
 				if(image){
 					var url = document.location.origin+'/uploads/'+image;
-					jQuery('#postlist').find('#post_'+postid).find('.post-data img').prop('src', url);
+					jQuery('#postlist').find('#post_'+postid).find('.post-data .post-img-cont .popup').prop('href', url);			
+					jQuery('#postlist').find('#post_'+postid).find('.post-data .post-img-cont .popup .post-img').prop('src', url);
 				}
 				$('#edit-modal').modal('hide');
 				// 	alert('asdfas');

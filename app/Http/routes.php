@@ -83,6 +83,8 @@ Route::post('ajax/remove-education','AjaxController@removeEducationDetails');
 
 Route::post('ajax/send-hotmail-invitation','AjaxController@sendHotmailInvitation');
 
+Route::post('/ajax/forumsubgroup','AjaxController@forumSubGroup');
+
 
 /**
  * @Api Routes..
@@ -139,7 +141,7 @@ Route::post('api/private-group-add','ApiController@privateGroupAdd');
 Route::post('api/get-group-list','ApiController@getGroupList');
 Route::post('api/delete-private-group','ApiController@deletePrivateGroup');
 
-
+Route::post('api/get-groups','ApiController@publicGroupGetIds');
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -165,7 +167,7 @@ Route::group(['middleware' => 'web'], function () {
 	Route::post('dashboard', 'DashboardController@dashboard');
 	Route::get('settings/privacy', 'DashboardController@settings');	
 	Route::post('settings/privacy', 'DashboardController@settings');
-	Route::get('/', 'DashboardController@dashboard');	
+	//Route::get('/', 'DashboardController@dashboard');	
 	Route::get('chatroom', 'DashboardController@chatroom');
 	Route::get('friends', 'DashboardController@friendRequests');
 	Route::get('invite-friends', 'ContactImporter@inviteFriends');
@@ -220,7 +222,27 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('linkedin/client', 'ContactImporter@linkedin');
 	Route::get('linkedin/client/callback', 'ContactImporter@linkedinCallback');
 
-        Route::get('/demopage', 'DashboardController@demopage');
-		Route::post('/demopage', 'DashboardController@demopage');
+    Route::get('/demopage', 'DashboardController@demopage');
+	Route::post('/demopage', 'DashboardController@demopage');
+
+	Route::get('/forums', 'DashboardController@forumsList');
+	Route::post('/forums', 'DashboardController@forumsList');
+
+	Route::get('subforums/{parentid}', 'DashboardController@subForums');
+	Route::get('subforums/{parentid}/{name}', 'DashboardController@subForums');	
+
+	Route::get('subforums', 'DashboardController@subForums');
+	Route::post('subforums', 'DashboardController@subForums');
+
+	Route::get('forumpost/{name}', 'DashboardController@forumPost');
+	Route::post('forumpost', 'DashboardController@forumPost');
+
+	Route::get('/', function(){
+		if(Auth::check())
+			return redirect()->action('DashboardController@dashboard');
+		else
+			return view('auth.register');
+	});
+
 
 });

@@ -188,10 +188,10 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 											<ul>
 
 											</ul>
-									    	<!-- <div class="load-btn load-more-friend">
-										    	<span class="loading-text">View more</span>
-										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
-										    </div> -->
+									    	<div class="load-btn load-more-friend">
+											    	<span class="loading-text">View more</span>
+											    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+											    </div>
 									    </div>
 
 								    </div>

@@ -22,6 +22,7 @@ $(document).ready(function(){
 	 
 	                 var reader = new FileReader();
 	                 reader.onload = function (e) {
+
 	                     $("<img />", {
 	                         "src": e.target.result,
 	                             "class": "thumb-image"
@@ -39,6 +40,7 @@ $(document).ready(function(){
 	         alert("Please select only images");
 	     }
 	});
+
 
 	 $('.edit-pr-img').find(".badge").remove();
 	//Profile Pic Upload Js
@@ -77,7 +79,7 @@ $(document).ready(function(){
 	         alert("Please select only images");
 	     }
 	});
- 
+
 
 	// Post status updates via ajax call.
 	$("#postform").ajaxForm(function(response) { 
@@ -147,7 +149,9 @@ $(document).ready(function(){
 				//console.log(response);
 				var parseresponse = jQuery.parseJSON(response);
 				 var check="";
+
 				if(parseresponse.count == 0){
+
 					jQuery("#page-"+feedId).html('');
 					jQuery("#popup-"+feedId).html('');
 
@@ -241,13 +245,13 @@ $(document).ready(function(){
 					jQuery("#pagecomment-"+feedId+" li .comment-text").last().html(converted);
 
 	 
-			if(popup==feedId)
+		if(popup==feedId)
 
-				{
-					var original1=jQuery("#popupcomment-"+feedId+" li .comment-text").last().html();
-					var converted1 = emojione.toImage(original1);
-					jQuery("#popupcomment-"+feedId+" li .comment-text").last().html(converted1);
-				}
+			{
+				var original1=jQuery("#popupcomment-"+feedId+" li .comment-text").last().html();
+				var converted1 = emojione.toImage(original1);
+				jQuery("#popupcomment-"+feedId+" li .comment-text").last().html(converted1);
+			}
 
 				}			
 			});	
@@ -305,8 +309,18 @@ $(document).ready(function(){
 			'data' : {'type' : type},
 			'type' : 'post',
 			'success' : function(response){
+				pageid=2;
+				current.closest('.tab-style-no-border').find('.active').find('.load-btn').addClass('load-more-friend');
+				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('View More');
 				if(response != '')
-					var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+				{
+				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+				}
+				if(response=='')
+				{
+				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('No results found');
+				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').prop('disabled',true);
+				}
 				// else
 					// var getelem = current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').hide();
 				//alert(response);
@@ -744,7 +758,7 @@ $(document).ready(function(){
 			'type' : 'post',
 			'data' : { 'pageid': pageid, 'reqType': reqType },
 			'success' : function(data){
-				if(data != 'No more results'){
+				if(data != 'No more results'){		
 					pageid = pageid + 1;
 					$('.loading-text').show();
 					$('.loading-img').hide();
@@ -753,6 +767,7 @@ $(document).ready(function(){
 					var currentobj = current.find('.loading-text');
 					currentobj.text('No more results');
 					current.removeClass('load-more-friend');
+					$('.load-btn').text('No more results')
 				}
 			}	
 		});

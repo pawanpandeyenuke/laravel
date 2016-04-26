@@ -5,22 +5,22 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Friendz Square</title>
-<link href="{{url('/css/bootstrap.css')}}" rel="stylesheet">
-<link href="{{url('/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
-<link href="{{url('/fancybox/jquery.fancybox.css')}}" rel="stylesheet" media="all">
-<link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
-<link href="{{url('/css/fileinput.min.css')}}" rel="stylesheet" media="all">
-<link href="{{url('/css/select2.min.css')}}" rel="stylesheet" media="all">
+<link href="/css/bootstrap.css" rel="stylesheet">
+<link href="/css/font-awesome.min.css" rel="stylesheet" media="all">
+<link href="/fancybox/jquery.fancybox.css" rel="stylesheet" media="all">
+<link href="/css/flat-icon/flaticon.css" rel="stylesheet" media="all">
+<link href="/css/fileinput.min.css" rel="stylesheet" media="all">
+<link href="/css/select2.min.css" rel="stylesheet" media="all">
 
-<link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet" media="all">
+<link href="/css/bootstrap-datepicker.css" rel="stylesheet" media="all">
 <!-- <link href="/converse/converse.min.css" rel="stylesheet" type="text/css" media="screen" > -->
 
-<link href="{{url('/lib/css/nanoscroller.css')}}" rel="stylesheet">
-<link href="{{url('/lib/css/emoji.css')}}" rel="stylesheet">
-<link href="{{url('/css/style.css')}}" rel="stylesheet">
-<link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
+<link href="/lib/css/nanoscroller.css" rel="stylesheet">
+<link href="/lib/css/emoji.css" rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet">
+<link href="/css/responsive.css" rel="stylesheet" media="all">
 
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 </head>
 
 <body class="dashboard">
@@ -76,7 +76,7 @@
 				<div class="dashboard-header-menu text-right">
 					<ul class="list-inline">
 						<li class="user-info-top">
-							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : '/images/user-thumb.jpg'; ?>
+							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : 'images/user-thumb.jpg'; ?>
 							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
 							{{Auth::User()->first_name}}</a>
 						</li>
@@ -92,22 +92,22 @@
 
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <script src="http://malsup.github.com/jquery.form.js"></script> 
-<script type="text/javascript" src="{{url('/fancybox/jquery.fancybox.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/fileinput.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/custom.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap-filestyle.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap-datepicker.min.js')}}"></script>
-<script src="{{url('/c-lib/lib/js/emojione.js')}}"></script>
-<script src="{{url('/js/select2.min.js')}}"></script>
+<script type="text/javascript" src="/fancybox/jquery.fancybox.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/fileinput.min.js"></script>
+<script type="text/javascript" src="/js/custom.js"></script>
+<script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-datepicker.min.js"></script>
+<script src="/c-lib/lib/js/emojione.js"></script>
+<script src="/js/select2.min.js"></script>
 <!--Emoji libraries-->
-<script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>
-<script src="{{url('/lib/js/tether.min.js')}}"></script>
-<script src="{{url('/lib/js/config.js')}}"></script>
-<script src="{{url('/lib/js/util.js')}}"></script>
-<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
-<script src="{{url('/lib/js/emoji-picker.js')}}"></script>
-<script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
+<script src="/lib/js/nanoscroller.min.js"></script>
+<script src="/lib/js/tether.min.js"></script>
+<script src="/lib/js/config.js"></script>
+<script src="/lib/js/util.js"></script>
+<script src="/lib/js/jquery.emojiarea.js"></script>
+<script src="/lib/js/emoji-picker.js"></script>
+<script src="/js/jquery.nicescroll.min.js"></script>
 <!--/Emoji-->
 
 <!-- 

@@ -306,6 +306,7 @@ comments;
 	public function viewMoreFriends()
 	{
 		$per_page = 10;
+		//print_r(Input::all());
 		$page = Input::get('pageid');
 		$type = Input::get('reqType');
 		$offset = ($page - 1) * $per_page;
@@ -1055,6 +1056,7 @@ comments;
 		// echo '<pre>';print_r($invalid);
 		// echo '<pre>';print_r($valid);die;		
 	}
+
 
 }
 	

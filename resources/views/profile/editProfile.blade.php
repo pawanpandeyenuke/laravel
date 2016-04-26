@@ -58,6 +58,7 @@
 					
 					<div class="p-header-outer">
 						<div class="profile-header">
+
 							<?php $userpic = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg'; ?>
 							<div id="profile-pic-holder" class="profile-img" style="background: url('{{ $userpic }}');">
 								<input type="file" id="profilepicture" name="picture" class="filestyle" data-input="false" data-iconName="glyphicon glyphicon-camera" data-buttonText="" data-buttonName="edit-pr-img">
