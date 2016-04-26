@@ -30,15 +30,16 @@
 	</div>
 	<div class="post-data">
 		
-		@if( !empty($postdata->message) )
 
 			<p>{{$postdata->message}}</p>
 
-		@endif
 
-		@if( !empty($postdata->image) )
+
+		@if(!empty($postdata->image))
 			<div class="post-img-cont">
+			<a href="uploads/{{$postdata->image}}" class="popup">
 				<img src="uploads/{{$postdata->image}}" class="post-img img-responsive">
+				</a>
 			</div>
 		@endif
 

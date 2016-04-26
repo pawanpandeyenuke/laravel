@@ -1,9 +1,10 @@
+
   <div class="modal-dialog modal-md">
 	    <div class="modal-content" data-value="{{$posts->id}}">
 		    {!! Form::open(array('url' => 'ajax/editposts', 'id' => 'postform1', 'files' => true)) !!}
 		    	<div class="modal-body text-center">
 		        <div class="" id="">
-		        	@if(!empty($posts->message))
+
 			        	<div class="edit-post-textarea">
 							{!! Form::textarea('message', $posts->message, array(
 								'id' => 'newsfeed', 
@@ -13,14 +14,14 @@
 								'data-emojiable' => 'true',
 							)) !!}
 			        	</div>
-		        	@endif
+
 	        	
 		        	<div class="edit-img-outer">
-		        		@if(!empty($posts->image))
-			        		<div id="imageholder">
+		        	@if(!empty($posts->image))
+			        		<div id="imageholder" data-value="1">
 			        			<img src="uploads/{{$posts->image}}" class="img-responsive">
 			        		</div>
-			        	@endif
+				@endif
 		        		<div class="img-update-cont">
 						    {!! Form::file('image', array(
 						    	'id' => 'fileUpload1',
@@ -100,6 +101,7 @@ $(document).ready(function(){
 	// Post status updates via ajax call.
 	$("#postform1").ajaxForm(function(response) { 
  		var current = $("#postform1")
+ 		 var image = $("#imageholder").data('value');
 		if(response){
 
 			if(response != 'Post something to update.'){
@@ -108,17 +110,22 @@ $(document).ready(function(){
 				var image = data[0].image;
 				var postid = data[0].id;
 				// console.log(data[0].message);
+
 				if(message)
 				{
 					jQuery('#postlist').find('#post_'+postid).find('.post-data p').text(message);
 
-						var original =$('#post_'+postid+' .post-data').first('p').html();		
-						var converted = emojione.toImage(original);
-						$('#post_'+postid+' .post-data').first('p').html(converted);	
+						 var original =$('#post_'+postid+' .post-data').first('p').html();		
+						 var converted = emojione.toImage(original);
+						 $('#post_'+postid+' .post-data').first('p').html(converted);	
 				}
+				else
+					jQuery('#postlist').find('#post_'+postid).find('.post-data p').text("");
 
 				if(image){
+
 					var url = document.location.origin+'/uploads/'+image;
+
 					jQuery('#postlist').find('#post_'+postid).find('.post-data .post-img-cont .popup').prop('href', url);			
 					jQuery('#postlist').find('#post_'+postid).find('.post-data .post-img-cont .popup .post-img').prop('src', url);
 				}
@@ -131,7 +138,14 @@ $(document).ready(function(){
 
 			}
 			
-		} 
+		}
+		else{
+			if(image)
+				$('#edit-modal').modal('hide');
+			else
+				alert("Post can't be left empty.");
+		}
+		 
     }); 
 
 });
