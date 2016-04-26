@@ -42,7 +42,8 @@
 								<a href="/editprofile/{{$userId}}" class="edit-profile"><i class="fa fa-pencil"></i></a>
 							@endif
 							<div class="profile-header">
-								<div class="profile-img" style="background: url('{{ $user->picture }}');">
+								<?php $userpic = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg'; ?>
+								<div class="profile-img" style="background: url('{{ $userpic }}');">
 								</div><!--Profile-img-->
 								<div class="pr-field">
 										<span style="font-size: xx-large;">{{ $user->first_name.' '.$user->last_name }}</span>
@@ -162,7 +163,5 @@
 		</div>
 	</div>
 </div>
-<!-- <<<<<<< HEAD -->
- 
 @endsection
  

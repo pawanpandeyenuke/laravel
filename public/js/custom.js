@@ -238,7 +238,7 @@ $(document).ready(function(){
 					current.parents('.row').find('.comment-field').text('');
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
- 
+
 					//Dashboard emoji fix.
 					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
 				    var converted = emojione.toImage(original);

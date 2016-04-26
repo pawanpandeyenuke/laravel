@@ -59,9 +59,9 @@
 					<div class="p-header-outer">
 						<div class="profile-header">
 
-							<div id="profile-pic-holder" class="profile-img" style="background: url('{{ $user->picture }}');">
+							<?php $userpic = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg'; ?>
+							<div id="profile-pic-holder" class="profile-img" style="background: url('{{ $userpic }}');">
 								<input type="file" id="profilepicture" name="picture" class="filestyle" data-input="false" data-iconName="glyphicon glyphicon-camera" data-buttonText="" data-buttonName="edit-pr-img">
-								<!-- <button type="button" class="edit-pr-img" title="Edit Image"><i class="glyphicon glyphicon-camera"></i></button> -->
 							</div><!--Profile-img-->
 							<div class="pr-field">
 								<input type="text" class="pr-edit pr-name" value="{{ $user->first_name }}" name="first_name">

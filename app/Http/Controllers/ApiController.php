@@ -1163,10 +1163,7 @@ class ApiController extends Controller
 					if(empty($finduser))
 						throw new Exception("This user does not exist.", 1);
 					
-/*					$groupname = Request::get('group_name');
-					$findgroup = User::find($groupname);
-					if(empty($findgroup))
-						throw new Exception("This group does not exist.", 1);					*/
+					$groupname = Request::get('group_name');
 
 					$arguments = Request::all();
 					$defaultgroup = new DefaultGroup;
@@ -1193,11 +1190,6 @@ class ApiController extends Controller
 					$arguments = Request::all();
 					$defaultgroup = new DefaultGroup;
 					$defaultgroup->create($arguments);
-
-/*					$groupname = Request::get('group_name');
-					$findgroup = User::find($groupname);
-					if(empty($findgroup))
-						throw new Exception("This group does not exist.", 1);	*/
 
 					$count = DefaultGroup::where('group_name', '=', $groupname)->count();
 
@@ -1576,6 +1568,34 @@ class ApiController extends Controller
 
 	}
 
+		/*
+	 * Delete public chatroom entry api on request.
+	 */
+	public function publicGroupGetIds()
+	{
+		try{
+			$groupBy = Request::get('group_by');
+
+			if($groupBy){
+
+				$userdata = User::find($groupBy);
+				if(empty($userdata))
+					throw new Exception("This user does not exist.", 1);
+
+				$userdata = DefaultGroup::where('group_by', $groupBy)->get()->toArray();
+		
+				$this->data = $userdata;
+				$this->status = 'success';
+				$this->message = count($userdata).' groups found.';
+			}else{
+				throw new Exception("Group user id is required.", 1);				
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+		return $this->output();
+	}
 
 	/*
 	 * Get country on request.

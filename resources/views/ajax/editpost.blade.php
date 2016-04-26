@@ -123,7 +123,9 @@ $(document).ready(function(){
 					jQuery('#postlist').find('#post_'+postid).find('.post-data p').text("");
 
 				if(image){
-				 	var url = document.location.origin+'/uploads/'+image;
+
+					var url = document.location.origin+'/uploads/'+image;
+
 					jQuery('#postlist').find('#post_'+postid).find('.post-data .post-img-cont .popup').prop('href', url);			
 					jQuery('#postlist').find('#post_'+postid).find('.post-data .post-img-cont .popup .post-img').prop('src', url);
 				}
