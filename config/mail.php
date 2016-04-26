@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' => env('MAIL_DRIVER', 'mail'),
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'aditya.i.singh@enukesoftware.com', 'name' => 'Aditya'],
+    'from' => ['address' => 'no-reply@friendzsquare.com', 'name' => 'FriendzSquare'],
 
     /*
     |--------------------------------------------------------------------------
@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+    'encryption' => 'tls', //env('MAIL_ENCRYPTION', 'tls'),
 
     /*
     |--------------------------------------------------------------------------
@@ -107,5 +107,5 @@ return [
     */
 
     'sendmail' => '/usr/sbin/sendmail -bs',
-
+    'pretend' => false,
 ];

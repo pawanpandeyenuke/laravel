@@ -82,6 +82,10 @@ class AjaxController extends Controller
 		$user = Auth::User();
 		$file = Input::file('image');
 
+		if($file==null && $arguments['message']=='')
+		{
+			exit;
+		}
 		if( isset($arguments['image']) && $file != null ){
 
        /* $file = Request::file('file');
@@ -95,7 +99,7 @@ class AjaxController extends Controller
 		}else{
 			unset($arguments['image']);
 		}
-
+		
 		$newsFeed = Feed::find($arguments['id']);
 		$newsFeed->fill($arguments);
 		$saved = $newsFeed->push();

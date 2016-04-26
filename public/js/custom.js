@@ -433,6 +433,7 @@ $(document).ready(function(){
 			'data' : { 'postid' : postid },
 			'type' : 'post',
 			'success' : function(response){
+
 				$('#edit-modal').append(response);
 				$("#edit-modal").modal();
 			}

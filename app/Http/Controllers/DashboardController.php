@@ -38,7 +38,7 @@ class DashboardController extends Controller
 
             foreach ($defGroup as $value) {
                 $converse = new Converse;
-                $response = $converse->removeUserGroup($value, $xmppusernames);    
+                $response = $converse->removeUserGroup($value, $xmppusername);    
             }
   
             DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
