@@ -61,24 +61,25 @@ class ContactImporter extends Controller
                             $existingUser[] = $value;
                         else
                             // $nonExistingUser[] = $value;
-                            $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
-                            self::mail($value, $message, 'Invitation', 'emails.invite');
-                    }
+                           { $message = "Hi, Take a look at this cool social site 'FriendzSquare!'";
+                            self::mail($value, $message, 'Invitation', 'Friend');
+                    }}
                 }
 
                 $friends = array();
                 foreach ($existingUser as $value) {
 
-                    $id = User::where('email', '=', $value)->value('id');
-                    $frienddata = Friend::where('user_id', '=', Auth::User()->id)
-                                        ->where('friend_id', '=', $id)
+
+                    $id = User::where('email', '=', $value)->pluck('first_name','id')->toArray();
+                   $frienddata = Friend::where('user_id', '=', Auth::User()->id)
+                                        ->where('friend_id', '=', array_keys($id)[0])
                                         ->where('status', '=', 'Accepted')
                                         ->get()
                                         ->toArray();
 
                     if(empty($frienddata)){
                         $message = 'Please add me on FriendzSquare!';
-                        self::mail($value, $message, 'Friend Request', 'emails.friend');
+                        self::mail($value, $message, 'Friend Request', array_values($id)[0]);
                     }
                 }
 
@@ -205,9 +206,9 @@ class ContactImporter extends Controller
 		// $mailsent = mail($email, $subject, $message);
         if($email != ''){
   			$mailsent = //Mail::send('emails.invite', ['email'=> 'pawanpandey392@gmail.com','message_text'=> 'checkout this new site. Friendz Square!'], 
-                Mail::raw('This is a demo email',function ($m)  {
+                Mail::raw($message,function ($m)  use($email, $subject, $type){
             	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
-                $m->to('aditya.i.singh@enukesoftware.com', 'Aditya Singh')->subject('Invitation');
+                $m->to($email,$type)->subject($subject);
             });
 			//print_r($mailsent);die;
         }
