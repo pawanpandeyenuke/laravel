@@ -321,6 +321,11 @@ $(document).ready(function(){
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('No results found');
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').prop('disabled',true);
 				}
+
+				if(!(response))
+					current.closest('.tab-style-no-border').find('.active').find('ul').html("");
+					
+
 				// else
 					// var getelem = current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').hide();
 				//alert(response);
@@ -606,7 +611,6 @@ $(document).ready(function(){
 			'data' : {'type' : type,'name' : name},
 			'type' : 'post',
 			'success' : function(response){
-				//alert(response);
 				//var type = response.type;
 				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
 			}

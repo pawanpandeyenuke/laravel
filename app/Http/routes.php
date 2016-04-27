@@ -56,7 +56,9 @@ Route::post('/ajax/jobcategory','AjaxController@getJobcategory');
 
 
 
-Route::post('ajax/sendrequest','AjaxController@sendRequest');
+Route::post('/ajax/sendrequest','AjaxController@sendRequest');
+Route::post('profile/ajax/sendrequest','AjaxController@sendRequest');
+
 
 Route::post('ajax/sendimage','AjaxController@sendImage');
 

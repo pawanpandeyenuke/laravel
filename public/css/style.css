@@ -2288,3 +2288,19 @@ textarea{
     right: 0;
     width: 25px;
 }
+
+/** Temporary   **/
+.btnview{
+  position: relative;
+  width: 50%;
+  bottom: 70px;
+}
+.rbtnview{
+	left: 260px;
+}
+.lbtnview{
+	left:130px;
+}
+.fremoved{
+	left:230px;
+}

@@ -82,7 +82,8 @@ class AjaxController extends Controller
 		$user = Auth::User();
 		$file = Input::file('image');
 
-		if($file==null && $arguments['message']=='')
+
+		if(!(isset($arguments['imagecheck'])) && $file==null && $arguments['message']=='')
 		{
 			exit;
 		}
@@ -892,8 +893,7 @@ comments;
 
 		if($model!=null){
 			foreach ($model as $key => $value) {
-				if($type=='current')
-
+				if($type=='current' || $type=='recieved')
 					$n=$value['user']['first_name']." ".$value['user']['last_name'];
 				else
 					$n=$value['friends']['first_name']." ".$value['friends']['last_name'];
