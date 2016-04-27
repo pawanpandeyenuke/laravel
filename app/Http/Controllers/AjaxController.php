@@ -865,11 +865,7 @@ comments;
 				</li>';
 			}
 
-		if($count==0) {
-				$data[] = '<li > 
-				<span style="color:black;font-weight:bold">'.$msg.'</span>
-				</li>';
-			}
+	
 		$html = implode('',$data);
 		echo $html;
 

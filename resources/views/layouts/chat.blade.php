@@ -60,7 +60,7 @@
 									)); !!}
 								</li>
 								<li class="search-btn-cont">
-									<button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+									<button type="button" class="search-btn"><i class="flaticon-magnifying-glass138"></i></button>
 									<!-- {!! Form::button('', array(
 										'class' => 'search-btn',
 										'id' => '',

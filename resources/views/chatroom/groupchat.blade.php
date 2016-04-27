@@ -142,7 +142,7 @@ if($pgid){
                                         <div class="chat-list-search">
                                             <div class="form-group">
                                                <input type="text" class="form-control searchtxt" placeholder="Search Friends">
-                                        <button type="button" class="search-btn" id="search"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+                                        <button type="button" class="search-btn" id="search"><i class="flaticon-magnifying-glass138"></i></button>
                                             </div>
                                         </div>
                                         
@@ -243,9 +243,9 @@ if($pgid){
 
 <link href="{{url('/converse/converse.min.css')}}" rel="stylesheet" type="text/css" media="screen" >
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script type="text/javascript" src="/converse/jquery.form.js"></script>
-<script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{url('/converse/jquery.form.js')}}"></script>
+<script type="text/javascript" src="{{url('/converse/converse.nojquery.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 
 
 

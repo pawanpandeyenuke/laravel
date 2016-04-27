@@ -61,24 +61,28 @@ class ContactImporter extends Controller
                             $existingUser[] = $value;
                         else
                             // $nonExistingUser[] = $value;
+                        {
+                            
                             $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
-                            self::mail($value, $message, 'Invitation', 'emails.invite');
+                            self::mail($value, $message, 'Invitation', 'Friend');
+                        }
                     }
                 }
 
                 $friends = array();
                 foreach ($existingUser as $value) {
 
-                    $id = User::where('email', '=', $value)->value('id');
+                    $id = User::where('email', '=', $value)->pluck('first_name','id')->toArray();
+
                     $frienddata = Friend::where('user_id', '=', Auth::User()->id)
-                                        ->where('friend_id', '=', $id)
+                                        ->where('friend_id', '=', array_keys($id)[0])
                                         ->where('status', '=', 'Accepted')
                                         ->get()
                                         ->toArray();
 
                     if(empty($frienddata)){
                         $message = 'Please add me on FriendzSquare!';
-                        self::mail($value, $message, 'Friend Request', 'emails.friend');
+                        self::mail($value, $message, 'Friend Request', array_values($id)[0]);
                     }
                 }
 
