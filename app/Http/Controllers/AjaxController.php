@@ -82,7 +82,8 @@ class AjaxController extends Controller
 		$user = Auth::User();
 		$file = Input::file('image');
 
-		if($file==null && $arguments['message']=='')
+		if(!(isset($arguments['imagecheck'])) && $file==null && $arguments['message']=='')
+		//if($file==null && $arguments['message']=='')
 		{
 			exit;
 		}
@@ -865,11 +866,7 @@ comments;
 				</li>';
 			}
 
-		if($count==0) {
-				$data[] = '<li > 
-				<span style="color:black;font-weight:bold">'.$msg.'</span>
-				</li>';
-			}
+	
 		$html = implode('',$data);
 		echo $html;
 
@@ -896,7 +893,7 @@ comments;
 
 		if($model!=null){
 			foreach ($model as $key => $value) {
-				if($type=='current')
+				if($type == 'current'|| $type == 'recieved')
 
 					$n=$value['user']['first_name']." ".$value['user']['last_name'];
 				else

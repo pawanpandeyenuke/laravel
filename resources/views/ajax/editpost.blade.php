@@ -18,6 +18,7 @@
 	        	
 		        	<div class="edit-img-outer">
 		        	@if(!empty($posts->image))
+						<input name="imagecheck" type="hidden" value="1"></input>
 			        		<div id="imageholder" data-value="1">
 			        			<img src="uploads/{{$posts->image}}" class="img-responsive">
 			        		</div>
@@ -119,7 +120,7 @@ $(document).ready(function(){
 						 var converted = emojione.toImage(original);
 						 $('#post_'+postid+' .post-data').first('p').html(converted);	
 				}
-				else
+				if(message == "")
 					jQuery('#postlist').find('#post_'+postid).find('.post-data p').text("");
 
 				if(image){

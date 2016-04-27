@@ -309,6 +309,7 @@ $(document).ready(function(){
 			'data' : {'type' : type},
 			'type' : 'post',
 			'success' : function(response){
+				
 				pageid=2;
 				current.closest('.tab-style-no-border').find('.active').find('.load-btn').addClass('load-more-friend');
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('View More');
@@ -321,6 +322,8 @@ $(document).ready(function(){
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('No results found');
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').prop('disabled',true);
 				}
+				if(!(response))
+					current.closest('.tab-style-no-border').find('.active').find('ul').html("");
 				// else
 					// var getelem = current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').hide();
 				//alert(response);

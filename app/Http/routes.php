@@ -123,6 +123,11 @@ Route::post('api/addfriend','ApiController@addFriend');
 Route::post('api/acceptrequest','ApiController@acceptRequest');
 Route::post('api/declinerequest','ApiController@declineRequest');
 
+
+
+Route::post('api/sent-request-list','ApiController@getSentUsersList');
+Route::post('api/remove-friend','ApiController@removeFriend');
+
 Route::post('api/push-notification','ApiController@updatePushNotificationDetails');
 Route::post('api/chatsendimage','ApiController@chatSendImage');
 
