@@ -842,7 +842,8 @@ class ApiController extends Controller
 			$friends = Friend::with('user')
 					->with('friends')
 					->where('user_id', '=', $arguments['id'])
-					->where('status', '=', 'Accepted')
+					->orWhere('friend_id', '=', $arguments['id'])
+					// ->where('status', '=', 'Accepted')
 					->get();
 			
 			// print_r($friends);exit;
@@ -971,15 +972,15 @@ class ApiController extends Controller
 		try{
 			$arguments = Request::all();
 
-			$user = User::where('id', '=', $arguments['user_id'])->get();
-			$friend = User::where('id', '=', $arguments['friend_id'])->get();
-
+			$user = User::where('id', '=', $arguments['user_id'])->get()->toArray();
+			$friend = User::where('id', '=', $arguments['friend_id'])->get()->toArray();
+			// echo '<pre>';print_r($friend);die;
 			if(empty($user))
 				throw new Exception("This user does not exist", 1);
 
 			if(empty($friend))
 				throw new Exception("This user does not exist", 1);
-
+			// echo '<pre>';print_r($friend);die;
 			$friendcheck = Friend::where('user_id', '=', $arguments['user_id'])
 							->where('friend_id', '=', $arguments['friend_id'])
 							->get()

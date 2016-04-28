@@ -16,7 +16,12 @@ class ContactImporter extends Controller
 
     public $google_client_secret = 'wUWM9ObLfOZVkR7-nXQvtb6V';
 
-    public $google_redirect_uri = 'http://development.laravel.com/google/client/callback';
+    public $google_redirect_uri = 'http://fs.yiipro.com/google/client/callback';
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function inviteFriends()
     {
@@ -155,7 +160,7 @@ class ContactImporter extends Controller
         if(Request::isMethod('post')){
 
             $request = Request::all();
-
+	    //print_r($request);die;
             unset($request['_token']);
             unset($request['selectall']);
 
@@ -169,11 +174,11 @@ class ContactImporter extends Controller
                         $userData = User::where('email', '=', $value)->get()->toArray();
                         if(!empty($userData))
                             $existingUser[] = $value;
-                        else
+                        else{
                             // $nonExistingUser[] = $value;
                             $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
                             self::mail($value, $message, 'Invitation', 'emails.invite');
-                    }
+                    }}
                 }
 
                 $friends = array();

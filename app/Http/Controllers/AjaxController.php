@@ -10,7 +10,7 @@ use App\Http\Requests;
 use XmppPrebind, App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
-use App\Feed, Auth;
+use App\Feed, Auth, Mail;
 use Intervention\Image\Image;
 use \Exception;
 use App\Library\Converse;
@@ -1040,7 +1040,11 @@ comments;
 				$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
 				$subject = 'FriendzSquare Invitation';
 				
-				$mailsent = mail($value, $subject, $message);
+				//$mailsent = mail($value, $subject, $message);
+		 Mail::raw($message,function ($m)  use($value, $subject){
+                	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
+                    	$m->to($value,"Friend")->subject($subject);
+                });
 			}
 
 		}

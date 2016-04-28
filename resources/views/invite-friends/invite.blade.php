@@ -4,7 +4,7 @@
 	<meta property="og:type" content="Friendz Square" />
 	<meta property="og:title" content="get connected" />
 	<meta property="og:description" content="Friendz Square is a social networking site." />
-	<meta property="og:image" content="http://development.laravel.com/images/post-img-big.jpg" />
+	<meta property="og:image" content="http://fs.yiipro.com/images/post-img-big.jpg" />
 </head>
 
 @section('content')
@@ -96,7 +96,7 @@
 <script type="text/javascript">
 	WL.init({
 	    client_id: '0000000044183F60',
-	    redirect_uri: 'http://development.laravel.com/hotmail/client/callback',
+	    redirect_uri: 'http://fs.yiipro.com/hotmail/client/callback',
 	    scope: ["wl.basic", "wl.contacts_emails"],
 	    response_type: "token"
 	});
