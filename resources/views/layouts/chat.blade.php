@@ -5,19 +5,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Friendz Square</title>
-<link href="/css/bootstrap.css" rel="stylesheet">
-<link href="/css/font-awesome.min.css" rel="stylesheet" media="all">
-<link href="/fancybox/jquery.fancybox.css" rel="stylesheet" media="all">
-<link href="/css/flat-icon/flaticon.css" rel="stylesheet" media="all">
-<link href="/css/fileinput.min.css" rel="stylesheet" media="all">
+<link href="{{url('/css/bootstrap.css')}}" rel="stylesheet">
+<link href="{{url('/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
+<link href="{{url('/fancybox/jquery.fancybox.css')}}" rel="stylesheet" media="all">
+<link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
+<link href="{{url('/css/fileinput.min.css')}}" rel="stylesheet" media="all">
 
-<link href="/css/bootstrap-datepicker.css" rel="stylesheet" media="all">
+<link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet" media="all">
 <!-- <link href="/converse/converse.min.css" rel="stylesheet" type="text/css" media="screen" > -->
 
-<link href="/lib/css/nanoscroller.css" rel="stylesheet">
-<link href="/lib/css/emoji.css" rel="stylesheet">
-<link href="/css/style.css" rel="stylesheet">
-<link href="/css/responsive.css" rel="stylesheet" media="all">
+<link href="{{url('/lib/css/nanoscroller.css')}}" rel="stylesheet">
+<link href="{{url('/lib/css/emoji.css')}}" rel="stylesheet">
+<link href="{{url('/css/style.css')}}" rel="stylesheet">
+<link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
 
 <!-- <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script> -->
 </head>
@@ -27,7 +27,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-3">
-				<a href="{{ url('/') }}" title="" class="logo"><img src="{{ url('images/logo.png') }}" alt="Friendz Square"></a>
+				<a href="{{ url('/dashboard') }}" title="" class="logo"><img src="{{ url('images/logo.png') }}" alt="Friendz Square"></a>
 			</div>
 			<div class="col-sm-6">
 				<div class="top-search">

@@ -842,7 +842,7 @@ class ApiController extends Controller
 			$friends = Friend::with('user')
 					->with('friends')
 					->where('user_id', '=', $arguments['id'])
-					->orWhere('friend_id', '=', $arguments['id'])
+					// ->orWhere('friend_id', '=', $arguments['id'])
 					->where('status', '=', 'Accepted')
 					->get();
 			
@@ -859,6 +859,81 @@ class ApiController extends Controller
 		return $this->output();
 		
 	}
+
+
+	/*
+	 * Get user's list i have sent a request.
+	 */
+	public function getSentUsersList()
+	{
+		try{
+			$arguments = Request::all();
+			$user = User::find($arguments['id']);
+
+			if(empty($user))
+				throw new Exception("This user does not exist", 1);
+
+			$friends = Friend::with('user')
+					->with('friends')
+					->where('user_id', '=', $arguments['id'])
+					// ->orWhere('friend_id', '=', $arguments['id'])
+					->where('status', '=', 'Pending')
+					->get();
+			
+			// print_r($friends);exit;
+
+			$this->data = $friends;
+			$this->status = 'success';
+			$this->message = count($friends).' friends found.';
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+		
+	}
+
+
+	/*
+	 * Get user's list i have sent a request.
+	 */
+	public function removeFriend()
+	{
+		try{
+			$arguments = Request::all();
+			$user = User::find($arguments['user_id']);
+
+			if(empty($user))
+				throw new Exception("This user does not exist", 1);
+
+			$friends = Friend::with('user')
+					->with('friends')
+					->where('user_id', '=', $arguments['user_id'])
+					->where('friend_id', '=', $arguments['friend_id'])
+					->where('status', '=', 'Accepted')
+					->delete();
+			
+			$friends = Friend::with('user')
+					->with('friends')
+					->where('friend_id', '=', $arguments['user_id'])
+					->where('user_id', '=', $arguments['friend_id'])
+					->where('status', '=', 'Accepted')
+					->delete();
+			// print_r($friends);exit;
+
+			$this->data = true;
+			$this->status = 'success';
+			$this->message = 'Friend removed successfully.';
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+		
+	}
+
 
 
 	/*
@@ -915,7 +990,7 @@ class ApiController extends Controller
 							->toArray();
 
 			if( !empty($friendcheck)){
-	
+
 				$this->data = $friendcheck;
 				$this->status = 'success';
 				$this->message = 'Friend request has already been sent.';
@@ -925,7 +1000,7 @@ class ApiController extends Controller
 				$friend = new Friend;
 				$friend->status = 'Pending';
 				$request = $friend->create($arguments);
-
+				print_r($request);exit;
 				$this->data = $request;
 				$this->status = 'success';
 				$this->message = 'Friend request sent.';
@@ -1146,13 +1221,15 @@ class ApiController extends Controller
 		try{
 			
 			$groupname = Request::get('group_name');
-
+			$groupby = Request::get('group_by');
 			if( !empty( $groupname ) ){				
-			
-				$groupcheck = DefaultGroup::where('group_name', '=', $groupname)->get()->toArray();
+
+				$groupcheck = DefaultGroup::where('group_name', '=', $groupname)
+									->where('group_by', '=', $groupby)
+									->get()->toArray();
 				
 				if(empty($groupcheck)){
-
+					// echo '<pre>';print_r($groupcheck);die;
 					$groupby = Request::get('group_by');
 
 					if(!isset($groupby))
@@ -1162,11 +1239,6 @@ class ApiController extends Controller
 					
 					if(empty($finduser))
 						throw new Exception("This user does not exist.", 1);
-					
-/*					$groupname = Request::get('group_name');
-					$findgroup = User::find($groupname);
-					if(empty($findgroup))
-						throw new Exception("This group does not exist.", 1);					*/
 
 					$arguments = Request::all();
 					$defaultgroup = new DefaultGroup;
@@ -1179,7 +1251,6 @@ class ApiController extends Controller
 					$this->message = $count.' Results were found.';
  
 				}else{ 
-
 					$groupby = Request::get('group_by');
 
 					if(!isset($groupby))
@@ -1189,16 +1260,8 @@ class ApiController extends Controller
 					
 					if(empty($finduser))
 						throw new Exception("This user does not exist.", 1);
-
-					$arguments = Request::all();
-					$defaultgroup = new DefaultGroup;
-					$defaultgroup->create($arguments);
-
-/*					$groupname = Request::get('group_name');
-					$findgroup = User::find($groupname);
-					if(empty($findgroup))
-						throw new Exception("This group does not exist.", 1);	*/
-
+					// echo '<pre>';print_r($returnData);die;
+ 
 					$count = DefaultGroup::where('group_name', '=', $groupname)->count();
 
 					$this->data = DefaultGroup::with('user')->where('group_name', '=', $groupname)->get();
@@ -1576,6 +1639,35 @@ class ApiController extends Controller
 
 	}
 
+
+	/*
+	 * Delete public chatroom entry api on request.
+	 */
+	public function publicGroupGetIds()
+	{
+		try{
+			$groupBy = Request::get('group_by');
+
+			if($groupBy){
+
+				$userdata = User::find($groupBy);
+				if(empty($userdata))
+					throw new Exception("This user does not exist.", 1);
+
+				$userdata = DefaultGroup::where('group_by', $groupBy)->get()->toArray();
+		
+				$this->data = $userdata;
+				$this->status = 'success';
+				$this->message = count($userdata).' groups found.';
+			}else{
+				throw new Exception("Group user id is required.", 1);				
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+		return $this->output();
+	}
 
 	/*
 	 * Get country on request.

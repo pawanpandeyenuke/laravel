@@ -139,6 +139,9 @@ Route::post('api/private-group-add','ApiController@privateGroupAdd');
 Route::post('api/get-group-list','ApiController@getGroupList');
 Route::post('api/delete-private-group','ApiController@deletePrivateGroup');
 
+Route::post('api/get-groups','ApiController@publicGroupGetIds');
+Route::post('api/sent-request-list','ApiController@getSentUsersList');
+Route::post('api/remove-friend','ApiController@removeFriend');
 
 /*
 |--------------------------------------------------------------------------
@@ -155,7 +158,6 @@ Route::get('/redirect/{provider}', 'SocialController@redirect');
 Route::get('/callback/{provider}', 'SocialController@callback');
 
 Route::get('home', 'HomeController@index');
-
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();

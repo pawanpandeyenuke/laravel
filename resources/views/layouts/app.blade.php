@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Friendz Square</title>
-<link href="/css/bootstrap.css" rel="stylesheet">
-<link href="/css/font-awesome.min.css" rel="stylesheet" media="all">
-<link href="/css/flat-icon/flaticon.css" rel="stylesheet" media="all">
-<link href="/css/style.css" rel="stylesheet">
-<link href="/css/responsive.css" rel="stylesheet" media="all">
+<link href="{{url('/css/bootstrap.css')}}" rel="stylesheet">
+<link href="{{url('/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
+<link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
+<link href="{{url('/css/style.css')}}" rel="stylesheet">
+<link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
 
 </head>
 	<body>
@@ -17,7 +17,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-3">
-						<a href="{{ url('/') }}" title="" class="logo"><img src="/images/logo.png" alt="Friendz Square"></a>
+						<a href="{{ url('/dashboard') }}" title="" class="logo"><img src="{{url('/images/logo.png')}}" alt="Friendz Square"></a>
 					</div>
 					<div class="col-sm-6">
 						<div class="top-search">
@@ -78,8 +78,8 @@
 		</header>
 		
 		@yield('content')
-		<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>	
-		<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>	
+		<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>

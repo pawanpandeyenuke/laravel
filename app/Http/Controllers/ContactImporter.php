@@ -18,6 +18,11 @@ class ContactImporter extends Controller
 
     public $google_redirect_uri = 'http://development.laravel.com/google/client/callback';
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function inviteFriends()
     {
  

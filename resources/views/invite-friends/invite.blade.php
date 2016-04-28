@@ -138,7 +138,7 @@
 		            			}
 		            		});
 		            	}
-		            	// console.log(emailsObj);
+		            	console.log(emailsObj);
 		            },
 		            function (responseFailed) {
 		            	//console.log(responseFailed);
