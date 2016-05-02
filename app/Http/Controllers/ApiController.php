@@ -985,12 +985,44 @@ class ApiController extends Controller
 							->where('friend_id', '=', $arguments['friend_id'])
 							->get()
 							->toArray();
-
-			if( !empty($friendcheck)){
-	
+			$friendcheck1 = Friend::where('user_id', '=', $arguments['friend_id'])
+							->where('friend_id', '=', $arguments['user_id'])
+							->get()
+							->toArray();
+			
+			if( !empty($friendcheck) || !empty($friendcheck1)){
+				if(!empty($friendcheck))
+				{
+				if(	$friendcheck[0]['status']== 'Rejected')
+				{
+					Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->update(['status'=>'Pending']);
+					$friendcheck[0]['status']='Pending';
+					$msg = "Friend request sent";	
+				}else{
+					$msg = "Friend request has already been sent.";
+				}
 				$this->data = $friendcheck;
 				$this->status = 'success';
-				$this->message = 'Friend request has already been sent.';
+				$this->message = $msg;
+			}
+			if(!empty($friendcheck1))
+			{
+				if(	$friendcheck1[0]['status']== 'Rejected')
+				{
+					Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->update(['status'=>'Pending']);
+					$friendcheck1[0]['status']='Pending';
+					$msg = "Friend request sent";	
+				}else{
+					$msg = "Already recieved a friend request from the user.";
+				}
+				$this->data = $friendcheck;
+				$this->status = 'success';
+				$this->message = $msg;
+			}
 
 			}else{
 
@@ -1080,30 +1112,45 @@ class ApiController extends Controller
 			if(empty($friend))
 				throw new Exception("This user does not exist", 1);
 
-			$friendcheck = Friend::where('user_id', '=', $arguments['friend_id'])
+			$friendcheck = Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->where('status', '=', 'Pending')
+							->get();
+
+			$friendcheck1 = Friend::where('user_id', '=', $arguments['friend_id'])
 							->where('friend_id', '=', $arguments['user_id'])
 							->where('status', '=', 'Pending')
 							->get();
+
 			
-			if( !empty($friendcheck)){
-
-				$request = DB::table('friends')
-					->where('user_id', '=', $arguments['user_id'])
-					->where('friend_id', '=', $arguments['friend_id'])
+			
+			if( !empty($friendcheck) || !empty($friendcheck1)){
+				if(!empty($friendcheck))
+				{
+					DB::table('friends')
+						->where('user_id', '=', $arguments['user_id'])
+						->where('friend_id', '=', $arguments['friend_id'])
+						->delete();
+					$this->status = 'success';
+					$this->message = 'Request cancelled.';		
+				}
+				if(!empty($friendcheck1))
+				{
+					$request = DB::table('friends')
+					->where('user_id', '=', $arguments['friend_id'])
+					->where('friend_id', '=', $arguments['user_id'])
 					->update(['status' => 'Rejected']);
-
-				$this->data = $request;
-				$this->status = 'success';
-				$this->message = 'Friend request declined.';
-
+					$this->data = $request;
+					$this->status = 'success';
+					$this->message = 'Friend request declined.';
+				}
 			}
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
 
-		return $this->output();
-		
+		return $this->output();		
 	}
 
 
