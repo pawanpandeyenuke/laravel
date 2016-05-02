@@ -2288,3 +2288,23 @@ textarea{
     right: 0;
     width: 25px;
 }
+
+/*****28-4-16******/
+.error-page{
+	padding: 85px 0 8px;
+  background: #e9faf8;
+}
+.error-data-outer {
+  padding: 30px 0;
+  min-height: 386px;
+}
+.page-data .error-data h3{
+  font-size: 40px;
+}
+.page-data .error-data p{
+  font-size: 15px;
+  color: #000;
+}
+.page-data .error-data a{
+	color: #00b0b2;
+}

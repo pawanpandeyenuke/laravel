@@ -842,11 +842,8 @@ class ApiController extends Controller
 			$friends = Friend::with('user')
 					->with('friends')
 					->where('user_id', '=', $arguments['id'])
-					// ->orWhere('friend_id', '=', $arguments['id'])
-					->where('status', '=', 'Accepted')
+					->orWhere('friend_id', '=', $arguments['id'])
 					->get();
-			
-			// print_r($friends);exit;
 
 			$this->data = $friends;
 			$this->status = 'success';
@@ -859,11 +856,11 @@ class ApiController extends Controller
 		return $this->output();
 		
 	}
-
+ 
 
 	/*
 	 * Get user's list i have sent a request.
-	 */
+	 */ 
 	public function getSentUsersList()
 	{
 		try{
@@ -895,9 +892,6 @@ class ApiController extends Controller
 	}
 
 
-	/*
-	 * Get user's list i have sent a request.
-	 */
 	public function removeFriend()
 	{
 		try{
@@ -933,7 +927,6 @@ class ApiController extends Controller
 		return $this->output();
 		
 	}
-
 
 
 	/*
@@ -975,15 +968,15 @@ class ApiController extends Controller
 		try{
 			$arguments = Request::all();
 
-			$user = User::where('id', '=', $arguments['user_id'])->get();
-			$friend = User::where('id', '=', $arguments['friend_id'])->get();
-
+			$user = User::where('id', '=', $arguments['user_id'])->get()->toArray();
+			$friend = User::where('id', '=', $arguments['friend_id'])->get()->toArray();
+			// echo '<pre>';print_r($friend);die;
 			if(empty($user))
 				throw new Exception("This user does not exist", 1);
 
 			if(empty($friend))
 				throw new Exception("This user does not exist", 1);
-
+			// echo '<pre>';print_r($friend);die;
 			$friendcheck = Friend::where('user_id', '=', $arguments['user_id'])
 							->where('friend_id', '=', $arguments['friend_id'])
 							->get()
@@ -1216,7 +1209,7 @@ class ApiController extends Controller
 	/*
 	 * Get public groups on request.
 	 */
-	public function getPublicGroups()
+		public function getPublicGroups()
 	{
 		try{
 			
@@ -1281,6 +1274,7 @@ class ApiController extends Controller
  
 		return $this->output();
 	}
+
 
 	
 	/*
@@ -1638,7 +1632,7 @@ class ApiController extends Controller
 		return $this->output();
 
 	}
-
+ 
 
 	/*
 	 * Delete public chatroom entry api on request.
@@ -1668,6 +1662,82 @@ class ApiController extends Controller
 		}
 		return $this->output();
 	}
+
+
+	/*
+	 * Search friends on site.
+	 */
+	public function searchSiteFriends()
+	{
+		try{
+			$arguments = Request::all();
+			$authuserid = $arguments['user_id'];
+			// echo $authuserid;die;
+			if($arguments){
+
+				$user = User::find($arguments['user_id']);
+
+				if(empty($user))
+					throw new Exception("User does not exist", 1);
+				
+				$keyword = $arguments['keyword'];
+
+				if(empty($keyword))
+					throw new Exception("Keyword is required", 1);
+
+/*				$searchuser = User::with('searchfriend')->with('searchUserFriend')
+								->where('first_name', 'Like', '%'.$arguments['keyword'].'%')
+								->orWhere('last_name', 'Like', '%'.$arguments['keyword'].'%')
+								->get();*/
+				
+				$searchuser = User::with(['searchfriend' => function($query) use($authuserid)
+							{
+							    $query->where('friend_id', $authuserid);
+
+							}])->where('first_name', 'Like', '%'.$arguments['keyword'].'%')
+								->orWhere('last_name', 'Like', '%'.$arguments['keyword'].'%')
+								->get();
+
+//$searchuser = DB::select("select users.first_name, users.last_name, users.email, f.status from users left join ( select distinct user_id from friends ) as f on users.id = f.user_id where users.first_name like '%".$keyword."%' or users.last_name like '%".$keyword."%' and users.id != '$authuserid'");
+
+//echo $query = "select f.status, f.friend_id from friends as f where f.user_id='$authuserid' and f.friend_id in ( select id from  users where id != '$authuserid' and first_name like '%".$keyword."%' or last_name like '%".$keyword."%' )";exit;
+
+// echo $query = "select friends.status, friends.user_id, users.id, users.first_name, users.last_name, users.email from users left join friends on users.id=friends.friend_id where users.id != '$authuserid' and users.first_name like '%".$keyword."%' or users.last_name like '%".$keyword."%' and friends.user_id='$authuserid'";exit;
+
+
+// $searchuser = DB::select("select first_name, last_name, email, friends.status from users left join friends on users.id = friends.user_id where users.first_name like '%".$keyword."%' or users.last_name like '%".$keyword."%' and friends.user_id = ?", [$authuserid]);
+ 
+
+// $searchuser = DB::select("select status from friends where user_id = (select id from users where first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
+	
+/*				$searchuser = User::with('searchfriend')
+								->where('first_name', 'Like', '%'.$arguments['keyword'].'%')
+								->orWhere('last_name', 'Like', '%'.$arguments['keyword'].'%')
+								// ->select('first_name', 'last_name', 'email')
+								// ->leftJoin('friends', 'friends.user_id', '=', 'users.id')
+								// ->whereRaw('friends.user_id = users.id')
+								->toSql();
+								// ->get();*/
+
+
+				// echo '<pre>';print_r($searchuser);die;
+
+				$this->data = $searchuser;
+				$this->status = 'success';
+				// $this->message = count($userdata).' groups found.';
+
+			}else{
+				throw new Exception("Keyword and user id are required", 1);
+				
+			}
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
 
 	/*
 	 * Get country on request.

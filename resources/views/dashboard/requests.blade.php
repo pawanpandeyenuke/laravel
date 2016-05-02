@@ -54,7 +54,7 @@
 							  <div class="page-title req-search">
 							<div class="search-box">
 								<input type="text" placeholder="Search" class="form-control searchtabtext">
-								<button data-reqtype="all" class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+								<button data-reqtype="all" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
 
 							</div>
 						</div>
@@ -152,7 +152,7 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 					    				 <div class="page-title req-search">
 							  <div class="search-box">
 							<input type="text" placeholder="Search" class="form-control searchtabtext">
-							<button data-reqtype="sent" class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+							<button data-reqtype="sent" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
 						</div>
 						</div>
 											<ul>
@@ -167,7 +167,7 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 									    <div class="page-title req-search">
 							  <div class="search-box">
 							<input type="text" placeholder="Search" class="form-control searchtabtext">
-							<button data-reqtype="recieved" class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+							<button data-reqtype="recieved" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
 						</div>
 						</div>
 											<ul>
@@ -182,16 +182,16 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 									    <div class="page-title req-search">
 							  <div class="search-box">
 							<input type="text" placeholder="Search" class="form-control searchtabtext">
-							<button data-reqtype="current" class="search-btn-small" type="button"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+							<button data-reqtype="current" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
 						</div>
 						</div>
 											<ul>
 
 											</ul>
-									    	<!-- <div class="load-btn load-more-friend">
-										    	<span class="loading-text">View more</span>
-										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
-										    </div> -->
+									    	<div class="load-btn load-more-friend">
+											    	<span class="loading-text">View more</span>
+											    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+											    </div>
 									    </div>
 
 								    </div>

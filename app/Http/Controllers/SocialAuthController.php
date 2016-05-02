@@ -69,17 +69,12 @@ class SocialAuthController extends Controller
         // echo '<pre>';print_r($providerUser);die;
         switch( $provider ){
 			
-			case 'facebook':
-<<<<<<< HEAD
-			print_r($provideruser);die;
-=======
-		
->>>>>>> edb8f7b7fd7f0eee2e121b7aa0d68a7f2e468856
+			case 'facebook': 
 				$userData = array(
 					'fb_id' => $providerUser->getId(),
 					'nickname' => $providerUser->getNickname(),
 					'first_name' =>$providerUser->user['first_name'],
-					'last_name' => " $providerUser->user['last_name'],
+					'last_name' => $providerUser->user['last_name'],
 					'email' => $providerUser->getEmail(),
 					'avatar' => $providerUser->getAvatar()
 				);

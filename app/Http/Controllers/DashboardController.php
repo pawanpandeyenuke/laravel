@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers,App\BroadcastMembers;
+use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers,App\BroadcastMembers,App\Forums;
 
 use App\Library\Converse, Google_Client, Mail;
 
@@ -252,8 +252,9 @@ $groupname =preg_replace('/(?<! )(?<!^)[A-Z]/',' $0', $groupname);
 $groupname=str_replace(', ',',',$groupname);
 $groupname=str_replace('-','',$groupname);
 $groupname=str_replace('It','IT',$groupname);
-
+//print_r($groupname);die;
 $result=DB::table('categories')->where('title',$groupname)->value('id');
+
 if($result==null)
 {
 return redirect('group');
@@ -288,7 +289,7 @@ return redirect('group');
                     $flag1=0; 
           // print_r($sub);die;
                     foreach ($sub as $key) {
-       $key = str_replace(" ","", $key);
+                    $key = str_replace(" ","", $key);
                     if($input['subcategory']==$key)
                     {
                     $flag=1;
@@ -303,7 +304,7 @@ return redirect('group');
                     }
                     }
 
-                    if($flag==0 || $flag1==0)
+                    if(($flag==0 || $flag1==0) && $result==null)
                     {
                 return redirect('group');
             }
@@ -828,9 +829,149 @@ if($input!=null && $gname!=null)
   }
 
 
-public function demopage()
-  {
-    return view('dashboard.demopage');
-  }
+    public function demopage()
+    {
+        return view('dashboard.demopage');
+    }
+
+    
+    public function forumsList()
+    {
+        $mainforums = Forums::where('parent_id',0)->get();
+        return view('forums.mainforums')
+            ->with('forums',$mainforums);
+    }
+
+    public function subForums($parentid='')
+    {
+   
+
+
+        if($parentid)
+        {
+        /* Redirecting for wrong parent id in URL */
+        $r1 = DB::table('forums')->where('id',$parentid)->where('parent_id','!=',0)->value('title');
+        $r2=DB::table('forums')->where('id',$parentid)->value('id');
+        if($r1!=null || $r2==null || $r2==3 || $r2==7 || $r2==9 || $r2==14 || $r2==19 || $r2==21)
+        {
+            return redirect('forums');
+        }
+        /******************END************************/
+
+           $mainforum=Forums::where('id',$parentid)->value('title');
+           $subforums = Forums::where('parent_id',$parentid)->get();
+        }
+        else
+        {
+         return redirect('forums');   
+        }
+
+        return view('forums.subforums')
+                ->with('mainforum',$mainforum)
+                ->with('subforums',$subforums);
+
+    }
+
+    public function forumPost($name='')
+    {
+      $input=Request::all();
+
+      if($name)
+      {
+        if($name == "superstitious-" || $name == "pet-products" || $name == "it,coding-language"
+            || $name == "ayurvedic,herbal" || $name == "face,hair,body-care" || $name == "eye-lasik"
+            || $name == "cosmetics")
+        {
+       
+            //$str = implode('-', array_map('ucfirst', explode('-', $name)));
+            $str=str_replace("-"," ",$name);
+            $str=ucwords($str);
+            $str = implode(',', array_map('ucfirst', explode(',', $str)));
+            $str=str_replace("It","IT","$str");
+           
+            $subforum=(['parentname'=>$str,
+                'subcategory'=>'']);
+            return view('forums.postforums')
+                ->with('forumpost',$subforum);
+
+        }
+        else{
+            return redirect('forums');
+        }
+      }
+    if(Request::isMethod('post') && $input['buttontype']!="Continue")
+    {
+                $forumpost = Request::all();
+
+              // print_r($forumpost);die; 
+           
+         $subforum=(['parentname'=>$forumpost['parentname'],
+                'subcategory'=>$forumpost['subcategory']]);      
+                
+
+        if($forumpost['subcategory']== "Country,State,City")
+        {
+            if($input['city']!=null)
+                    $city=$input['country'].", ".$input['state'].", ".$input['city'];
+                else
+                    $city=$input['country'].", ".$input['state'];
+            $subforum=(['parentname'=>$forumpost['parentname'],
+                'subcategory'=>$city]);      
+        }
+        if($forumpost['subcategory']== "Country")
+        {
+            $country = DB::table('country')->where('country_id',$forumpost['country1'])->value('country_name');
+            $subforum=(['parentname'=>$forumpost['parentname'],
+                'subcategory'=>$country]);      
+        }
+        if($forumpost['subcategory']== "International")
+        {
+            $subforum=(['parentname'=>$forumpost['parentname'],
+                'subcategory'=>"International"]);      
+        }
+        if($forumpost['subcategory']== "Professional Course")
+        {
+            $subforum=(['parentname'=>$forumpost['subcategory'],
+                'subcategory'=>$forumpost['coursedata1']]);      
+        }
+        if($forumpost['subcategory']== "Subjects")
+        {
+            $subforum=(['parentname'=>$forumpost['subcategory'],
+                'subcategory'=>$forumpost['coursedata']]);      
+        }
+
+                return view('forums.postforums')
+                ->with('forumpost',$subforum);
+    }
+
+       /* For Doctor's sub-sub category */
+
+        if($input['parentname']=="Doctor")
+        {
+             $subname="";
+            if($input['subcategory']=="Country,State,City")
+            {
+                if($input['city']!=null)
+                    $subname=$input['country'].", ".$input['state'].", ".$input['city'];
+                else
+                    $subname=$input['country'].", ".$input['state'];
+            }
+            
+            if($input['subcategory']=="Country")
+            $subname=DB::table('country')->where('country_id',$input['country1'])->value('country_name');
+            
+            if($input['subcategory']=="International")
+            $subname="International";
+
+           $mainforum="Doctor ".$subname;
+           $subforums = Forums::where('parent_id',70)->get();
+
+           return view('forums.subforums')
+                ->with('mainforum',$mainforum)
+                ->with('subforums',$subforums);
+        }
+
+        
+    }
 
 }

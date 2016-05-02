@@ -10,7 +10,7 @@ use App\Http\Requests;
 use XmppPrebind, App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
-use App\Feed, Auth;
+use App\Feed, Auth, Mail;
 use Intervention\Image\Image;
 use \Exception;
 use App\Library\Converse;
@@ -82,6 +82,11 @@ class AjaxController extends Controller
 		$user = Auth::User();
 		$file = Input::file('image');
 
+		if(!(isset($arguments['imagecheck'])) && $file==null && $arguments['message']=='')
+		//if($file==null && $arguments['message']=='')
+		{
+			exit;
+		}
 		if( isset($arguments['image']) && $file != null ){
 
        /* $file = Request::file('file');
@@ -95,7 +100,7 @@ class AjaxController extends Controller
 		}else{
 			unset($arguments['image']);
 		}
-
+		
 		$newsFeed = Feed::find($arguments['id']);
 		$newsFeed->fill($arguments);
 		$saved = $newsFeed->push();
@@ -306,6 +311,7 @@ comments;
 	public function viewMoreFriends()
 	{
 		$per_page = 10;
+		//print_r(Input::all());
 		$page = Input::get('pageid');
 		$type = Input::get('reqType');
 		$offset = ($page - 1) * $per_page;
@@ -860,11 +866,7 @@ comments;
 				</li>';
 			}
 
-		if($count==0) {
-				$data[] = '<li > 
-				<span style="color:black;font-weight:bold">'.$msg.'</span>
-				</li>';
-			}
+	
 		$html = implode('',$data);
 		echo $html;
 
@@ -891,7 +893,7 @@ comments;
 
 		if($model!=null){
 			foreach ($model as $key => $value) {
-				if($type=='current')
+				if($type == 'current'|| $type == 'recieved')
 
 					$n=$value['user']['first_name']." ".$value['user']['last_name'];
 				else
@@ -1038,7 +1040,11 @@ comments;
 				$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
 				$subject = 'FriendzSquare Invitation';
 				
-				$mailsent = mail($value, $subject, $message);
+				//$mailsent = mail($value, $subject, $message);
+		 Mail::raw($message,function ($m)  use($value, $subject){
+                	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
+                    	$m->to($value,"Friend")->subject($subject);
+                });
 			}
 
 		}
@@ -1055,6 +1061,7 @@ comments;
 		// echo '<pre>';print_r($invalid);
 		// echo '<pre>';print_r($valid);die;		
 	}
+
 
 }
 	

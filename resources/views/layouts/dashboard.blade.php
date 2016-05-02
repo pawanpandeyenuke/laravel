@@ -62,7 +62,7 @@
 									)); !!}
 								</li>
 								<li class="search-btn-cont">
-									<button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
+									<button type="button" class="search-btn"><i class="flaticon-magnifying-glass138"></i></button>
 									<!-- {!! Form::button('', array(
 										'class' => 'search-btn',
 										'id' => '',
@@ -76,7 +76,7 @@
 				<div class="dashboard-header-menu text-right">
 					<ul class="list-inline">
 						<li class="user-info-top">
-							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : 'images/user-thumb.jpg'; ?>
+							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : '/images/user-thumb.jpg'; ?>
 							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
 							{{Auth::User()->first_name}}</a>
 						</li>
