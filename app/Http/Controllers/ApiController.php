@@ -842,10 +842,8 @@ class ApiController extends Controller
 			$friends = Friend::with('user')
 					->with('friends')
 					->where('user_id', '=', $arguments['id'])
-					->where('status', '=', 'Accepted')
+					->orWhere('friend_id', '=', $arguments['id'])
 					->get();
-			
-			// print_r($friends);exit;
 
 			$this->data = $friends;
 			$this->status = 'success';
@@ -858,10 +856,11 @@ class ApiController extends Controller
 		return $this->output();
 		
 	}
+ 
 
-		/*
+	/*
 	 * Get user's list i have sent a request.
-	 */
+	 */ 
 	public function getSentUsersList()
 	{
 		try{
@@ -893,9 +892,6 @@ class ApiController extends Controller
 	}
 
 
-	/*
-	 * Get user's list i have sent a request.
-	 */
 	public function removeFriend()
 	{
 		try{
@@ -931,6 +927,7 @@ class ApiController extends Controller
 		return $this->output();
 		
 	}
+
 
 	/*
 	 * Get users list to send friend request.
@@ -972,15 +969,15 @@ class ApiController extends Controller
 			$arguments = Request::all();
 			//print_r($arguments);die;
 
-			$user = User::where('id', '=', $arguments['user_id'])->get();
-			$friend = User::where('id', '=', $arguments['friend_id'])->get();
-
+			$user = User::where('id', '=', $arguments['user_id'])->get()->toArray();
+			$friend = User::where('id', '=', $arguments['friend_id'])->get()->toArray();
+			// echo '<pre>';print_r($friend);die;
 			if(empty($user))
 				throw new Exception("This user does not exist", 1);
 
 			if(empty($friend))
 				throw new Exception("This user does not exist", 1);
-
+			// echo '<pre>';print_r($friend);die;
 			$friendcheck = Friend::where('user_id', '=', $arguments['user_id'])
 							->where('friend_id', '=', $arguments['friend_id'])
 							->get()
@@ -990,7 +987,6 @@ class ApiController extends Controller
 							->where('friend_id', '=', $arguments['user_id'])
 							->get()
 							->toArray();
-
 
 			if( !empty($friendcheck) || !empty($friendcheck1)){
 				if(!empty($friendcheck))
@@ -1005,6 +1001,7 @@ class ApiController extends Controller
 				}else{
 					$msg = "Friend request has already been sent.";
 				}
+
 				$this->data = $friendcheck;
 				$this->status = 'success';
 				$this->message = $msg;
@@ -1031,7 +1028,7 @@ class ApiController extends Controller
 				$friend = new Friend;
 				$friend->status = 'Pending';
 				$request = $friend->create($arguments);
-
+				print_r($request);exit;
 				$this->data = $request;
 				$this->status = 'success';
 				$this->message = 'Friend request sent.';
@@ -1152,8 +1149,7 @@ class ApiController extends Controller
 			$this->message = $e->getMessage();
 		}
 
-		return $this->output();
-		
+		return $this->output();		
 	}
 
 
@@ -1686,8 +1682,9 @@ class ApiController extends Controller
 		return $this->output();
 
 	}
+ 
 
-		/*
+	/*
 	 * Delete public chatroom entry api on request.
 	 */
 	public function publicGroupGetIds()
@@ -1715,6 +1712,49 @@ class ApiController extends Controller
 		}
 		return $this->output();
 	}
+
+
+	/*
+	 * Search friends on site.
+	 */
+	public function searchSiteFriends()
+	{
+		try{
+			$arguments = Request::all();
+			$authuserid = $arguments['user_id'];
+			// echo $authuserid;die;
+			if($arguments){
+
+				$user = User::find($arguments['user_id']);
+
+				if(empty($user))
+					throw new Exception("User does not exist", 1);
+				
+				$keyword = $arguments['keyword'];
+
+				if(empty($keyword))
+					throw new Exception("Keyword is required", 1);
+
+				$searchuser = DB::select("select t2.user_id, t2.friend_id, t2.status, t1.first_name, t1.last_name, t1.email, t1.picture from (SELECT * FROM `users` WHERE `first_name` like '%".$keyword."%' or `last_name` like '%".$keyword."%') as t1 join (select * from friends where user_id = ".$authuserid.") as t2 on t1.id= t2.friend_id");
+
+				// echo '<pre>';print_r($searchuser);die;
+
+				$this->data = $searchuser;
+				$this->status = 'success';
+				$this->message = count($searchuser).' users found.';
+
+			}else{
+				throw new Exception("Keyword and user id are required", 1);
+				
+			}
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
 
 	/*
 	 * Get country on request.

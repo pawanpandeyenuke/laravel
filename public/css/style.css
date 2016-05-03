@@ -2288,6 +2288,7 @@ textarea{
     width: 25px;
 }
 
+
 /** Temporary   **/
 .btnview{
   position: relative;
@@ -2371,6 +2372,7 @@ textarea{
 	margin-top: 60px;
 }
 
+
 /*****28-4-16******/
 .error-page{
 	padding: 85px 0 8px;
@@ -2389,6 +2391,7 @@ textarea{
 }
 .page-data .error-data a{
 	color: #00b0b2;
+<<<<<<< HEAD
 }
 .top-search-cont{
   padding: 19px 0;
@@ -2432,8 +2435,8 @@ textarea{
 .page-data.dashboard-body .col-sm-6 {
     width: 56%;
 }
-}*/
-.carousel-control.right, .carousel-control.left{
+}
+*/.carousel-control.right, .carousel-control.left{
 	background: none;
 }
 .carousel-control i:before{
@@ -2503,3 +2506,8 @@ textarea{
   margin: 70px 0 0;
   text-align: center;
 }
+
+.fa-facebook-f::before, .fa-facebook::before, .fa-twitter::before,.fa-google-plus::before,
+.fa-linkedin::before {
+	line-height: 3;
+	}

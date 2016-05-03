@@ -16,8 +16,13 @@ class ContactImporter extends Controller
 
     public $google_client_secret = 'wUWM9ObLfOZVkR7-nXQvtb6V';
 
-    public $google_redirect_uri = 'http://development.laravel.com/google/client/callback';
+    public $google_redirect_uri = 'http://fs.yiipro.com/google/client/callback';
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+ 
     public function inviteFriends()
     {
  
@@ -157,7 +162,7 @@ class ContactImporter extends Controller
         if(Request::isMethod('post')){
 
             $request = Request::all();
-
+	    //print_r($request);die;
             unset($request['_token']);
             unset($request['selectall']);
 
@@ -171,11 +176,11 @@ class ContactImporter extends Controller
                         $userData = User::where('email', '=', $value)->get()->toArray();
                         if(!empty($userData))
                             $existingUser[] = $value;
-                        else
+                        else{
                             // $nonExistingUser[] = $value;
                             $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
                             self::mail($value, $message, 'Invitation', 'emails.invite');
-                    }
+                    }}
                 }
 
                 $friends = array();
@@ -206,28 +211,51 @@ class ContactImporter extends Controller
                 ->with('contacts', $google_contacts);
 
     }
-
+/*
     public function mail($email = '', $message, $subject, $type) {
-		// $mailsent = mail($email, $subject, $message);
         if($email != ''){
+<<<<<<< HEAD
   			    Mail::raw($message,function ($m)  use($email, $subject, $type){
                 	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
                     $m->to($email,$type)->subject($subject);
                 });
 			//print_r($mailsent);die;
+=======
+		$mailsent = //Mail::send('emails.invite', ['email'=> 'pawanpandey392@gmail.com','message_text'=> 'checkout this new site. Friendz Square!'], 
+                Mail::raw('emails.invite',function ($m)  use($email, $subject, $type){
+            	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
+                $m->to($email,$type)->subject($subject);
+            });
+>>>>>>> dd12761116c2b123e6f88acebd682a7598bf20e4
         }
     }
-/*    public function mail($email = '', $message, $subject, $type) {
+*/
+
+    public function mail($email = '', $message, $subject, $type) {
   
-        $mailsent = mail($email, $subject, $message);
+	$username = Auth::User()->first_name.' '.Auth::User()->last_name;
+
+	$data = array(
+			'message' => $message,
+			'subject' => $subject,
+			'id' => Auth::User()->id,
+			'type' => $type,
+			'username' => $username,
+		);
 
         if($email != ''){
+		Mail::send('emails.invite', $data, function($message) use($email, $subject) {
+		$message->from('no-reply@friendzsquare.com', 'Friend Square');
+		$message->to($email)->subject($subject);
+	});
+/*
             Mail::send($type, ['email'=>$email,'message_text'=> $message], function ($m)  {
                 $m->from('no-reply@friendzsquare.com', 'FriendzSquare!');
                 $m->to($email)->subject($subject);
             });
+*/
         }
-    }*/
+    }
 
     public function curl($url, $post = "") {
         $curl = curl_init();
