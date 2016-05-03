@@ -1041,7 +1041,7 @@ comments;
 				$subject = 'FriendzSquare Invitation';
 				
 				//$mailsent = mail($value, $subject, $message);
-		 Mail::raw($message,function ($m)  use($value, $subject){
+			 Mail::raw($message,function ($m)  use($value, $subject){
                 	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
                     	$m->to($value,"Friend")->subject($subject);
                 });

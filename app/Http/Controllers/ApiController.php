@@ -982,11 +982,45 @@ class ApiController extends Controller
 							->get()
 							->toArray();
 
-			if( !empty($friendcheck)){
+			$friendcheck1 = Friend::where('user_id', '=', $arguments['friend_id'])
+							->where('friend_id', '=', $arguments['user_id'])
+							->get()
+							->toArray();
+			
+			if( !empty($friendcheck) || !empty($friendcheck1)){
+				if(!empty($friendcheck))
+				{
+				if(	$friendcheck[0]['status']== 'Rejected')
+				{
+					Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->update(['status'=>'Pending']);
+					$friendcheck[0]['status']='Pending';
+					$msg = "Friend request sent";	
+				}else{
+					$msg = "Friend request has already been sent.";
+				}
 
 				$this->data = $friendcheck;
 				$this->status = 'success';
-				$this->message = 'Friend request has already been sent.';
+				$this->message = $msg;
+			}
+			if(!empty($friendcheck1))
+			{
+				if(	$friendcheck1[0]['status']== 'Rejected')
+				{
+					Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->update(['status'=>'Pending']);
+					$friendcheck1[0]['status']='Pending';
+					$msg = "Friend request sent";	
+				}else{
+					$msg = "Already recieved a friend request from the user.";
+				}
+				$this->data = $friendcheck;
+				$this->status = 'success';
+				$this->message = $msg;
+			}
 
 			}else{
 
@@ -1076,30 +1110,45 @@ class ApiController extends Controller
 			if(empty($friend))
 				throw new Exception("This user does not exist", 1);
 
-			$friendcheck = Friend::where('user_id', '=', $arguments['friend_id'])
+			$friendcheck = Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->where('status', '=', 'Pending')
+							->get();
+
+			$friendcheck1 = Friend::where('user_id', '=', $arguments['friend_id'])
 							->where('friend_id', '=', $arguments['user_id'])
 							->where('status', '=', 'Pending')
 							->get();
+
 			
-			if( !empty($friendcheck)){
-
-				$request = DB::table('friends')
-					->where('user_id', '=', $arguments['user_id'])
-					->where('friend_id', '=', $arguments['friend_id'])
+			
+			if( !empty($friendcheck) || !empty($friendcheck1)){
+				if(!empty($friendcheck))
+				{
+					DB::table('friends')
+						->where('user_id', '=', $arguments['user_id'])
+						->where('friend_id', '=', $arguments['friend_id'])
+						->delete();
+					$this->status = 'success';
+					$this->message = 'Request cancelled.';		
+				}
+				if(!empty($friendcheck1))
+				{
+					$request = DB::table('friends')
+					->where('user_id', '=', $arguments['friend_id'])
+					->where('friend_id', '=', $arguments['user_id'])
 					->update(['status' => 'Rejected']);
-
-				$this->data = $request;
-				$this->status = 'success';
-				$this->message = 'Friend request declined.';
-
+					$this->data = $request;
+					$this->status = 'success';
+					$this->message = 'Friend request declined.';
+				}
 			}
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
 
-		return $this->output();
-		
+		return $this->output();		
 	}
 
 
@@ -1685,46 +1734,13 @@ class ApiController extends Controller
 				if(empty($keyword))
 					throw new Exception("Keyword is required", 1);
 
-/*				$searchuser = User::with('searchfriend')->with('searchUserFriend')
-								->where('first_name', 'Like', '%'.$arguments['keyword'].'%')
-								->orWhere('last_name', 'Like', '%'.$arguments['keyword'].'%')
-								->get();*/
-				
-				$searchuser = User::with(['searchfriend' => function($query) use($authuserid)
-							{
-							    $query->where('friend_id', $authuserid);
-
-							}])->where('first_name', 'Like', '%'.$arguments['keyword'].'%')
-								->orWhere('last_name', 'Like', '%'.$arguments['keyword'].'%')
-								->get();
-
-//$searchuser = DB::select("select users.first_name, users.last_name, users.email, f.status from users left join ( select distinct user_id from friends ) as f on users.id = f.user_id where users.first_name like '%".$keyword."%' or users.last_name like '%".$keyword."%' and users.id != '$authuserid'");
-
-//echo $query = "select f.status, f.friend_id from friends as f where f.user_id='$authuserid' and f.friend_id in ( select id from  users where id != '$authuserid' and first_name like '%".$keyword."%' or last_name like '%".$keyword."%' )";exit;
-
-// echo $query = "select friends.status, friends.user_id, users.id, users.first_name, users.last_name, users.email from users left join friends on users.id=friends.friend_id where users.id != '$authuserid' and users.first_name like '%".$keyword."%' or users.last_name like '%".$keyword."%' and friends.user_id='$authuserid'";exit;
-
-
-// $searchuser = DB::select("select first_name, last_name, email, friends.status from users left join friends on users.id = friends.user_id where users.first_name like '%".$keyword."%' or users.last_name like '%".$keyword."%' and friends.user_id = ?", [$authuserid]);
- 
-
-// $searchuser = DB::select("select status from friends where user_id = (select id from users where first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
-	
-/*				$searchuser = User::with('searchfriend')
-								->where('first_name', 'Like', '%'.$arguments['keyword'].'%')
-								->orWhere('last_name', 'Like', '%'.$arguments['keyword'].'%')
-								// ->select('first_name', 'last_name', 'email')
-								// ->leftJoin('friends', 'friends.user_id', '=', 'users.id')
-								// ->whereRaw('friends.user_id = users.id')
-								->toSql();
-								// ->get();*/
-
+				$searchuser = DB::select("select t2.user_id, t2.friend_id, t2.status, t1.first_name, t1.last_name, t1.email, t1.picture from (SELECT * FROM `users` WHERE `first_name` like '%".$keyword."%' or `last_name` like '%".$keyword."%') as t1 join (select * from friends where user_id = ".$authuserid.") as t2 on t1.id= t2.friend_id");
 
 				// echo '<pre>';print_r($searchuser);die;
 
 				$this->data = $searchuser;
 				$this->status = 'success';
-				// $this->message = count($userdata).' groups found.';
+				$this->message = count($searchuser).' users found.';
 
 			}else{
 				throw new Exception("Keyword and user id are required", 1);

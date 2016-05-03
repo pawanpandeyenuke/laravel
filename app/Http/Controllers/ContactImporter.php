@@ -209,29 +209,43 @@ class ContactImporter extends Controller
                 ->with('contacts', $google_contacts);
 
     }
-
+/*
     public function mail($email = '', $message, $subject, $type) {
-		// $mailsent = mail($email, $subject, $message);
         if($email != ''){
-  			$mailsent = //Mail::send('emails.invite', ['email'=> 'pawanpandey392@gmail.com','message_text'=> 'checkout this new site. Friendz Square!'], 
-                Mail::raw($message,function ($m)  use($email, $subject, $type){
+		$mailsent = //Mail::send('emails.invite', ['email'=> 'pawanpandey392@gmail.com','message_text'=> 'checkout this new site. Friendz Square!'], 
+                Mail::raw('emails.invite',function ($m)  use($email, $subject, $type){
             	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
                 $m->to($email,$type)->subject($subject);
             });
-			//print_r($mailsent);die;
         }
     }
-/*    public function mail($email = '', $message, $subject, $type) {
+*/
+
+    public function mail($email = '', $message, $subject, $type) {
   
-        $mailsent = mail($email, $subject, $message);
+	$username = Auth::User()->first_name.' '.Auth::User()->last_name;
+
+	$data = array(
+			'message' => $message,
+			'subject' => $subject,
+			'id' => Auth::User()->id,
+			'type' => $type,
+			'username' => $username,
+		);
 
         if($email != ''){
+		Mail::send('emails.invite', $data, function($message) use($email, $subject) {
+		$message->from('no-reply@friendzsquare.com', 'Friend Square');
+		$message->to($email)->subject($subject);
+	});
+/*
             Mail::send($type, ['email'=>$email,'message_text'=> $message], function ($m)  {
                 $m->from('no-reply@friendzsquare.com', 'FriendzSquare!');
                 $m->to($email)->subject($subject);
             });
+*/
         }
-    }*/
+    }
 
     public function curl($url, $post = "") {
         $curl = curl_init();

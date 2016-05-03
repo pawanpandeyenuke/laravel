@@ -248,14 +248,17 @@ if($pgid){
 <script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 
 <?php 
+ 
   $img = Auth::User()->picture; 
   $userpic = !empty($img)? url($img) : url('/images/user-thumb.png');
 ?>
-
+ 
 <script type="text/javascript">
 
     var userImage="{{$userpic}}";
-    var defaultImage="{{url('/images/user-thumb.png')}}";
+ 
+    var defaultImage="{{url('/images/user-thumb.jpg')}}";
+
     var image_upload_url="ajax/sendimage";
     var chatserver='@fs.yiipro.com';
     
