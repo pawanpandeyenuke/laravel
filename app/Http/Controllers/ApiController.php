@@ -842,7 +842,6 @@ class ApiController extends Controller
 			$friends = Friend::with('user')
 					->with('friends')
 					->where('user_id', '=', $arguments['id'])
-					->orWhere('friend_id', '=', $arguments['id'])
 					->where('status', '=', 'Accepted')
 					->get();
 			
@@ -860,6 +859,78 @@ class ApiController extends Controller
 		
 	}
 
+		/*
+	 * Get user's list i have sent a request.
+	 */
+	public function getSentUsersList()
+	{
+		try{
+			$arguments = Request::all();
+			$user = User::find($arguments['id']);
+
+			if(empty($user))
+				throw new Exception("This user does not exist", 1);
+
+			$friends = Friend::with('user')
+					->with('friends')
+					->where('user_id', '=', $arguments['id'])
+					// ->orWhere('friend_id', '=', $arguments['id'])
+					->where('status', '=', 'Pending')
+					->get();
+			
+			// print_r($friends);exit;
+
+			$this->data = $friends;
+			$this->status = 'success';
+			$this->message = count($friends).' friends found.';
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+		
+	}
+
+
+	/*
+	 * Get user's list i have sent a request.
+	 */
+	public function removeFriend()
+	{
+		try{
+			$arguments = Request::all();
+			$user = User::find($arguments['user_id']);
+
+			if(empty($user))
+				throw new Exception("This user does not exist", 1);
+
+			$friends = Friend::with('user')
+					->with('friends')
+					->where('user_id', '=', $arguments['user_id'])
+					->where('friend_id', '=', $arguments['friend_id'])
+					->where('status', '=', 'Accepted')
+					->delete();
+			
+			$friends = Friend::with('user')
+					->with('friends')
+					->where('friend_id', '=', $arguments['user_id'])
+					->where('user_id', '=', $arguments['friend_id'])
+					->where('status', '=', 'Accepted')
+					->delete();
+			// print_r($friends);exit;
+
+			$this->data = true;
+			$this->status = 'success';
+			$this->message = 'Friend removed successfully.';
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+		
+	}
 
 	/*
 	 * Get users list to send friend request.
@@ -899,6 +970,7 @@ class ApiController extends Controller
 	{
 		try{
 			$arguments = Request::all();
+			//print_r($arguments);die;
 
 			$user = User::where('id', '=', $arguments['user_id'])->get();
 			$friend = User::where('id', '=', $arguments['friend_id'])->get();
@@ -914,11 +986,45 @@ class ApiController extends Controller
 							->get()
 							->toArray();
 
-			if( !empty($friendcheck)){
-	
+			$friendcheck1 = Friend::where('user_id', '=', $arguments['friend_id'])
+							->where('friend_id', '=', $arguments['user_id'])
+							->get()
+							->toArray();
+
+
+			if( !empty($friendcheck) || !empty($friendcheck1)){
+				if(!empty($friendcheck))
+				{
+				if(	$friendcheck[0]['status']== 'Rejected')
+				{
+					Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->update(['status'=>'Pending']);
+					$friendcheck[0]['status']='Pending';
+					$msg = "Friend request sent";	
+				}else{
+					$msg = "Friend request has already been sent.";
+				}
 				$this->data = $friendcheck;
 				$this->status = 'success';
-				$this->message = 'Friend request has already been sent.';
+				$this->message = $msg;
+			}
+			if(!empty($friendcheck1))
+			{
+				if(	$friendcheck1[0]['status']== 'Rejected')
+				{
+					Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->update(['status'=>'Pending']);
+					$friendcheck1[0]['status']='Pending';
+					$msg = "Friend request sent";	
+				}else{
+					$msg = "Already recieved a friend request from the user.";
+				}
+				$this->data = $friendcheck;
+				$this->status = 'success';
+				$this->message = $msg;
+			}
 
 			}else{
 
@@ -1008,22 +1114,38 @@ class ApiController extends Controller
 			if(empty($friend))
 				throw new Exception("This user does not exist", 1);
 
-			$friendcheck = Friend::where('user_id', '=', $arguments['friend_id'])
+			$friendcheck = Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->where('status', '=', 'Pending')
+							->get();
+
+			$friendcheck1 = Friend::where('user_id', '=', $arguments['friend_id'])
 							->where('friend_id', '=', $arguments['user_id'])
 							->where('status', '=', 'Pending')
 							->get();
+
 			
-			if( !empty($friendcheck)){
-
-				$request = DB::table('friends')
-					->where('user_id', '=', $arguments['user_id'])
-					->where('friend_id', '=', $arguments['friend_id'])
+			
+			if( !empty($friendcheck) || !empty($friendcheck1)){
+				if(!empty($friendcheck))
+				{
+					DB::table('friends')
+						->where('user_id', '=', $arguments['user_id'])
+						->where('friend_id', '=', $arguments['friend_id'])
+						->delete();
+					$this->status = 'success';
+					$this->message = 'Request cancelled.';		
+				}
+				if(!empty($friendcheck1))
+				{
+					$request = DB::table('friends')
+					->where('user_id', '=', $arguments['friend_id'])
+					->where('friend_id', '=', $arguments['user_id'])
 					->update(['status' => 'Rejected']);
-
-				$this->data = $request;
-				$this->status = 'success';
-				$this->message = 'Friend request declined.';
-
+					$this->data = $request;
+					$this->status = 'success';
+					$this->message = 'Friend request declined.';
+				}
 			}
 
 		}catch(Exception $e){
@@ -1141,18 +1263,20 @@ class ApiController extends Controller
 	/*
 	 * Get public groups on request.
 	 */
-	public function getPublicGroups()
+		public function getPublicGroups()
 	{
 		try{
 			
 			$groupname = Request::get('group_name');
-
+			$groupby = Request::get('group_by');
 			if( !empty( $groupname ) ){				
-			
-				$groupcheck = DefaultGroup::where('group_name', '=', $groupname)->get()->toArray();
+
+				$groupcheck = DefaultGroup::where('group_name', '=', $groupname)
+									->where('group_by', '=', $groupby)
+									->get()->toArray();
 				
 				if(empty($groupcheck)){
-
+					// echo '<pre>';print_r($groupcheck);die;
 					$groupby = Request::get('group_by');
 
 					if(!isset($groupby))
@@ -1162,8 +1286,6 @@ class ApiController extends Controller
 					
 					if(empty($finduser))
 						throw new Exception("This user does not exist.", 1);
-					
-					$groupname = Request::get('group_name');
 
 					$arguments = Request::all();
 					$defaultgroup = new DefaultGroup;
@@ -1176,7 +1298,6 @@ class ApiController extends Controller
 					$this->message = $count.' Results were found.';
  
 				}else{ 
-
 					$groupby = Request::get('group_by');
 
 					if(!isset($groupby))
@@ -1186,11 +1307,8 @@ class ApiController extends Controller
 					
 					if(empty($finduser))
 						throw new Exception("This user does not exist.", 1);
-
-					$arguments = Request::all();
-					$defaultgroup = new DefaultGroup;
-					$defaultgroup->create($arguments);
-
+					// echo '<pre>';print_r($returnData);die;
+ 
 					$count = DefaultGroup::where('group_name', '=', $groupname)->count();
 
 					$this->data = DefaultGroup::with('user')->where('group_name', '=', $groupname)->get();
@@ -1210,6 +1328,7 @@ class ApiController extends Controller
  
 		return $this->output();
 	}
+
 
 	
 	/*

@@ -1,7 +1,11 @@
 @extends('layouts.dashboard')
 <?php 
-$title1=strtolower($title);
+
+//print_r($groupdetail);die;
+$title1=strtolower($groupdetail[0]['title']);
 $title1=str_replace(" ","-",$title1);
+
+
  ?>
 @section('content')
 <div class="page-data dashboard-body">
@@ -14,18 +18,21 @@ $title1=str_replace(" ","-",$title1);
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title no-left-padding">Detail</div>
-
-					<div class="group-img">
-						<img src="/images/post-img-big.jpg" class="g-img">
+<?php
+					$group_picture = !empty($groupdetail[0]['picture']) ? $groupdetail[0]['picture'] : '/images/post-img-big.jpg';
+	
+ ?>
+					<div class="group-img" id="groupimageholder">
+						<img src="{{$group_picture}}" class="g-img">
 						<div class="grp-img-outer">
-							<input type="file" class="filestyle" data-input="false" data-icon="true" data-iconName="glyphicon glyphicon-picture" data-buttonText=""  data-buttonName="btn-upload-icon">
+							<input type="file" id="groupimage" class="filestyle" data-input="false" data-icon="true" data-iconName="glyphicon glyphicon-picture" data-buttonText=""  data-buttonName="btn-upload-icon" data-groupid="{{$groupid}}">
 						</div>
 					</div>
 
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
 							<div class="edit-grp-name">
-								<b><input type="text" name="privategroupname" class="pr-edit pr-gname" disabled="disabled"  value="{{$title}}"></b>
+								<b><input type="text" name="privategroupname" class="pr-edit pr-gname" disabled="disabled"  value="{{$groupdetail[0]['title']}}"></b>
 					<button type="button" class="edit-profile editgroupname" title="Edit Profile"><i class="fa fa-pencil"></i></button>
 					<button type="button" class="save-profile-changes savegroupname" title="Save Profile" value="{{$groupid}}"><i class="fa fa-check-circle"></i></button>
 								<!-- <button type="button" class="editbtn-pencil"><i class="fa fa-pencil"></i></button> -->

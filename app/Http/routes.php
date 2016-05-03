@@ -79,6 +79,8 @@ Route::post('/ajax/editgroupname','AjaxController@editGroupName');
 
 Route::post('ajax/viewmorefriends','AjaxController@viewMoreFriends');
 
+Route::post('ajax/viewMoreForAll','AjaxController@viewMoreForAll');
+
 Route::post('ajax/viewmoreposts','AjaxController@viewMorePosts');
 
 Route::post('ajax/remove-education','AjaxController@removeEducationDetails');
@@ -86,6 +88,10 @@ Route::post('ajax/remove-education','AjaxController@removeEducationDetails');
 Route::post('ajax/send-hotmail-invitation','AjaxController@sendHotmailInvitation');
 
 Route::post('/ajax/forumsubgroup','AjaxController@forumSubGroup');
+
+Route::post('/private-group-detail/ajax/groupimage','AjaxController@groupImage');
+
+Route::post('/ajax/login','AjaxController@login');
 
 
 /**
@@ -125,6 +131,11 @@ Route::post('api/addfriend','ApiController@addFriend');
 Route::post('api/acceptrequest','ApiController@acceptRequest');
 Route::post('api/declinerequest','ApiController@declineRequest');
 
+
+
+Route::post('api/sent-request-list','ApiController@getSentUsersList');
+Route::post('api/remove-friend','ApiController@removeFriend');
+
 Route::post('api/push-notification','ApiController@updatePushNotificationDetails');
 Route::post('api/chatsendimage','ApiController@chatSendImage');
 
@@ -159,7 +170,8 @@ Route::get('/redirect/{provider}', 'SocialController@redirect');
 Route::get('/callback/{provider}', 'SocialController@callback');
 
 Route::get('home', 'HomeController@index');
-
+	Route::get('/searchfriends',"SearchController@searchFromUsers");
+	Route::post('/searchfriends',"SearchController@searchFromUsers");
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
@@ -231,7 +243,8 @@ Route::group(['middleware' => 'web'], function () {
 	Route::post('/forums', 'DashboardController@forumsList');
 
 	Route::get('subforums/{parentid}', 'DashboardController@subForums');
-	Route::get('subforums/{parentid}/{name}', 'DashboardController@subForums');	
+
+	Route::get('subforums/{parentid}/{name}', 'DashboardController@subForums');
 
 	Route::get('subforums', 'DashboardController@subForums');
 	Route::post('subforums', 'DashboardController@subForums');
@@ -245,6 +258,10 @@ Route::group(['middleware' => 'web'], function () {
 		else
 			return view('auth.register');
 	});
+
+	Route::post('/addnewforumpost','DashboardController@addNewForumPost');
+
+
 
 
 });

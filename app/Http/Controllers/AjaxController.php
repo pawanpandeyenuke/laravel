@@ -18,6 +18,48 @@ use App\Library\Converse;
 class AjaxController extends Controller
 {
 
+	public function login()
+	{
+		
+		$arguments = Input::all();
+		$email = Input::get('email');
+		$password = Input::get('password');
+
+		$user = new User();
+
+		$validator = Validator::make($arguments, 
+							['email' => 'required|email',
+							'password' => 'required'],
+							
+							['email.required' => 'Please enter email address',
+							'email.email' => 'Please enter valid email',
+							'password.required' => 'Please enter password']
+						);
+
+				if($validator->fails()) {					
+					 $error = $validator->errors()->getMessages();	
+					 //print_r($error);die;
+					 if(isset($error['password']))
+					 {
+					 	if(isset($error['email']))
+					 		echo 'email,'.$error['email'][0];
+					 	else	
+					 		echo 'password,'.$error['password'][0];
+					 }
+					 else
+					 	echo 'email,'.$error['email'][0];			
+					}
+					else{
+						if(Auth::attempt(['email' => $email,'password'=>$password]))
+							echo 'success';
+						else
+							echo 'These credentials do not match our records.';
+
+					}
+		
+
+
+	}
 	//Handling posts
 	public function posts()
 	{
@@ -84,6 +126,8 @@ class AjaxController extends Controller
 
 
 		if(!(isset($arguments['imagecheck'])) && $file==null && $arguments['message']=='')
+
+
 		{
 			exit;
 		}
@@ -267,11 +311,16 @@ comments;
 
 		if($input=='all') {
 			$model1=User::where('id','!=',Auth::User()->id)->take(10)->orderBy('id','desc')->get()->toArray();
-		} else {
+		} else { 
+
 			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
 				    self::queryBuilder( $query, $input );
 					})->take(10)->get()->toArray();
+			$count = Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
+				    self::queryBuilder( $query, $input );
+					})->get()->count();
 		}
+		echo $count;
 
 		return view('dashboard.getfriendslist')->with('model',$model)->with('model1',$model1);
  
@@ -893,7 +942,8 @@ comments;
 
 		if($model!=null){
 			foreach ($model as $key => $value) {
-				if($type=='current' || $type=='recieved')
+
+				if($type == 'current'|| $type == 'recieved')
 					$n=$value['user']['first_name']." ".$value['user']['last_name'];
 				else
 					$n=$value['friends']['first_name']." ".$value['friends']['last_name'];
@@ -1055,6 +1105,41 @@ comments;
 		}
 		// echo '<pre>';print_r($invalid);
 		// echo '<pre>';print_r($valid);die;		
+	}
+
+	public function groupImage()
+	{
+		$input = Input::all();
+		DB::table('groups')->where('id',$input['groupid'])->update(['picture' => $input['imagesrc']]);
+	}
+
+	public function viewMoreForAll()
+	{
+		$per_page = 10;
+		$page = Input::get('pageid');
+		$keyword = Input::get('keyword');
+		$offset = ($page - 1) * $per_page;
+		$user_id = Auth::User()->id;
+
+				$model = User::where('id','!=',Auth::User()->id)
+                            ->where('first_name','LIKE','%'. $keyword.'%')
+                            ->orWhere('last_name','LIKE','%'. $keyword.'%')
+                            ->skip($offset)
+                            ->take($per_page)
+                            ->orderBy('id','desc')
+                            ->get()
+                            ->toArray();
+		
+			$modelcount = count($model);
+			
+			if($model){
+			return view('dashboard.getsearchresult')
+					->with('model',$model)
+					->with('modelcount',$modelcount);          
+			}
+			else{
+				echo "No more results";
+			}
 	}
 
 

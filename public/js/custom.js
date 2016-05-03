@@ -1,8 +1,11 @@
 $(document).ready(function(){
-	
+
 	$('.StyleScroll').niceScroll();
 	
 	var myReader = new FileReader();
+
+
+
 
 	 $("#fileUpload").on('change', function () {
 	 
@@ -80,6 +83,66 @@ $(document).ready(function(){
 	     }
 	});
 
+
+$('.btn-upload-icon').find(".badge").remove();
+	 //Group Image
+	 $("#groupimage").on('change', function () {
+	 	 
+	     //Get count of selected files
+	     var countFiles = $(this)[0].files.length;
+	 	 
+	     var imgPath = $(this)[0].value;
+	     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+	     var image_holder = $("#groupimageholder");
+	     //image_holder.empty();
+	     var groupid = $(this).data('groupid');
+	
+	     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+	         if (typeof (FileReader) != "undefined") {
+	 
+	             //loop for each file selected for uploaded.
+	             for (var i = 0; i < countFiles; i++) {
+	 
+	                 var reader = new FileReader();
+	                 reader.onload = function (e) {
+	                 	//alert($('.g-img').get);
+	                 	$('.btn-upload-icon').find(".badge").remove();
+	                 	$('.g-img').prop("src",e.target.result);
+	                 	e.ta
+	                 	//alert($('.g-img').attr("src"));
+	                 	var imagesrc = $('.g-img').attr("src");
+	                 	var img = imagesrc.split(',');
+	                 	//alert(img[1]);
+	             		var img1 = atob(img[1]);
+	                 	//alert(reader.readAsDataURL(imagesrc));
+
+
+						$.ajax({			
+							'url' : '/private-group-detail/ajax/groupimage',
+							'data' : { 'groupid' : groupid, 'imagesrc' : imagesrc},
+							'type' : 'post',
+							'success' : function(response){
+
+							}
+
+						});
+
+
+	                 }
+	 
+	                 image_holder.show();
+	                 reader.readAsDataURL($(this)[0].files[i]);
+	             }
+	 
+	         } else {
+	             alert("This browser does not support FileReader.");
+	         }
+	     } else {
+	         alert("Please select only images");
+	     }
+
+
+	});
 
 	// Post status updates via ajax call.
 	$("#postform").ajaxForm(function(response) { 
@@ -304,35 +367,39 @@ $(document).ready(function(){
 	$(document).on('click', '.friendstabs', function(){    
 		var type = $(this).data('reqtype');
 		var current = $(this);
+
+		//current.closest('.tab-style-no-border').find('.active').find('ul').hide();
 		$.ajax({
 			'url' : 'ajax/getfriendslist',
 			'data' : {'type' : type},
 			'type' : 'post',
 			'success' : function(response){
+				//alert(response);
+				var count = response.split('<',1);
+				var response = response.replace(count+"<","<");
 				pageid=2;
+
 				current.closest('.tab-style-no-border').find('.active').find('.load-btn').addClass('load-more-friend');
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('View More');
 				if(response != '')
 				{
-				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+					if(response != 0){
+					var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+					}
+					else
+					var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html("");	
+				current.find('.count').html(count);
 				}
-				if(response=='')
+				if(response=='' || response == 0)
 				{
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('No results found');
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').prop('disabled',true);
+				current.find('.count').html('0');
 				}
 
 				if(!(response))
 					current.closest('.tab-style-no-border').find('.active').find('ul').html("");
-					
-
-				// else
-					// var getelem = current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').hide();
-				//alert(response);
-				//var type = response.type;				
-				// var getelem2 = current.closest('.tab-style-no-border').find('.active').find('loading-text');
-				// console.log(getelem2);
-				// current.closest('.tab-style-no-border').find('.active').find('load-btn').find('.loading-text').show();
+				 //current.find('.count').html("0");
 			}
 		});
 	});
@@ -560,11 +627,15 @@ $(document).ready(function(){
 		var user_id=current.closest('.get_id').data('userid');
 		var friend_id=current.closest('.get_id').data('friendid');
 		
+		var count = current.parents('.tab-style-no-border').find('.active .count').html();
+		var newcount = count - 1;
+		
 		$.ajax({
 			'url' : '/ajax/accept',
 			'type' : 'post',
 			'data' : {'user_id' : user_id,'friend_id':friend_id },
 			'success' : function(data){
+				current.parents('.tab-style-no-border').find('.active .count').html(newcount);
 				current.closest('.get_id').find('.accept').hide(200);
 				current.closest('.get_id').find('.decline').hide(200);
 				current.closest('.get_id').find('.remove').show(500);
@@ -617,7 +688,6 @@ $(document).ready(function(){
 		});
 	});
 
-
 	$(document).on('keypress', '.searchtabtext', function(e){
 		var key = e.which;
 		if(key == 13){
@@ -647,11 +717,15 @@ $(document).ready(function(){
 		var user_id=current.closest('.get_id').data('userid');
 		var friend_id=current.closest('.get_id').data('friendid');
 		
+		var count = current.parents('.tab-style-no-border').find('.active .count').html();
+		var newcount = count - 1;
+
 		$.ajax({
 			'url' : '/ajax/reject',
 			'type' : 'post',
 			'data' : {'user_id' : user_id,'friend_id':friend_id },
 			'success' : function(data){
+				current.parents('.tab-style-no-border').find('.active .count').html(newcount);
 				current.closest('.get_id').find('.accept').hide(200);
 				current.closest('.get_id').find('.decline').hide(200);
 				current.closest('.get_id').find('.msg').show(500);
@@ -692,11 +766,15 @@ $(document).ready(function(){
 		var user_id=current.closest('.get_id').data('userid');
 		var friend_id=current.closest('.get_id').data('friendid');
 
+		var count = current.parents('.tab-style-no-border').find('.active .count').html();
+		var newcount = count - 1;
+
 		$.ajax({
 			'url' : '/ajax/remove',
 			'type' : 'post',
 			'data' : {'user_id' : user_id,'friend_id':friend_id },
 			'success' : function(data){
+				current.parents('.tab-style-no-border').find('.active .count').html(newcount)
 				current.closest('.get_id').find('.remove').hide(200);
 				current.closest('.get_id').find('.msg2').show(500);
 			}
@@ -754,7 +832,7 @@ $(document).ready(function(){
 		$('.loading-text').hide();
 		$('.loading-img').show();
 		var current = $(this);
-		//var
+
 		var reqType = current.closest('.friends-list').find('.active').data('value');
 		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
 		//alert(abc);
@@ -772,6 +850,34 @@ $(document).ready(function(){
 					var currentobj = current.find('.loading-text');
 					currentobj.text('No more results');
 					current.removeClass('load-more-friend');
+					$('.load-btn').text('No more results')
+				}
+			}	
+		});
+	});
+
+	$(document).on('click','.load-more-all',function(){
+		$('.loading-text').hide();
+		$('.loading-img').show();
+		var current = $(this);
+		var keyword = $(this).data('key');
+		//alert(keyword);
+		//var reqType = current.closest('.friends-list').find('.active').data('value');
+		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
+		$.ajax({
+			'url' : '/ajax/viewMoreForAll',
+			'type' : 'post',
+			'data' : { 'pageid': pageid , 'keyword' : keyword },
+			'success' : function(data){
+				if(data != 'No more results'){		
+					pageid = pageid + 1;
+					$('.loading-text').show();
+					$('.loading-img').hide();
+					current.closest('.friends-list').find('.active').find('ul').append(data);
+				}else{
+					var currentobj = current.find('.loading-text');
+					currentobj.text('No more results');
+					current.removeClass('load-more-all');
 					$('.load-btn').text('No more results')
 				}
 			}	

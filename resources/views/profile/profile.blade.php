@@ -22,7 +22,10 @@
 	$categoryid = DB::table('job_area')->where('job_area',$user->job_area)->value('job_area_id');
 	$all_job_cat = DB::table('job_category')->where('job_area_id',$categoryid)->pluck('job_category');
 
-
+	if($user->city == null)	
+	$cls="btnview1";
+	else					
+	$cls="btnview";
 
 ?>
 @section('content')
@@ -50,9 +53,9 @@
 
 							<div class="pr-field">
 							 <span style="font-size: large;">{{$user->city}}</span>
-							<!-- </div> -->
 
-								<!-- <div class="pr-field"> -->
+					
+					
 										@if( $userId != $user->id )
 							<?php
 								$status1=DB::table('friends')->where('user_id',$user->id)->where('friend_id',$userId)->value('status');
@@ -60,48 +63,48 @@
 								<div class="get_id" data-userid="{{$user->id}}" data-friendid="{{$userId}}">
 							@if($status1=="Accepted" || $status2=="Accepted")
 							<div class="text-right">
-					<button class="btn btn-default btnview remove abc" type="button" id="remove">Remove</button>
+					<button class="btn btn-default {{$cls}} remove abc" type="button" id="remove">Remove</button>
 						</div>
 						@endif
 						@if($status1=="Pending")
 						<div class="row">
 					<div class="col-sm-6">
-						<button class="btn btn-primary rbtnview btnview accept abc" type="button" id="accept" >Accept</button>
+						<button class="btn btn-primary rbtnview {{$cls}} accept abc" type="button" id="accept" >Accept</button>
 					</div>
 					<div class="col-sm-6">
-						<button class="btn btn-default lbtnview btnview abc decline" type="button"  id="decline">Decline</button>
+						<button class="btn btn-default lbtnview {{$cls}} abc decline" type="button"  id="decline">Decline</button>
 					</div>
 
-					<span class="btn btn-default fremoved btnview msg" id='msg' style="display: none;">Request Rejected</span>
+					<span class="spanmsg1 fremoved {{$cls}} msg" id='msg' style="display: none;">Request Rejected</span>
 
-					<span class="btn btn-default fremoved btnview msg2" id='msg2' style="display: none;">Friend Removed</span>
+					<span class="spanmsg1 fremoved {{$cls}} msg2" id='msg2' style="display: none;">Friend Removed</span>
 
 					<div class="text-right">
 
-					<button class="btn btn-default btnview remove abc" type="button" id="remove" style="display: none;">Remove</button>
+					<button class="btn btn-default {{$cls}} remove abc" type="button" id="remove" style="display: none;">Remove</button>
 				</div>
 				</div>
 						@endif
 						@if($status2=="Pending")
 						<div class="text-right">
-					<button class="btn btn-primary btnview" type="button" id="sent">Sent Request</button>
+					<button class="spanmsg {{$cls}}" type="button" id="sent">Sent Request</button>
 				</div>
 						@endif
 						@if($status2=="Rejected")
 						<div class="text-right">
-						<button type="button" class="btn btn-primary btnview resend" id='resend'>Re-Send</button>
+						<button type="button" class="btn btn-primary {{$cls}} resend" id='resend'>Re-Send</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btnview sent" type="button" id="sent"style="display: none;">Sent Request</button>
+					<button class="spanmsg {{$cls}} sent" type="button" id="sent"style="display: none;">Sent Request</button>
 				</div>
 
 						@endif
 						@if($status1=='Rejected'||($status1==null)&&($status2==null))
 						<div class="text-right">
-						<button type="button" class="btn btn-primary btnview invite" id='invite'>Add as a friend</button>
+						<button type="button" class="btn btn-primary {{$cls}} invite" id='invite'>Add as a friend</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btnview sent" type="button" id="sent"style="display: none;">Sent Request</button>
+					<button class="spanmsg {{$cls}} sent" type="button" id="sent"style="display: none;">Sent Request</button>
 					</div>
 					</div>
 						@endif

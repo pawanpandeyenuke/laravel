@@ -100,11 +100,11 @@ $count=0;
 		if($data['friend_id'] == Auth::User()->id){
 			$name = $data['user']['first_name'].' '.$data['user']['last_name'];
 			$profileimage = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; 
-			$viewid=$data['user']['id'];
+			$userid = $data['user']['id'];
 		}else{
 			$name = $data['friends']['first_name'].' '.$data['friends']['last_name'];
 			$profileimage = !empty($data['friends']['picture']) ? $data['friends']['picture'] : '/images/user-thumb.jpg'; 
-			$viewid=$data['friends']['id'];
+		$userid = $data['friends']['id'];
 		}
 
 		if(!(($data['user_id']==Auth::User()->id && $data['status']=="Accepted")||($data['friend_id']==Auth::User()->id && $data['status']=='Rejected')))
@@ -114,7 +114,7 @@ $count=0;
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="user-cont">
-					<a title="" href="profile/{{$viewid}}">
+					<a title="" href="profile/{{$userid}}">
 						<span style="background: url('{{$profileimage}}');" class="user-thumb"></span>
 					{{ $name }}
 					</a>

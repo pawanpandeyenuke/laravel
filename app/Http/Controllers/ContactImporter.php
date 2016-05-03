@@ -40,10 +40,12 @@ class ContactImporter extends Controller
                 $emailsarray = explode(',', $requestemails);
             
                 foreach ($emailsarray as $key => $value) {
+
                         $validator=null;
                     $validator = Validator::make($emailsarray, [
                         $key => 'required|email'
                     ]); 
+                  //  print_r($emailsarray);die;
                    $validator->each($key, ['required', 'email']);
                    
                    if($validator->fails()) {
@@ -60,7 +62,7 @@ class ContactImporter extends Controller
                         if(!empty($userData))
                             $existingUser[] = $value;
                         else
-                            // $nonExistingUser[] = $value;
+                            // $nonExistingUser[] = $value
                         {
                             
                             $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
@@ -208,11 +210,10 @@ class ContactImporter extends Controller
     public function mail($email = '', $message, $subject, $type) {
 		// $mailsent = mail($email, $subject, $message);
         if($email != ''){
-  			$mailsent = //Mail::send('emails.invite', ['email'=> 'pawanpandey392@gmail.com','message_text'=> 'checkout this new site. Friendz Square!'], 
-                Mail::raw('This is a demo email',function ($m)  {
-            	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
-                $m->to('aditya.i.singh@enukesoftware.com', 'Aditya Singh')->subject('Invitation');
-            });
+  			    Mail::raw($message,function ($m)  use($email, $subject, $type){
+                	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
+                    $m->to($email,$type)->subject($subject);
+                });
 			//print_r($mailsent);die;
         }
     }

@@ -247,12 +247,15 @@ if($pgid){
 <script type="text/javascript" src="{{url('/converse/converse.nojquery.min.js')}}"></script>
 <script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 
+<?php $userdp = DB::table('users')->where('id',Auth::User()->id)->value('picture');
 
+ $user_picture = !empty($userdp) ? $userdp : '/images/user-thumb.jpg';
+    $dp = url($user_picture);
+ ?>
 
 <script type="text/javascript">
-
-    var userImage="{{url('/images/logo.png')}}";
-    var defaultImage="{{url('/images/logo.png')}}";
+    var userImage="{{url('$user_picture')}}";
+    var defaultImage="{{$dp}}";
     var image_upload_url="ajax/sendimage";
     var chatserver='@fs.yiipro.com';
     
