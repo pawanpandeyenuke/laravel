@@ -95,8 +95,8 @@
  
 <script type="text/javascript">
 	WL.init({
-	    client_id: '0000000044183F60',
-	    redirect_uri: 'http://fs.yiipro.com/hotmail/client/callback',
+	    client_id: '<?= Config::get('constants.client_id') ?>',
+	    redirect_uri: '<?= Config::get('constants.redirect_uri') ?>',
 	    scope: ["wl.basic", "wl.contacts_emails"],
 	    response_type: "token"
 	});
@@ -154,7 +154,7 @@
  
 <script>
 	FB.init({
-		appId:'254486034889306',
+		appId:'<?= Config::get('constants.appId') ?>',
 		cookie:true,
 		status:true,
 		xfbml:true

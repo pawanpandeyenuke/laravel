@@ -17,8 +17,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         
-        // $a = JobArea::lists('job_area','job_area_id')->toArray() ;
-        // echo '<pre>';print_r($a);die;
+        // $title = Category::where('parent_id', 0)->pluck('img_url')->toArray();
+        // echo '<pre>';print_r($title);die;
 
      $educationLevel = array('High school','Certifciate/diploma','Associate degree','3 or 4 year undergraduate program','Post graduate degree','Post graduate degree - MBA','Post graduate degree - Masters','Post graduate degree - JD','Post graduate degree - PHD/Doctrate','Professional','Other degree');
 
