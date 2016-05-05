@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+<?php //print_r($parent_category);die; ?>
 @section('content')
 	<div class="page-data dashboard-body">
 	        <div class="container">
@@ -34,18 +34,25 @@
 							            $nameexp = explode(' ', $data->title);
 							            $catname = implode('-', $nameexp);
 							            $name = strtolower($catname);
+
+							            $image = url("/category_images/".$data['img_url']);
+							           // print_r($image);die;
 							            ?>
 
 		                                @if($fieldsData)
 											<div class="col-sm-4">
 												<div class="cat-btn-outer">
-													<a href="subgroup/{{$data->id}}/{{$name}}" title="" class="cat-btn">{{ $data->title }}</a>
+													<a href="subgroup/{{$data->id}}/{{$name}}" title="" class="cat-btn">
+													<img style="width:85%" src="{{$image}}"><br>
+													{{ $data->title }}</a>
 												</div>
 											</div>
 										@else
 											<div class="col-sm-4">
 												<div class="cat-btn-outer">
-													<a href="groupchat/{{$name}}" title="" class="cat-btn">{{ $data->title }}</a>
+													<a href="groupchat/{{$name}}" title="" class="cat-btn">
+														<img style="width:85%" src="{{$image}}"><br>
+													{{ $data->title }}</a>
 												</div>
 											</div>
 										@endif

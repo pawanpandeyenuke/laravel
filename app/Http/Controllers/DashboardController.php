@@ -11,7 +11,7 @@ use Request, Session, Validator, Input, Cookie;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\MessageBag;
+use Illuminate\Support\MessageBag, Config;
 // use Illuminate\Support\Facades\Input;
 
 class DashboardController extends Controller
