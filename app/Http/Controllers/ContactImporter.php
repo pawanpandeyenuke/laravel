@@ -50,7 +50,6 @@ class ContactImporter extends Controller
                     $validator = Validator::make($emailsarray, [
                         $key => 'required|email'
                     ]); 
-                  //  print_r($emailsarray);die;
                    $validator->each($key, ['required', 'email']);
                    
                    if($validator->fails()) {

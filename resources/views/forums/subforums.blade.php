@@ -35,16 +35,11 @@ unset($countries[0]);
 												@if(!empty($subforums))
 													@foreach($subforums as $data)
 <?php  
-	if($mainforum == "Doctor"){
-      	$subids = DB::table('forums')->where('parent_id',$data['id'])->pluck('id');
-      	$count = DB::table('forums_post')->whereIn('category_id',$subids)->count();
-	}else{
-			if($mainforum == "Study Questions"){
-				$subids = DB::table('forums')->where('parent_id',$data['id'])->pluck('id');
-      	$count = DB::table('forums_post')->whereIn('category_id',$subids)->count();
-			}else{
-			   $count = DB::table('forums_post')->where('category_id',$data['id'])->count();     
-			}
+	if($mainforum == "Doctor" || $mainforum == "Study Questions"){
+      	$subids = \App\Forums::where('parent_id',$data['id'])->pluck('id');
+      	$count = \App\ForumPost::whereIn('category_id',$subids)->get()->count();
+		}else{
+			   $count = \App\ForumPost::where('category_id',$data['id'])->get()->count();
 	}
 			 $sub = $data['title'].'_'.$data['id'];					                    
 			     ?>
@@ -83,36 +78,6 @@ unset($countries[0]);
 																	</select>
 																</div>
 
-															@elseif($data['title'] == 'Professional Course')
-
-																<div class="subs" style="display:none;">
-																	<?php $courses = DB::table('forums')->where(['parent_id' => $data['id']])->where(['status' => 'Active'])->get();			?>
-
-																	<select name="coursedata1" class="boxsize">
-																		<option value="">Select</option>
-																		@foreach($courses as $data1)	
-																		<?php
-																			$sub = $data1->title.'_'.$data1->id;
-																		 ?>	
-																			<option value="{{$sub}}">{{$data1->title}}</option>
-																		@endforeach							
-																	</select>					
-																</div>
-															@elseif($data['title'] == 'Subjects')
-																<div class="subs" style="display:none">
-																	<?php $courses = DB::table('forums')->where(['parent_id' => $data['id']])->where(['status' => 'Active'])->get();
-																	?>
-																	<select name="coursedata" class="boxsize">
-																		<option value="">Select</option>
-																		@foreach($courses as $data2)
-																		<?php 
-																		$sub = $data2->title.'_'.$data2->id;
-																		 ?>					
-																			<option value="{{$sub}}">{{$data2->title}}</option>
-																		@endforeach
-																	</select>
-																</div>
-
 															@endif
 														</div>
 
@@ -126,7 +91,7 @@ unset($countries[0]);
 								</div>
 							</div>
 							<div class="btn-cont text-center">
-							<?php if($mainforum=="Doctor") 			
+							<?php if($mainforum=="Doctor" || $mainforum == "Study Questions") 			
 								$bname="Continue";
 								else					
 								$bname="Enter Chat";

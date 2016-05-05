@@ -2299,7 +2299,8 @@ textarea{
 	left: 260px;
 }
 .lbtnview{
-	left:130px;
+	left:423px;
+	bottom: 110px;
 }
 .fremoved{
 	left:260px;
@@ -2391,7 +2392,7 @@ textarea{
 }
 .page-data .error-data a{
 	color: #00b0b2;
-<<<<<<< HEAD
+
 }
 .top-search-cont{
   padding: 19px 0;
@@ -2428,7 +2429,7 @@ textarea{
 }
 .home-slider-cont .carousel-inner{
 }
-/*@media (min-width: 768px){
+@media (min-width: 768px){
 .page-data.dashboard-body .col-sm-3 {
     width: 22%;
 }
@@ -2436,7 +2437,7 @@ textarea{
     width: 56%;
 }
 }
-*/.carousel-control.right, .carousel-control.left{
+.carousel-control.right, .carousel-control.left{
 	background: none;
 }
 .carousel-control i:before{
@@ -2511,3 +2512,5 @@ textarea{
 .fa-linkedin::before {
 	line-height: 3;
 	}
+
+

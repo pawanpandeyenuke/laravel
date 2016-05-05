@@ -16,6 +16,9 @@ class SearchController extends Controller
         if(Request::isMethod('post')){
             $input = Request::all();
             $name = $input['searchfriends'];
+            if($name == ""){
+              return redirect('/');
+            }
             if(Auth::Check())
             {
             $model1 = User::where('id','!=',Auth::User()->id)
@@ -64,6 +67,7 @@ class SearchController extends Controller
                 ->with('count',$count)
                 ->with('keyword',$input['searchfriends'])
                 ->with('auth',$auth);    
+        
         }
 
         

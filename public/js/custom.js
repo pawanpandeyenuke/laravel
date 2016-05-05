@@ -87,7 +87,6 @@ $(document).ready(function(){
 $('.btn-upload-icon').find(".badge").remove();
 	 //Group Image
 	 $("#groupimage").on('change', function () {
-	 	 
 	     //Get count of selected files
 	     var countFiles = $(this)[0].files.length;
 	 	 
@@ -116,16 +115,17 @@ $('.btn-upload-icon').find(".badge").remove();
 	             		var img1 = atob(img[1]);
 	                 	//alert(reader.readAsDataURL(imagesrc));
 
+	                 	$('#uploadgroupimage').trigger('submit');
 
-						$.ajax({			
-							'url' : '/private-group-detail/ajax/groupimage',
-							'data' : { 'groupid' : groupid, 'imagesrc' : imagesrc},
-							'type' : 'post',
-							'success' : function(response){
+						// $.ajax({			
+						// 	'url' : '/private-group-detail/ajax/groupimage',
+						// 	'data' : { 'groupid' : groupid, 'imagesrc' : imagesrc},
+						// 	'type' : 'post',
+						// 	'success' : function(response){
 
-							}
+						// 	}
 
-						});
+						// });
 
 
 	                 }
@@ -140,9 +140,10 @@ $('.btn-upload-icon').find(".badge").remove();
 	     } else {
 	         alert("Please select only images");
 	     }
-
-
 	});
+
+
+	 $("#uploadgroupimage").ajaxForm(function(response) {});
 
 	// Post status updates via ajax call.
 	$("#postform").ajaxForm(function(response) { 

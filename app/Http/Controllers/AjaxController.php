@@ -1114,7 +1114,17 @@ comments;
 	public function groupImage()
 	{
 		$input = Input::all();
-		DB::table('groups')->where('id',$input['groupid'])->update(['picture' => $input['imagesrc']]);
+
+		$file = Input::file('groupimage');
+		if( isset($input['groupimage']) && $file != null ){
+
+			$image_name = time()."_GI_".strtoupper($file->getClientOriginalName());
+			$input['groupimage'] = $image_name;
+			$file->move(public_path('uploads'), $image_name);
+			$img = "/uploads/".$input['groupimage'];
+		}
+
+		DB::table('groups')->where('id',$input['groupid'])->update(['picture' => $img]);
 	}
 
 	public function viewMoreForAll()

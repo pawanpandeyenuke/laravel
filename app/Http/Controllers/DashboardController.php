@@ -978,7 +978,8 @@ if($input!=null && $gname!=null)
     }
 
        /* For Doctor's sub-sub category */
-
+    if($input['parentname'] == "Study Questions" || $input['parentname']=="Doctor")
+      {
         if($input['parentname']=="Doctor")
         {
             
@@ -1012,6 +1013,19 @@ if($input!=null && $gname!=null)
                 ;
         }
 
+        if($input['parentname'] == "Study Questions")
+        {
+             $sub = explode('_',$input['subcategory']);
+             $subforums = Forums::where('parent_id',$sub[1])->get();
+             $mainforum = $sub[0];
+             return view('forums.subforums')
+                ->with('mainforum',$mainforum)
+                ->with('subforums',$subforums)
+                ;
+
+        }
+    }
+
     } 
     
 
@@ -1027,8 +1041,6 @@ if($input!=null && $gname!=null)
             return redirect('forums');
     }
     }
-
-  
 
 
 }

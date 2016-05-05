@@ -18,17 +18,21 @@ $title1=str_replace(" ","-",$title1);
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title no-left-padding">Detail</div>
+
 <?php
-					$group_picture = !empty($groupdetail[0]['picture']) ? $groupdetail[0]['picture'] : '/images/post-img-big.jpg';
+			$group_picture = !empty($groupdetail[0]['picture']) ? $groupdetail[0]['picture'] : '/images/post-img-big.jpg';
 	
  ?>
+ 		{{Form::open(array('url'=>'/private-group-detail/ajax/groupimage','id'=>'uploadgroupimage','files'=>true))}}
 					<div class="group-img" id="groupimageholder">
 						<img src="{{$group_picture}}" class="g-img">
 						<div class="grp-img-outer">
-							<input type="file" id="groupimage" class="filestyle" data-input="false" data-icon="true" data-iconName="glyphicon glyphicon-picture" data-buttonText=""  data-buttonName="btn-upload-icon" data-groupid="{{$groupid}}">
+						<input type="hidden" name="groupid" value={{$groupid}}></input>
+							<input name="groupimage" type="file" id="groupimage" class="filestyle" data-input="false" data-icon="true" data-iconName="glyphicon glyphicon-picture" data-buttonText=""  data-buttonName="btn-upload-icon" data-groupid="{{$groupid}}">
 						</div>
 					</div>
-
+					{{Form::close()}}
+			<!-- <button type="submit" class="btn btn-primary savegroupimage" style="display: none;">Change Image</button> -->
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
 							<div class="edit-grp-name">

@@ -36,7 +36,7 @@
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title">
-						<i class="flaticon-people"></i> {{$count}} results found
+						<i class="flaticon-people"></i> {{$count}} results found for "{{$keyword}}"
 					</div>
 	
 						<div class="tab-style-no-border">

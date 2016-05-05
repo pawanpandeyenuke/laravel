@@ -101,7 +101,7 @@ $setting['friend-request'] ="Friends of friends";
 					</div>
 				{!! Form::close() !!}
 				</div><!--/page center data-->
-				<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
+				<div class="shadow-box bottom-ad"><img src="/images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 			</div>
 
 			@include('panels.right')
