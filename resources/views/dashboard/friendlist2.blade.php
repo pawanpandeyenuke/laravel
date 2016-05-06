@@ -51,8 +51,10 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 			<?php }elseif($status2 == 'Pending'){ 
 			?>
 				<div class="text-right">
-					<button class="btn btn-primary btn-full" type="button" id="sent">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent">Cancel Request</button>
+							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
 				</div>
+
 			<?php }elseif($status1=='Accepted' || $status2=='Accepted'){ 
 			?>
 				<div class="text-right">
@@ -64,7 +66,8 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Re-Send</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
+							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
 				</div>
 
 					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null)){
@@ -74,9 +77,9 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 						<button type="button" class="btn btn-primary btn-full invite" id='invite'>Add as a friend</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
+						<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
 					</div>
-
 
 				<?php } ?>
 			</div>
@@ -140,8 +143,10 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 			<?php }elseif(($data['status'] == 'Pending') && ($data['user_id'] == Auth::User()->id)){ 
 			?>
 				<div class="text-right">
-					<button class="btn btn-primary btn-full" type="button" id="sent">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent">Cancel Request</button>
+						<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
 				</div>
+
 			<?php }elseif(($data['status'] == 'Accepted') && ($data['user_id'] == Auth::User()->id) || ($data['friend_id'] == Auth::User()->id)){ 
 			?>
 				<div class="text-right">
@@ -153,12 +158,10 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Re-Send</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
+							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
 				</div>
-
 					<?php }?>
-
-
 			
 			</div>
 		</div>

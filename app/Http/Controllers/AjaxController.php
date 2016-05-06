@@ -812,6 +812,17 @@ comments;
 		}
 	
 	}
+	/** Cancel Sent Friend Request **/
+	public function cancelRequest()
+	{
+		$input=Input::all();
+		//print_r($input);die;
+		if($input['user_id'] == Auth::User()->id)
+			Friend::where('user_id',$input['user_id'])->where('friend_id',$input['friend_id'])->delete();
+		
+		if($input['friend_id'] == Auth::User()->id)
+			Friend::where('user_id',$input['friend_id'])->where('friend_id',$input['user_id'])->delete();	
+	}
  
 
 	public function sendImage(){

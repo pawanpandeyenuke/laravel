@@ -1520,8 +1520,8 @@ width:495px;
   display: table-cell;
   background: #fff;
   vertical-align: middle;
-  padding: 0 15px;
-  font-size: 16px;
+  padding: 0 15px 10px;
+  font-size: 14px;
   color: #000;
   font-weight: 700;
   border: 1px solid;
@@ -2256,14 +2256,19 @@ textarea{
 }
 .add-study-btn {
   position: absolute;
-  right: 0px;
+  right: 23px;
   width: 40px;
   padding: 0px;
   height: 40px;
   line-height: 40px;
   border-radius: 50%;
-  top: -6px;
+  top: 25px;
   background: #92e7dc;
+  z-index: 1;
+}
+.btn.add-study-btn.removeme {
+	right: 0;
+	top: 0;
 }
 #edit-modal{
 	z-index: 1111;
@@ -2290,7 +2295,7 @@ textarea{
 
 
 /** Temporary   **/
-.btnview{
+/*.btnview{
   position: relative;
   width: 50%;
   bottom: 70px;
@@ -2304,7 +2309,7 @@ textarea{
 }
 .fremoved{
 	left:260px;
-}
+}*/
 
 .btnview1 {
     bottom: 43px;
@@ -2430,10 +2435,10 @@ textarea{
 .home-slider-cont .carousel-inner{
 }
 @media (min-width: 768px){
-.page-data.dashboard-body .col-sm-3 {
+.page-data.dashboard-body > .container > .row > .col-sm-3 {
     width: 22%;
 }
-.page-data.dashboard-body .col-sm-6 {
+.page-data.dashboard-body > .container > .row > .col-sm-6 {
     width: 56%;
 }
 }
@@ -2514,3 +2519,15 @@ textarea{
 	}
 
 
+.acs-btns {
+    margin: 0;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 20px;
+    width: 40%;
+}
+.cat-btn-outer .cat-btn img{
+  height: 60px;
+  margin: 10px 0;
+}
