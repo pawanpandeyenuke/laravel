@@ -17,7 +17,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-2">
-				<a href="#" title="" class="logo"><img src="/images/logo.png" alt="Friendz Square"></a>
+				<a href="{{url('/')}}" title="" class="logo"><img src="/images/logo.png" alt="Friendz Square"></a>
 			</div>
 			<div class="col-sm-7">
 				<div class="top-search-cont">

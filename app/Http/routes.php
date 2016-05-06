@@ -157,6 +157,7 @@ Route::post('api/get-group-list','ApiController@getGroupList');
 Route::post('api/delete-private-group','ApiController@deletePrivateGroup');
 
 Route::post('api/get-groups','ApiController@publicGroupGetIds');
+
 Route::post('api/sent-request-list','ApiController@getSentUsersList');
 Route::post('api/remove-friend','ApiController@removeFriend');
 
