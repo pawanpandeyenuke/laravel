@@ -295,11 +295,12 @@
 					<div id="AllCommentNew" class="post-list popup-list-without-img" style="display: none;"></div>
 					</div>
 
+					@if($feeds->count() > 1)
 			    	<div class="dashboard-load">
 				    	<span class="glyphicon glyphicon-download"></span>
 				    	<!-- <span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span> -->
 				    </div>
-
+				    @endif
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 				</div>
 
