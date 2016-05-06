@@ -74,5 +74,19 @@ class User extends Authenticatable
 		return $this->hasMany('App\BroadcastMembers');
 	}
 
+	public function searchfriend()
+	{
+		return $this->hasMany('App\Friend', 'user_id', 'id');
+	}
+
+	public function searchUserFriend()
+	{
+		return $this->hasMany('App\Friend', 'user_id', 'id');
+	}
+
+	public function friends()
+	{
+        return $this->belongsTo('App\Friend','friend_id','id')->select(['id','first_name', 'last_name', 'picture','xmpp_username']);
+	}
 
 }

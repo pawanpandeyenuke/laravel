@@ -89,9 +89,9 @@
                 <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
 
 <!-- =============================== Header ====================================== -->           
-                  
 
                   <tr><td height='75' style="padding-bottom: 10px; border-bottom: 3px solid #A0F0E8;"><a href="#" title=""><img src="{{url('/images/logo.jpg')}}" alt=""></a></td></tr>
+
 <!-- =============================== Body ====================================== -->
 
                   <tr>
@@ -103,7 +103,9 @@
                             <td valign='top' align='center'>
                               <div class="contentEditableContainer contentTextEditable">
                                 <div class="contentEditable">
+
                                   <p style='text-align:center;margin:0;font-family:Georgia,Time,sans-serif;font-size:26px;color:#222222;'>Welcome to <a href="{{url('/')}}" style="text-decoration:none"><span style='color:#A0F0E6;'>Friendz Square</span></a></p>
+
                                 </div>
                               </div>
                             </td>
@@ -129,7 +131,9 @@
                             <td align='left'>
                               <div class="contentEditableContainer contentTextEditable">
                                 <div class="contentEditable" align='center'>
+
                                   <h2> Connect to your friends and stay updated about their lives!</h2>
+
                                 </div>
                               </div>
                             </td>
@@ -142,14 +146,18 @@
                               <div class="contentEditableContainer contentTextEditable">
                                 <div class="contentEditable" align='center'>
                                   <p  style='text-align:left;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>
+
 Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and meet new people. Connect to your friend by<a target='_blank' class='link1' href="{{url('profile/'.$id)}}"> clicking here</a>
+
                                     <br>
                                     Have questions? Get in touch with us via Facebook or Twitter, or email our support team.
                                     <br>
                                     <br>
                                     Cheers,
                                     <br>
+
                                     <span style='color:#222222;'>{{$username}}</span>
+
                                   </p>
                                 </div>
                               </div>
@@ -165,7 +173,9 @@ Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and m
                                   <td align='center' bgcolor='#A0F0E6' style='background:#A0F0E6; padding:15px 18px;-webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;'>
                                     <div class="contentEditableContainer contentTextEditable">
                                       <div class="contentEditable" align='center'>
+
                                         <a target='_blank' href="{{url('profile/'.$id)}}" class='link2' style='color:#ffffff;'>Get Started</a>
+
                                       </div>
                                     </div>
                                   </td>
@@ -207,7 +217,9 @@ Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and m
                                   <td valign='top' width='52'>
                                     <div class="contentEditableContainer contentFacebookEditable">
                                       <div class="contentEditable">
+
                                         <a href="#" title=""><img src="{{url('images/logo.jpg')}}" alt="" style="width: 100px;"></a>
+
                                       </div>
                                     </div>
                                   </td>
@@ -241,5 +253,4 @@ Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and m
     </table>
       </body>
       </html>
-
-
+ 

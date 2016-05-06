@@ -53,8 +53,10 @@ $count=0;
 			<?php }elseif($status2 == 'Pending'){ 
 			?>
 				<div class="text-right">
-					<button class="btn btn-primary btn-full" type="button" id="sent">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent">Cancel Request</button>
+					<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
 				</div>
+				
 			<?php }elseif($status1=='Accepted' || $status2=='Accepted'){ 
 			?>
 				<div class="text-right">
@@ -66,8 +68,10 @@ $count=0;
 						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Re-Send</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
+					<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
 				</div>
+
 
 					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null)){
 
@@ -76,8 +80,10 @@ $count=0;
 						<button type="button" class="btn btn-primary btn-full invite" id='invite'>Add as a friend</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
+						<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
 					</div>
+
 
 
 				<?php } ?>
@@ -100,9 +106,11 @@ $count=0;
 		if($data['friend_id'] == Auth::User()->id){
 			$name = $data['user']['first_name'].' '.$data['user']['last_name'];
 			$profileimage = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; 
+			$userid = $data['user']['id'];
 		}else{
 			$name = $data['friends']['first_name'].' '.$data['friends']['last_name'];
 			$profileimage = !empty($data['friends']['picture']) ? $data['friends']['picture'] : '/images/user-thumb.jpg'; 
+		$userid = $data['friends']['id'];
 		}
 
 		if(!(($data['user_id']==Auth::User()->id && $data['status']=="Accepted")||($data['friend_id']==Auth::User()->id && $data['status']=='Rejected')))
@@ -112,7 +120,7 @@ $count=0;
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="user-cont">
-					<a title="" href="profile/{{$data['friends']['id']}}">
+					<a title="" href="profile/{{$userid}}">
 						<span style="background: url('{{$profileimage}}');" class="user-thumb"></span>
 					{{ $name }}
 					</a>
@@ -142,8 +150,11 @@ $count=0;
 			<?php }elseif(($data['status'] == 'Pending') && ($data['user_id'] == Auth::User()->id)){ 
 			?>
 				<div class="text-right">
-					<button class="btn btn-primary btn-full" type="button" id="sent">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent">Cancel Request</button>
+					<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
 				</div>
+
+				
 			<?php }elseif(($data['status'] == 'Accepted') && ($data['user_id'] == Auth::User()->id) || ($data['friend_id'] == Auth::User()->id)){ 
 			?>
 				<div class="text-right">
@@ -155,8 +166,11 @@ $count=0;
 						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Re-Send</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
+					<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
 				</div>
+
+				
 
 					<?php }?>
 

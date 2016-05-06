@@ -45,6 +45,8 @@ Route::post('ajax/accept','AjaxController@accept');
 Route::post('ajax/reject','AjaxController@reject');
 Route::post('ajax/resend','AjaxController@resend');
 Route::post('ajax/remove','AjaxController@remove');
+Route::post('ajax/cancelrequest','AjaxController@cancelRequest');
+Route::post('profile/ajax/cancelrequest','AjaxController@cancelRequest');
 
 Route::post('ajax/deletepost','AjaxController@deletepost');
 Route::post('ajax/deletecomments','AjaxController@deletecomments');
@@ -56,7 +58,9 @@ Route::post('/ajax/jobcategory','AjaxController@getJobcategory');
 
 
 
-Route::post('ajax/sendrequest','AjaxController@sendRequest');
+Route::post('/ajax/sendrequest','AjaxController@sendRequest');
+Route::post('profile/ajax/sendrequest','AjaxController@sendRequest');
+
 
 Route::post('ajax/sendimage','AjaxController@sendImage');
 
@@ -77,6 +81,8 @@ Route::post('/ajax/editgroupname','AjaxController@editGroupName');
 
 Route::post('ajax/viewmorefriends','AjaxController@viewMoreFriends');
 
+Route::post('ajax/viewMoreForAll','AjaxController@viewMoreForAll');
+
 Route::post('ajax/viewmoreposts','AjaxController@viewMorePosts');
 
 Route::post('ajax/remove-education','AjaxController@removeEducationDetails');
@@ -84,6 +90,10 @@ Route::post('ajax/remove-education','AjaxController@removeEducationDetails');
 Route::post('ajax/send-hotmail-invitation','AjaxController@sendHotmailInvitation');
 
 Route::post('/ajax/forumsubgroup','AjaxController@forumSubGroup');
+
+Route::post('/private-group-detail/ajax/groupimage','AjaxController@groupImage');
+
+Route::post('/ajax/login','AjaxController@login');
 
 
 /**
@@ -147,7 +157,15 @@ Route::post('api/get-group-list','ApiController@getGroupList');
 Route::post('api/delete-private-group','ApiController@deletePrivateGroup');
 
 Route::post('api/get-groups','ApiController@publicGroupGetIds');
+
+Route::post('api/sent-request-list','ApiController@getSentUsersList');
+Route::post('api/remove-friend','ApiController@removeFriend');
+
+Route::post('api/search-user','ApiController@searchSiteFriends');
+
 Route::post('api/invite-email','ApiController@inviteByEmail');
+Route::post('api/non-existing-emails','ApiController@returnNonExistingEmails');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -163,6 +181,9 @@ Route::get('/redirect/{provider}', 'SocialController@redirect');
 Route::get('/callback/{provider}', 'SocialController@callback');
 
 Route::get('home', 'HomeController@index');
+
+Route::get('/searchfriends',"SearchController@searchFromUsers");
+Route::post('/searchfriends',"SearchController@searchFromUsers");
 
 
 Route::group(['middleware' => 'web'], function () {
@@ -235,7 +256,8 @@ Route::group(['middleware' => 'web'], function () {
 	Route::post('/forums', 'DashboardController@forumsList');
 
 	Route::get('subforums/{parentid}', 'DashboardController@subForums');
-	Route::get('subforums/{parentid}/{name}', 'DashboardController@subForums');	
+
+	Route::get('subforums/{parentid}/{name}', 'DashboardController@subForums');
 
 	Route::get('subforums', 'DashboardController@subForums');
 	Route::post('subforums', 'DashboardController@subForums');
@@ -249,6 +271,10 @@ Route::group(['middleware' => 'web'], function () {
 		else
 			return view('auth.register');
 	});
+
+	Route::post('/addnewforumpost','DashboardController@addNewForumPost');
+
+
 
 
 });

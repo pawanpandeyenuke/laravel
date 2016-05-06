@@ -23,60 +23,39 @@
 </head>
 
 <body class="dashboard">
-<header>
+ <header>
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-3">
-				<a href="{{ url('/dashboard') }}" title="" class="logo"><img src="{{ url('images/logo.png') }}" alt="Friendz Square"></a>
+			<div class="col-sm-2">
+				<a href="/dashboard" title="" class="logo"><img src="/images/logo.png" alt="Friendz Square"></a>
 			</div>
-			<div class="col-sm-6">
-				<div class="top-search">
-						{!! Form::open(array('url' => 'dashboard', 'id' => 'searchform')) !!}
-							<ul class="clearfix">
-								<li class="search-textbox">
-									<!-- <input type="text" class="search-field" placeholder="Search Friends"> -->
-									{!! Form::text('searchfriends', null, array(
-										'class'=>'search-field', 
-										'id'=>'searchfriends',										
-										'placeholder'=>'Search Friends'
-									)) !!}
-								</li>
-								<li>
-									{!! Form::select('country', $countries, null, array(
-										'class' => 'search-field',
-										'id' => 'country',
-									)); !!}
-								</li>
-								<li>
-									{!! Form::select('state', [], null, array(
-										'class' => 'search-field',
-										'id' => 'state',
-									)); !!}
-								</li>
-								<li>
-									{!! Form::select('city', [], null, array(
-										'class' => 'search-field',
-										'id' => 'city',
-									)); !!}
-								</li>
-								<li class="search-btn-cont">
-									<button type="button" class="search-btn"><i class="flaticon-magnifying-glass138"></i></button>
-									<!-- {!! Form::button('', array(
-										'class' => 'search-btn',
-										'id' => '',
-									)) !!}	 -->								
-								</li>
-							</ul>
-							{!! Form::close() !!}
+			<div class="col-sm-7">
+				<div class="top-search-cont">
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="search-field">
+							{!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
+								<input type="text" name="searchfriends" value="" placeholder="Enter Name" class="form-control">
+								<button type="submit" class="btn btn-primary btn-srch-top search-btn">Search Friends</button>
+									{!! Form::close() !!}
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="search-field">
+								<input type="text" name="" value="" placeholder="Enter Keyword" class="form-control">
+								<button type="button" class="btn btn-primary btn-srch-top">Search Forum</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="col-sm-3">
 				<div class="dashboard-header-menu text-right">
 					<ul class="list-inline">
 						<li class="user-info-top">
-							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : 'images/user-thumb.jpg'; ?>
-							<span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
-							{{Auth::User()->first_name}}
+							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : '/images/user-thumb.jpg'; ?>
+							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
+							{{Auth::User()->first_name}}</a>
 						</li>
 						<li><div class="logout"><a href="{{ url('/logout') }}" title="">Logout</a></div></li>
 					</ul>

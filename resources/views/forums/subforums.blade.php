@@ -1,16 +1,12 @@
 @extends('layouts.dashboard')
 
 <?php
-
-
 unset($countries[0]);
  ?>
 
 <style type="text/css">
 	.boxsize{width:200px;}
 </style>
-
-<?php //echo '<pre>' ;print_r($mainforum);die;?>
 @section('content')
 	<div class="page-data dashboard-body">
 	        <div class="container">
@@ -38,21 +34,25 @@ unset($countries[0]);
 
 												@if(!empty($subforums))
 													@foreach($subforums as $data)
-								                        <?php  
-								                        //print_r($data->title);
-								                            //$titledata = explode(' ', $data->title);
-								                           // if(is_array($titledata)){
-								                               // $title = strtolower(implode('', $titledata));
+<?php  
+	if($mainforum == "Doctor" || $mainforum == "Study Questions"){
+      	$subids = \App\Forums::where('parent_id',$data['id'])->pluck('id');
+      	$count = \App\ForumPost::whereIn('category_id',$subids)->get()->count();
+		}else{
+			   $count = \App\ForumPost::where('category_id',$data['id'])->get()->count();
+	}
+			 $sub = $data['title'].'_'.$data['id'];					                    
+			     ?>
 
-								                            //}
-								                            
-								                        ?>
-
+								                        <!-- <input type="hidden" name="subid" value="{{$data['id']}}"></input> -->
 														<div class="radio-cont radio-label-left">
-															<input class="group-radio" type="radio" name="subcategory" value="{{ $data->title }}" id="{{ $data->title }}"></input>
-															<label for="{{$data->title }}">{{ $data->title }}</label>
+															<input class="group-radio" type="radio" name="subcategory" value="{{ $sub }}" id="{{ $data['title'] }}"></input>
 
-															@if($data->title == 'Country')
+															
+
+															<label for="{{$data['title'] }}">{{ $data['title'] }} ({{$count}})</label>
+
+															@if($data['title'] == 'Country')
 																<div class="subs" style="display:none">
 																{!! Form::select('country1', $countries, null, array(
 																	'class' => 'search-field boxsize',
@@ -60,7 +60,7 @@ unset($countries[0]);
 																	
 																)); !!}
 																</div>
-															@elseif($data->title == 'Country,State,City')
+															@elseif($data['title'] == 'Country,State,City')
 																<div class="subs" style="display:none">
 																	<select name="country" class="search-field boxsize" id="subcountry">
 																		<option value="">Country</option>
@@ -78,33 +78,6 @@ unset($countries[0]);
 																	</select>
 																</div>
 
-															@elseif($data->title == 'Professional Course')
-
-																<div class="subs" style="display:none">
-																	<?php $courses = DB::table('forums')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->pluck('title');
-																	 
-																	?>
-																	<select name="coursedata1" class="boxsize">
-																		<option value="">Select</option>
-																		@foreach($courses as $data)					
-																			<option value="{{$data}}">{{$data}}</option>
-																		@endforeach
-																	</select>
-																</div>
-															@elseif($data->title == 'Subjects')
-																<div class="subs" style="display:none">
-																	<?php $courses = DB::table('forums')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->pluck('title'); 
-																	
-																	
-																	?>
-																	<select name="coursedata" class="boxsize">
-																		<option value="">Select</option>
-																		@foreach($courses as $data)					
-																			<option value="{{$data}}">{{$data}}</option>
-																		@endforeach
-																	</select>
-																</div>
-
 															@endif
 														</div>
 
@@ -118,7 +91,7 @@ unset($countries[0]);
 								</div>
 							</div>
 							<div class="btn-cont text-center">
-							<?php if($mainforum=="Doctor") 			
+							<?php if($mainforum=="Doctor" || $mainforum == "Study Questions") 			
 								$bname="Continue";
 								else					
 								$bname="Enter Chat";

@@ -14,68 +14,39 @@
 </head>
 	<body>
 		<header>
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-3">
-						<a href="{{ url('/dashboard') }}" title="" class="logo"><img src="{{url('/images/logo.png')}}" alt="Friendz Square"></a>
-					</div>
-					<div class="col-sm-6">
-						<div class="top-search">
-						{!! Form::open(array('url' => 'dashboard', 'id' => 'searchform')) !!}
-							<ul class="clearfix">
-								<li class="search-textbox">
-									<!-- <input type="text" class="search-field" placeholder="Search Friends"> -->
-									{!! Form::text('searchfriends', null, array(
-										'class'=>'search-field', 
-										'id'=>'searchfriends',
-										'placeholder'=>'Search Friends'
-									)) !!}
-								</li>
-								<li>
-									{!! Form::select('country', $countries, null, array(
-										'class' => 'search-field',
-										'id' => 'country',
-									)); !!}
-								</li>
-								<li>
-									{!! Form::select('state', ['State'], null, array(
-										'class' => 'search-field',
-										'id' => 'state',
-									)); !!}
-								</li>
-								<li>
-									{!! Form::select('city', ['City'], null, array(
-										'class' => 'search-field',
-										'id' => 'city',
-									)); !!}
-								</li>
-								<li class="search-btn-cont">
-									<button type="button" class="search-btn"><i class="flaticon-magnifying-glass138"></i></button>
-									<!-- {!! Form::button('', array(
-										'class' => 'search-btn',
-										'id' => '',
-									)) !!}	 -->								
-								</li>
-							</ul>
-							{!! Form::close() !!}
-						</div>
-					</div>
-					<div class="col-sm-3">
-						@if (Auth::guest())
-							<div class="header-right-menu text-right">
-								<!--<a href="#" title="" class="btn btn-primary btn-header-right">Suggestions</a> -->
-								<a href="{{ url('/login') }}" title="" class="btn btn-primary btn-header-right">Login</a>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-2">
+				<a href="{{url('/')}}" title="" class="logo"><img src="/images/logo.png" alt="Friendz Square"></a>
+			</div>
+			<div class="col-sm-7">
+				<div class="top-search-cont">
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="search-field">
+								{!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
+								<input type="text" name="searchfriends" value="" placeholder="Enter Name" class="form-control">
+								<button type="submit" class="btn btn-primary btn-srch-top search-btn">Search Friends</button>
+									{!! Form::close() !!}
 							</div>
-						@else						
-							<ul style="list-style:none;margin:15%;">
-								<li style="float:left;"><a href="{{ url('/home') }}">Home</a></li>
-								<li style="float:right;"><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-							</ul>
-						@endif
+						</div>
+						<div class="col-sm-6">
+							<div class="search-field">
+								<input type="text" name="" value="" placeholder="Enter Keyword" class="form-control">
+								<button type="button" class="btn btn-primary btn-srch-top">Search Forum</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</header>
+			<div class="col-sm-3">
+				<div class="header-right-menu text-right">
+					<a href="#" title="" class="btn btn-primary btn-header-right">Suggestions</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</header><!--/header-->
 		
 		@yield('content')
 		<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>	

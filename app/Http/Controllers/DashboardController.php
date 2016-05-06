@@ -11,7 +11,7 @@ use Request, Session, Validator, Input, Cookie;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\MessageBag;
+use Illuminate\Support\MessageBag, Config;
 // use Illuminate\Support\Facades\Input;
 
 class DashboardController extends Controller
@@ -146,10 +146,33 @@ class DashboardController extends Controller
 
     public function friendRequests()
     {
-        $model1=User::where('id','!=',Auth::User()->id)->take(10)->orderBy('id','desc')->get()->toArray();
+        // $model1=User::where('id','!=',Auth::User()->id)->take(10)->orderBy('id','desc')->get()->toArray();
+        $model1 = Friend::
+                    with('user')
+                    ->where('friend_id', '=', Auth::User()->id)
+                    ->where('status', '=', 'Pending')
+                    ->take(10)
+                    ->get()
+                    ->toArray();
+
+        $recievedcount = Friend::where('friend_id', '=', Auth::User()->id)
+                    ->where('status', '=', 'Pending')
+                    ->get()
+                    ->count();
+        $sentcount = Friend::where('user_id', '=', Auth::User()->id)
+                    ->where('status', '=', 'Pending')
+                    ->get()
+                    ->count();
+        $friendscount = Friend::where('user_id', '=', Auth::User()->id)
+                    ->where('status', '=', 'Accepted')
+                    ->get()
+                    ->count();
 
         return view('dashboard.requests')
-                ->with('model1', $model1);
+                ->with('model1', $model1)
+                ->with('recievedcount', $recievedcount)
+                ->with('sentcount', $sentcount)
+                ->with('friendscount', $friendscount);
 
     }
 
@@ -806,7 +829,8 @@ if($input!=null && $gname!=null)
   {
     if($privategroupid)
     {
-        $title=DB::table('groups')->where('id',$privategroupid)->value('title');
+        //$title=DB::table('groups')->where('id',$privategroupid)->value('title');
+        $groupdetail = Group::where('id',$privategroupid)->get()->toArray();
         $ownerid=DB::table('groups')->where('id',$privategroupid)->value('owner_id');
         $members=DB::table('members')->where('group_id',$privategroupid)->pluck('member_id');
         $name=User::whereIn('id',$members)->orWhere('id',$ownerid)->get()->toArray();
@@ -819,7 +843,7 @@ if($input!=null && $gname!=null)
                     ->toArray();
 
         return view('privategroup.detail')
-               ->with('title',$title)
+               ->with('groupdetail',$groupdetail)
                ->with('name',$name)
                ->with('groupid',$privategroupid)
                ->with('ownerid',$ownerid)
@@ -838,6 +862,7 @@ if($input!=null && $gname!=null)
     public function forumsList()
     {
         $mainforums = Forums::where('parent_id',0)->get();
+     
         return view('forums.mainforums')
             ->with('forums',$mainforums);
     }
@@ -859,7 +884,7 @@ if($input!=null && $gname!=null)
         /******************END************************/
 
            $mainforum=Forums::where('id',$parentid)->value('title');
-           $subforums = Forums::where('parent_id',$parentid)->get();
+           $subforums = Forums::where('parent_id',$parentid)->get()->toArray();
         }
         else
         {
@@ -891,8 +916,10 @@ if($input!=null && $gname!=null)
            
             $subforum=(['parentname'=>$str,
                 'subcategory'=>'']);
+            $category_id = DB::table('forums')->where('title',$subforum['parentname'])->value('id');
             return view('forums.postforums')
-                ->with('forumpost',$subforum);
+                ->with('forumpost',$subforum)
+                ->with('category_id',$category_id);
 
         }
         else{
@@ -903,13 +930,14 @@ if($input!=null && $gname!=null)
     {
                 $forumpost = Request::all();
 
-              // print_r($forumpost);die; 
-           
+              //print_r($forumpost);die; 
+           $sub = explode('_', $forumpost['subcategory']);
+           //print_r($sub[1]);die;
          $subforum=(['parentname'=>$forumpost['parentname'],
-                'subcategory'=>$forumpost['subcategory']]);      
+                'subcategory'=>$sub[0]]);      
                 
 
-        if($forumpost['subcategory']== "Country,State,City")
+        if($sub[0]== "Country,State,City")
         {
             if($input['city']!=null)
                     $city=$input['country'].", ".$input['state'].", ".$input['city'];
@@ -918,60 +946,101 @@ if($input!=null && $gname!=null)
             $subforum=(['parentname'=>$forumpost['parentname'],
                 'subcategory'=>$city]);      
         }
-        if($forumpost['subcategory']== "Country")
+        if($sub[0]== "Country")
         {
             $country = DB::table('country')->where('country_id',$forumpost['country1'])->value('country_name');
             $subforum=(['parentname'=>$forumpost['parentname'],
                 'subcategory'=>$country]);      
         }
-        if($forumpost['subcategory']== "International")
+        if($sub[0]== "International")
         {
             $subforum=(['parentname'=>$forumpost['parentname'],
                 'subcategory'=>"International"]);      
         }
-        if($forumpost['subcategory']== "Professional Course")
+        if($sub[0]== "Professional Course")
         {
-            $subforum=(['parentname'=>$forumpost['subcategory'],
-                'subcategory'=>$forumpost['coursedata1']]);      
+            $course = explode('_',$forumpost['coursedata1']);
+            $subforum=(['parentname'=>$sub[0],
+                'subcategory'=>$course[0]]);
+                 $sub[1] = $course[1];        
         }
-        if($forumpost['subcategory']== "Subjects")
+        if($sub[0]== "Subjects")
         {
-            $subforum=(['parentname'=>$forumpost['subcategory'],
-                'subcategory'=>$forumpost['coursedata']]);      
+            $course = explode('_',$forumpost['coursedata']);
+            $subforum=(['parentname'=>$sub[0],
+                'subcategory'=>$course[0]]);
+                $sub[1] = $course[1];      
         }
 
                 return view('forums.postforums')
-                ->with('forumpost',$subforum);
+                ->with('forumpost',$subforum)
+                ->with('category_id',$sub[1]);
     }
 
        /* For Doctor's sub-sub category */
-
+    if($input['parentname'] == "Study Questions" || $input['parentname']=="Doctor")
+      {
         if($input['parentname']=="Doctor")
         {
+            
+            $sub = explode('_',$input['subcategory']);
+            //print_r($sub);die;
              $subname="";
-            if($input['subcategory']=="Country,State,City")
+            if($sub[0]=="Country,State,City")
             {
+                $subforums = Forums::where('parent_id',$sub[1])->get();
                 if($input['city']!=null)
                     $subname=$input['country'].", ".$input['state'].", ".$input['city'];
                 else
                     $subname=$input['country'].", ".$input['state'];
             }
             
-            if($input['subcategory']=="Country")
+            if($sub[0]=="Country"){
             $subname=DB::table('country')->where('country_id',$input['country1'])->value('country_name');
+             $subforums = Forums::where('parent_id',$sub[1])->get();
+            }
             
-            if($input['subcategory']=="International")
+            if($sub[0]=="International"){
             $subname="International";
+          $subforums = Forums::where('parent_id',$sub[1])->get();
+            }
 
            $mainforum="Doctor ".$subname;
-           $subforums = Forums::where('parent_id',70)->get();
 
            return view('forums.subforums')
                 ->with('mainforum',$mainforum)
-                ->with('subforums',$subforums);
+                ->with('subforums',$subforums)
+                ;
         }
 
-        
+        if($input['parentname'] == "Study Questions")
+        {
+             $sub = explode('_',$input['subcategory']);
+             $subforums = Forums::where('parent_id',$sub[1])->get();
+             $mainforum = $sub[0];
+             return view('forums.subforums')
+                ->with('mainforum',$mainforum)
+                ->with('subforums',$subforums)
+                ;
+
+        }
     }
+
+    } 
+    
+
+    public function addNewForumPost()
+    {
+      if(Request::isMethod('post')){
+        $input = Request::all();
+       // print_r($input);die;
+        DB::table('forums_post')
+            ->insert(['title'=>$input['topic'],
+                    'owner_id'=>Auth::User()->id,
+                    'category_id'=>$input['category_id']]);
+            return redirect('forums');
+    }
+    }
+
 
 }

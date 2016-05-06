@@ -5,24 +5,30 @@ namespace App\Http\Controllers;
 // use Illuminate\Http\Request;
 
 // use App\Http\Requests;
-use App\Library\ContactsImporter, Mail;
+use App\Library\ContactsImporter, Mail, Config;
 use Google_Client, Auth, App\User, App\Friend;
 use Request, Session, Validator, Input, Cookie;
 
 class ContactImporter extends Controller
 {
 
-    public $google_client_id = '401736044025-5jdpu98eqgvb1h0g60s21u6o5sofb9e3.apps.googleusercontent.com';
+    // public $google_client_id = '401736044025-5jdpu98eqgvb1h0g60s21u6o5sofb9e3.apps.googleusercontent.com';
 
-    public $google_client_secret = 'wUWM9ObLfOZVkR7-nXQvtb6V';
+    // public $google_client_secret = 'wUWM9ObLfOZVkR7-nXQvtb6V';
 
-    public $google_redirect_uri = 'http://fs.yiipro.com/google/client/callback';
+    // public $google_redirect_uri = 'http://fs.yiipro.com/google/client/callback';
 
     public function __construct()
     {
         $this->middleware('auth');
-    }
 
+        $this->google_client_id = Config::get('constants.google_client_id');
+
+        $this->google_client_secret = Config::get('constants.google_client_secret');
+
+        $this->google_redirect_uri = Config::get('constants.google_redirect_uri');
+    }
+ 
     public function inviteFriends()
     {
  
@@ -45,6 +51,7 @@ class ContactImporter extends Controller
                 $emailsarray = explode(',', $requestemails);
             
                 foreach ($emailsarray as $key => $value) {
+
                         $validator=null;
                     $validator = Validator::make($emailsarray, [
                         $key => 'required|email'
@@ -212,11 +219,19 @@ class ContactImporter extends Controller
 /*
     public function mail($email = '', $message, $subject, $type) {
         if($email != ''){
+<<<<<<< HEAD
+  			    Mail::raw($message,function ($m)  use($email, $subject, $type){
+                	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
+                    $m->to($email,$type)->subject($subject);
+                });
+			//print_r($mailsent);die;
+=======
 		$mailsent = //Mail::send('emails.invite', ['email'=> 'pawanpandey392@gmail.com','message_text'=> 'checkout this new site. Friendz Square!'], 
                 Mail::raw('emails.invite',function ($m)  use($email, $subject, $type){
             	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
                 $m->to($email,$type)->subject($subject);
             });
+>>>>>>> dd12761116c2b123e6f88acebd682a7598bf20e4
         }
     }
 */
