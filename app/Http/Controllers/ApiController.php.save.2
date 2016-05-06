@@ -1488,11 +1488,7 @@ class ApiController extends Controller
 
 					if(empty($groupcheck))
 						throw new Exception("Group does not exist.", 1);
-					
-						$xmppusername = User::where('id',$arguments['group_by'])->value('xmpp_username');
-
-               				 $converse = new Converse;
-                			 $response = $converse->removeUserGroup($arguments['group_name'], $xmppusername);    	
+						
 					$group = DefaultGroup::where([
 									'group_name' => $arguments['group_name'],
 									'group_by' => $arguments['group_by']
@@ -1764,10 +1760,10 @@ class ApiController extends Controller
 
 		                	$existingUser = array();
                 			$nonExistingUser = array();
-					$userEmail = User::where('id',$arguments['user_id'])->value('email');
+
                 		foreach ($arguments['email_id'] as $value) {
  
-                    		if($value != $userEmail){
+                    		if($value != User::where('id',$arguments['user_id'])->pluck('email')){
 
                         	$userData = User::where('email', '=', $value)->get();
                         	if($userData->isEmpty())
@@ -1775,6 +1771,7 @@ class ApiController extends Controller
                         	else
                         	{  
                             	$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
+
                             	self::mail($value, $message, 'Invitation', 'Friend',$arguments['user_id']);
                        		 }
                     		}
@@ -1794,11 +1791,11 @@ class ApiController extends Controller
  	//print_r(array_values($id)[0]);die;
                     		if($frienddata->isEmpty()){
                         		$message = 'Please add me on FriendzSquare!';
-
+print_r($message);die;
                         		self::mail($value, $message, 'Friend Request',$name,$arguments['user_id']);
                     		}
                  		 }
-                			$this->message = "Invitation emails sent successfully!";
+          			$this->message = "Invitation emails sent successfully!";
                 			$this->data = true;
 		                }
 		            }
@@ -1933,14 +1930,13 @@ class ApiController extends Controller
 	}
 	
     public function mail($email = '', $message, $subject, $type,$userid) {
-//die('aa');
-	$user = User::find($userid);
-	$username = $user->first_name.' '.$user->last_name;
-//	print_r($username);die;
+  die('uu');
+	$username = User::where('id',$userid)->pluck('first_name').' '.User::where('id',$userid)->pluck('last_name');
+	print_r($username);die;
 	$data = array(
 			'message' => $message,
 			'subject' => $subject,
-			'id' => $user->id,
+			'id' => Auth::User()->id,
 			'type' => $type,
 			'username' => $username,
 		);

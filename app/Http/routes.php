@@ -147,6 +147,7 @@ Route::post('api/get-group-list','ApiController@getGroupList');
 Route::post('api/delete-private-group','ApiController@deletePrivateGroup');
 
 Route::post('api/get-groups','ApiController@publicGroupGetIds');
+Route::post('api/invite-email','ApiController@inviteByEmail');
 /*
 |--------------------------------------------------------------------------
 | Application Routes

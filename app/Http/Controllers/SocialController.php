@@ -30,14 +30,14 @@ class SocialController extends Controller
 					$providerUser['password'] = Hash::make($tempEmail[0]);
 					$userDbObj = $user->create($providerUser);
 
-					$tempEmail = explode('@', $providerUser['email']);
+/*					$tempEmail = explode('@', $providerUser['email']);
 					$tempId = ( isset( $userDbObj->id ) && $userDbObj->id != "" ) ? $userDbObj->id : $userDbObj->user_id;
 
 					// Storing xmpp username and password.				
 					$user = User::find($userDbObj->id);
 					$user->xmpp_username = $tempEmail[0].'_'.$tempId;
 					$user->xmpp_password = md5($tempEmail[0]);
-					$user->save();
+					$user->save(); */
 					
 				}
 				return $userDbObj;
