@@ -27,11 +27,7 @@
 
 			@include('panels.left')
 		@else
-			<div class="col-sm-3">
-	<!-- <div class="side-widget-cont"> -->
-		<!-- <img src="/images/side-ad.jpg" alt="" class="img-responsive side-ad"> -->
-	<!-- </div> -->
-		</div>
+	 		@include('panels.leftguest')
 	@endif	
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
@@ -118,8 +114,11 @@
 			<?php }elseif($status2 == 'Pending'){ 
 			?>
 				<div class="text-right">
-					<button class="spanmsg btn-full" type="button" id="sent">Sent Request</button>
+					<button class="spanmsg btn-full sent" type="button" id="sent">Cancel Request</button>
+							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
 				</div>
+
+				
 			<?php }elseif($status1=='Accepted' || $status2=='Accepted'){ 
 			?>
 				<div class="text-right">
@@ -129,22 +128,17 @@
 					?>
 					<div class="text-right">
 						<button type="button" class="btn btn-primary btn-full resend"  id='resend'>Re-Send</button>
-					</div>
-					<div class="text-right">
-					<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>
-				</div>
+							<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
+							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
+					</div>	
 
 					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null)){
 
 					?>	
 					<div class="text-right">
 						<button type="button" class="btn btn-primary btn-full invite" id='invite'>Add as a friend</button>
+						<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
 					</div>
-					<div class="text-right">
-					<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>
-					</div>
-
-
 				<?php } ?>
 			</div>
 		</div>

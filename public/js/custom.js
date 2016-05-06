@@ -665,6 +665,27 @@ $('.btn-upload-icon').find(".badge").remove();
 		});
 	});
 
+	/*
+	* Cancel sent request.
+	*
+	**/
+	$(document).on('click','.sent',function(){
+		var current = $(this);
+		var user_id=current.closest('.get_id').data('userid');
+		var friend_id=current.closest('.get_id').data('friendid');
+
+		
+		$.ajax({
+			'url' : 'ajax/cancelrequest',
+			'type' : 'post',
+			'data' : {'user_id' : user_id,'friend_id': friend_id},
+			'success' : function(data){
+				current.closest('.get_id').find('.sent').hide(200);
+				current.closest('.get_id').find('.invite').show(500);
+			}
+		});
+	});
+
 
 	/*
 	* Search friends tab wise.
