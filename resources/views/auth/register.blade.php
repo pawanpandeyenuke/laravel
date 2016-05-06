@@ -246,138 +246,37 @@
 $("#loginform").ajaxForm(function(response) { 
 	if(response){
 
-							if(response == "These credentials do not match our records.")
-							{
-								$('.help-block').find('.errorpassword').text(response).css('color','#a94442');
-								$('.emailid').css('border-color','#333333');
-								$('.password').css('border-color','#333333');
-								$('.help-block').find('.erroremail').text("");
-							}
-		
-							else if(response == "success"){
-								window.location = '/dashboard';
-							}else{
-								var res = response.split(',');
+		if(response == "These credentials do not match our records.")
+		{
+			$('.help-block').find('.errorpassword').text(response).css('color','#a94442');
+			$('.emailid').css('border-color','#333333');
+			$('.password').css('border-color','#333333');
+			$('.help-block').find('.erroremail').text("");
+		}
 
-									if(res[0] == "email")
-									{
-									$('.help-block').find('.erroremail').text(res[1]).css('color','#a94442');
-									$('.emailid').css('border-color','#a94442');
-									$('.password').css('border-color','#333333');
-									$('.help-block').find('.errorpassword').text("");
-									}
-									if(res[0] == "password"){
-									$('.help-block').find('.erroremail').text("");
-									$('.help-block').find('.errorpassword').text(res[1]).css('color','#a94442');
-									$('.password').css('border-color','#a94442');
-									$('.emailid').css('border-color','#333333');	
-									}
-							}
-							
-							}
+		else if(response == "success"){
+			window.location = '/dashboard';
+		}else{
+			var res = response.split(',');
+
+				if(res[0] == "email")
+				{
+				$('.help-block').find('.erroremail').text(res[1]).css('color','#a94442');
+				$('.emailid').css('border-color','#a94442');
+				$('.password').css('border-color','#333333');
+				$('.help-block').find('.errorpassword').text("");
+				}
+				if(res[0] == "password"){
+				$('.help-block').find('.erroremail').text("");
+				$('.help-block').find('.errorpassword').text(res[1]).css('color','#a94442');
+				$('.password').css('border-color','#a94442');
+				$('.emailid').css('border-color','#333333');	
+				}
+		}
+		
+		}
 
 }); 
 
-
-
-
-
-	// 	jQuery(document).on('click', '.login', function(){
-
-	// 	var email = $('.emailid').val();
-	// 	var password = 	$('.password').val();
-	// 	$.ajax({
-	// 		'url' : '/ajax/login',
-	// 		'type' : 'post',
-	// 		'data' : { 'email': email, 'password': password },
-	// 		'success' : function(response){
-	// 						if(response){
-
-	// 						if(response == "These credentials do not match our records.")
-	// 						{
-	// 							$('.help-block').find('.errorpassword').text(response).css('color','#a94442');
-	// 							$('.emailid').css('border-color','#333333');
-	// 							$('.password').css('border-color','#333333');
-	// 							$('.help-block').find('.erroremail').text("");
-	// 						}
-		
-	// 						else if(response == "success"){
-	// 							window.location = '/dashboard';
-	// 						}else{
-	// 							var res = response.split(',');
-
-	// 								if(res[0] == "email")
-	// 								{
-	// 								$('.help-block').find('.erroremail').text(res[1]).css('color','#a94442');
-	// 								$('.emailid').css('border-color','#a94442');
-	// 								$('.password').css('border-color','#333333');
-	// 								$('.help-block').find('.errorpassword').text("");
-	// 								}
-	// 								if(res[0] == "password"){
-	// 								$('.help-block').find('.erroremail').text("");
-	// 								$('.help-block').find('.errorpassword').text(res[1]).css('color','#a94442');
-	// 								$('.password').css('border-color','#a94442');
-	// 								$('.emailid').css('border-color','#333333');	
-	// 								}
-	// 						}
-							
-	// 						}
-
-	// 		}	
-	// 	});
-	// });
-
-
-	// $(document).on('keypress', '.password', function(e){
-		
-	// 	var key = e.which;
-	// 	if(key == 13){
-		
-	// 			var email = $('.emailid').val();
-	// 	var password = 	$('.password').val();
-	// 	$.ajax({
-	// 		'url' : '/ajax/login',
-	// 		'type' : 'post',
-	// 		'data' : { 'email': email, 'password': password },
-	// 		'success' : function(response){
-	// 						if(response){
-
-	// 						if(response == "These credentials do not match our records.")
-	// 						{
-	// 							$('.help-block').find('.errorpassword').text(response).css('color','#a94442');
-	// 							$('.emailid').css('border-color','#333333');
-	// 							$('.password').css('border-color','#333333');
-	// 							$('.help-block').find('.erroremail').text("");
-	// 						}
-		
-	// 						else if(response == "success"){
-	// 							window.location = '/dashboard';
-	// 						}else{
-	// 							var res = response.split(',');
-
-	// 								if(res[0] == "email")
-	// 								{
-	// 								$('.help-block').find('.erroremail').text(res[1]).css('color','#a94442');
-	// 								$('.emailid').css('border-color','#a94442');
-	// 								$('.password').css('border-color','#333333');
-	// 								$('.help-block').find('.errorpassword').text("");
-	// 								}
-	// 								if(res[0] == "password"){
-	// 								$('.help-block').find('.erroremail').text("");
-	// 								$('.help-block').find('.errorpassword').text(res[1]).css('color','#a94442');
-	// 								$('.password').css('border-color','#a94442');
-	// 								$('.emailid').css('border-color','#333333');	
-	// 								}
-	// 						}
-							
-	// 						}
-
-	// 		}	
-	// 	});
-
-		
-	// 	}
-		
-	// 	});
 
 </script>

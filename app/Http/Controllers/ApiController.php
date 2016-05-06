@@ -1773,73 +1773,79 @@ class ApiController extends Controller
 		return $this->output();
 
 	}
-	
+
+
+	/*
+	 * Return Non Existing Email Ids. 
+	 */
+	public function returnNonExistingEmails()
+	{
+		try{
+			$arguments = Request::get('emails');
+
+			// User's email check
+			$nonExistingUsers = [];
+			foreach ($arguments as $key => $email) {
+				$userEmailCheck = User::where('email', $email)->get();
+				if($userEmailCheck->isEmpty()){
+					$nonExistingUsers[] = $email;
+				}
+			}
+
+			$this->status = 'success';			
+			$this->message = count($nonExistingUsers).' Users found.';
+			$this->data = $nonExistingUsers;
+			// echo '<pre>';print_r($arguments);die;
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+	}	
+
+
 	/*
 	 * Invitation by Email. 
 	 */
 	public function inviteByEmail()
 	{
 		try{
-				$arguments = Request::all();
+			$arguments = Request::all();
 			if($arguments){
 
-					$user = User::find($arguments['user_id']);
+				$user = User::find($arguments['user_id']);
+				$emailsArray = $arguments['emails'];
 
-					if(empty($user))
-						throw new Exception("User does not exist", 1);
+				if(empty($user))
+					throw new Exception("User does not exist", 1);
 
-					if(empty($arguments['email_id']))
-						throw new Exception("Atleast one email id is required", 1);
+				if(empty($emailsArray))
+					throw new Exception("Atleast one email id is required", 1);
 
-				if($arguments['email_id'])
-				{
-						    foreach ($arguments['email_id'] as $key => $value) {
+				if($emailsArray){
+					foreach ($emailsArray as $key => $value) {
 
-		                     $validator=null;
-		               		 $validator = Validator::make($arguments['email_id'], [
-		                     $key => 'required|email'
-		                	]); 
-		               $validator->each($key, ['required', 'email']);
-		               
-		              if($validator->fails()) {
-		               	throw new Exception("Please check email addresses entered and try again.", 1);
-		                }else{
-
-		                	$existingUser = array();
-                			$nonExistingUser = array();
-
-                		foreach ($arguments['email_id'] as $value) {                
-                    		if($value != User::where('id',$arguments['user_id'])->pluck('email')){
-                        	$userData = User::where('email', '=', $value)->pluck('id');
-                        	if($userData != null)
-                            	$existingUser[] = $value;
-                        	else
-                        	{  
-                            	$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
-                            	self::mail($value, $message, 'Invitation', 'Friend',$arguments['user_id']);
-                       		 }
-                    		}
-                		   }
-
-                		 $friends = array();
-                		foreach ($existingUser as $value) {
-                    	
-                    	$id = User::where('email', '=', $value)->pluck('first_name','id')->toArray();
-                    	$frienddata = Friend::where('user_id', '=', $arguments['user_id'])
-                                        ->where('friend_id', '=', array_keys($id)[0])
-                                        ->where('status', '=', 'Accepted')
-                                        ->get()
-                                        ->toArray();
-
-                    		if(empty($frienddata)){
-                        		$message = 'Please add me on FriendzSquare!';
-                        		self::mail($value, $message, 'Friend Request', array_values($id)[0],$arguments['user_id']);
-                    		}
-                		 }
-                			$this->message = "Invitation emails sent successfully!";
-                			$this->data = true;
-		                }
-		            }
+						$validator=null;
+						$validator = Validator::make($emailsArray, [
+							$key => 'required|email'
+						]); 
+						$validator->each($key, ['required', 'email']);
+								               
+						if($validator->fails()) {
+							throw new Exception("Please check email address entered and try again.", 1);
+						}else{
+							foreach ($emailsArray as $value) {
+								if($value != User::where('id',$arguments['user_id'])->pluck('email')){
+									$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
+									self::mail($value, $message, 'Invitation', 'Friend',$arguments['user_id']); 
+								}
+							}
+						}
+					}
+					
+					$this->status = "success";
+					$this->message = "Invitation emails sent successfully!";
+					$this->data = true;
 				}
 			}
 		}
@@ -1985,10 +1991,10 @@ class ApiController extends Controller
 		);
 
         if($email != ''){
-		Mail::send('emails.invite', $data, function($message) use($email, $subject) {
-		$message->from('no-reply@friendzsquare.com', 'Friend Square');
-		$message->to($email)->subject($subject);
-	});
+			Mail::send('emails.invite', $data, function($message) use($email, $subject) {
+				$message->from('no-reply@friendzsquare.com', 'Friend Square');
+				$message->to($email)->subject($subject);
+			});
         }
     }
 	

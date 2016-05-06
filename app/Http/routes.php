@@ -161,7 +161,7 @@ Route::post('api/remove-friend','ApiController@removeFriend');
 Route::post('api/search-user','ApiController@searchSiteFriends');
 
 Route::post('api/invite-email','ApiController@inviteByEmail');
-
+Route::post('api/non-existing-emails','ApiController@returnNonExistingEmails');
 
 /*
 |--------------------------------------------------------------------------
