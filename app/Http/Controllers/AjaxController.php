@@ -255,15 +255,20 @@ comments;
 		$node = config('app.xmppHost');
 
 		$user = User::find($user_id);
-		
+		//print_r($user);die;
 		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
 		{
 			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', '', false, false);
+//print_r($xmppPrebind);die;
 			$username = $user->xmpp_username;
 			$password = $user->xmpp_password;
+//print_r($password);die;
 			$xmppPrebind->connect($username, $password);
+print_r($xmppPrebind);die;
 			$xmppPrebind->auth();
+//print_r($xmppPrebind);die;
 			$sessionInfo = $xmppPrebind->getSessionInfo();
+//print_r($sessionInfo);die;
 			$status = 1;
 		}
 
@@ -1099,11 +1104,24 @@ comments;
             	$valid[] = $value;
 				$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
 				$subject = 'FriendzSquare Invitation';
-				
-				//$mailsent = mail($value, $subject, $message);
-			 Mail::raw($message,function ($m)  use($value, $subject){
+
+		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
+
+		$data = array(
+			'message' => $message,
+			'subject' => $subject,
+			'id' => Auth::User()->id,
+			//'type' => $type,
+			'username' => $username,
+		);
+
+/*			 Mail::raw($message,function ($m)  use($value, $subject){
                 	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
                     	$m->to($value,"Friend")->subject($subject);
+*/
+			Mail::send('emails.invite', $data, function($message) use($value, $subject) {
+			$message->from('no-reply@friendzsquare.com', 'Friend Square');
+			$message->to($value)->subject($subject);
                 });
 			}
 

@@ -6,12 +6,12 @@ return [
 
 	'google_client_secret' => 'wUWM9ObLfOZVkR7-nXQvtb6V',
 
-	'google_client_id' => 'http://fs.yiipro.com/google/client/callback',
+	'google_redirect_uri' => url('/').'/google/client/callback',
 
 	// Hotmail Credentials
 	'client_id' => '0000000044183F60',
 
-	'redirect_uri' => 'http://fs.yiipro.com/hotmail/client/callback',
+	'redirect_uri' => url('/').'/hotmail/client/callback',
 
 	// Facebook Credentials
 	'appId' => '254486034889306',
