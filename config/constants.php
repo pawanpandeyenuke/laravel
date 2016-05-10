@@ -2,9 +2,9 @@
 
 return [
 	
-	'google_client_id' => '962290042733-4hg07g6fp7bl8up63pna5k6hgk4bc1ot.apps.googleusercontent.com',
+	'google_client_id' => '497778402485-835j9ckhljhi7ppvesjbir5sllcb7ljo.apps.googleusercontent.com',
 
-	'google_client_secret' => 'WtAGIuBj7yCAxE0CYu20ogxu',
+	'google_client_secret' => 'kEb4tZE4YXHN_1A9tVNRR-65',
 
 	'google_redirect_uri' => url('/').'/google/client/callback',
 	
