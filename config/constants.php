@@ -25,6 +25,9 @@ return [
 
 	// Android Push Notification Variables
 	'API_ACCESS_KEY'=>'AIzaSyBV19WPze6Icm3RITDLEbPieXalcoM7wEw',
+
+	// Xmpp-prebind
+	'xmpp_host_Url'=>'friendzsquare.com',
 ]
 
 ?>

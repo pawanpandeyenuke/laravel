@@ -261,7 +261,7 @@ if($pgid){
     var defaultImage="{{url('/images/user-thumb.jpg')}}";
 
     var image_upload_url="ajax/sendimage";
-    var chatserver='@fs.yiipro.com';
+    var chatserver='@<?= Config::get('constants.xmpp_host_Url') ?>';
     
     var subcategory="<?php echo Request::get('subcategory'); ?>";
 
@@ -270,7 +270,7 @@ if($pgid){
     // alert(subcategory);
     // alert(parent);
   //  var username='<?php DB::table('') ?>';
-    var conferencechatserver='@conference.fs.yiipro.com';
+    var conferencechatserver='@conference.<?= Config::get('constants.xmpp_host_Url') ?>';
     var conObj;
     var groupname="{{$groupname}}";
     var groupid="{{$groupid}}";
@@ -297,7 +297,7 @@ if($pgid){
                             rid: data.rid,
                             sid: data.sid,
                             jid: data.jid,
-                            bosh_service_url: '//fs.yiipro.com:5280/http-bind',
+                            bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
                             show_controlbox_by_default: true,
                             allow_contact_requests:true,
                             xhr_user_search: false,

@@ -12,7 +12,8 @@ class Converse{
 
 		$server = Request::server('HTTP_HOST'); 
 
-		$node = config('app.xmppHost');
+		$node = Config::get('constants.xmpp_host_Url');
+		// $node = config('app.xmppHost');
 		$response = @exec('sudo ejabberdctl register '.$username.' '.$node.' '.$password.' 2>&1', $output, $status);
 
 		// dd($response);exit;
@@ -25,7 +26,7 @@ class Converse{
 	**/
 	public static function addFriend($localuser,$user,$nic1,$nic2, $group = 'general', $subscription = 'both', $update = 0) {
 
-		$node = config('app.xmppHost');
+		$node = Config::get('constants.xmpp_host_Url');
 		$data_from = $localuser .' '. $node .' '. $user .' '. $node .' "'. $nic1 .'" '. $group .' '. $subscription;
 		$data_to = $user .' '. $node .' '. $localuser .' '. $node .' "'. $nic2 .'" '. $group .' '. $subscription;
 
@@ -41,7 +42,7 @@ class Converse{
 	**/
 	public static function createGroup($roomid,$roomname) {
 
-		$node=config('app.xmppHost');
+		$node = Config::get('constants.xmpp_host_Url');
 	//	$node='conference.'.$node;
 		$roomname=str_replace(" ","_",$roomname);
 		@exec('sudo  ejabberdctl srg_create '.$roomname.' '.$node.' '.$roomid.' Private_Group My_Group');
@@ -57,7 +58,7 @@ class Converse{
 	**/
 	public static function deleteGroup($roomname){
 
-		$node=config('app.xmppHost');
+		$node = Config::get('constants.xmpp_host_Url');
 		$roomname=str_replace(" ","_",$roomname);
 		$response=@exec('sudo  ejabberdctl srg_delete ' .$roomname.' ' .$node);
 			// srg-delete group host  
@@ -69,7 +70,7 @@ class Converse{
 	**/
 	public static function addUserGroup($roomname,$username){
 
-		$node = config('app.xmppHost');
+		$node = Config::get('constants.xmpp_host_Url');
 	//	$node='conference.'.$node;
 		$roomname=str_replace(" ","_",$roomname);
 		$response=@exec('sudo  ejabberdctl srg_user_add '.$username.' '.$node.' '.$roomname.' '.$node);
@@ -85,7 +86,7 @@ class Converse{
 	**/
 	public static function removeUserGroup($roomname,$username){
 
-		$node = config('app.xmppHost');
+		$node = Config::get('constants.xmpp_host_Url');
 		$roomname=str_replace(" ","_",$roomname);
 		$response=@exec('sudo  ejabberdctl srg_user_del '.$username.' '.$node.' '.$roomname.' '.$node);
 		
@@ -100,7 +101,7 @@ class Converse{
 	**/
 	public static function broadcast($userfrom,$userto,$msg){
 
-		$node=config('app.xmppHost');
+		$node = Config::get('constants.xmpp_host_Url');
 
 		//$msg=str_replace(" ","_",$msg);
 		 //$msg = ['type'=>'text','message'=>$msg];
