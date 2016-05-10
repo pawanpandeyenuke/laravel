@@ -1,6 +1,6 @@
 <?php namespace App\Library;
 
-use Validator, Input, Redirect, Request, Session, Hash, DB;
+use Validator, Input, Redirect, Request, Session, Hash, DB, Config;
 
 class Converse{
 
