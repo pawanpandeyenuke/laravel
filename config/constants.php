@@ -2,13 +2,14 @@
 
 return [
 	
-	'google_client_id' => '401736044025-5jdpu98eqgvb1h0g60s21u6o5sofb9e3.apps.googleusercontent.com',
+	'google_client_id' => '962290042733-4hg07g6fp7bl8up63pna5k6hgk4bc1ot.apps.googleusercontent.com',
 
-	'google_client_secret' => 'wUWM9ObLfOZVkR7-nXQvtb6V',
+	'google_client_secret' => 'WtAGIuBj7yCAxE0CYu20ogxu',
 
 	'google_redirect_uri' => url('/').'/google/client/callback',
+	
 	// Hotmail Credentials
-	'client_id' => '0000000044183F60',
+	'client_id' => '0000000040194135',
 
 	'redirect_uri' => url('/').'/hotmail/client/callback',
 

@@ -42,8 +42,8 @@ return [
     		// 'redirect' => url('/').'/callback/facebook',
 
         // Server -->
-            'client_id' => '147417315641264',
-            'client_secret' => '796d800b177429195b9994152301c82f',
+            'client_id' => '',
+            'client_secret' => '',
             'redirect' => url('/').'/callback/facebook',
 	],
  
@@ -54,8 +54,8 @@ return [
     		// 'redirect' => url('/').'/callback/twitter',
 
         // Server -->
-            'client_id' => '147417315641264',
-            'client_secret' => '796d800b177429195b9994152301c82f',
+            'client_id' => '',
+            'client_secret' => '',
             'redirect' => url('/').'/callback/twitter',
 	],
     
@@ -78,8 +78,8 @@ return [
     		// 'redirect' => url('/').'/callback/linkedin',
 
         // Server -->
-            'client_id' => '147417315641264',
-            'client_secret' => '796d800b177429195b9994152301c82f',
+            'client_id' => '',
+            'client_secret' => '',
             'redirect' => url('/').'/callback/linkedin',
 	],
     
