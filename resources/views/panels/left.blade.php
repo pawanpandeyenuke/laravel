@@ -83,7 +83,7 @@
 		      </h4>
 		    </div>
 		  </div>
-		   <div class="panel panel-default">
+<!--		   <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingSeven">
 		      <h4 class="panel-title">
 		        <a class="without-arrow" href="{{ url('/forums') }}">
@@ -92,7 +92,7 @@
 		      </h4>
 		    </div>
 		  </div>
-	 
+	 -->
 		</div>
 	</div><!--/dashboard sidemenu-->
 </div>

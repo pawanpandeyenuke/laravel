@@ -1,10 +1,10 @@
 @extends('layouts.dashboard')
 <head>
-	<meta property="og:url" content="http://fs.yiipro.com/" />
+	<meta property="og:url" content="{{url('/')}}" />
 	<meta property="og:type" content="Friendz Square" />
 	<meta property="og:title" content="get connected" />
 	<meta property="og:description" content="Friendz Square is a social networking site." />
-	<meta property="og:image" content="http://fs.yiipro.com/images/post-img-big.jpg" />
+	<meta property="og:image" content="{{url('images/post-img-big.jpg')}}" />
 </head>
 
 @section('content')
@@ -63,7 +63,7 @@
 											<li><div class="fb-share-button" data-href="{{$servername}}" data-layout="button_count" data-mobile-iframe="true"></div></li>
 											<li>
 												<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
-												<script type="IN/Share" data-url="http://fs.yiipro.com/" data-counter="right"></script>
+												<script type="IN/Share" data-url="{{url('/')}}" data-counter="right"></script>
 											</li>
 										</ul>
 									</div>

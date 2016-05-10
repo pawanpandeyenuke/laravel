@@ -13,7 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Feed, Auth, Mail;
 use Intervention\Image\Image;
 use \Exception;
-use App\Library\Converse;
+use App\Library\Converse, Config;
 
 class AjaxController extends Controller
 {
@@ -252,7 +252,7 @@ comments;
 
 		$status=0;
 		$user_id = Auth::User()->id;
-		$node = config('app.xmppHost');
+		$node = Config::get('constants.xmpp_host_Url');
 
 		$user = User::find($user_id);
 		//print_r($user);die;
