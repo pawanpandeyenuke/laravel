@@ -36,27 +36,51 @@ return [
     ],
 
 	'facebook' => [
-		'client_id' => '147417315641264',
-		'client_secret' => '796d800b177429195b9994152301c82f',
-		'redirect' => url('/').'/callback/facebook',
+        // Localhost -->
+    		// 'client_id' => '147417315641264',
+    		// 'client_secret' => '796d800b177429195b9994152301c82f',
+    		// 'redirect' => url('/').'/callback/facebook',
+
+        // Server -->
+            'client_id' => '',
+            'client_secret' => '',
+            'redirect' => url('/').'/callback/facebook',
 	],
  
 	'twitter' => [
-		'client_id' => 'yjJPO9ogaQBbQl127IBJS5bCV',
-		'client_secret' => 'RMkAeOC47JWFS9d7zSDBCXgdN1InVEiTYdHCrdjsnmlYock8aX',
-		'redirect' => url('/').'/callback/twitter',
+        // Localhost -->
+    		// 'client_id' => 'yjJPO9ogaQBbQl127IBJS5bCV',
+    		// 'client_secret' => 'RMkAeOC47JWFS9d7zSDBCXgdN1InVEiTYdHCrdjsnmlYock8aX',
+    		// 'redirect' => url('/').'/callback/twitter',
+
+        // Server -->
+            'client_id' => '',
+            'client_secret' => '',
+            'redirect' => url('/').'/callback/twitter',
 	],
     
 	'google' => [
-		'client_id' => '875545827153-ogtrtj4m0610tr7qc6ujrsbs98mq6fln.apps.googleusercontent.com',
-		'client_secret' => 'QbW-lrmDMk8ZeVK0eJV9XB2v',
-		'redirect' => url('/').'/callback/google',
+        // Localhost -->
+    		// 'client_id' => '875545827153-ogtrtj4m0610tr7qc6ujrsbs98mq6fln.apps.googleusercontent.com',
+    		// 'client_secret' => 'QbW-lrmDMk8ZeVK0eJV9XB2v',
+    		// 'redirect' => url('/').'/callback/google',
+
+        // Server -->
+            'client_id' => '962290042733-3cjdj7f3jkojqnv6kct7dm1jg03nekoc.apps.googleusercontent.com',
+            'client_secret' => 'cVXRNjz2DDb0eFcZB26JJS4_',
+            'redirect' => url('/').'/callback/google',
 	],
     
 	'linkedin' => [
-		'client_id' => '75kno0ahk9abe7',
-		'client_secret' => '4c3Cjv0urMvDVWqa',
-		'redirect' => url('/').'/callback/linkedin',
+        // Localhost -->
+    		// 'client_id' => '75kno0ahk9abe7',
+    		// 'client_secret' => '4c3Cjv0urMvDVWqa',
+    		// 'redirect' => url('/').'/callback/linkedin',
+
+        // Server -->
+            'client_id' => '',
+            'client_secret' => '',
+            'redirect' => url('/').'/callback/linkedin',
 	],
     
 
