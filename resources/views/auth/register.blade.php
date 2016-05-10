@@ -72,7 +72,7 @@
 				<div class="home-slider-cont">
 					<div class="slider-btns">
 						<ul class="list-inline">
-							<li><a href="#" title="" class="btn btn-primary">Enter Chat Room</a></li>
+							<li><a href="#" title="" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Enter Chat Room</a></li>
 							<li><a href="#" title="" class="btn btn-primary">Enter Forum</a></li>
 						</ul>
 					</div>

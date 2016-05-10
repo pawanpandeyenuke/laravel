@@ -11,6 +11,12 @@
 |
 */
 
+/**
+ * @Push Notifications..
+ *
+ **/
+Route::get('pushnotification-iphone', 'DashboardController@pushNotificationIphone');
+Route::get('pushnotification-android', 'DashboardController@pushNotificationAndroid');
 
 /**
  * @Ajax Routes..
