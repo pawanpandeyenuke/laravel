@@ -255,20 +255,14 @@ comments;
 		$node = Config::get('constants.xmpp_host_Url');
 
 		$user = User::find($user_id);
-		//print_r($user);die;
 		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
 		{
 			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', '', false, false);
-//print_r($xmppPrebind);die;
 			$username = $user->xmpp_username;
 			$password = $user->xmpp_password;
-//print_r($password);die;
 			$xmppPrebind->connect($username, $password);
-print_r($xmppPrebind);die;
 			$xmppPrebind->auth();
-//print_r($xmppPrebind);die;
 			$sessionInfo = $xmppPrebind->getSessionInfo();
-//print_r($sessionInfo);die;
 			$status = 1;
 		}
 
