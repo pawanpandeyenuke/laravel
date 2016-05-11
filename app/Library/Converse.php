@@ -103,16 +103,20 @@ class Converse{
 
 		$node = Config::get('constants.xmpp_host_Url');
 
+		$subject = "Broadcast Subject";
+
+//		$userto = $userto.'@'.$node;
+//		print_r($userfrom.'@'.$node);die;
 		//$msg=str_replace(" ","_",$msg);
 		 //$msg = ['type'=>'text','message'=>$msg];
         	// $enmsg = json_encode($msg);
-		 $result=@exec("sudo ejabberdctl send_message_chat ".$userfrom."@".$node." ".$userto."@".$node." '".$msg."'");
+//		 $result=@exec("sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userto."@".$node." '".$msg."'");
 
+$result2 = @exec("sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userto."@".$node." '".$subject."' '".$msg."'");
+//echo $result2;exit;
 	}
- 
-    
-}	
 
+}
 
 
 ?>
