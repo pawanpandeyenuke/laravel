@@ -164,7 +164,7 @@ $('.btn-upload-icon').find(".badge").remove();
 				var original =$('.single-post .post-data').first('p').html();		
 		        var converted = emojione.toImage(original);
 		        $('.single-post .post-data').first('p').html(converted);	
-
+			 jQuery('.btn-post').prop('disabled',false); 
 			}
 			
 		} 
@@ -269,13 +269,14 @@ $('.btn-upload-icon').find(".badge").remove();
 		var commentData = current.closest('.post-comment').find('textarea').val();
 		var commented_by = $('#user_id').val();
 		var popup = current.closest('.pop-post-comment').data('value');
-
+		current.closest('.post-comment').find('textarea').val('');
 		if(commentData == ''){
 			var nextdata = current.closest('.post-footer').find('.comment-field').text();
 			commentData = nextdata;
 		}
 
 		if(commentData){
+			current.prop('disabled',true);
 			$.ajax({			
 				'url' : 'ajax/comments/post',
 				'data' : { '_token' : _token, 'feed_id' : feedId, 'commented_by' : commented_by, 'comments' : commentData },
@@ -303,6 +304,9 @@ $('.btn-upload-icon').find(".badge").remove();
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
 
+					if(jQuery("#pagecomment-"+feedId+" li").length > 3)
+						jQuery("#pagecomment-"+feedId+" li").first().remove();
+
 					//Dashboard emoji fix.
 					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
 				    var converted = emojione.toImage(original);
@@ -316,6 +320,7 @@ $('.btn-upload-icon').find(".badge").remove();
 				var converted1 = emojione.toImage(original1);
 				jQuery("#popupcomment-"+feedId+" li .comment-text").last().html(converted1);
 			}
+			current.prop('disabled',false);
 
 				}			
 			});	

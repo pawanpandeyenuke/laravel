@@ -98,7 +98,7 @@
 															<!-- <button type="button" class="btn btn-primary">Upload</button> -->
 															{!! Form::submit('Upload', array(
 																	'id' => 'submit-btn', 
-																	'class' => 'btn btn-primary'
+																	'class' => 'btn btn-primary btn-post'
 																))
 															!!}
 														</li>
@@ -310,8 +310,14 @@
 		</div>
 	</div><!--/pagedata-->
 
-<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
-
 
 @endsection
+<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<script type="text/javascript">
+		$(document).on("click",".btn-post",function(){
+		$(this).parents('form').submit();
+			if($('#newsfeed').val()!="" || !($('#image-holder').is(':empty')))
+			$('.btn-post').prop('disabled',true);
+	});
+</script>
 

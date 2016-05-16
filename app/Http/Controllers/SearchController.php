@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Request, Session, Validator, Input, Cookie;
-use App\User, Auth;
+use App\User, Auth,Mail;
 class SearchController extends Controller
 {
     
@@ -72,4 +72,45 @@ class SearchController extends Controller
 
         
     }
+
+    public function contactUs()
+    {
+        $arguments = Request::all();
+        $feedbackid = "feedback@friendzsquare.com";
+        if($arguments['email'] == "")
+            $arguments['email'] = "Anonymous User";
+
+        self::suggestionMail($feedbackid,$arguments['message_text'],'Suggestion',$arguments['email']);
+
+        //Session::put('success', 'Thank you for your valuable suggestion!');
+        
+        return 'success';
+        // return redirect()->back()->with('success', 'Thank you for your valuable suggestion!');
+
+
+    }
+
+    public function suggestionMail($email = '', $message_text, $subject,$usermail) {
+  
+        $data = array(
+            'message_text' => $message_text,
+            'subject' => $subject,
+            'usermail'=>$usermail
+        );
+
+        if($email != ''){
+        Mail::send('emails.suggestion', $data, function($message) use($email, $subject) {
+        $message->from($email, 'User Feedback');
+        $message->to('adi490162@gmail.com')->subject($subject);
+    });
+        }
+    }
+
+    public function newPassword()
+    {
+        Auth::logout();
+        return view('auth.passwords.newpassword');
+    }
+
+
 }

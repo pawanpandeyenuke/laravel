@@ -13,11 +13,11 @@
 
                         <input type="hidden" name="token" value="{{ $token }}">
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}" style="display:none">
                             <label class="col-md-4 control-label">E-Mail Address</label>
 
                             <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ $email or old('email') }}">
+                                <input type="hidden" class="form-control" name="email" value="{{ $email or old('email') }}">
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">

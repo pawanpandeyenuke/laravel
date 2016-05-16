@@ -310,7 +310,9 @@ if($pgid){
                             auto_join_on_invite:true,
                             roster_groups:true,
                             allow_logout: false,
-                            allow_chat_pending_contacts:true
+  			    send_initial_presence:true,
+                            allow_chat_pending_contacts:true,
+			    xhr_custom_status:true
                     });
                     //jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                     //jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();

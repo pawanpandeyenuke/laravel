@@ -20,7 +20,7 @@
 		      <input type="hidden" value="{{$comment->id}}" name="id"></input>
 		      <div class="modal-footer">
 				{!! Form::button('Cancel', array('id' => 'submit-btn', 'class' => 'btn btn-default', 'data-dismiss' => 'modal')) !!}
-				{!! Form::submit('Upload', array('id' => 'submit-btn', 'class' => 'subcomment btn btn-primary')) !!}
+				{!! Form::submit('Submit', array('id' => 'submit-btn', 'class' => 'subcomment btn btn-primary')) !!}
 		      </div>
 	      	{!! Form::close() !!}
 	    </div>
