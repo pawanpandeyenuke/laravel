@@ -53,7 +53,7 @@
 				<div class="dashboard-header-menu text-right">
 					<ul class="list-inline">
 						<li class="user-info-top">
-							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : '/images/user-thumb.jpg'; ?>
+							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : '/images/user-icon.png'; ?>
 							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
 							{{Auth::User()->first_name}}</a>
 						</li>

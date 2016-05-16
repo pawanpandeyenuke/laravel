@@ -39,7 +39,7 @@
 					<div class="row field-row">
 						<div class="col-md-6 border-right">
 							<div class="checkbox-cont">
-								<input type="checkbox" name="checkboxG3" id="checkboxG3" class="css-checkbox">
+								<input type="checkbox" name="log" id="checkboxG3" class="css-checkbox">
 								<label for="checkboxG3" class="css-label">Keep me logged in</label>
 							</div>
 						</div>

@@ -264,6 +264,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	$(document).on('click', '.comment', function(){
 
 		var current = $(this);
+		
 		var _token = $('#postform input[name=_token]').val();
 		var feedId = $(this).closest('.post-comment').data('value');
 		var commentData = current.closest('.post-comment').find('textarea').val();
@@ -276,6 +277,8 @@ $('.btn-upload-icon').find(".badge").remove();
 		}
 
 		if(commentData){
+
+			current.prop('disabled', true);
 			$.ajax({			
 				'url' : 'ajax/comments/post',
 				'data' : { '_token' : _token, 'feed_id' : feedId, 'commented_by' : commented_by, 'comments' : commentData },
@@ -303,19 +306,22 @@ $('.btn-upload-icon').find(".badge").remove();
 					current.parents('#AllCommentNew').find('.comments-list ul').append(parseresponse.comment);
 					current.parents('#AllCommentNew').find('.comment-field').text('');
 
+					if(jQuery("#pagecomment-"+feedId+" li").length > 3)
+					jQuery("#pagecomment-"+feedId+" li").first().remove();
+					
 					//Dashboard emoji fix.
 					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
 				    var converted = emojione.toImage(original);
 					jQuery("#pagecomment-"+feedId+" li .comment-text").last().html(converted);
 
 	 
-		if(popup==feedId)
+					if(popup==feedId){
+							var original1=jQuery("#popupcomment-"+feedId+" li .comment-text").last().html();
+							var converted1 = emojione.toImage(original1);
+							jQuery("#popupcomment-"+feedId+" li .comment-text").last().html(converted1);
+					}
 
-			{
-				var original1=jQuery("#popupcomment-"+feedId+" li .comment-text").last().html();
-				var converted1 = emojione.toImage(original1);
-				jQuery("#popupcomment-"+feedId+" li .comment-text").last().html(converted1);
-			}
+					current.prop('disabled', false);
 
 				}			
 			});	

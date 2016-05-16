@@ -244,7 +244,8 @@ if($pgid){
 <link href="{{url('/converse/converse.min.css')}}" rel="stylesheet" type="text/css" media="screen" >
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script type="text/javascript" src="{{url('/converse/jquery.form.js')}}"></script>
-<script type="text/javascript" src="{{url('/converse/converse.nojquery.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/demo_converse.nojquery.min.js')}}"></script>
+<!-- <script type="text/javascript" src="{{url('/converse/converse.nojquery.min.js')}}"></script> -->
 <script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 
 
@@ -282,7 +283,25 @@ if($pgid){
 
     jQuery(document).ready(function(){
 
-        jQuery.ajax({
+      require(['converse'], function (converse) {
+        
+                conObj=converse;
+                converse.initialize({                           
+                  prebind: true,
+                  bosh_service_url: '//friendzsquare.com:5280/http-bind',
+                  keepalive: true,
+                  jid: 'two308@friendzsquare.com',
+                  authentication: 'prebind',
+                  prebind_url: "{{url('/ajax/getxmppuser')}}",
+                  allow_logout: false,
+                  debug: false ,
+                  //message_carbons: true,
+                  send_initial_presence:true,
+                });
+           });
+
+
+/*        jQuery.ajax({
             'url' : "{{url('/ajax/getxmppuser')}}",
             'type' : 'post',
             'dataType':'json',
@@ -310,7 +329,9 @@ if($pgid){
                             auto_join_on_invite:true,
                             roster_groups:true,
                             allow_logout: false,
-                            allow_chat_pending_contacts:true
+                            allow_chat_pending_contacts:true,
+                            send_initial_presence:true,
+                            xhr_custom_status:true
                     });
                     //jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                     //jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
@@ -338,7 +359,7 @@ if($pgid){
                 }
 
             }
-        });
+        });*/
 
 
     // Send image over chat.

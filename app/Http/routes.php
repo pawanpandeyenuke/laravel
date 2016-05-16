@@ -41,6 +41,7 @@ Route::post('ajax/post/get', 'AjaxController@getPostBox');
 Route::post('ajax/getfriendslist', 'AjaxController@getfriendslist');
 
 Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
+Route::get('ajax/getxmppuser', 'AjaxController@getxmppuser');
 Route::post('ajax/search-friend', 'AjaxController@searchfriend');
 
 Route::post('ajax/webgetlikes', 'AjaxController@webgetlikes');
