@@ -169,7 +169,10 @@ if($pgid){
 
                         $privategroupname=$data['title'];
                         $privategroupid=strtolower($privategroupname);
-                        $privategroupid=str_replace(" ","_",$privategroupid); 
+                        $privategroupid=str_replace(" ","_",$privategroupid);
+                         
+                        $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
+			
                             $namestr='';
                             $name=array();
                             $count=0;
@@ -191,8 +194,8 @@ if($pgid){
                             ?>
                                
                                         <li>                           
-                                                <a href="#" class="chat-user-outer"  title="" onclick="openChatGroup(<?php echo "'".$privategroupname."', '".$privategroupid."'"?>);">
-                                                <span class="chat-thumb" style="background: url('/images/user-thumb.jpg');"></span>
+                                                <a href="{{url("private-group-detail/".$data['id'])}}" class="chat-user-outer"  title="" >
+                                                <span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
                                                 <span class="title">
                                                     {{$data['title']}} 
                                                 </span>

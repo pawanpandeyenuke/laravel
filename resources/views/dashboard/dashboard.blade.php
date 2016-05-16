@@ -98,7 +98,7 @@
 															<!-- <button type="button" class="btn btn-primary">Upload</button> -->
 															{!! Form::submit('Upload', array(
 																	'id' => 'submit-btn', 
-																	'class' => 'btn btn-primary'
+																	'class' => 'btn btn-primary btn-post'
 																))
 															!!}
 														</li>
@@ -309,8 +309,36 @@
 		</div>
 	</div><!--/pagedata-->
 
-<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
-
 
 @endsection
+<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<script type="text/javascript">
+	$(document).on("click",".btn-post",function(){
+					    // Opera 8.0+
+			// var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+			//     // Firefox 1.0+
+			// var isFirefox = typeof InstallTrigger !== 'undefined';
+			//     // At least Safari 3+: "[object HTMLElementConstructor]"
+			// var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+			//     // Internet Explorer 6-11
+			// var isIE = /*@cc_on!@*/false || !!document.documentMode;
+			//     // Edge 20+
+			// var isEdge = !isIE && !!window.StyleMedia;
+			//     // Blink engine detection
+			// var isBlink = (isChrome || isOpera) && !!window.CSS;
+			
+			// Chrome 1+
+			var isChrome = !!window.chrome && !!window.chrome.webstore;
+				if(isChrome!="")
+					$(this).parents('form').submit();
+
+			if($('#newsfeed').val()!="" || !($('#image-holder').is(':empty')))
+			$('.btn-post').prop('disabled',true);
+					
+	});
+
+
+
+
+</script>
 

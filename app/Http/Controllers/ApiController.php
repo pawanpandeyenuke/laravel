@@ -643,7 +643,7 @@ class ApiController extends Controller
 	{
 		try{
 			$arguments = Request::all();
-
+			//print_r($arguments);die;
  			$validator = Validator::make($arguments, [
 	 						'id' => 'required|numeric',
 	 					]); 
@@ -667,6 +667,9 @@ class ApiController extends Controller
 					$arguments['image'] = $image_name;
 					$file->move('uploads', $image_name);
 
+				}
+				else{
+					$arguments['image'] = "";
 				}
 
 				$newsFeed->fill($arguments);

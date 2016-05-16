@@ -24,6 +24,11 @@ class AjaxController extends Controller
 		$arguments = Input::all();
 		$email = Input::get('email');
 		$password = Input::get('password');
+		//print_r($arguments);die;
+		if(isset($arguments['log']))
+			$log = true;
+		else
+			$log = false;
 
 		$user = new User();
 
@@ -50,7 +55,7 @@ class AjaxController extends Controller
 					 	echo 'email,'.$error['email'][0];			
 					}
 					else{
-						if(Auth::attempt(['email' => $email,'password'=>$password]))
+						if(Auth::attempt(['email' => $email,'password'=>$password],$log))
 							echo 'success';
 						else
 							echo 'These credentials do not match our records.';

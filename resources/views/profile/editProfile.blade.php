@@ -3,7 +3,6 @@
 @section('content')
 
 <?php
-// print_r($user->country);die;
 	if(!empty($user->country)){
 
 		//$country = DB::table('country')->where('country_id', '=', $user->country)->value('country_name'); 
@@ -234,6 +233,7 @@
 											@if(count($education) > 0 )
 												<?php $customcount = 1; ?>
 												@foreach($education as $data)
+												
 <?php 
 		$countryidestab = DB::table('country')->where('country_name', '=', $data->country_of_establishment)->value('country_id'); 
 		$all_states_estab = DB::table('state')->where('country_id', '=', $countryidestab)->pluck('state_name','state_id'); 
@@ -452,16 +452,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="pe-row">
-										<div class="row">
-											<div class="col-sm-6">
-												
-											</div>
-											<div class="col-sm-6">
-												
-											</div>
-										</div>
-									</div>
+								
 								</div><!--/profile-data-table-->
 							</div>
 						</div>

@@ -5,7 +5,7 @@
 		<div class="row">
 			<div class="col-md-7">
 				<?php $user_picture = !empty($user->picture) ? $user->picture : 'images/user-thumb.jpg'; ?>
-				<a href="profile/{{$user->id}}" title="" class="user-thumb-link">
+				<a href="{{url("profile/$user->id")}}" title="" class="user-thumb-link">
 					<span class="small-thumb" style="background: url('{{$user_picture}}');"></span>
 					{{ $user->first_name.' '.$user->last_name }}
 				</a>
@@ -37,8 +37,8 @@
 
 		@if(!empty($postdata->image))
 			<div class="post-img-cont">
-			<a href="uploads/{{$postdata->image}}" class="popup">
-				<img src="uploads/{{$postdata->image}}" class="post-img img-responsive">
+			<a href="{{url("uploads/$postdata->image")}}" class="popup">
+				<img src="{{url("uploads/$postdata->image")}}" class="post-img img-responsive">
 				</a>
 			</div>
 		@endif

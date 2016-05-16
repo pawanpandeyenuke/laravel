@@ -36,13 +36,13 @@
 		                                @if($fieldsData)
 											<div class="col-sm-4">
 												<div class="cat-btn-outer">
-													<a href="subforums/{{$data->id}}" title="" class="cat-btn">{{ $data->title }}</a>
+													<a href="{{url("subforums/$data->id")}}" title="" class="cat-btn">{{ $data->title }}</a>
 												</div>
 											</div>
 										@else
 											<div class="col-sm-4">
 												<div class="cat-btn-outer">
-													<a href="forumpost/{{$name}}" title="" class="cat-btn">{{ $data->title }}</a>
+													<a href="{{url("forumpost/$name")}}" title="" class="cat-btn">{{ $data->title }}</a>
 												</div>
 											</div>
 										@endif
