@@ -192,7 +192,7 @@ Route::get('home', 'HomeController@index');
 Route::get('/searchfriends',"SearchController@searchFromUsers");
 Route::post('/searchfriends',"SearchController@searchFromUsers");
 
-
+	Route::post('/contactus','SearchController@contactUs');
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
@@ -271,7 +271,9 @@ Route::group(['middleware' => 'web'], function () {
 
 	Route::get('forumpost/{name}', 'DashboardController@forumPost');
 	Route::post('forumpost', 'DashboardController@forumPost');
-
+        
+       Route::get('newpassword','SearchController@newPassword');
+	Route::post('newpassword','SearchController@newPassword');
 	Route::get('/', function(){
 		if(Auth::check())
 			return redirect()->action('DashboardController@dashboard');

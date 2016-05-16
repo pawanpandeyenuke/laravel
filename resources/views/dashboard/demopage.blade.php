@@ -7,7 +7,6 @@
 </head>
 <body >
 
-
 </body>
 
 <script type="text/javascript">
@@ -53,7 +52,6 @@
         });
   
     });
- 
 
 /*converse.initialize({
     bosh_service_url: 'https://bind.example.com',

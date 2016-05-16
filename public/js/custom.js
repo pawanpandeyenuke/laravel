@@ -164,7 +164,7 @@ $('.btn-upload-icon').find(".badge").remove();
 				var original =$('.single-post .post-data').first('p').html();		
 		        var converted = emojione.toImage(original);
 		        $('.single-post .post-data').first('p').html(converted);	
-
+			 jQuery('.btn-post').prop('disabled',false); 
 			}
 			
 		} 
@@ -270,14 +270,13 @@ $('.btn-upload-icon').find(".badge").remove();
 		var commentData = current.closest('.post-comment').find('textarea').val();
 		var commented_by = $('#user_id').val();
 		var popup = current.closest('.pop-post-comment').data('value');
-
+		current.closest('.post-comment').find('textarea').val('');
 		if(commentData == ''){
 			var nextdata = current.closest('.post-footer').find('.comment-field').text();
 			commentData = nextdata;
 		}
 
 		if(commentData){
-
 			current.prop('disabled', true);
 			$.ajax({			
 				'url' : 'ajax/comments/post',
@@ -307,8 +306,9 @@ $('.btn-upload-icon').find(".badge").remove();
 					current.parents('#AllCommentNew').find('.comment-field').text('');
 
 					if(jQuery("#pagecomment-"+feedId+" li").length > 3)
-					jQuery("#pagecomment-"+feedId+" li").first().remove();
+						jQuery("#pagecomment-"+feedId+" li").first().remove();
 					
+
 					//Dashboard emoji fix.
 					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
 				    var converted = emojione.toImage(original);
@@ -321,7 +321,7 @@ $('.btn-upload-icon').find(".badge").remove();
 							jQuery("#popupcomment-"+feedId+" li .comment-text").last().html(converted1);
 					}
 
-					current.prop('disabled', false);
+					current.prop('disabled',false);
 
 				}			
 			});	
@@ -643,9 +643,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'data' : {'user_id' : user_id,'friend_id':friend_id },
 			'success' : function(data){
 				current.parents('.tab-style-no-border').find('.active .count').html(newcount);
-				current.closest('.get_id').find('.accept').hide(200);
-				current.closest('.get_id').find('.decline').hide(200);
-				current.closest('.get_id').find('.remove').show(500);
+				current.closest('.get_id').hide(200);
 			}
 		});
 	});
@@ -680,14 +678,17 @@ $('.btn-upload-icon').find(".badge").remove();
 		var user_id=current.closest('.get_id').data('userid');
 		var friend_id=current.closest('.get_id').data('friendid');
 
+		var count = current.parents('.tab-style-no-border').find('.active .count').html();
+		var newcount = count - 1;
+
 		
 		$.ajax({
 			'url' : 'ajax/cancelrequest',
 			'type' : 'post',
 			'data' : {'user_id' : user_id,'friend_id': friend_id},
 			'success' : function(data){
-				current.closest('.get_id').find('.sent').hide(200);
-				current.closest('.get_id').find('.invite').show(500);
+				current.parents('.tab-style-no-border').find('.active .count').html(newcount);
+				current.closest('.get_id').hide(200);
 			}
 		});
 	});
@@ -754,9 +755,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'data' : {'user_id' : user_id,'friend_id':friend_id },
 			'success' : function(data){
 				current.parents('.tab-style-no-border').find('.active .count').html(newcount);
-				current.closest('.get_id').find('.accept').hide(200);
-				current.closest('.get_id').find('.decline').hide(200);
-				current.closest('.get_id').find('.msg').show(500);
+				current.closest('.get_id').hide(200);
 			}
 		});
 	});
@@ -802,9 +801,8 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'data' : {'user_id' : user_id,'friend_id':friend_id },
 			'success' : function(data){
-				current.parents('.tab-style-no-border').find('.active .count').html(newcount)
-				current.closest('.get_id').find('.remove').hide(200);
-				current.closest('.get_id').find('.msg2').show(500);
+				current.parents('.tab-style-no-border').find('.active .count').html(newcount);
+				current.closest('.get_id').hide(200);
 			}
 		});
 	});

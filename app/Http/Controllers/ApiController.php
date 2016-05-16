@@ -682,6 +682,9 @@ class ApiController extends Controller
 					$file->move('uploads', $image_name);
 
 				}
+				else{
+					$arguments['image'] = "";
+				}
 
 				$newsFeed->fill($arguments);
 				$saved = $newsFeed->push();
@@ -1773,7 +1776,7 @@ class ApiController extends Controller
 
 			//	$searchuser = DB::select("select t2.user_id, t2.friend_id, t2.status, t1.first_name, t1.last_name, t1.email, t1.picture from (SELECT * FROM `users` WHERE `first_name` like '%".$keyword."%' or `last_name` like '%".$keyword."%') as t1 join (select * from friends where user_id = ".$authuserid.") as t2 on t1.id = t2.friend_id");
 				
-				$searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name, f.status,f.friend_id FROM `users` as u left join friends as f on u.id=f.friend_id where u.id!=".$authuserid." and (u.first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
+$searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.picture, f.status,f.friend_id FROM `users` as u left join friends as f on u.id=f.friend_id where u.id!=".$authuserid." and (u.first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
 
 				//$this->data = $searchuser;
 				$this->status = 'success';

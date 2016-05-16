@@ -2,6 +2,15 @@
 
 @section('content')
 
+<style>
+	.small-text{
+		color: #717272;
+  font-size: 12px;
+  text-align: center;
+  padding: 5px 0;
+	}
+</style>
+
 <!-- Login Popup -->
 <div class="modal fade" id="LoginPop" tabindex="-1" role="dialog" aria-labelledby="LoginPopLabel">
   <div class="modal-dialog modal-sm" role="document">
@@ -64,7 +73,9 @@
 </div>
 
 <!--- Popup Login End  -->
-
+@if (Session::has('success'))
+ <div class="alert alert-success">{!! Session::get('success') !!}</div>
+ @endif
 <div class="page-data login-page">
 	<div class="container">
 		<div class="row">
@@ -95,7 +106,6 @@
 					      <img src="images/slide1.jpg" alt="">
 					    </div>
 					  </div>
-
 					  
 					</div>
 					<!-- Controls -->
@@ -128,7 +138,7 @@
 						<div class="col-sm-12">
 
 							<div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
-								<input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control icon-field" placeholder="First Name">
+								<input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control icon-field" placeholder="First Name" required>
 									
 									@if ($errors->has('first_name'))
 										<span class="help-block">
@@ -140,7 +150,7 @@
 								</div>
 
 							<div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
-									<input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control icon-field" placeholder="Last Name">
+									<input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control icon-field" placeholder="Last Name" required>
 									
 									@if ($errors->has('last_name'))
 										<span class="help-block">
@@ -153,7 +163,7 @@
 
 
 								<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-									<input type="text" name="email" value="{{ old('email') }}" class="form-control icon-field" placeholder="Email ID">
+									<input type="email" name="email" value="{{ old('email') }}" class="form-control icon-field" placeholder="Email ID" required>
 									
 									@if ($errors->has('email'))
 										<span class="help-block">
@@ -165,7 +175,7 @@
 								</div>
 
 							<div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-									<input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword">
+									<input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword" required>
 									
 									@if ($errors->has('password'))
 										<span class="help-block">
@@ -181,7 +191,7 @@
 								</div>
 
 							<div class="form-group">
-								<input type="text" class="form-control icon-field" name = "phone_no" placeholder="Mobile">
+								<input type="text" class="form-control icon-field numeric" name = "phone_no" placeholder="Mobile">
 								<span class="field-icon flaticon-smartphone-with-blank-screen"></span>
 							</div>
 
@@ -203,9 +213,17 @@
 									</ul>
 								</div>
 
+					<div class="form-groups">
+						<div class="form-group">
+                        <div class = "checkbox-cont">
+                     	<input type="checkbox" name="terms" id="terms" class="css-checkbox">
+                		<label for="terms" class="css-label" style="color: #0c0c0c" >I agree to the following<a href="{{url('terms-conditions')}}" style="color:#3ab29f "> terms and conditions</a>.</label>
+                     	</div>
+                     </div>
+						</div>
 								<div class="form-groups">
 									<div class="btn-cont text-center">
-										<input type="submit" class="btn btn-primary" value="Get Started">
+										<input type="submit" class="btn btn-primary register" value="Get Started" disabled="disabled">
 									</div>
 								</div>
 						</div>
@@ -215,7 +233,7 @@
 
 					<div class="or-divider"><span>Or</span></div>
 
-					
+				 <div class="small-text">Your social networking login details would be kept confidential.</div>					
 					<div class="social-login top-margin">
 						<ul>
 							<li><a href="{{ url('redirect/facebook') }}" class="fb"><i class="fa fa-facebook"></i></a></li>
@@ -242,41 +260,69 @@
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script> 
 <script type="text/javascript" >
-	
+
+
+$(document).on('change', '#terms', function() {
+
+    // $this will contain a reference to the checkbox   
+    if ($(this).is(':checked')) {
+        $('.register').prop('disabled',false);
+    } else {
+        $('.register').prop('disabled',true);
+    }
+});
+
+
 $("#loginform").ajaxForm(function(response) { 
 	if(response){
 
-		if(response == "These credentials do not match our records.")
-		{
-			$('.help-block').find('.errorpassword').text(response).css('color','#a94442');
-			$('.emailid').css('border-color','#333333');
-			$('.password').css('border-color','#333333');
-			$('.help-block').find('.erroremail').text("");
-		}
+							if(response == "These credentials do not match our records.")
+							{
+								$('.help-block').find('.errorpassword').text(response).css('color','#a94442');
+								$('.emailid').css('border-color','#333333');
+								$('.password').css('border-color','#333333');
+								$('.help-block').find('.erroremail').text("");
+							}
+		
+							else if(response == "success"){
+								window.location = '/dashboard';
+							}else{
+								var res = response.split(',');
 
-		else if(response == "success"){
-			window.location = '/dashboard';
-		}else{
-			var res = response.split(',');
+									if(res[0] == "email")
+									{
+									$('.help-block').find('.erroremail').text(res[1]).css('color','#a94442');
+									$('.emailid').css('border-color','#a94442');
+									$('.password').css('border-color','#333333');
+									$('.help-block').find('.errorpassword').text("");
+									}
+									if(res[0] == "password"){
+									$('.help-block').find('.erroremail').text("");
+									$('.help-block').find('.errorpassword').text(res[1]).css('color','#a94442');
+									$('.password').css('border-color','#a94442');
+									$('.emailid').css('border-color','#333333');	
+									}
+							}
+							
+							}
 
-				if(res[0] == "email")
-				{
-				$('.help-block').find('.erroremail').text(res[1]).css('color','#a94442');
-				$('.emailid').css('border-color','#a94442');
-				$('.password').css('border-color','#333333');
-				$('.help-block').find('.errorpassword').text("");
-				}
-				if(res[0] == "password"){
-				$('.help-block').find('.erroremail').text("");
-				$('.help-block').find('.errorpassword').text(res[1]).css('color','#a94442');
-				$('.password').css('border-color','#a94442');
-				$('.emailid').css('border-color','#333333');	
-				}
+});
+	//disabling texts for mobile fields
+	$(document).on('keypress','.numeric,input[type="number"]', function(evt){
+		evt = (evt) ? evt : window.event;
+		var charCode = (evt.which) ? evt.which : evt.keyCode;
+		if (charCode == 46) {
+			return true;
 		}
 		
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
 		}
-
-}); 
-
+		return true;
+	});
+	
+	$('.numeric,input[type="number"]').bind('paste drop',function(e){
+		e.preventDefault();
+	});
 
 </script>

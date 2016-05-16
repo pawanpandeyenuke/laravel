@@ -332,6 +332,7 @@ if($pgid){
                             allow_chat_pending_contacts:true,
                             send_initial_presence:true,
                             xhr_custom_status:true
+
                     });
                     //jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                     //jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
