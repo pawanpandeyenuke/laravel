@@ -7,11 +7,11 @@ use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\Edu
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
-use XmppPrebind, App\DefaultGroup;
+use App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth, Mail;
-use Intervention\Image\Image;
+use XmppPrebind;
 use \Exception;
 use App\Library\Converse, Config;
 
@@ -260,6 +260,7 @@ comments;
 		$user = User::find($user_id);
 		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
 		{
+			// print_r('$xmppPrebind');die;
 			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', 'FS', false, false);
 			$username = $user->xmpp_username;
 			$password = $user->xmpp_password;

@@ -42,6 +42,7 @@ Route::post('ajax/getfriendslist', 'AjaxController@getfriendslist');
 
 Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
 Route::get('ajax/getxmppuser', 'AjaxController@getxmppuser');
+
 Route::post('ajax/search-friend', 'AjaxController@searchfriend');
 
 Route::post('ajax/webgetlikes', 'AjaxController@webgetlikes');
@@ -272,8 +273,9 @@ Route::group(['middleware' => 'web'], function () {
 	Route::get('forumpost/{name}', 'DashboardController@forumPost');
 	Route::post('forumpost', 'DashboardController@forumPost');
         
-       Route::get('newpassword','SearchController@newPassword');
+	Route::get('newpassword','SearchController@newPassword');
 	Route::post('newpassword','SearchController@newPassword');
+
 	Route::get('/', function(){
 		if(Auth::check())
 			return redirect()->action('DashboardController@dashboard');
@@ -282,8 +284,5 @@ Route::group(['middleware' => 'web'], function () {
 	});
 
 	Route::post('/addnewforumpost','DashboardController@addNewForumPost');
-
-
-
 
 });
