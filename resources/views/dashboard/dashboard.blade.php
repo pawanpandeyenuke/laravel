@@ -295,11 +295,12 @@
 					<div id="AllCommentNew" class="post-list popup-list-without-img" style="display: none;"></div>
 					</div>
 
+					@if($feeds->count() > 1)
 			    	<div class="dashboard-load">
 				    	<span class="glyphicon glyphicon-download"></span>
 				    	<!-- <span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span> -->
 				    </div>
-
+				    @endif
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
 				</div>
 
@@ -314,31 +315,27 @@
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 <script type="text/javascript">
 	$(document).on("click",".btn-post",function(){
-					    // Opera 8.0+
-			// var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-			//     // Firefox 1.0+
-			// var isFirefox = typeof InstallTrigger !== 'undefined';
-			//     // At least Safari 3+: "[object HTMLElementConstructor]"
-			// var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-			//     // Internet Explorer 6-11
-			// var isIE = /*@cc_on!@*/false || !!document.documentMode;
-			//     // Edge 20+
-			// var isEdge = !isIE && !!window.StyleMedia;
-			//     // Blink engine detection
-			// var isBlink = (isChrome || isOpera) && !!window.CSS;
-			
-			// Chrome 1+
-			var isChrome = !!window.chrome && !!window.chrome.webstore;
-				if(isChrome!="")
-					$(this).parents('form').submit();
 
-			if($('#newsfeed').val()!="" || !($('#image-holder').is(':empty')))
-			$('.btn-post').prop('disabled',true);
-					
+		// Opera 8.0+
+		// var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+		//     // Firefox 1.0+
+		// var isFirefox = typeof InstallTrigger !== 'undefined';
+		//     // At least Safari 3+: "[object HTMLElementConstructor]"
+		// var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+		//     // Internet Explorer 6-11
+		// var isIE = /*@cc_on!@*/false || !!document.documentMode;
+		//     // Edge 20+
+		// var isEdge = !isIE && !!window.StyleMedia;
+		//     // Blink engine detection
+		// var isBlink = (isChrome || isOpera) && !!window.CSS;
+		
+		// Chrome 1+
+		var isChrome = !!window.chrome && !!window.chrome.webstore;
+			if(isChrome!="")
+				$(this).parents('form').submit();
+
+		if($('#newsfeed').val()!="" || !($('#image-holder').is(':empty')))
+		$('.btn-post').prop('disabled',true);
 	});
-
-
-
-
 </script>
 

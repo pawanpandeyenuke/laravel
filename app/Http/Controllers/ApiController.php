@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Mail;
 use App\Library\Converse;
-use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend,App\Broadcast,App\BroadcastMembers,App\BroadcastMessages;
+use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers;
 use Validator, Input, Redirect, Request, Session, Hash, DB;
@@ -151,23 +150,38 @@ class ApiController extends Controller
 				elseif( isset( $arguments['id'] ) &&  $arguments['type'] == 'linkedin' )
 					$arguments['linked_id'] = $arguments['id'];
 
-				
+				//print_r($arguments);die;
 				$controller = app()->make('App\Http\Controllers\SocialController')->socialLogin($arguments);
-				
+
+
+                                //Saving xmpp-username and xmpp-pasword into database.
+                                $xmpp_username = $controller->first_name.$controller->id;
+                                $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
+                                //print_r($userDbObj);die;
+                                $user = User::find($controller->id);
+                                $user->xmpp_username = strtolower($xmpp_username);
+                                $user->xmpp_password = $xmpp_password;
+                                $user->save();
+
+			        $converse = new Converse;
+			        $response = $converse->register($xmpp_username, $xmpp_password);
+
+				//print_r($controller);die;
+
 				if( $controller ){
 					$this->message = 'Successfully logged in';
 					$this->status = 'success';
 					$this->data = $controller;
 				}
-				
+
 			}
-			
+
 		}catch( Exception $e ){
-			
+
 			$this->message = $e->getMessage();
-			
+
 		}
-		
+
 		return $this->output();
 
 	}
@@ -1491,11 +1505,14 @@ class ApiController extends Controller
 					if(empty($groupcheck))
 						throw new Exception("Group does not exist.", 1);
 
-			$xmppusername = User::where('id',$arguments['group_by'])->value('xmpp_username');
+ 					 $xmppusername = User::where('id',$arguments['group_by'])->value('xmpp_username');
+               				 $converse = new Converse;
+                			 $response = $converse->removeUserGroup($arguments['group_name'], $xmppusername);
 
-                $converse = new Converse;
-                $response = $converse->removeUserGroup($arguments['group_name'], $xmppusername);    
-						
+					 //$xmppusername = User::where('id',$arguments['group_by'])->value('xmpp_username');
+	        		         //$converse = new Converse;
+        			         //$response = $converse->removeUserGroup($arguments['group_name'], $xmppusername);
+
 					$group = DefaultGroup::where([
 									'group_name' => $arguments['group_name'],
 									'group_by' => $arguments['group_by']
@@ -1757,12 +1774,13 @@ class ApiController extends Controller
 				if(empty($keyword))
 					throw new Exception("Keyword is required", 1);
 
-				$searchuser = DB::select("select t2.user_id, t2.friend_id, t2.status, t1.first_name, t1.last_name, t1.email, t1.picture from (SELECT * FROM `users` WHERE `first_name` like '%".$keyword."%' or `last_name` like '%".$keyword."%') as t1 join (select * from friends where user_id = ".$authuserid.") as t2 on t1.id= t2.friend_id");
+			//	$searchuser = DB::select("select t2.user_id, t2.friend_id, t2.status, t1.first_name, t1.last_name, t1.email, t1.picture from (SELECT * FROM `users` WHERE `first_name` like '%".$keyword."%' or `last_name` like '%".$keyword."%') as t1 join (select * from friends where user_id = ".$authuserid.") as t2 on t1.id = t2.friend_id");
+				
+$searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.picture, f.status,f.friend_id FROM `users` as u left join friends as f on u.id=f.friend_id where u.id!=".$authuserid." and (u.first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
 
-				// echo '<pre>';print_r($searchuser);die;
-
-				$this->data = $searchuser;
+				//$this->data = $searchuser;
 				$this->status = 'success';
+				$this->data = $searchuser;
 				$this->message = count($searchuser).' users found.';
 
 			}else{
@@ -1776,73 +1794,80 @@ class ApiController extends Controller
 		return $this->output();
 
 	}
-	
+
+
+	/*
+	 * Return Non Existing Email Ids. 
+	 */
+	public function returnNonExistingEmails()
+	{
+		try{
+			$arguments = Request::get('emails');
+
+			// User's email check
+			$nonExistingUsers = [];
+			foreach ($arguments as $key => $email) {
+				$userEmailCheck = User::where('email', $email)->get();
+				if($userEmailCheck->isEmpty()){
+					$nonExistingUsers[] = $email;
+				}
+			}
+
+			$this->status = 'success';			
+			$this->message = count($nonExistingUsers).' Users found.';
+			$this->data = $nonExistingUsers;
+			// echo '<pre>';print_r($arguments);die;
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+	}	
+
+
 	/*
 	 * Invitation by Email. 
 	 */
 	public function inviteByEmail()
 	{
 		try{
-				$arguments = Request::all();
+			$arguments = Request::all();
 			if($arguments){
 
-					$user = User::find($arguments['user_id']);
+				$user = User::find($arguments['user_id']);
+				$emailsArray = $arguments['emails'];
 
-					if(empty($user))
-						throw new Exception("User does not exist", 1);
+				if(empty($user))
+					throw new Exception("User does not exist", 1);
 
-					if(empty($arguments['email_id']))
-						throw new Exception("Atleast one email id is required", 1);
+				if(empty($emailsArray))
+					throw new Exception("Atleast one email id is required", 1);
 
-				if($arguments['email_id'])
-				{
-						    foreach ($arguments['email_id'] as $key => $value) {
+				if($emailsArray){
+					foreach ($emailsArray as $key => $value) {
 
-		                     $validator=null;
-		               		 $validator = Validator::make($arguments['email_id'], [
-		                     $key => 'required|email'
-		                	]); 
-		               $validator->each($key, ['required', 'email']);
-		               
-		              if($validator->fails()) {
-		               	throw new Exception("Please check email addresses entered and try again.", 1);
-		                }else{
+						$validator=null;
+						$validator = Validator::make($emailsArray, [
+							$key => 'required|email'
+						]); 
+						$validator->each($key, ['required', 'email']);
+								               
+						if($validator->fails()) {
+							throw new Exception("Please check email address entered and try again.", 1);
+						}else{
+							foreach ($emailsArray as $value) {
+								if($value != User::where('id',$arguments['user_id'])->pluck('email')){
+									$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
+									self::mail($value, $message, 'Invitation', 'Friend',$arguments['user_id']); 
+								}
+							}
+						}
+					}
+					
+					$this->status = "success";
+					$this->message = "Invitation emails sent successfully!";
+					$this->data = true;
 
-		                	$existingUser = array();
-                			$nonExistingUser = array();
-
-                		foreach ($arguments['email_id'] as $value) {                
-                    		if($value != User::where('id',$arguments['user_id'])->pluck('email')){
-                        	$userData = User::where('email', '=', $value)->pluck('id');
-                        	if($userData != null)
-                            	$existingUser[] = $value;
-                        	else
-                        	{  
-                            	$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
-                            	self::mail($value, $message, 'Invitation', 'Friend',$arguments['user_id']);
-                       		 }
-                    		}
-                		   }
-
-                		 $friends = array();
-                		foreach ($existingUser as $value) {
-                    	
-                    	$id = User::where('email', '=', $value)->pluck('first_name','id')->toArray();
-                    	$frienddata = Friend::where('user_id', '=', $arguments['user_id'])
-                                        ->where('friend_id', '=', array_keys($id)[0])
-                                        ->where('status', '=', 'Accepted')
-                                        ->get()
-                                        ->toArray();
-
-                    		if(empty($frienddata)){
-                        		$message = 'Please add me on FriendzSquare!';
-                        		self::mail($value, $message, 'Friend Request', array_values($id)[0],$arguments['user_id']);
-                    		}
-                		 }
-                			$this->message = "Invitation emails sent successfully!";
-                			$this->data = true;
-		                }
-		            }
 				}
 			}
 		}
@@ -1988,12 +2013,12 @@ class ApiController extends Controller
 		);
 
         if($email != ''){
-		Mail::send('emails.invite', $data, function($message) use($email, $subject) {
-		$message->from('no-reply@friendzsquare.com', 'Friend Square');
-		$message->to($email)->subject($subject);
-	});
+			Mail::send('emails.invite', $data, function($message) use($email, $subject) {
+				$message->from('no-reply@friendzsquare.com', 'Friend Square');
+				$message->to($email)->subject($subject);
+			});
         }
     }
-	
+
 
 }

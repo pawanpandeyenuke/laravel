@@ -2,20 +2,32 @@
 
 return [
 	
-	'google_client_id' => '401736044025-5jdpu98eqgvb1h0g60s21u6o5sofb9e3.apps.googleusercontent.com',
+	'google_client_id' => '497778402485-835j9ckhljhi7ppvesjbir5sllcb7ljo.apps.googleusercontent.com',
 
-	'google_client_secret' => 'wUWM9ObLfOZVkR7-nXQvtb6V',
+	'google_client_secret' => 'kEb4tZE4YXHN_1A9tVNRR-65',
 
-	'google_client_id' => 'http://fs.yiipro.com/google/client/callback',
-
+	'google_redirect_uri' => url('/').'/google/client/callback',
+	
 	// Hotmail Credentials
-	'client_id' => '0000000044183F60',
+	'client_id' => '0000000040194135',
 
-	'redirect_uri' => 'http://fs.yiipro.com/hotmail/client/callback',
+	'redirect_uri' => url('/').'/hotmail/client/callback',
 
 	// Facebook Credentials
 	'appId' => '254486034889306',
-// echo $this->exchange = Config::get('constants.appId');die;
+
+	// IOS Push Notification Variables
+	'passphrase' => '',
+
+	'ios_pem_file_url' => 'FriendzSquareAPNS.pem',
+
+	// 'development_certificate' => 'ios-pem/FriendzSquareDevPush.pem',
+
+	// Android Push Notification Variables
+	'API_ACCESS_KEY'=>'AIzaSyBV19WPze6Icm3RITDLEbPieXalcoM7wEw',
+
+	// Xmpp-prebind
+	'xmpp_host_Url'=>'friendzsquare.com',
 ]
 
 ?>

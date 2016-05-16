@@ -35,8 +35,8 @@
 						<div class="col-sm-6">
 							<div class="search-field">
 							{!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
-								<input type="text" name="searchfriends" value="" placeholder="Enter Name" class="form-control">
-								<button type="submit" class="btn btn-primary btn-srch-top search-btn">Search Friends</button>
+								<input type="text" name="searchfriends" id="searchfriends" value="" placeholder="Enter Name" class="form-control">
+								<button type="submit" class="btn btn-primary btn-srch-top search-btn search" disabled>Search Friends</button>
 									{!! Form::close() !!}
 							</div>
 						</div>
@@ -53,7 +53,7 @@
 				<div class="dashboard-header-menu text-right">
 					<ul class="list-inline">
 						<li class="user-info-top">
-							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : '/images/user-thumb.jpg'; ?>
+							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : '/images/user-icon.png'; ?>
 							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
 							{{Auth::User()->first_name}}</a>
 						</li>
@@ -68,7 +68,15 @@
 	@yield('content')
 
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
-
+<script type="text/javascript">
+$(document).on('keyup','#searchfriends',function(){
+			
+				if($('#searchfriends').val() != "")
+					$('.search').prop('disabled',false);
+				else
+					$('.search').prop('disabled',true);		
+				});
+</script>
 </body>
 </html>
 

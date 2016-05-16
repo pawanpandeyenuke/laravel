@@ -74,6 +74,7 @@ class AuthController extends Controller
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+	    'phone_no' => $data['phone_no'],
         ]);
         $xmpp_username = $userdata->first_name.$userdata->id;
         $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);

@@ -10,6 +10,15 @@
 	}
 </style>
 
+<style>
+	.small-text{
+		color: #717272;
+  font-size: 12px;
+  text-align: center;
+  padding: 5px 0;
+	}
+</style>
+
 <!-- Login Popup -->
 <div class="modal fade" id="LoginPop" tabindex="-1" role="dialog" aria-labelledby="LoginPopLabel">
   <div class="modal-dialog modal-sm" role="document">
@@ -229,7 +238,7 @@
 					</div>
        </form>
 					<div class="or-divider"><span>Or</span></div>
-					<div class="small-text">Your social networking login details would be kept confidential.</div>
+				 <div class="small-text">Your social networking login details would be kept confidential.</div>					
 					<div class="social-login top-margin">
 						<ul>
 							<li><a href="{{ url('redirect/facebook') }}" class="fb"><i class="fa fa-facebook"></i></a></li>

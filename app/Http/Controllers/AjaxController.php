@@ -13,7 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Feed, Auth, Mail;
 use Intervention\Image\Image;
 use \Exception;
-use App\Library\Converse;
+use App\Library\Converse, Config;
 
 class AjaxController extends Controller
 {
@@ -31,7 +31,10 @@ class AjaxController extends Controller
 			$log = false;
 
 		$user = new User();
-
+		if(isset($arguments['log']))
+			$log = true;
+		else
+			$log = false;
 		$validator = Validator::make($arguments, 
 							['email' => 'required|email',
 							'password' => 'required'],
@@ -257,13 +260,12 @@ comments;
 
 		$status=0;
 		$user_id = Auth::User()->id;
-		$node = config('app.xmppHost');
+		$node = Config::get('constants.xmpp_host_Url');
 
 		$user = User::find($user_id);
-		
 		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
 		{
-			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', '', false, false);
+			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', 'FS', false, false);
 			$username = $user->xmpp_username;
 			$password = $user->xmpp_password;
 			$xmppPrebind->connect($username, $password);
@@ -272,9 +274,10 @@ comments;
 			$status = 1;
 		}
 
-		$sessionInfo['status']=$status;	  
-		echo json_encode($sessionInfo); 
-		exit;
+		// $sessionInfo['status']=$status;	  
+		// echo json_encode($sessionInfo); 
+		// exit;
+		return $sessionInfo;
  	}
 
 
@@ -1104,11 +1107,24 @@ comments;
             	$valid[] = $value;
 				$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
 				$subject = 'FriendzSquare Invitation';
-				
-				//$mailsent = mail($value, $subject, $message);
-			 Mail::raw($message,function ($m)  use($value, $subject){
+
+		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
+
+		$data = array(
+			'message' => $message,
+			'subject' => $subject,
+			'id' => Auth::User()->id,
+			//'type' => $type,
+			'username' => $username,
+		);
+
+/*			 Mail::raw($message,function ($m)  use($value, $subject){
                 	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
                     	$m->to($value,"Friend")->subject($subject);
+*/
+			Mail::send('emails.invite', $data, function($message) use($value, $subject) {
+			$message->from('no-reply@friendzsquare.com', 'Friend Square');
+			$message->to($value)->subject($subject);
                 });
 			}
 

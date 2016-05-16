@@ -101,7 +101,7 @@ class SearchController extends Controller
         if($email != ''){
         Mail::send('emails.suggestion', $data, function($message) use($email, $subject) {
         $message->from($email, 'User Feedback');
-        $message->to('suggestions@friendzsquare.com')->subject($subject);
+        $message->to('adi490162@gmail.com')->subject($subject);
     });
         }
     }
@@ -112,9 +112,9 @@ class SearchController extends Controller
         return view('auth.passwords.newpassword');
     }
 
+
     public function termsConditions()
     {
         return view('terms-conditions');
     }
-
 }

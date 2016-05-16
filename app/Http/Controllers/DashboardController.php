@@ -1031,15 +1031,57 @@ if($input!=null && $gname!=null)
 
     public function addNewForumPost()
     {
-      if(Request::isMethod('post')){
-        $input = Request::all();
-       // print_r($input);die;
-        DB::table('forums_post')
-            ->insert(['title'=>$input['topic'],
-                    'owner_id'=>Auth::User()->id,
-                    'category_id'=>$input['category_id']]);
-            return redirect('forums');
+        if(Request::isMethod('post')){
+            $input = Request::all();
+            // print_r($input);die;
+            DB::table('forums_post')
+                ->insert(['title'=>$input['topic'],
+                        'owner_id'=>Auth::User()->id,
+                        'category_id'=>$input['category_id']]);
+                return redirect('forums');
+        }
     }
+
+
+    /*
+     * @return Response For Push Notification In IOS
+     */
+    public function pushNotificationIphone()
+    {   
+        $data = array(
+            'message' => "this is message",
+            'token' => 'cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262'
+        );
+        
+        $msg = 'Message not delivered';   
+        
+        if(iphonePushNotification($data))
+            $msg='Message successfully delivered';  
+
+        return $msg;
+    }
+
+
+    /*
+     * @return Response For Push Notification In Android
+     */
+    public function pushNotificationAndroid()
+    {   
+        $data=array('registration_ids'=>array( 'APA91bGsmuvwZ8N0Fhc8JflH_t3agUK_MNQn6mZEvgkBw2hb2_P9yrnLOSAjgtk_vUgj50In5xAvPD5NH4J-gm_MrGYf9JpPJ7qPKo6e9cUa7tdHXEseSaw' ),
+            'data'=>array(
+                            'message'   => 'Here is a message from Mayank123',
+                            'title'     => 'From: Mayank123',
+                            'subtitle'  => 'My-subtitle',
+                            'tickerText'    => 'My tickerText',
+                            'vibrate'   => 1,
+                            'sound'     => 1,
+                            'largeIcon' => 'large_icon',
+                            'smallIcon' => 'small_icon'
+                        ));
+        $msg='Message not delivered';   
+        
+        if(androidPushNotification($data)) $msg='Message successfully delivered';
+        return $msg;
     }
 
    

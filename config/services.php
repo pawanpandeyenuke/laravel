@@ -36,27 +36,27 @@ return [
     ],
 
 	'facebook' => [
-		'client_id' => '147417315641264',
-		'client_secret' => '796d800b177429195b9994152301c82f',
-		'redirect' => 'http://fs.yiipro.com/callback/facebook',
+    		'client_id' => '147417315641264',
+    		'client_secret' => '796d800b177429195b9994152301c82f',
+    		'redirect' => url('/').'/callback/facebook',
 	],
  
 	'twitter' => [
-		'client_id' => 'yjJPO9ogaQBbQl127IBJS5bCV',
-		'client_secret' => 'RMkAeOC47JWFS9d7zSDBCXgdN1InVEiTYdHCrdjsnmlYock8aX',
-		'redirect' => 'http://fs.yiipro.com/callback/twitter',
+            'client_id' => 'tu7f4c1WegVX2UzybYkHbKQnu',
+            'client_secret' => 'pavx5Ies5YtKSFL675hsyBKPXdvTtILmd6jS3lSe8k6JJdsfTC',
+            'redirect' => url('/').'/callback/twitter',
 	],
     
 	'google' => [
-		'client_id' => '875545827153-ogtrtj4m0610tr7qc6ujrsbs98mq6fln.apps.googleusercontent.com',
-		'client_secret' => 'QbW-lrmDMk8ZeVK0eJV9XB2v',
-		'redirect' => 'http://fs.yiipro.com/callback/google',
+            'client_id' => '497778402485-761fpbrmt0vucml85gk7be49c8fpmi7b.apps.googleusercontent.com',
+            'client_secret' => 'edvSDQiJBSwgsgPSmems9RnA',
+            'redirect' => url('/').'/callback/google',
 	],
     
 	'linkedin' => [
-		'client_id' => '75kno0ahk9abe7',
-		'client_secret' => '4c3Cjv0urMvDVWqa',
-		'redirect' => 'http://fs.yiipro.com/callback/linkedin',
+    		'client_id' => '75kno0ahk9abe7',
+    		'client_secret' => '4c3Cjv0urMvDVWqa',
+    		'redirect' => url('/').'/callback/linkedin', 
 	],
     
 
