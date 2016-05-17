@@ -113,6 +113,8 @@ class Converse{
 //		 $result=@exec("sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userto."@".$node." '".$msg."'");
 
 $result2 = @exec("sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userto."@".$node." '".$subject."' '".$msg."'");
+
+$result2 = @exec("sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userfrom."@".$node." '".$subject."' '".$msg."'");
 //echo $result2;exit;
 	}
 
