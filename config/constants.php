@@ -6,12 +6,12 @@ return [
 
 	'google_client_secret' => 'kEb4tZE4YXHN_1A9tVNRR-65',
 
-	'google_redirect_uri' => url('/').'/google/client/callback',
-	
+	'google_redirect_uri' => 'http://www.friendzsquare.com/google/client/callback', 
+
 	// Hotmail Credentials
 	'client_id' => '0000000040194135',
 
-	'redirect_uri' => url('/').'/hotmail/client/callback',
+	'redirect_uri' => 'http://www.friendzsquare.com/hotmail/client/callback',
 
 	// Facebook Credentials
 	'appId' => '254486034889306',

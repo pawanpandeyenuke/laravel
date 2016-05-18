@@ -1074,8 +1074,7 @@ class ApiController extends Controller
 		
 	}
 
-
-	/*
+		/*
 	 * Accept friend request.
 	 */
 	public function acceptRequest()
@@ -1095,19 +1094,30 @@ class ApiController extends Controller
 			$friendcheck = Friend::where('user_id', '=', $arguments['friend_id'])
 							->where('friend_id', '=', $arguments['user_id'])
 							->where('status', '=', 'Pending')
-							->get();
-			
-			if( !empty($friendcheck)){
+							->get()
+							->toArray();
+
+			$friendcheck2 = Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->where('status', '=', 'Pending')
+							->get()
+							->toArray();
+			//print_r($friendcheck2);die;
+			if(!empty($friendcheck2)){
+				throw new Exception("You can't accept request", 1);
+			}
+				
+			if(!empty($friendcheck)){
 
 				DB::table('friends')
-					->where('user_id', '=', $arguments['user_id'])
-					->where('friend_id', '=', $arguments['friend_id'])
+					->where('user_id', '=', $arguments['friend_id'])
+					->where('friend_id', '=', $arguments['user_id'])
 					->update(['status' => 'Accepted']);
 
 				$friend = new Friend;
 				$friend->status = 'Accepted';
-				$friend->friend_id = $arguments['user_id'];
-				$friend->user_id = $arguments['friend_id'];
+				$friend->friend_id = $arguments['friend_id'];
+				$friend->user_id = $arguments['user_id'];
 				$request = $friend->save();
 
 				$this->data = $request;
@@ -1119,11 +1129,11 @@ class ApiController extends Controller
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
-
-		return $this->output();
-		
+		return $this->output();	
 	}
 
+
+	
 
 	/*
 	 * Decline friend request.
@@ -1855,6 +1865,7 @@ $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.pict
 						if($validator->fails()) {
 							throw new Exception("Please check email address entered and try again.", 1);
 						}else{
+//print_r($emailsArray);die;
 							foreach ($emailsArray as $value) {
 								if($value != User::where('id',$arguments['user_id'])->pluck('email')){
 									$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
@@ -2002,12 +2013,14 @@ $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.pict
 
 	public function mail($email = '', $message, $subject, $type,$userid) {
   
-	$username = User::where('id',$userid)->pluck('first_name').' '.User::where('id',$userid)->pluck('last_name');
-
+	//$username = User::where('id',$userid)->pluck('first_name').' '.User::where('id',$userid)->pluck('last_name');
+	$userdata = User::find($userid);
+	$username = $userdata->first_name.' '.$userdata->last_name;
+	//print_r($username);die;
 	$data = array(
 			'message' => $message,
 			'subject' => $subject,
-			'id' => Auth::User()->id,
+			'id' => $userid,
 			'type' => $type,
 			'username' => $username,
 		);
