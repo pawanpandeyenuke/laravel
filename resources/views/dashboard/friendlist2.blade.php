@@ -12,7 +12,7 @@
 			$name = $data['first_name'].' '.$data['last_name'];
 
 	?>
-	<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="{{$id1}}">
+	<li  class="get_id flist" data-userid="{{$data['id']}}" data-friendid="{{$id1}}">
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="user-cont">
@@ -33,10 +33,10 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 			?>
 				<div class="row">
 					<div class="col-sm-6">
-						<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Accept</button>
+						<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Confirm</button>
 					</div>
 					<div class="col-sm-6">
-						<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Decline</button>
+						<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Delete</button>
 					</div>
 
 					<span class="btn btn-default btn-full msg" id='msg' style="display: none;">Request Rejected</span>
@@ -51,8 +51,8 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 			<?php }elseif($status2 == 'Pending'){ 
 			?>
 				<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent">Cancel Request</button>
-							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent">Undo</button>
+							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
 				</div>
 
 			<?php }elseif($status1=='Accepted' || $status2=='Accepted'){ 
@@ -63,22 +63,22 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 				<?php }elseif($status2=='Rejected'){ 
 					?>
 					<div class="text-right">
-						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Re-Send</button>
+						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Add Friend</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
-							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
+							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
 				</div>
 
 					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null)){
 
 					?>	
 					<div class="text-right">
-						<button type="button" class="btn btn-primary btn-full invite" id='invite'>Add as a friend</button>
+						<button type="button" class="btn btn-primary btn-full invite" id='invite'>Add Friend</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
-						<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
+						<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
 					</div>
 
 				<?php } ?>
@@ -108,7 +108,7 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 		if(!(($data['user_id']==Auth::User()->id && $data['status']=="Accepted")||($data['friend_id']==Auth::User()->id && $data['status']=='Rejected')))
 		{
 	?>
-	<li  class="get_id" data-userid="{{$data['user']['id']}}" data-friendid="{{$data['friends']['id']}}">
+	<li  class="get_id flist" data-userid="{{$data['user']['id']}}" data-friendid="{{$data['friends']['id']}}">
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="user-cont">
@@ -125,10 +125,10 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 			?>
 				<div class="row">
 					<div class="col-sm-6">
-						<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Accept</button>
+						<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Confirm</button>
 					</div>
 					<div class="col-sm-6">
-						<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Decline</button>
+						<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Delete</button>
 					</div>
 
 					<span class="btn btn-default btn-full msg" id='msg' style="display: none;">Request Rejected</span>
@@ -143,8 +143,8 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 			<?php }elseif(($data['status'] == 'Pending') && ($data['user_id'] == Auth::User()->id)){ 
 			?>
 				<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent">Cancel Request</button>
-						<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent">Undo</button>
+						<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
 				</div>
 
 			<?php }elseif(($data['status'] == 'Accepted') && ($data['user_id'] == Auth::User()->id) || ($data['friend_id'] == Auth::User()->id)){ 
@@ -155,11 +155,11 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 				<?php }elseif(($data['status'] == 'Rejected') && ($data['user_id'] == Auth::User()->id)){ 
 					?>
 					<div class="text-right">
-						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Re-Send</button>
+						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Add Friend</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
-							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
+							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
 				</div>
 					<?php }?>
 			

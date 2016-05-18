@@ -174,6 +174,9 @@ Route::post('api/search-user','ApiController@searchSiteFriends');
 Route::post('api/invite-email','ApiController@inviteByEmail');
 Route::post('api/non-existing-emails','ApiController@returnNonExistingEmails');
 
+Route::post('api/get-job-category','ApiController@getJobCategories');
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes

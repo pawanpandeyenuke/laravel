@@ -5,7 +5,7 @@ use Mail;
 use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
 use App\Http\Controllers\Controller;
-use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers;
+use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory;
 use Validator, Input, Redirect, Request, Session, Hash, DB;
 use \Exception;
 
@@ -1898,6 +1898,26 @@ class ApiController extends Controller
 
 		return $this->output();
 	}	
+
+
+	/*
+	 * Get Job Area Category.
+	 */
+	public function getJobCategories()
+	{
+		// print_r('$categories');die;
+		$categories = JobArea::with('getJobCategories')->get()->toArray();
+
+		foreach($categories as $key => $val)
+		{
+			foreach($val['get_job_categories'] as $key1 => $val1) {
+				$this->data[$val['job_area']][] = $val1['name'];
+			}
+		}
+		$this->status = 'success';
+		$this->message = null;
+		return $this->output();
+	}
 
 
 	/*

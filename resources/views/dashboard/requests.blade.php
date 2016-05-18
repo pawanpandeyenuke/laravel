@@ -35,14 +35,14 @@
 						    	<!-- <a class="friendstabs" data-reqtype="all" data-name="All" data-toggle="tab" role="tab" aria-controls="All" href="#All">All Users</a> -->
 						    <!-- </li> -->
 						       <li role="presentation">
-						    	<a class="friendstabs" data-reqtype="recieved" data-name="Recieved" data-toggle="tab" role="tab" aria-controls="Recieved" href="#Recieved">Recieved (<span class = "count">{{$recievedcount}}</span>)</a>
+						    	<a class="friendstabs recievecount" data-reqtype="recieved" data-name="Recieved" data-toggle="tab" role="tab" aria-controls="Recieved" href="#Recieved">Recieved (<span class = "count">{{$recievedcount}}</span>)</a>
 						    </li>
 						    <li role="presentation">
-						    	<a class="friendstabs" data-reqtype="sent" data-name="Sent" data-toggle="tab" role="tab" aria-controls="Send" href="#Send">Sent (<span class = "count">{{$sentcount}}</span>)</a>
+						    	<a class="friendstabs sentcount" data-reqtype="sent" data-name="Sent" data-toggle="tab" role="tab" aria-controls="Send" href="#Send">Sent (<span class = "count">{{$sentcount}}</span>)</a>
 						    </li>
 						 
 						    <li role="presentation">
-						    	<a class="friendstabs" data-reqtype="current" data-name="Current" data-toggle="tab" role="tab" aria-controls="Current" href="#Current">Friends (<span class = "count">{{$friendscount}}</span>)</a>
+						    	<a class="friendstabs friendcount" data-reqtype="current" data-name="Current" data-toggle="tab" role="tab" aria-controls="Current" href="#Current">Friends (<span class = "count">{{$friendscount}}</span>)</a>
 						    </li>
 						  </ul>
 
@@ -66,7 +66,7 @@
 								$user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : 'images/user-thumb.jpg';
 							 $id1=Auth::User()->id; 
 							 ?>
-							<li  class="get_id" data-userid="{{$data['user']['id']}}" data-friendid="{{$id1}}">
+							<li  class="get_id flist" data-userid="{{$data['user']['id']}}" data-friendid="{{$id1}}">
 								<div class="row">
 								<div class="col-sm-6">
 									<div class="user-cont">
@@ -79,10 +79,10 @@
 								<div class="col-sm-6">
 								<div class="row">
 									<div class="col-sm-6">
-										<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Accept</button>
+										<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Confirm</button>
 									</div>
 									<div class="col-sm-6">
-										<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Decline</button>
+										<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Delete</button>
 									</div>
 
 									<span class="btn btn-default btn-full msg" disabled="disabled" id='msg' style="display: none;">Request Rejected</span>
@@ -118,16 +118,15 @@
 										    </div>
 									    </div>
 
-					    				<div id="Send" class="tab-pane" data-value="sent" data-pageid="2" role="tabpanel">
+					    			<div id="Send" class="tab-pane" data-value="sent" data-pageid="2" role="tabpanel">
 					    				 <div class="page-title req-search">
-							  <div class="search-box">
-							<input type="text" placeholder="Search" class="form-control searchtabtext">
-							<button data-reqtype="sent" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
-						</div>
-						</div>
+										    <div class="search-box">
+												<input type="text" placeholder="Search" class="form-control searchtabtext">
+												<button data-reqtype="sent" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
+											</div>
+										</div>
 											<ul>
-
-											</ul>
+										    </ul>
 									    	<div class="load-btn load-more-friend">
 										    	<span class="loading-text">View more</span>
 										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>

@@ -99,26 +99,22 @@
 			?>
 				<div class="row">
 					<div class="col-sm-6">
-						<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Accept</button>
+						<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Confirm</button>
 					</div>
 					<div class="col-sm-6">
-						<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Decline</button>
+						<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Delete</button>
 					</div>
-
-					<span class="spanmsg1 btn-full msg" id='msg' style="display: none;">Request Rejected</span>
-
-					<span class="spanmsg1 btn-full msg2" id='msg2' style="display: none;">Friend Removed</span>
-
-					<div class="text-right">
-
+					<div class="col-sm-12">
 					<button class="btn btn-default btn-full remove abc" type="button" id="remove" style="display: none;">Remove</button>
+					<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
+					<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
 				</div>
 				</div>
 			<?php }elseif($status2 == 'Pending'){ 
 			?>
 				<div class="text-right">
-					<button class="spanmsg btn-full sent" type="button" id="sent">Cancel Request</button>
-							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
+					<button class="spanmsg btn-full sent" type="button" id="sent">Undo</button>
+							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
 				</div>
 
 				
@@ -126,21 +122,23 @@
 			?>
 				<div class="text-right">
 					<button class="btn btn-default btn-full remove abc" type="button" id="remove">Remove</button>
+						<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
+					<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
 				</div>
 				<?php }elseif($status2=='Rejected'){ 
 					?>
 					<div class="text-right">
-						<button type="button" class="btn btn-primary btn-full resend"  id='resend'>Re-Send</button>
-							<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
-							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add as a friend</button>
+						<button type="button" class="btn btn-primary btn-full resend"  id='resend'>Add Friend</button>
+							<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
+							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
 					</div>	
 
 					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null)){
 
 					?>	
 					<div class="text-right">
-						<button type="button" class="btn btn-primary btn-full invite" id='invite'>Add as a friend</button>
-						<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Cancel Request</button>
+						<button type="button" class="btn btn-primary btn-full invite" id='invite'>Add Friend</button>
+						<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
 					</div>
 				<?php } ?>
 			</div>
@@ -151,107 +149,48 @@
 @else
 
 
-						<ul class="counting">
+					<ul class="counting">
 														
-@foreach($model1 as $data) 
-	<?php 
-
-	$user_picture = !empty($data['picture']) ? $data['picture'] : 'images/user-thumb.jpg';
-	//$id1=Auth::User()->id;
+				@foreach($model1 as $data) 
+	<?php
+			$user_picture = !empty($data['picture']) ? $data['picture'] : 'images/user-thumb.jpg';
 			$name = $data['first_name'].' '.$data['last_name'];
-		
 	?>
-	<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="">
-		<div class="row">
-			<div class="col-sm-6">
-				<div class="user-cont">
-					<a title="" href="profile/{{$data['id']}}">
-						<span style="background: url('{{$user_picture}}');" class="user-thumb"></span>
-					{{ $name }}
-					</a>
-				</div>
-			</div>
-			<div class="col-sm-6">
-		
-					<div class="text-right">
-						<a href="{{url('/register')}}" class="btn btn-primary btn-full invite" id='invite'>Add as a friend</a>
-					</div>
-			</div>
-		</div>
-	</li>
-	@endforeach
-</ul>
-@endif
-
+				<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="">
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="user-cont">
+								<a title="" href="profile/{{$data['id']}}">
+									<span style="background: url('{{$user_picture}}');" class="user-thumb"></span>
+											{{ $name }}
+											</a>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="text-right">
+												<a href="{{url('/register')}}" class="btn btn-primary btn-full invite" id='invite'>Add Friend</a>
+										</div>
+									</div>
+								</div>
+							</li>
+					@endforeach
+				</ul>
+				@endif
 											<?php	
 												if($count > 10)
 												{
-													$class = "load-more-all";
-													$text  = "View More";
-												}
-												else
-												{
-												if($count == 0)	
-													$text = "No results";
-												else
-													$text ="No more results";
-													
-													$class = "";	
-												}
 											 ?>
 
- 										<div class="load-btn {{$class}}" data-key="{{$keyword}}">
-											    	<span class="loading-text">{{$text}}</span>
+ 										<div class="load-btn load-more-all" data-key="{{$keyword}}">
+											    	<span class="loading-text">View More</span>
 											    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
 											    </div>
+											<?php } ?>
 
 							  			</div>
-					    				<div id="Send" class="tab-pane" data-value="sent" data-pageid="2" role="tabpanel">
-					    				 <div class="page-title req-search">
-							  <div class="search-box">
-							<input type="text" placeholder="Search" class="form-control searchtabtext">
-							<button data-reqtype="sent" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
-						</div>
-						</div>
-											<ul>
-
-											</ul>
-									    	<div class="load-btn load-more-friend">
-										    	<span class="loading-text">View more</span>
-										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
-										    </div>
-					    				</div>
-									    <div id="Recieved" class="tab-pane" data-value="recieved" data-pageid="2" role="tabpanel">
-									    <div class="page-title req-search">
-							  <div class="search-box">
-							<input type="text" placeholder="Search" class="form-control searchtabtext">
-							<button data-reqtype="recieved" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
-						</div>
-						</div>
-											<ul>
-
-											</ul>
-									    	<div class="load-btn load-more-friend">
-										    	<span class="loading-text">View more</span>
-										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
-										    </div>
-									    </div>
-									    <div id="Current" class="tab-pane" data-value="current" data-pageid="2" role="tabpanel">
-									    <div class="page-title req-search">
-							  <div class="search-box">
-							<input type="text" placeholder="Search" class="form-control searchtabtext">
-							<button data-reqtype="current" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
-						</div>
-						</div>
-											<ul>
-
-											</ul>
-											
-									    	<div class="load-btn {{$class}}">
-											    	<span class="loading-text">{{$text}}</span>
-											    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
-											    </div>
-									    </div>
+					    		
+						
+						
 
 								    </div>
 						  		</div>						    
