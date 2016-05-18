@@ -40,7 +40,7 @@ Route::post('ajax/post/get', 'AjaxController@getPostBox');
 
 Route::post('ajax/getfriendslist', 'AjaxController@getfriendslist');
 
-Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
+// Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
 Route::get('ajax/getxmppuser', 'AjaxController@getxmppuser');
 
 Route::post('ajax/search-friend', 'AjaxController@searchfriend');
@@ -184,16 +184,21 @@ Route::post('api/non-existing-emails','ApiController@returnNonExistingEmails');
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-	
-Route::get('/redirect/{provider}', 'SocialController@redirect');
-Route::get('/callback/{provider}', 'SocialController@callback');
+	Route::get('test', function()
+	{
+    dd(Config::get('mail'));
+	});
+	Route::get('/redirect/{provider}', 'SocialController@redirect');
+	Route::get('/callback/{provider}', 'SocialController@callback');
 
-Route::get('home', 'HomeController@index');
+	Route::get('home', 'HomeController@index');
 
-Route::get('/searchfriends',"SearchController@searchFromUsers");
-Route::post('/searchfriends',"SearchController@searchFromUsers");
+	Route::get('/searchfriends',"SearchController@searchFromUsers");
+	Route::post('/searchfriends',"SearchController@searchFromUsers");
+
 
 	Route::post('/contactus','SearchController@contactUs');
+
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
@@ -272,10 +277,13 @@ Route::group(['middleware' => 'web'], function () {
 
 	Route::get('forumpost/{name}', 'DashboardController@forumPost');
 	Route::post('forumpost', 'DashboardController@forumPost');
-        
+ 
 	Route::get('newpassword','SearchController@newPassword');
 	Route::post('newpassword','SearchController@newPassword');
 
+	Route::get('terms-conditions','SearchController@termsConditions');
+	Route::post('terms-conditions','SearchController@termsConditions');
+ 
 	Route::get('/', function(){
 		if(Auth::check())
 			return redirect()->action('DashboardController@dashboard');

@@ -657,7 +657,7 @@ class ApiController extends Controller
 	{
 		try{
 			$arguments = Request::all();
-
+			//print_r($arguments);die;
  			$validator = Validator::make($arguments, [
 	 						'id' => 'required|numeric',
 	 					]); 
@@ -1760,14 +1760,9 @@ class ApiController extends Controller
 	{
 		try{
 			$arguments = Request::all();
-			$authuserid = $arguments['user_id'];
+			
 			// echo $authuserid;die;
 			if($arguments){
-
-				$user = User::find($arguments['user_id']);
-
-				if(empty($user))
-					throw new Exception("User does not exist", 1);
 				
 				$keyword = $arguments['keyword'];
 
@@ -1775,8 +1770,22 @@ class ApiController extends Controller
 					throw new Exception("Keyword is required", 1);
 
 			//	$searchuser = DB::select("select t2.user_id, t2.friend_id, t2.status, t1.first_name, t1.last_name, t1.email, t1.picture from (SELECT * FROM `users` WHERE `first_name` like '%".$keyword."%' or `last_name` like '%".$keyword."%') as t1 join (select * from friends where user_id = ".$authuserid.") as t2 on t1.id = t2.friend_id");
-				
-$searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.picture, f.status,f.friend_id FROM `users` as u left join friends as f on u.id=f.friend_id where u.id!=".$authuserid." and (u.first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
+			
+
+			//Useful Query	
+			// $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.picture, f.status,f.friend_id FROM `users` as u left join friends as f on u.id=f.friend_id where u.id!=".$authuserid." and (u.first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
+
+				$per_page = $arguments['page_size'];
+				$page = $arguments['page'];
+				$offset = ($page - 1) * $per_page;
+
+				$searchuser = User::where('first_name', 'LIKE', '%'.$keyword.'%')
+							->orWhere('last_name', 'LIKE', '%'.$keyword.'%')
+							->skip($offset)
+							->take($per_page)
+							->select('first_name', 'last_name', 'email', 'xmpp_username')
+							->get()
+							->toArray();
 
 				//$this->data = $searchuser;
 				$this->status = 'success';
@@ -1784,7 +1793,7 @@ $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.pict
 				$this->message = count($searchuser).' users found.';
 
 			}else{
-				throw new Exception("Keyword and user id are required", 1);
+				throw new Exception("Keyword is required", 1);
 				
 			}
 		}catch(Exception $e){

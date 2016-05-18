@@ -158,7 +158,7 @@
 									@if($data['image'])
 										<div class="post-img-cont">
 											<a href="{{ url('uploads/'.$data['image']) }}" class="popup">
-											<img src="{{ url('uploads/'.$data['image']) }}" class="post-img img-responsive">
+											<img src="{{ url('uploads/'.$data['image']) }}" class="post-img">
 											</a>
 										</div>
 									@endif
@@ -315,6 +315,7 @@
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 <script type="text/javascript">
 	$(document).on("click",".btn-post",function(){
+
 		// Opera 8.0+
 		// var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
 		//     // Firefox 1.0+

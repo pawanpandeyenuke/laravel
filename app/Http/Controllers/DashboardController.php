@@ -485,6 +485,8 @@ if($input!=null && $gname!=null)
     {
 
         $user = User::where('id', $id)->get()->first();
+        if($user == null)
+            return redirect('/');
         $education = EducationDetails::where('user_id', $id)->get();
                     
         // echo '<pre>';print_r($education);die;
@@ -1084,5 +1086,6 @@ if($input!=null && $gname!=null)
         return $msg;
     }
 
+   
 
 }

@@ -10,7 +10,16 @@
 <link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/style.css')}}" rel="stylesheet">
 <link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
+  ga('create', 'UA-77777490-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 </head>
 	<body>
 		<header>
@@ -25,8 +34,8 @@
 						<div class="col-sm-6">
 							<div class="search-field">
 								{!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
-								<input type="text" name="searchfriends" value="" placeholder="Enter Name" class="form-control">
-								<button type="submit" class="btn btn-primary btn-srch-top search-btn">Search Friends</button>
+								<input type="text" name="searchfriends" id="searchfriends" value="" placeholder="Enter Name" class="form-control">
+								<button type="submit" class="btn btn-primary btn-srch-top search-btn search" disabled>Search Friends</button>
 									{!! Form::close() !!}
 							</div>
 						</div>
@@ -88,6 +97,14 @@
 		<script src="http://malsup.github.com/jquery.form.js"></script> 
 		{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 		<script type="text/javascript" >
+
+			$(document).on('keyup','#searchfriends',function(){
+			
+				if($('#searchfriends').val() != "")
+					$('.search').prop('disabled',false);
+				else
+					$('.search').prop('disabled',true);		
+				});
 
 		$("#suggestionform").ajaxForm(function(response) {
 			if(response == "success")

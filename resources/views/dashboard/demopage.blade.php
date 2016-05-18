@@ -1,9 +1,9 @@
 <!doctype html>
 <html>
 <head>
-<link href="/demo_converse.min.css" rel="stylesheet" type="text/css" media="screen" >
+<link href="/converselib/demo_converse.min.css" rel="stylesheet" type="text/css" media="screen" >
 <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="/demo_converse.nojquery.min.js"></script>
+<script type="text/javascript" src="/converselib/converse.js"></script>
 </head>
 <body >
 
