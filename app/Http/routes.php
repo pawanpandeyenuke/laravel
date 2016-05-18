@@ -40,8 +40,9 @@ Route::post('ajax/post/get', 'AjaxController@getPostBox');
 
 Route::post('ajax/getfriendslist', 'AjaxController@getfriendslist');
 
-Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
+// Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
 Route::get('ajax/getxmppuser', 'AjaxController@getxmppuser');
+
 Route::post('ajax/search-friend', 'AjaxController@searchfriend');
 
 Route::post('ajax/webgetlikes', 'AjaxController@webgetlikes');
@@ -173,6 +174,9 @@ Route::post('api/search-user','ApiController@searchSiteFriends');
 Route::post('api/invite-email','ApiController@inviteByEmail');
 Route::post('api/non-existing-emails','ApiController@returnNonExistingEmails');
 
+Route::post('api/get-job-category','ApiController@getJobCategories');
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -276,14 +280,13 @@ Route::group(['middleware' => 'web'], function () {
 
 	Route::get('forumpost/{name}', 'DashboardController@forumPost');
 	Route::post('forumpost', 'DashboardController@forumPost');
-
-
+ 
 	Route::get('newpassword','SearchController@newPassword');
 	Route::post('newpassword','SearchController@newPassword');
 
 	Route::get('terms-conditions','SearchController@termsConditions');
 	Route::post('terms-conditions','SearchController@termsConditions');
-
+ 
 	Route::get('/', function(){
 		if(Auth::check())
 			return redirect()->action('DashboardController@dashboard');
@@ -292,8 +295,5 @@ Route::group(['middleware' => 'web'], function () {
 	});
 
 	Route::post('/addnewforumpost','DashboardController@addNewForumPost');
-
-
-
 
 });

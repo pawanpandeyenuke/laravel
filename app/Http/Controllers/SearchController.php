@@ -12,54 +12,51 @@ class SearchController extends Controller
     
      public function searchFromUsers()
     {
-
         if(Request::isMethod('post')){
+
             $input = Request::all();
             $name = $input['searchfriends'];
-            if($name == ""){
-              return redirect('/');
-            }
+
+            if($name == "")
+                return redirect('/');
+
             if(Auth::Check())
-            {
-            $model1 = User::where('id','!=',Auth::User()->id)
-                            ->where(function($query) use ($name){
-                                $query->where('first_name','LIKE','%'. $name.'%');
-                                 $query->orWhere('last_name','LIKE','%'. $name.'%');
-                                })      
-                            ->orderBy('id','desc')
-                            ->get()
-                            ->toArray();
-                
 
-            $count = User::where('id','!=',Auth::User()->id)
-                          ->where(function($query) use ($name){
-                                $query->where('first_name','LIKE','%'. $name.'%');
-                                $query->orWhere('last_name','LIKE','%'. $name.'%');
-                                })      
-                            ->orderBy('id','desc')
-                            ->get()
-                            ->count();
-                      $auth = 1;
+            {   
+                $auth = 1;
+                $pregMatch = preg_match('/\s/',$name); 
+
+                if($pregMatch){
+                    $name = explode(' ', $name);
+                    $fname = $name[0];
+                    $lname = $name[1];
+                    $result = self::searchUsersFromSite($auth, $fname, $lname);
+                }else{
+                    $result = self::searchUsersFromSite($auth, $name);
+                }
+
+                $model1 = $result->toArray(); 
+                $count = $result->count();
+                $auth = 1;
+
+            }else{
+                $auth = 0;
+                $pregMatch = preg_match('/\s/',$name); 
+
+                if($pregMatch){
+                    $name = explode(' ', $name);
+                    $fname = $name[0];
+                    $lname = $name[1];
+                    $result = self::searchUsersFromSite($auth, $fname, $lname);
+                }else{
+                    $result = self::searchUsersFromSite($auth, $name);
+                }
+                // echo '<pre>';print_r($result->toArray());die;
+                $model1 = $result->toArray(); 
+                $count = $result->count();
+                $auth = 0;
              }
-             else
-             {
-             	   $model1 = User::where('first_name','LIKE','%'. $name.'%')
-								->orWhere('last_name','LIKE','%'. $name.'%')      
-								->take(10)
-								->orderBy('id','desc')
-								->get()
-								->toArray();
-		            
 
-            	$count = User::where('first_name','LIKE','%'. $name.'%')
-							->orWhere('last_name','LIKE','%'. $name.'%')      
-							->take(10)
-							->orderBy('id','desc')
-							->get()
-							->count();
-
-							$auth = 0;
-             }
         return view('dashboard.allusers')
                 ->with('model1',$model1)
                 ->with('count',$count)
@@ -67,9 +64,50 @@ class SearchController extends Controller
                 ->with('auth',$auth);    
         
         }
-
         
     }
+
+
+    public function searchUsersFromSite($auth, $firstname, $lastname = ''){
+
+        if($auth){
+            if( !empty( $firstname ) && !empty( $lastname ) ) {
+                return User::where('id','!=',Auth::User()->id)
+                        ->where(function($query) use ( $firstname, $lastname ){
+                            $query->where('first_name','LIKE','%'. $firstname.'%');
+                            $query->orWhere('last_name','LIKE','%'. $lastname.'%');
+                        })
+                        ->orderBy('id','desc')
+                        ->get();
+            }elseif( !empty($firstname ) ) {
+                return User::where('id','!=',Auth::User()->id)
+                        ->where(function($query) use ( $firstname ){
+                            $query->where('first_name','LIKE','%'. $firstname.'%');
+                            $query->orWhere('last_name','LIKE','%'. $firstname.'%');
+                        })
+                        ->orderBy('id','desc')
+                        ->get();
+            }
+        }else{
+            if( !empty( $firstname ) && !empty( $lastname ) ) {
+                return User::where(function($query) use ( $firstname, $lastname ){
+                            $query->where('first_name','LIKE','%'. $firstname.'%');
+                            $query->orWhere('last_name','LIKE','%'. $lastname.'%');
+                        })
+                        ->orderBy('id','desc')
+                        ->get();
+            }elseif( !empty($firstname ) ) {
+                return User::where(function($query) use ( $firstname ){
+                            $query->where('first_name','LIKE','%'. $firstname.'%');
+                            $query->orWhere('last_name','LIKE','%'. $firstname.'%');
+                        })
+                        ->orderBy('id','desc')
+                        ->get();
+            }
+        }
+
+    }
+
 
     public function contactUs()
     {

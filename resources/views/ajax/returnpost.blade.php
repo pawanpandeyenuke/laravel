@@ -38,7 +38,7 @@
 		@if(!empty($postdata->image))
 			<div class="post-img-cont">
 			<a href="{{url("uploads/$postdata->image")}}" class="popup">
-				<img src="{{url("uploads/$postdata->image")}}" class="post-img img-responsive">
+				<img src="{{url("uploads/$postdata->image")}}" class="post-img">
 				</a>
 			</div>
 		@endif

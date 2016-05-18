@@ -5,7 +5,7 @@ use Mail;
 use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
 use App\Http\Controllers\Controller;
-use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers;
+use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory;
 use Validator, Input, Redirect, Request, Session, Hash, DB;
 use \Exception;
 
@@ -1074,8 +1074,7 @@ class ApiController extends Controller
 		
 	}
 
-
-	/*
+		/*
 	 * Accept friend request.
 	 */
 	public function acceptRequest()
@@ -1130,11 +1129,11 @@ class ApiController extends Controller
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
-
-		return $this->output();
-		
+		return $this->output();	
 	}
 
+
+	
 
 	/*
 	 * Decline friend request.
@@ -1771,14 +1770,9 @@ class ApiController extends Controller
 	{
 		try{
 			$arguments = Request::all();
-			$authuserid = $arguments['user_id'];
+			
 			// echo $authuserid;die;
 			if($arguments){
-
-				$user = User::find($arguments['user_id']);
-
-				if(empty($user))
-					throw new Exception("User does not exist", 1);
 				
 				$keyword = $arguments['keyword'];
 
@@ -1786,8 +1780,22 @@ class ApiController extends Controller
 					throw new Exception("Keyword is required", 1);
 
 			//	$searchuser = DB::select("select t2.user_id, t2.friend_id, t2.status, t1.first_name, t1.last_name, t1.email, t1.picture from (SELECT * FROM `users` WHERE `first_name` like '%".$keyword."%' or `last_name` like '%".$keyword."%') as t1 join (select * from friends where user_id = ".$authuserid.") as t2 on t1.id = t2.friend_id");
-				
-$searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.picture, f.status,f.friend_id FROM `users` as u left join friends as f on u.id=f.friend_id where u.id!=".$authuserid." and (u.first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
+			
+
+			//Useful Query	
+			// $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.picture, f.status,f.friend_id FROM `users` as u left join friends as f on u.id=f.friend_id where u.id!=".$authuserid." and (u.first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
+
+				$per_page = $arguments['page_size'];
+				$page = $arguments['page'];
+				$offset = ($page - 1) * $per_page;
+
+				$searchuser = User::where('first_name', 'LIKE', '%'.$keyword.'%')
+							->orWhere('last_name', 'LIKE', '%'.$keyword.'%')
+							->skip($offset)
+							->take($per_page)
+							->select('first_name', 'last_name', 'email', 'xmpp_username')
+							->get()
+							->toArray();
 
 				//$this->data = $searchuser;
 				$this->status = 'success';
@@ -1795,7 +1803,7 @@ $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.pict
 				$this->message = count($searchuser).' users found.';
 
 			}else{
-				throw new Exception("Keyword and user id are required", 1);
+				throw new Exception("Keyword is required", 1);
 				
 			}
 		}catch(Exception $e){
@@ -1866,6 +1874,7 @@ $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.pict
 						if($validator->fails()) {
 							throw new Exception("Please check email address entered and try again.", 1);
 						}else{
+//print_r($emailsArray);die;
 							foreach ($emailsArray as $value) {
 								if($value != User::where('id',$arguments['user_id'])->pluck('email')){
 									$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
@@ -1889,6 +1898,26 @@ $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.pict
 
 		return $this->output();
 	}	
+
+
+	/*
+	 * Get Job Area Category.
+	 */
+	public function getJobCategories()
+	{
+		// print_r('$categories');die;
+		$categories = JobArea::with('getJobCategories')->get()->toArray();
+
+		foreach($categories as $key => $val)
+		{
+			foreach($val['get_job_categories'] as $key1 => $val1) {
+				$this->data[$val['job_area']][] = $val1['name'];
+			}
+		}
+		$this->status = 'success';
+		$this->message = null;
+		return $this->output();
+	}
 
 
 	/*
@@ -2013,12 +2042,14 @@ $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.pict
 
 	public function mail($email = '', $message, $subject, $type,$userid) {
   
-	$username = User::where('id',$userid)->pluck('first_name').' '.User::where('id',$userid)->pluck('last_name');
-
+	//$username = User::where('id',$userid)->pluck('first_name').' '.User::where('id',$userid)->pluck('last_name');
+	$userdata = User::find($userid);
+	$username = $userdata->first_name.' '.$userdata->last_name;
+	//print_r($username);die;
 	$data = array(
 			'message' => $message,
 			'subject' => $subject,
-			'id' => Auth::User()->id,
+			'id' => $userid,
 			'type' => $type,
 			'username' => $username,
 		);

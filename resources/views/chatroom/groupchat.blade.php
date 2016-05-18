@@ -1,5 +1,34 @@
 @extends('layouts.chat')
 
+<style>
+.flyout.box-flyout {
+  width: 100% !important;
+}
+.chat-message {
+  word-break: break-all;
+}
+#conversejs .chat-title {
+  margin: 0 !important;
+}
+.chat-message.pic-me .chat-message-content::after, #conversejs .chat-message.pic-them .chat-message-content::after {
+  border-bottom: 6px solid transparent;
+  border-left: 10px solid #ddd;
+  border-top: 6px solid transparent;
+  content: "";
+  display: block;
+  position: absolute;
+  right: -9px;
+  top: 0;
+}
+.toggle-otr.unencrypted{
+  display: none !important;
+}
+#conversejs .icon-happy:before {
+  font-size: 25px;
+  color: #A5A4A4;
+}
+</style>
+
 @section('content')
 <?php 
 $groupid=$groupname;
@@ -247,7 +276,7 @@ if($pgid){
 <link href="{{url('/converse/converse.min.css')}}" rel="stylesheet" type="text/css" media="screen" >
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script type="text/javascript" src="{{url('/converse/jquery.form.js')}}"></script>
-<script type="text/javascript" src="{{url('/demo_converse.nojquery.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/converselib/demo_converse.nojquery.min.js')}}"></script>
 <!-- <script type="text/javascript" src="{{url('/converse/converse.nojquery.min.js')}}"></script> -->
 <script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 

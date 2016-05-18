@@ -7,11 +7,11 @@
     "require": {
        "php": ">=5.5.9",
        "laravel/framework": "5.2.*",
-	   "laravelcollective/html": "5.2.*",
+       "laravelcollective/html": "5.2.*",
        "laravel/socialite": "^2.0",
-	   "intervention/image": "^2.3",
        "google/apiclient": "1.0.*@beta",
-       "guzzlehttp/guzzle": "~5.3|~6.0"
+       "guzzlehttp/guzzle": "~5.3|~6.0",
+       "intervention/image": "^2.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -22,7 +22,8 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database",
+	    "vendor/xmpp-prebind/"
         ],
         "files": [
             "app/helpers.php"

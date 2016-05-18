@@ -74,7 +74,7 @@ class AuthController extends Controller
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-	    'phone_no' => $data['phone_no'],
+	        'phone_no' => $data['phone_no'],
         ]);
         $xmpp_username = $userdata->first_name.$userdata->id;
         $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
@@ -91,7 +91,10 @@ class AuthController extends Controller
         DB::table('settings')->insert(['setting_title'=>'friend-request','setting_value'=>'All','user_id'=>$userdata->id]);
         $converse = new Converse;
         $response = $converse->register($xmpp_username, $xmpp_password);
-     
+        
+
+        $vcard = $converse->setVcard($xmpp_username, $user->picture);
+        // echo '<pre>';print_r($vcard);die;
         return $userdata;
     }
 
