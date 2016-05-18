@@ -1095,19 +1095,30 @@ class ApiController extends Controller
 			$friendcheck = Friend::where('user_id', '=', $arguments['friend_id'])
 							->where('friend_id', '=', $arguments['user_id'])
 							->where('status', '=', 'Pending')
-							->get();
-			
-			if( !empty($friendcheck)){
+							->get()
+							->toArray();
+
+			$friendcheck2 = Friend::where('user_id', '=', $arguments['user_id'])
+							->where('friend_id', '=', $arguments['friend_id'])
+							->where('status', '=', 'Pending')
+							->get()
+							->toArray();
+			//print_r($friendcheck2);die;
+			if(!empty($friendcheck2)){
+				throw new Exception("You can't accept request", 1);
+			}
+				
+			if(!empty($friendcheck)){
 
 				DB::table('friends')
-					->where('user_id', '=', $arguments['user_id'])
-					->where('friend_id', '=', $arguments['friend_id'])
+					->where('user_id', '=', $arguments['friend_id'])
+					->where('friend_id', '=', $arguments['user_id'])
 					->update(['status' => 'Accepted']);
 
 				$friend = new Friend;
 				$friend->status = 'Accepted';
-				$friend->friend_id = $arguments['user_id'];
-				$friend->user_id = $arguments['friend_id'];
+				$friend->friend_id = $arguments['friend_id'];
+				$friend->user_id = $arguments['user_id'];
 				$request = $friend->save();
 
 				$this->data = $request;

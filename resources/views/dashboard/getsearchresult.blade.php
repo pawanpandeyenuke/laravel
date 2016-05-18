@@ -32,10 +32,10 @@ $count=0;
 			?>
 				<div class="row">
 					<div class="col-sm-6">
-						<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Accept</button>
+						<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Confirm</button>
 					</div>
 					<div class="col-sm-6">
-						<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Decline</button>
+						<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Delete</button>
 					</div>
 
 					<span class="btn btn-default btn-full msg" id='msg' style="display: none;">Request Rejected</span>
@@ -60,7 +60,7 @@ $count=0;
 				<?php }elseif($status2=='Rejected'){ 
 					?>
 					<div class="text-right">
-						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Re-Send</button>
+						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Add Friend</button>
 					</div>
 					<div class="text-right">
 					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>
@@ -70,7 +70,7 @@ $count=0;
 
 					?>	
 					<div class="text-right">
-						<button type="button" class="btn btn-primary btn-full invite" id='invite'>Add as a friend</button>
+						<button type="button" class="btn btn-primary btn-full invite" id='invite'>Add Friend</button>
 					</div>
 					<div class="text-right">
 					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>

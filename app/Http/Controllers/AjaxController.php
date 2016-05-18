@@ -266,6 +266,7 @@ comments;
 		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
 		{
 			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', 'FS', false, false);
+			//print_r($xmppPrebind);die;
 			$username = $user->xmpp_username;
 			$password = $user->xmpp_password;
 			$xmppPrebind->connect($username, $password);
@@ -323,14 +324,16 @@ comments;
 
 			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
 				    self::queryBuilder( $query, $input );
-					})->take(10)->get()->toArray();
-			$count = Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
-				    self::queryBuilder( $query, $input );
-					})->get()->count();
+					})->take(10)->get();
+		$count = $model->count();
+		$model = $model->toArray();
 		}
-		echo $count;
+		//echo $count;
 
-		return view('dashboard.getfriendslist')->with('model',$model)->with('model1',$model1);
+		return view('dashboard.getfriendslist')
+					->with('model',$model)
+					->with('model1',$model1)
+					->with('count',$count);
  
 	}
 
@@ -633,13 +636,13 @@ comments;
 	
 		Friend::where(['friend_id'=>$input['friend_id']])
 				->where(['user_id'=>$input['user_id']])
-				->update(['status'=>'Rejected']); 
+				->where(['status'=>'Accepted'])
+				->delete(); 
 
 		Friend::where(['friend_id'=>$input['user_id']])
 				->where(['user_id'=>$input['friend_id']])
-				->update(['status'=>'Rejected']);      
-
-		Friend::where(['friend_id'=>$input['user_id']])->where(['status'=>'Rejected'])->delete();
+				->where(['status'=>'Accepted'])
+				->delete();      
 		
 	}
 
@@ -956,7 +959,9 @@ comments;
 		}else{
 			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $type ) {
 							self::queryBuilder( $query, $type );
-						})->get()->toArray();
+						})->get();
+			$count = $model->count();
+			$model = $model->toArray();
 		}
 
 		if($model!=null){
@@ -973,7 +978,10 @@ comments;
 			}
 		}
 		//print_r($model2);die;
-		return view('dashboard.friendlist2')->with('model',$model2)->with('model1',$model1);
+		return view('dashboard.friendlist2')
+					->with('model',$model2)
+					->with('model1',$model1)
+					->with('count',$count);
 	}
 
 /**

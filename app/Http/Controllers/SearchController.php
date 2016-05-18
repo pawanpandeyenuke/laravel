@@ -26,7 +26,6 @@ class SearchController extends Controller
                                 $query->where('first_name','LIKE','%'. $name.'%');
                                  $query->orWhere('last_name','LIKE','%'. $name.'%');
                                 })      
-                            ->take(10)
                             ->orderBy('id','desc')
                             ->get()
                             ->toArray();
@@ -37,7 +36,6 @@ class SearchController extends Controller
                                 $query->where('first_name','LIKE','%'. $name.'%');
                                 $query->orWhere('last_name','LIKE','%'. $name.'%');
                                 })      
-                          ->take(10)
                             ->orderBy('id','desc')
                             ->get()
                             ->count();

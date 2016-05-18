@@ -387,10 +387,15 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'success' : function(response){
 				//alert(response);
-				var count = response.split('<',1);
-				var response = response.replace(count+"<","<");
+				//var count = response.split('<',1);
+				//var response = response.replace(count+"<","<");
 				pageid=2;
+				var itemcount = parseInt(current.closest('.tab-style-no-border').find('.active .count').html());
 
+				if(itemcount <= 10)
+				{
+					current.closest('.tab-style-no-border').find('.active .load-btn').remove();	
+				}
 				current.closest('.tab-style-no-border').find('.active').find('.load-btn').addClass('load-more-friend');
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('View More');
 				if(response != '')
@@ -400,7 +405,7 @@ $('.btn-upload-icon').find(".badge").remove();
 					}
 					else
 					var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html("");	
-				current.find('.count').html(count);
+				current.find('.count').html(itemcount);
 				}
 				if(response=='' || response == 0)
 				{
@@ -639,16 +644,22 @@ $('.btn-upload-icon').find(".badge").remove();
 		var user_id=current.closest('.get_id').data('userid');
 		var friend_id=current.closest('.get_id').data('friendid');
 		
-		var count = current.parents('.tab-style-no-border').find('.active .count').html();
-		var newcount = count - 1;
+		var recievecount = parseInt($('.recievecount').find('.count').html());
+		var newrecievecount = recievecount - 1;
+		var friendcount = parseInt($('.friendcount').find('.count').html());
+		var newfriendcount = friendcount + 1;
 		
 		$.ajax({
 			'url' : '/ajax/accept',
 			'type' : 'post',
 			'data' : {'user_id' : user_id,'friend_id':friend_id },
 			'success' : function(data){
-				current.parents('.tab-style-no-border').find('.active .count').html(newcount);
-				current.closest('.get_id').hide(200);
+				$('.recievecount').find('.count').html(newrecievecount);
+				$('.friendcount').find('.count').html(newfriendcount);
+				current.closest('.get_id').find('.accept').hide(200);
+				current.closest('.get_id').find('.decline').hide(200);
+				current.closest('.get_id').find('.remove').show(200);
+				current.closest('.flist').hide(200);
 			}
 		});
 	});
@@ -693,7 +704,9 @@ $('.btn-upload-icon').find(".badge").remove();
 			'data' : {'user_id' : user_id,'friend_id': friend_id},
 			'success' : function(data){
 				current.parents('.tab-style-no-border').find('.active .count').html(newcount);
-				current.closest('.get_id').hide(200);
+				current.closest('.get_id').find('.invite').show(200);
+				current.closest('.get_id').find('.sent').hide(500);
+				current.closest('.flist').hide(200);
 			}
 		});
 	});
@@ -751,7 +764,10 @@ $('.btn-upload-icon').find(".badge").remove();
 		var user_id=current.closest('.get_id').data('userid');
 		var friend_id=current.closest('.get_id').data('friendid');
 		
-		var count = current.parents('.tab-style-no-border').find('.active .count').html();
+		var recievecount = parseInt($('.recievecount').find('.count').html());
+		var newrecievecount = recievecount - 1;
+
+		var count = parseInt(current.parents('.tab-style-no-border').find('.active .count').html());
 		var newcount = count - 1;
 
 		$.ajax({
@@ -760,7 +776,11 @@ $('.btn-upload-icon').find(".badge").remove();
 			'data' : {'user_id' : user_id,'friend_id':friend_id },
 			'success' : function(data){
 				current.parents('.tab-style-no-border').find('.active .count').html(newcount);
-				current.closest('.get_id').hide(200);
+				$('.recievecount').find('.count').html(newrecievecount);
+				current.closest('.get_id').find('.accept').hide(200);
+				current.closest('.get_id').find('.decline').hide(200);
+				current.closest('.get_id').find('.invite').show(200);
+				current.closest('.flist').hide(200);
 			}
 		});
 	});
@@ -807,7 +827,10 @@ $('.btn-upload-icon').find(".badge").remove();
 			'data' : {'user_id' : user_id,'friend_id':friend_id },
 			'success' : function(data){
 				current.parents('.tab-style-no-border').find('.active .count').html(newcount);
-				current.closest('.get_id').hide(200);
+				current.closest('.get_id').find('.remove').hide(200);
+				current.closest('.text-right').find('.invite').show(200);
+				current.closest('.col-sm-12').find('.invite').show(200);
+				current.closest('.flist').hide(200);
 			}
 		});
 	});
