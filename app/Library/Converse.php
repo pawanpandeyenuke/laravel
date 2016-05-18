@@ -105,19 +105,31 @@ class Converse{
 
 		$subject = "Broadcast Subject";
 
-//		$userto = $userto.'@'.$node;
-//		print_r($userfrom.'@'.$node);die;
-		//$msg=str_replace(" ","_",$msg);
-		 //$msg = ['type'=>'text','message'=>$msg];
-        	// $enmsg = json_encode($msg);
-//		 $result=@exec("sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userto."@".$node." '".$msg."'");
+		/*$userto = $userto.'@'.$node;
+		print_r($userfrom.'@'.$node);die;
+		$msg=str_replace(" ","_",$msg);
+		$msg = ['type'=>'text','message'=>$msg];
+		$enmsg = json_encode($msg);
+		$result=@exec("sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userto."@".$node." '".$msg."'");*/
 
-$result2 = @exec("sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userto."@".$node." '".$subject."' '".$msg."'");
-
-$result2 = @exec("sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userfrom."@".$node." '".$subject."' '".$msg."'");
-//echo $result2;exit;
+		$result2 = @exec("sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userto."@".$node." '".$subject."' '".$msg."'");
+		//echo $result2;exit;
 	}
 
+
+	/**
+	*   Set users vCard.
+	*
+	**/
+	public static function setVcard($username, $fieldValue){
+
+		$node = Config::get('constants.xmpp_host_Url');
+		$fieldName = 'image';
+		$fieldValue = base64_encode ( $fieldValue );
+
+		return @exec('sudo ejabberdctl set-vcard '.$username.' '.$node.' '.$fieldName.' "'.$fieldValue.'" 2>&1', $output, $status);
+
+	}
 }
 
 

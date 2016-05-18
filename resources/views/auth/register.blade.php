@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+	.small-text{
+		color: #717272;
+  font-size: 12px;
+  text-align: center;
+  padding: 5px 0;
+	}
+</style>
 
 <style>
 	.small-text{
@@ -228,11 +236,8 @@
 								</div>
 						</div>
 					</div>
-
-                    </form>
-
+       </form>
 					<div class="or-divider"><span>Or</span></div>
-
 				 <div class="small-text">Your social networking login details would be kept confidential.</div>					
 					<div class="social-login top-margin">
 						<ul>
@@ -242,6 +247,7 @@
 							<li><a href="{{ url('redirect/linkedin') }}" class="lin"><i class="fa fa-linkedin"></i></a></li>
 						</ul>
 					</div><!--/social login-->
+
 				</div>
 			</div>
 		</div>

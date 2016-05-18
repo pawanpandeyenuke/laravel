@@ -48,7 +48,7 @@
 							@endforeach
 							</div>
 							<div class="add-blist text-center">
-								<a href="broadcast-add" title="" class="add-blist-btn"><i class="fa fa-plus"></i></a>
+								<a href="{{url('broadcast-add')}}" title="" class="add-blist-btn"><i class="fa fa-plus"></i></a>
 							</div>
 						</div>
 					</div>

@@ -1,5 +1,34 @@
 @extends('layouts.chat')
 
+<style>
+.flyout.box-flyout {
+  width: 100% !important;
+}
+.chat-message {
+  word-break: break-all;
+}
+#conversejs .chat-title {
+  margin: 0 !important;
+}
+.chat-message.pic-me .chat-message-content::after, #conversejs .chat-message.pic-them .chat-message-content::after {
+  border-bottom: 6px solid transparent;
+  border-left: 10px solid #ddd;
+  border-top: 6px solid transparent;
+  content: "";
+  display: block;
+  position: absolute;
+  right: -9px;
+  top: 0;
+}
+.toggle-otr.unencrypted{
+  display: none !important;
+}
+#conversejs .icon-happy:before {
+  font-size: 25px;
+  color: #A5A4A4;
+}
+</style>
+
 @section('content')
 <?php 
 $groupid=$groupname;
@@ -169,7 +198,10 @@ if($pgid){
 
                         $privategroupname=$data['title'];
                         $privategroupid=strtolower($privategroupname);
-                        $privategroupid=str_replace(" ","_",$privategroupid); 
+                        $privategroupid=str_replace(" ","_",$privategroupid);
+                         
+                        $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
+			
                             $namestr='';
                             $name=array();
                             $count=0;
@@ -191,8 +223,8 @@ if($pgid){
                             ?>
                                
                                         <li>                           
-                                                <a href="#" class="chat-user-outer"  title="" onclick="openChatGroup(<?php echo "'".$privategroupname."', '".$privategroupid."'"?>);">
-                                                <span class="chat-thumb" style="background: url('/images/user-thumb.jpg');"></span>
+                                                <a href="{{url("private-group-detail/".$data['id'])}}" class="chat-user-outer"  title="" >
+                                                <span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
                                                 <span class="title">
                                                     {{$data['title']}} 
                                                 </span>
@@ -244,7 +276,8 @@ if($pgid){
 <link href="{{url('/converse/converse.min.css')}}" rel="stylesheet" type="text/css" media="screen" >
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script type="text/javascript" src="{{url('/converse/jquery.form.js')}}"></script>
-<script type="text/javascript" src="{{url('/converse/converse.nojquery.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/converselib/demo_converse.nojquery.min.js')}}"></script>
+<!-- <script type="text/javascript" src="{{url('/converse/converse.nojquery.min.js')}}"></script> -->
 <script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 
 
@@ -282,7 +315,25 @@ if($pgid){
 
     jQuery(document).ready(function(){
 
-        jQuery.ajax({
+      require(['converse'], function (converse) {
+        
+                conObj=converse;
+                converse.initialize({                           
+                  prebind: true,
+                  bosh_service_url: '//friendzsquare.com:5280/http-bind',
+                  keepalive: true,
+                  jid: 'two308@friendzsquare.com',
+                  authentication: 'prebind',
+                  prebind_url: "{{url('/ajax/getxmppuser')}}",
+                  allow_logout: false,
+                  debug: false ,
+                  //message_carbons: true,
+                  send_initial_presence:true,
+                });
+           });
+
+
+/*        jQuery.ajax({
             'url' : "{{url('/ajax/getxmppuser')}}",
             'type' : 'post',
             'dataType':'json',
@@ -310,9 +361,10 @@ if($pgid){
                             auto_join_on_invite:true,
                             roster_groups:true,
                             allow_logout: false,
-  			    send_initial_presence:true,
                             allow_chat_pending_contacts:true,
-			    xhr_custom_status:true
+                            send_initial_presence:true,
+                            xhr_custom_status:true
+
                     });
                     //jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                     //jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
@@ -340,7 +392,7 @@ if($pgid){
                 }
 
             }
-        });
+        });*/
 
 
     // Send image over chat.

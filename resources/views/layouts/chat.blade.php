@@ -19,7 +19,16 @@
 <link href="{{url('/css/style.css')}}" rel="stylesheet">
 <link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
 
-<!-- <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script> -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77777490-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 </head>
 
 <body class="dashboard">
@@ -35,8 +44,8 @@
 						<div class="col-sm-6">
 							<div class="search-field">
 							{!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
-								<input type="text" name="searchfriends" value="" placeholder="Enter Name" class="form-control">
-								<button type="submit" class="btn btn-primary btn-srch-top search-btn">Search Friends</button>
+								<input type="text" name="searchfriends" id="searchfriends" value="" placeholder="Enter Name" class="form-control">
+								<button type="submit" class="btn btn-primary btn-srch-top search-btn search" disabled>Search Friends</button>
 									{!! Form::close() !!}
 							</div>
 						</div>
@@ -53,7 +62,7 @@
 				<div class="dashboard-header-menu text-right">
 					<ul class="list-inline">
 						<li class="user-info-top">
-							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : '/images/user-thumb.jpg'; ?>
+							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : '/images/user-icon.png'; ?>
 							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
 							{{Auth::User()->first_name}}</a>
 						</li>
@@ -68,7 +77,15 @@
 	@yield('content')
 
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
-
+<script type="text/javascript">
+$(document).on('keyup','#searchfriends',function(){
+			
+				if($('#searchfriends').val() != "")
+					$('.search').prop('disabled',false);
+				else
+					$('.search').prop('disabled',true);		
+				});
+</script>
 </body>
 </html>
 

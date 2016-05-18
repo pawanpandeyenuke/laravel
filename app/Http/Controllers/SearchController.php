@@ -113,4 +113,8 @@ class SearchController extends Controller
     }
 
 
+    public function termsConditions()
+    {
+        return view('terms-conditions');
+    }
 }

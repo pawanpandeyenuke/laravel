@@ -36,6 +36,9 @@
 					</div>
 	
 						<div class="tab-style-no-border">
+@if (Session::has('success'))
+		<div class="alert alert-success">{!! Session::get('success') !!}</div>
+	@endif
 
 					  <!-- Nav tabs -->
 						  <!-- <ul role="tablist" class="nav nav-tabs"> -->

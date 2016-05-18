@@ -7,11 +7,11 @@ use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\Edu
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
-use XmppPrebind, App\DefaultGroup;
+use App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth, Mail;
-use Intervention\Image\Image;
+use XmppPrebind;
 use \Exception;
 use App\Library\Converse, Config;
 
@@ -24,9 +24,17 @@ class AjaxController extends Controller
 		$arguments = Input::all();
 		$email = Input::get('email');
 		$password = Input::get('password');
+		//print_r($arguments);die;
+		if(isset($arguments['log']))
+			$log = true;
+		else
+			$log = false;
 
 		$user = new User();
-
+		if(isset($arguments['log']))
+			$log = true;
+		else
+			$log = false;
 		$validator = Validator::make($arguments, 
 							['email' => 'required|email',
 							'password' => 'required'],
@@ -50,7 +58,7 @@ class AjaxController extends Controller
 					 	echo 'email,'.$error['email'][0];			
 					}
 					else{
-						if(Auth::attempt(['email' => $email,'password'=>$password]))
+						if(Auth::attempt(['email' => $email,'password'=>$password],$log))
 							echo 'success';
 						else
 							echo 'These credentials do not match our records.';
@@ -257,7 +265,8 @@ comments;
 		$user = User::find($user_id);
 		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
 		{
-			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', '', false, false);
+			// print_r('$xmppPrebind');die;
+			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', 'FS', false, false);
 			$username = $user->xmpp_username;
 			$password = $user->xmpp_password;
 			$xmppPrebind->connect($username, $password);
@@ -266,9 +275,10 @@ comments;
 			$status = 1;
 		}
 
-		$sessionInfo['status']=$status;	  
-		echo json_encode($sessionInfo); 
-		exit;
+		// $sessionInfo['status']=$status;	  
+		// echo json_encode($sessionInfo); 
+		// exit;
+		return $sessionInfo;
  	}
 
 

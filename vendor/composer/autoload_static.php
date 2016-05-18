@@ -312,11 +312,22 @@ class ComposerStaticInit2459a43b6ab27bf9e2f725b18df64991
     );
 
     public static $classMap = array (
+        'Auth_SASL' => __DIR__ . '/..' . '/xmpp-prebind/Auth/SASL.php',
+        'Auth_SASL_Anonymous' => __DIR__ . '/..' . '/xmpp-prebind/Auth/SASL/Anonymous.php',
+        'Auth_SASL_Common' => __DIR__ . '/..' . '/xmpp-prebind/Auth/SASL/Common.php',
+        'Auth_SASL_CramMD5' => __DIR__ . '/..' . '/xmpp-prebind/Auth/SASL/CramMD5.php',
+        'Auth_SASL_DigestMD5' => __DIR__ . '/..' . '/xmpp-prebind/Auth/SASL/DigestMD5.php',
+        'Auth_SASL_Exception' => __DIR__ . '/..' . '/xmpp-prebind/Auth/SASL/Exception.php',
+        'Auth_SASL_External' => __DIR__ . '/..' . '/xmpp-prebind/Auth/SASL/External.php',
+        'Auth_SASL_Login' => __DIR__ . '/..' . '/xmpp-prebind/Auth/SASL/Login.php',
+        'Auth_SASL_Plain' => __DIR__ . '/..' . '/xmpp-prebind/Auth/SASL/Plain.php',
         'CreateSocialAccountsTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_11_092001_create_social_accounts_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
+        'FB' => __DIR__ . '/..' . '/xmpp-prebind/FirePHP/fb.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
         'File_Iterator_Factory' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Factory.php',
+        'FirePHP' => __DIR__ . '/..' . '/xmpp-prebind/FirePHP/FirePHP.class.php',
         'Google_Auth_Abstract' => __DIR__ . '/..' . '/google/apiclient/src/Google/Auth/Abstract.php',
         'Google_Auth_AppIdentity' => __DIR__ . '/..' . '/google/apiclient/src/Google/Auth/AppIdentity.php',
         'Google_Auth_AssertionCredentials' => __DIR__ . '/..' . '/google/apiclient/src/Google/Auth/AssertionCredentials.php',
@@ -3169,6 +3180,9 @@ class ComposerStaticInit2459a43b6ab27bf9e2f725b18df64991
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
         'TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
+        'XmppPrebind' => __DIR__ . '/..' . '/xmpp-prebind/XmppPrebind.php',
+        'XmppPrebindConnectionException' => __DIR__ . '/..' . '/xmpp-prebind/XmppPrebind.php',
+        'XmppPrebindException' => __DIR__ . '/..' . '/xmpp-prebind/XmppPrebind.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

@@ -91,8 +91,8 @@
 
 						<div class="social-store">
 							<ul>
-								<li><a href=""><img src="/images/apple-stroe-btn.png" alt=""></a></li>
-								<li><a href=""><img src="/images/android-store-btn.png" alt=""></a></li>
+								<li><a href=""><img src="{{url('/images/apple-stroe-btn.png')}}" alt=""></a></li>
+								<li><a href=""><img src="{{url('/images/android-store-btn.png')}}" alt=""></a></li>
 							</ul>
 						</div>
 					</div><!--/social login-->

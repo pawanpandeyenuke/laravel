@@ -41,7 +41,7 @@
 		                                @if($fieldsData)
 											<div class="col-sm-4">
 												<div class="cat-btn-outer">
-													<a href="subgroup/{{$data->id}}/{{$name}}" title="" class="cat-btn">
+													<a href="{{url("subgroup/$data->id/$name")}}" title="" class="cat-btn">
 													<img src="{{$image}}"><br>
 													{{ $data->title }}</a>
 												</div>
@@ -49,7 +49,7 @@
 										@else
 											<div class="col-sm-4">
 												<div class="cat-btn-outer">
-													<a href="groupchat/{{$name}}" title="" class="cat-btn">
+													<a href="{{url("groupchat/$name")}}" title="" class="cat-btn">
 													<img src="{{$image}}"><br>
 													{{ $data->title }}</a>
 												</div>
@@ -62,7 +62,7 @@
 							</div>
 
 						</div><!--/page center data-->
-						<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
+						<div class="shadow-box bottom-ad"><img src="{{url("images/bottom-ad.jpg")}}" alt="" class="img-responsive"></div>
 					</div>
 
  				@include('panels.right')
