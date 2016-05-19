@@ -94,7 +94,7 @@ class AuthController extends Controller
         
 
         $vcard = $converse->setVcard($xmpp_username, $user->picture);
-        // echo '<pre>';print_r($vcard);die;
+//        echo '<pre>';print_r($vcard);//die;
         return $userdata;
     }
 

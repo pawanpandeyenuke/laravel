@@ -408,8 +408,9 @@
 														</select>
 													</div>
 												</div> 
-											@endif
+										
 										</div>
+											@endif
 										<div id="addedRows"></div>
 										
 									</div>

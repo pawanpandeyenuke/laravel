@@ -21,6 +21,7 @@ class SearchController extends Controller
                 return redirect('/');
 
             if(Auth::Check())
+
             {   
                 $authUserId = Auth::User()->id;
                 $auth = 1;
@@ -51,12 +52,10 @@ class SearchController extends Controller
                 }else{
                     $result = self::searchUsersFromSite($auth, $name);
                 }
-                // echo '<pre>';print_r($result);die;
 
                 $model1 = $result->toArray(); 
                 $count = $result->count();
                 $auth = 0;
-
              }
 
         return view('dashboard.allusers')

@@ -128,6 +128,7 @@ class Converse{
 		$fieldValue = base64_encode ( $fieldValue );
 
 		return @exec('sudo ejabberdctl set-vcard '.$username.' '.$node.' '.$fieldName.' "'.$fieldValue.'" 2>&1', $output, $status);
+		//print_r($status);die;
 
 	}
 }

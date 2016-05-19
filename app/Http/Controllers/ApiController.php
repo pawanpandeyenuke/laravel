@@ -1831,7 +1831,7 @@ class ApiController extends Controller
 			$this->status = 'success';
 			$this->data = $result;
 			$this->message = count($result).' users found.';
- 
+
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
@@ -1900,7 +1900,7 @@ class ApiController extends Controller
 						if($validator->fails()) {
 							throw new Exception("Please check email address entered and try again.", 1);
 						}else{
-//print_r($emailsArray);die;
+
 							foreach ($emailsArray as $value) {
 								if($value != User::where('id',$arguments['user_id'])->pluck('email')){
 									$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';

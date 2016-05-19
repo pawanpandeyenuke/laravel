@@ -289,6 +289,8 @@ $("#loginform").ajaxForm(function(response) {
 			current.css('border-color','#a94442');
 			current.next('.help-block').find('.errormsg').text(response).css('color','#a94442');
 			$('.emailid').css('border-color','#a94442');
+			$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+
 		}
 
 		else if(response == "success"){
