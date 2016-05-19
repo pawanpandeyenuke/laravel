@@ -34,15 +34,15 @@
 							<div class="form-group">
 								<input type="text" name="email" class="form-control icon-field emailid" placeholder="Email ID">
 									<span class="help-block">
-											<strong class = "erroremail"></strong>
-										</span>
+										<strong class = "errormsg"></strong>
+									</span>
 								<span class="field-icon flaticon-letter133"></span>
 							</div>
 							<div class="form-group">
 								<input type="password" name="password" class="form-control icon-field password" placeholder="Password" id="showpassword">
 								<span class="help-block">
-											<strong class = "errorpassword"></strong>
-										</span>
+									<strong class = "errormsg"></strong>
+								</span>
 								<span class="field-icon flaticon-padlock50"></span>
 								<div class="check-cont show-pw">
 									<input type="checkbox" onchange="document.getElementById('showpassword').type = this.checked ? 'text' : 'password'" name="checkboxG2" id="checkboxG2" class="css-checkbox">
@@ -280,39 +280,49 @@ $(document).on('change', '#terms', function() {
 
 
 $("#loginform").ajaxForm(function(response) { 
+
 	if(response){
-
-							if(response == "These credentials do not match our records.")
-							{
-								$('.help-block').find('.errorpassword').text(response).css('color','#a94442');
-								$('.emailid').css('border-color','#333333');
-								$('.password').css('border-color','#333333');
-								$('.help-block').find('.erroremail').text("");
-							}
 		
-							else if(response == "success"){
-								window.location = '/dashboard';
-							}else{
-								var res = response.split(',');
+		if(response === "These credentials do not match our records.")
+		{
+			var current = $('.password');
+			current.css('border-color','#a94442');
+			current.next('.help-block').find('.errormsg').text(response).css('color','#a94442');
+			$('.emailid').css('border-color','#a94442');
+		}
 
-									if(res[0] == "email")
-									{
-									$('.help-block').find('.erroremail').text(res[1]).css('color','#a94442');
-									$('.emailid').css('border-color','#a94442');
-									$('.password').css('border-color','#333333');
-									$('.help-block').find('.errorpassword').text("");
-									}
-									if(res[0] == "password"){
-									$('.help-block').find('.erroremail').text("");
-									$('.help-block').find('.errorpassword').text(res[1]).css('color','#a94442');
-									$('.password').css('border-color','#a94442');
-									$('.emailid').css('border-color','#333333');	
-									}
-							}
-							
-							}
+		else if(response == "success"){
+			window.location = '/dashboard';
+		}else{
+			var obj = jQuery.parseJSON( response );
+			if( obj.email != null ){
+
+				var current = $('.emailid');
+				current.css('border-color','#a94442');
+				current.next('.help-block').find('.errormsg').text(obj.email).css('color','#a94442');
+
+				if( obj.password == null ){
+					$('.password').next('.help-block').find('.errormsg').text("").css('color','#333333');
+					$('.password').css('border-color','#333333');
+				}
+			}
+			if( obj.password != null ){
+
+				var current = $('.password');				
+				current.css('border-color','#a94442');
+				current.next('.help-block').find('.errormsg').text(obj.password).css('color','#a94442');
+
+				if( obj.email == null ){
+					$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+					$('.emailid').css('border-color','#333333');
+				}
+			}
+		}
+	
+	}
 
 });
+
 	//disabling texts for mobile fields
 	$(document).on('keypress','.numeric,input[type="number"]', function(evt){
 		evt = (evt) ? evt : window.event;

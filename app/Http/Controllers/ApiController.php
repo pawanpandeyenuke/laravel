@@ -1008,6 +1008,10 @@ class ApiController extends Controller
 
 			if(empty($friend))
 				throw new Exception("This user does not exist", 1);
+
+			if( $arguments['user_id'] === $arguments['friend_id'] )
+				throw new Exception("You cannot send request to yourself.", 1);
+
 			// echo '<pre>';print_r($friend);die;
 			$friendcheck = Friend::where('user_id', '=', $arguments['user_id'])
 							->where('friend_id', '=', $arguments['friend_id'])
@@ -1090,6 +1094,9 @@ class ApiController extends Controller
 
 			if(empty($friend))
 				throw new Exception("This user does not exist", 1);
+
+			if( $arguments['user_id'] === $arguments['friend_id'] )
+				throw new Exception("You cannot add yourself as a friend.", 1);
 
 			$friendcheck = Friend::where('user_id', '=', $arguments['friend_id'])
 							->where('friend_id', '=', $arguments['user_id'])
@@ -1770,14 +1777,50 @@ class ApiController extends Controller
 	{
 		try{
 			$arguments = Request::all();
-			
-			// echo $authuserid;die;
-			if($arguments){
-				
-				$keyword = $arguments['keyword'];
+			$authuserid = isset($arguments['user_id']) ? $arguments['user_id'] : '';
+			$keyword = $arguments['keyword'];
+			$auth = $arguments['auth'];
+			$result = '';
+			// Paginate the results according to conditions.
+			$per_page = $arguments['page_size'];
+			$page = $arguments['page'];
+			$offset = ($page - 1) * $per_page;
 
-				if(empty($keyword))
-					throw new Exception("Keyword is required", 1);
+			if($auth === 1){
+				$user = User::find($authuserid);
+				if(empty($user))
+					throw new Exception("This user does not exist.", 1);
+
+				// Search pattern prepare.
+                $pregMatch = preg_match('/\s/',$keyword); 
+				
+                if($pregMatch){
+                    $name = explode(' ', $keyword);
+                    $fname = $name[0];
+                    $lname = $name[1];
+
+                    $result = app()->make('App\Http\Controllers\SearchController')->searchUsersFromSite($auth, $fname, $lname, $authuserid);
+                }else{
+                    $result = app()->make('App\Http\Controllers\SearchController')->searchUsersFromSite($auth, $keyword, '', $authuserid);
+                	// echo '<pre>';print_r($result);die;
+                }
+
+			}elseif ($auth === 0) {
+				// Search pattern prepare.
+                $pregMatch = preg_match('/\s/',$keyword); 
+
+                if($pregMatch){
+                    $name = explode(' ', $keyword);
+                    $fname = $name[0];
+                    $lname = $name[1];
+
+                    $result = app()->make('App\Http\Controllers\SearchController')->searchUsersFromSite($auth, $fname, $lname);
+                }else{
+                    $result = app()->make('App\Http\Controllers\SearchController')->searchUsersFromSite($auth, $keyword);
+					// echo '<pre>';print_r($result->toArray());die;
+                }
+
+			}
 
 			//	$searchuser = DB::select("select t2.user_id, t2.friend_id, t2.status, t1.first_name, t1.last_name, t1.email, t1.picture from (SELECT * FROM `users` WHERE `first_name` like '%".$keyword."%' or `last_name` like '%".$keyword."%') as t1 join (select * from friends where user_id = ".$authuserid.") as t2 on t1.id = t2.friend_id");
 			
@@ -1785,27 +1828,10 @@ class ApiController extends Controller
 			//Useful Query	
 			// $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.picture, f.status,f.friend_id FROM `users` as u left join friends as f on u.id=f.friend_id where u.id!=".$authuserid." and (u.first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
 
-				$per_page = $arguments['page_size'];
-				$page = $arguments['page'];
-				$offset = ($page - 1) * $per_page;
-
-				$searchuser = User::where('first_name', 'LIKE', '%'.$keyword.'%')
-							->orWhere('last_name', 'LIKE', '%'.$keyword.'%')
-							->skip($offset)
-							->take($per_page)
-							->select('first_name', 'last_name', 'email', 'xmpp_username')
-							->get()
-							->toArray();
-
-				//$this->data = $searchuser;
-				$this->status = 'success';
-				$this->data = $searchuser;
-				$this->message = count($searchuser).' users found.';
-
-			}else{
-				throw new Exception("Keyword is required", 1);
-				
-			}
+			$this->status = 'success';
+			$this->data = $result;
+			$this->message = count($result).' users found.';
+ 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
@@ -2030,7 +2056,7 @@ class ApiController extends Controller
 	 */
 	protected function output()
 	{
-		$this->data = empty($this->data) ? null : $this->data;
+		// $this->data = empty($this->data) ? null : $this->data;
 
 		return json_encode(array(
 			'status' => $this->status, 

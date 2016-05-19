@@ -44,30 +44,47 @@ class AjaxController extends Controller
 							'password.required' => 'Please enter password']
 						);
 
-				if($validator->fails()) {					
-					 $error = $validator->errors()->getMessages();	
-					 //print_r($error);die;
-					 if(isset($error['password']))
-					 {
-					 	if(isset($error['email']))
-					 		echo 'email,'.$error['email'][0];
-					 	else	
-					 		echo 'password,'.$error['password'][0];
-					 }
-					 else
-					 	echo 'email,'.$error['email'][0];			
-					}
-					else{
-						if(Auth::attempt(['email' => $email,'password'=>$password],$log))
-							echo 'success';
-						else
-							echo 'These credentials do not match our records.';
+		if($validator->fails()) {					
+			$error = $validator->errors()->getMessages();	
 
-					}
-		
+			$emailValidate = isset($error['email'][0]) ? $error['email'][0] : '';
+			$passwordValidate = isset($error['password'][0]) ? $error['password'][0] : '';
 
+			if( $emailValidate != null && $passwordValidate != null ) {
+
+				$err = array(
+						'email' => $emailValidate,
+						'password' => $passwordValidate
+					);
+
+			}elseif ( $emailValidate != null ) {
+				
+				$err = array(
+						'email' => $emailValidate
+					);
+
+			}else{
+
+				$err = array(
+						'password' => $passwordValidate
+					);
+
+			}
+
+			echo json_encode($err);
+
+		}else{
+
+			if(Auth::attempt(['email' => $email, 'password'=>$password], $log))
+				echo 'success';
+			else
+				echo 'These credentials do not match our records.';
+
+		}
 
 	}
+
+
 	//Handling posts
 	public function posts()
 	{

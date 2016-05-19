@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Request, Session, Validator, Input, Cookie;
-use App\User, Auth,Mail;
+use App\User, Auth, Mail, App\Friend;
 class SearchController extends Controller
 {
     
@@ -22,6 +22,7 @@ class SearchController extends Controller
 
             if(Auth::Check())
             {   
+                $authUserId = Auth::User()->id;
                 $auth = 1;
                 $pregMatch = preg_match('/\s/',$name); 
 
@@ -29,9 +30,9 @@ class SearchController extends Controller
                     $name = explode(' ', $name);
                     $fname = $name[0];
                     $lname = $name[1];
-                    $result = self::searchUsersFromSite($auth, $fname, $lname);
+                    $result = self::searchUsersFromSite($auth, $fname, $lname, $authUserId);
                 }else{
-                    $result = self::searchUsersFromSite($auth, $name);
+                    $result = self::searchUsersFromSite($auth, $name, '', $authUserId);
                 }
 
                 $model1 = $result->toArray(); 
@@ -50,7 +51,7 @@ class SearchController extends Controller
                 }else{
                     $result = self::searchUsersFromSite($auth, $name);
                 }
-                // echo '<pre>';print_r($result->toArray());die;
+                // echo '<pre>';print_r($result);die;
 
                 $model1 = $result->toArray(); 
                 $count = $result->count();
@@ -69,11 +70,16 @@ class SearchController extends Controller
     }
 
 
-    public function searchUsersFromSite($auth, $firstname, $lastname = ''){
+    public function searchUsersFromSite($auth, $firstname, $lastname = '', $authUserId = ''){
 
         if($auth){
+            // echo '<pre>';print_r($authUserId);die;
             if( !empty( $firstname ) && !empty( $lastname ) ) {
-                return User::where('id','!=',Auth::User()->id)
+                return User::where('id', '!=', $authUserId)
+                        ->whereNotIn('id', Friend::where('user_id', '=', $authUserId)
+                                                ->where('status', '=', 'Accepted')
+                                                ->pluck('friend_id')
+                                                ->toArray() )
                         ->where(function($query) use ( $firstname, $lastname ){
                             $query->where('first_name','LIKE','%'. $firstname.'%');
                             $query->orWhere('last_name','LIKE','%'. $lastname.'%');
@@ -81,7 +87,11 @@ class SearchController extends Controller
                         ->orderBy('id','desc')
                         ->get();
             }elseif( !empty($firstname ) ) {
-                return User::where('id','!=',Auth::User()->id)
+                return User::where('id', '!=', $authUserId)
+                        ->whereNotIn('id', Friend::where('user_id', '=', $authUserId)
+                                                ->where('status', '=', 'Accepted')
+                                                ->pluck('friend_id')
+                                                ->toArray() )
                         ->where(function($query) use ( $firstname ){
                             $query->where('first_name','LIKE','%'. $firstname.'%');
                             $query->orWhere('last_name','LIKE','%'. $firstname.'%');
