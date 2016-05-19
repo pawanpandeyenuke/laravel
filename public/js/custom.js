@@ -402,6 +402,7 @@ $('.btn-upload-icon').find(".badge").remove();
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('View More');
 				if(response != '')
 				{
+					current.closest('.tab-style-no-border').find('.active .count').html(itemcount);
 					if(response != 0){
 					var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
 					}
@@ -739,7 +740,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'success' : function(response){
 				//var type = response.type;
-				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+				var getelem = current.closest('.tab-style-no-border').find('.active').find('.aftersearch').html(response);
 			}
 		});
 	});

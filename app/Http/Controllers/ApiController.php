@@ -1793,7 +1793,7 @@ class ApiController extends Controller
 							->orWhere('last_name', 'LIKE', '%'.$keyword.'%')
 							->skip($offset)
 							->take($per_page)
-							->select('first_name', 'last_name', 'email', 'xmpp_username')
+							->select('id', 'first_name', 'last_name', 'email', 'xmpp_username')
 							->get()
 							->toArray();
 

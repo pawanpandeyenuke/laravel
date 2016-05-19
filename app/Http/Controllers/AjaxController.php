@@ -948,7 +948,7 @@ comments;
 	public function searchTabFriend()
 	{
 		$input=Input::all();
-
+		$count = 0;
 		$type=$input['type'];
 		$name=$input['name'];
 		$model1=array();
@@ -975,6 +975,7 @@ comments;
 
 				if (stripos($n, $name) !== false) {
 					$model2[] =$value;
+					$count ++;
 				}
 			}
 		}
