@@ -1777,16 +1777,40 @@ class ApiController extends Controller
 	{
 		try{
 			$arguments = Request::all();
-			$authuserid = isset($arguments['user_id']) ? $arguments['user_id'] : '';
+//			$authuserid = isset($arguments['user_id']) ? $arguments['user_id'] : '';
 			$keyword = $arguments['keyword'];
-			$auth = $arguments['auth'];
+//			$auth = $arguments['auth'];
 			$result = '';
 			// Paginate the results according to conditions.
 			$per_page = $arguments['page_size'];
 			$page = $arguments['page'];
 			$offset = ($page - 1) * $per_page;
 
-			if($auth === 1){
+ $pregMatch = preg_match('/\s/',$keyword); 
+if($pregMatch){
+                   $name = explode(' ', $keyword);
+                   $fname = $name[0];
+                   $lname = $name[1];
+
+$searchuser = User::where('id', '!=', $arguments['user_id'])
+		->where(function($query) use ( $fname, $lname ){
+                            $query->where('first_name','LIKE','%'. $fname.'%');
+                            $query->orWhere('last_name','LIKE','%'. $lname.'%');
+                        })
+		->orderBy('id','desc')
+                ->get();
+}else{
+$searchuser = User::where(function($query) use ( $keyword ){
+                            $query->where('first_name','LIKE','%'. $keyword.'%');
+                            $query->orWhere('last_name','LIKE','%'. $keyword.'%');
+                        })
+                ->orderBy('id','desc')
+                ->get();
+
+}
+
+
+/*			if($auth === 1){
 				$user = User::find($authuserid);
 				if(empty($user))
 					throw new Exception("This user does not exist.", 1);
@@ -1827,9 +1851,9 @@ class ApiController extends Controller
 
 			//Useful Query	
 			// $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.picture, f.status,f.friend_id FROM `users` as u left join friends as f on u.id=f.friend_id where u.id!=".$authuserid." and (u.first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
-
+*/
 			$this->status = 'success';
-			$this->data = $result;
+			$this->data = $searchuser;
 			$this->message = count($result).' users found.';
 
 		}catch(Exception $e){
