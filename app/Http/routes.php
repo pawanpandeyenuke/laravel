@@ -196,7 +196,10 @@ Route::post('api/get-job-category','ApiController@getJobCategories');
 
 	Route::get('home', 'HomeController@index');
 
-	Route::get('/searchfriends',"SearchController@searchFromUsers");
+	// Route::get('/searchfriends',"SearchController@searchFromUsers");
+	Route::get('/searchfriends', function(){
+		return redirect('/');
+	});
 	Route::post('/searchfriends',"SearchController@searchFromUsers");
 
 

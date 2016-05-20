@@ -35,7 +35,7 @@
 							<div class="search-field">
 								{!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
 								<input type="text" name="searchfriends" id="searchfriends" value="" placeholder="Enter Name" class="form-control">
-								<button type="submit" class="btn btn-primary btn-srch-top search-btn search" disabled>Search Friends</button>
+								<button type="submit" class="btn btn-primary btn-srch-top search-btn search">Search Friends</button>
 									{!! Form::close() !!}
 							</div>
 						</div>
@@ -95,17 +95,20 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		<script src="http://malsup.github.com/jquery.form.js"></script> 
+		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+
 		{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
-		<script type="text/javascript" >
+	<script type="text/javascript" >
+ 
+		$( "#searchform" ).submit(function( event ) {
+			var searchkey = $('#searchfriends').val();
+			if(searchkey == ''){
+				$('#searchfriends').attr('placeholder', 'Search here..').focus();
+				event.preventDefault();
+			}
+		});
 
-			$(document).on('keyup','#searchfriends',function(){
-			
-				if($('#searchfriends').val() != "")
-					$('.search').prop('disabled',false);
-				else
-					$('.search').prop('disabled',true);		
-				});
-
+ 
 		$("#suggestionform").ajaxForm(function(response) {
 			if(response == "success")
 			{
