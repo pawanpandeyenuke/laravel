@@ -1768,7 +1768,9 @@ class ApiController extends Controller
 	        }
 
 	        // Gather all the results from the queries and paginate it.
-	     	$result = $model->orderBy('id','desc')->skip($offset)->take($per_page)->get()->toArray();   
+	     	$model = $model->select('id', 'first_name', 'last_name', 'email', 'picture');
+	     	$model = $model->orderBy('id','desc');
+	     	$result = $model->skip($offset)->take($per_page)->get()->toArray();
 
 			$this->status = 'success';
 			$this->data = $result;
