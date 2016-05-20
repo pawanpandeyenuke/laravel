@@ -15,48 +15,47 @@ class SearchController extends Controller
         if(Request::isMethod('post')){
 
             $input = Request::all();
-            $name = $input['searchfriends'];
+            $keyword = $input['searchfriends'];
 
-            if($name == "")
+            if($keyword == "")
                 return redirect('/');
 
-            if(Auth::Check())
+            $authUserId = isset(Auth::User()->id) ? Auth::User()->id : '';
 
-            {   
-                $authUserId = Auth::User()->id;
-                $auth = 1;
-                $pregMatch = preg_match('/\s/',$name); 
+            $model = new User;
 
-                if($pregMatch){
-                    $name = explode(' ', $name);
-                    $fname = $name[0];
-                    $lname = $name[1];
-                    $result = self::searchUsersFromSite($auth, $fname, $lname, $authUserId);
-                }else{
-                    $result = self::searchUsersFromSite($auth, $name, '', $authUserId);
-                }
+            // Search for the following people.
+            if(trim($keyword) != ''){
 
-                $model1 = $result->toArray(); 
-                $count = $result->count();
-                $auth = 1;
+                $model = $model->where( function( $query ) use ( $input, $keyword ) {
+                    $expVal = explode(' ', $keyword);
+                    foreach( $expVal as $key => $value ) {                          
+                        $query->orWhere( 'last_name', 'LIKE', '%'. $value.'%' )
+                            ->orWhere( 'first_name', 'LIKE', '%'. $value.'%' );  
+                    }
+                });
 
-            }else{
-                $auth = 0;
-                $pregMatch = preg_match('/\s/',$name); 
+            }
 
-                if($pregMatch){
-                    $name = explode(' ', $name);
-                    $fname = $name[0];
-                    $lname = $name[1];
-                    $result = self::searchUsersFromSite($auth, $fname, $lname);
-                }else{
-                    $result = self::searchUsersFromSite($auth, $name);
-                }
+            if( $authUserId != '' ){
+                
+                // User cannot search himself.
+                $model = $model->where('id', '!=', $authUserId);
 
-                $model1 = $result->toArray(); 
-                $count = $result->count();
-                $auth = 0;
-             }
+                // Search for user's who are not friends with me.
+                $model = $model->whereNotIn('id', Friend::where('user_id', '=', $authUserId)
+                                ->where('status', '=', 'Accepted')
+                                ->pluck('friend_id')
+                                ->toArray() );
+
+            }
+
+            // Gather all the results from the queries and paginate it.
+            $result = $model->orderBy('id','desc')->get();   
+
+            $model1 = $result->toArray(); 
+            $count = $result->count();
+            $auth = ($authUserId != '') ? 1 : 0;
 
         return view('dashboard.allusers')
                 ->with('model1',$model1)
@@ -66,56 +65,6 @@ class SearchController extends Controller
         
         }
         
-    }
-
-
-    public function searchUsersFromSite($auth, $firstname, $lastname = '', $authUserId = ''){
-
-        if($auth){
-            // echo '<pre>';print_r($authUserId);die;
-            if( !empty( $firstname ) && !empty( $lastname ) ) {
-                return User::where('id', '!=', $authUserId)
-                        ->whereNotIn('id', Friend::where('user_id', '=', $authUserId)
-                                                ->where('status', '=', 'Accepted')
-                                                ->pluck('friend_id')
-                                                ->toArray() )
-                        ->where(function($query) use ( $firstname, $lastname ){
-                            $query->where('first_name','LIKE','%'. $firstname.'%');
-                            $query->orWhere('last_name','LIKE','%'. $lastname.'%');
-                        })
-                        ->orderBy('id','desc')
-                        ->get();
-            }elseif( !empty($firstname ) ) {
-                return User::where('id', '!=', $authUserId)
-                        ->whereNotIn('id', Friend::where('user_id', '=', $authUserId)
-                                                ->where('status', '=', 'Accepted')
-                                                ->pluck('friend_id')
-                                                ->toArray() )
-                        ->where(function($query) use ( $firstname ){
-                            $query->where('first_name','LIKE','%'. $firstname.'%');
-                            $query->orWhere('last_name','LIKE','%'. $firstname.'%');
-                        })
-                        ->orderBy('id','desc')
-                        ->get();
-            }
-        }else{
-            if( !empty( $firstname ) && !empty( $lastname ) ) {
-                return User::where(function($query) use ( $firstname, $lastname ){
-                            $query->where('first_name','LIKE','%'. $firstname.'%');
-                            $query->orWhere('last_name','LIKE','%'. $lastname.'%');
-                        })
-                        ->orderBy('id','desc')
-                        ->get();
-            }elseif( !empty($firstname ) ) {
-                return User::where(function($query) use ( $firstname ){
-                            $query->where('first_name','LIKE','%'. $firstname.'%');
-                            $query->orWhere('last_name','LIKE','%'. $firstname.'%');
-                        })
-                        ->orderBy('id','desc')
-                        ->get();
-            }
-        }
-
     }
 
 
