@@ -139,14 +139,14 @@
 					<div class="already-member">Already have Account? <a href="#" title="" data-toggle="modal" data-target="#LoginPop">Login</a></div>
 					<h3 class="text-center">Registration</h3>
 
-					  <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
+					  <form class="form-horizontal" id="registerForm" role="form" method="POST" action="{{ url('/register') }}">
                         {!! csrf_field() !!}
 
 					<div class="row field-row">
 						<div class="col-sm-12">
 
 							<div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
-								<input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control icon-field" placeholder="First Name" required>
+								<input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control icon-field" placeholder="First Name">
 									
 									@if ($errors->has('first_name'))
 										<span class="help-block">
@@ -158,7 +158,7 @@
 								</div>
 
 							<div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
-									<input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control icon-field" placeholder="Last Name" required>
+									<input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control icon-field" placeholder="Last Name">
 									
 									@if ($errors->has('last_name'))
 										<span class="help-block">
@@ -171,7 +171,7 @@
 
 
 								<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-									<input type="email" name="email" value="{{ old('email') }}" class="form-control icon-field" placeholder="Email ID" required>
+									<input type="email" name="email" value="{{ old('email') }}" class="form-control icon-field" placeholder="Email ID" >
 									
 									@if ($errors->has('email'))
 										<span class="help-block">
@@ -183,7 +183,7 @@
 								</div>
 
 							<div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-									<input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword" required>
+									<input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword">
 									
 									@if ($errors->has('password'))
 										<span class="help-block">
@@ -231,7 +231,7 @@
 						</div>
 								<div class="form-groups">
 									<div class="btn-cont text-center">
-										<input type="submit" class="btn btn-primary register" value="Get Started" disabled="disabled">
+										<input type="submit" class="btn btn-primary register" value="Get Started">
 									</div>
 								</div>
 						</div>
@@ -264,11 +264,50 @@
 
 @endsection
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script> 
+<script src="http://malsup.github.com/jquery.form.js"></script>
 <script type="text/javascript" >
 
+$(document).ready(function () {
 
-$(document).on('change', '#terms', function() {
+    $("#registerForm").validate({ 
+        errorElement: 'span',
+        errorClass: 'help-inline',
+        rules: {
+            first_name: { required: true },
+            last_name:  { required: true },
+            email:  { required: true, email: true },
+            password:  { required: true, minlength: 8 },
+            terms:  { required: true },
+            phone_no: { maxlength: 15 }
+        },
+        messages:{
+            first_name:{
+                required: "Please enter your first name."
+            },
+            last_name:{
+                required: "Please enter your last name."
+            },
+            email:{
+                required: "Please enter your Email id.",
+                email: "Please enter a valid email address."
+            },
+            password:{
+                required: "Please enter a password.",
+                minlength: "Password must have more that 8 character."
+            },
+            terms:{
+                required: "Please agree to the terms.",
+            },
+            phone_no:{
+            	maxlength: "Contact number cannot have more than 15 digits."
+            }
+        }
+    });
+
+});
+
+
+/*$(document).on('change', '#terms', function() {
 
     // $this will contain a reference to the checkbox   
     if ($(this).is(':checked')) {
@@ -276,7 +315,7 @@ $(document).on('change', '#terms', function() {
     } else {
         $('.register').prop('disabled',true);
     }
-});
+});*/
 
 
 $("#loginform").ajaxForm(function(response) { 

@@ -13,24 +13,24 @@
 					<div class="page-title no-left-padding">Create New Broadcast List</div>
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
-						{!! Form::open() !!}
+						{!! Form::open(array('id' => 'broadcastAdd')) !!}
 							<div class="b-cast-name">
 								<h5>Broadcast Name</h5>
 
-								<input type="text" name="broadcastname" value="" class="form-control bcast-field">
+								<input type="text" name="broadcastname" value="" class="form-control bcast-field b-valid">
 							</div>
 			
 							<div class="bcast-list">
 								<h5>Add Friends</h5>
 
-								<select class="multiple-slt form-control" name="broadcastuser[]" multiple="multiple">
-						@foreach($friends as $data)
-							<?php 
-								$name=$data['user']['first_name']." ".$data['user']['last_name'];
-								$id=$data['user']['id'];
-							?>
-									<option value="{{$id}}">{{$name}}</option>
-						@endforeach
+								<select class="multiple-slt form-control b-valid" id="select-multiuser-broadcast" name="broadcastuser[]" multiple="multiple">
+									@foreach($friends as $data)
+										<?php 
+											$name=$data['user']['first_name']." ".$data['user']['last_name'];
+											$id=$data['user']['id'];
+										?>
+										<option value="{{$id}}">{{$name}}</option>
+									@endforeach
 								</select>
 							</div>
 
@@ -53,3 +53,92 @@
 	</div>
 </div>
 @endsection
+<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+<script type="text/javascript" >
+
+$(document).ready(function () {
+
+/*    $("#broadcastAdd").validate({ 
+        errorElement: 'span',
+        errorClass: 'help-inline',
+        rules: {
+            broadcastname: { required: true, number: false },
+            // broadcastuser:  { selectcheck: true }
+        },
+        messages:{
+            broadcastname:{
+                required: "Please enter the name of broadcast.",
+                number: "Please enter a valid broadcast name."
+            },
+            broadcastuser:{
+                required: "Please add at least one contact to broadcast list."
+            }
+        }
+    });*/
+
+
+	$( "#broadcastAdd" ).submit(function( event ) {
+		var stack = $('.b-valid');
+		$.each(stack, function(i,v){
+			if($(this).is('input')){
+				$(this).closest('.b-cast-name').find('#groupname-error').remove();
+				$(this).removeClass('help-inline');
+				if($(this).val() === ''){
+					$(this).closest('.b-cast-name').append('<span id="groupname-error" class="help-inline">Please enter the name of broadcast.</span>');
+					$(this).addClass('help-inline');
+					// $(this).focus();
+					event.preventDefault();
+				}
+			}else if($(this).is('select')){	
+				$(this).closest('.bcast-list').find('#groupuser-error').remove();
+				$('.select2-selection').removeClass('help-inline');
+				// alert($(this).val());
+				if($(this).val() === null){
+					$('#select-multiuser-broadcast').closest('.bcast-list').append('<span id="groupuser-error" class="help-inline">Please add at least one contact to broadcast list.</span>');
+					$('.select2-selection').addClass('help-inline');
+					event.preventDefault();
+				}
+			}
+		});
+
+	$( ".bcast-field" ).focus(function( ) {
+		$(this).closest('.b-cast-name').find('#groupname-error').remove();
+		$(this).removeClass('help-inline');
+	});
+
+
+	$( ".multiple-slt" ).change(function( ) {
+		$(this).closest('.bcast-list').find('#groupuser-error').remove();
+		$('.select2-selection').removeClass('help-inline');
+	});
+
+/*		if(multiuser === null){
+			$('#select-multiuser-broadcast').closest('.bcast-list').append('<span id="groupuser-error" class="help-inline">Please add at least one contact to broadcast list.</span>');
+			$('.select2-selection').addClass('help-inline');
+			event.preventDefault();
+		}*/
+	});
+
+/*	$( "#broadcastAdd" ).submit(function( event ) {
+		var multiuser = $('#select-multiuser-broadcast').val();
+		if(multiuser === null){
+			$('#select-multiuser-broadcast').closest('.bcast-list').append('<span id="groupuser-error" class="help-inline">Please add at least one contact to broadcast list.</span>');
+			$('.select2-selection').addClass('help-inline');
+			event.preventDefault();
+		}
+	});*/
+
+/*	$( "#select-multiuser-broadcast" ).change(function( event ) {
+		$('#select-multiuser-broadcast').closest('.bcast-list').find('#groupuser-error').remove();
+		$('.select2-selection').removeClass('help-inline');
+		var multiuser = $('#select-multiuser-broadcast').val();
+		if(multiuser === null){		
+			$('#select-multiuser-broadcast').closest('.bcast-list').append('<span id="groupuser-error" class="help-inline">Please add at least one contact to broadcast list.</span>');
+			$('.select2-selection').addClass('help-inline');
+		}
+	});*/
+
+});
+ 
+</script>

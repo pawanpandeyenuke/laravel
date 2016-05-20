@@ -153,7 +153,7 @@
 													</td>
 												</tr>
 												<tr>
-													<td><div class="p-data-title"><i class="flaticon-calendar"></i>Date of Birth</div></td>
+													<td><div class="p-data-title"><i class="flaticon-calendar"></i>Date of Birth <span style="">[it's confidential] </span> </div></td>
 													<td>
 														<span style="font-weight:500">{{!empty($user->birthday)?$user->birthday:'N/A'}}</span>
 													</td>

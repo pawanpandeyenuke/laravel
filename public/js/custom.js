@@ -1,12 +1,18 @@
 $(document).ready(function(){
 
+	
+	$( "#searchform" ).submit(function( event ) {
+		var searchkey = $('#searchfriends').val();
+		if(searchkey == ''){
+			$('#searchfriends').attr('placeholder', 'Search here..').focus();
+			event.preventDefault();
+		}
+	});
+
+
 	$('.StyleScroll').niceScroll();
 	
 	var myReader = new FileReader();
-
-
-
-
 	 $("#fileUpload").on('change', function () {
 	 
 	     //Get count of selected files

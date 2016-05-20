@@ -45,7 +45,7 @@
 							<div class="search-field">
 							{!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
 								<input type="text" name="searchfriends" id="searchfriends" value="" placeholder="Enter Name" class="form-control">
-								<button type="submit" class="btn btn-primary btn-srch-top search-btn search" disabled>Search Friends</button>
+								<button type="submit" class="btn btn-primary btn-srch-top search-btn search">Search Friends</button>
 									{!! Form::close() !!}
 							</div>
 						</div>
@@ -78,13 +78,13 @@
 
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <script type="text/javascript">
-$(document).on('keyup','#searchfriends',function(){
-			
-				if($('#searchfriends').val() != "")
-					$('.search').prop('disabled',false);
-				else
-					$('.search').prop('disabled',true);		
-				});
+	$( "#searchform" ).submit(function( event ) {
+		var searchkey = $('#searchfriends').val();
+		if(searchkey == ''){
+			$('#searchfriends').attr('placeholder', 'Search here..').focus();
+			event.preventDefault();
+		}
+	});
 </script>
 </body>
 </html>
