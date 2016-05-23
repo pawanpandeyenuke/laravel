@@ -110,20 +110,21 @@ class SearchController extends Controller
 
     public function verify()
     {
-         if(Request::isMethod('post')){
+        if(Request::isMethod('post')){
             $arguments = Request::all();
-            $user = User::where('email',$arguments['email'])->first();
-            //print_r($user);die;
-            $useremail = $user->email;
-            $username = $user->first_name." ".$user->last_name;
-            $confirmation_code = str_random(30);
+            $user = User::where('email',$arguments['email'])->get();
 
-            if($user->is_email_verified == "Y"){
+            if($user->count() > 0){
+                 if($user->is_email_verified == "Y"){
                  Session::put('error', 'This email is already verified!');
                  return redirect()->back();
              }
              elseif($user->is_email_verified == "N"){
-                 $emaildata = array('confirmation_code' => $confirmation_code);
+                 $useremail = $user->email;
+                $username = $user->first_name." ".$user->last_name;
+                $confirmation_code = str_random(30);
+                User::where('email',$arguments['email'])->update(['confirmation_code'=>$confirmation_code]);
+                $emaildata = array('confirmation_code' => $confirmation_code);
 
                     Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
                     $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
@@ -132,6 +133,11 @@ class SearchController extends Controller
                 Session::put('success', 'Verification link sent to '.$useremail.' !');
                   return redirect()->back();
              }
+            }
+            else{
+                 Session::put('error', "We can't find a user with that e-mail address.");
+                 return redirect()->back();
+                }
         }
             return view('verifyemail');
     }

@@ -308,9 +308,9 @@ Route::post('api/get-job-category','ApiController@getJobCategories');
 			return view('auth.register');
 	});
 
-	Route::get('register/verify/{confirmationCode}', [
+	Route::get('register/verify/{confirmation_code}', [
     'as' => 'confirmation_path',
-    'uses' => 'AuthController@confirm'
+    'uses' => 'Auth\AuthController@confirm'
 	]);
 
 
