@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 29/04/2016 12:02
+  	Creation date: 18/05/2016 12:09
   	*/
 
 @font-face {
@@ -38,26 +38,31 @@ font-style: normal;
 .flaticon-days:before { content: "\f107"; }
 .flaticon-education:before { content: "\f108"; }
 .flaticon-eye109:before { content: "\f109"; }
-.flaticon-gps:before { content: "\f10a"; }
-.flaticon-graduation:before { content: "\f10b"; }
-.flaticon-icon-88206:before { content: "\f10c"; }
-.flaticon-icon-89571:before { content: "\f10d"; }
-.flaticon-icon-98732:before { content: "\f10e"; }
-.flaticon-interface:before { content: "\f10f"; }
-.flaticon-interface-1:before { content: "\f110"; }
-.flaticon-letter:before { content: "\f111"; }
-.flaticon-letter133:before { content: "\f112"; }
-.flaticon-magnifying-glass138:before { content: "\f113"; }
-.flaticon-padlock50:before { content: "\f114"; }
-.flaticon-people:before { content: "\f115"; }
-.flaticon-profile5:before { content: "\f116"; }
-.flaticon-round:before { content: "\f117"; }
-.flaticon-search74:before { content: "\f118"; }
-.flaticon-smartphone-with-blank-screen:before { content: "\f119"; }
-.flaticon-social:before { content: "\f11a"; }
-.flaticon-technology:before { content: "\f11b"; }
-.flaticon-time:before { content: "\f11c"; }
-.flaticon-tool:before { content: "\f11d"; }
-.flaticon-vintage:before { content: "\f11e"; }
-.flaticon-web:before { content: "\f11f"; }
-.flaticon-web-1:before { content: "\f120"; }
+.flaticon-garbage:before { content: "\f10a"; }
+.flaticon-gps:before { content: "\f10b"; }
+.flaticon-graduation:before { content: "\f10c"; }
+.flaticon-icon-88206:before { content: "\f10d"; }
+.flaticon-icon-89571:before { content: "\f10e"; }
+.flaticon-icon-98732:before { content: "\f10f"; }
+.flaticon-interface:before { content: "\f110"; }
+.flaticon-interface-1:before { content: "\f111"; }
+.flaticon-letter:before { content: "\f112"; }
+.flaticon-letter133:before { content: "\f113"; }
+.flaticon-magnifying-glass138:before { content: "\f114"; }
+.flaticon-next:before { content: "\f115"; }
+.flaticon-padlock50:before { content: "\f116"; }
+.flaticon-pencil:before { content: "\f117"; }
+.flaticon-people:before { content: "\f118"; }
+.flaticon-profile5:before { content: "\f119"; }
+.flaticon-round:before { content: "\f11a"; }
+.flaticon-search74:before { content: "\f11b"; }
+.flaticon-smartphone-with-blank-screen:before { content: "\f11c"; }
+.flaticon-social:before { content: "\f11d"; }
+.flaticon-technology:before { content: "\f11e"; }
+.flaticon-time:before { content: "\f11f"; }
+.flaticon-tool:before { content: "\f120"; }
+.flaticon-two-post-it:before { content: "\f121"; }
+.flaticon-user-profile:before { content: "\f122"; }
+.flaticon-vintage:before { content: "\f123"; }
+.flaticon-web:before { content: "\f124"; }
+.flaticon-web-1:before { content: "\f125"; }

@@ -103,6 +103,9 @@ Route::post('/private-group-detail/ajax/groupimage','AjaxController@groupImage')
 
 Route::post('/ajax/login','AjaxController@login');
 
+Route::post('/ajax/delforumpost','AjaxController@delForumPost');
+Route::post('/ajax/editforumpost','AjaxController@editForumPost');
+
 
 /**
  * @Api Routes..
@@ -202,7 +205,24 @@ Route::post('api/get-job-category','ApiController@getJobCategories');
 
 	Route::post('/contactus','SearchController@contactUs');
 
-Route::group(['middleware' => 'web'], function () {
+	Route::get('/forums', 'SearchController@forumsList');
+	Route::post('/forums', 'SearchController@forumsList');
+
+	Route::get('subforums/{parentid}', 'SearchController@subForums');
+
+	Route::get('subforums/{parentid}/{name}', 'SearchController@subForums');
+
+	Route::get('subforums', 'SearchController@subForums');
+	Route::post('subforums', 'SearchController@subForums');
+
+	Route::get('forumpost/{name}', 'SearchController@forumPost');
+	Route::post('forumpost', 'SearchController@forumPost');
+	Route::post('/addnewforumpost','SearchController@addNewForumPost');
+
+	Route::get('subcatforums/{id}','SearchController@subCatForums');
+	Route::get('viewforumposts/{id}','SearchController@viewForumPosts');
+
+	Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
     Route::get('/home', 'HomeController@index');
@@ -267,19 +287,6 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::get('/demopage', 'DashboardController@demopage');
 	Route::post('/demopage', 'DashboardController@demopage');
-
-	Route::get('/forums', 'DashboardController@forumsList');
-	Route::post('/forums', 'DashboardController@forumsList');
-
-	Route::get('subforums/{parentid}', 'DashboardController@subForums');
-
-	Route::get('subforums/{parentid}/{name}', 'DashboardController@subForums');
-
-	Route::get('subforums', 'DashboardController@subForums');
-	Route::post('subforums', 'DashboardController@subForums');
-
-	Route::get('forumpost/{name}', 'DashboardController@forumPost');
-	Route::post('forumpost', 'DashboardController@forumPost');
  
 	Route::get('newpassword','SearchController@newPassword');
 	Route::post('newpassword','SearchController@newPassword');
@@ -294,6 +301,6 @@ Route::group(['middleware' => 'web'], function () {
 			return view('auth.register');
 	});
 
-	Route::post('/addnewforumpost','DashboardController@addNewForumPost');
+
 
 });

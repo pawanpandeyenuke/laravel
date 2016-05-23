@@ -70,27 +70,11 @@ header{
 	font-size: 15px;
 	color: #000;
 }
-.btn-primary1{
-	position: absolute;
-  right: 0px;
-  bottom: 0px;
-  background: #92e7dc;
-  border: 0px;
-  width: 25px;
-  height: 25px;
-  padding: 0px;
-  text-align: center;
-  line-height: 25px;
-  border-radius: 50%;
-  font-size: 13px;
-  outline:none;
-}
 .btn-primary:hover{
 	background: #5DF7E3;
 	color: #000;
 }
 .btn-header-right{
-  border-radius: 20px;
   margin: 24px 0;
   font-size: 14px;
 }
@@ -130,9 +114,10 @@ header{
 	user-select: none;
 }
 .check-cont.show-pw {
-position: absolute;
-    right: 10px;
-    top: 10px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-top: -15px;
 }
 .login-form{
 
@@ -636,14 +621,14 @@ a:hover{
   padding-bottom: 10px;
 }
 .comments-list{
-  padding: 0px 0 0;
+  padding: 15px 0 0;
   border-top: 1px solid #ECECEC;
   margin-top: 15px;
 }
 .comments-list li{
   display: block !important;
   position: relative;
-  padding: 18px 0 0px 50px;
+  padding: 10px 0 0px 50px;
   font-size: 12px;
   border-top: 1px solid #ECECEC;
   margin-top: 10px;
@@ -659,7 +644,7 @@ a:hover{
   background-size: cover !important;
   border-radius: 50%;
   left: 0px;
-  top: 17px;
+  top: 10px;
 }
 .comments-list .user-link{
   font-weight: 500;
@@ -745,7 +730,6 @@ a:hover{
   color: #A0A0A0;
   font-weight: 100;
   font-size: 11px;
-  margin-right: -15px;
 }
 .fancybox-skin{
 	padding: 0px !important;
@@ -1064,7 +1048,6 @@ a:hover{
 }
 .chat-user-list{
   height: 350px;
-  overflow-y: scroll;
 }
 .chat-user-list ul{
 	padding:0px;
@@ -1088,11 +1071,11 @@ a:hover{
 }
 .chat-user-list li .chat-thumb, .user-list-with-thumb li .chat-thumb{
   width: 34px;
-  height: 32px;
+  height: 34px;
   border-radius: 50%;
   position: absolute;
   background-size: cover !important;
-  top: 1px;
+  top: 8px;
   left: 5px;
 }
 .user-list-with-thumb li .chat-thumb{
@@ -1383,7 +1366,7 @@ width:495px;
   color: #4CBB5B;
   display:none;
 }
-.edit-pr-img {
+button.edit-pr-img {
   position: absolute;
   right: 0px;
   bottom: 0px;
@@ -1397,8 +1380,8 @@ width:495px;
   border-radius: 50%;
   font-size: 13px;
   outline:none;
+  display:none;
 }
-
 .p-data-title {
   position: relative;
   padding-left: 30px;
@@ -1520,8 +1503,8 @@ width:495px;
   display: table-cell;
   background: #fff;
   vertical-align: middle;
-  padding: 0 15px 10px;
-  font-size: 14px;
+  padding: 0 15px;
+  font-size: 16px;
   color: #000;
   font-weight: 700;
   border: 1px solid;
@@ -1654,7 +1637,7 @@ width:495px;
 .popup-list-without-img .comments-list{
 	padding: 0px;
 	border: 0px;
-	height: 180px;
+	height: 260px;
 }
 .popup-list-without-img .single-post {
   margin: 0px;
@@ -1703,16 +1686,10 @@ width:495px;
 	text-align: center;
 }
 .comments-list .comment-delete {
-	 top: 4px !important;
-  right: 0px !important;
+	 top: 8px !important;
+  right: -5px !important;
   font-size: 10px;
   color: #DCDCDC;
-}
-.comments-list .p-edit-btn{
-	font-size: 10px;
-    color: #DCDCDC;
-    right: 17px;
-    top: 4px;
 }
 .edit-post-textarea{
   position: relative;
@@ -2256,89 +2233,19 @@ textarea{
 }
 .add-study-btn {
   position: absolute;
-  right: 23px;
+  right: 0px;
   width: 40px;
   padding: 0px;
   height: 40px;
   line-height: 40px;
   border-radius: 50%;
-  top: 25px;
+  top: -6px;
   background: #92e7dc;
-  z-index: 1;
-}
-.btn.add-study-btn.removeme {
-	right: 0;
-	top: 0;
-}
-#edit-modal{
-	z-index: 1111;
-}
-.fancybox-wrap{
-	top: 30px !important;
-}
-.comment-text img.emojione{
-	margin: 0 5px 0 0;
-    width: 25px;
-}
-.cmt-data {
-    position: relative;
-    top: -16px;
-}
-.profile-img .input-group{
-	bottom: 0;
-    display: block;
-    height: 25px;
-    position: absolute;
-    right: 0;
-    width: 25px;
 }
 
 
-/** Temporary   **/
-/*.btnview{
-  position: relative;
-  width: 50%;
-  bottom: 70px;
-}
-.rbtnview{
-	left: 260px;
-}
-.lbtnview{
-	left:423px;
-	bottom: 110px;
-}
-.fremoved{
-	left:260px;
-}*/
 
-.btnview1 {
-    bottom: 43px;
-    position: relative;
-    width: 50%;
-}
-.spanmsg
-	{
-    background: #a0f0e6 none repeat scroll 0 0;
-    color: #000;
-    font-size: 15px;
-     border: 0 none;
-    height: 40px;
-    line-height: 40px;
-    padding: 0 30px;
-    }
- .spanmsg1
-	{
-    background: background: #e7e7e7;
-    color: #000;
-    font-size: 15px;
-     border: 0 none;
-    height: 40px;
-    line-height: 40px;
-    padding: 0 30px;
-    }
-
-
-    /******27-4-16*******/
+/******27-4-16*******/
 @media (min-width: 768px){
 .modal-sm {
   width: 450px;
@@ -2379,6 +2286,7 @@ textarea{
 }
 
 
+
 /*****28-4-16******/
 .error-page{
 	padding: 85px 0 8px;
@@ -2397,7 +2305,6 @@ textarea{
 }
 .page-data .error-data a{
 	color: #00b0b2;
-
 }
 .top-search-cont{
   padding: 19px 0;
@@ -2435,10 +2342,10 @@ textarea{
 .home-slider-cont .carousel-inner{
 }
 @media (min-width: 768px){
-.page-data.dashboard-body > .container > .row > .col-sm-3 {
+.page-data.dashboard-body .col-sm-3 {
     width: 22%;
 }
-.page-data.dashboard-body > .container > .row > .col-sm-6 {
+.page-data.dashboard-body .col-sm-6 {
     width: 56%;
 }
 }
@@ -2512,113 +2419,6 @@ textarea{
   margin: 70px 0 0;
   text-align: center;
 }
-
-.fa-facebook-f::before, .fa-facebook::before, .fa-twitter::before,.fa-google-plus::before,
-.fa-linkedin::before {
-	line-height: 3;
-	}
-
-
-.acs-btns {
-    margin: 0;
-    position: absolute;
-    right: 0;
-    text-align: right;
-    top: 20px;
-    width: 40%;
-}
-.cat-btn-outer .cat-btn img{
-  height: 60px;
-  margin: 10px 0;
-}
-
-/**********16-5-16*************/
-.post-list .single-post .post-img-cont {
-    margin: 0 -20px;
-    height: 320px;
-    background: #000;
-    padding: 0px;
-    text-align: center;
-    line-height: 320px;
-    overflow: hidden;
-}
-.post-list .single-post .post-img-cont img {
-    vertical-align: middle;
-    max-width: 100%;
-    max-height: 100%;
-}
-
-/*****17-5-16*******/
-.chat-message{
-	position: relative;
-	min-height: 70px;
-}
-
-#chat-system .profile-pic {
-	overflow: hidden;
-	background-size: cover !important;
-	position: absolute;
-	top: 15px;
-	left: 0px;
-}
-#chat-system .chat-msg-me{
-	text-align: right;
-	padding-right: 60px;
-}
-#chat-system .chat-msg-them{
-	text-align: left;
-	padding-left: 60px;
-}
-#chat-system .chat-msg-me .profile-pic{
-	margin-left: 10px !important;
-    margin-right: 0 !important;
-    right: 0px;
-    left: auto;
-}
-#chat-system .chat-msg-author{
-	display: block;
-    font-size: 12px;
-}
-#chat-system .chat-msg-content{
-    color: #3A3A3A;
-    font-size: 14px;
-    font-weight: normal;
-    word-wrap: break-word;
-    padding: 8px 10px;
-    border-radius: 5px;
-    display: block;
-    background: rgba(199,255,248,1);
-	background: -moz-linear-gradient(top, rgba(199,255,248,1) 0%, rgba(135,232,219,1) 100%);
-	background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(199,255,248,1)), color-stop(100%, rgba(135,232,219,1)));
-	background: -webkit-linear-gradient(top, rgba(199,255,248,1) 0%, rgba(135,232,219,1) 100%);
-	background: -o-linear-gradient(top, rgba(199,255,248,1) 0%, rgba(135,232,219,1) 100%);
-	background: -ms-linear-gradient(top, rgba(199,255,248,1) 0%, rgba(135,232,219,1) 100%);
-	background: linear-gradient(to bottom, rgba(199,255,248,1) 0%, rgba(135,232,219,1) 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c7fff8', endColorstr='#87e8db', GradientType=0 );
-	position: relative;
-}
-#chat-system .chat-msg-me .chat-msg-content:after{
-	content: '';
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-top: 0px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-left: 10px solid #BAFAF2;
-    left: 100%;
-    top: 5px;
-}
-#chat-system .chat-msg-them .chat-msg-content:before{
-	content: '';
-    position: absolute;
-    width: 0; 
-	height: 0; 
-	border-top: 0px solid transparent;
-	border-bottom: 10px solid transparent; 
-	border-right:10px solid #BAFAF2;
-    right: 100%;
-    top: 5px;
-}
 .page-loading{
   position: fixed;
   width: 100%;
@@ -2636,226 +2436,4 @@ textarea{
   margin-left: -75px;
   top: 50%;
   margin-top: -75px;
-}
-@media (min-width:800px){
-.popup-list-without-img {
-    width: 700px;
-}
-}
-.popup_list_with_img .single-post{
-  margin: 0px;
-  box-shadow: none;
-  border-radius: 7px 0px 0px 7px;
-  margin-left: -15px;
-  position:relative;
-  overflow: hidden;
-}
-
-/*********Forum style 18-05-16************/
-.forum-list-cont {
-
-}
-.forum-list-cont .forum-btn{
-  display: table;
-  width: 100%;
-  padding: 0 40px;
-  text-align: center;
-  margin: 0 0 25px;
-}
-.forum-list-cont .forum-btn a{
-  display: table-cell;
-  vertical-align: middle;
-  height: 90px;
-  font-size: 14px;
-  color: #000;
-  background: #fff;
-  border: 1px solid;
-  border-radius: 5px;
-  padding: 0 10px;
-  line-height: 17px;
-}
-.forum-list-cont .forum-btn a:hover, .forum-list-cont .forum-btn a:focus{
-  background: #E2E2E2;
-}
-.forum-list-cont .forum-btn a span{
-	display: block;
-}
-.green-bg{
-	background: #92E7DC;
-}
-.green-bg.page-title{
-  border-radius: 5px 5px 0px 0px;
-}
-.padding-data-inner {
-  padding: 0 30px;
-}
-.forum-filter .form-control{
-	margin: 0 0 20px;
-  height: 34px;
-  font-size: 12px;
-}
-.forum-btn-cont{
-  margin: 20px 0 0;
-}
-.fs-breadcrumb {
-  font-size: 14px;
-  color: #000;
-  padding: 10px 0 5px;
-  border-bottom: 1px solid #ccc;
-}
-.forum-srch-list a{
-	color: #000;
-}
-.forum-srch-list .table td{
-  vertical-align: middle;
-  padding: 15px 8px;
-}
-.forum-srch-list {
-  margin: 20px 0 0;
-}
-.forum-srch-list .count span{
-  background: #A0F0E6;
-  padding: 3px 20px;
-  border-radius: 5px;
-}
-.f-post-form{
-	position: relative;
-}
-.forum-post-cont {
-  color: #000;
-  padding: 10px 20px;
-  border-bottom: 1px solid #cccccc;
-  margin: 0 0 15px;
-}
-.f-post-form .emoji-wysiwyg-editor{
-  border-color: #ccc;
-  padding: 0 120px 0 45px !important;
-}
-.f-post-form .emoji-picker-icon{
-  font-size: 30px;
-  right: auto !important;
-  left: 10px;
-  top: 9px;
-}
-.f-post-form .btn{
-	position: absolute;
-  top: 1px;
-  right: 1px;
-  border-radius: 0px 2px 2px 0px;
-  height: 48px;
-  line-height: 48px;
-}
-.f-single-post{
-  position: relative;
-  padding: 0 0 0 95px;
-  min-height: 120px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
-  margin: 0 0 15px;
-}
-.f-single-post .p-user {
-	width: 80px;
-  font-size: 10px;
-  position: absolute;
-  left: 0px;
-  top: 0px;	
-}
-.f-single-post .p-user span{
-	display: block;
-  margin: 5px 0 0;
-}
-.f-single-post .p-user i:before{
-  font-size: 12px;
-}
-.f-single-post .p-likes i:before{
-  font-size: 17px;
-  color: #a1a1a1;
-	}
-.f-single-post .user-thumb{
-  width: 45px;
-  height: 45px;
-  display: block;
-  margin: 0 auto !important;
-  background-size: cover !important;
-  border-radius: 50%;
-}
-.f-single-post .p-date{
-
-}
-.f-single-post .p-time{
-	
-}
-.f-single-post .p-likes, .fp-likes{
-  position: relative;
-  padding: 2px 0 0 30px;
-  margin: 8px 0 0;
-}
-.f-single-post .p-likes i, .fp-likes i{
-	position: absolute;
-  left: 0px;
-  top: 0px;
-}
-.f-single-post .p-likes .plike-count, .fp-likes .plike-count{
-  background: #92e7dc;
-  font-size: 12px;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  text-align: center;
-  line-height: 20px;
-  margin: 0 0 0;
-}
-.f-single-post .f-post-title{
-  position: relative;
-  font-size: 13px;
-  color: #000;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 5px;
-  margin: 12px 0 5px 0;
-}
-.f-single-post .f-post-title .fp-action{
-  position: absolute;
-  right: 0px;
-  top: 0px;
-}
-.f-single-post .f-post-title .fp-action a{
-  padding: 0 5px;
-  border-right: 1px solid #000;
-  line-height: 12px;
-  display: inline-block;
-}
-.f-single-post .f-post-title .fp-action a:nth-last-child(1){
-	border: 0px;
-}
-.f-single-post .f-post-title .fp-action i:before{
-  font-size: 12px;
-}
-.f-single-post p{
-  font-size: 12px;
-}
-.f-single-post .p-user:after{
-  width: 1px;
-  height: 80px;
-  position: absolute;
-  content: '';
-  background: #ccc;
-  right: -5px;
-  top: 10px;
-}
-.fp-btns .btn{
-  padding: 0px 15px;
-  font-size: 13px;
-  line-height: 30px;
-  height: 30px;
-  margin: 0 0 0 5px;
-}
-.btn-sm{
-	padding: 0px 15px;
-  font-size: 13px;
-  line-height: 30px;
-  height: 30px;
-}
-.f-post-reply-form{
-	display: none;
 }

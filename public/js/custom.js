@@ -393,7 +393,6 @@ $('.btn-upload-icon').find(".badge").remove();
 				//var response = response.replace(count+"<","<");
 				pageid=2;
 				var itemcount = parseInt(current.closest('.tab-style-no-border').find('.active .count').html());
-
 				if(itemcount <= 10)
 				{
 					current.closest('.tab-style-no-border').find('.active .load-btn').remove();	
@@ -402,11 +401,12 @@ $('.btn-upload-icon').find(".badge").remove();
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('View More');
 				if(response != '')
 				{
+					current.closest('.tab-style-no-border').find('.active .count').html(itemcount);
 					if(response != 0){
-					var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+					var getelem = current.closest('.tab-style-no-border').find('.active').find('.aftersearch ul').html(response);
 					}
 					else
-					var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html("");	
+					var getelem = current.closest('.tab-style-no-border').find('.active').find('.aftersearch ul').html("");	
 				current.find('.count').html(itemcount);
 				}
 				if(response=='' || response == 0)
@@ -417,7 +417,7 @@ $('.btn-upload-icon').find(".badge").remove();
 				}
 
 				if(!(response))
-					current.closest('.tab-style-no-border').find('.active').find('ul').html("");
+					current.closest('.tab-style-no-border').find('.active').find('.aftersearch ul').html("");
 				 //current.find('.count').html("0");
 			}
 		});
@@ -739,7 +739,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'success' : function(response){
 				//var type = response.type;
-				var getelem = current.closest('.tab-style-no-border').find('.active').find('ul').html(response);
+				var getelem = current.closest('.tab-style-no-border').find('.active').find('.aftersearch').html(response);
 			}
 		});
 	});
@@ -1008,8 +1008,6 @@ $('.btn-upload-icon').find(".badge").remove();
 			'success' : function(data){
 		 
 				current.closest('.single-list').hide();
-				
-				//current.closest('.get_id').find('.msg2').show(500);
 			}
 		});
 	});
@@ -1111,6 +1109,43 @@ $(document).on('click','.savegroupname',function()
 			}
 		});
 	}
+	});
+	
+	/***** Forum Post Delete ****/
+
+	$(document).on('click','.forumpostdelete',function(){
+		var current = $(this);
+		var forumpostid = $(this).val();
+			$.ajax({
+			'url' : '/ajax/delforumpost',
+			'type' : 'post',
+			'data' : {'forumpostid' : forumpostid},
+			'success' : function(data){		 
+				current.closest('.f-single-post').hide();
+			}
+		});
+
+	});
+
+	/***** Forum Post Edit ****/
+
+		$(document).on('click','.editforumpost',function(){
+		showLoading();
+		var forumpostid = $(this).val(); 
+
+		$.ajax({
+			'url' : 'ajax/editforumpost',
+			'data' : {'forumpostid':forumpostid},
+			'type' : 'post',
+			'success' : function(response){
+				$.fancybox.close();
+				$('#edit-modal').append(response);
+				$("#edit-modal").modal();
+				hideLoading();
+			}
+		});
+		$('#edit-modal').html('');
+
 	});
 
 

@@ -58,6 +58,7 @@
 							<button data-reqtype="recieved" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
 						</div>
 						</div>
+				<div class = "aftersearch">
 						<ul>
 							@foreach($model1 as $data)
 							<?php
@@ -110,11 +111,14 @@
 									    			  $class1 = "load-btn";
 									    			  $class2 = "load-more-friend";
 									    			}
+									    			if($recievedcount > 10) {
 									    	 ?>
-									    	<div class="load-btn {{$class2}}">
-									    	
+
+									    	<div class="load-btn {{$class2}}">  	
 										    	<span class="loading-text">{{$text}}</span>
 										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+										    </div>
+										    <?php } ?>
 										    </div>
 									    </div>
 
@@ -125,29 +129,33 @@
 												<button data-reqtype="sent" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
 											</div>
 										</div>
+										 <div class = "aftersearch">
 											<ul>
 										    </ul>
 									    	<div class="load-btn load-more-friend">
 										    	<span class="loading-text">View more</span>
 										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
 										    </div>
+										    </div>
 					    				</div>
 									    
 
 									    <div id="Current" class="tab-pane" data-value="current" data-pageid="2" role="tabpanel">
 									    <div class="page-title req-search">
-							  <div class="search-box">
-							<input type="text" placeholder="Search" class="form-control searchtabtext">
-							<button data-reqtype="current" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
-						</div>
-						</div>
-											<ul>
-
-											</ul>
-									    	<div class="load-btn load-more-friend">
-											    	<span class="loading-text">View more</span>
-											    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
-											    </div>
+									
+												  <div class="search-box">
+												<input type="text" placeholder="Search" class="form-control searchtabtext">
+												<button data-reqtype="current" class="search-btn-small" type="button"><i class="flaticon-magnifying-glass138"></i></button>
+											</div>
+											  </div>
+											   <div class = "aftersearch">
+														<ul>
+														</ul>
+									    			<div class="load-btn load-more-friend">
+											    		<span class="loading-text">View more</span>
+											    		<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+											    	</div>
+											  </div>
 									    </div>
 
 								    </div>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
-,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers;
+,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers,App\ForumPost;
 
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
@@ -948,7 +948,7 @@ comments;
 	public function searchTabFriend()
 	{
 		$input=Input::all();
-
+		$count = 0;
 		$type=$input['type'];
 		$name=$input['name'];
 		$model1=array();
@@ -961,7 +961,7 @@ comments;
 			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $type ) {
 							self::queryBuilder( $query, $type );
 						})->get();
-			$count = $model->count();
+			//$count = $model->count();
 			$model = $model->toArray();
 		}
 
@@ -975,6 +975,7 @@ comments;
 
 				if (stripos($n, $name) !== false) {
 					$model2[] =$value;
+					$count ++;
 				}
 			}
 		}
@@ -1021,7 +1022,7 @@ comments;
 		     			'broadcast_message'=>$input['msg'],
                         'broadcast_id'=>$input['bid'],
                         'broadcast_by'=>Auth::User()->id,
-                        'created_at'=>date('Y-m-d h:i:s',time()),
+                        'created_at'=>date('Y-m-d H:i:s',time()),
                             );  
                 
                 BroadcastMessages::insert($data);
@@ -1197,6 +1198,19 @@ comments;
 			}
 	}
 
+	public function delForumPost()
+	{
+		$args = Input::all();
+		ForumPost::where('id',$args['forumpostid'])->delete();
+	}
+
+	public function editForumPost()
+	{
+		$forumpostid = Input::get('forumpostid');
+		$forumpost = ForumPost::where('id',$forumpostid)->get()->first();
+
+		return view('ajax.editforumpost')->with('forumpost', $forumpost);
+	}
 
 }
 	

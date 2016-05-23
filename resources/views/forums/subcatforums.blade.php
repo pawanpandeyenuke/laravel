@@ -63,7 +63,7 @@ unset($countries[0]);
 						</div><!--/forum filter-->
 
 						<div class="forum-srch-list">
-							<div class="fs-breadcrumb"><a href="{{url('forums')}}" title="">Home</a> > {{$mainforum}}</div>
+							<div class="fs-breadcrumb"><a href="{{url('forums')}}" title="">Home</a> > <a href = "{{url("subforums/$parentforumid")}}" title="">{{$parentforum}}</a> >{{$mainforum}}</div>
 							<div class="table-responsive">
 								<table class="table">
 			@if(!empty($subforums))

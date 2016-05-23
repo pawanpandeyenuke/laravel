@@ -1,3 +1,4 @@
+		
 		<?php 
 
 		if($model1!=null)
@@ -5,7 +6,6 @@
 			$id1 = Auth::User()->id;
 
 		?>
-
 @foreach($model1 as $data) 
 	<?php 
 			
@@ -91,6 +91,7 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 	<?php } else
 		{
          ?>
+ <ul>
 @foreach($model as $data) 
 	<?php 
 //print_r($model);die;
@@ -168,5 +169,14 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 	</li>
 	<?php } ?>
 	@endforeach
+		</ul>
+		<?php if($count > 10){ 
+			//print_r("die here");die;
+			?>
+			<div class="load-btn load-more-friend">
+			<span class="loading-text">View more</span>
+			<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+		</div>
+		<?php } ?>
 
 	<?php } ?>

@@ -1,6 +1,6 @@
 	/*
   	Flaticon icon font: Flaticon
-  	Creation date: 27/04/2016 12:47
+  	Creation date: 18/05/2016 11:08
   	*/
 
 @font-face {
@@ -48,15 +48,18 @@ font-style: normal;
 .flaticon-letter:before { content: "\f111"; }
 .flaticon-letter133:before { content: "\f112"; }
 .flaticon-magnifying-glass138:before { content: "\f113"; }
-.flaticon-padlock50:before { content: "\f114"; }
-.flaticon-people:before { content: "\f115"; }
-.flaticon-profile5:before { content: "\f116"; }
-.flaticon-round:before { content: "\f117"; }
-.flaticon-search74:before { content: "\f118"; }
-.flaticon-social:before { content: "\f119"; }
-.flaticon-technology:before { content: "\f11a"; }
-.flaticon-time:before { content: "\f11b"; }
-.flaticon-tool:before { content: "\f11c"; }
-.flaticon-vintage:before { content: "\f11d"; }
-.flaticon-web:before { content: "\f11e"; }
-.flaticon-web-1:before { content: "\f11f"; }
+.flaticon-next:before { content: "\f114"; }
+.flaticon-padlock50:before { content: "\f115"; }
+.flaticon-people:before { content: "\f116"; }
+.flaticon-profile5:before { content: "\f117"; }
+.flaticon-round:before { content: "\f118"; }
+.flaticon-search74:before { content: "\f119"; }
+.flaticon-smartphone-with-blank-screen:before { content: "\f11a"; }
+.flaticon-social:before { content: "\f11b"; }
+.flaticon-technology:before { content: "\f11c"; }
+.flaticon-time:before { content: "\f11d"; }
+.flaticon-tool:before { content: "\f11e"; }
+.flaticon-user-profile:before { content: "\f11f"; }
+.flaticon-vintage:before { content: "\f120"; }
+.flaticon-web:before { content: "\f121"; }
+.flaticon-web-1:before { content: "\f122"; }
