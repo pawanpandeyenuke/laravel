@@ -180,3 +180,4 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 		<?php } ?>
 
 	<?php } ?>
+

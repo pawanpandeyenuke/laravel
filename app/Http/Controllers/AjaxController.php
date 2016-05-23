@@ -44,30 +44,53 @@ class AjaxController extends Controller
 							'password.required' => 'Please enter password']
 						);
 
-				if($validator->fails()) {					
-					 $error = $validator->errors()->getMessages();	
-					 //print_r($error);die;
-					 if(isset($error['password']))
-					 {
-					 	if(isset($error['email']))
-					 		echo 'email,'.$error['email'][0];
-					 	else	
-					 		echo 'password,'.$error['password'][0];
-					 }
-					 else
-					 	echo 'email,'.$error['email'][0];			
-					}
-					else{
-						if(Auth::attempt(['email' => $email,'password'=>$password],$log))
-							echo 'success';
-						else
-							echo 'These credentials do not match our records.';
+		if($validator->fails()) {					
+			$error = $validator->errors()->getMessages();	
 
-					}
-		
+			$emailValidate = isset($error['email'][0]) ? $error['email'][0] : '';
+			$passwordValidate = isset($error['password'][0]) ? $error['password'][0] : '';
 
+			if( $emailValidate != null && $passwordValidate != null ) {
+
+				$err = array(
+						'email' => $emailValidate,
+						'password' => $passwordValidate
+					);
+
+			}elseif ( $emailValidate != null ) {
+				
+				$err = array(
+						'email' => $emailValidate
+					);
+
+			}else{
+
+				$err = array(
+						'password' => $passwordValidate
+					);
+
+			}
+
+			echo json_encode($err);
+
+		}else{
+
+			if(Auth::attempt(['email' => $email, 'password'=>$password , 'is_email_verified'=>
+				'Y'], $log))
+				echo 'success';
+			else{
+				$verified = User::where('email',$email)->value('is_email_verified');
+				if($verified == 'N')
+					echo 'verification';
+				elseif($verified == "Y")
+					echo 'These credentials do not match our records.';
+			}
+
+		}
 
 	}
+
+
 	//Handling posts
 	public function posts()
 	{
@@ -1211,6 +1234,49 @@ comments;
 
 		return view('ajax.editforumpost')->with('forumpost', $forumpost);
 	}
+
+	public function addNewForumPost()
+    {
+    	$user = Auth::User();
+            $input = Input::all();
+            $name = $user->first_name." ".$user->last_name;
+           print_r($input);die;
+        $date1 = date('d M Y', time());
+        $date2 = date('h:i a', time());
+            DB::table('forums_post')
+                ->insert(['title'=>$input['topic'],
+                        'owner_id'=>$user->id,
+                        'category_id'=>$input['category_id'],
+                        'created_at'=>date('Y-m-d H:i:s',time()),
+                        'updated_at'=>date('Y-m-d H:i:s',time())]);
+
+
+
+        $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+
+       $forumpostdata = "<div class='f-single-post'>
+									<div class='p-user'>
+										<span class='user-thumb' style='background: url('{{$profileimage}}');'></span>
+										<span class='p-date'><i class='flaticon-days'></i> {{$date1}}</span>
+										<span class='p-time'><i class='flaticon-time'></i> {{$date2}}</span>
+										<div class='p-likes'><i class='flaticon-web'></i> <span class='plike-count'>19</span></div>
+									</div>
+									<div class='f-post-title'>
+									<a href='{{url('profile/$user->id')}}' title=''>
+										{{$name}}
+										<a>
+										<div class='fp-action'>
+											<button class='editforumpost' value='{{$data->id}}'  data-toggle='modal' title='Edit' data-target='.edit-forumpost-popup'><i class='flaticon-pencil'></i></button>
+											<button class='forumpostdelete' value='{{$data->id}}'><i class='flaticon-garbage'></i></button>
+										</div>
+									</div>
+									<p>{{$data->title}} </p>
+									<div class='fp-btns text-right'>
+										<span class='btn btn-primary'>Replies(8)</span>
+										<a href='#' title='' class='btn btn-primary'><span class='glyphicon glyphicon-share-alt'></span>Reply</a>
+									</div>
+								</div>";
+    }
 
 }
 	

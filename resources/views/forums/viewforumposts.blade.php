@@ -88,13 +88,10 @@
 							</div><!--/forum post cont-->
 
 							<!---New Forum Post-->
-						{!! Form::open(array('url' => '/addnewforumpost', 'id' => 'addnewpost','method' => 'post')) !!}
 							<div class="f-post-form">
-							<input type="hidden" name="category_id" value="{{$categoryid}}">
-								<textarea name="topic" class="form-control" data-emojiable="true"></textarea>
-								<button type="submit" class="btn btn-primary">Submit</button>
+								<textarea name="topic" class="form-control forumpost" data-emojiable="true"></textarea>
+								<button type="button" class="btn btn-primary addforumpost"  value="{{$categoryid}}">Submit</button>
 							</div>
-						{!! Form::close() !!}
 							<!---END New Forum Post-->
 
 							<div class="f-post-list-outer">
@@ -152,9 +149,19 @@
 
 @endsection
 {!! Session::forget('error') !!}
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
+<script src="{{url('/lib/js/emoji-picker.js')}}"></script> -->
 <script type="text/javascript">
 	
+	window.onload = function() {
 
+			window.emojiPicker = new EmojiPicker({
+			emojiable_selector: '[data-emojiable=true]',
+			assetsPath: '/lib/img/',
+			popupButtonClasses: 'fa fa-smile-o'
+      	});
+      window.emojiPicker.discover();
+	}
 
 </script>

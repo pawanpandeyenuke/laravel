@@ -49,7 +49,7 @@
 							<div class="search-field">
 							{!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
 								<input type="text" name="searchfriends" id="searchfriends" value="" placeholder="Enter Name" class="form-control">
-								<button type="submit" class="btn btn-primary btn-srch-top search-btn search" disabled>Search Friends</button>
+								<button type="submit" class="btn btn-primary btn-srch-top search-btn search" >Search Friends</button>
 									{!! Form::close() !!}
 							</div>
 						</div>
@@ -87,6 +87,12 @@
 { ?>
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <?php } ?>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
+
 <script src="http://malsup.github.com/jquery.form.js"></script> 
 <script type="text/javascript" src="{{url('/fancybox/jquery.fancybox.js')}}"></script>
 <script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
@@ -104,22 +110,8 @@
 <script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
 <script src="{{url('/lib/js/emoji-picker.js')}}"></script>
 <script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
-<script type="text/javascript">
-	$(document).on('keyup','#searchfriends',function(){
-			
-				if($('#searchfriends').val() != "")
-					$('.search').prop('disabled',false);
-				else
-					$('.search').prop('disabled',true);		
-	});
-</script>
-<!--/Emoji-->
 
-<!-- 
-<script type="text/javascript" src="/converse/converse.nojquery.min.js"></script>
-<script type="text/javascript" src="/converse/jquery.form.js"></script>
--->
-
+ 
 </body>
 </html>
 

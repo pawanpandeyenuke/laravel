@@ -34,15 +34,16 @@
 							<div class="form-group">
 								<input type="text" name="email" class="form-control icon-field emailid" placeholder="Email ID">
 									<span class="help-block">
-											<strong class = "erroremail"></strong>
-										</span>
+										<strong class = "errormsg"></strong>
+									</span>
 								<span class="field-icon flaticon-letter133"></span>
 							</div>
 							<div class="form-group">
 								<input type="password" name="password" class="form-control icon-field password" placeholder="Password" id="showpassword">
 								<span class="help-block">
-											<strong class = "errorpassword"></strong>
-										</span>
+									<strong class = "errormsg"></strong>
+									<strong class = "verifymsg" style="display: none; color:#a94442">Please verify your account.<a href="{{url('send-verification-link')}}"> Click here </a>to send verification link again.</strong>
+								</span>
 								<span class="field-icon flaticon-padlock50"></span>
 								<div class="check-cont show-pw">
 									<input type="checkbox" onchange="document.getElementById('showpassword').type = this.checked ? 'text' : 'password'" name="checkboxG2" id="checkboxG2" class="css-checkbox">
@@ -139,14 +140,14 @@
 					<div class="already-member">Already have Account? <a href="#" title="" data-toggle="modal" data-target="#LoginPop">Login</a></div>
 					<h3 class="text-center">Registration</h3>
 
-					  <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
+					  <form class="form-horizontal" id="registerForm" role="form" method="POST" action="{{ url('/register') }}">
                         {!! csrf_field() !!}
 
 					<div class="row field-row">
 						<div class="col-sm-12">
 
 							<div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
-								<input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control icon-field" placeholder="First Name" required>
+								<input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control icon-field" placeholder="First Name">
 									
 									@if ($errors->has('first_name'))
 										<span class="help-block">
@@ -158,7 +159,7 @@
 								</div>
 
 							<div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
-									<input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control icon-field" placeholder="Last Name" required>
+									<input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control icon-field" placeholder="Last Name">
 									
 									@if ($errors->has('last_name'))
 										<span class="help-block">
@@ -171,7 +172,7 @@
 
 
 								<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-									<input type="email" name="email" value="{{ old('email') }}" class="form-control icon-field" placeholder="Email ID" required>
+									<input type="email" name="email" value="{{ old('email') }}" class="form-control icon-field" placeholder="Email ID" >
 									
 									@if ($errors->has('email'))
 										<span class="help-block">
@@ -183,7 +184,7 @@
 								</div>
 
 							<div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-									<input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword" required>
+									<input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword">
 									
 									@if ($errors->has('password'))
 										<span class="help-block">
@@ -231,7 +232,7 @@
 						</div>
 								<div class="form-groups">
 									<div class="btn-cont text-center">
-										<input type="submit" class="btn btn-primary register" value="Get Started" disabled="disabled">
+										<input type="submit" class="btn btn-primary register" value="Get Started">
 									</div>
 								</div>
 						</div>
@@ -262,13 +263,51 @@
 	</div>
 </div><!--/pagedata-->
 
-@endsection
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script> 
+<script src="http://malsup.github.com/jquery.form.js"></script>
 <script type="text/javascript" >
 
+$(document).ready(function () {
 
-$(document).on('change', '#terms', function() {
+    $("#registerForm").validate({ 
+        errorElement: 'span',
+        errorClass: 'help-inline',
+        rules: {
+            first_name: { required: true },
+            last_name:  { required: true },
+            email:  { required: true, email: true },
+            password:  { required: true, minlength: 8 },
+            terms:  { required: true },
+            phone_no: { maxlength: 15 }
+        },
+        messages:{
+            first_name:{
+                required: "Please enter your first name."
+            },
+            last_name:{
+                required: "Please enter your last name."
+            },
+            email:{
+                required: "Please enter your Email id.",
+                email: "Please enter a valid email address."
+            },
+            password:{
+                required: "Please enter a password.",
+                minlength: "Password must have more that 8 character."
+            },
+            terms:{
+                required: "Please agree to the terms.",
+            },
+            phone_no:{
+            	maxlength: "Contact number cannot have more than 15 digits."
+            }
+        }
+    });
+
+});
+
+
+/*$(document).on('change', '#terms', function() {
 
     // $this will contain a reference to the checkbox   
     if ($(this).is(':checked')) {
@@ -276,43 +315,74 @@ $(document).on('change', '#terms', function() {
     } else {
         $('.register').prop('disabled',true);
     }
-});
+});*/
 
 
 $("#loginform").ajaxForm(function(response) { 
+
 	if(response){
-
-							if(response == "These credentials do not match our records.")
-							{
-								$('.help-block').find('.errorpassword').text(response).css('color','#a94442');
-								$('.emailid').css('border-color','#333333');
-								$('.password').css('border-color','#333333');
-								$('.help-block').find('.erroremail').text("");
-							}
+			$('.password').next('.help-block').find('.verifymsg').hide();
 		
-							else if(response == "success"){
-								window.location = '/dashboard';
-							}else{
-								var res = response.split(',');
+		if(response === "These credentials do not match our records.")
+		{
+		
+			var current = $('.password');
+		    current.next('.help-block').find('.verifymsg').hide();
+			current.css('border-color','#a94442');
+			current.next('.help-block').find('.errormsg').text(response).css('color','#a94442');
+			$('.emailid').css('border-color','#a94442');
+			$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
 
-									if(res[0] == "email")
-									{
-									$('.help-block').find('.erroremail').text(res[1]).css('color','#a94442');
-									$('.emailid').css('border-color','#a94442');
-									$('.password').css('border-color','#333333');
-									$('.help-block').find('.errorpassword').text("");
-									}
-									if(res[0] == "password"){
-									$('.help-block').find('.erroremail').text("");
-									$('.help-block').find('.errorpassword').text(res[1]).css('color','#a94442');
-									$('.password').css('border-color','#a94442');
-									$('.emailid').css('border-color','#333333');	
-									}
-							}
-							
-							}
+
+		}
+
+		if(response === "verification")
+		{
+			var current = $('.password');
+			current.css('border-color','#a94442');
+			current.next('.help-block').find('.errormsg').text("").css('color','#a94442');
+			current.next('.help-block').find('.verifymsg').show();
+			$('.emailid').css('border-color','#a94442');
+			$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+
+
+		}
+
+		else if(response == "success"){
+			window.location = '/dashboard';
+		}else{
+			var obj = jQuery.parseJSON( response );
+			if( obj.email != null ){
+
+				var current = $('.emailid');
+				current.next('.help-block').find('.verifymsg').hide();
+				current.css('border-color','#a94442');
+				current.next('.help-block').find('.errormsg').text(obj.email).css('color','#a94442');
+
+				if( obj.password == null ){
+					$('.password').next('.help-block').find('.errormsg').text("").css('color','#333333');
+					current.next('.help-block').find('.verifymsg').hide();
+					$('.password').css('border-color','#333333');
+				}
+			}
+			if( obj.password != null ){		
+				var current = $('.password');
+				current.next('.help-block').find('.verifymsg').hide();				
+				current.css('border-color','#a94442');
+				current.next('.help-block').find('.errormsg').text(obj.password).css('color','#a94442');
+
+				if( obj.email == null ){
+					$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+					current.next('.help-block').find('.verifymsg').hide();
+					$('.emailid').css('border-color','#333333');
+				}
+			}
+		}
+	
+	}
 
 });
+
 	//disabling texts for mobile fields
 	$(document).on('keypress','.numeric,input[type="number"]', function(evt){
 		evt = (evt) ? evt : window.event;
@@ -331,4 +401,7 @@ $("#loginform").ajaxForm(function(response) {
 		e.preventDefault();
 	});
 
+
+
 </script>
+@endsection

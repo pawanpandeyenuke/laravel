@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Request, Session, Validator, Input, Cookie;
 use App\User, Auth,Mail,App\Forums,DB,App\ForumPost;
+
 class SearchController extends Controller
 {
     
@@ -15,47 +16,47 @@ class SearchController extends Controller
         if(Request::isMethod('post')){
 
             $input = Request::all();
-            $name = $input['searchfriends'];
+            $keyword = $input['searchfriends'];
 
-            if($name == "")
+            if($keyword == "")
                 return redirect('/');
 
-            if(Auth::Check())
+            $authUserId = isset(Auth::User()->id) ? Auth::User()->id : '';
 
-            {   
-                $auth = 1;
-                $pregMatch = preg_match('/\s/',$name); 
+            $model = new User;
 
-                if($pregMatch){
-                    $name = explode(' ', $name);
-                    $fname = $name[0];
-                    $lname = $name[1];
-                    $result = self::searchUsersFromSite($auth, $fname, $lname);
-                }else{
-                    $result = self::searchUsersFromSite($auth, $name);
-                }
+            // Search for the following people.
+            if(trim($keyword) != ''){
 
-                $model1 = $result->toArray(); 
-                $count = $result->count();
-                $auth = 1;
+                $model = $model->where( function( $query ) use ( $input, $keyword ) {
+                    $expVal = explode(' ', $keyword);
+                    foreach( $expVal as $key => $value ) {                          
+                        $query->orWhere( 'last_name', 'LIKE', '%'. $value.'%' )
+                            ->orWhere( 'first_name', 'LIKE', '%'. $value.'%' );  
+                    }
+                });
 
-            }else{
-                $auth = 0;
-                $pregMatch = preg_match('/\s/',$name); 
+            }
 
-                if($pregMatch){
-                    $name = explode(' ', $name);
-                    $fname = $name[0];
-                    $lname = $name[1];
-                    $result = self::searchUsersFromSite($auth, $fname, $lname);
-                }else{
-                    $result = self::searchUsersFromSite($auth, $name);
-                }
-                // echo '<pre>';print_r($result->toArray());die;
-                $model1 = $result->toArray(); 
-                $count = $result->count();
-                $auth = 0;
-             }
+            if( $authUserId != '' ){
+                
+                // User cannot search himself.
+                $model = $model->where('id', '!=', $authUserId);
+
+                // Search for user's who are not friends with me.
+                $model = $model->whereNotIn('id', Friend::where('user_id', '=', $authUserId)
+                                ->where('status', '=', 'Accepted')
+                                ->pluck('friend_id')
+                                ->toArray() );
+
+            }
+
+            // Gather all the results from the queries and paginate it.
+            $result = $model->orderBy('id','desc')->get();   
+
+            $model1 = $result->toArray(); 
+            $count = $result->count();
+            $auth = ($authUserId != '') ? 1 : 0;
 
         return view('dashboard.allusers')
                 ->with('model1',$model1)
@@ -65,47 +66,6 @@ class SearchController extends Controller
         
         }
         
-    }
-
-
-    public function searchUsersFromSite($auth, $firstname, $lastname = ''){
-
-        if($auth){
-            if( !empty( $firstname ) && !empty( $lastname ) ) {
-                return User::where('id','!=',Auth::User()->id)
-                        ->where(function($query) use ( $firstname, $lastname ){
-                            $query->where('first_name','LIKE','%'. $firstname.'%');
-                            $query->orWhere('last_name','LIKE','%'. $lastname.'%');
-                        })
-                        ->orderBy('id','desc')
-                        ->get();
-            }elseif( !empty($firstname ) ) {
-                return User::where('id','!=',Auth::User()->id)
-                        ->where(function($query) use ( $firstname ){
-                            $query->where('first_name','LIKE','%'. $firstname.'%');
-                            $query->orWhere('last_name','LIKE','%'. $firstname.'%');
-                        })
-                        ->orderBy('id','desc')
-                        ->get();
-            }
-        }else{
-            if( !empty( $firstname ) && !empty( $lastname ) ) {
-                return User::where(function($query) use ( $firstname, $lastname ){
-                            $query->where('first_name','LIKE','%'. $firstname.'%');
-                            $query->orWhere('last_name','LIKE','%'. $lastname.'%');
-                        })
-                        ->orderBy('id','desc')
-                        ->get();
-            }elseif( !empty($firstname ) ) {
-                return User::where(function($query) use ( $firstname ){
-                            $query->where('first_name','LIKE','%'. $firstname.'%');
-                            $query->orWhere('last_name','LIKE','%'. $firstname.'%');
-                        })
-                        ->orderBy('id','desc')
-                        ->get();
-            }
-        }
-
     }
 
 
@@ -146,6 +106,34 @@ class SearchController extends Controller
     {
         Auth::logout();
         return view('auth.passwords.newpassword');
+    }
+
+    public function verify()
+    {
+         if(Request::isMethod('post')){
+            $arguments = Request::all();
+            $user = User::where('email',$arguments['email'])->first();
+            //print_r($user);die;
+            $useremail = $user->email;
+            $username = $user->first_name." ".$user->last_name;
+            $confirmation_code = str_random(30);
+
+            if($user->is_email_verified == "Y"){
+                 Session::put('error', 'This email is already verified!');
+                 return redirect()->back();
+             }
+             elseif($user->is_email_verified == "N"){
+                 $emaildata = array('confirmation_code' => $confirmation_code);
+
+                    Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
+                    $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
+                    $message->to($useremail,$username)->subject('Verify your email address');
+                    });
+                Session::put('success', 'Verification link sent to '.$useremail.' !');
+                  return redirect()->back();
+             }
+        }
+            return view('verifyemail');
     }
 
 
@@ -239,19 +227,5 @@ class SearchController extends Controller
                 ->with('categoryid',$id);
     }
 
-    public function addNewForumPost()
-    {
-        if(Request::isMethod('post')){
-            $input = Request::all();
-            // print_r($input);die;
-        $date = date('d M Y,h:i a', time());
-            DB::table('forums_post')
-                ->insert(['title'=>$input['topic'],
-                        'owner_id'=>Auth::User()->id,
-                        'category_id'=>$input['category_id'],
-                        'created_at'=>date('Y-m-d H:i:s',time()),
-                        'updated_at'=>date('Y-m-d H:i:s',time())]);
-                return redirect('viewforumposts/'.$input['category_id']);
-        }
-    }
+  
 }

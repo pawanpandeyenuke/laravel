@@ -1,12 +1,18 @@
 $(document).ready(function(){
 
+	
+	$( "#searchform" ).submit(function( event ) {
+		var searchkey = $('#searchfriends').val();
+		if(searchkey == ''){
+			$('#searchfriends').attr('placeholder', 'Search here..').focus();
+			event.preventDefault();
+		}
+	});
+
+
 	$('.StyleScroll').niceScroll();
 	
 	var myReader = new FileReader();
-
-
-
-
 	 $("#fileUpload").on('change', function () {
 	 
 	     //Get count of selected files
@@ -1122,6 +1128,21 @@ $(document).on('click','.savegroupname',function()
 			'data' : {'forumpostid' : forumpostid},
 			'success' : function(data){		 
 				current.closest('.f-single-post').hide();
+			}
+		});
+
+	});
+
+		$(document).on('click','.addforumpost',function(){
+		var current = $(this);
+		var category_id = $(this).val();
+		var post = $('.forumpost').val();
+			$.ajax({
+			'url' : '/ajax/addnewforumpost',
+			'type' : 'post',
+			'data' : {'category_id' : category_id,'topic' : post},
+			'success' : function(data){		 
+				
 			}
 		});
 

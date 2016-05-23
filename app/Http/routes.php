@@ -106,6 +106,8 @@ Route::post('/ajax/login','AjaxController@login');
 Route::post('/ajax/delforumpost','AjaxController@delForumPost');
 Route::post('/ajax/editforumpost','AjaxController@editForumPost');
 
+	Route::post('/ajax/addnewforumpost','AjaxController@addNewForumPost');
+
 
 /**
  * @Api Routes..
@@ -199,7 +201,10 @@ Route::post('api/get-job-category','ApiController@getJobCategories');
 
 	Route::get('home', 'HomeController@index');
 
-	Route::get('/searchfriends',"SearchController@searchFromUsers");
+	// Route::get('/searchfriends',"SearchController@searchFromUsers");
+	Route::get('/searchfriends', function(){
+		return redirect('/');
+	});
 	Route::post('/searchfriends',"SearchController@searchFromUsers");
 
 
@@ -217,7 +222,6 @@ Route::post('api/get-job-category','ApiController@getJobCategories');
 
 	Route::get('forumpost/{name}', 'SearchController@forumPost');
 	Route::post('forumpost', 'SearchController@forumPost');
-	Route::post('/addnewforumpost','SearchController@addNewForumPost');
 
 	Route::get('subcatforums/{id}','SearchController@subCatForums');
 	Route::get('viewforumposts/{id}','SearchController@viewForumPosts');
@@ -293,6 +297,9 @@ Route::post('api/get-job-category','ApiController@getJobCategories');
 
 	Route::get('terms-conditions','SearchController@termsConditions');
 	Route::post('terms-conditions','SearchController@termsConditions');
+
+	Route::get('send-verification-link','SearchController@verify');
+	Route::post('send-verification-link','SearchController@verify');	
  
 	Route::get('/', function(){
 		if(Auth::check())
@@ -300,6 +307,11 @@ Route::post('api/get-job-category','ApiController@getJobCategories');
 		else
 			return view('auth.register');
 	});
+
+	Route::get('register/verify/{confirmationCode}', [
+    'as' => 'confirmation_path',
+    'uses' => 'AuthController@confirm'
+	]);
 
 
 

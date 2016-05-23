@@ -6,7 +6,7 @@ use Auth;
 use DB;
 use App\Library\Converse;
 use Socialite;
-use App\User;
+use App\User,Mail,Session;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -32,7 +32,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard';
+    protected $redirectTo = '/';
 
     /**
      * Create a new authentication controller instance.
@@ -68,6 +68,7 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
+        $confirmation_code = str_random(30);
 
         $userdata = User::create([
             'first_name' => $data['first_name'],
@@ -75,6 +76,8 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
 	        'phone_no' => $data['phone_no'],
+            'confirmation_code' => $confirmation_code,
+            'is_email_verified' => 'N'
         ]);
         $xmpp_username = $userdata->first_name.$userdata->id;
         $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
@@ -84,7 +87,18 @@ class AuthController extends Controller
         $user->xmpp_password = $xmpp_password;
         $user->save();
 
+        $useremail = $data['email'];
+        $username = $data['first_name']." ".$data['last_name'];
 
+         $emaildata = array(
+            'confirmation_code' => $confirmation_code,
+        );
+
+        Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
+        $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
+        $message->to($useremail,$username)->subject('Verify your email address');
+        });
+       
         DB::table('settings')->insert(['setting_title'=>'contact-request','setting_value'=>'All','user_id'=>$userdata->id]);
 
 
@@ -92,10 +106,36 @@ class AuthController extends Controller
         $converse = new Converse;
         $response = $converse->register($xmpp_username, $xmpp_password);
         
-
+        Session::put('success', 'Thanks for signing up! Please check your email to verify your account.');
+        
         $vcard = $converse->setVcard($xmpp_username, $user->picture);
-        // echo '<pre>';print_r($vcard);die;
+//        echo '<pre>';print_r($vcard);//die;
         return $userdata;
+
+        
+    }
+
+    public function confirm($confirmation_code)
+    {
+        if( ! $confirmation_code)
+        {
+            throw new InvalidConfirmationCodeException;
+        }
+
+        $user = User::whereConfirmationCode($confirmation_code)->first();
+
+        if ( ! $user)
+        {
+            throw new InvalidConfirmationCodeException;
+        }
+
+        $user->is_email_verified = 'Y';
+        $user->confirmation_code = null;
+        $user->save();
+
+        Flash::message('You have successfully verified your account.');
+
+        return Redirect::route('/');
     }
 
 }

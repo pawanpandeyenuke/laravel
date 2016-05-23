@@ -80,7 +80,7 @@ class ApiController extends Controller
 
 		        $converse = new Converse;
 		        $response = $converse->register($xmpp_username, $xmpp_password);
-		        // echo '<pre>';print_r($response);die;
+
 				$this->status = 'success';
 				$this->message = 'User registered successfully';				
 				$this->data = $user->toArray();
@@ -150,14 +150,13 @@ class ApiController extends Controller
 				elseif( isset( $arguments['id'] ) &&  $arguments['type'] == 'linkedin' )
 					$arguments['linked_id'] = $arguments['id'];
 
-				//print_r($arguments);die;
 				$controller = app()->make('App\Http\Controllers\SocialController')->socialLogin($arguments);
 
 
                                 //Saving xmpp-username and xmpp-pasword into database.
                                 $xmpp_username = $controller->first_name.$controller->id;
                                 $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
-                                //print_r($userDbObj);die;
+
                                 $user = User::find($controller->id);
                                 $user->xmpp_username = strtolower($xmpp_username);
                                 $user->xmpp_password = $xmpp_password;
@@ -165,8 +164,6 @@ class ApiController extends Controller
 
 			        $converse = new Converse;
 			        $response = $converse->register($xmpp_username, $xmpp_password);
-
-				//print_r($controller);die;
 
 				if( $controller ){
 					$this->message = 'Successfully logged in';
@@ -291,44 +288,12 @@ class ApiController extends Controller
 								->with('likedornot')
 								->count();
 
-					/*$posts = Feed::where('user_by', $arguments['user_by'])->orderBy('updated_at', 'desc')->skip($offset)->take($per_page)->with('likesCount')->with('commentsCount')->with('user')->with('likedornot')->get()->toArray();*/
-//					$recordscount = Feed::where('user_by', $arguments['user_by'])->get();
-//					$rcounts = Feed::all();
-//					$recordscount = count($rcounts);
-//print_r($recordscount);die;
-
-
-					// $posts = Feed::with('user')->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')->groupBy('news_feed.id')->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments'),DB::raw('count(likes.id) as likes')]);
-
-/*					$posts = DB::table('users')
-					            ->join('news_feed', 'news_feed.user_by', '=', 'users.id')
-					            ->join('likes', 'news_feed.user_by', '=', 'likes.user_id')
-					            ->join('comments', 'news_feed.user_by', '=', 'comments.commented_by')
-					            ->select('users.id', 'users.first_name', 'users.last_name', 'users.picture')
-					            ->selectRaw('likes.feed_id, count(*) as likescount')->groupBy('likes.feed_id')
-					            ->selectRaw('comments.feed_id, count(*) as commentscount')->groupBy('comments.feed_id')
-					            ->get();
-					            // ->toSql();*/
-
-/*					$posts = Feed::with('user')
-								->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')
-								->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')
-								->groupBy('news_feed.id')
-								->get(['news_feed.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as comments')]);*/
-
 					if( $posts ){
 
 						$this->status = 'success';
 						$this->data['feed'] = $posts;
 						$this->data['page_no'] = $arguments['page'];
 						$this->data['page_size'] = $arguments['page_size'];
-/*
-						$this->data['records'] = $recordscount;
-						$this->data['total_pages'] = ceil($recordscount / $arguments['page_size']);
-						$this->message = count($posts). ' posts found.';
-						$this->status = 'success';
-						$this->message = count($posts). ' posts found.';
-						$this->data['feeds'] = $posts;*/
 
 						$this->data['records'] = $postscount;
 						$this->data['total_pages'] = ceil($postscount / $arguments['page_size']);
@@ -393,7 +358,6 @@ class ApiController extends Controller
 						$this->data = $arguments;
 						$this->data['status'] = 'unliked';
 
-						// echo '<pre>';print_r($response);exit;
 					}
 
 				}
@@ -465,7 +429,7 @@ class ApiController extends Controller
 			try
 			{
 				$arguments = Request::all();
-				// print_r($arguments);die('pawan');
+
 				$comments = new Comment;
 
 				$validator = Validator::make($arguments, $comments->rules, $comments->messages);
@@ -519,8 +483,6 @@ class ApiController extends Controller
 					throw new Exception("This user id doesn't exist");
 
 				$userProfile = User::with('education')->where(['id'=>$arguments['id']])->get()->toArray();
-
-				//print_r($userProfile);die;
 
 				$this->status = 'Success';
 				$this->data = $userProfile;
@@ -594,7 +556,7 @@ class ApiController extends Controller
 		try{
 			$arguments = Request::all();
 			$user = new User();
-//			echo '<pre>';print_r($arguments);die;
+
 			if(isset($arguments['education'])){
 
 				$delete = EducationDetails::where('user_id', '=', $arguments['id'])->delete();
@@ -602,7 +564,7 @@ class ApiController extends Controller
 				$data = array();
 
 				$educationdata = $arguments['education'];
-				// echo '<pre>';print_r($educationdata);die;
+
 				foreach ($educationdata as $key => $value) {
 
 					$education = new EducationDetails;
@@ -657,7 +619,7 @@ class ApiController extends Controller
 	{
 		try{
 			$arguments = Request::all();
-			//print_r($arguments);die;
+
  			$validator = Validator::make($arguments, [
 	 						'id' => 'required|numeric',
 	 					]); 
@@ -998,17 +960,19 @@ class ApiController extends Controller
 	{
 		try{
 			$arguments = Request::all();
-			//print_r($arguments);die;
 
 			$user = User::where('id', '=', $arguments['user_id'])->get()->toArray();
 			$friend = User::where('id', '=', $arguments['friend_id'])->get()->toArray();
-			// echo '<pre>';print_r($friend);die;
+
 			if(empty($user))
 				throw new Exception("This user does not exist", 1);
 
 			if(empty($friend))
 				throw new Exception("This user does not exist", 1);
-			// echo '<pre>';print_r($friend);die;
+
+			if( $arguments['user_id'] === $arguments['friend_id'] )
+				throw new Exception("You cannot send request to yourself.", 1);
+
 			$friendcheck = Friend::where('user_id', '=', $arguments['user_id'])
 							->where('friend_id', '=', $arguments['friend_id'])
 							->get()
@@ -1091,6 +1055,9 @@ class ApiController extends Controller
 			if(empty($friend))
 				throw new Exception("This user does not exist", 1);
 
+			if( $arguments['user_id'] === $arguments['friend_id'] )
+				throw new Exception("You cannot add yourself as a friend.", 1);
+
 			$friendcheck = Friend::where('user_id', '=', $arguments['friend_id'])
 							->where('friend_id', '=', $arguments['user_id'])
 							->where('status', '=', 'Pending')
@@ -1102,7 +1069,7 @@ class ApiController extends Controller
 							->where('status', '=', 'Pending')
 							->get()
 							->toArray();
-			//print_r($friendcheck2);die;
+
 			if(!empty($friendcheck2)){
 				throw new Exception("You can't accept request", 1);
 			}
@@ -1215,7 +1182,7 @@ class ApiController extends Controller
 			if (in_array($ext, $valid_formats)) {
 				$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
 				$tmp = $uploadedfile;
-				// echo '<pre>'; print_r($actual_image_name);die;
+
 				if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
 					$data = public_path().''.'/uploads/media/chat_images/'.$actual_image_name;
 					$chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
@@ -1313,7 +1280,7 @@ class ApiController extends Controller
 									->get()->toArray();
 				
 				if(empty($groupcheck)){
-					// echo '<pre>';print_r($groupcheck);die;
+
 					$groupby = Request::get('group_by');
 
 					if(!isset($groupby))
@@ -1344,7 +1311,6 @@ class ApiController extends Controller
 					
 					if(empty($finduser))
 						throw new Exception("This user does not exist.", 1);
-					// echo '<pre>';print_r($returnData);die;
  
 					$count = DefaultGroup::where('group_name', '=', $groupname)->count();
 
@@ -1532,7 +1498,7 @@ class ApiController extends Controller
 					$this->data = $arguments;
 					$this->message = $arguments['group_name'].' successfully deleted.' ;
 					$this->status = 'success';
-					// echo '<pre>';print_r($group);die;
+
 				}else{
 					throw new Exception("Group by id or Group name cannot be empty.", 1);
 				}
@@ -1572,7 +1538,6 @@ class ApiController extends Controller
 			$this->data = $findbroadcast;
 			$this->message = 'Broadcast successfully deleted.' ;
 			$this->status = 'success';
-			// echo '<pre>';print_r($group);die;
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
@@ -1722,7 +1687,6 @@ class ApiController extends Controller
 			$this->data = $findgroup;
 			$this->message = 'Group successfully deleted.' ;
 			$this->status = 'success';
-			// echo '<pre>';print_r($group);die;
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
@@ -1769,43 +1733,49 @@ class ApiController extends Controller
 	public function searchSiteFriends()
 	{
 		try{
-			$arguments = Request::all();
-			
-			// echo $authuserid;die;
-			if($arguments){
+			$input = Request::all();
+
+			$per_page = $input['page_size'];
+			$page = $input['page'];
+			$offset = ($page - 1) * $per_page;
+
+			$model = new User;
+
+            // Search for the following people.
+          	if(trim($input['keyword']) != ''){
+
+	          	$model = $model->where( function( $query ) use ( $input ) {	          		
+	          		$expVal = explode(' ', $input['keyword']);
+	          		foreach( $expVal as $key => $value ) {  			        	
+			           	$query->orWhere( 'last_name', 'LIKE', '%'. $value.'%' )
+			           	 	->orWhere( 'first_name', 'LIKE', '%'. $value.'%' );  
+			        }
+				});
+
+	        }
+
+           	if( isset( $input['user_id'] ) ){
 				
-				$keyword = $arguments['keyword'];
+				// User cannot search himself.
+            	$model = $model->where('id', '!=', $input['user_id']);
 
-				if(empty($keyword))
-					throw new Exception("Keyword is required", 1);
+            	// Search for user's who are not friends with me.
+	        	$model = $model->whereNotIn('id', Friend::where('user_id', '=', $input['user_id'])
+	                            ->where('status', '=', 'Accepted')
+	                            ->pluck('friend_id')
+	                            ->toArray() );
 
-			//	$searchuser = DB::select("select t2.user_id, t2.friend_id, t2.status, t1.first_name, t1.last_name, t1.email, t1.picture from (SELECT * FROM `users` WHERE `first_name` like '%".$keyword."%' or `last_name` like '%".$keyword."%') as t1 join (select * from friends where user_id = ".$authuserid.") as t2 on t1.id = t2.friend_id");
-			
+	        }
 
-			//Useful Query	
-			// $searchuser = DB::select("SELECT u.id as user_id,u.first_name,u.last_name,u.picture, f.status,f.friend_id FROM `users` as u left join friends as f on u.id=f.friend_id where u.id!=".$authuserid." and (u.first_name like '%".$keyword."%' or last_name like '%".$keyword."%')");
+	        // Gather all the results from the queries and paginate it.
+	     	$model = $model->select('id', 'first_name', 'last_name', 'email', 'picture');
+	     	$model = $model->orderBy('id','desc');
+	     	$result = $model->skip($offset)->take($per_page)->get()->toArray();
 
-				$per_page = $arguments['page_size'];
-				$page = $arguments['page'];
-				$offset = ($page - 1) * $per_page;
+			$this->status = 'success';
+			$this->data = $result;
+			$this->message = count($result).' users found.';
 
-				$searchuser = User::where('first_name', 'LIKE', '%'.$keyword.'%')
-							->orWhere('last_name', 'LIKE', '%'.$keyword.'%')
-							->skip($offset)
-							->take($per_page)
-							->select('first_name', 'last_name', 'email', 'xmpp_username')
-							->get()
-							->toArray();
-
-				//$this->data = $searchuser;
-				$this->status = 'success';
-				$this->data = $searchuser;
-				$this->message = count($searchuser).' users found.';
-
-			}else{
-				throw new Exception("Keyword is required", 1);
-				
-			}
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
@@ -1835,7 +1805,7 @@ class ApiController extends Controller
 			$this->status = 'success';			
 			$this->message = count($nonExistingUsers).' Users found.';
 			$this->data = $nonExistingUsers;
-			// echo '<pre>';print_r($arguments);die;
+
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
@@ -1874,7 +1844,7 @@ class ApiController extends Controller
 						if($validator->fails()) {
 							throw new Exception("Please check email address entered and try again.", 1);
 						}else{
-//print_r($emailsArray);die;
+
 							foreach ($emailsArray as $value) {
 								if($value != User::where('id',$arguments['user_id'])->pluck('email')){
 									$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
@@ -1905,7 +1875,7 @@ class ApiController extends Controller
 	 */
 	public function getJobCategories()
 	{
-		// print_r('$categories');die;
+
 		$categories = JobArea::with('getJobCategories')->get()->toArray();
 
 		foreach($categories as $key => $val)
@@ -2030,7 +2000,7 @@ class ApiController extends Controller
 	 */
 	protected function output()
 	{
-		$this->data = empty($this->data) ? null : $this->data;
+		// $this->data = empty($this->data) ? null : $this->data;
 
 		return json_encode(array(
 			'status' => $this->status, 
@@ -2041,26 +2011,25 @@ class ApiController extends Controller
 	}
 
 	public function mail($email = '', $message, $subject, $type,$userid) {
-  
-	//$username = User::where('id',$userid)->pluck('first_name').' '.User::where('id',$userid)->pluck('last_name');
-	$userdata = User::find($userid);
-	$username = $userdata->first_name.' '.$userdata->last_name;
-	//print_r($username);die;
-	$data = array(
-			'message' => $message,
-			'subject' => $subject,
-			'id' => $userid,
-			'type' => $type,
-			'username' => $username,
-		);
 
-        if($email != ''){
-			Mail::send('emails.invite', $data, function($message) use($email, $subject) {
-				$message->from('no-reply@friendzsquare.com', 'Friend Square');
-				$message->to($email)->subject($subject);
-			});
-        }
-    }
+		$userdata = User::find($userid);
+		$username = $userdata->first_name.' '.$userdata->last_name;
+
+		$data = array(
+				'message' => $message,
+				'subject' => $subject,
+				'id' => $userid,
+				'type' => $type,
+				'username' => $username,
+			);
+
+	        if($email != ''){
+				Mail::send('emails.invite', $data, function($message) use($email, $subject) {
+					$message->from('no-reply@friendzsquare.com', 'Friend Square');
+					$message->to($email)->subject($subject);
+				});
+	        }
+	    }
 
 
 }
