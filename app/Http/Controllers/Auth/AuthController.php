@@ -117,25 +117,27 @@ class AuthController extends Controller
 
     public function confirm($confirmation_code)
     {
-        if( ! $confirmation_code)
+	  if( ! $confirmation_code)
         {
-            throw new InvalidConfirmationCodeException;
+            Session::put('error',"Wrong confirmation code!");
+           return redirect('/');
         }
 
-        $user = User::whereConfirmationCode($confirmation_code)->first();
+        $user = User::where('confirmation_code',$confirmation_code)->first();
 
         if ( ! $user)
         {
-            throw new InvalidConfirmationCodeException;
+             Session::put('error',"No user with matching verification code found!");
+             return redirect('/');
         }
 
         $user->is_email_verified = 'Y';
         $user->confirmation_code = null;
         $user->save();
 
-        Flash::message('You have successfully verified your account.');
+        Session::put('success',"Your account has been successfully verified!");
+        return redirect('/');
 
-        return Redirect::route('/');
     }
 
 }
