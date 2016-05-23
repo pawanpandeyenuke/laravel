@@ -1170,7 +1170,7 @@ class ApiController extends Controller
 		$status = 0;
 		$message = ""; 
 		$image = $_FILES["chatsendimage"]["name"];
-		$path = public_path().''.'/uploads/media/chat_images';
+		$path = public_path().''.'/uploads/media/chat_images/';
 		
 		$uploadedfile = $_FILES['chatsendimage']['tmp_name'];
 		$name = $_FILES['chatsendimage']['name'];
