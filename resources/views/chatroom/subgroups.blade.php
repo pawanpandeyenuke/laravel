@@ -19,7 +19,7 @@ unset($countries[0]);
 					<div class="col-sm-6">
 						<div class="shadow-box page-center-data no-margin-top">
 
-							{{ Form::open(array('url' => 'groupchat', 'method' => 'get')) }}
+							{{ Form::open(array('url' => 'groupchat', 'method' => 'get', 'id' => 'chatsubgroupsvalidate')) }}
 							<div class="page-title">
 
 								<i class="flaticon-balloon"></i>{{$groupnamestr}}
@@ -127,7 +127,8 @@ unset($countries[0]);
             </div>
         </div>
     </div><!--/pagedata-->
- 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
  <script type="text/javascript">
  	
  $(document).on('click', '.group-radio', function(){
@@ -142,6 +143,42 @@ unset($countries[0]);
  	}
 
  });
+
+
+
+    $("#chatsubgroupsvalidate").validate({ 
+        errorElement: 'span',
+        errorClass: 'help-inline',
+        rules: {
+            subcategory: { required: true },
+            country: { required: true },
+            state: { required: true }
+        },
+        messages:{
+            subcategory:{
+                required: "Please select a sub category."
+            },
+            country:{
+                required: "Country is required."
+            },
+            state:{
+                required: "State is required."
+            }
+        }
+    });
+
+
+	// $( "#chatsubgroupsvalidate" ).submit(function( event ) {
+	// 	var groupradio = $('.group-radio');
+	// 	$.each(groupradio, function(i,v){
+	// 		if($(this).is(':checked')) { 
+	// 			return true;
+	// 		}else{
+	// 			event.preventDefault();		
+	// 		}
+	// 	});		
+	// });
+
 
 	$('#subcountry').change(function(){
 		var countryId = $(this).val();

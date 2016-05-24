@@ -113,6 +113,7 @@ class AjaxController extends Controller
 					$file->move(public_path('uploads'), $image_name);
 
 				}
+				// $arguments['message'] = nl2br($arguments['message']);
 
 				$feed = $model->create( $arguments );
 				
@@ -236,8 +237,9 @@ class AjaxController extends Controller
 		$userid = Auth::User()->id;
 		$user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : 'images/user-thumb.jpg';
 		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
-		$comment = $model->comments;
+		$comment = nl2br($model->comments);
 		$time = $model->updated_at->format('h:i A');
+		$date = $model->updated_at->format('D jS');
 		$id = $model->id;
 
 $variable = array();				
@@ -255,7 +257,12 @@ $variable['comment'] = <<<comments
 				<a href="profile/$userid" title="" class="user-link">$username</a>
 			</div>
 			<div class="col-sm-6">
-				<div class="comment-time text-right">$time</div>
+				<div class="text-right">
+					<ul class="list-inline date-time-list">
+						<li><div class="comment-time text-right">$date</div></li>
+						<li><div class="comment-time text-right">$time</div></li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>

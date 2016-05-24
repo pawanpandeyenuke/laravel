@@ -153,7 +153,8 @@
 									</div>
 								</div><!--/post header-->
 								<div class="post-data">
-									<p>{{ $data['message'] }}</p>
+									<?php $argumentsMessage = nl2br($data['message']); ?>
+									<p><?= $argumentsMessage ?></p>
 
 									@if($data['image'])
 										<div class="post-img-cont">
@@ -263,11 +264,17 @@
 																			<a href="profile/{{$commentsData['commented_by']}}" title="" class="user-link">{{$name}}</a>
 																		</div>
 																		<div class="col-sm-6">
-																			<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
+																			<div class="text-right">
+																				<ul class="list-inline date-time-list">
+																					<li><div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div></li>
+																					<li><div class="comment-time text-right">{{ $commentsData->updated_at->format('D jS') }}</div></li>
+																				</ul>
+																			</div>
+																			<?php //echo $commentsData->updated_at->diffForHumans();// die;?>	
 																		</div>
 																	</div>
 																</div>
-																<div class="comment-text">{{$commentsData['comments']}}</div>
+																<div class="comment-text"><?= nl2br($commentsData['comments']) ?></div>
 															</li>
 															<?php 
 															}

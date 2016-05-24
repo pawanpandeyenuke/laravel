@@ -2689,3 +2689,42 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
 .registration-form .btn-cont {
     margin-top: 30px;
 }
+
+.chat-header-small {
+    padding: 10px 10px;
+    border-bottom: 1px solid #ddd;
+}
+.chat-user-list li a, .user-list-with-thumb li a{
+	padding: 15px 5px 15px 45px;
+}
+.chat-user-list li .chat-thumb, .user-list-with-thumb li .chat-thumb{
+	top: 8px;
+}
+.chat-user-list li .btn-sm.btn-chat {
+    padding: 0px 16px;
+    height: auto;
+    line-height: 24px;
+    font-size: 12px;
+    top: 11px;
+}
+.chat-header-small i {
+    margin: 0 8px 0 0;
+}
+#conversejs .chatbox .box-flyout{
+	height: 400px;
+}
+#conversejs .occupants, #conversejs .chat-toolbar li.toggle-occupants {
+    display: none;
+}
+.post-list .single-post .date-time-list, .comments-list .date-time-list {
+	margin: 2px -13px 0 0px;
+}
+.post-list .single-post .date-time-list li, .comments-list .date-time-list li{
+	display: inline-block !important;
+	border: 0px;
+	padding: 0 15px;
+	margin: 0px;
+}
+.popup-list-without-img .pop-post-text{
+	height: auto;
+}

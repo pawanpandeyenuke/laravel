@@ -77,6 +77,9 @@
 	@yield('content')
 
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
+
+
+
 <script type="text/javascript">
 	$( "#searchform" ).submit(function( event ) {
 		var searchkey = $('#searchfriends').val();

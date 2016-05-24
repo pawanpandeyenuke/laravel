@@ -46,8 +46,11 @@ $new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Revie
 
 
 if($pgid){
-   $groupid=$groupid."_".$pgid;
+  if($pgid != $groupid){
+    $groupid=$groupid."_".$pgid;
+  }
 }
+$groupid = str_replace('/', '-', $groupid);
 
 ?>
 <div class="page-data dashboard-body">
@@ -104,8 +107,11 @@ if($pgid){
                                     </div>
                                     <div id="gccollapseOne" class="{{$pubdivid}}" role="tabpanel" aria-labelledby="gcheadingOne">
                                       <div class="panel-body">
+                                        <div class="chat-header-small text-center">
+                                          <i class="flaticon-people"></i> <b>{{$groupname}}</b>
+                                        </div>
                                         <div class="chat-user-list StyleScroll">
-                                         <i class="flaticon-people"></i> <b>{{$groupname}}</b>
+                                         
                                                     <ul>
                                     @foreach($userdata as $data)
                                     <?php //echo '<pre>';print_r($data['user']['id']);die;
@@ -114,7 +120,7 @@ if($pgid){
                                     <li>
                                         <a title="" href="#" class='info' data-id="{{$data['user']['id']}}" >
                                             <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
-                                            <span class="title">{{ $data['user']['first_name'].' '.$data['user']['last_name'] }}</span>
+                                            <span class="title">{{ $data['user']['first_name'] }}</span>
                         
 
                                         <?php 
@@ -144,7 +150,7 @@ if($pgid){
                                                             else 
                                                             { 
                                                                 ?>
-                                                                <button type="button" class="time invite">Invite</button>
+                                                                <button type="button" class="time btn btn-sm btn-chat btn-primary invite">Invite</button>
                                                                 <span class='time sentinvite' style="display: none;">Sent</span>
                                                                 <?php 
                                                                 }
@@ -305,24 +311,24 @@ if($pgid){
   //  var username='<?php DB::table('') ?>';
     var conferencechatserver='@conference.<?= Config::get('constants.xmpp_host_Url') ?>';
     var conObj;
-    var groupname="{{$groupname}}";
-    var groupid="{{$groupid}}";
-    var pgid="{{$pgid}}";
+    var groupname = "{{$groupname}}";
+    var groupid = "{{$groupid}}";
+    var pgid = "{{$pgid}}";
 
 
 
-    var is_first=true;  
+    var is_first = true;  
 
     jQuery(document).ready(function(){
 
       require(['converse'], function (converse) {
         
-                conObj=converse;
+                conObj = converse;
                 converse.initialize({                           
                   prebind: true,
-                  bosh_service_url: '//friendzsquare.com:5280/http-bind',
+                  bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
                   keepalive: true,
-                  jid: 'two308@friendzsquare.com',
+                  jid: '<?= Auth::User()->xmpp_username ?>@<?= Config::get('constants.xmpp_host_Url') ?>',
                   authentication: 'prebind',
                   prebind_url: "{{url('/ajax/getxmppuser')}}",
                   allow_logout: false,
@@ -330,7 +336,37 @@ if($pgid){
                   //message_carbons: true,
                   send_initial_presence:true,
                 });
+                jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
+                jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
+
+                $(".chatroom:visible").each(function()  {
+                  checkChatboxAndChatRoom(this);
+                });                     
+    
+                $(".chatbox:visible").each(function()  {
+                  checkChatboxAndChatRoom(this);
+                });
+
+                if(is_first){
+                  jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click(); 
+                }
+
+              if(groupname != '' || groupid != '')
+              {
+                console.log(groupid);
+                // converse.rooms.open('haeri@conference.friendzsquare.com', 'mycustomnick');
+                openChatGroup(groupname, groupid);
+                // converse.rooms.open(groupname, groupid);
+                
+              }
+
            });
+
+
+
+
+            // openChatGroup(groupname,groupid);
+             //converse.chats.open('hari@muc.friendzsquare.com');
 
 
 /*        jQuery.ajax({
@@ -452,17 +488,17 @@ if($pgid){
 
     });
 
-     // function openChatbox(xmpusername,username)
-     // {
-     //     conObj=converse;
-     //    var ss=conObj.contacts.get(xmpusername+'@fs.yiipro.com');
-     //     if(ss==null)
-     //     {  
-     //  console.log(ss);   
-     //         conObj.contacts.add(xmpusername+'@fs.yiipro.com', username);             
-     //     }
-     //    conObj.chats.open(xmpusername+'@fs.yiipro.com');
-     // }
+     function openChatbox(xmpusername,username)
+     {
+         conObj =converse;
+        var ss=conObj.contacts.get(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+         if(ss==null)
+         {  
+      console.log(ss);   
+             conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
+         }
+        conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+     }
 
 
     function checkChatboxAndChatRoom(obj)
@@ -519,6 +555,7 @@ function openChatbox(xmpusername,username)
        } 
   function openChatGroup(grpname,grpjid)
        {
+        // alert(grpjid);
            var minbox=$("#min-"+grpjid);
             hideOpendBox();
             if(minbox.length>0)
@@ -526,7 +563,7 @@ function openChatbox(xmpusername,username)
             minbox.click();
             }
             else{
-                conObj.rooms.open(grpjid+conferencechatserver);
+               conObj.rooms.open(grpjid+conferencechatserver);
             }
        }
 
@@ -544,6 +581,8 @@ function openChatbox(xmpusername,username)
     "click":             function() { this.closable = true; },
     "hide.bs.dropdown":  function() { return this.closable; }
     });
+
+
 
 </script>
 
