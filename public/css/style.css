@@ -2945,20 +2945,29 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
     position: absolute;
     top: 15px;
     width: 50px;
+    padding-left: 11px;
 }
 .ph-field{
 	position: relative;
 }
 .ph-field .form-control {
-    padding-left: 90px;
+    padding-left: 100px;
 }
 .ph-field:before{
 	content: '-' !important;
     position: absolute;
-    left: 80px;
+    left: 90px;
     z-index: 1;
     top: 15px;
 }
 .country-code-field[disabled]{
 	background: #fff;
+}
+.ph-field:after{
+	content: '+' !important;
+    position: absolute;
+    left: 40px;
+    z-index: 1;
+    top: 15px;
+    font-size: 15px;
 }
