@@ -1,10 +1,9 @@
-
 <ul>
+{{--*/ $LastID = 0 /*--}}
 @foreach($model as $data) 
 <?php //echo '<pre>';print_r($data['friends']);die; ?>
 
-	<?php 
- 		
+	<?php
  		$profileimage = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; 
 
 		if($data['friend_id'] == Auth::User()->id){
@@ -20,7 +19,8 @@
 		if(!(($data['user_id']==Auth::User()->id && $data['status']=="Accepted")||($data['friend_id']==Auth::User()->id && $data['status']=='Rejected')))
 		{
 	?>
-	<li  class="get_id flist" data-userid="{{$data['user']['id']}}" data-friendid="{{$data['friends']['id']}}">
+	{{--*/ $LastID = $data['id'] /*--}}
+	<li data-id="{{$LastID}}" class="get_id flist" data-userid="{{$data['user']['id']}}" data-friendid="{{$data['friends']['id']}}">
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="user-cont">
@@ -79,10 +79,10 @@
 	</li>
 	<?php } ?>
 	@endforeach
-	</ul>
-	@if($count > 10)
-		<div class="load-btn load-more-friend">
-		<span class="loading-text">View more</span>
-		<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
-		</div>
-	@endif
+</ul>
+@if($count > 9)
+<div class="load-btn load-more-friend" data-last-id="{{$LastID}}">
+	<span class="loading-text" >View more</span>
+	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+</div>
+@endif
