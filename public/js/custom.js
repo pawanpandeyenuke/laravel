@@ -316,10 +316,6 @@ $('.btn-upload-icon').find(".badge").remove();
 			if(jQuery("#pagecomment-"+feedId+" li").length > 3)
 				jQuery("#pagecomment-"+feedId+" li").first().remove();
 
-					if(jQuery("#pagecomment-"+feedId+" li").length > 3)
-						jQuery("#pagecomment-"+feedId+" li").first().remove();
-					
-
 					//Dashboard emoji fix.
 					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
 				    var converted = emojione.toImage(original);

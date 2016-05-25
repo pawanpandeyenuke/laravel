@@ -202,8 +202,20 @@
 									</div>
 								</div>
 
+								<?php //echo '<pre>';print_r($countries);die;?>
+
 							<div class="form-group">
-								<input type="text" class="form-control icon-field numeric" name = "phone_no" placeholder="Mobile">
+								<select class="form-control icon-field" name ="" id="mob-country">
+									@foreach($countries as $key => $country)
+										<option value="{{ $key }}">{{ $country }}</option>
+									@endforeach
+								</select>
+								<span class="field-icon flaticon-smartphone-with-blank-screen"></span>
+							</div>
+
+							<div class="form-group ph-field">
+								<input type="text" name="country_code" class="country-code-field" value="+000" >
+								<input type="text" class="form-control icon-field numeric" name = "phone_no" placeholder="Mobile" id="mobileContact">
 								<span class="field-icon flaticon-smartphone-with-blank-screen"></span>
 							</div>
 
@@ -270,8 +282,76 @@
 <script src="http://malsup.github.com/jquery.form.js"></script>
 <script type="text/javascript" >
 
+function getValidationArray(mobCode){
+
+	// console.log(mobCode);
+	// alert(mobCode);
+	var countryMobValidLengthArray = <?php print_r(json_encode(countryMobileLength(),1));?>;
+
+	var countryMobValidLength = countryMobValidLengthArray[mobCode];
+	
+	if(countryMobValidLength == undefined){
+		return {min: 0, max: 15};
+	}
+
+	console.log(countryMobValidLength);
+	return {min: countryMobValidLength.min, max: countryMobValidLength.max};
+	
+}
+
 $(document).ready(function () {
 
+		// $('.country-code-field').val('+000');
+
+		$(document).on('change', '#mob-country', function(){
+				$('#mobileContact').val('');
+				var countryId = $(this).val();
+				$.ajax({
+					'url': 'ajax/mob-country-code',
+					'data': { 'countryId': countryId },
+					'type': 'post',
+					'success': function(response){
+
+						var mobCode = response[0].phonecode;
+
+						$('.country-code-field').val('+'+mobCode);
+						$('.country-code-field').attr('data-value', mobCode);
+						var validArray = getValidationArray(mobCode);
+					}
+				})
+
+		});
+
+
+		$(document).on('focus', '#mobileContact', function(){
+
+			var array = $('.country-code-field').data('value');
+
+			var validArray = getValidationArray(array);
+
+			$('#mobileContact').prop('minlength', validArray.min);
+			$('#mobileContact').prop('maxlength', validArray.max);
+
+		});
+
+
+		$(document).on('blur', '#mobileContact', function(){
+
+			$('#mobileContact').parent().find('#groupname-error').remove();
+
+			var array = $('.country-code-field').data('value');
+
+			var validArray = getValidationArray(array);
+
+			var mobileContact = $('#mobileContact').val();
+			if(mobileContact.length < validArray.min){
+				// alert('invalid value');
+				$('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
+			}
+
+		});
+
+ 
     $("#registerForm").validate({ 
         errorElement: 'span',
         errorClass: 'help-inline',

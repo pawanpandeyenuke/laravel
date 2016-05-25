@@ -69,12 +69,13 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         $confirmation_code = str_random(30);
-
+ 
         $userdata = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'country_code' => str_replace('+', '', $data['country_code']),
 	        'phone_no' => $data['phone_no'],
             'confirmation_code' => $confirmation_code,
             'is_email_verified' => 'N'
@@ -109,7 +110,7 @@ class AuthController extends Controller
         Session::put('success', 'Thanks for signing up! Please check your email to verify your account.');
         
         $vcard = $converse->setVcard($xmpp_username, $user->picture);
-//        echo '<pre>';print_r($vcard);//die;
+//        echo '<pre>';print_r($data);die;
         return $userdata;
 
         

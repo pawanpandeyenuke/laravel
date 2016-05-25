@@ -165,7 +165,7 @@ span.field-icon:before{
 	margin-top: 0;
 	left: 10px;
 }
-input.form-control.icon-field {
+.form-control.icon-field {
   padding-left: 40px;
 }
 .page-data h3{
@@ -689,6 +689,7 @@ a:hover{
   /* border-top: 1px dotted #ECECEC; */
   margin: 3px 0 0;
   padding: 2px 0 0;
+  word-wrap: break-word;
 }
 .post-comment-cont {
   margin: 0px -20px -15px -20px;
@@ -2899,5 +2900,65 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
 }
 .registration-form .btn-cont {
     margin-top: 30px;
-
+}
+.chat-header-small {
+    padding: 10px 10px;
+    border-bottom: 1px solid #ddd;
+}
+.chat-user-list li a, .user-list-with-thumb li a{
+	padding: 15px 5px 15px 45px;
+}
+.chat-user-list li .chat-thumb, .user-list-with-thumb li .chat-thumb{
+	top: 8px;
+}
+.chat-user-list li .btn-sm.btn-chat {
+    padding: 0px 16px;
+    height: auto;
+    line-height: 24px;
+    font-size: 12px;
+    top: 11px;
+}
+.chat-header-small i {
+    margin: 0 8px 0 0;
+}
+#conversejs .chatbox .box-flyout{
+	height: 400px;
+}
+#conversejs .occupants, #conversejs .chat-toolbar li.toggle-occupants {
+    display: none;
+}
+.post-list .single-post .date-time-list, .comments-list .date-time-list {
+	margin: 2px -13px 0 0px;
+}
+.post-list .single-post .date-time-list span, .comments-list .date-time-list span{
+	display: inline-block !important;
+	border: 0px;
+	padding: 0 15px;
+	margin: 0px;
+}
+.popup-list-without-img .pop-post-text{
+	height: auto;
+}
+.country-code-field{
+	border: 0 none;
+    left: 40px;
+    position: absolute;
+    top: 15px;
+    width: 50px;
+}
+.ph-field{
+	position: relative;
+}
+.ph-field .form-control {
+    padding-left: 90px;
+}
+.ph-field:before{
+	content: '-' !important;
+    position: absolute;
+    left: 80px;
+    z-index: 1;
+    top: 15px;
+}
+.country-code-field[disabled]{
+	background: #fff;
 }

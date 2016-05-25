@@ -29,9 +29,10 @@
 		</div>
 	</div>
 	<div class="post-data">
+	<?php $argumentsMessage = nl2br($postdata->message); ?>
 		
 
-			<p>{{$postdata->message}}</p>
+			<p> <?= $argumentsMessage ?></p>
 
 
 

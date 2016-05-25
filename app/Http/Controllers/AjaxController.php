@@ -119,6 +119,7 @@ class AjaxController extends Controller
 					$file->move(public_path('uploads'), $image_name);
 
 				}
+				// $arguments['message'] = nl2br($arguments['message']);
 
 				$feed = $model->create( $arguments );
 				
@@ -242,8 +243,9 @@ class AjaxController extends Controller
 		$userid = Auth::User()->id;
 		$user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : 'images/user-thumb.jpg';
 		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
-		$comment = $model->comments;
+		$comment = nl2br($model->comments);
 		$time = $model->updated_at->format('h:i A');
+		$date = $model->updated_at->format('D jS');
 		$id = $model->id;
 
 $variable = array();				
@@ -261,7 +263,12 @@ $variable['comment'] = <<<comments
 				<a href="profile/$userid" title="" class="user-link">$username</a>
 			</div>
 			<div class="col-sm-6">
-				<div class="comment-time text-right">$time</div>
+				<div class="text-right">
+					<div class="date-time-list">
+						<span><div class="comment-time text-right">$date</div></span>
+						<span><div class="comment-time text-right">$time</div></span>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -1254,8 +1261,6 @@ comments;
     	$user = Auth::User();
         $input = Input::all();
        	$name = $user->first_name." ".$user->last_name;
-        $date1 = date('d M Y', time());
-        $date2 = date('h:i a', time());
 
                 $data = ['title'=>$input['topic'],
                         'owner_id'=>$user->id,
@@ -1264,9 +1269,10 @@ comments;
                         'updated_at'=>date('Y-m-d H:i:s',time())];
 
                
-            $forumpost = new Forumpost;
-         $forumpostid = $forumpost->create($data);
+        $forumpost = new Forumpost;
+        $forumpostid = $forumpost->create($data);
         $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+
         
         return view('ajax.forumpost')
         		->with('forumpostid',$forumpostid)
@@ -1278,6 +1284,15 @@ comments;
     }
 
     
+	/*
+	 * Get country on request.
+	 */
+	public function mobCountryCode()
+	{	
+		$countryId = Input::get('countryId');
+		$country = Country::where('country_id', $countryId)->get();
+		return $country;	
+	}
 
 }
 	
