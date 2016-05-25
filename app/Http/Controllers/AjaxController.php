@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
-,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers;
+,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers,App\ForumPost;
 
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
@@ -75,10 +75,16 @@ class AjaxController extends Controller
 
 		}else{
 
-			if(Auth::attempt(['email' => $email, 'password'=>$password], $log))
+			if(Auth::attempt(['email' => $email, 'password'=>$password , 'is_email_verified'=>
+				'Y'], $log))
 				echo 'success';
-			else
-				echo 'These credentials do not match our records.';
+			else{
+				$verified = User::where('email',$email)->value('is_email_verified');
+				if($verified == 'N')
+					echo 'verification';
+				elseif($verified == "Y")
+					echo 'These credentials do not match our records.';
+			}
 
 		}
 
@@ -258,10 +264,10 @@ $variable['comment'] = <<<comments
 			</div>
 			<div class="col-sm-6">
 				<div class="text-right">
-					<ul class="list-inline date-time-list">
-						<li><div class="comment-time text-right">$date</div></li>
-						<li><div class="comment-time text-right">$time</div></li>
-					</ul>
+					<div class="date-time-list">
+						<span><div class="comment-time text-right">$date</div></span>
+						<span><div class="comment-time text-right">$time</div></span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -985,7 +991,7 @@ comments;
 			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $type ) {
 							self::queryBuilder( $query, $type );
 						})->get();
-			$count = $model->count();
+			//$count = $model->count();
 			$model = $model->toArray();
 		}
 
@@ -1046,7 +1052,7 @@ comments;
 		     			'broadcast_message'=>$input['msg'],
                         'broadcast_id'=>$input['bid'],
                         'broadcast_by'=>Auth::User()->id,
-                        'created_at'=>date('Y-m-d h:i:s',time()),
+                        'created_at'=>date('Y-m-d H:i:s',time()),
                             );  
                 
                 BroadcastMessages::insert($data);
@@ -1222,6 +1228,79 @@ comments;
 			}
 	}
 
+	public function delForumPost()
+	{
+		$args = Input::all();
+		ForumPost::where('id',$args['forumpostid'])->delete();
+	}
+
+	public function editForumPost()
+	{
+		$forumpostid = Input::get('forumpostid');
+		$forumpost = ForumPost::where('id',$forumpostid)->get()->first();
+
+		return view('ajax.editforumpost')->with('forumpost', $forumpost);
+	}
+
+	public function addNewForumPost()
+    {
+    	$user = Auth::User();
+            $input = Input::all();
+            $name = $user->first_name." ".$user->last_name;
+           print_r($input);die;
+        $date1 = date('d M Y', time());
+        $date2 = date('h:i a', time());
+            DB::table('forums_post')
+                ->insert(['title'=>$input['topic'],
+                        'owner_id'=>$user->id,
+                        'category_id'=>$input['category_id'],
+                        'created_at'=>date('Y-m-d H:i:s',time()),
+                        'updated_at'=>date('Y-m-d H:i:s',time())]);
+
+
+
+        $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+
+       $forumpostdata = "<div class='f-single-post'>
+					<div class='p-user'>
+						<span class='user-thumb' style='background: url('{{$profileimage}}');'></span>
+						<span class='p-date'><i class='flaticon-days'></i> {{$date1}}</span>
+						<span class='p-time'><i class='flaticon-time'></i> {{$date2}}</span>
+						<div class='p-likes'><i class='flaticon-web'></i> <span class='plike-count'>19</span></div>
+					</div>
+					<div class='f-post-title'>
+					<a href='{{url('profile/$user->id')}}' title=''>
+						{{$name}}
+						<a>
+						<div class='fp-action'>
+							<button class='editforumpost' value='{{$data->id}}'  data-toggle='modal' title='Edit' data-target='.edit-forumpost-popup'><i class='flaticon-pencil'></i></button>
+							<button class='forumpostdelete' value='{{$data->id}}'><i class='flaticon-garbage'></i></button>
+						</div>
+					</div>
+					<p>{{$data->title}} </p>
+					<div class='fp-btns text-right'>
+						<span class='btn btn-primary'>Replies(8)</span>
+						<a href='#' title='' class='btn btn-primary'><span class='glyphicon glyphicon-share-alt'></span>Reply</a>
+					</div>
+				</div>";
+    }
+
+
+
+	/*
+	 * Get country on request.
+	 */
+	public function mobCountryCode()
+	{
+		
+		$countryId = Input::get('countryId');
+		$country = Country::where('country_id', $countryId)->get();
+
+
+		// echo '<pre>';print_r($country->toArray());die;
+		return $country;
+		
+	}
 
 }
 	

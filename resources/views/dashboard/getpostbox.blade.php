@@ -101,10 +101,10 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 								</div>
 								<div class="col-sm-6">
 									<div class="text-right">
-										<ul class="list-inline date-time-list">
-											<li><div class="comment-time text-right">{{ $data->updated_at->format('h:i A') }}</div></li>
-											<li><div class="comment-time text-right">{{ $data->updated_at->format('D jS') }}</div></li>
-										</ul>
+										<div class="date-time-list">
+											<span><div class="comment-time text-right">{{ $data->updated_at->format('h:i A') }}</div></span>
+											<span><div class="comment-time text-right">{{ $data->updated_at->format('D jS') }}</div></span>
+										</div>
 									</div>
 								</div>
 							</div>

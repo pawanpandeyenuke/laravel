@@ -165,7 +165,7 @@ span.field-icon:before{
 	margin-top: 0;
 	left: 10px;
 }
-input.form-control.icon-field {
+.form-control.icon-field {
   padding-left: 40px;
 }
 .page-data h3{
@@ -689,6 +689,7 @@ a:hover{
   /* border-top: 1px dotted #ECECEC; */
   margin: 3px 0 0;
   padding: 2px 0 0;
+  word-wrap: break-word;
 }
 .post-comment-cont {
   margin: 0px -20px -15px -20px;
@@ -2670,6 +2671,217 @@ textarea{
   position:relative;
   overflow: hidden;
 }
+
+
+/*********Forum style 18-05-16************/
+.forum-list-cont {
+
+}
+.forum-list-cont .forum-btn{
+  display: table;
+  width: 100%;
+  padding: 0 40px;
+  text-align: center;
+  margin: 0 0 25px;
+}
+.forum-list-cont .forum-btn a{
+  display: table-cell;
+  vertical-align: middle;
+  height: 90px;
+  font-size: 14px;
+  color: #000;
+  background: #fff;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 0 10px;
+  line-height: 17px;
+}
+.forum-list-cont .forum-btn a:hover, .forum-list-cont .forum-btn a:focus{
+  background: #E2E2E2;
+}
+.forum-list-cont .forum-btn a span{
+	display: block;
+}
+.green-bg{
+	background: #92E7DC;
+}
+.green-bg.page-title{
+  border-radius: 5px 5px 0px 0px;
+}
+.padding-data-inner {
+  padding: 0 30px;
+}
+.forum-filter .form-control{
+	margin: 0 0 20px;
+  height: 34px;
+  font-size: 12px;
+}
+.forum-btn-cont{
+  margin: 20px 0 0;
+}
+.fs-breadcrumb {
+  font-size: 14px;
+  color: #000;
+  padding: 10px 0 5px;
+  border-bottom: 1px solid #ccc;
+}
+.forum-srch-list a{
+	color: #000;
+}
+.forum-srch-list .table td{
+  vertical-align: middle;
+  padding: 15px 8px;
+}
+.forum-srch-list {
+  margin: 20px 0 0;
+}
+.forum-srch-list .count span{
+  background: #A0F0E6;
+  padding: 3px 20px;
+  border-radius: 5px;
+}
+.f-post-form{
+	position: relative;
+}
+.forum-post-cont {
+  color: #000;
+  padding: 10px 20px;
+  border-bottom: 1px solid #cccccc;
+  margin: 0 0 15px;
+}
+.f-post-form .emoji-wysiwyg-editor{
+  border-color: #ccc;
+  padding: 0 120px 0 45px !important;
+}
+.f-post-form .emoji-picker-icon{
+  font-size: 30px;
+  right: auto !important;
+  left: 10px;
+  top: 9px;
+}
+.f-post-form .btn{
+	position: absolute;
+  top: 1px;
+  right: 1px;
+  border-radius: 0px 2px 2px 0px;
+  height: 48px;
+  line-height: 48px;
+}
+.f-single-post{
+  position: relative;
+  padding: 0 0 0 95px;
+  min-height: 120px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin: 0 0 15px;
+}
+.f-single-post .p-user {
+	width: 80px;
+  font-size: 10px;
+  position: absolute;
+  left: 0px;
+  top: 0px;	
+}
+.f-single-post .p-user span{
+	display: block;
+  margin: 5px 0 0;
+}
+.f-single-post .p-user i:before{
+  font-size: 12px;
+}
+.f-single-post .p-likes i:before{
+  font-size: 17px;
+  color: #a1a1a1;
+	}
+.f-single-post .user-thumb{
+  width: 45px;
+  height: 45px;
+  display: block;
+  margin: 0 auto !important;
+  background-size: cover !important;
+  border-radius: 50%;
+}
+.f-single-post .p-date{
+
+}
+.f-single-post .p-time{
+	
+}
+.f-single-post .p-likes, .fp-likes{
+  position: relative;
+  padding: 2px 0 0 30px;
+  margin: 8px 0 0;
+}
+.f-single-post .p-likes i, .fp-likes i{
+	position: absolute;
+  left: 0px;
+  top: 0px;
+}
+.f-single-post .p-likes .plike-count, .fp-likes .plike-count{
+  background: #92e7dc;
+  font-size: 12px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+  margin: 0 0 0;
+}
+.f-single-post .f-post-title{
+  position: relative;
+  font-size: 13px;
+  color: #000;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  margin: 12px 0 5px 0;
+}
+.f-single-post .f-post-title .fp-action{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+.f-single-post .f-post-title .fp-action a{
+  padding: 0 5px;
+  border-right: 1px solid #000;
+  line-height: 12px;
+  display: inline-block;
+}
+.f-single-post .f-post-title .fp-action a:nth-last-child(1){
+	border: 0px;
+}
+.f-single-post .f-post-title .fp-action i:before{
+  font-size: 12px;
+}
+.f-single-post p{
+  font-size: 12px;
+}
+.f-single-post .p-user:after{
+  width: 1px;
+  height: 80px;
+  position: absolute;
+  content: '';
+  background: #ccc;
+  right: -5px;
+  top: 10px;
+}
+.fp-btns .btn{
+  padding: 0px 15px;
+  font-size: 13px;
+  line-height: 30px;
+  height: 30px;
+  margin: 0 0 0 5px;
+}
+.btn-sm{
+	padding: 0px 15px;
+  font-size: 13px;
+  line-height: 30px;
+  height: 30px;
+}
+.f-post-reply-form{
+	display: none;
+}
+
 span.help-inline{
 	color: #a94442;
     font-size: 13px;
@@ -2689,7 +2901,6 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
 .registration-form .btn-cont {
     margin-top: 30px;
 }
-
 .chat-header-small {
     padding: 10px 10px;
     border-bottom: 1px solid #ddd;
@@ -2719,7 +2930,7 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
 .post-list .single-post .date-time-list, .comments-list .date-time-list {
 	margin: 2px -13px 0 0px;
 }
-.post-list .single-post .date-time-list li, .comments-list .date-time-list li{
+.post-list .single-post .date-time-list span, .comments-list .date-time-list span{
 	display: inline-block !important;
 	border: 0px;
 	padding: 0 15px;
@@ -2727,4 +2938,27 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
 }
 .popup-list-without-img .pop-post-text{
 	height: auto;
+}
+.country-code-field{
+	border: 0 none;
+    left: 40px;
+    position: absolute;
+    top: 15px;
+    width: 50px;
+}
+.ph-field{
+	position: relative;
+}
+.ph-field .form-control {
+    padding-left: 90px;
+}
+.ph-field:before{
+	content: '-' !important;
+    position: absolute;
+    left: 80px;
+    z-index: 1;
+    top: 15px;
+}
+.country-code-field[disabled]{
+	background: #fff;
 }

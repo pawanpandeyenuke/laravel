@@ -265,10 +265,10 @@
 																		</div>
 																		<div class="col-sm-6">
 																			<div class="text-right">
-																				<ul class="list-inline date-time-list">
-																					<li><div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div></li>
-																					<li><div class="comment-time text-right">{{ $commentsData->updated_at->format('D jS') }}</div></li>
-																				</ul>
+																				<div class="date-time-list">
+																					<span><div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div></span>
+																					<span><div class="comment-time text-right">{{ $commentsData->updated_at->format('D jS') }}</div></span>
+																				</div>
 																			</div>
 																			<?php //echo $commentsData->updated_at->diffForHumans();// die;?>	
 																		</div>

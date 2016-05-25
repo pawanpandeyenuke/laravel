@@ -110,9 +110,7 @@
 <script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
 <script src="{{url('/lib/js/emoji-picker.js')}}"></script>
 <script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
-<script type="text/javascript">
- 
-</script>
+
  
 </body>
 </html>

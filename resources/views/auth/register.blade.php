@@ -42,6 +42,7 @@
 								<input type="password" name="password" class="form-control icon-field password" placeholder="Password" id="showpassword">
 								<span class="help-block">
 									<strong class = "errormsg"></strong>
+									<strong class = "verifymsg" style="display: none; color:#a94442">Please verify your account.<a href="{{url('send-verification-link')}}"> Click here </a>to send verification link again.</strong>
 								</span>
 								<span class="field-icon flaticon-padlock50"></span>
 								<div class="check-cont show-pw">
@@ -83,6 +84,9 @@
 <!--- Popup Login End  -->
 @if (Session::has('success'))
  <div class="alert alert-success">{!! Session::get('success') !!}</div>
+ @endif
+ @if (Session::has('error'))
+ <div class="alert alert-danger">{!! Session::get('error') !!}</div>
  @endif
 <div class="page-data login-page">
 	<div class="container">
@@ -198,8 +202,20 @@
 									</div>
 								</div>
 
+								<?php //echo '<pre>';print_r($countries);die;?>
+
 							<div class="form-group">
-								<input type="text" class="form-control icon-field numeric" name = "phone_no" placeholder="Mobile">
+								<select class="form-control icon-field" name ="" id="mob-country">
+									@foreach($countries as $key => $country)
+										<option value="{{ $key }}">{{ $country }}</option>
+									@endforeach
+								</select>
+								<span class="field-icon flaticon-smartphone-with-blank-screen"></span>
+							</div>
+
+							<div class="form-group ph-field">
+								<input type="text" name="country_code" class="country-code-field" value="+000" >
+								<input type="text" class="form-control icon-field numeric" name = "phone_no" placeholder="Mobile" id="mobileContact">
 								<span class="field-icon flaticon-smartphone-with-blank-screen"></span>
 							</div>
 
@@ -262,13 +278,80 @@
 	</div>
 </div><!--/pagedata-->
 
-@endsection
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
 <script type="text/javascript" >
 
+function getValidationArray(mobCode){
+
+	// console.log(mobCode);
+	// alert(mobCode);
+	var countryMobValidLengthArray = <?php print_r(json_encode(countryMobileLength(),1));?>;
+
+	var countryMobValidLength = countryMobValidLengthArray[mobCode];
+	
+	if(countryMobValidLength == undefined){
+		return {min: 0, max: 15};
+	}
+
+	console.log(countryMobValidLength);
+	return {min: countryMobValidLength.min, max: countryMobValidLength.max};
+	
+}
+
 $(document).ready(function () {
 
+		// $('.country-code-field').val('+000');
+
+		$(document).on('change', '#mob-country', function(){
+				$('#mobileContact').val('');
+				var countryId = $(this).val();
+				$.ajax({
+					'url': 'ajax/mob-country-code',
+					'data': { 'countryId': countryId },
+					'type': 'post',
+					'success': function(response){
+
+						var mobCode = response[0].phonecode;
+
+						$('.country-code-field').val('+'+mobCode);
+						$('.country-code-field').attr('data-value', mobCode);
+						var validArray = getValidationArray(mobCode);
+					}
+				})
+
+		});
+
+
+		$(document).on('focus', '#mobileContact', function(){
+
+			var array = $('.country-code-field').data('value');
+
+			var validArray = getValidationArray(array);
+
+			$('#mobileContact').prop('minlength', validArray.min);
+			$('#mobileContact').prop('maxlength', validArray.max);
+
+		});
+
+
+		$(document).on('blur', '#mobileContact', function(){
+
+			$('#mobileContact').parent().find('#groupname-error').remove();
+
+			var array = $('.country-code-field').data('value');
+
+			var validArray = getValidationArray(array);
+
+			var mobileContact = $('#mobileContact').val();
+			if(mobileContact.length < validArray.min){
+				// alert('invalid value');
+				$('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
+			}
+
+		});
+
+ 
     $("#registerForm").validate({ 
         errorElement: 'span',
         errorClass: 'help-inline',
@@ -321,14 +404,30 @@ $(document).ready(function () {
 $("#loginform").ajaxForm(function(response) { 
 
 	if(response){
+			$('.password').next('.help-block').find('.verifymsg').hide();
 		
 		if(response === "These credentials do not match our records.")
 		{
+		
 			var current = $('.password');
+		    current.next('.help-block').find('.verifymsg').hide();
 			current.css('border-color','#a94442');
 			current.next('.help-block').find('.errormsg').text(response).css('color','#a94442');
 			$('.emailid').css('border-color','#a94442');
 			$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+
+
+		}
+
+		if(response === "verification")
+		{
+			var current = $('.password');
+			current.css('border-color','#a94442');
+			current.next('.help-block').find('.errormsg').text("").css('color','#a94442');
+			current.next('.help-block').find('.verifymsg').show();
+			$('.emailid').css('border-color','#a94442');
+			$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+
 
 		}
 
@@ -339,22 +438,25 @@ $("#loginform").ajaxForm(function(response) {
 			if( obj.email != null ){
 
 				var current = $('.emailid');
+				current.next('.help-block').find('.verifymsg').hide();
 				current.css('border-color','#a94442');
 				current.next('.help-block').find('.errormsg').text(obj.email).css('color','#a94442');
 
 				if( obj.password == null ){
 					$('.password').next('.help-block').find('.errormsg').text("").css('color','#333333');
+					current.next('.help-block').find('.verifymsg').hide();
 					$('.password').css('border-color','#333333');
 				}
 			}
-			if( obj.password != null ){
-
-				var current = $('.password');				
+			if( obj.password != null ){		
+				var current = $('.password');
+				current.next('.help-block').find('.verifymsg').hide();				
 				current.css('border-color','#a94442');
 				current.next('.help-block').find('.errormsg').text(obj.password).css('color','#a94442');
 
 				if( obj.email == null ){
 					$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+					current.next('.help-block').find('.verifymsg').hide();
 					$('.emailid').css('border-color','#333333');
 				}
 			}
@@ -382,4 +484,7 @@ $("#loginform").ajaxForm(function(response) {
 		e.preventDefault();
 	});
 
+
+
 </script>
+@endsection

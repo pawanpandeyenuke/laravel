@@ -111,13 +111,15 @@
 									    			  $class1 = "load-btn";
 									    			  $class2 = "load-more-friend";
 									    			}
+
 										if($recievedcount > 10) {
 									    	 ?>
-									    	<div class="load-btn {{$class2}}">
-									    	
+
+									    	<div class="load-btn {{$class2}}">  	
 										    	<span class="loading-text">{{$text}}</span>
 										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
 										    </div>
+
 										<?php }  ?>
 										    </div>
 									    </div>
