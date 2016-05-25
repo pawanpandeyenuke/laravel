@@ -82,7 +82,7 @@ class AjaxController extends Controller
 				$verified = User::where('email',$email)->value('is_email_verified');
 				if($verified == 'N')
 					echo 'verification';
-				elseif($verified == "Y")
+				else
 					echo 'These credentials do not match our records.';
 			}
 
