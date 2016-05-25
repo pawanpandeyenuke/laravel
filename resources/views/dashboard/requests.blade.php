@@ -134,10 +134,12 @@
 										 <div class = "aftersearch">
 											<ul>
 										    </ul>
+										    @if($sentcount > 10)
 									    	<div class="load-btn load-more-friend">
 										    	<span class="loading-text">View more</span>
 										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
 										    </div>
+										    @endif
 										    </div>
 					    				</div>
 									    
@@ -153,10 +155,12 @@
 											   <div class = "aftersearch">
 														<ul>
 														</ul>
+												@if($recievedcount > 10)
 									    			<div class="load-btn load-more-friend">
 											    		<span class="loading-text">View more</span>
 											    		<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
 											    	</div>
+											    @endif
 											  </div>
 									    </div>
 

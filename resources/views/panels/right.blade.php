@@ -1,7 +1,7 @@
 <div class="col-sm-3">
 	<div class="side-btn">
 		<a href="#" title="" data-toggle="modal" data-target="#myModal" class="btn btn-lg btn-full btn-primary">Suggestions</a>
-	  <form id="suggestionform" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" >
+	  <form id="suggestionform1" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" >
                             <div class="modal fade send-msg-popup" id="myModal" tabindex="-1" role="dialog" aria-labelledby="sendMsgLabel">
                            
                               <div class="modal-dialog modal-sm" role="document">
@@ -38,11 +38,9 @@
 	</div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script> 
 <script type="text/javascript">
-  
-  $("#suggestionform").ajaxForm(function(response) {
+	
+	$("#suggestionform1").ajaxForm(function(response) {
       if(response == "success")
       {
         $('.modal-title').hide();
@@ -63,7 +61,5 @@
       $('.message_text').val('');
       $('.useremail').val('');
     });
-
-
+	
 </script>
-

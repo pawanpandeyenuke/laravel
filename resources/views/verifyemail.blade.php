@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Verify Email</div>
+                <div class="panel-heading"><b>Verify your email address to login. Enter email address below to send verification link again.</b></div>
                 <div class="panel-body">
 
                 @if (Session::has('success'))

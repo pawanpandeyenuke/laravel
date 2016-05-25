@@ -88,7 +88,6 @@
  @if (Session::has('error'))
  <div class="alert alert-danger">{!! Session::get('error') !!}</div>
  @endif
-
 <div class="page-data login-page">
 	<div class="container">
 		<div class="row">
@@ -323,13 +322,12 @@ $(document).ready(function () {
 
 
 $("#loginform").ajaxForm(function(response) { 
-
+		 
 	if(response){
 			$('.password').next('.help-block').find('.verifymsg').hide();
 		
 		if(response === "These credentials do not match our records.")
 		{
-		
 			var current = $('.password');
 		    current.next('.help-block').find('.verifymsg').hide();
 			current.css('border-color','#a94442');
@@ -342,12 +340,13 @@ $("#loginform").ajaxForm(function(response) {
 
 		if(response === "verification")
 		{
-			var current = $('.password');
-			current.css('border-color','#a94442');
-			current.next('.help-block').find('.errormsg').text("").css('color','#a94442');
-			current.next('.help-block').find('.verifymsg').show();
-			$('.emailid').css('border-color','#a94442');
-			$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+			window.location = 'send-verification-link';
+			// var current = $('.password');
+			// current.css('border-color','#a94442');
+			// current.next('.help-block').find('.errormsg').text("").css('color','#a94442');
+			// current.next('.help-block').find('.verifymsg').show();
+			// $('.emailid').css('border-color','#a94442');
+			// $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
 
 
 		}

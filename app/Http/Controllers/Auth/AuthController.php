@@ -117,7 +117,7 @@ class AuthController extends Controller
 
     public function confirm($confirmation_code)
     {
-        if( ! $confirmation_code)
+	  if( ! $confirmation_code)
         {
             Session::put('error',"Wrong confirmation code!");
            return redirect('/');

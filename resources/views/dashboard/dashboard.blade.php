@@ -252,7 +252,7 @@
 									<?php if($commentsData['commented_by']==Auth::User()->id){ ?>
 																<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>	
 
-																<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+																<button type="button" class="p-del-btn comment-delete" ><span class="glyphicon glyphicon-remove"></span></button>
 
 													<?php } ?>
 															
