@@ -105,11 +105,16 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 													<a href="profile/{{$username->id}}" title="" class="user-link">{{ $username->first_name.' '.$username->last_name }}</a>
 												</div>
 												<div class="col-sm-6">
-													<div class="comment-time text-right">{{ $data->updated_at->format('h:i A') }}</div>
+													<div class="text-right">
+														<div class="date-time-list">
+															<span><div class="comment-time text-right">{{ $data->updated_at->format('h:i A') }}</div></span>
+															<span><div class="comment-time text-right">{{ $data->updated_at->format('D jS') }}</div></span>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
-										<div class="comment-text">{{ $data->comments }}</div>
+										<div class="comment-text"><?= nl2br($data->comments) ?></div>
 									</div>
 									</li>
 								@endforeach 

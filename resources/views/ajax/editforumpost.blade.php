@@ -1,13 +1,12 @@
   <div class="modal-dialog modal-md">
-  
 	    <div class="modal-content" data-value="{{$forumpost->id}}">
-		    {!! Form::open(array('url' => 'ajax/', 'id' => 'postform2', 'files' => true)) !!}
+		    {!! Form::open(array('url' => 'ajax/', 'id' => 'postform3', 'files' => true)) !!}
 		    	<div class="modal-body text-center">
 		        <div class="" id="">
-		        	@if(!empty($comment->comments))
-			        	<div class="edit-post-textarea" data-feed="{{$comment->feed_id}}">
-							{!! Form::textarea('comments', $comment->comments, array(
-								'id' => 'newsfeed', 
+		        	@if(!empty($forumpost->title))
+			        	<div class="edit-post-textarea" data-feed="{{$forumpost->id}}">
+							{!! Form::textarea('forumtitle', $forumpost->title, array(
+								'id' => 'forumpost', 
 								'class' => 'form-control',
 								'data-emojiable' => true,
 								'placeholder' => 'Type here..',
@@ -17,7 +16,7 @@
 		        	@endif
 		        </div>
 		      </div>
-		      <input type="hidden" value="{{$comment->id}}" name="id"></input>
+		      <input type="hidden" value="{{$forumpost->id}}" name="id"></input>
 		      <div class="modal-footer">
 				{!! Form::button('Cancel', array('id' => 'submit-btn', 'class' => 'btn btn-default', 'data-dismiss' => 'modal')) !!}
 				{!! Form::submit('Submit', array('id' => 'submit-btn', 'class' => 'subcomment btn btn-primary')) !!}
@@ -41,11 +40,11 @@ $(document).ready(function(){
 
 	var myReader = new FileReader();
  $('.subcomment').click(function(){
-  $('#edit-modal').modal('hide');
+ // $('#edit-modal').modal('hide');
  });
 	// Post status updates via ajax call.
-	$("#postform2").ajaxForm(function(response) { 
- 		var current = $("#postform2");
+	$("#postform3").ajaxForm(function(response) { 
+ 		var current = $("#postform3");
  		var feedId = current.closest('.edit-post-textarea').data('feed');
 
 		if(response){
@@ -69,7 +68,7 @@ $(document).ready(function(){
 				alert("Comment not updated.Comment field can't eb empty");
 			}
 
-			 $('#edit-modal').modal('hide');
+			 $('#forumpost-edit-modal').modal('hide');
 
 			}	
 		} 
@@ -81,7 +80,7 @@ $(document).ready(function(){
       // Initializes and creates emoji set from sprite sheet
       window.emojiPicker = new EmojiPicker({
         emojiable_selector: '[data-emojiable=true]',
-        assetsPath: 'lib/img/',
+        assetsPath: '/lib/img/',
         popupButtonClasses: 'fa fa-smile-o'
       });
       // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
@@ -89,4 +88,6 @@ $(document).ready(function(){
       // It can be called as many times as necessary; previously converted input fields will not be converted again
       window.emojiPicker.discover();
     });
+
+
 </script>

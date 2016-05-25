@@ -60,6 +60,7 @@
 						</div>
 				<div class = "aftersearch">
 						<ul>
+							{{--*/ $LastID = 0 /*--}}
 							@foreach($model1 as $data)
 							<?php
 								$name = $data['user']['first_name'].' '.$data['user']['last_name'];
@@ -67,7 +68,8 @@
 								$user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : 'images/user-thumb.jpg';
 							 $id1=Auth::User()->id; 
 							 ?>
-							<li  class="get_id flist" data-userid="{{$data['user']['id']}}" data-friendid="{{$id1}}">
+							 {{--*/ $LastID = $data['id'] /*--}}
+							<li  class="get_id flist" data-id="{{$data['id']}}" data-userid="{{$data['user']['id']}}" data-friendid="{{$id1}}">
 								<div class="row">
 								<div class="col-sm-6">
 									<div class="user-cont">
@@ -115,7 +117,7 @@
 										if($recievedcount > 10) {
 									    	 ?>
 
-									    	<div class="load-btn {{$class2}}">  	
+									    	<div class="load-btn {{$class2}}" data-last-id="{{$LastID}}" >  	
 										    	<span class="loading-text">{{$text}}</span>
 										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
 										    </div>
@@ -134,10 +136,12 @@
 										 <div class = "aftersearch">
 											<ul>
 										    </ul>
+										    @if($sentcount > 10)
 									    	<div class="load-btn load-more-friend">
 										    	<span class="loading-text">View more</span>
 										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
 										    </div>
+										    @endif
 										    </div>
 					    				</div>
 									    
@@ -153,10 +157,12 @@
 											   <div class = "aftersearch">
 														<ul>
 														</ul>
+												@if($recievedcount > 10)
 									    			<div class="load-btn load-more-friend">
 											    		<span class="loading-text">View more</span>
 											    		<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
 											    	</div>
+											    @endif
 											  </div>
 									    </div>
 

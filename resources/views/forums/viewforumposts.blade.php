@@ -94,7 +94,9 @@
 							</div>
 							<!---END New Forum Post-->
 
-							<div class="f-post-list-outer">
+							<div class="modal fade edit-forumpost-popup" id="forumpost-edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost"></div>
+
+							<div class="f-post-list-outer forumpostlist">
 							@foreach($posts as $data)
 								<div class="f-single-post">
 									<div class="p-user">
@@ -128,8 +130,7 @@
 									</div>
 
 								</div><!--/single post-->
-								@endforeach
-
+							@endforeach
 							</div>
 
 							<div class="load-more-btn-cont text-center">
@@ -146,7 +147,6 @@
             </div>
         </div>
     </div><!--/pagedata-->
-
 @endsection
 {!! Session::forget('error') !!}
 <!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
@@ -162,6 +162,7 @@
 			popupButtonClasses: 'fa fa-smile-o'
       	});
       window.emojiPicker.discover();
+      loadOrgionalImogi();
 	}
 
 </script>

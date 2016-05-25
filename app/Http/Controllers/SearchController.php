@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Request, Session, Validator, Input, Cookie;
-use App\User, Auth,Mail,App\Forums,DB,App\ForumPost, App\Friend;
+use App\User, Auth, Mail, App\Forums, DB, App\ForumPost, App\Friend;
 
 class SearchController extends Controller
 {
@@ -52,10 +52,11 @@ class SearchController extends Controller
             }
 
             // Gather all the results from the queries and paginate it.
-            $result = $model->orderBy('id','desc')->get();   
+            $count = $model->get()->count();
+            $result = $model->orderBy('id','desc')->take(10)->get();   
 
             $model1 = $result->toArray(); 
-            $count = $result->count();
+            
             $auth = ($authUserId != '') ? 1 : 0;
 
         return view('dashboard.allusers')
@@ -113,8 +114,8 @@ class SearchController extends Controller
         if(Request::isMethod('post')){
             $arguments = Request::all();
             $user = User::where('email',$arguments['email'])->first();
-
-            if($user->count() > 0){
+            //print_r($user);die;
+            if($user != null){
                  if($user->is_email_verified == "Y"){
                  Session::put('error', 'This email is already verified!');
                  return redirect()->back();
@@ -223,7 +224,7 @@ class SearchController extends Controller
         $categoryname = Forums::where('id',$id)->value('title');
         $posts = ForumPost::with('user')
                         ->where('category_id',$id)
-                        ->take($per_page)
+                        //->take($per_page)
                         ->get();
         $postscount = $posts->count();
         return view('forums.viewforumposts')

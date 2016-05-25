@@ -50,7 +50,8 @@ $count=0;
 			<?php }elseif($status2 == 'Pending'){ 
 			?>
 				<div class="text-right">
-					<button class="btn btn-primary btn-full" type="button" id="sent">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent">Undo</button>
+					<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
 				</div>
 			<?php }elseif($status1=='Accepted' || $status2=='Accepted'){ 
 			?>
@@ -63,7 +64,7 @@ $count=0;
 						<button type="button" class="btn btn-primary btn-full resend" id='resend'>Add Friend</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
 				</div>
 
 					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null)){
@@ -73,7 +74,7 @@ $count=0;
 						<button type="button" class="btn btn-primary btn-full invite" id='invite'>Add Friend</button>
 					</div>
 					<div class="text-right">
-					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Sent Request</button>
+					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
 					</div>
 
 

@@ -153,7 +153,8 @@
 									</div>
 								</div><!--/post header-->
 								<div class="post-data">
-									<p>{{ $data['message'] }}</p>
+									<?php $argumentsMessage = nl2br($data['message']); ?>
+									<p><?= $argumentsMessage ?></p>
 
 									@if($data['image'])
 										<div class="post-img-cont">
@@ -252,7 +253,7 @@
 									<?php if($commentsData['commented_by']==Auth::User()->id){ ?>
 																<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>	
 
-																<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+																<button type="button" class="p-del-btn comment-delete" ><span class="glyphicon glyphicon-remove"></span></button>
 
 													<?php } ?>
 															
@@ -263,11 +264,17 @@
 																			<a href="profile/{{$commentsData['commented_by']}}" title="" class="user-link">{{$name}}</a>
 																		</div>
 																		<div class="col-sm-6">
-																			<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
+																			<div class="text-right">
+																				<div class="date-time-list">
+																					<span><div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div></span>
+																					<span><div class="comment-time text-right">{{ $commentsData->updated_at->format('D jS') }}</div></span>
+																				</div>
+																			</div>
+																			<?php //echo $commentsData->updated_at->diffForHumans();// die;?>	
 																		</div>
 																	</div>
 																</div>
-																<div class="comment-text">{{$commentsData['comments']}}</div>
+																<div class="comment-text"><?= nl2br($commentsData['comments']) ?></div>
 															</li>
 															<?php 
 															}

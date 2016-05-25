@@ -150,6 +150,7 @@ class DashboardController extends Controller
                     with('user')
                     ->where('friend_id', '=', Auth::User()->id)
                     ->where('status', '=', 'Pending')
+                    ->orderby('id','ASC')
                     ->take(10)
                     ->get()
                     ->toArray();

@@ -1,6 +1,7 @@
 
 @foreach($feeds as $data)		
-		<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>					
+		<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>
+		<?php //echo $data->updated_at->diffForHumans();// die;?>
 		<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 
 			<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
@@ -140,11 +141,16 @@
 														<a href="profile/{{$commentsData['commented_by']}}" title="" class="user-link">{{$name}}</a>
 													</div>
 													<div class="col-sm-6">
-														<div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div>
+														<div class="text-right">
+															<div class="date-time-list">
+																<span><div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div></span>
+																<span><div class="comment-time text-right">{{ $commentsData->updated_at->format('D jS') }}</div></span>
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>
-											<div class="comment-text">{{$commentsData['comments']}}</div>
+											<div class="comment-text"><?= nl2br($commentsData['comments']) ?></div>
 										</li>
 										<?php 
 										}

@@ -106,7 +106,9 @@ Route::post('/ajax/login','AjaxController@login');
 Route::post('/ajax/delforumpost','AjaxController@delForumPost');
 Route::post('/ajax/editforumpost','AjaxController@editForumPost');
 
-	Route::post('/ajax/addnewforumpost','AjaxController@addNewForumPost');
+Route::post('/ajax/addnewforumpost','AjaxController@addNewForumPost');
+
+Route::post('/ajax/mob-country-code','AjaxController@mobCountryCode');
 
 
 /**

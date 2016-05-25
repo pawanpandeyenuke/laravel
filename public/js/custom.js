@@ -316,10 +316,6 @@ $('.btn-upload-icon').find(".badge").remove();
 			if(jQuery("#pagecomment-"+feedId+" li").length > 3)
 				jQuery("#pagecomment-"+feedId+" li").first().remove();
 
-					if(jQuery("#pagecomment-"+feedId+" li").length > 3)
-						jQuery("#pagecomment-"+feedId+" li").first().remove();
-					
-
 					//Dashboard emoji fix.
 					var original =jQuery("#pagecomment-"+feedId+" li .comment-text").last().html();
 				    var converted = emojione.toImage(original);
@@ -395,9 +391,19 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'success' : function(response){
 				//alert(response);
-				//var count = response.split('<',1);
-				//var response = response.replace(count+"<","<");
+				var jresponse = jQuery.parseJSON(response);
+				// var count = parseInt(response.split('<',1));
+				// var response = response.replace(count+"<","<");
 				pageid=2;
+				// var friendcount = parseInt($('.friendcount').closest('.count').html());
+				// var sentcount = parseInt($('.sentcount').closest('.count').html())
+				// 					current.find('.count').html(count);
+				$('.friendcount').find('.count').html(jresponse.friend);
+				$('.sentcount').find('.count').html(jresponse.sent);
+				$('.recievecount').find('.count').html(jresponse.recieve);
+
+
+
 				var itemcount = parseInt(current.closest('.tab-style-no-border').find('.active .count').html());
 				if(itemcount <= 10)
 				{
@@ -407,13 +413,11 @@ $('.btn-upload-icon').find(".badge").remove();
 				current.closest('.tab-style-no-border').find('.active').find('.load-more-friend').text('View More');
 				if(response != '')
 				{
-					current.closest('.tab-style-no-border').find('.active .count').html(itemcount);
 					if(response != 0){
-					var getelem = current.closest('.tab-style-no-border').find('.active').find('.aftersearch ul').html(response);
+					var getelem = current.closest('.tab-style-no-border').find('.active').find('.aftersearch').html(jresponse.view);
 					}
 					else
-					var getelem = current.closest('.tab-style-no-border').find('.active').find('.aftersearch ul').html("");	
-				current.find('.count').html(itemcount);
+					var getelem = current.closest('.tab-style-no-border').find('.active').find('.aftersearch').html("");	
 				}
 				if(response=='' || response == 0)
 				{
@@ -423,7 +427,7 @@ $('.btn-upload-icon').find(".badge").remove();
 				}
 
 				if(!(response))
-					current.closest('.tab-style-no-border').find('.active').find('.aftersearch ul').html("");
+					current.closest('.tab-style-no-border').find('.active').find('.aftersearch').html("");
 				 //current.find('.count').html("0");
 			}
 		});
@@ -709,7 +713,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		var user_id=current.closest('.get_id').data('userid');
 		var friend_id=current.closest('.get_id').data('friendid');
 
-		var count = current.parents('.tab-style-no-border').find('.active .count').html();
+		var count = parseInt($('.sentcount').find('.count').html());
 		var newcount = count - 1;
 
 		
@@ -718,7 +722,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'data' : {'user_id' : user_id,'friend_id': friend_id},
 			'success' : function(data){
-				current.parents('.tab-style-no-border').find('.active .count').html(newcount);
+				$('.sentcount').find('.count').html(newcount)
 				current.closest('.get_id').find('.invite').show(200);
 				current.closest('.get_id').find('.sent').hide(500);
 				current.closest('.flist').hide(200);
@@ -901,20 +905,21 @@ $('.btn-upload-icon').find(".badge").remove();
 		$('.loading-text').hide();
 		$('.loading-img').show();
 		var current = $(this);
-
 		var reqType = current.closest('.friends-list').find('.active').data('value');
 		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
 		//alert(abc);
 		$.ajax({
 			'url' : '/ajax/viewmorefriends',
 			'type' : 'post',
-			'data' : { 'pageid': pageid, 'reqType': reqType },
+			'data' : { 'pageid': pageid, 'reqType': reqType, 'lastid': current.data( 'last-id' ) },
 			'success' : function(data){
 				if(data != 'No more results'){		
 					pageid = pageid + 1;
 					$('.loading-text').show();
 					$('.loading-img').hide();
-					current.closest('.friends-list').find('.active').find('ul').append(data);
+					current.parent().append(data);
+					current.remove();
+					
 				}else{
 					var currentobj = current.find('.loading-text');
 					currentobj.text('No more results');
@@ -1132,40 +1137,48 @@ $(document).on('click','.savegroupname',function()
 		});
 
 	});
-
+	/***** Add new Forum Post ****/
 		$(document).on('click','.addforumpost',function(){
 		var current = $(this);
 		var category_id = $(this).val();
 		var post = $('.forumpost').val();
+		  if($('.forumpost').val()!="")
+		  {
 			$.ajax({
 			'url' : '/ajax/addnewforumpost',
 			'type' : 'post',
 			'data' : {'category_id' : category_id,'topic' : post},
-			'success' : function(data){		 
-				
+			'success' : function(response){	
+		  		$('.forumpost').val();
+		  		$('.emoji-wysiwyg-editor').text('');
+				$('.forumpostlist').append(response);
+				var original =jQuery('.f-single-post').last().find('p').html();
+			   	var converted = emojione.toImage(original);
+				jQuery('.f-single-post').last().find('p').html(converted);
 			}
 		});
+		}
 
 	});
 
 	/***** Forum Post Edit ****/
 
 		$(document).on('click','.editforumpost',function(){
-		showLoading();
 		var forumpostid = $(this).val(); 
+		showLoading();
 
 		$.ajax({
-			'url' : 'ajax/editforumpost',
+			'url' : '/ajax/editforumpost',
 			'data' : {'forumpostid':forumpostid},
 			'type' : 'post',
 			'success' : function(response){
 				$.fancybox.close();
-				$('#edit-modal').append(response);
-				$("#edit-modal").modal();
+				$('#forumpost-edit-modal').append(response);
+				$("#forumpost-edit-modal").modal();
 				hideLoading();
 			}
 		});
-		$('#edit-modal').html('');
+		$('#forumpost-edit-modal').html('');
 
 	});
 
@@ -1188,10 +1201,11 @@ $(document).on('click','.savegroupname',function()
       //alert(6);
 	}
 
+  /*********** To display emoji onload of a page******************/
 	function loadOrgionalImogi()
 	{
 
-		$(".single-post .post-data p, .single-post .comment-text").each(function() {
+		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p").each(function() {
 		var original = $(this).html();
 		// use .shortnameToImage if only converting shortnames (for slightly better performance)
 		var converted = emojione.toImage(original);

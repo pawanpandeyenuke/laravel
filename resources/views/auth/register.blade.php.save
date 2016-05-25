@@ -315,7 +315,7 @@ $(document).ready(function () {
 
 						var mobCode = response[0].phonecode;
 
-						$('.country-code-field').val(mobCode);
+						$('.country-code-field').valmobCode);
 						$('.country-code-field').attr('data-value', mobCode);
 						var validArray = getValidationArray(mobCode);
 					}

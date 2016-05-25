@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 
-use Auth, App\Country, App\Category,App\JobArea;
+use Auth, App\Country, App\Category,App\JobArea, App\Forums;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -17,8 +17,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         
-        // $title = Category::where('parent_id', 0)->pluck('img_url')->toArray();
-        // echo '<pre>';print_r($title);die;
+/*        $forum = Forums::where('parent_id', 0)->pluck('id')->toArray();
+        foreach ($forum as $value) {
+            $forumdata = Forums::find($value);
+            $forumdata->img_url = $value.'.png';
+            $forumdata->save();
+        }
+        echo '<pre>';print_r($forumdata);die; */
 
      $educationLevel = array('High school','Certifciate/diploma','Associate degree','3 or 4 year undergraduate program','Post graduate degree','Post graduate degree - MBA','Post graduate degree - Masters','Post graduate degree - JD','Post graduate degree - PHD/Doctrate','Professional','Other degree');
 
