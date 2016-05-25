@@ -1087,6 +1087,13 @@ class ApiController extends Controller
 				$friend->user_id = $arguments['user_id'];
 				$request = $friend->save();
 
+				// Add friends to roster in API.
+				$arrayOfIds = array($arguments['user_id'], $arguments['friend_id']);
+				$udetail = User::whereIn('id', $arrayOfIds)->get()->toArray();
+				$converse = new Converse;
+				$converse->addFriend($udetail[0]['xmpp_username'], $udetail[1]['xmpp_username'], $udetail[1]['first_name'], $udetail[0]['first_name']);   
+				// Add friends to roster in API.
+
 				$this->data = $request;
 				$this->status = 'success';
 				$this->message = 'Friend request accepted.';
