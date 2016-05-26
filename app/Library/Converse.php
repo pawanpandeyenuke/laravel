@@ -71,9 +71,9 @@ class Converse{
 	public static function addUserGroup($roomname,$username){
 
 		$node = Config::get('constants.xmpp_host_Url');
-		$node = 'conference.'.$node;
+		//$node = 'conference.'.$node;
 		$roomname=str_replace(" ","_",$roomname);
-		$response=@exec('sudo  ejabberdctl srg_user_add '.$username.' '.$node.' '.$roomname.' '.$node);
+		$response=@exec('sudo  ejabberdctl srg_user_add '.$username.' '.$node.' '.$roomname.' conference.'.$node);
 		
 		
 		//srg-user-add user server group host                   Adds user@server to group on host
