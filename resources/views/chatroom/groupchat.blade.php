@@ -322,6 +322,7 @@ $groupid = str_replace('/', '-', $groupid);
                   debug: false ,
                   message_carbons: true,
                   send_initial_presence:true,
+                  roster_groups: true ,
                 });
                 jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                 jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
