@@ -320,7 +320,7 @@ $groupid = str_replace('/', '-', $groupid);
                   prebind_url: "{{url('/ajax/getxmppuser')}}",
                   allow_logout: false,
                   debug: false ,
-                  //message_carbons: true,
+                  message_carbons: true,
                   send_initial_presence:true,
                 });
                 jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
