@@ -227,11 +227,11 @@ $groupid = str_replace('/', '-', $groupid);
                             if(!($count==0) || $data['owner_id']==Auth::User()->id) {   ?>
                                <li>
 								   <div class="chat-user-outer" >
-										<a href="{{url(private-group-detail/$data['id'])}}" >
+										<a href="{{url('private-group-detail/<?php echo $data['id']; ?>)}}" >
 											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
 											<span class="title">{{$data['title']}}</span>
 										</a>
-										<button onclick="openChatRoom({{'str_replace(' ','_',$data['title'].'_'.$data['id'])}}', '{{$data['title']}}');" class="time">Chat</button>
+										<button onclick="openChatRoom('<?php echo str_replace( ' ','_', $data['title'].'_'.$data['id'] ); ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
                                    </div>
                                </li>
 							<?php } ?>
