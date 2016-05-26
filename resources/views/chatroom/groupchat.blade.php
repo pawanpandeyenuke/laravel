@@ -224,24 +224,19 @@ $groupid = str_replace('/', '-', $groupid);
 
                             $namestr=implode(",",$name);
 
-                            if(!($count==0) || $data['owner_id']==Auth::User()->id)
-                            {          
-                            ?>
-                               
-                                        <li>                           
-                                                <a href="{{url("private-group-detail/".$data['id'])}}" class="chat-user-outer"  title="" >
-                                                <span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
-                                                <span class="title">
-                                                    {{$data['title']}} 
-                                                </span>
-                                                   </a>
-                                          
-                                                  
-                                                </li>
-                                                <?php } ?>
-                                        @endforeach
-                                        </ul>
-                         
+                            if(!($count==0) || $data['owner_id']==Auth::User()->id) {   ?>
+                               <li>
+								   <div class="chat-user-outer" >
+										<a href="{{url(private-group-detail/$data['id'])}}" >
+											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
+											<span class="title">{{$data['title']}}</span>
+										</a>
+										<button onclick="openChatRoom({{'str_replace(' ','_',$data['title'].'_'.$data['id'])}}', '{{$data['title']}}');" class="time">Chat</button>
+                                   </div>
+                               </li>
+							<?php } ?>
+                         @endforeach
+					</ul>
                                      </div><!--/chat user list-->
                                       </div>
                                     </div>
@@ -508,9 +503,7 @@ $groupid = str_replace('/', '-', $groupid);
 
 
 
-
-function openChatbox(xmpusername,username)
-     {
+function openChatbox( xmpusername,username ){
    //var chatbox=conObj.chats.get(xmpusername+chatserver);
    //console.log(chatbox);
    var minbox=$("#min-"+xmpusername);
@@ -534,10 +527,11 @@ function openChatbox(xmpusername,username)
    }   
 
 
-    
-     }
+}
+
  function hideOpendBox()
        {
+		alert( 'OK' );
               $(".chatroom:visible").each(function()    {
                 $(this).find('.icon-minus').click();
                 });
@@ -558,6 +552,9 @@ function openChatbox(xmpusername,username)
                conObj.rooms.open(grpjid+conferencechatserver);
             }
        }
+function openChatRoom( room, roomname ){
+	converse.rooms.open( room'@<?= Config::get('constants.xmpp_host_Url') ?>', roomname );	
+}
 
     $('.status-r-btn').on('click',function(){
         if ( $('#status_img_up').is(':checked') ) { 
