@@ -531,7 +531,6 @@ function openChatbox( xmpusername,username ){
 
  function hideOpendBox()
        {
-		alert( 'OK' );
               $(".chatroom:visible").each(function()    {
                 $(this).find('.icon-minus').click();
                 });
@@ -552,9 +551,9 @@ function openChatbox( xmpusername,username ){
                conObj.rooms.open(grpjid+conferencechatserver);
             }
        }
-function openChatRoom( room, roomname ){
-	converse.rooms.open( room'@<?= Config::get('constants.xmpp_host_Url') ?>', roomname );	
-}
+	function openChatRoom( room, roomname ){
+		converse.rooms.open( room+'@<?= Config::get('constants.xmpp_host_Url') ?>', roomname );	
+	}
 
     $('.status-r-btn').on('click',function(){
         if ( $('#status_img_up').is(':checked') ) { 
