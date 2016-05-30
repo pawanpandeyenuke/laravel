@@ -174,6 +174,8 @@
       $('.message_text').val('');
       $('.useremail').val('');
     });
+
+    
 	
 </script>
 

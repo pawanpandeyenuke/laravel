@@ -2770,7 +2770,7 @@ textarea{
 .f-single-post{
   position: relative;
   padding: 0 0 0 95px;
-  min-height: 120px;
+  min-height: 125px;
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
   margin: 0 0 15px;
@@ -2810,7 +2810,7 @@ textarea{
 .f-single-post .p-likes, .fp-likes{
   position: relative;
   padding: 2px 0 0 30px;
-  margin: 8px 0 0;
+  margin: 5px 0 0;
 }
 .f-single-post .p-likes i, .fp-likes i{
 	position: absolute;
@@ -2826,7 +2826,7 @@ textarea{
   display: inline-block;
   text-align: center;
   line-height: 20px;
-  margin: 0 0 0;
+  margin: 0 0 0 5px;
 }
 .f-single-post .f-post-title{
   position: relative;
@@ -2961,4 +2961,115 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
 }
 .country-code-field[disabled]{
 	background: #fff;
+}
+
+/**********25-5-16***********/
+.p-likes .like-cont {
+    position: absolute;
+    left: 0px;
+    top: 2px;
+}
+.f-single-post p img{
+	width: 20px;
+	margin: 0 5px;
+}
+.fp-btns .reply-count{
+
+}
+.fp-btns {
+    position: absolute;
+    right: 0px;
+    bottom: 8px;
+    width: 300px;
+}
+.f-single-post{
+	padding-bottom: 40px;
+}
+.fp-action button{
+	border: 0px;
+	background: none;
+}
+div#forumpost-edit-modal {
+    z-index: 1111;
+}
+div#forumreply-edit-modal {
+    z-index: 1111;
+}
+
+.fix-header {
+  margin: 0 -30px;
+  padding: 10px 30px;
+  background: #fff;
+}
+.stick {
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  border-radius: 0 0 0.5em 0.5em;
+}
+
+.morecontent span {
+	display: none;
+}
+.morelink {
+  color: #4EBDAF !important;
+}
+
+.f-post-reply-form{
+	display: none;
+}
+.fp-master-header{
+	padding: 20px 0 5px;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 10px;
+}
+.fp-master-header .ut-name{
+	position: relative;
+  min-height: 35px;
+  line-height: 35px;
+  font-size: 16px;
+  padding: 0 0 0 45px;
+}
+.fp-master-header .user-thumb{
+	width: 35px;
+	height: 35px;
+	position: absolute;
+	background-size: cover !important;
+	border-radius: 50%;
+	left: 0px;
+	top: 0px;
+}
+.fp-master-header-right{
+	float: right;
+	margin: 8px 0 0 0;
+}
+.fp-master-header-right .fp-likes{
+  margin: 0;
+}
+.fp-master-header-right .p-date{
+	font-size: 10px;
+}
+.fp-master-header-right .p-time{
+	font-size: 10px;
+}
+.fp-master-header-right span i:before{
+  font-size: 10px;
+}
+.fp-master-header-right span{
+  margin: 4px 0 0 15px;
+}
+.f-single-post .f-post-title .fp-meta{
+  position: absolute;
+  top: 0px;
+  right: 55px;
+}
+.f-single-post .f-post-title .fp-meta span{
+  font-size: 12px;
+  margin: 0 5px 0;
+}
+.f-single-post .f-post-title .fp-meta span i:before{
+	font-size: 12px;
+}
+.p-likes.ml {
+  margin: 5px 0 0 12px;
 }

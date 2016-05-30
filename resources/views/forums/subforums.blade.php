@@ -76,16 +76,20 @@ unset($countries[0]);
 							@if($fieldsdata)
 									<tr>
 										<td>{{ $data->title }}</td>
-										<td>31, Jan 12:00 pm</td>
-										<td><div class="count text-center"><span>{{$count}}</span></div></td>
-										<td><a href="{{url("subcatforums/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
+										<td>{{$data->updated_at->format('d, M h:i a')}}</td>
+				<?php 	$subid1 = \App\Forums::where('parent_id',$data->id)->pluck('id');
+						$count1 = \App\ForumPost::whereIn('category_id',$subid1)->get()->count();
+						?>
+										<td><div class="count text-center"><span>{{$count1}}</span></div></td>
+										<td><a href="{{url("sub-cat-forums/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
 									</tr>
 							@else
 									<tr>
 										<td>{{ $data->title }}</td>
-										<td>31, Jan 12:00 pm</td>
+										<td>{{$data->updated_at->format('d, M h:i a')}}</td>
+										<!-- <td>31, Jan 12:00 pm</td> -->
 										<td><div class="count text-center"><span>{{$count}}</span></div></td>
-										<td><a href="{{url("viewforumposts/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
+										<td><a href="{{url("view-forum-posts/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
 									</tr>
 							@endif
 							@endforeach	

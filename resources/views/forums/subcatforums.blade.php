@@ -63,7 +63,7 @@ unset($countries[0]);
 						</div><!--/forum filter-->
 
 						<div class="forum-srch-list">
-							<div class="fs-breadcrumb"><a href="{{url('forums')}}" title="">Home</a> > <a href = "{{url("subforums/$parentforumid")}}" title="">{{$parentforum}}</a> >{{$mainforum}}</div>
+							<div class="fs-breadcrumb"><a href="{{url('forums')}}" title="">Home</a> > <a href = "{{url("sub-forums/$parentforumid")}}" title="">{{$parentforum}}</a> >{{$mainforum}}</div>
 							<div class="table-responsive">
 								<table class="table">
 			@if(!empty($subforums))
@@ -76,16 +76,16 @@ unset($countries[0]);
 							@if($fieldsdata)
 									<tr>
 										<td>{{ $data->title }}</td>
-										<td>31, Jan 12:00 pm</td>
+										<td>{{$data->updated_at->format('d, M h:i a')}}</td>
 										<td><div class="count text-center"><span>{{$count}}</span></div></td>
-										<td><a href="{{url("subcatforums/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
+										<td><a href="{{url("sub-cat-forums/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
 									</tr>
 							@else
 									<tr>
 										<td>{{ $data->title }}</td>
-										<td>31, Jan 12:00 pm</td>
+										<td>{{$data->updated_at->format('d, M h:i a')}}</td>
 										<td><div class="count text-center"><span>{{$count}}</span></div></td>
-										<td><a href="{{url("viewforumposts/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
+										<td><a href="{{url("view-forum-posts/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
 									</tr>
 							@endif
 							@endforeach	

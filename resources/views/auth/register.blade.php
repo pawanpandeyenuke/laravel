@@ -389,25 +389,12 @@ $(document).ready(function () {
 
 });
 
-
-/*$(document).on('change', '#terms', function() {
-
-    // $this will contain a reference to the checkbox   
-    if ($(this).is(':checked')) {
-        $('.register').prop('disabled',false);
-    } else {
-        $('.register').prop('disabled',true);
-    }
-});*/
-
-
 $("#loginform").ajaxForm(function(response) { 
 		 
 	if(response){
 			$('.password').next('.help-block').find('.verifymsg').hide();
 		
-		if(response === "These credentials do not match our records.")
-		{
+		if(response === "These credentials do not match our records."){
 			var current = $('.password');
 		    current.next('.help-block').find('.verifymsg').hide();
 			current.css('border-color','#a94442');
@@ -415,21 +402,10 @@ $("#loginform").ajaxForm(function(response) {
 			$('.emailid').css('border-color','#a94442');
 			$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
 
-
 		}
 
 		if(response === "verification")
-		{
 			window.location = 'send-verification-link';
-			// var current = $('.password');
-			// current.css('border-color','#a94442');
-			// current.next('.help-block').find('.errormsg').text("").css('color','#a94442');
-			// current.next('.help-block').find('.verifymsg').show();
-			// $('.emailid').css('border-color','#a94442');
-			// $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
-
-
-		}
 
 		else if(response == "success"){
 			window.location = '/dashboard';
@@ -483,8 +459,6 @@ $("#loginform").ajaxForm(function(response) {
 	$('.numeric,input[type="number"]').bind('paste drop',function(e){
 		e.preventDefault();
 	});
-
-
 
 </script>
 @endsection

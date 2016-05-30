@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Request, Session, Validator, Input, Cookie;
-use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend;
+use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend,App\ForumLikes,App\ForumReply;
 
 class SearchController extends Controller
 {
@@ -209,30 +209,83 @@ class SearchController extends Controller
 
     public function viewForumPosts($id = "")
     {
-        // $posts = ForumPost::where('category_id',$id)->get();
 
-         $per_page = 5;
+    	/*************************/
 
-        // $posts = ForumPost::with('likesCount')->with('replyCount')->with('user')->with('likes')->with('reply')
-        //        ->where('category_id',$id)
-        //         //->orderBy('forums_post.id','DESC')
-        //         ->take($per_page)
-        //         ->get()
-        //         ->toSql();
+    	$parent = Forums::where('parent_id',$id)->value('id');
+    	$parent2 = Forums::where('id',$id)->value('id');
+    	if($parent != null || $parent2 == null)
+    		return redirect('forums');
 
-        //         print_r($posts);die;
+    	/************************/
         $categoryname = Forums::where('id',$id)->value('title');
         $posts = ForumPost::with('user')
+                        ->with('forumPostLikesCount')
+                        ->with('replyCount')
                         ->where('category_id',$id)
-                        //->take($per_page)
+                        ->orderBy('updated_at','DESC')
                         ->get();
+
+        $forum_category_breadcrum="";
+        $parents1 = Forums::where('id',$id)->first();
+            if($parents1->parent_id == 0){
+                    $forum_category_id = $parents1->id;
+                    $forum_category_breadcrum = "Home > ".$parents1->title; 
+            }
+            else{
+                $parents2 = Forums::where('id',$parents1->parent_id)->first();
+                if($parents2->parent_id == 0){
+                    $forum_category_id = $parents2->id.",".$parents1->id;
+                    $forum_category_breadcrum = "Home > ".$parents2->title." > ".$parents1->title;
+                }
+                else{
+                    $parents3 = Forums::where('id',$parents2->parent_id)->first();
+                    $forum_category_id = $parents3->id.",".$parents2->id.",".$parents1->id;
+                    $forum_category_breadcrum = "Home > ".$parents3->title." > ".$parents2->title." > ".$parents1->title;
+                }
+            }
+
+                       // echo '<pre>'; print_r($posts);die;
         $postscount = $posts->count();
+        $posts = $posts->take(10);
         return view('forums.viewforumposts')
                 ->with('posts',$posts)
                 ->with('postscount',$postscount)
                 ->with('categoryname',$categoryname)
+                ->with('breadcrum',$forum_category_breadcrum)
                 ->with('categoryid',$id);
     }
 
+    public function forumPostReply($forumpostid = "")
+    {
+        $checkpost = ForumPost::with('user')
+                        ->with('forumPostLikesCount')
+                        ->where('id',$forumpostid)
+                        ->first();
+
+    	if(empty($checkpost))
+            return redirect()->back();
+
+        $reply = ForumReply::with('user')
+                ->with('replyLikesCount')
+                ->with('replyCommentsCount')
+                ->where('post_id',$forumpostid)
+                ->orderBy('updated_at','DESC')
+                ->get();
+
+        $replycount = $reply->count();
+        $checkarr = array();
+
+        return view('forums.forumpostreply')
+                    ->with('post',$checkpost)
+                    ->with('replycount',$replycount)
+                    ->with('reply',$reply);
+    }
+
+
+    public function demo()
+    {
+    	return view('demo');
+    }
   
 }
