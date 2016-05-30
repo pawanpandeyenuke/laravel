@@ -389,19 +389,8 @@ $(document).ready(function () {
 
 });
 
-
-/*$(document).on('change', '#terms', function() {
-
-    // $this will contain a reference to the checkbox   
-    if ($(this).is(':checked')) {
-        $('.register').prop('disabled',false);
-    } else {
-        $('.register').prop('disabled',true);
-    }
-});*/
-
-
 $("#loginform").ajaxForm(function(response) { 
+
          
     if(response){
             $('.password').next('.help-block').find('.verifymsg').hide();
@@ -483,8 +472,6 @@ $("#loginform").ajaxForm(function(response) {
     $('.numeric,input[type="number"]').bind('paste drop',function(e){
         e.preventDefault();
     });
-
-
 
 </script>
 @endsection

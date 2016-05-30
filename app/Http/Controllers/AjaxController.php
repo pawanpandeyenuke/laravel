@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
-,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers,App\ForumPost;
+,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments;
 
 use Illuminate\Http\Request;
 use Session, Validator, Cookie;
@@ -1254,6 +1254,10 @@ comments;
 	{
 		$args = Input::all();
 		ForumPost::where('id',$args['forumpostid'])->delete();
+		ForumLikes::where('post_id',$args['forumpostid'])->delete();
+		ForumReply::where('post_id',$args['forumpostid'])->delete();
+		$count = ForumPost::where('category_id',$args['categoryid'])->get()->count();
+		echo $count;
 	}
 
 	public function editForumPost()
@@ -1261,7 +1265,24 @@ comments;
 		$forumpostid = Input::get('forumpostid');
 		$forumpost = ForumPost::where('id',$forumpostid)->first();
 
-		return view('ajax.editforumpost')->with('forumposts', $forumpost);
+		return view('ajax.editforumpost')->with('forumpost', $forumpost);
+	}
+
+	public function editNewForumPost()
+	{
+		$arguments = Input::all();
+		//print_r($arguments);die;
+		if($arguments['forumtitle'] != "")
+		{
+			ForumPost::where('id',$arguments['id'])->update(['title'=>$arguments['forumtitle']]);
+			$data = ['id'=>$arguments['id'],
+					 'title'=>$arguments['forumtitle']];
+
+			echo json_encode($data);
+		}
+		else
+			echo "Post something to update.";
+
 	}
 
 	public function addNewForumPost()
@@ -1270,13 +1291,46 @@ comments;
         $input = Input::all();
        	$name = $user->first_name." ".$user->last_name;
 
+       	$forum_category_id="";
+        $forum_category_breadcrum="";
+        $parents1 = Forums::where('id',$input['category_id'])->first();
+            if($parents1->parent_id == 0){
+                    $forum_category_id = $parents1->id;
+                    $forum_category_breadcrum = "Home > ".$parents1->title; 
+            }
+            else{
+                $parents2 = Forums::where('id',$parents1->parent_id)->first();
+                if($parents2->parent_id == 0){
+                    $forum_category_id = $parents2->id.",".$parents1->id;
+                    $forum_category_breadcrum = "Home > ".$parents2->title." > ".$parents1->title;
+                }
+                else{
+                    $parents3 = Forums::where('id',$parents2->parent_id)->first();
+                    $forum_category_id = $parents3->id.",".$parents2->id.",".$parents1->id;
+                    $forum_category_breadcrum = "Home > ".$parents3->title." > ".$parents2->title." > ".$parents1->title;
+                }
+            }
+
+
+
+
                 $data = ['title'=>$input['topic'],
                         'owner_id'=>$user->id,
                         'category_id'=>$input['category_id'],
+                        'forum_category_id'=>$forum_category_id,
+                        'forum_category_breadcrum'=>$forum_category_breadcrum,
                         'created_at'=>date('Y-m-d H:i:s',time()),
                         'updated_at'=>date('Y-m-d H:i:s',time())];
 
-               
+         Forums::where('id',$input['category_id'])->update(['updated_at'=>date('Y-m-d H:i:s',time())]);
+         $parent1 = Forums::where('id',$input['category_id'])->value('parent_id');
+         if($parent1 != null){
+         	Forums::where('id',$parent1)->update(['updated_at'=>date('Y-m-d H:i:s',time())]);
+         	$parent2 = Forums::where('id',$parent1)->value('parent_id');
+         	if($parent2 != null)
+         		Forums::where('id',$parent2)->update(['updated_at'=>date('Y-m-d H:i:s',time())]);
+         }
+		               
         $forumpost = new Forumpost;
         $forumpostid = $forumpost->create($data);
         $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
@@ -1284,7 +1338,9 @@ comments;
         
         return view('ajax.forumpost')
         		->with('forumpostid',$forumpostid)
+        		->with('categoryid',$input['category_id'])
         		->with('profileimage',$profileimage)
+        		->with('breadcrum',$forum_category_breadcrum)
         		->with('user',$user)
         		->with('name',$name);
 
@@ -1301,6 +1357,194 @@ comments;
 		$country = Country::where('country_id', $countryId)->get();
 		return $country;	
 	}
+
+	/*
+	 * Like on Forum Posts.
+	 */
+	public function likeForumPost()
+	{
+		$forumpost = Input::get('forumpostid');
+		$userid = Auth::User()->id;
+
+		$likecheck = ForumLikes::where('owner_id',$userid)->where('post_id',$forumpost)->value('id');
+		if($likecheck == null)
+		{
+			$likedata = ['liked'=>'Yes',
+						 'owner_id'=>$userid,
+						 'post_id'=>$forumpost];
+
+		   $forumlike = new ForumLikes;
+		   $forumlike->create($likedata);
+		   $likecount = ForumLikes::where('post_id',$forumpost)->get()->count();
+
+		   echo $likecount;
+		}
+		else{
+			ForumLikes::where('owner_id',$userid)->where('post_id',$forumpost)->delete();
+			$likecount = ForumLikes::where('post_id',$forumpost)->get()->count();
+
+		   	echo $likecount; 
+		}
+
+	}
+
+	public function viewMoreForumPost()
+	{
+		$per_page = 10;
+		$page = Input::get('pageid');
+		$categoryid = Input::get('categoryid');
+		$offset = ($page - 1) * $per_page;
+
+		     $posts = ForumPost::with('user')->with('forumPostLikesCount')
+		        ->where('category_id',$categoryid)
+		        ->skip($offset)
+		        ->take($per_page)
+		        ->orderBy('updated_at','DESC')
+		        ->get();   
+
+			$str  = "No More Results";
+
+		if(!($posts->isEmpty())){
+			return view('forums.viewmoreforumposts')
+						->with('posts',$posts)
+						->with('categoryid',$categoryid);       
+			}
+			else{
+				echo $str;
+			}
+	}
+
+	public function addNewForumReply()
+	{
+	    $user = Auth::User();
+        $input = Input::all();
+       
+                $data = ['reply'=>$input['reply'],
+                        'owner_id'=>$user->id,
+                        'post_id'=>$input['forumpostid'],
+                        'created_at'=>date('Y-m-d H:i:s',time()),
+                        'updated_at'=>date('Y-m-d H:i:s',time())];
+		               
+        $forumreply = new ForumReply;
+        $forumpostreply = $forumreply->create($data);
+
+        $name = $user->first_name." ".$user->last_name;
+        $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+
+        
+        return view('ajax.forumpostreply')
+        		->with('forumreply',$forumpostreply)
+        		->with('profileimage',$profileimage)
+        		->with('forumpostid',$input['forumpostid'])
+        		->with('user',$user)
+        		->with('name',$name);
+
+	}
+
+	public function delForumReply()
+	{
+		$args = Input::all();
+		ForumReply::where('id',$args['forumreplyid'])->delete();
+		$count = ForumReply::where('post_id',$args['forumpostid'])->get()->count();
+		echo $count;
+	}
+	
+	public function editForumReply()
+	{
+		$forumreplyid = Input::get('forumreplyid');
+		$forumreply = ForumReply::where('id',$forumreplyid)->first();
+		
+		return view('ajax.editforumreply')
+				->with('forumreply', $forumreply);
+	}
+
+	public function editNewForumReply()
+	{
+		$arguments = Input::all();
+		//print_r($arguments);die;
+		if($arguments['forumreply'] != "")
+		{
+			ForumReply::where('id',$arguments['id'])->update(['reply'=>$arguments['forumreply']]);
+			$data = ['id'=>$arguments['id'],
+					 'reply'=>$arguments['forumreply']];
+
+			echo json_encode($data);
+		}
+		else
+			echo "Post something to update.";
+
+	}
+
+	public function likeForumReply()
+	{
+		$forumreplyid = Input::get('forumreplyid');
+		$userid = Auth::User()->id;
+
+		$likecheck = ForumReplyLikes::where('owner_id',$userid)->where('reply_id',$forumreplyid)->value('id');
+		if($likecheck == null)
+		{
+			$likedata = ['liked'=>'Yes',
+						 'owner_id'=>$userid,
+						 'reply_id'=>$forumreplyid];
+
+		   $forumreplylike = new ForumReplyLikes;
+		   $forumreplylike->create($likedata);
+		   $likecount = ForumReplyLikes::where('reply_id',$forumreplyid)->get()->count();
+		   $likearr = ['likecount'=>$likecount,
+		   				'check'=>'checked'];
+		   print_r(json_encode($likearr));
+		}
+		else{
+			ForumReplyLikes::where('owner_id',$userid)->where('reply_id',$forumreplyid)->delete();
+			$likecount = ForumReplyLikes::where('reply_id',$forumreplyid)->get()->count();
+			$likearr = ['likecount'=>$likecount,
+		   				'check'=>'unchecked'];
+		   print_r(json_encode($likearr)); 
+		}
+	}
+
+	public function getForumPostBox()
+	{
+		$reply_id = Input::get('replyid');
+
+	    $reply = ForumReply::with('user')
+	    ->with('replyLikesCount')
+	    ->with('replyCommentsCount')
+	    ->where('id',$reply_id)
+	    ->first();
+
+	    $replyComments = ForumReplyComments::where('reply_id',$reply_id)->get();
+
+		return view('ajax.getforumpostbox')
+				->with('reply',$reply)
+				->with('replyComments',$replyComments);
+	}
+
+	public function forumReplyComment()
+	{
+		$replyid = Input::get('replyid');
+		$replycomment = Input::get('comment');
+		$user  = Auth::User();
+
+		$arr = ['reply_comment'=>$replycomment,
+				'owner_id'=>$user->id,
+				'reply_id'=>$replyid];
+
+		$replycomment = new ForumReplyComments;
+		$comment = $replycomment->create($arr);
+
+		$name = $user->first_name." ".$user->last_name;
+        $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+
+		return view('ajax.forumreplycomment')
+				->with('comment',$comment)
+				->with('name',$name)
+				->with('userid',$user->id)
+				->with('profileimage',$profileimage);
+		
+
+	}
+
 
 }
 	

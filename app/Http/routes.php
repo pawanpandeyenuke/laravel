@@ -38,6 +38,9 @@ Route::post('ajax/comments/get', 'AjaxController@getCommentBox');
 Route::post('ajax/comments/post', 'AjaxController@postcomment');
 Route::post('ajax/post/get', 'AjaxController@getPostBox');
 
+Route::post('/ajax/forumpostreply/get', 'AjaxController@getForumPostBox');
+
+
 Route::post('ajax/getfriendslist', 'AjaxController@getfriendslist');
 
 // Route::post('ajax/getxmppuser', 'AjaxController@getxmppuser');
@@ -104,12 +107,29 @@ Route::post('/private-group-detail/ajax/groupimage','AjaxController@groupImage')
 Route::post('/ajax/login','AjaxController@login');
 
 Route::post('/ajax/delforumpost','AjaxController@delForumPost');
+
 Route::post('/ajax/editforumpost','AjaxController@editForumPost');
+Route::post('/ajax/editnewforumpost','AjaxController@editNewForumPost');
+
 
 Route::post('/ajax/addnewforumpost','AjaxController@addNewForumPost');
 
 Route::post('/ajax/mob-country-code','AjaxController@mobCountryCode');
 
+Route::post('/ajax/likeforumpost','AjaxController@likeForumPost');
+
+Route::post('/ajax/addnewforumreply','AjaxController@addNewForumReply');
+
+Route::post('/ajax/view-more-forum-post','AjaxController@viewMoreForumPost');
+
+Route::post('/ajax/delforumreply','AjaxController@delForumReply');
+
+Route::post('/ajax/editforumreply','AjaxController@editForumReply');
+Route::post('/ajax/editnewforumreply','AjaxController@editNewForumReply');
+
+Route::post('/ajax/likeforumreply','AjaxController@likeForumReply');
+
+Route::post('/ajax/forumreplycomment','AjaxController@forumReplyComment');
 
 /**
  * @Api Routes..
@@ -216,18 +236,23 @@ Route::post('api/get-userby-jid','ApiController@getUserByJID');
 	Route::get('/forums', 'SearchController@forumsList');
 	Route::post('/forums', 'SearchController@forumsList');
 
-	Route::get('subforums/{parentid}', 'SearchController@subForums');
+	Route::get('sub-forums/{parentid}', 'SearchController@subForums');
 
-	Route::get('subforums/{parentid}/{name}', 'SearchController@subForums');
+	Route::get('sub-forums/{parentid}/{name}', 'SearchController@subForums');
 
-	Route::get('subforums', 'SearchController@subForums');
-	Route::post('subforums', 'SearchController@subForums');
+	Route::get('sub-forums', 'SearchController@subForums');
+	Route::post('sub-forums', 'SearchController@subForums');
 
-	Route::get('forumpost/{name}', 'SearchController@forumPost');
-	Route::post('forumpost', 'SearchController@forumPost');
+	Route::get('forum-post/{name}', 'SearchController@forumPost');
+	Route::post('forum-post', 'SearchController@forumPost');
 
-	Route::get('subcatforums/{id}','SearchController@subCatForums');
-	Route::get('viewforumposts/{id}','SearchController@viewForumPosts');
+	Route::get('sub-cat-forums/{id}','SearchController@subCatForums');
+	Route::get('view-forum-posts/{id}','SearchController@viewForumPosts');
+
+	//Route::get('forum-post-reply', 'SearchController@forumPostReply');
+	Route::get('demo', 'SearchController@demo');
+    Route::get('forum-post-reply/{forumpostid}', 'SearchController@forumPostReply');
+
 
 	Route::group(['middleware' => 'web'], function () {
     Route::auth();
@@ -248,7 +273,7 @@ Route::post('api/get-userby-jid','ApiController@getUserByJID');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
 	Route::get('subgroup/{parentid}/{name}', 'DashboardController@subgroup');
 	Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
-	Route::get('groupchat', 'DashboardController@groupchat');
+	Route::get('groupchat', 'DashboardController@groupchat');	
 
 	Route::get('groupchat/pg/{groupid}/{groupname}','DashboardController@groupchat');
 

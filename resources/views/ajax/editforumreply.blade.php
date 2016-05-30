@@ -1,12 +1,12 @@
   <div class="modal-dialog modal-md">
-	    <div class="modal-content" data-value="{{$forumpost->id}}">
-		    {!! Form::open(array('url' => '/ajax/editnewforumpost', 'id' => 'postform3', 'files' => true)) !!}
+	    <div class="modal-content" data-value="{{$forumreply->id}}">
+		    {!! Form::open(array('url' => '/ajax/editnewforumreply', 'id' => 'postform3', 'files' => true)) !!}
 		    	<div class="modal-body text-center">
 		        <div class="" id="">
-		        	@if(!empty($forumpost->title))
-			        	<div class="edit-post-textarea" data-feed="{{$forumpost->id}}">
-							{!! Form::textarea('forumtitle', $forumpost->title, array(
-								'id' => 'forumpost', 
+		        	@if(!empty($forumreply->reply))
+			        	<div class="edit-post-textarea" data-feed="{{$forumreply->id}}">
+							{!! Form::textarea('forumreply', $forumreply->reply, array(
+								'id' => 'forumreply', 
 								'class' => 'form-control',
 								'data-emojiable' => true,
 								'placeholder' => 'Type here..',
@@ -16,7 +16,7 @@
 		        	@endif
 		        </div>
 		      </div>
-		      <input type="hidden" value="{{$forumpost->id}}" name="id"></input>
+		      <input type="hidden" value="{{$forumreply->id}}" name="id"></input>
 		      <div class="modal-footer">
 				{!! Form::button('Cancel', array('id' => 'submit-btn', 'class' => 'btn btn-default', 'data-dismiss' => 'modal')) !!}
 				{!! Form::submit('Submit', array('id' => 'submit-btn', 'class' => 'subcomment btn btn-primary')) !!}
@@ -52,15 +52,15 @@ $(document).ready(function(){
 			if(response != 'Post something to update.'){
 
 			var data = jQuery.parseJSON(response);
-			var comment = data.title;
+			var comment = data.reply;
 			var commentid=data.id;
 
 			if(comment!='')
 			{
-			jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').text(comment);
-			var original =jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html();
+			jQuery('.forumreplylist').find('#forumreply_'+commentid).find('p').text(comment);
+			var original =jQuery('.forumreplylist').find('#forumreply_'+commentid).find('p').html();
 			var converted = emojione.toImage(original);
-			jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html(converted);
+			jQuery('.forumreplylist').find('#forumreply_'+commentid).find('p').html(converted);
 			}
 
 			else
@@ -68,7 +68,7 @@ $(document).ready(function(){
 				alert("Comment not updated.Comment field can't eb empty");
 			}
 			 
-			 $('#forumpost-edit-modal').modal('hide');
+			 $('#forumreply-edit-modal').modal('hide');
 
 			}
 
