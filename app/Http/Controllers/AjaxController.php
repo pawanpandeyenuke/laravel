@@ -351,7 +351,7 @@ comments;
 
 		$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
 				    self::queryBuilder( $query, $input );
-					})->take(10)->get();
+					})->orderby('id','ASC')->take(10)->get();
 		$count = Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $input ) {
 				    self::queryBuilder( $query, $input );
 					})->get()->count();
@@ -418,24 +418,28 @@ comments;
 	{
 		$per_page = 10;
 		//print_r(Input::all());
-		$page = Input::get('pageid');
-		$type = Input::get('reqType');
+		$page 	= Input::get('pageid');
+		$type 	= Input::get('reqType');
+		$LastID = Input::get('lastid');
 		$offset = ($page - 1) * $per_page;
 		$user_id = Auth::User()->id;
 
 		switch ($type) {
 			case 'all':
 				$model = User::where('id', '!=', $user_id)
-							->skip($offset)
+							->where('id', '>', $LastID)
+							//->skip($offset)
 							->take($per_page)
-							->orderby('id','desc')
+							->orderby('id','ASC')
 				            ->get()->toArray();
 				break;
 			case 'sent':
 				$modeldata = Friend::with('user')->with('friends')->with('user')
 							->where('user_id', '=', $user_id)
 							->where('status', '=', 'Pending')
-							->skip($offset)
+							->where('id', '>', $LastID)
+							->orderby('id','ASC')
+							//->skip($offset)
 							->take($per_page)		
 							->get()->toArray();
 				break;
@@ -443,7 +447,9 @@ comments;
 				$modeldata = Friend::with('user')->with('friends')->with('user')
 				            ->where('friend_id', '=', $user_id)
 				            ->where('status', '=', 'Pending')
-							->skip($offset)
+				            ->where('id', '>', $LastID)
+				            ->orderby('id','ASC')
+							//->skip($offset)
 							->take($per_page)
 				            ->get()->toArray();
 				break;
@@ -451,7 +457,9 @@ comments;
 				$modeldata = Friend::with('user')->with('friends')->with('user')
 							->where('friend_id', '=', $user_id)
 				            ->where('status', '=', 'Accepted')
-							->skip($offset)
+				            ->where('id', '>', $LastID)
+				            ->orderby('id','ASC')
+							//->skip($offset)
 							->take($per_page)
 				            ->get()->toArray();
 				break;
@@ -469,7 +477,7 @@ comments;
 		}
 
 		if($model || $model1)
-			return view('dashboard.getfriendslist')
+			return view('dashboard.getfriendslist' )
 						->with('model',$model)
 						->with('count', $modelcount);
 		else

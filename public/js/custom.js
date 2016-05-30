@@ -924,20 +924,21 @@ $('.btn-upload-icon').find(".badge").remove();
 		$('.loading-text').hide();
 		$('.loading-img').show();
 		var current = $(this);
-
 		var reqType = current.closest('.friends-list').find('.active').data('value');
 		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
 		//alert(abc);
 		$.ajax({
 			'url' : '/ajax/viewmorefriends',
 			'type' : 'post',
-			'data' : { 'pageid': pageid, 'reqType': reqType },
+			'data' : { 'pageid': pageid, 'reqType': reqType, 'lastid': current.data( 'last-id' ) },
 			'success' : function(data){
 				if(data != 'No more results'){		
 					pageid = pageid + 1;
 					$('.loading-text').show();
 					$('.loading-img').hide();
-					current.closest('.friends-list').find('.active').find('ul').append(data);
+					current.parent().append(data);
+					current.remove();
+					
 				}else{
 					var currentobj = current.find('.loading-text');
 					currentobj.text('No more results');
