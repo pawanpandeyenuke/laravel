@@ -3084,3 +3084,7 @@ div#forumreply-edit-modal {
     font-size: 15px;
 
 }
+.forum-srch-list p img{
+ margin: 0 5px;
+ width: 20px;
+}

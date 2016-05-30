@@ -3,8 +3,8 @@
 											<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 											<div class="p-likes ml">
 											<div class="like-cont">
-												<input type="checkbox" name="" id="#checkbox_forumreply_{{$forumreply->id}}" class="css-checkbox likeforumreply" data-forumreplyid="{{$forumreply->id}}" />
-												<label for="#checkbox_forumreply_{{$forumreply->id}}" class="css-label"></label>
+												<input type="checkbox" name="" id="checkbox_forumreply_{{$forumreply->id}}" class="css-checkbox likeforumreply" data-forumreplyid="{{$forumreply->id}}" />
+												<label for="checkbox_forumreply_{{$forumreply->id}}" class="css-label"></label>
 											</div>
 											<span class="plike-count forumreplylike">0</span>
 											<div class="p-likes ml">

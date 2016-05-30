@@ -218,7 +218,7 @@ $(".multiple-slt").select2();
 			popupButtonClasses: 'fa fa-smile-o'
       	});
       window.emojiPicker.discover();
-      // loadOrgionalImogi();
+       loadOrgionalImogi();
 
       var w = $('#sticky-anchor').width();
 		$('.fix-header').css('width',w+60);
