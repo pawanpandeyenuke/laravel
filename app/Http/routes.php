@@ -183,6 +183,7 @@ Route::post('api/non-existing-emails','ApiController@returnNonExistingEmails');
 
 Route::post('api/get-job-category','ApiController@getJobCategories');
 
+Route::post('api/get-userby-jid','ApiController@getUserByJID');
 
 /*
 |--------------------------------------------------------------------------
