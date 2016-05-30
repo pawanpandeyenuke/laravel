@@ -1310,17 +1310,14 @@ comments;
                     $forum_category_breadcrum = "Home > ".$parents3->title." > ".$parents2->title." > ".$parents1->title;
                 }
             }
-
-
-
-
-                $data = ['title'=>$input['topic'],
-                        'owner_id'=>$user->id,
-                        'category_id'=>$input['category_id'],
-                        'forum_category_id'=>$forum_category_id,
-                        'forum_category_breadcrum'=>$forum_category_breadcrum,
-                        'created_at'=>date('Y-m-d H:i:s',time()),
-                        'updated_at'=>date('Y-m-d H:i:s',time())];
+ 
+            $data = ['title'=>$input['topic'],
+                    'owner_id'=>$user->id,
+                    'category_id'=>$input['category_id'],
+                    'forum_category_id'=>$forum_category_id,
+                    'forum_category_breadcrum'=>$forum_category_breadcrum,
+                    'created_at'=>date('Y-m-d H:i:s',time()),
+                    'updated_at'=>date('Y-m-d H:i:s',time())];
 
          Forums::where('id',$input['category_id'])->update(['updated_at'=>date('Y-m-d H:i:s',time())]);
          $parent1 = Forums::where('id',$input['category_id'])->value('parent_id');

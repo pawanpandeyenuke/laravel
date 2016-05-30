@@ -464,7 +464,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		var commentId = $(this).closest('li').data('value'); 
 		var feedId = $(this).closest('.single-post').data('value');
 		$.ajax({
-			'url' : 'ajax/deletebox',
+			'url' : '/ajax/deletebox',
 			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'postdelete'},
 			'type' : 'post',
 			'success' : function(response){
@@ -503,7 +503,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		var feedId = $('.single-post').data('value');
 		// alert(feedId);
 		$.ajax({
-			'url' : 'ajax/deletebox',
+			'url' : '/ajax/deletebox',
 			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'deletecomment'},
 			'type' : 'post',
 			'success' : function(response){
@@ -1344,26 +1344,31 @@ $(document).on('click','.savegroupname',function()
 		}
 	});
 
-		$(document).on('click', '.replycomment', function(){		
+
+	$(document).on('click', '.replycomment', function(){
+		showLoading();
 		var replyid = $(this).val();
 		var comment = $('.reply-comment-text').val();	
 		var commentcount = parseInt($('#forumreplycomment_'+replyid).html());
 		var newcount = commentcount + 1;
-		if($('.reply-comment-text').val()!=null){
+
+		if(comment){
 			$.ajax({			
 				'url' : '/ajax/forumreplycomment',
 				'data' : { 'replyid':replyid, 'comment':comment },
 				'type' : 'post',
 				'success' : function(response){
+					// alert(response);
 					$('.reply-comment-text').val('');
 					$('.emoji-wysiwyg-editor').text('');				
 					$('.forumreplycommentlist').append(response);
 					$('#forumreplycomment_'+replyid).html(newcount);
 					// $('#forumreplycomment_ajax_'+replyid).html(newcount);
 					$('#forumreplycomment_popup_'+replyid).html(newcount);
-					var original =jQuery('.forumreplycommentlist').last().find('.replycomment').html();
+					var original =jQuery('.forumreplycommentlist li:last-child').find('.replycomment').html();
 				   	var converted = emojione.toImage(original);
-					jQuery('.forumreplycommentlist').last().find('.replycomment').html(converted);					
+					jQuery('.forumreplycommentlist li:last-child').find('.replycomment').html(converted);					
+					hideLoading();
 				}			
 			});
 		}	
