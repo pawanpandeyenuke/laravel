@@ -63,7 +63,7 @@ Route::post('ajax/deletepost','AjaxController@deletepost');
 Route::post('ajax/deletecomments','AjaxController@deletecomments');
 
 
-Route::post('ajax/deletebox','AjaxController@deletebox');
+Route::post('/ajax/deletebox','AjaxController@deletebox');
 
 Route::post('/ajax/jobcategory','AjaxController@getJobcategory');
 

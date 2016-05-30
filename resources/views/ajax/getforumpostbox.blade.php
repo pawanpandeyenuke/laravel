@@ -58,48 +58,53 @@
 		<div class="post-comment-cont">
 			<div class="comments-list">
 				<ul class = "forumreplycommentlist">
-				@if(!($replyComments->isEmpty()))
-				@foreach($replyComments as $data)
-				<?php 
-					$commentuser = $data->user;
-					$commentuserid = $commentuser->id;
-					$profileimage = !empty($commentuser->picture) ? $commentuser->picture : '/images/user-thumb.jpg';
-					$name = $commentuser->first_name." ".$commentuser->last_name;
-				?>
-					<li>
-						<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
-
-						<div class="modal fade comment-del-confrm" tabindex="-1" role="dialog" aria-labelledby="DeletePost">
-						  <div class="modal-dialog modal-sm">
-						    <div class="modal-content">
-						    	<div class="modal-body text-center">
-						        <h5>Are you sure to delete this post?</h5>
-						      </div>
-						      <div class="modal-footer text-center">
-						        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						        <button type="button" class="btn btn-primary">Delete</button>
-						      </div>
-						    </div>
-						  </div>
-						</div>
+					@if(!($replyComments->isEmpty()))
+					@foreach($replyComments as $data)
+						<?php 
+							$commentuser = $data->user;
+							$commentuserid = $commentuser->id;
+							$profileimage = !empty($commentuser->picture) ? $commentuser->picture : '/images/user-thumb.jpg';
+							$name = $commentuser->first_name." ".$commentuser->last_name;
+						?>
+						<li>
+							<button type="button" class="p-del-btn" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
 
-						<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
-						<div class="comment-title-cont">
-							<div class="row">
-								<div class="col-sm-6">
-									<a href="url("profile/$commentuserid")" title="" class="user-link">{{$name}}</a>
-								</div>
-								<div class="col-sm-6">
-									<div class="comment-time text-right">{{$data->created_at->format('h:i A,d M')}}</div>
+
+
+							<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
+							<div class="comment-title-cont">
+								<div class="row">
+									<div class="col-sm-6">
+										<a href="url("profile/$commentuserid")" title="" class="user-link">{{$name}}</a>
+									</div>
+									<div class="col-sm-6">
+										<div class="comment-time text-right">{{$data->created_at->format('h:i A,d M')}}</div>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="comment-text">{{$data->reply_comment}}</div>
-					</li>
+							<div class="comment-text">{{$data->reply_comment}}</div>
+						</li>
 					@endforeach
 					@endif
 				</ul>
+
+				<!-- Delete comments on forum replies -->
+				<div class="modal fade comment-del-confrm" tabindex="-1" role="dialog" aria-labelledby="DeletePost">
+				  <div class="modal-dialog modal-sm">
+				    <div class="modal-content">
+				    	<div class="modal-body text-center">
+				        <h5>Are you sure to delete this post?</h5>
+				      </div>
+				      <div class="modal-footer text-center">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				        <button type="button" class="btn btn-primary">Delete</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+				<!-- Delete comments on forum replies -->
+				
 			</div>
 		</div>
 		<div class="pop-post-comment post-comment">
