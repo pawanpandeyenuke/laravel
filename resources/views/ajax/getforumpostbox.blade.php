@@ -66,8 +66,8 @@
 							$profileimage = !empty($commentuser->picture) ? $commentuser->picture : '/images/user-thumb.jpg';
 							$name = $commentuser->first_name." ".$commentuser->last_name;
 						?>
-						<li>
-							<button type="button" class="p-del-btn" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
+						<li class="forum-li-comment-{{$data->id}}">
+							<button type="button" class="p-del-btn del-forum-reply-comment" data-toggle="modal" data-target=".comment-del-confrm" value="{{$data->id}}" data-forumreplyid="{{$replyid}}"><span class="glyphicon glyphicon-remove"></span></button>
 
 
 
@@ -89,8 +89,9 @@
 					@endif
 				</ul>
 
+				<div class="modal fade comment-del-confrm" id="modal" tabindex="-1" role="dialog" aria-labelledby="DeletePost"></div>
 				<!-- Delete comments on forum replies -->
-				<div class="modal fade comment-del-confrm" tabindex="-1" role="dialog" aria-labelledby="DeletePost">
+<!-- 				<div class="modal fade comment-del-confrm" tabindex="-1" role="dialog" aria-labelledby="DeletePost">
 				  <div class="modal-dialog modal-sm">
 				    <div class="modal-content">
 				    	<div class="modal-body text-center">
@@ -102,7 +103,7 @@
 				      </div>
 				    </div>
 				  </div>
-				</div>
+				</div> -->
 				<!-- Delete comments on forum replies -->
 				
 			</div>

@@ -848,10 +848,14 @@ comments;
 		$commentId = Input::get('commentId');
 		$feedId = Input::get('feedId');
 		$class = Input::get('class');
+		$forumReplyCommentId = Input::get('forumReplyCommentId');
+		$replyid = Input::get('forumReplyID');
 		
 		return view('panels.deletebox')
 				->with('commentId', $commentId)
 				->with('feedId', $feedId)
+				->with('forumReplyCommentId', $forumReplyCommentId)
+				->with('replyid',$replyid)
 				->with('class', $class);
 
 	}
@@ -1537,9 +1541,19 @@ comments;
 				->with('comment',$comment)
 				->with('name',$name)
 				->with('userid',$user->id)
+				->with('replyid',$replyid)
 				->with('profileimage',$profileimage);
 		
 
+	}
+
+	public function delForumReplyComment()
+	{
+		$commentID = Input::get('forumReplyCommentId');
+		$forumReplyId = Input::get('forumReplyId');
+		ForumReplyComments::where('id',$commentID)->delete();
+		$count = ForumReplyComments::where('reply_id',$forumReplyId)->get()->count();
+		echo $count;
 	}
 
 

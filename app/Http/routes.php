@@ -131,6 +131,9 @@ Route::post('/ajax/likeforumreply','AjaxController@likeForumReply');
 
 Route::post('/ajax/forumreplycomment','AjaxController@forumReplyComment');
 
+Route::post('/ajax/del-forum-reply-comment','AjaxController@delForumReplyComment');
+
+
 /**
  * @Api Routes..
  *

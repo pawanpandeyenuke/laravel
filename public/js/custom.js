@@ -517,6 +517,51 @@ $('.btn-upload-icon').find(".badge").remove();
 		$("#modal").html('');
 	});
 
+		/**
+	*	Delete comments on forum reply.
+	
+	*/	
+	$(document).on('click', '.del-forum-reply-comment', function(){
+		showLoading();
+		var forumReplyCommentId = $(this).val(); 
+		var forumReplyID = $(this).data('forumreplyid');
+		$.ajax({
+			'url' : '/ajax/deletebox',
+			'data' : {'forumReplyCommentId':forumReplyCommentId, 'forumReplyID' : forumReplyID, 'class' : 'delete-forum-reply-comment'},
+			'type' : 'post',
+			'success' : function(response){
+				if(response){
+					$("#modal").append(response);
+					$("#modal").modal();
+					hideLoading();
+				}
+			}
+		});
+		$("#modal").html('');
+	});
+
+	$(document).on('click', '.delete-forum-reply-comment', function(){
+		showLoading();
+		var current = $('.delete-forum-reply-comment');
+		var forumReplyCommentId = current.closest('.modal-content').data('forumreplycommentid');
+		var forumReplyId = current.closest('.modal-content').data('forumreplyid'); 
+		 //alert(forumReplyCommentId);
+		// alert(forumReplyId);
+		$.ajax({
+			'url' : '/ajax/del-forum-reply-comment',
+			'data' : {'forumReplyCommentId': forumReplyCommentId, 'forumReplyId' : forumReplyId },
+			'type' : 'post',
+			'success' : function(response){
+				if(response){
+					$('#forum-li-comment-'+forumReplyCommentId).remove();
+					$('#forumreplycomment_'+forumReplyId).html(response);
+					$('#forumreplycomment_popup_'+forumReplyId).html(response);
+					hideLoading();
+				}
+			}
+		});
+	});
+
 	$(document).on('click', '.deletecomment', function(){		
 		var current = $('.deletecomment');
 		var commentId = current.closest('.modal-content').data('value');
@@ -1346,13 +1391,13 @@ $(document).on('click','.savegroupname',function()
 
 
 	$(document).on('click', '.replycomment', function(){
-		showLoading();
 		var replyid = $(this).val();
 		var comment = $('.reply-comment-text').val();	
 		var commentcount = parseInt($('#forumreplycomment_'+replyid).html());
 		var newcount = commentcount + 1;
 
 		if(comment){
+			showLoading();
 			$.ajax({			
 				'url' : '/ajax/forumreplycomment',
 				'data' : { 'replyid':replyid, 'comment':comment },
@@ -1363,7 +1408,6 @@ $(document).on('click','.savegroupname',function()
 					$('.emoji-wysiwyg-editor').text('');				
 					$('.forumreplycommentlist').append(response);
 					$('#forumreplycomment_'+replyid).html(newcount);
-					// $('#forumreplycomment_ajax_'+replyid).html(newcount);
 					$('#forumreplycomment_popup_'+replyid).html(newcount);
 					var original =jQuery('.forumreplycommentlist li:last-child').find('.replycomment').html();
 				   	var converted = emojione.toImage(original);
