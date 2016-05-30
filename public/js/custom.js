@@ -1206,28 +1206,28 @@ $(document).on('click','.savegroupname',function()
 	});
 
 	/***** Add new Forum Post ****/
-		$(document).on('click','.addforumpost',function(){
+	$(document).on('click','.addforumpost',function(){
 		var current = $(this);
 		var category_id = $(this).val();
 		var post = $('.forumpost').val();
 		var postcount = parseInt($('.posts-count').find('.count').html());
 		var newpostcount = postcount + 1;
-		  if($('.forumpost').val()!="")
-		  {
+		if($('.forumpost').val() != ""){
+			// alert($('.forumpost').val());
 			$.ajax({
-			'url' : '/ajax/addnewforumpost',
-			'type' : 'post',
-			'data' : {'category_id' : category_id,'topic' : post},
-			'success' : function(response){	
-				$('.posts-count').find('.count').html(' '+newpostcount);
-		  		$('.forumpost').val('');
-		  		$('.emoji-wysiwyg-editor').text('');
-				$('.forumpostlist').prepend(response);
-				var original =jQuery('.f-single-post').first().find('p').html();
-			   	var converted = emojione.toImage(original);
-				jQuery('.f-single-post').first().find('p').html(converted);
-			}
-		});
+				'url' : '/ajax/addnewforumpost',
+				'type' : 'post',
+				'data' : {'category_id' : category_id,'topic' : post},
+				'success' : function(response){	
+					$('.posts-count').find('.count').html(' '+newpostcount);
+			  		$('.forumpost').val('');
+			  		$('.emoji-wysiwyg-editor').text('');
+					$('.forumpostlist').prepend(response);
+					var original =jQuery('.f-single-post').first().find('p').html();
+				   	var converted = emojione.toImage(original);
+					jQuery('.f-single-post').first().find('p').html(converted);
+				}
+			});
 		}
 
 	});
