@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Request, Session, Validator, Input, Cookie;
-use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend;
+use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend,App\ForumLikes,App\ForumReply,App\ForumsDoctor;
 
 class SearchController extends Controller
 {
@@ -180,9 +180,17 @@ class SearchController extends Controller
          return redirect('forums');   
         }
 
+        $flag = 0;
+        $ids = [4,5,6,12,15,17,20];
+
+        if(in_array($parentid, $ids)){
+            $flag = 1;
+        }
+
         return view('forums.subforums')
                 ->with('mainforum',$mainforum)
-                ->with('subforums',$subforums);
+                ->with('subforums',$subforums)
+                ->with('flag',$flag);
 
     }
 
@@ -209,30 +217,176 @@ class SearchController extends Controller
 
     public function viewForumPosts($id = "")
     {
-        // $posts = ForumPost::where('category_id',$id)->get();
 
-         $per_page = 5;
+    	/*************************/
 
-        // $posts = ForumPost::with('likesCount')->with('replyCount')->with('user')->with('likes')->with('reply')
-        //        ->where('category_id',$id)
-        //         //->orderBy('forums_post.id','DESC')
-        //         ->take($per_page)
-        //         ->get()
-        //         ->toSql();
+    	$parent = Forums::where('parent_id',$id)->value('id');
+    	$parent2 = Forums::where('id',$id)->value('id');
+    	if($parent != null || $parent2 == null)
+    		return redirect('forums');
 
-        //         print_r($posts);die;
+        $ids = [54,55,56,57,58,59,60,70,71,72,230,233,234,239,240,241];
+
+        if(in_array($id, $ids)){
+            return redirect('forums');
+        }
+
+    	/************************/
         $categoryname = Forums::where('id',$id)->value('title');
         $posts = ForumPost::with('user')
+                        ->with('forumPostLikesCount')
+                        ->with('replyCount')
                         ->where('category_id',$id)
-                        //->take($per_page)
+                        ->orderBy('updated_at','DESC')
                         ->get();
+
+        $forum_category_breadcrum="";
+        $parents1 = Forums::where('id',$id)->first();
+            if($parents1->parent_id == 0){
+                    $forum_category_id = $parents1->id;
+                    $forum_category_breadcrum = $parents1->title; 
+            }
+            else{
+                $parents2 = Forums::where('id',$parents1->parent_id)->first();
+                if($parents2->parent_id == 0){
+                    $forum_category_id = $parents2->id.",".$parents1->id;
+                    $forum_category_breadcrum = $parents2->title." > ".$parents1->title;
+                }
+                else{
+                    $parents3 = Forums::where('id',$parents2->parent_id)->first();
+                    $forum_category_id = $parents3->id.",".$parents2->id.",".$parents1->id;
+                    $forum_category_breadcrum = $parents3->title." > ".$parents2->title." > ".$parents1->title;
+                }
+            }
+
         $postscount = $posts->count();
+        $posts = $posts->take(10);
         return view('forums.viewforumposts')
                 ->with('posts',$posts)
                 ->with('postscount',$postscount)
-                ->with('categoryname',$categoryname)
-                ->with('categoryid',$id);
+                ->with('breadcrum',$forum_category_breadcrum);
     }
 
+    public function forumPostReply($forumpostid = "")
+    {
+        $checkpost = ForumPost::with('user')
+                        ->with('forumPostLikesCount')
+                        ->where('id',$forumpostid)
+                        ->first();
+
+    	if(empty($checkpost))
+            return redirect()->back();
+
+        $reply = ForumReply::with('user')
+                ->with('replyLikesCount')
+                ->with('replyCommentsCount')
+                ->where('post_id',$forumpostid)
+                ->orderBy('updated_at','DESC')
+                ->get();
+
+        $replycount = $reply->count();
+        $reply = $reply->take(10);
+        $checkarr = array();
+
+        return view('forums.forumpostreply')
+                    ->with('post',$checkpost)
+                    ->with('replycount',$replycount)
+                    ->with('reply',$reply);
+    }
+
+    public function viewForumPostsOpt()
+    {
+        $input = Request::all();
+
+        $breadcrum = $input['mainforum']." > ";
+        if($input['mainforum'] == "Doctor"){
+         
+         if($input['subcategory'] == "international")
+                $breadcrum = $breadcrum."International > ".$input['i-diseases'];
+         else if($input['subcategory'] == "country")
+                $breadcrum = $breadcrum.$input['country1']." > ".$input['c-diseases'];
+          else if($input['subcategory'] == 'country,state,city')
+                $breadcrum = $breadcrum.$input['country']." > ".$input['state']." > ".$input['city']." > ".$input['csc-diseases'];  
+         
+         }else{
+
+            if($input['subcategory'] == "international")
+                $breadcrum = $breadcrum."International";
+            else if($input['subcategory'] == "country")
+                $breadcrum = $breadcrum.$input['country1'];
+            else if($input['subcategory'] == 'country,state,city')
+                $breadcrum = $breadcrum.$input['country']." > ".$input['state']." > ".$input['city'];   
+         }
+
+         $posts = ForumPost::with('user')
+                        ->with('forumPostLikesCount')
+                        ->with('replyCount')
+                        ->where('forum_category_breadcrum',$breadcrum)
+                        ->orderBy('updated_at','DESC')
+                        ->get();
+         
+        $postscount = $posts->count();
+        $posts = $posts->take(10);
+
+        return view('forums.viewforumposts')
+                ->with('posts',$posts)
+                ->with('postscount',$postscount)
+                ->with('breadcrum',$breadcrum);
+    }
+
+    public function searchForum()
+    {
+        $input = Request::all();
+        $mainforum = Forums::where('id',$input['mainforum'])->value('title');
+        $breadcrum = $mainforum;
+        if($input['check']=='direct'){
+            $breadcrum = $mainforum;
+        }
+        else if($input['check'] == 'sub'){
+            $subforum = Forums::where('id',$input['search-subforums'])->value('title');
+            $breadcrum = $breadcrum." > ".$subforum;
+        }
+        else if($input['check'] == 'subfor'){
+            $subforum = Forums::where('id',$input['search-subforums'])->value('title');
+            $sub = Forums::where('id',$input['search-subject1'])->value('title');
+            $breadcrum = $breadcrum." > ".$subforum." > ".$sub;
+        }
+        else if($input['check'] == 'c'){
+            $breadcrum = $breadcrum." > ".$input['search-country1'];
+        }
+        else if($input['check'] == 'csc'){
+            $breadcrum = $breadcrum." > ".$input['search-country']." > ".$input['search-state']." > ".$input['search-city'];
+        }
+
+        $keyword = strtolower($input['forum-keyword']);
+
+        $replyresult = ForumReply::whereRaw( 'LOWER(`reply`) like ?', array("%".$keyword."%"))
+                            ->pluck('post_id')
+                            ->toArray();
+
+        $results = ForumPost::with('user')
+                        ->with('forumPostLikesCount')
+                        ->with('replyCount')
+                        ->where('forum_category_breadcrum', 'LIKE', $breadcrum.'%')
+                        ->whereRaw( 'LOWER(`title`) like ?', array("%".$keyword."%"))
+                        ->orWhere( function( $query ) use ( $replyresult) {
+                            $query->whereIn( 'id', $replyresult); })
+                        ->orderBy('updated_at','DESC')
+                        ->get();
+
+            $count = $results->count();
+            $results = $results->take(10);
+
+       return view('forums.searchresultforum')
+                ->with('postscount',$count)
+                ->with('keyword',$keyword)
+                ->with('breadcrum',$breadcrum)
+                ->with('posts',$results);
+    }
+
+    public function demo()
+    {
+    	return view('demo');
+    }
   
 }

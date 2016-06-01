@@ -1,6 +1,6 @@
   <div class="modal-dialog modal-md">
 	    <div class="modal-content" data-value="{{$forumpost->id}}">
-		    {!! Form::open(array('url' => 'ajax/', 'id' => 'postform3', 'files' => true)) !!}
+		    {!! Form::open(array('url' => '/ajax/editnewforumpost', 'id' => 'postform3', 'files' => true)) !!}
 		    	<div class="modal-body text-center">
 		        <div class="" id="">
 		        	@if(!empty($forumpost->title))
@@ -40,7 +40,7 @@ $(document).ready(function(){
 
 	var myReader = new FileReader();
  $('.subcomment').click(function(){
- // $('#edit-modal').modal('hide');
+  $('#edit-modal').modal('hide');
  });
 	// Post status updates via ajax call.
 	$("#postform3").ajaxForm(function(response) { 
@@ -52,25 +52,27 @@ $(document).ready(function(){
 			if(response != 'Post something to update.'){
 
 			var data = jQuery.parseJSON(response);
-			var comment = data[0].comments;
-			var commentid=data[0].id;
+			var comment = data.title;
+			var commentid=data.id;
 
 			if(comment!='')
 			{
-
-			jQuery('#postlist').find('#post_'+commentid).find('.comment-text').text(comment);
-			var original =jQuery('#postlist').find('#post_'+commentid).find('.comment-text').html();
+			jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').text(comment);
+			var original =jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html();
 			var converted = emojione.toImage(original);
-			jQuery('#postlist').find('#post_'+commentid).find('.comment-text').html(converted);
+			jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html(converted);
 			}
+
 			else
 			{
 				alert("Comment not updated.Comment field can't eb empty");
 			}
-
+			 
 			 $('#forumpost-edit-modal').modal('hide');
 
-			}	
+			}
+
+				
 		} 
     }); 
 });

@@ -4,9 +4,11 @@
 	<div class="page-data dashboard-body">
 	        <div class="container">
 	          <div class="row">
-
+	          @if(Auth::check())
 	            @include('panels.left')
-
+	           @else
+	            @include('panels.leftguest')
+	           @endif
 				<div class="col-sm-6">
 				<div class="shadow-box page-center-data blue-bg no-margin-top">
 					<div class="page-title">
@@ -33,7 +35,7 @@
 		                       @if($fieldsData)
 							<div class="col-sm-4">
 								<div class="forum-btn">
-									<a href="{{url("subforums/$data->id")}}" title="">
+									<a href="{{url("sub-forums/$data->id")}}" title="">
 										<img src="{{$image}}" alt="">
 										<span>{{ $data->title }}</span>
 									</a>
@@ -42,7 +44,7 @@
 							@else
 							<div class="col-sm-4">
 								<div class="forum-btn">
-									<a href="{{url("viewforumposts/$data->id")}}" title="">
+									<a href="{{url("view-forum-posts/$data->id")}}" title="">
 										<img src="{{$image}}" alt="">
 										<span>{{ $data->title }}</span>
 									</a>

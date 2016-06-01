@@ -96,7 +96,7 @@
                     <div class="slider-btns">
                         <ul class="list-inline">
                             <li><a href="#" title="" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Enter Chat Room</a></li>
-                            <li><a href="#" title="" class="btn btn-primary">Enter Forum</a></li>
+                            <li><a href="{{url('forums')}}" title="" class="btn btn-primary">Enter Forum</a></li>
                         </ul>
                     </div>
                     <div id="hSlider" class="carousel slide" data-ride="carousel">
@@ -187,7 +187,7 @@
                                 </div>
 
                             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                    <input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword">
+                                    <input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword1">
                                     
                                     @if ($errors->has('password'))
                                         <span class="help-block">
@@ -197,8 +197,8 @@
                                     
                                     <span class="field-icon flaticon-padlock50"></span>
                                     <div class="check-cont show-pw">
-                                        <input type="checkbox"  name="checkboxG2" id="checkboxG2" class="css-checkbox password-eye"/>
-                                        <label for="checkboxG2" class="css-label">show</label>
+                                        <input type="checkbox"  name="checkboxG2" id="checkboxG21" class="css-checkbox password-eye" onchange="document.getElementById('showpassword1').type = this.checked ? 'text' : 'password'"/>
+                                        <label for="checkboxG21" class="css-label">show</label>
                                     </div>
                                 </div>
 
@@ -387,21 +387,11 @@ $(document).ready(function () {
         }
     });
 
+
 });
 
-
-/*$(document).on('change', '#terms', function() {
-
-    // $this will contain a reference to the checkbox   
-    if ($(this).is(':checked')) {
-        $('.register').prop('disabled',false);
-    } else {
-        $('.register').prop('disabled',true);
-    }
-});*/
-
-
 $("#loginform").ajaxForm(function(response) { 
+
          
     if(response){
             $('.password').next('.help-block').find('.verifymsg').hide();
@@ -484,7 +474,7 @@ $("#loginform").ajaxForm(function(response) {
         e.preventDefault();
     });
 
-
+ 
 
 </script>
 @endsection

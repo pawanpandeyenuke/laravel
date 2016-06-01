@@ -1898,6 +1898,35 @@ class ApiController extends Controller
 
 
 	/*
+	 * Get Job Area Category.
+	 */
+	public function getUserByJID()
+	{
+		try{
+
+			$userJID = Request::get('user_jid');
+
+			$data = User::where('xmpp_username', $userJID)->select('id', 'first_name', 'last_name', 'email', 'xmpp_username', 'picture')->get();
+
+			if($data->isEmpty())
+				throw new Exception("No user exists with ".$userJID." JID.", 1);
+			
+			$this->status = 'success';
+			$this->message = null;
+			$this->data = $data;
+
+		}catch(Exception $e){
+
+			$this->message = $e->getMessage();
+
+		}
+
+		return $this->output();
+
+	}	
+
+
+	/*
 	 * Get country on request.
 	 */
 	public function getCountries()

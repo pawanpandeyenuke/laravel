@@ -39,12 +39,16 @@
 									{!! Form::close() !!}
 							</div>
 						</div>
+            		{{ Form::open(array('url' => 'search-forum', 'id' => 'search-forum', 'method' => 'post')) }}
 						<div class="col-sm-6">
 							<div class="search-field">
-								<input type="text" name="" value="" placeholder="Enter Keyword" class="form-control">
-								<button type="button" class="btn btn-primary btn-srch-top">Search Forum</button>
+              					<input type = "hidden" name = "mainforum" value = "Forum">
+              					<input type = "hidden" name = "check" value = "">
+								<input type="text" name="forum-keyword" value="" id = "forum-keyword-app" placeholder="Enter Keyword" class="form-control">
+								<button type="submit" class="btn btn-primary btn-srch-top">Search Forum</button>
 							</div>
 						</div>
+            		{{Form::close()}}
 					</div>
 				</div>
 			</div>
@@ -108,6 +112,13 @@
 			}
 		});
 
+			$( "#search-forum" ).submit(function( event ) {
+			var searchkey = $('#forum-keyword-app').val();
+			if(searchkey == ''){
+				$('#forum-keyword-app').attr('placeholder', 'Enter Keyword').focus();
+				event.preventDefault();
+			}
+		});
  
 		$("#suggestionform").ajaxForm(function(response) {
 			if(response == "success")
