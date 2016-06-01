@@ -18,7 +18,7 @@ if($mainforum == "Doctor")
 	   <div class="container">
 	    <div class="row">
 
-	      	@if(Auth::attempt())
+	      	@if(Auth::check())
 	            @include('panels.left')
 	           @else
 	            @include('panels.leftguest')

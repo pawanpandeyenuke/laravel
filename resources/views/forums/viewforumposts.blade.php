@@ -11,11 +11,12 @@
 	   <div class="container">
 	    <div class="row">
 
-	           @if(Auth::check())
-	            @include('panels.left')
-	           @else
-	            @include('panels.leftguest')
-	           @endif
+			@if(Auth::check())
+				@include('panels.left')
+			@else
+				@include('panels.leftguest')
+			@endif
+
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title green-bg">
@@ -35,14 +36,14 @@
 								</div><!--/forum post cont-->
 
 								@if(Auth::check())
-								<!---New Forum Post-->
-								<div class="f-post-form">
-									<textarea name="topic" class="form-control forumpost" data-emojiable="true"></textarea>
-									<button type="button" class="btn btn-primary addforumpost" value="{{$breadcrum}}">Submit</button>
-								</div>
+									<!---New Forum Post-->
+									<div class="f-post-form">
+										<textarea name="topic" class="form-control forumpost" data-emojiable="true"></textarea>
+										<button type="button" class="btn btn-primary addforumpost" value="{{$breadcrum}}">Submit</button>
+									</div>
+								@endif
 							</div>
 							<!---END New Forum Post-->
-							@endif
 
 							<div class="modal fade edit-forumpost-popup" id="forumpost-edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost"></div>
 
