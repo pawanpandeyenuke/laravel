@@ -40,9 +40,10 @@
 									<textarea name="topic" class="form-control forumpost" data-emojiable="true"></textarea>
 									<button type="button" class="btn btn-primary addforumpost" value="{{$breadcrum}}">Submit</button>
 								</div>
+								@endif
 							</div>
 							<!---END New Forum Post-->
-							@endif
+							
 
 							<div class="modal fade edit-forumpost-popup" id="forumpost-edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost"></div>
 

@@ -4,7 +4,7 @@
 	<div class="page-data dashboard-body">
 	        <div class="container">
 	          <div class="row">
-	          @if(Auth::attempt())
+	          @if(Auth::check())
 	            @include('panels.left')
 	           @else
 	            @include('panels.leftguest')
