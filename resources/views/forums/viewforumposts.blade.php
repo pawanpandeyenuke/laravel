@@ -36,11 +36,11 @@
 								</div><!--/forum post cont-->
 
 								@if(Auth::check())
-									<!---New Forum Post-->
-									<div class="f-post-form">
-										<textarea name="topic" class="form-control forumpost" data-emojiable="true"></textarea>
-										<button type="button" class="btn btn-primary addforumpost" value="{{$breadcrum}}">Submit</button>
-									</div>
+								<!---New Forum Post-->
+								<div class="f-post-form">
+									<textarea name="topic" class="form-control forumpost" data-emojiable="true"></textarea>
+									<button type="button" class="btn btn-primary addforumpost" value="{{$breadcrum}}">Submit</button>
+								</div>
 								@endif
 							</div>
 							<!---END New Forum Post-->
