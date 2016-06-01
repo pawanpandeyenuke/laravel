@@ -658,7 +658,7 @@ comments;
 
        Friend::where(['friend_id'=>$input['friend_id']])
 				->where(['user_id'=>$input['user_id']])
-				->update(['status'=>'Rejected']);
+				->delete();
 
 	}
 
@@ -1339,7 +1339,13 @@ comments;
 	public function mobCountryCode()
 	{	
 		$countryId = Input::get('countryId');
-		$country = Country::where('country_id', $countryId)->get();
+
+		if(is_numeric($countryId)){
+			$country = Country::where('country_id', $countryId)->get();	
+		}else{
+			$country = Country::where('country_name', $countryId)->get();	
+		}
+		
 		return $country;	
 	}
 

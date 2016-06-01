@@ -73,17 +73,21 @@
 							$name = $commentuser->first_name." ".$commentuser->last_name;
 						?>
 						<li id="forum-li-comment-{{$data->id}}">
+
 						<?php /*** @if(Auth::check()) 
 						@if($commentuserid == Auth::User()->id) ***/ ?>
 							<!-- <button type="button" class="p-del-btn del-forum-reply-comment" data-toggle="modal" data-target=".comment-del-confrm" value="{{$data->id}}" data-forumreplyid="{{$replyid}}"><span class="glyphicon glyphicon-remove"></span></button> -->
 						<?php  	/*@endif 
 								@endif*/ 
 						?>
+
 							<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 							<div class="comment-title-cont">
 								<div class="row">
 									<div class="col-sm-6">
+
 										<a href="{{url("profile/$commentuserid")}}" title="" class="user-link">{{$name}}</a>
+
 									</div>
 									<div class="col-sm-6">
 										<div class="comment-time text-right">{{$data->created_at->format('h:i A,d M')}}</div>

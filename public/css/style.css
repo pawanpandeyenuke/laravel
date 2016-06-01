@@ -141,8 +141,9 @@ position: absolute;
 	position: relative;
 }
 .form-control{
-  border:1px solid #6d6d6d;
+  border: 1px solid #e9e9e9;
   height: 50px;
+  box-shadow: none;
 }
 .status-up-cont .form-control{
 	border-radius: 5px;
@@ -1083,9 +1084,9 @@ a:hover{
 .padding-right-none{
 	padding-right:0px;
 }
-.chat-user-list{
-  height: 350px;
-  overflow-y: scroll;
+.chat-user-list {
+    height: 393px;
+    overflow-y: scroll;
 }
 .chat-user-list ul{
 	padding:0px;
@@ -1095,6 +1096,9 @@ a:hover{
 	list-style:none;
   padding: 0 3px;
   min-height: 45px;
+}
+.panel-group{
+	margin-bottom: 0px;
 }
 .chat-user-list li a, .user-list-with-thumb li a{
   display: block;
@@ -3087,4 +3091,57 @@ div#forumreply-edit-modal {
 .forum-srch-list p img{
  margin: 0 5px;
  width: 20px;
+}
+#conversejs .chatbox .box-flyout {
+	height: 549px !important;
+	border: 0px !important;
+}
+div#chat-system {
+margin-left: -15px;
+}
+#conversejs .chat-content{
+	background: #fff !important;
+}
+#conversejs .chat-head, #conversejs .chat-head {
+    border-bottom: 1px solid #E2E2E2 !important;
+}
+#conversejs a{
+	display: none !important;
+}
+#conversejs .chat-head {
+    padding: 15px 10px;
+    height: auto;
+    background: #F5F5F5 !important;
+}
+#conversejs .icon-happy:before{
+	color: #7DD0C6 !important;
+}
+.pe-row .ph-field .form-control{
+
+}
+.pe-row .country-code-field {
+    border: 0 none;
+    left: 22px;
+    padding-left: 11px;
+    position: absolute;
+    top: 6px;
+    width: 50px;
+}
+.pe-row .ph-field::after {
+    content: "+" !important;
+    font-size: 15px;
+    left: 20px;
+    position: absolute;
+    top: 6px;
+    z-index: 1;
+}
+.pe-row .ph-field .ph-input{
+	padding-left: 60px;
+}
+.pe-row .ph-field::before {
+    content: "-" !important;
+    left: 70px;
+    position: absolute;
+    top: 5px;
+    z-index: 1;
 }

@@ -2,6 +2,7 @@
 					?>
 					<li id="forum-li-comment-{{$comment->id}}">
 						<!-- <button type="button" class="p-del-btn del-forum-reply-comment" data-toggle="modal" data-target=".comment-del-confrm" value="{{$comment->id}}" data-forumreplyid="{{$replyid}}"><span class="glyphicon glyphicon-remove" ></span></button> -->
+
 <!-- 
 						<div class="modal fade comment-del-confrm" tabindex="-1" role="dialog" aria-labelledby="DeletePost">
 						  <div class="modal-dialog modal-sm">
