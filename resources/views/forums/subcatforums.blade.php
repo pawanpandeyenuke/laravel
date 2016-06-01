@@ -12,7 +12,11 @@ unset($countries[0]);
 	   <div class="container">
 	    <div class="row">
 
+	           	@if(Auth::attempt())
 	            @include('panels.left')
+	           @else
+	            @include('panels.leftguest')
+	           @endif
 	     <div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title green-bg">
@@ -20,47 +24,7 @@ unset($countries[0]);
 					</div>
 
 					<div class="padding-data-inner">
-						<div class="forum-filter">
-							<div class="row">
-								<div class="col-md-4">
-									<select class="form-control">
-										<option>School Reviews</option>
-									</select>
-								</div>
-								<div class="col-md-4">
-									<select class="form-control">
-										<option>City</option>
-									</select>
-								</div>
-								<div class="col-md-4">
-									<input type="text" name="" value="" placeholder="Search Keyword" class="form-control">
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-4">
-									<select class="form-control">
-										<option>India</option>
-									</select>
-								</div>
-								<div class="col-md-4">
-									<select class="form-control">
-										<option>Haryana</option>
-									</select>
-								</div>
-								<div class="col-md-4">
-									<select class="form-control">
-										<option>Gurgaon</option>
-									</select>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-4 col-md-offset-4">
-									<div class="forum-btn-cont text-center">
-										<button type="button" class="btn btn-primary">Search</button>
-									</div>
-								</div>
-							</div>
-						</div><!--/forum filter-->
+						@include('forums.searchforum')
 
 						<div class="forum-srch-list">
 							<div class="fs-breadcrumb"><a href="{{url('forums')}}" title="">Home</a> > <a href = "{{url("sub-forums/$parentforumid")}}" title="">{{$parentforum}}</a> >{{$mainforum}}</div>
@@ -72,18 +36,22 @@ unset($countries[0]);
 				 	$count = \App\ForumPost::where('category_id',$data->id)->get()->count();
 					$fieldsdata = \App\Forums::where('parent_id',$data->id)->value('id');
 					$forumid = $data->id;
+					if($data->updated_at->format('Y-m-d H:i:s') == "-0001-11-30 00:00:00")
+							$date = "No Posts";
+					else
+						$date = $data->updated_at->format('d, M h:i a');
 				?>	
 							@if($fieldsdata)
 									<tr>
 										<td>{{ $data->title }}</td>
-										<td>{{$data->updated_at->format('d, M h:i a')}}</td>
+										<td>{{$date}}</td>
 										<td><div class="count text-center"><span>{{$count}}</span></div></td>
 										<td><a href="{{url("sub-cat-forums/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
 									</tr>
 							@else
 									<tr>
 										<td>{{ $data->title }}</td>
-										<td>{{$data->updated_at->format('d, M h:i a')}}</td>
+										<td>{{$date}}</td>
 										<td><div class="count text-center"><span>{{$count}}</span></div></td>
 										<td><a href="{{url("view-forum-posts/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
 									</tr>

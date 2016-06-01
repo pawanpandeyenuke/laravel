@@ -1,4 +1,3 @@
-<?php //print_r($replyComments);die; ?>
 		<div class="single-post">
 			<div class="pop-post-header">
 				<div class="post-header">
@@ -18,6 +17,8 @@
 							$profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 							$name = $user->first_name." ".$user->last_name;
 							$userid = $user->id;
+
+							if(Auth::check())
 							$likedata = \App\ForumReplyLikes::where(['owner_id' => Auth::User()->id, 'reply_id' => $replyid])->get();								
 						 ?>
 							<a href="{{url("profile/$userid")}}" title="" class="user-thumb-link">
@@ -45,8 +46,13 @@
 					<ul>
 						<li>
 							<div class="like-cont">
+							@if(Auth::check())
 								<input type="checkbox" name="checkboxG4" id="checkboxG4" class="css-checkbox likeforumreply" data-forumreplyid="{{$replyid}}" {{ isset($likedata[0])?'checked':'' }} />
 								<label for="checkboxG4" class="css-label"><span class="forumreplylike">{{$likeCount}}</span> <span>Likes</span></label>
+							@else
+							   <input type="checkbox" name="guest-popup" id="guest-popup" class="css-checkbox"/>
+								<label for="guest-popup" class="css-label"><span class="forumreplylike">{{$likeCount}}</span> <span>Likes</span></label>
+							@endif
 							</div>
 						</li>
 						<li><span class="icon flaticon-interface-1"></span> <span class="forumreplycomment" id="forumreplycomment_popup_{{$replyid}}">{{$commentCount}}</span> <span>Comments</span></li>
@@ -66,17 +72,18 @@
 							$profileimage = !empty($commentuser->picture) ? $commentuser->picture : '/images/user-thumb.jpg';
 							$name = $commentuser->first_name." ".$commentuser->last_name;
 						?>
-						<li class="forum-li-comment-{{$data->id}}">
-							<button type="button" class="p-del-btn del-forum-reply-comment" data-toggle="modal" data-target=".comment-del-confrm" value="{{$data->id}}" data-forumreplyid="{{$replyid}}"><span class="glyphicon glyphicon-remove"></span></button>
-
-
-
-
+						<li id="forum-li-comment-{{$data->id}}">
+						<?php /*** @if(Auth::check()) 
+						@if($commentuserid == Auth::User()->id) ***/ ?>
+							<!-- <button type="button" class="p-del-btn del-forum-reply-comment" data-toggle="modal" data-target=".comment-del-confrm" value="{{$data->id}}" data-forumreplyid="{{$replyid}}"><span class="glyphicon glyphicon-remove"></span></button> -->
+						<?php  	/*@endif 
+								@endif*/ 
+						?>
 							<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 							<div class="comment-title-cont">
 								<div class="row">
 									<div class="col-sm-6">
-										<a href="url("profile/$commentuserid")" title="" class="user-link">{{$name}}</a>
+										<a href="{{url("profile/$commentuserid")}}" title="" class="user-link">{{$name}}</a>
 									</div>
 									<div class="col-sm-6">
 										<div class="comment-time text-right">{{$data->created_at->format('h:i A,d M')}}</div>
@@ -90,30 +97,17 @@
 				</ul>
 
 				<div class="modal fade comment-del-confrm" id="modal" tabindex="-1" role="dialog" aria-labelledby="DeletePost"></div>
-				<!-- Delete comments on forum replies -->
-<!-- 				<div class="modal fade comment-del-confrm" tabindex="-1" role="dialog" aria-labelledby="DeletePost">
-				  <div class="modal-dialog modal-sm">
-				    <div class="modal-content">
-				    	<div class="modal-body text-center">
-				        <h5>Are you sure to delete this post?</h5>
-				      </div>
-				      <div class="modal-footer text-center">
-				        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				        <button type="button" class="btn btn-primary">Delete</button>
-				      </div>
-				    </div>
-				  </div>
-				</div> -->
-				<!-- Delete comments on forum replies -->
 				
 			</div>
 		</div>
+		@if(Auth::check())
 		<div class="pop-post-comment post-comment">
 			<div class="emoji-field-cont cmnt-field-cont">
 				<textarea type="text" class="form-control comment-field reply-comment-text" data-emojiable="true" placeholder="Type here..."></textarea>
 				<button type="button" class="btn-icon btn-cmnt replycomment" value="{{$replyid}}"><i class="flaticon-letter"></i></button>
 			</div>
 		</div>
+		@endif
 
  <script type="text/javascript" src="{{url('/js/bootstrap-filestyle.min.js')}}"></script>
 <script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>

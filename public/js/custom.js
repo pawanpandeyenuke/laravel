@@ -1027,14 +1027,14 @@ $('.btn-upload-icon').find(".badge").remove();
 		$('.loading-text').hide();
 		$('.loading-img').show();
 		var current = $(this);
-		var categoryid = $(this).data('categoryid');
+		var breadcrum = $(this).data('breadcrum');
 		//alert(keyword);
 		//var reqType = current.closest('.friends-list').find('.active').data('value');
 		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
 		$.ajax({
 			'url' : '/ajax/view-more-forum-post',
 			'type' : 'post',
-			'data' : { 'pageid': pageid ,'categoryid' : categoryid },
+			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum },
 			'success' : function(data){
 				if(data != 'No More Results'){		
 					pageid = pageid + 1;
@@ -1050,6 +1050,55 @@ $('.btn-upload-icon').find(".badge").remove();
 		});
 	});
 
+		$(document).on('click','.load-more-forumreply',function(){
+		$('.loading-text').hide();
+		$('.loading-img').show();
+		var current = $(this);
+		var forumpostid = $(this).data('forumpostid');
+		$.ajax({
+			'url' : '/ajax/view-more-forum-reply',
+			'type' : 'post',
+			'data' : { 'pageid': pageid ,'forumpostid' : forumpostid },
+			'success' : function(data){
+				if(data != 'No More Results'){		
+					pageid = pageid + 1;
+					$('.loading-text').show();
+					$('.loading-img').hide();
+					current.parents('.forum-srch-list').find('.forumreplylist').append(data);
+				}else{
+					current.text('No more results');
+					current.removeClass('.load-more-forumreply');
+					//$('.load-btn').text('No more results')
+				}
+			}	
+		});
+	});
+
+		$(document).on('click','.load-more-search-forum',function(){
+		$('.loading-text').hide();
+		$('.loading-img').show();
+		var current = $(this);
+		var breadcrum = $(this).data('breadcrum');
+		var keyword = $(this).data('keyword');
+		$.ajax({
+			'url' : '/ajax/view-more-search-forum',
+			'type' : 'post',
+			'data' : { 'pageid': pageid,'breadcrum': breadcrum ,'keyword' : keyword },
+			'success' : function(data){
+				if(data != 'No More Results'){		
+					pageid = pageid + 1;
+					$('.loading-text').show();
+					$('.loading-img').hide();
+					current.parents('.forum-srch-list').find('.forumpostlist').append(data);
+				}else{
+					current.text('No more results');
+					current.removeClass('.load-more-forumreply');
+					//$('.load-btn').text('No more results')
+				}
+			}	
+		});
+	});
+		
 	$("#up_imgs").fileinput({
     uploadUrl: "/file-upload-batch/2",
     allowedFileExtensions: ["jpg", "png", "gif"],
@@ -1220,14 +1269,22 @@ $(document).on('click','.savegroupname',function()
 		showLoading();
 		var current = $(this);
 		var forumpostid = $(this).val();
-		var categoryid = $(this).data('categoryid');
+		var breadcrum = $(this).data('breadcrum');
+		var search = $(this).data('search');
+		if(search == 1)
+		{
+			var scount = parseInt($('.search-forum-count').find('.count').html());
+			var newcount = scount - 1;
+		}
 			$.ajax({
 			'url' : '/ajax/delforumpost',
 			'type' : 'post',
-			'data' : {'forumpostid' : forumpostid , 'categoryid' : categoryid},
+			'data' : {'forumpostid' : forumpostid , 'breadcrum' : breadcrum},
 			'success' : function(response){
 				$('.posts-count').find('.count').html(' '+response);		 
 				current.closest('.f-single-post').hide();
+				if(search == 1)
+					$('.search-forum-count').find('.count').html(newcount);
 				hideLoading();
 			}
 		});
@@ -1258,7 +1315,7 @@ $(document).on('click','.savegroupname',function()
 		$(document).on('click','.addforumpost',function(){
 
 		var current = $(this);
-		var category_id = $(this).val();
+		var breadcrum = $(this).val();
 		var post = $('.forumpost').val();
 		var postcount = parseInt($('.posts-count').find('.count').html());
 		var newpostcount = postcount + 1;
@@ -1268,7 +1325,7 @@ $(document).on('click','.savegroupname',function()
 			$.ajax({
 			'url' : '/ajax/addnewforumpost',
 			'type' : 'post',
-			'data' : {'category_id' : category_id,'topic' : post},
+			'data' : {'breadcrum' : breadcrum,'topic' : post},
 			'success' : function(response){	
 				$('.posts-count').find('.count').html(' '+newpostcount);
 		  		$('.forumpost').val('');

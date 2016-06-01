@@ -408,11 +408,9 @@
 														</select>
 													</div>
 												</div> 
-										
-										</div>
 											@endif
+											</div>
 										<div id="addedRows"></div>
-										
 									</div>
 									
 									<div class="pe-row">

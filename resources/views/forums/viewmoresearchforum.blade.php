@@ -2,7 +2,7 @@
 								<div class="f-single-post" id="forumpost_{{$data->id}}">
 									<div class="p-user">
 									<?php 
-									$user = $data->user;
+										$user = $data->user;
 											if(isset($data->forumPostLikesCount[0]))
 												$likeCount = $data->forumPostLikesCount[0]->forumlikescount;
 											else
@@ -14,7 +14,7 @@
 									$userid = $user->id;
 									$profileimage = !empty($data->user->picture) ? $user->picture : '/images/user-thumb.jpg';
 									if(Auth::check())
-									$likedata = \App\ForumLikes::where(['owner_id' => Auth::User()->id, 'post_id' => $data->id])->get();
+									$likedata = \App\ForumLikes::where(['owner_id' => Auth::User()->id, 'post_id' => $data->id])->get(); 
 									?>
 										<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 										<span class="p-date"><i class="flaticon-days"></i> {{$data->updated_at->format('d M Y')}}</span>
@@ -43,7 +43,7 @@
 									</div>
 
 									<p> {{$data->title}} </p>
-									
+
 									<div class="fp-btns text-right">
 										<span class="reply-count">Replies ({{$replyCount}})</span>
 										<a href="{{url("forum-post-reply/$data->id")}}" title="" class="btn btn-primary"><span class="glyphicon glyphicon-share-alt"></span>Reply</a>

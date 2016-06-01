@@ -4,9 +4,11 @@
 	<div class="page-data dashboard-body">
 	        <div class="container">
 	          <div class="row">
-
+	          @if(Auth::attempt())
 	            @include('panels.left')
-
+	           @else
+	            @include('panels.leftguest')
+	           @endif
 				<div class="col-sm-6">
 				<div class="shadow-box page-center-data blue-bg no-margin-top">
 					<div class="page-title">

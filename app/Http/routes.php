@@ -121,6 +121,8 @@ Route::post('/ajax/likeforumpost','AjaxController@likeForumPost');
 Route::post('/ajax/addnewforumreply','AjaxController@addNewForumReply');
 
 Route::post('/ajax/view-more-forum-post','AjaxController@viewMoreForumPost');
+Route::post('/ajax/view-more-forum-reply','AjaxController@viewMoreForumReply');
+
 
 Route::post('/ajax/delforumreply','AjaxController@delForumReply');
 
@@ -132,6 +134,12 @@ Route::post('/ajax/likeforumreply','AjaxController@likeForumReply');
 Route::post('/ajax/forumreplycomment','AjaxController@forumReplyComment');
 
 Route::post('/ajax/del-forum-reply-comment','AjaxController@delForumReplyComment');
+
+Route::post('/ajax/getsubforums','AjaxController@getSubForums');
+
+Route::post('/ajax/getsubforums-2','AjaxController@getSubForums2');
+
+Route::post('/ajax/view-more-search-forum','AjaxController@viewMoreSearchForum');
 
 
 /**
@@ -250,12 +258,15 @@ Route::post('api/get-userby-jid','ApiController@getUserByJID');
 	Route::post('forum-post', 'SearchController@forumPost');
 
 	Route::get('sub-cat-forums/{id}','SearchController@subCatForums');
-	Route::get('view-forum-posts/{id}','SearchController@viewForumPosts');
 
-	//Route::get('forum-post-reply', 'SearchController@forumPostReply');
+	Route::get('view-forum-posts/{id}','SearchController@viewForumPosts');
+	Route::post('view-forum-posts','SearchController@viewForumPostsOpt');
+
 	Route::get('demo', 'SearchController@demo');
     Route::get('forum-post-reply/{forumpostid}', 'SearchController@forumPostReply');
 
+    Route::post('search-forum', 'SearchController@searchForum');
+   
 
 	Route::group(['middleware' => 'web'], function () {
     Route::auth();

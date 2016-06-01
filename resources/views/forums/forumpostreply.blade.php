@@ -14,7 +14,11 @@
 	   <div class="container">
 	    <div class="row">
 
+	           @if(Auth::check())
 	            @include('panels.left')
+	           @else
+	            @include('panels.leftguest')
+	           @endif
 
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
@@ -23,47 +27,7 @@
 					</div>
 
 					<div class="padding-data-inner">
-						<div class="forum-filter">
-							<div class="row">
-								<div class="col-md-4">
-									<select class="form-control">
-										<option>School Reviews</option>
-									</select>
-								</div>
-								<div class="col-md-4">
-									<select class="form-control">
-										<option>City</option>
-									</select>
-								</div>
-								<div class="col-md-4">
-									<input type="text" name="" value="" placeholder="Search Keyword" class="form-control">
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-4">
-									<select class="form-control">
-										<option>India</option>
-									</select>
-								</div>
-								<div class="col-md-4">
-									<select class="form-control">
-										<option>Haryana</option>
-									</select>
-								</div>
-								<div class="col-md-4">
-									<select class="form-control">
-										<option>Gurgaon</option>
-									</select>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-4 col-md-offset-4">
-									<div class="forum-btn-cont text-center">
-										<button type="button" class="btn btn-primary">Search</button>
-									</div>
-								</div>
-							</div>
-						</div><!--/forum filter-->
+						@include('forums.searchforum')
 
 						<div class="forum-srch-list">
 							<div class="fs-breadcrumb">{{$post->forum_category_breadcrum}}</div>
@@ -80,7 +44,7 @@
 										$likeCount = 0;
 										$userid = $user->id;
 										$profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
-
+										if(Auth::check())
 										$likedata = \App\ForumLikes::where(['owner_id' => Auth::User()->id, 'post_id' => $post->id])->get(); 
 									?>
 											<div class="ut-name">
@@ -93,8 +57,13 @@
 
 											<div class="fp-likes pull-left">
 											  <div class="like-cont">
+											  @if(Auth::check())
 												<input type="checkbox" name="" id="checkbox{{$post->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$post->id}}" {{ isset($likedata[0])?'checked':'' }}/>	
 												<label for="checkbox{{$post->id}}" class="css-label"></label>
+											  @else
+											  <input type="checkbox" name="" id="guest-reply" class="css-checkbox"/>
+											  <label for="guest-reply" class="css-label"></label>
+											  @endif
 											  </div>
 											  <span class="plike-count">{{$likeCount}}</span>
 											</div>
@@ -106,7 +75,9 @@
 								</div>
 								<p> {{$post->title}} </p>
 								<div class="text-right">
-									<button type="button" class="btn btn-primary mpost-rply-btn">Reply</button>
+								@if(Auth::check())
+								  <button type="button" class="btn btn-primary mpost-rply-btn">Reply</button>
+								@endif
 								</div>
 							</div>
 
@@ -140,14 +111,19 @@
 										 	$userid = $user->id;
 											$profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 											$name = $user->first_name." ".$user->last_name;
-
+											if(Auth::check())
 											$likedata = \App\ForumReplyLikes::where(['owner_id' => Auth::User()->id, 'reply_id' => $forumreply->id])->get();
 										?>
 											<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 											<div class="p-likes ml">
 											<div class="like-cont">
+											@if(Auth::check())
 												<input type="checkbox" name="" id="checkbox_forumreply_{{$forumreply->id}}" class="css-checkbox likeforumreply" data-forumreplyid="{{$forumreply->id}}" {{ isset($likedata[0])?'checked':'' }}/>
 												<label for="checkbox_forumreply_{{$forumreply->id}}" class="css-label"></label>
+											@else
+											<input type="checkbox" id="guest-reply2" class="css-checkbox"/>
+												<label for="guest-reply2" class="css-label"></label>
+											@endif
 											</div>
 											<span class="plike-count forumreplylike">{{$likeCount}}</span>
 											<div class="p-likes ml">
@@ -165,20 +141,24 @@
 												<span class="p-date"><i class="flaticon-days"></i> {{$forumreply->updated_at->format('d M Y')}}</span>
 												<span class="p-time"><i class="flaticon-time"></i> {{$forumreply->updated_at->format('h:i A')}}</span>
 											</div>
+											@if(Auth::check())
 											@if($userid == Auth::User()->id)
 											<div class="fp-action">
 											<button class='editforumreply' value='{{$forumreply->id}}'data-forumpostid = "{{$post->id}}"><i class='flaticon-pencil'></i></button>
 											<button class='forumreplydelete' value='{{$forumreply->id}}' data-forumpostid = "{{$post->id}}"><i class='flaticon-garbage'></i></button>
 											</div>
 											@endif
+											@endif
 										</div>
-
 										<p class="more">{{ $forumreply->reply }} </p>
-
-									</div><!--/single post-->
-								
+									</div><!--/single post-->								
 								@endforeach
 							</div>
+							 @if($replycount > 10)
+							<div class="load-more-btn-cont text-center">
+								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumreply" data-forumpostid = "{{$post->id}}">View More</button>
+							</div>
+							@endif
  						 </div>
 					    </div><!--/forum search list-->
 					</div>

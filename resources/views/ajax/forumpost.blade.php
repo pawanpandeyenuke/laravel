@@ -18,8 +18,8 @@
 										{{$name}}
 										<a>
 										<div class='fp-action'>
-											<button class='editforumpost' value='{{$forumpostid->id}}'s><i class='flaticon-pencil' data-categoryid = "{{$categoryid}}"></i></button>
-											<button class='forumpostdelete' value='{{$forumpostid->id}}' data-categoryid = "{{$categoryid}}"><i class='flaticon-garbage'></i></button>
+											<button class='editforumpost' value='{{$forumpostid->id}}'s><i class='flaticon-pencil' data-breadcrum = "{{$breadcrum}}"></i></button>
+											<button class='forumpostdelete' value='{{$forumpostid->id}}' data-breadcrum = "{{$breadcrum}}"><i class='flaticon-garbage'></i></button>
 										</div>
 									</div>
 									<p>{{$forumpostid->title}} </p>

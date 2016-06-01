@@ -136,9 +136,9 @@ unset($countries[0]);
  	if($(this).is(':checked')){
 
  		// alert('asdfsa');
-		$(this).closest('.radio-cont').next().find('.subs').hide();
+		$(this).closest('.radio-cont').nextAll().find('.subs').hide();
 		$(this).closest('.radio-cont').find('.subs').show();
-		$(this).closest('.radio-cont').prev().find('.subs').hide();
+		$(this).closest('.radio-cont').prevAll().find('.subs').hide();
 
  	}
 
@@ -167,17 +167,6 @@ unset($countries[0]);
         }
     });
 
-
-	// $( "#chatsubgroupsvalidate" ).submit(function( event ) {
-	// 	var groupradio = $('.group-radio');
-	// 	$.each(groupradio, function(i,v){
-	// 		if($(this).is(':checked')) { 
-	// 			return true;
-	// 		}else{
-	// 			event.preventDefault();		
-	// 		}
-	// 	});		
-	// });
 
 
 	$('#subcountry').change(function(){

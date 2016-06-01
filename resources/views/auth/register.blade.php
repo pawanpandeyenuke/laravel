@@ -96,7 +96,7 @@
                     <div class="slider-btns">
                         <ul class="list-inline">
                             <li><a href="#" title="" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Enter Chat Room</a></li>
-                            <li><a href="#" title="" class="btn btn-primary">Enter Forum</a></li>
+                            <li><a href="{{url('forums')}}" title="" class="btn btn-primary">Enter Forum</a></li>
                         </ul>
                     </div>
                     <div id="hSlider" class="carousel slide" data-ride="carousel">
