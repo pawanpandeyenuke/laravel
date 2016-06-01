@@ -2,7 +2,7 @@
 	$mainforums = \App\Forums::where('parent_id',0)->select('id','title')->get();
 
 ?>				
-				{{ Form::open(array('url' => 'search-forum', 'method' => 'post')) }}
+				{{ Form::open(array('url' => 'search-forum','id' => 'search-forum-layout', 'method' => 'post')) }}
 						<div class="forum-filter">
 							<div class="row">
 								<div class="col-md-4">
@@ -22,7 +22,7 @@
 								</div>
 								</div>
 								<div class="col-md-4">
-									<input type="text" name="forum-keyword" value="" placeholder="Search Keyword" class="form-control">
+									<input type="text" name="forum-keyword" value="" id="forum-keyword-layout" placeholder="Enter Keyword" class="form-control">
 								</div>
 							</div>
 							<div class="row">
@@ -72,6 +72,15 @@
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 <!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script> -->
 <script type="text/javascript">
+
+      $( "#search-forum-layout" ).submit(function( event ) {
+      var searchkey = $('#forum-keyword-layout').val();
+      if(searchkey == ''){
+        $('#forum-keyword-layout').attr('placeholder', 'Enter Keyword').focus();
+        event.preventDefault();
+      }
+   	 });
+
 	
 		$('.getsubcategory').change(function(){
 					$('.search-country1').hide();

@@ -360,15 +360,23 @@ class SearchController extends Controller
 
         $keyword = strtolower($input['forum-keyword']);
 
+        $replyresult = ForumReply::whereRaw( 'LOWER(`reply`) like ?', array("%".$keyword."%"))
+                            ->pluck('post_id')
+                            ->toArray();
+
         $results = ForumPost::with('user')
                         ->with('forumPostLikesCount')
                         ->with('replyCount')
                         ->where('forum_category_breadcrum', 'LIKE', $breadcrum.'%')
                         ->whereRaw( 'LOWER(`title`) like ?', array("%".$keyword."%"))
+                        ->orWhere( function( $query ) use ( $replyresult) {
+                            $query->whereIn( 'id', $replyresult); })
                         ->orderBy('updated_at','DESC')
                         ->get();
+
             $count = $results->count();
             $results = $results->take(10);
+
        return view('forums.searchresultforum')
                 ->with('postscount',$count)
                 ->with('keyword',$keyword)
