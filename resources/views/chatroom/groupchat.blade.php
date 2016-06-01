@@ -111,56 +111,45 @@ $groupid = str_replace('/', '-', $groupid);
                                           <i class="flaticon-people"></i> <b>{{$groupname}}</b>
                                         </div>
                                         <div class="chat-user-list StyleScroll">
-                                         
-                                                    <ul>
-                                    @foreach($userdata as $data)
-                                    <?php //echo '<pre>';print_r($data['user']['id']);die;
-                                  $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg';
-                                    ?>
-                                    <li>
-                                        <a title="" href="#" class='info' data-id="{{$data['user']['id']}}" >
-                                            <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
-                                            <span class="title">{{ $data['user']['first_name'] }}</span>
-                        
+                                          <ul>
+                                            @foreach($userdata as $data)
 
-                                        <?php 
+                                              <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; ?>
 
-                                        if($data['user']['id']!=Auth::User()->id)
-                                        {
-                                           $status=DB::table('friends')->where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
-                                           $status1=DB::table('friends')->where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
-
-                                        if($status!=null || $status1!=null){
-                                            if($status=='Accepted'){
-                                         ?>
-                                          <button class='time' onclick="openChatbox(<?php echo "'".$data['user']['xmpp_username']."', '".$data['user']['first_name']."'"?>);">Chat</button>         
-                                                <?php } 
-                                            elseif($status=='Pending')
-                                            {
-                                                ?>                           
-                                                                <span class='time'>Sent</span>
-                                                      <?php  } 
-                                                      elseif($status1=='Pending') {
+                                              <li>
+                                                  <a title="" href="#" class='info' data-id="{{$data['user']['id']}}" >
+                                                      <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
+                                                      <span class="title">{{ $data['user']['first_name'] }}</span>
+                                                  
+                                                  @if($data['user']['id'] != Auth::User()->id)
+                                                    <?php 
+                                                      $status = DB::table('friends')->where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
+                                                      $status1 = DB::table('friends')->where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
+                                                      // echo '<pre>';print_r($status1);die;
                                                       ?>
-                                                                <span class='time'></span>
+                                                    @if($status != null || $status1 != null)
 
-                                                            <?php 
-                                                            }
-                                                            } 
-                                                            else 
-                                                            { 
-                                                                ?>
-                                                                <button type="button" class="time btn btn-sm btn-chat btn-primary invite">Invite</button>
-                                                                <span class='time sentinvite' style="display: none;">Sent</span>
-                                                                <?php 
-                                                                }
-                                                                } ?>
-                                                       
-                                        </a>
-                                    </li>
-                                    @endforeach
-                                    </ul>
-                                                </div><!--/chat user list-->
+                                                        @if($status == 'Accepted')
+                                                          <button class='time' onclick="openChatbox(<?php echo "'".$data['user']['xmpp_username']."', '".$data['user']['first_name']."'"?>);">Chat</button>
+                                                        @elseif($status=='Pending')
+                                                          <span class='time'>Sent</span>                                            
+                                                        @elseif($status1=='Pending')                                                  
+                                                          <span class='time'></span>
+                                                        @endif
+
+                                                    @else 
+
+                                                        <button type="button" class="time btn btn-sm btn-chat btn-primary invite">Invite</button>
+                                                        <span class='time sentinvite' style="display: none;">Sent</span>
+
+                                                    @endif
+                                                  @endif
+                                                                 
+                                                  </a>
+                                              </li>
+                                            @endforeach
+                                          </ul>
+                                        </div><!--/chat user list-->
                                       </div>
                                     </div>
                                   </div>
@@ -198,45 +187,45 @@ $groupid = str_replace('/', '-', $groupid);
                                     <div id="gccollapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="gcheadingThree">
                                       <div class="panel-body">
                                         <div class="chat-user-list StyleScroll">
-                                <ul>
-                    @foreach($privategroup as $data)
-                    <?php  
+                                          <ul>
+                                            @foreach($privategroup as $data)
+                                              <?php  
 
-                        $privategroupname=$data['title'];
-                        $privategroupid=strtolower($privategroupname);
-                        $privategroupid=str_replace(" ","_",$privategroupid);
-                         
-                        $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
-			
-                            $namestr='';
-                            $name=array();
-                            $count=0;
-                        foreach ($data['members'] as $mem) {
-                                if($mem['member_id']==Auth::User()->id)
-                                {
-                                    $name[]="You";
-                                    $count++;
-                                }
-                                else{
-                                $name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
-                                }
-                            }
+                                              $privategroupname=$data['title'];
+                                              $privategroupid=strtolower($privategroupname);
+                                              $privategroupid=str_replace(" ","_",$privategroupid);
 
-                            $namestr=implode(",",$name);
+                                              $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
 
-                            if(!($count==0) || $data['owner_id']==Auth::User()->id) {   ?>
-                               <li>
-								   <div class="chat-user-outer" >
-										<a href="{{url('private-group-detail/<?php echo $data['id']; ?>)}}" >
-											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
-											<span class="title">{{$data['title']}}</span>
-										</a>
-										<button onclick="openChatRoom('<?php echo str_replace( ' ','_', $data['title'].'_'.$data['id'] ); ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
-                                   </div>
-                               </li>
-							<?php } ?>
-                         @endforeach
-					</ul>
+                                              $namestr='';
+                                              $name=array();
+                                              $count=0; ?>
+                                              @foreach ($data['members'] as $mem) 
+                                                @if($mem['member_id']==Auth::User()->id)
+                                                  <?php
+                                                    $name[]="You";
+                                                    $count++;
+                                                  ?>
+                                                @else
+                                                  <?php $name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name'); ?>
+                                                @endif
+                                              @endforeach
+
+                                              <?php $namestr=implode(",",$name); ?>
+
+                                              @if(!($count==0) || $data['owner_id']==Auth::User()->id) 
+                                                <li>
+                                                  <div class="chat-user-outer" >
+                                                    <a href="{{url('private-group-detail/<?php echo $data['id']; ?>)}}" >
+                                                      <span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
+                                                      <span class="title">{{$data['title']}}</span>
+                                                    </a>
+                                                    <button onclick="openChatRoom('<?php echo str_replace( ' ','_', $data['title'].'_'.$data['id'] ); ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
+                                                  </div>
+                                                </li>
+                                              @endif
+                                            @endforeach
+                                          </ul>
                                      </div><!--/chat user list-->
                                       </div>
                                     </div>
@@ -244,22 +233,17 @@ $groupid = str_replace('/', '-', $groupid);
                                 </div>
                             </div>
                             
-                        </div>                        <div class="col-sm-8">
+                        </div>
+                        <div class="col-sm-8">
                             <div id="chat-system"></div>
                         </div>
                     </div>
                 </div>
-
 <!--END-->
-
                 <div class="shadow-box bottom-ad"><img src="/images/bottom-ad.jpg" alt="" class="img-responsive"></div>
-
-
                </div>
-
         @include('panels.right')
- 
-            </div>
+             </div>
         </div>
     </div><!--/pagedata-->
   
@@ -324,8 +308,25 @@ $groupid = str_replace('/', '-', $groupid);
                   send_initial_presence:true,
                   roster_groups: true ,
                 });
-                jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
-                jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
+                // jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
+                // jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
+
+                /* pawanpandey Code */
+                
+                  var minimizedIcon = $(".icon-close");
+                  $.each(minimizedIcon, function(i,v){
+                    v.click();
+                  });
+
+                  $('.minimized-chats-flyout .chat-head:first .restore-chat').click();
+
+/*                  $('.icon-minus').each(function(){
+                    $(this).trigger('click');
+                  });*/
+                  // jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
+
+
+                /* pawanpandey Code */
 
                 $(".chatroom:visible").each(function()  {
                   checkChatboxAndChatRoom(this);
@@ -341,11 +342,7 @@ $groupid = str_replace('/', '-', $groupid);
 
               if(groupname != '' || groupid != '')
               {
-                console.log(groupid);
-                // converse.rooms.open('haeri@conference.friendzsquare.com', 'mycustomnick');
                 openChatGroup(groupname, groupid);
-                // converse.rooms.open(groupname, groupid);
-                
               }
 
            });
@@ -444,6 +441,21 @@ $groupid = str_replace('/', '-', $groupid);
             }
   
         });*/
+
+        $(document).on('click','.invite',function(){
+          var current = $(this);
+          var user_id = current.closest('.info').data('id');
+          
+          $.ajax({
+            'url' : 'ajax/sendrequest',
+            'type' : 'post',
+            'data' : {'user_id' : user_id },
+            'success' : function(data){
+              current.closest('.info').find('.invite').hide(200);
+              current.closest('.info').find('.sentinvite').show(500);
+            }
+          });
+        });
 
 
         $(document).on('click','#search',function() {

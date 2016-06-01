@@ -151,8 +151,11 @@
 											<div class="col-sm-6">
 												<div class="p-data-title"><i class="flaticon-technology"></i>Contact</div>
 											</div>
-											<div class="col-sm-6">
-												<input type="text" name="phone_no" class="pr-edit numeric" maxlength="15" value="{{ $user->phone_no }}">
+											<div class="col-sm-6 ph-field">
+												<!-- <input type="text" name="phone_no" class="pr-edit numeric" maxlength="15" value="{{ $user->phone_no }}"> -->
+
+											    <input type="text" name="country_code" class="country-code-field numeric" value="{{ $user->country_code }}" placeholder="000" >
+											    <input type="text" class="ph-input numeric" name = "phone_no" id="mobileContact" value="{{ $user->phone_no }}">
 											</div>
 										</div>
 									</div>
@@ -234,13 +237,13 @@
 												<?php $customcount = 1; ?>
 												@foreach($education as $data)
 												
-<?php 
-		$countryidestab = DB::table('country')->where('country_name', '=', $data->country_of_establishment)->value('country_id'); 
-		$all_states_estab = DB::table('state')->where('country_id', '=', $countryidestab)->pluck('state_name','state_id'); 
+													<?php 
+															$countryidestab = DB::table('country')->where('country_name', '=', $data->country_of_establishment)->value('country_id'); 
+															$all_states_estab = DB::table('state')->where('country_id', '=', $countryidestab)->pluck('state_name','state_id'); 
 
-		$stateidestab = DB::table('city')->where('city_name', '=', $data->city_of_establishment)->value('state_id'); 
-	 	$all_cities_estab = DB::table('city')->where('state_id', '=', $stateidestab)->pluck('city_name', 'city_id'); 	
-?>
+															$stateidestab = DB::table('city')->where('city_name', '=', $data->city_of_establishment)->value('state_id'); 
+														 	$all_cities_estab = DB::table('city')->where('state_id', '=', $stateidestab)->pluck('city_name', 'city_id'); 	
+													?>
 													<div class="pe-row" data-id="<?php echo $data->id; ?>">
 														@if($customcount > 1)
 															<button type="button" class="btn add-study-btn removeme"><span class="glyphicon glyphicon-trash"></span></button>
@@ -408,11 +411,9 @@
 														</select>
 													</div>
 												</div> 
-										
+											@endif										
 										</div>
-											@endif
-										<div id="addedRows"></div>
-										
+										<div id="addedRows"></div>										
 									</div>
 									
 									<div class="pe-row">
@@ -508,15 +509,29 @@
 		$(document).on('change', '#profile_country', function(){
 			var countryId = $(this).val();
 			var _token = $('#searchform input[name=_token]').val();
-
+			$('#mobileContact').val('');
 			if(countryId != ''){
 				// alert(countryId);
 				$.ajax({			
 					'url' : '/ajax/getstates',
 					'data' : { 'countryId' : countryId, '_token' : _token },
 					'type' : 'post',
-					'success' : function(response){				
+					'success' : function(response){
+						// alert(countryId);
 						$('#profile_state').html(response);
+						$.ajax({			
+							'url' : '/ajax/mob-country-code',
+							'data' : { 'countryId' : countryId, '_token' : _token },
+							'type' : 'post',
+							'success' : function(response){
+								
+								var mobCode = response[0].phonecode;
+								// alert(mobCode);
+								$('.country-code-field').val(mobCode);
+								$('.country-code-field').attr('data-value', mobCode);
+                        		var validArray = getValidationArray(mobCode);
+							}			
+						});	
 					}			
 				});	
 			}else{
@@ -524,6 +539,40 @@
 				$('#profile_city').html('<option>City</option>');
 			}
 		});
+
+		/* @Mobile code change on country change */
+			function getValidationArray(mobCode){
+			    // console.log(mobCode);
+			    // alert(mobCode);
+			    var countryMobValidLengthArray = <?php print_r(json_encode(countryMobileLength(),1));?>;
+			    var countryMobValidLength = countryMobValidLengthArray[mobCode];
+			    if(countryMobValidLength == undefined){
+			        return {min: 0, max: 15};
+			    }
+			    console.log(countryMobValidLength);
+			    return {min: countryMobValidLength.min, max: countryMobValidLength.max};
+			}
+
+	        $(document).on('focus', '#mobileContact', function(){
+	            var array = $('.country-code-field').data('value');
+	            var validArray = getValidationArray(array);
+	            $('#mobileContact').prop('minlength', validArray.min);
+	            $('#mobileContact').prop('maxlength', validArray.max);
+	        });
+
+	        $(document).on('blur', '#mobileContact', function(){
+	            $('#mobileContact').parent().find('#groupname-error').remove();
+	            var array = $('.country-code-field').data('value');
+	            var validArray = getValidationArray(array);
+	            var mobileContact = $('#mobileContact').val();
+	            if(mobileContact.length < validArray.min){
+	                // alert('invalid value');
+	                $('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
+	            }
+	        });
+        /* @Mobile code change on country change */
+
+
 
 		$(document).on('change', '#profile_state', function(){
 			var stateId = $(this).val();

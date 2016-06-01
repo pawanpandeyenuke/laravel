@@ -1,6 +1,6 @@
 <?php //print_r($comment->id."  ".$replyid);die;
 					?>
-					<li class="forum-li-comment-{{$comment->id}}">
+					<li id="forum-li-comment-{{$comment->id}}">
 						<button type="button" class="p-del-btn del-forum-reply-comment" data-toggle="modal" data-target=".comment-del-confrm" value="{{$comment->id}}" data-forumreplyid="{{$replyid}}"><span class="glyphicon glyphicon-remove" ></span></button>
 <!-- 
 						<div class="modal fade comment-del-confrm" tabindex="-1" role="dialog" aria-labelledby="DeletePost">

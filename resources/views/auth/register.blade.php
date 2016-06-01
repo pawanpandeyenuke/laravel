@@ -187,7 +187,7 @@
                                 </div>
 
                             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                    <input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword">
+                                    <input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword1">
                                     
                                     @if ($errors->has('password'))
                                         <span class="help-block">
@@ -197,8 +197,8 @@
                                     
                                     <span class="field-icon flaticon-padlock50"></span>
                                     <div class="check-cont show-pw">
-                                        <input type="checkbox"  name="checkboxG2" id="checkboxG2" class="css-checkbox password-eye"/>
-                                        <label for="checkboxG2" class="css-label">show</label>
+                                        <input type="checkbox"  name="checkboxG2" id="checkboxG21" class="css-checkbox password-eye" onchange="document.getElementById('showpassword1').type = this.checked ? 'text' : 'password'"/>
+                                        <label for="checkboxG21" class="css-label">show</label>
                                     </div>
                                 </div>
 
@@ -387,6 +387,7 @@ $(document).ready(function () {
         }
     });
 
+
 });
 
 $("#loginform").ajaxForm(function(response) { 
@@ -472,6 +473,8 @@ $("#loginform").ajaxForm(function(response) {
     $('.numeric,input[type="number"]').bind('paste drop',function(e){
         e.preventDefault();
     });
+
+ 
 
 </script>
 @endsection

@@ -564,8 +564,9 @@ if($input!=null && $gname!=null)
                     $arguments['picture'] = '/uploads/user_img/'.$image_name;
                     $file->move(public_path('uploads/user_img'), $image_name);
                 }
-                // echo '<pre>';print_r($arguments);die;
+                
                 // $arguments['picture'] = 'uploads/user_img/'.$arguments['picture'];
+                // echo '<pre>';print_r($arguments);die;
                 foreach ($arguments as $key => $value) {
                     if( $key != 'email' && $key != 'password' ){
                         User::where([ 'id' => $id ])
