@@ -59,6 +59,7 @@ class Converse{
 	public static function deleteGroup($roomname){
 
 		$node = Config::get('constants.xmpp_host_Url');
+		$node 		= 'conference.'.$node;
 		$roomname	=	str_replace(" ","_",$roomname);
 		$response	=	@exec('sudo  ejabberdctl srg_delete ' .$roomname.' ' .$node);
 			// srg-delete group host  
