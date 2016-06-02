@@ -32,14 +32,13 @@ class AppServiceProvider extends ServiceProvider
 
         $gradYear = array("1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015");
 
-
         view()->share([
                 'countries' => self::prepare(Country::all(['country_id', 'country_name'])),
                 'parent_category' => Category::where('parent_id', '=', 0)->get(),
                 'educationLevel' => $educationLevel,
                 'specialization' => $specialization,
                 'gradYear' => $gradYear,
-                'jobarea' => JobArea::lists('job_area','job_area_id')->toArray()                
+                'jobarea' => JobArea::lists('job_area','job_area_id')->toArray(),
             ]);
     }
 

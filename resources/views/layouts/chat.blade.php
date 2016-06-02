@@ -49,12 +49,16 @@
 									{!! Form::close() !!}
 							</div>
 						</div>
-						<div class="col-sm-6">
-							<div class="search-field">
-								<input type="text" name="" value="" placeholder="Enter Keyword" class="form-control">
-								<button type="button" class="btn btn-primary btn-srch-top">Search Forum</button>
-							</div>
-						</div>
+            {{ Form::open(array('url' => 'search-forum', 'id' => 'search-forum-chat', 'method' => 'post')) }}
+            <div class="col-sm-6">
+              <div class="search-field">
+              <input type = "hidden" name = "mainforum" value = "Forum">
+              <input type = "hidden" name = "check" value = "">
+                <input type="text" name="forum-keyword" value="" placeholder="Enter Keyword" class="form-control forum-keyword-app">
+                <button type="submit" class="btn btn-primary btn-srch-top">Search Forum</button>
+              </div>
+            </div>
+            {{Form::close()}}
 					</div>
 				</div>
 			</div>
@@ -123,6 +127,15 @@
 			event.preventDefault();
 		}
 	});
+
+        $( "#search-forum-chat" ).submit(function( event ) {
+      var searchkey = $('.forum-keyword-app').val();
+      if(searchkey == ''){
+        $('.forum-keyword-app').attr('placeholder', 'Enter Keyword').focus();
+        event.preventDefault();
+      }
+    });
+
 
 	
 	$("#suggestionform2").ajaxForm(function(response) {

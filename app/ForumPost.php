@@ -10,7 +10,7 @@ class ForumPost extends Model
 
 	protected $primaryKey = 'id';
 
-	public $fillable = ['title', 'owner_id', 'category_id'];
+	public $fillable = ['title', 'owner_id', 'category_id','forum_category_id','forum_category_breadcrum'];
 
 	public $timestamps = true;
 
@@ -23,29 +23,29 @@ class ForumPost extends Model
 		'owner_id' => 'required|numeric'
 	);
 
-	public function likes()
+	public function forumpostlikes()
 	{
-		return $this->hasMany('App\ForumLikes');
+		return $this->hasMany('App\ForumLikes', 'post_id', 'id');
 	}
 
-	public function likesCount()
+	public function forumPostLikesCount()
 	{
-		return $this->likes()
-		    ->selectRaw('post_id, count(*) as likescount')
+		return $this->forumpostlikes()
+		    ->selectRaw('post_id, count(*) as forumlikescount')
 		    ->groupBy('post_id');
 	}
 
-	// public function reply()
-	// {
-	// 	return $this->hasMany('App\ForumReply');//->orderBy('comments.id','DESC');
-	// }
+	public function reply()
+	{
+		return $this->hasMany('App\ForumReply','post_id','id');//->orderBy('comments.id','DESC');
+	}
 
-	// public function replyCount()
-	// {
-	// 	return $this->reply()
-	// 		->selectRaw('post_id, count(*) as commentscount')
-	// 		->groupBy('post_id');
-	// }
+	public function replyCount()
+	{
+		return $this->reply()
+			->selectRaw('post_id, count(*) as replyCount')
+			->groupBy('post_id');
+	}
 
 	public function user()
 	{

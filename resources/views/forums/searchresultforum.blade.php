@@ -27,27 +27,26 @@
 
 						<div class="forum-srch-list">
 						 <div id="sticky-anchor"></div>
-						 	<div class="fix-header">
-								 <div class="fs-breadcrumb">Home > {{$breadcrum}}</div>
+						 	<!-- <div class="fix-header"> -->
+								 <div class="fs-breadcrumb">Search Result</div>
 
-								<div class="forum-post-cont forum-post-count">
-									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{$postscount}}</span> Posts</div>
+								<div class="forum-post-cont">
+									<div class="posts-count search-forum-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{$postscount}}</span> Posts</div>
 								</div><!--/forum post cont-->
 
 								@if(Auth::check())
 								<!---New Forum Post-->
-								<div class="f-post-form">
+							<!-- 	<div class="f-post-form">
 									<textarea name="topic" class="form-control forumpost" data-emojiable="true"></textarea>
-									<button type="button" class="btn btn-primary addforumpost" value="{{$breadcrum}}">Submit</button>
-								</div>
-								@endif
-							</div>
+									<button type="button" class="btn btn-primary addforumpost" value="$breadcrum">Submit</button>
+								</div> -->
+							<!-- </div> -->
 							<!---END New Forum Post-->
-							
+							@endif
 
 							<div class="modal fade edit-forumpost-popup" id="forumpost-edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost"></div>
 
-							<div class="f-post-list-outer forumpostlist">
+							<div class="f-post-list-outer forumpostlist forumsearch">
 							@foreach($posts as $data)
 								<div class="f-single-post" id="forumpost_{{$data->id}}">
 									<div class="p-user">
@@ -93,7 +92,8 @@
 									@if($data->user->id == Auth::user()->id)
 										<div class="fp-action">
 											<button class="editforumpost" value="{{$data->id}}" title="Edit" ><i class="flaticon-pencil" ></i></button>
-											<button class="forumpostdelete" value="{{$data->id}}" data-breadcrum = "{{$breadcrum}}"><i class="flaticon-garbage" ></i></button>
+											<button class="forumpostdelete" value="{{$data->id}}" data-breadcrum = "{{$data->forum_category_breadcrum}}" data-search=
+											"1"><i class="flaticon-garbage" ></i></button>
 										</div>
 									@endif
 									@endif
@@ -109,10 +109,10 @@
 								</div><!--/single post-->
 							@endforeach
 							</div>
-							 <!-- <div class="pagination">  </div> -->
+							  <!-- <div class="pagination">  </div> -->
 							 @if($postscount > 10)
 							<div class="load-more-btn-cont text-center">
-								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumpost" data-breadcrum = "{{$breadcrum}}">View More</button>
+								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-search-forum" data-breadcrum = "{{$breadcrum}}" data-keyword = "{{$keyword}}">View More</button>
 							</div>
 							@endif
 						</div><!--/forum search list-->

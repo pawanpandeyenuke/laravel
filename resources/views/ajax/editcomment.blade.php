@@ -66,7 +66,7 @@ $(document).ready(function(){
 			}
 			else
 			{
-				alert("Comment not updated.Comment field can't eb empty");
+				alert("Comment not updated.Comment field can't be empty");
 			}
 
 			 $('#edit-modal').modal('hide');

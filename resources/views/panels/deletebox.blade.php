@@ -1,10 +1,10 @@
 
 
 	<!-- Delete comment confirmation box -->
-	<?php
+	<?php 
 	 ?>
 	  <div class="modal-dialog modal-sm">
-	    <div class="modal-content" id="delete-confirm" data-value="{{$commentId}}" data-feedid="{{$feedId}}">
+	    <div class="modal-content" id="delete-confirm" data-value="{{$commentId}}" data-feedid="{{$feedId}}" data-forumreplycommentid="{{$forumReplyCommentId}}" data-forumreplyid="{{$replyid}}">
 	    	<div class="modal-body text-center">
 	        <h5>Are you sure to delete this ?</h5>
 	      </div>

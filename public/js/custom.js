@@ -375,6 +375,25 @@ $('.btn-upload-icon').find(".badge").remove();
 
 	});
 
+		$(document).on('click', '.popupforumreply', function(){    
+		showLoading();
+		var replyid = $(this).data('replyid');
+		//var feedId = $(this).closest('.single-post').data('value');
+		//var _token = $('#postform input[name=_token]').val();
+		$.ajax({
+			'url' : '/ajax/forumpostreply/get',
+			'data' : { 'replyid' : replyid },
+			'type' : 'post',
+			'success' : function(response){
+				$('#AllCommentNew1').html(response);
+		        $.fancybox([
+		            { href : '#AllCommentNew1' }
+		        ]);
+		        hideLoading();
+			}
+		});
+
+	});
 
 	/**
 	* Friend request tabs ajax call handling.
@@ -445,7 +464,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		var commentId = $(this).closest('li').data('value'); 
 		var feedId = $(this).closest('.single-post').data('value');
 		$.ajax({
-			'url' : 'ajax/deletebox',
+			'url' : '/ajax/deletebox',
 			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'postdelete'},
 			'type' : 'post',
 			'success' : function(response){
@@ -484,7 +503,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		var feedId = $('.single-post').data('value');
 		// alert(feedId);
 		$.ajax({
-			'url' : 'ajax/deletebox',
+			'url' : '/ajax/deletebox',
 			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'deletecomment'},
 			'type' : 'post',
 			'success' : function(response){
@@ -496,6 +515,51 @@ $('.btn-upload-icon').find(".badge").remove();
 			}
 		});
 		$("#modal").html('');
+	});
+
+		/**
+	*	Delete comments on forum reply.
+	
+	*/	
+	$(document).on('click', '.del-forum-reply-comment', function(){
+		showLoading();
+		var forumReplyCommentId = $(this).val(); 
+		var forumReplyID = $(this).data('forumreplyid');
+		$.ajax({
+			'url' : '/ajax/deletebox',
+			'data' : {'forumReplyCommentId':forumReplyCommentId, 'forumReplyID' : forumReplyID, 'class' : 'delete-forum-reply-comment'},
+			'type' : 'post',
+			'success' : function(response){
+				if(response){
+					$("#modal").append(response);
+					$("#modal").modal();
+					hideLoading();
+				}
+			}
+		});
+		$("#modal").html('');
+	});
+
+	$(document).on('click', '.delete-forum-reply-comment', function(){
+		showLoading();
+		var current = $('.delete-forum-reply-comment');
+		var forumReplyCommentId = current.closest('.modal-content').data('forumreplycommentid');
+		var forumReplyId = current.closest('.modal-content').data('forumreplyid'); 
+		 //alert(forumReplyCommentId);
+		// alert(forumReplyId);
+		$.ajax({
+			'url' : '/ajax/del-forum-reply-comment',
+			'data' : {'forumReplyCommentId': forumReplyCommentId, 'forumReplyId' : forumReplyId },
+			'type' : 'post',
+			'success' : function(response){
+				if(response){
+					$('#forum-li-comment-'+forumReplyCommentId).remove();
+					$('#forumreplycomment_'+forumReplyId).html(response);
+					$('#forumreplycomment_popup_'+forumReplyId).html(response);
+					hideLoading();
+				}
+			}
+		});
 	});
 
 	$(document).on('click', '.deletecomment', function(){		
@@ -958,6 +1022,83 @@ $('.btn-upload-icon').find(".badge").remove();
 		});
 	});
 
+
+		$(document).on('click','.load-more-forumpost',function(){
+		$('.loading-text').hide();
+		$('.loading-img').show();
+		var current = $(this);
+		var breadcrum = $(this).data('breadcrum');
+		//alert(keyword);
+		//var reqType = current.closest('.friends-list').find('.active').data('value');
+		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
+		$.ajax({
+			'url' : '/ajax/view-more-forum-post',
+			'type' : 'post',
+			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum },
+			'success' : function(data){
+				if(data != 'No More Results'){		
+					pageid = pageid + 1;
+					$('.loading-text').show();
+					$('.loading-img').hide();
+					current.parents('.forum-srch-list').find('.forumpostlist').append(data);
+				}else{
+					current.text('No more results');
+					current.removeClass('.load-more-forumpost');
+					//$('.load-btn').text('No more results')
+				}
+			}	
+		});
+	});
+
+		$(document).on('click','.load-more-forumreply',function(){
+		$('.loading-text').hide();
+		$('.loading-img').show();
+		var current = $(this);
+		var forumpostid = $(this).data('forumpostid');
+		$.ajax({
+			'url' : '/ajax/view-more-forum-reply',
+			'type' : 'post',
+			'data' : { 'pageid': pageid ,'forumpostid' : forumpostid },
+			'success' : function(data){
+				if(data != 'No More Results'){		
+					pageid = pageid + 1;
+					$('.loading-text').show();
+					$('.loading-img').hide();
+					current.parents('.forum-srch-list').find('.forumreplylist').append(data);
+				}else{
+					current.text('No more results');
+					current.removeClass('.load-more-forumreply');
+					//$('.load-btn').text('No more results')
+				}
+			}	
+		});
+	});
+
+		$(document).on('click','.load-more-search-forum',function(){
+		$('.loading-text').hide();
+		$('.loading-img').show();
+		var current = $(this);
+		var breadcrum = $(this).data('breadcrum');
+		var keyword = $(this).data('keyword');
+		$.ajax({
+			'url' : '/ajax/view-more-search-forum',
+			'type' : 'post',
+			'data' : { 'pageid': pageid,'breadcrum': breadcrum ,'keyword' : keyword },
+			'success' : function(data){
+				if(data != 'No More Results'){		
+					pageid = pageid + 1;
+					$('.loading-text').show();
+					$('.loading-img').hide();
+					current.parents('.forum-srch-list').find('.forumpostlist').append(data);
+				}else{
+					current.text('No more results');
+					current.removeClass('.load-more-forumreply');
+					//$('.load-btn').text('No more results')
+				}
+			}	
+		});
+	});
+		
 	$("#up_imgs").fileinput({
     uploadUrl: "/file-upload-batch/2",
     allowedFileExtensions: ["jpg", "png", "gif"],
@@ -1125,36 +1266,75 @@ $(document).on('click','.savegroupname',function()
 	/***** Forum Post Delete ****/
 
 	$(document).on('click','.forumpostdelete',function(){
+		showLoading();
 		var current = $(this);
 		var forumpostid = $(this).val();
+		var breadcrum = $(this).data('breadcrum');
+		var search = $(this).data('search');
+		if(search == 1)
+		{
+			var scount = parseInt($('.search-forum-count').find('.count').html());
+			var newcount = scount - 1;
+		}
 			$.ajax({
 			'url' : '/ajax/delforumpost',
 			'type' : 'post',
-			'data' : {'forumpostid' : forumpostid},
-			'success' : function(data){		 
+			'data' : {'forumpostid' : forumpostid , 'breadcrum' : breadcrum},
+			'success' : function(response){
+				$('.posts-count').find('.count').html(' '+response);		 
 				current.closest('.f-single-post').hide();
+				if(search == 1)
+					$('.search-forum-count').find('.count').html(newcount);
+				hideLoading();
 			}
 		});
 
 	});
+
+	/***** Forum Reply Delete ****/
+
+	$(document).on('click','.forumreplydelete',function(){
+		showLoading();
+		var current = $(this);
+		var forumreplyid = $(this).val();
+		var forumpostid = $(this).data('forumpostid');
+			$.ajax({
+			'url' : '/ajax/delforumreply',
+			'type' : 'post',
+			'data' : {'forumreplyid' : forumreplyid , 'forumpostid' : forumpostid},
+			'success' : function(response){
+				$('.posts-count').find('.forumreplycount').html(' '+response);		 
+				current.closest('.f-single-post').hide();
+				hideLoading();
+			}
+		});
+
+	});
+
 	/***** Add new Forum Post ****/
 		$(document).on('click','.addforumpost',function(){
+
 		var current = $(this);
-		var category_id = $(this).val();
+		var breadcrum = $(this).val();
 		var post = $('.forumpost').val();
+		var postcount = parseInt($('.posts-count').find('.count').html());
+		var newpostcount = postcount + 1;
 		  if($('.forumpost').val()!="")
 		  {
+		  	showLoading();
 			$.ajax({
 			'url' : '/ajax/addnewforumpost',
 			'type' : 'post',
-			'data' : {'category_id' : category_id,'topic' : post},
+			'data' : {'breadcrum' : breadcrum,'topic' : post},
 			'success' : function(response){	
-		  		$('.forumpost').val();
+				$('.posts-count').find('.count').html(' '+newpostcount);
+		  		$('.forumpost').val('');
 		  		$('.emoji-wysiwyg-editor').text('');
-				$('.forumpostlist').append(response);
-				var original =jQuery('.f-single-post').last().find('p').html();
+				$('.forumpostlist').prepend(response);
+				var original =jQuery('.f-single-post').first().find('p').html();
 			   	var converted = emojione.toImage(original);
-				jQuery('.f-single-post').last().find('p').html(converted);
+				jQuery('.f-single-post').first().find('p').html(converted);
+				hideLoading();
 			}
 		});
 		}
@@ -1182,6 +1362,120 @@ $(document).on('click','.savegroupname',function()
 
 	});
 
+		/***** Forum Post Edit ****/
+
+		$(document).on('click','.editforumreply',function(){
+		var forumreplyid = $(this).val(); 
+		showLoading();
+
+		$.ajax({
+			'url' : '/ajax/editforumreply',
+			'data' : {'forumreplyid':forumreplyid},
+			'type' : 'post',
+			'success' : function(response){
+				$.fancybox.close();
+				$('#forumreply-edit-modal').append(response);
+				$("#forumreply-edit-modal").modal();
+				hideLoading();
+			}
+		});
+		$('#forumreply-edit-modal').html('');
+
+	});
+
+		$(document).on('click', '.likeforumpost', function(){		
+		//var _token = $('#postform input[name=_token]').val();
+		var forumPostID = $(this).data('forumpostid');
+		// var user_id = $('#user_id').val();
+		var current = $(this);		
+		$.ajax({			
+			'url' : '/ajax/likeforumpost',
+			'data' : { 'forumpostid':forumPostID },
+			'type' : 'post',
+			'success' : function(response){
+					current.parents('.p-likes').find('.plike-count').html(response);
+					current.parents('.fp-likes').find('.plike-count').html(response);
+			}			
+		});	
+	});
+
+		$(document).on('click', '.likeforumreply', function(){		
+		//var _token = $('#postform input[name=_token]').val();
+		var forumreplyid = $(this).data('forumreplyid');
+		// var user_id = $('#user_id').val();
+		var current = $(this);		
+		$.ajax({			
+			'url' : '/ajax/likeforumreply',
+			'data' : { 'forumreplyid':forumreplyid },
+			'type' : 'post',
+			'success' : function(response){
+				var newresponse = jQuery.parseJSON(response);
+					$('#checkbox_forumreply_'+forumreplyid).parents('.p-likes').find('.forumreplylike').html(newresponse.likecount);
+					current.parents('.like-cont').find('.forumreplylike').html(newresponse.likecount);
+					if(newresponse.check == "unchecked")
+						$('#checkbox_forumreply_'+forumreplyid).prop('checked',false);
+					else
+						$('#checkbox_forumreply_'+forumreplyid).prop('checked',true);
+			}			
+		});	
+	});
+
+		$(document).on('click', '.forumpostreply', function(){	
+		var forumPostID = $(this).data('forumpostid');
+		var reply = $('.forumreply').val();
+		var current = $(this);	
+		var postcount = parseInt($('.posts-count').find('.forumreplycount').html());
+		var newpostcount = postcount + 1;
+		if($('.forumreply').val()!=""){	
+			showLoading();	
+			$.ajax({			
+				'url' : '/ajax/addnewforumreply',
+				'data' : { 'forumpostid':forumPostID ,'reply' : reply},
+				'type' : 'post',
+				'success' : function(response){
+					$('.posts-count').find('.forumreplycount').html(' '+newpostcount);
+			  		$('.forumreply').val('');
+			  		$('.emoji-wysiwyg-editor').text('');
+					$('.forumreplylist').prepend(response);
+					var original =jQuery('.f-single-post').first().find('p').html();
+				   	var converted = emojione.toImage(original);
+					jQuery('.f-single-post').first().find('p').html(converted);
+					hideLoading();
+				}			
+			});	
+		}
+	});
+
+
+	$(document).on('click', '.replycomment', function(){
+		var replyid = $(this).val();
+		var comment = $('.reply-comment-text').val();	
+		var commentcount = parseInt($('#forumreplycomment_'+replyid).html());
+		var newcount = commentcount + 1;
+
+		if(comment){
+			showLoading();
+			$.ajax({			
+				'url' : '/ajax/forumreplycomment',
+				'data' : { 'replyid':replyid, 'comment':comment },
+				'type' : 'post',
+				'success' : function(response){
+					// alert(response);
+					$('.reply-comment-text').val('');
+					$('.emoji-wysiwyg-editor').text('');				
+					$('.forumreplycommentlist').append(response);
+					$('#forumreplycomment_'+replyid).html(newcount);
+					$('#forumreplycomment_popup_'+replyid).html(newcount);
+					var original =jQuery('.forumreplycommentlist li:last-child').find('.replycomment').html();
+				   	var converted = emojione.toImage(original);
+					jQuery('.forumreplycommentlist li:last-child').find('.replycomment').html(converted);					
+					hideLoading();
+				}			
+			});
+		}	
+	});
+
+
 
 
 	$('.popup').fancybox();
@@ -1205,7 +1499,7 @@ $(document).on('click','.savegroupname',function()
 	function loadOrgionalImogi()
 	{
 
-		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p").each(function() {
+		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p").each(function() {
 		var original = $(this).html();
 		// use .shortnameToImage if only converting shortnames (for slightly better performance)
 		var converted = emojione.toImage(original);

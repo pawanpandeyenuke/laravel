@@ -96,7 +96,7 @@
                     <div class="slider-btns">
                         <ul class="list-inline">
                             <li><a href="#" title="" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Enter Chat Room</a></li>
-                            <li><a href="#" title="" class="btn btn-primary">Enter Forum</a></li>
+                            <li><a href="{{url('forums')}}" title="" class="btn btn-primary">Enter Forum</a></li>
                         </ul>
                     </div>
                     <div id="hSlider" class="carousel slide" data-ride="carousel">
@@ -187,7 +187,7 @@
                                 </div>
 
                             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                    <input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword">
+                                    <input type="password" name="password" class="form-control icon-field" placeholder="Password" id="showpassword1">
                                     
                                     @if ($errors->has('password'))
                                         <span class="help-block">
@@ -197,8 +197,8 @@
                                     
                                     <span class="field-icon flaticon-padlock50"></span>
                                     <div class="check-cont show-pw">
-                                        <input type="checkbox"  name="checkboxG2" id="checkboxG2" class="css-checkbox password-eye"/>
-                                        <label for="checkboxG2" class="css-label">show</label>
+                                        <input type="checkbox"  name="checkboxG2" id="checkboxG21" class="css-checkbox password-eye" onchange="document.getElementById('showpassword1').type = this.checked ? 'text' : 'password'"/>
+                                        <label for="checkboxG21" class="css-label">show</label>
                                     </div>
                                 </div>
 
@@ -388,6 +388,7 @@ $(document).ready(function () {
         }
     });
 
+<<<<<<< HEAD
 });
 
 $("#loginform").ajaxForm(function(response) { 
@@ -460,6 +461,96 @@ $("#loginform").ajaxForm(function(response) {
 	$('.numeric,input[type="number"]').bind('paste drop',function(e){
 		e.preventDefault();
 	});
+=======
+
+});
+
+$("#loginform").ajaxForm(function(response) { 
+
+         
+    if(response){
+            $('.password').next('.help-block').find('.verifymsg').hide();
+        
+        if(response === "These credentials do not match our records.")
+        {
+            var current = $('.password');
+            current.next('.help-block').find('.verifymsg').hide();
+            current.css('border-color','#a94442');
+            current.next('.help-block').find('.errormsg').text(response).css('color','#a94442');
+            $('.emailid').css('border-color','#a94442');
+            $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+
+
+        }
+
+        if(response === "verification")
+        {
+            window.location = 'send-verification-link';
+            // var current = $('.password');
+            // current.css('border-color','#a94442');
+            // current.next('.help-block').find('.errormsg').text("").css('color','#a94442');
+            // current.next('.help-block').find('.verifymsg').show();
+            // $('.emailid').css('border-color','#a94442');
+            // $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+
+
+        }
+
+        else if(response == "success"){
+            window.location = '/dashboard';
+        }else{
+            var obj = jQuery.parseJSON( response );
+            if( obj.email != null ){
+
+                var current = $('.emailid');
+                current.next('.help-block').find('.verifymsg').hide();
+                current.css('border-color','#a94442');
+                current.next('.help-block').find('.errormsg').text(obj.email).css('color','#a94442');
+
+                if( obj.password == null ){
+                    $('.password').next('.help-block').find('.errormsg').text("").css('color','#333333');
+                    current.next('.help-block').find('.verifymsg').hide();
+                    $('.password').css('border-color','#333333');
+                }
+            }
+            if( obj.password != null ){     
+                var current = $('.password');
+                current.next('.help-block').find('.verifymsg').hide();              
+                current.css('border-color','#a94442');
+                current.next('.help-block').find('.errormsg').text(obj.password).css('color','#a94442');
+
+                if( obj.email == null ){
+                    $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+                    current.next('.help-block').find('.verifymsg').hide();
+                    $('.emailid').css('border-color','#333333');
+                }
+            }
+        }
+    
+    }
+
+});
+
+    //disabling texts for mobile fields
+    $(document).on('keypress','.numeric,input[type="number"]', function(evt){
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode == 46) {
+            return true;
+        }
+        
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    });
+    
+    $('.numeric,input[type="number"]').bind('paste drop',function(e){
+        e.preventDefault();
+    });
+
+ 
+>>>>>>> 6db5e1085a46f94a1a54503b37168de374cee5cd
 
 </script>
 
