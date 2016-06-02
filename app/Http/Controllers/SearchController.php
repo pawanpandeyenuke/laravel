@@ -6,12 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Request, Session, Validator, Input, Cookie;
-<<<<<<< HEAD
-use App\User, Auth, Mail, App\Forums, DB, App\ForumPost, App\Friend;
-=======
 use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend,App\ForumLikes,App\ForumReply,App\ForumsDoctor;
->>>>>>> 6db5e1085a46f94a1a54503b37168de374cee5cd
-
 class SearchController extends Controller
 {
     

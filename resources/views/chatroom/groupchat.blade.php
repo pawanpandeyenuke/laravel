@@ -584,7 +584,7 @@ function openChatbox( xmpusername,username ){
        }
 	function openChatRoom( room, roomname ){
 		hideOpendBox();
-		converse.rooms.open( room+'@<?= Config::get('constants.xmpp_host_Url') ?>', roomname );	
+		converse.rooms.open( room+'@conference.<?= Config::get('constants.xmpp_host_Url') ?>', roomname );	
 	}
 
     $('.status-r-btn').on('click',function(){
