@@ -204,7 +204,7 @@ class AjaxController extends Controller
 		echo $commentdata;
 
 		exit;
-	}
+		}
 	}
 
 

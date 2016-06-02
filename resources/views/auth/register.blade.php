@@ -280,77 +280,76 @@
 
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
-
 <script type="text/javascript" >
 
 function getValidationArray(mobCode){
 
-	// console.log(mobCode);
-	// alert(mobCode);
-	var countryMobValidLengthArray = <?php print_r(json_encode(countryMobileLength(),1));?>;
+    // console.log(mobCode);
+    // alert(mobCode);
+    var countryMobValidLengthArray = <?php print_r(json_encode(countryMobileLength(),1));?>;
 
-	var countryMobValidLength = countryMobValidLengthArray[mobCode];
-	
-	if(countryMobValidLength == undefined){
-		return {min: 0, max: 15};
-	}
+    var countryMobValidLength = countryMobValidLengthArray[mobCode];
+    
+    if(countryMobValidLength == undefined){
+        return {min: 0, max: 15};
+    }
 
-	console.log(countryMobValidLength);
-	return {min: countryMobValidLength.min, max: countryMobValidLength.max};
-	
+    console.log(countryMobValidLength);
+    return {min: countryMobValidLength.min, max: countryMobValidLength.max};
+    
 }
 
 $(document).ready(function () {
 
-		// $('.country-code-field').val('+000');
+        // $('.country-code-field').val('+000');
 
-		$(document).on('change', '#mob-country', function(){
-				$('#mobileContact').val('');
-				var countryId = $(this).val();
-				$.ajax({
-					'url': 'ajax/mob-country-code',
-					'data': { 'countryId': countryId },
-					'type': 'post',
-					'success': function(response){
+        $(document).on('change', '#mob-country', function(){
+                $('#mobileContact').val('');
+                var countryId = $(this).val();
+                $.ajax({
+                    'url': 'ajax/mob-country-code',
+                    'data': { 'countryId': countryId },
+                    'type': 'post',
+                    'success': function(response){
 
-						var mobCode = response[0].phonecode;
+                        var mobCode = response[0].phonecode;
 
-						$('.country-code-field').val(mobCode);
-						$('.country-code-field').attr('data-value', mobCode);
-						var validArray = getValidationArray(mobCode);
-					}
-				})
+                        $('.country-code-field').val(mobCode);
+                        $('.country-code-field').attr('data-value', mobCode);
+                        var validArray = getValidationArray(mobCode);
+                    }
+                })
 
-		});
-
-
-		$(document).on('focus', '#mobileContact', function(){
-
-			var array = $('.country-code-field').data('value');
-
-			var validArray = getValidationArray(array);
-
-			$('#mobileContact').prop('minlength', validArray.min);
-			$('#mobileContact').prop('maxlength', validArray.max);
-
-		});
+        });
 
 
-		$(document).on('blur', '#mobileContact', function(){
+        $(document).on('focus', '#mobileContact', function(){
 
-			$('#mobileContact').parent().find('#groupname-error').remove();
+            var array = $('.country-code-field').data('value');
 
-			var array = $('.country-code-field').data('value');
+            var validArray = getValidationArray(array);
 
-			var validArray = getValidationArray(array);
+            $('#mobileContact').prop('minlength', validArray.min);
+            $('#mobileContact').prop('maxlength', validArray.max);
 
-			var mobileContact = $('#mobileContact').val();
-			if(mobileContact.length < validArray.min){
-				// alert('invalid value');
-				$('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
-			}
+        });
 
-		});
+
+        $(document).on('blur', '#mobileContact', function(){
+
+            $('#mobileContact').parent().find('#groupname-error').remove();
+
+            var array = $('.country-code-field').data('value');
+
+            var validArray = getValidationArray(array);
+
+            var mobileContact = $('#mobileContact').val();
+            if(mobileContact.length < validArray.min){
+                // alert('invalid value');
+                $('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
+            }
+
+        });
 
  
     $("#registerForm").validate({ 
@@ -383,85 +382,11 @@ $(document).ready(function () {
                 required: "Please agree to the terms.",
             },
             phone_no:{
-            	maxlength: "Contact number cannot have more than 15 digits."
+                maxlength: "Contact number cannot have more than 15 digits."
             }
         }
     });
 
-<<<<<<< HEAD
-});
-
-$("#loginform").ajaxForm(function(response) { 
-		 
-	if(response){
-			$('.password').next('.help-block').find('.verifymsg').hide();
-		
-		if(response === "These credentials do not match our records."){
-			var current = $('.password');
-		    current.next('.help-block').find('.verifymsg').hide();
-			current.css('border-color','#a94442');
-			current.next('.help-block').find('.errormsg').text(response).css('color','#a94442');
-			$('.emailid').css('border-color','#a94442');
-			$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
-
-		}
-
-		if(response === "verification")
-			window.location = 'send-verification-link';
-
-		else if(response == "success"){
-			window.location = '/dashboard';
-		}else{
-			var obj = jQuery.parseJSON( response );
-			if( obj.email != null ){
-
-				var current = $('.emailid');
-				current.next('.help-block').find('.verifymsg').hide();
-				current.css('border-color','#a94442');
-				current.next('.help-block').find('.errormsg').text(obj.email).css('color','#a94442');
-
-				if( obj.password == null ){
-					$('.password').next('.help-block').find('.errormsg').text("").css('color','#333333');
-					current.next('.help-block').find('.verifymsg').hide();
-					$('.password').css('border-color','#333333');
-				}
-			}
-			if( obj.password != null ){		
-				var current = $('.password');
-				current.next('.help-block').find('.verifymsg').hide();				
-				current.css('border-color','#a94442');
-				current.next('.help-block').find('.errormsg').text(obj.password).css('color','#a94442');
-
-				if( obj.email == null ){
-					$('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
-					current.next('.help-block').find('.verifymsg').hide();
-					$('.emailid').css('border-color','#333333');
-				}
-			}
-		}
-	
-	}
-
-});
-
-	//disabling texts for mobile fields
-	$(document).on('keypress','.numeric,input[type="number"]', function(evt){
-		evt = (evt) ? evt : window.event;
-		var charCode = (evt.which) ? evt.which : evt.keyCode;
-		if (charCode == 46) {
-			return true;
-		}
-		
-		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-			return false;
-		}
-		return true;
-	});
-	
-	$('.numeric,input[type="number"]').bind('paste drop',function(e){
-		e.preventDefault();
-	});
-=======
 
 });
 
@@ -550,8 +475,6 @@ $("#loginform").ajaxForm(function(response) {
     });
 
  
->>>>>>> 6db5e1085a46f94a1a54503b37168de374cee5cd
 
 </script>
-
 @endsection
