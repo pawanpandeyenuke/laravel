@@ -1938,6 +1938,8 @@ class ApiController extends Controller
 		try{
 
 			$breadcrumb = Request::get('breadcrumb');
+			$user_id = Request::get('user_id');
+
 		        $breadcrumb = urldecode($breadcrumb);
 
 		        $posts = ForumPost::with('user')
@@ -1955,6 +1957,7 @@ class ApiController extends Controller
 
 			return view('forums-api.forum-posts')
 					->with('posts', $posts->take(5))
+					->with('user_id', $user_id)
 					->render();
 
 		}catch(Exception $e){

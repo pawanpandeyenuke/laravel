@@ -1034,7 +1034,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		$.ajax({
 			'url' : '/ajax/view-more-forum-post',
 			'type' : 'post',
-			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, call_type: 'web' },
+			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, 'call_type': 'web' },
 			'success' : function(data){
 				alert(data);
 				if(data != 'No More Results'){		

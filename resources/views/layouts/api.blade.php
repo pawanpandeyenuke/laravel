@@ -30,11 +30,12 @@
 			$('.loading-img').show();
 			var current = $(this);
 			var breadcrum = $(this).data('breadcrum');
+			var user_id = $('.userid').data('id');
 			var abc = current.closest('.friends-list').find('ul.counting').children('li').length;
 			$.ajax({
 				'url' : '/ajax/view-more-forum-post',
 				'type' : 'post',
-				'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, call_type: 'api' },
+				'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, 'call_type': 'api', 'user_id': user_id },
 				'success' : function(data){
 					if(data != 'No More Results'){
 						pageid = pageid + 1;
@@ -59,7 +60,7 @@
 			$.ajax({
 				'url' : '/ajax/view-more-forum-reply',
 				'type' : 'post',
-				'data' : { 'pageid': pageid , 'forumpostid' : forumpostid, call_type: 'api', 'user_id': user_id },
+				'data' : { 'pageid': pageid , 'forumpostid' : forumpostid, 'call_type': 'api', 'user_id': user_id },
 				'success' : function(data){
 					if(data != 'No More Results'){		
 						pageid = pageid + 1;
@@ -86,7 +87,7 @@
 			$.ajax({
 				'url' : '/ajax/view-more-forum-comment',
 				'type' : 'post',
-				'data' : { 'pageid': pageid , 'forumreplyid' : forumReplyId, call_type: 'api', 'user_id': user_id },
+				'data' : { 'pageid': pageid , 'forumreplyid' : forumReplyId, 'call_type': 'api', 'user_id': user_id },
 				'success' : function(data){
 					if(data != 'No More Results'){		
 						pageid = pageid + 1;
