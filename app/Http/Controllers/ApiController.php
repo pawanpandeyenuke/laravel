@@ -1938,9 +1938,9 @@ class ApiController extends Controller
 		try{
 
 			$breadcrumb = Request::get('breadcrumb');
-            $breadcrumb = urldecode($breadcrumb);
+		        $breadcrumb = urldecode($breadcrumb);
 
-	        $posts = ForumPost::with('user')
+		        $posts = ForumPost::with('user')
 	                        ->with('forumPostLikesCount')
 	                        ->with('replyCount')
 	                        ->where('forum_category_breadcrum',$breadcrumb)
@@ -1975,12 +1975,12 @@ class ApiController extends Controller
 			$post_id = Request::get('post_id');
 			$user_id = Request::get('user_id');
 
-	        $checkpost = ForumPost::with('user')
+		        $checkpost = ForumPost::with('user')
 	                        ->with('forumPostLikesCount')
 	                        ->where('id',$post_id)
 	                        ->first();
 
-	    	
+//print_r($checkpost);die;
 			if(empty($checkpost)){
 				return view('forums-api.forum-not-found')->with('message', 'Reply does not exist.')->render();
 			}

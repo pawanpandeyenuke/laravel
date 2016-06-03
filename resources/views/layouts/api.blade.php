@@ -42,8 +42,9 @@
 						$('.loading-img').hide();
 						$('.forum-post-list').append(data);
 					}else{
-						current.text('No more results');
-						current.removeClass('.load-more-forumpost');
+						current.hide();
+//						current.text('No more results');
+//						current.removeClass('.load-more-forumpost');
 					}
 				}	
 			});
@@ -67,8 +68,9 @@
 						$('.reply-post-cont').append(data);
 						// current.parents('.forum-srch-list').find('.forumreplylist').append(data);
 					}else{
-						current.text('No more results');
-						current.removeClass('.load-more-forumreply');
+						current.hide();
+						//current.text('No more results');
+						//current.removeClass('.load-more-forumreply');
 						//$('.load-btn').text('No more results')
 					}
 				}	
@@ -92,8 +94,9 @@
 						$('.loading-img').hide();
 						$('.reply-post-cont').append(data);
 					}else{
-						current.text('No more results');
-						current.removeClass('.load-more-forumcommets');
+						current.hide();
+//						current.text('No more results');
+//						current.removeClass('.load-more-forumcommets');
 					}
 				}	
 			});

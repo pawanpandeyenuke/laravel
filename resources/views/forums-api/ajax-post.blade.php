@@ -21,19 +21,19 @@
 		$postTitle = !empty($posts->title) ? $posts->title : '';
 
 		$breadcrumb = !empty($posts->forum_category_breadcrum) ? $posts->forum_category_breadcrum : '';
-
+		$pic = !empty($user->picture) ? $user->picture : url('images/user-thumb.jpg');
 	?>
 
 	<div class="single-post">
 		<div class="post-header">
-			<span class="u-img" style="background: url('<?= url($user->picture) ?>');"></span>
+			<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
 			<span class="title">{{ $user->first_name }}</span>
 			<div class="post-time">
 				<span class="date"><img src="{{url('/forums-data/images/date-icon.png')}}" alt="">{{ $posts->updated_at->format('D jS') }}</span>
 				<span class="time"><img src="{{url('/forums-data/images/time-icon.png')}}" alt="">{{ $posts->updated_at->format('h:i A') }}</span>
 			</div>
 			<span class="loc">
-				<img src="{{url('/forums-data/images/location.png')}}" alt="">{{ $location }}
+				<img src="{{url('/forums-data/images/location.png')}}" alt="">{{ !empty($location)?$location:'N/A' }}
 			</span>
 			<div class="breadcrumb-cont">
 				<?= $breadcrumb ?>

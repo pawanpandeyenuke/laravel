@@ -21,19 +21,19 @@
 		$breadcrumb = !empty($rawBreadcrumbData) ? $rawBreadcrumbData : '';
 
 		$replyLikesCount = isset($reply->replyLikesCount[0]) ? $reply->replyLikesCount[0]['replyLikesCount'] : 0;
-
+		$pic = !empty($replyUser->picture) ? $replyUser->picture : url('images/user-thumb.jpg');
 	?>
 	<div class="forum-post-list">
 		<div class="single-post">
 			<div class="post-header">
-				<span class="u-img" style="background: url('<?= url($replyUser->picture) ?>');"></span>
+				<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
 				<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name }}</span>
 				<div class="post-time">
 					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">28-03-2016</span>
 					<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="">09:45 AM</span>
 				</div>
 				<span class="loc">
-					<img src="{{url('forums-data/images/location.png')}}" alt="">{{ $replyLocation }}
+					<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($replyLocati)?$replyLocation:'N/A' }}
 				</span>
 				<div class="breadcrumb-cont">
 					{{ $breadcrumb }}
@@ -68,14 +68,15 @@
 					$commentLocation = implode(', ', $rawCommentCountry);
 
 					$replyComment = !empty($comment->reply_comment) ? $comment->reply_comment : '';
+					$commentUserPic = !empty($commentUser->picture) ? $commentUser->picture : url('images/user-thumb.jpg');
 				?>
 				<div class="single-post">
 					<div class="post-header">
 
-						<span class="u-img" style="background: url('<?= url($commentUser->picture)?>');"></span>
+						<span class="u-img" style="background: url('<?= url($commentUserPic)?>');"></span>
 						<span class="title">{{ $commentUser->first_name.' '.$commentUser->last_name }}</span>
 						<span class="loc">
-							<img src="{{url('forums-data/images/location.png')}}" alt="">{{ $commentLocation }}
+							<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($commentLocation)?$commentLocation:'N/A' }}
 						</span>
 					</div>
 
