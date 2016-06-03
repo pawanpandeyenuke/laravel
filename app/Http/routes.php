@@ -218,9 +218,16 @@ Route::post('api/get-job-category','ApiController@getJobCategories');
 
 Route::post('api/get-userby-jid','ApiController@getUserByJID');
 
+Route::post('api/get-forum-categories','ApiController@getForumCategories');
+Route::post('api/get-doctor-categories','ApiController@getDoctorCategories');
 
-Route::post('api/post-forum','ApiController@postForum');
-Route::post('api/post-forum-reply','ApiController@postForumReply');
+Route::post('api/forum-post','ApiController@postForum');
+Route::post('api/like-forum-post','ApiController@likeForumPost');
+Route::post('api/delete-forum','ApiController@deleteForumPost');
+Route::post('api/edit-forum-post','ApiController@editForumPost');
+
+
+Route::post('api/forum-post-reply','ApiController@postForumReply');
 
 Route::match(['get', 'post'], 'api/get-forum-post','ApiController@getForumPosts');
 Route::match(['get', 'post'], 'api/get-forum-post-reply','ApiController@getForumPostsReply');
