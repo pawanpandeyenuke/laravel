@@ -5,7 +5,7 @@ use Mail;
 use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
 use App\Http\Controllers\Controller;
-use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory;
+use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments;
 use Validator, Input, Redirect, Request, Session, Hash, DB;
 use \Exception;
 
@@ -2067,5 +2067,68 @@ class ApiController extends Controller
 	        }
 	    }
 
+	public function postForum()
+	{
+		try{
+			$args = Request::all();
+			$user = User::where('id',$args['user_id'])->get();
+			if($user->isEmpty())
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				$breadcrumb = explode(" > ", $args['breadcrumb']);
+				
+				foreach ($breadcrumb as $key => $value) {
+					$breadcrumb[$key] = Forums::where('title',$value)->value('id');
+				}
+				//print_r($breadcrumb);die;
+				if(in_array("", $breadcrumb)){
+					throw new Exception("Wrong breadcrumb", 1);
+				}
+				else{
+				
+				}
+			}
+				
+		}
+		catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
 
+		return $this->output();		
+	}
+
+	public function postForumReply()
+	{
+		try{
+			$args = Request::all();
+			$user = User::where('id',$args['user_id'])->get();
+			if($user->isEmpty())
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				$post_check = ForumPost::where('id',$args['post_id'])->value('id');
+				if($post_check == null)
+					throw new Exception("No such forum post exist.", 1);
+				else{
+					$data = ['reply'=>$args['reply'],
+                        'owner_id'=>$args['user_id'],
+                        'post_id'=>$args['post_id'],
+                        'created_at'=>date('Y-m-d H:i:s',time()),
+                        'updated_at'=>date('Y-m-d H:i:s',time())];
+		               
+        		$forumreply = new ForumReply;
+        		$this->message = 'Your reply has been saved successfully.';
+        		$this->status = 'success';
+        		$this->data = $forumreply->create($data);
+
+				}
+					  
+			}
+				
+		}
+		catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();		
+	}
 }

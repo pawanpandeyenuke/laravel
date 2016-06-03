@@ -29,7 +29,7 @@
 					<div class="padding-data-inner">
 						@include('forums.searchforum')
 
-						<div class="forum-srch-list">
+						<div class="forum-srch-list" id="forum-post-reply_{{$post->id}}">
 							<div class="fs-breadcrumb">{{$post->forum_category_breadcrum}}</div>
 
 							<div class="forum-master-post">
@@ -48,8 +48,10 @@
 										$likedata = \App\ForumLikes::where(['owner_id' => Auth::User()->id, 'post_id' => $post->id])->get(); 
 									?>
 											<div class="ut-name">
+												<a href = "{{url("profile/$user->id")}}" title = "User Profile">
 												<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 												{{$user->first_name." ".$user->last_name}}
+												</a>
 											</div>
 										</div>
 										<div class="col-md-6">
@@ -58,14 +60,14 @@
 											<div class="fp-likes pull-left">
 											  <div class="like-cont">
 											  @if(Auth::check())
-												<input type="checkbox" name="" id="checkbox{{$post->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$post->id}}" {{ isset($likedata[0])?'checked':'' }}/>	
-												<label for="checkbox{{$post->id}}" class="css-label"></label>
+												<input type="checkbox" name="" id="checkbox_forumpost_replypage_{{$post->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$post->id}}" {{ isset($likedata[0])?'checked':'' }}/>	
+												<label for="checkbox_forumpost_replypage_{{$post->id}}" title="Like Post" class="css-label"></label>
 											  @else
 											  <input type="checkbox" name="" id="guest-reply" class="css-checkbox"/>
 											  <label for="guest-reply" class="css-label"></label>
 											  @endif
 											  </div>
-											  <span class="plike-count">{{$likeCount}}</span>
+											  <span class="plike-count" title="Likes">{{$likeCount}}</span>
 											</div>
 												<span class="p-date pull-left"><i class="flaticon-days"></i> {{$post->updated_at->format('d M Y')}}</span>
 												<span class="p-time pull-left"><i class="flaticon-time"></i>  {{$post->updated_at->format('h:i A')}}</span>
@@ -76,7 +78,7 @@
 								<p> {{$post->title}} </p>
 								<div class="text-right">
 								@if(Auth::check())
-								  <button type="button" class="btn btn-primary mpost-rply-btn">Reply</button>
+								  <button type="button" class="btn btn-primary mpost-rply-btn" title="Write a reply">Reply</button>
 								@endif
 								</div>
 							</div>
@@ -89,7 +91,7 @@
 
 								<div class="f-post-form f-post-reply-form">
 									<textarea name="" class="form-control forumreply" data-emojiable="true"></textarea>
-									<button type="button" class="btn btn-primary forumpostreply" data-forumpostid = "{{$post->id}}">Submit</button>
+									<button type="button" class="btn btn-primary forumpostreply" data-forumpostid = "{{$post->id}}" title="Click to post a Reply">Submit</button>
 								</div>
 
 								<div class="modal fade edit-forumpost-popup" id="forumreply-edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost"></div>
@@ -113,23 +115,24 @@
 											$name = $user->first_name." ".$user->last_name;
 											if(Auth::check())
 											$likedata = \App\ForumReplyLikes::where(['owner_id' => Auth::User()->id, 'reply_id' => $forumreply->id])->get();
+
 										?>
 											<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 											<div class="p-likes ml">
 											<div class="like-cont">
 											@if(Auth::check())
 												<input type="checkbox" name="" id="checkbox_forumreply_{{$forumreply->id}}" class="css-checkbox likeforumreply" data-forumreplyid="{{$forumreply->id}}" {{ isset($likedata[0])?'checked':'' }}/>
-												<label for="checkbox_forumreply_{{$forumreply->id}}" class="css-label"></label>
+												<label for="checkbox_forumreply_{{$forumreply->id}}" title="Like Reply" class="css-label"></label>
 											@else
 											<input type="checkbox" id="guest-reply2" class="css-checkbox"/>
 												<label for="guest-reply2" class="css-label"></label>
 											@endif
 											</div>
-											<span class="plike-count forumreplylike">{{$likeCount}}</span>
+											<span class="plike-count forumreplylike"  title="Likes">{{$likeCount}}</span>
 											<div class="p-likes ml">
 												<a href="#" class="popupforumreply" data-replyid = "{{$forumreply->id}}">
-													<i class="fa fa-comment" aria-hidden="true"></i> 
-													<span class="plike-count" id="forumreplycomment_{{$forumreply->id}}">{{$commentCount}}</span>
+													<i class="fa fa-comment" title="Open Comments" aria-hidden="true"></i> 
+													<span class="plike-count" id="forumreplycomment_{{$forumreply->id}}" title="Commments">{{$commentCount}}</span>
 												</a>
 											</div>
 										</div>
@@ -144,19 +147,19 @@
 											@if(Auth::check())
 											@if($userid == Auth::User()->id)
 											<div class="fp-action">
-											<button class='editforumreply' value='{{$forumreply->id}}'data-forumpostid = "{{$post->id}}"><i class='flaticon-pencil'></i></button>
-											<button class='forumreplydelete' value='{{$forumreply->id}}' data-forumpostid = "{{$post->id}}"><i class='flaticon-garbage'></i></button>
+											<button class='editforumreply' value='{{$forumreply->id}}'data-forumpostid = "{{$post->id}}" title="Edit Reply"><i class='flaticon-pencil'></i></button>
+											<button class='forumreplydelete' title="Delete Reply" value='{{$forumreply->id}}' data-forumpostid = "{{$post->id}}"><i class='flaticon-garbage'></i></button>
 											</div>
 											@endif
 											@endif
 										</div>
-										<p class="more">{{ $forumreply->reply }} </p>
+										<p class="more"><?php echo nl2br($forumreply->reply); ?></p>
 									</div><!--/single post-->								
 								@endforeach
 							</div>
 							 @if($replycount > 10)
 							<div class="load-more-btn-cont text-center">
-								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumreply" data-forumpostid = "{{$post->id}}">View More</button>
+								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumreply" data-forumpostid = "{{$post->id}}" title="View More Replies">View More</button>
 							</div>
 							@endif
  						 </div>
@@ -211,9 +214,8 @@ $(".multiple-slt").select2();
 
 
 	// More Less Text
-/*
+
 	$(document).ready(function() {
-		alert('morelink');
 	  var showChar = 300;
 	  var ellipsestext = "...";
 	  var moretext = "more";
@@ -232,20 +234,21 @@ $(".multiple-slt").select2();
 	      }
 
 	  });
-
-	  $(".morelink").click(function(){
+		$(document).on('click','.morelink',function(){
 	      if($(this).hasClass("less")) {
 	          $(this).removeClass("less");
 	          $(this).html(moretext);
 	      } else {
 	          $(this).addClass("less");
 	          $(this).html(lesstext);
-	      }
+	      } 
 	      $(this).parent().prev().toggle();
 	      $(this).prev().toggle();
 	      return false;
 	  });
-	});*/
+
+	});
+
 
 </script>
 </body>

@@ -36,7 +36,9 @@
 									</a>
 									@if($data->user->id == Auth::user()->id)
 										<div class="fp-action">
+										@if($replyCount == 0)
 											<button class="editforumpost" value="{{$data->id}}" title="Edit" ><i class="flaticon-pencil" ></i></button>
+										@endif
 											<button class="forumpostdelete" value="{{$data->id}}" data-breadcrum = "{{$breadcrum}}"><i class="flaticon-garbage" ></i></button>
 										</div>
 									@endif
@@ -51,3 +53,9 @@
 
 								</div><!--/single post-->
 							@endforeach
+<script type="text/javascript">
+	$(document).ready(function() {
+		 loadOrgionalImogi();
+	});
+
+</script>

@@ -216,6 +216,10 @@ Route::post('api/get-job-category','ApiController@getJobCategories');
 
 Route::post('api/get-userby-jid','ApiController@getUserByJID');
 
+Route::post('api/post-forum','ApiController@postForum');
+
+Route::post('api/post-forum-reply','ApiController@postForumReply');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes

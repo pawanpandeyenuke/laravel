@@ -38,7 +38,7 @@
 					</div>
 				</div><!--/post header-->
 				<div class="pop-post-text clearfix">
-					<p>{{$reply->reply}}</p>
+					<p><?php echo nl2br($reply->reply); ?></p>
 				</div>
 			</div>
 			<div class="post-footer pop-post-footer">
@@ -94,7 +94,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="comment-text">{{$data->reply_comment}}</div>
+							<div class="comment-text"><?php echo nl2br($data->reply_comment); ?></div>
 						</li>
 					@endforeach
 					@endif

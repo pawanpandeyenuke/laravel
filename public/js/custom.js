@@ -1393,8 +1393,23 @@ $(document).on('click','.savegroupname',function()
 			'data' : { 'forumpostid':forumPostID },
 			'type' : 'post',
 			'success' : function(response){
+				if(response == "no"){
+				$('#forumpost_'+forumPostID).html("<div class ='alert alert-danger'>You can't like the post as it doesn't exist anymore.</div>");
+				setInterval(function(){ $('#forumpost_'+forumPostID).fadeOut(200);}, 5000);
+				$('#forum-post-reply_'+forumPostID).html("<div class ='alert alert-danger'>You can't like the post as it doesn't exist anymore.</div>");
+				}
+				else{
+					if(current.is(':checked')){
+						$('#checkbox_forumpost_'+forumPostID).prop('checked',true);
+						$('#checkbox_forumpost_replypage_'+forumPostID).prop('checked',true);
+					}
+					else{
+						$('#checkbox_forumpost_'+forumPostID).prop('checked',false);
+						$('#checkbox_forumpost_replypage_'+forumPostID).prop('checked',false);
+					}
 					current.parents('.p-likes').find('.plike-count').html(response);
 					current.parents('.fp-likes').find('.plike-count').html(response);
+			}
 			}			
 		});	
 	});
@@ -1433,13 +1448,17 @@ $(document).on('click','.savegroupname',function()
 				'data' : { 'forumpostid':forumPostID ,'reply' : reply},
 				'type' : 'post',
 				'success' : function(response){
+					if(response == "no"){
+					$('#forum-post-reply_'+forumPostID).html("<div class ='alert alert-danger'>You can't reply to the post as it doesn't exist anymore.</div>");	
+					}else{
 					$('.posts-count').find('.forumreplycount').html(' '+newpostcount);
-			  		$('.forumreply').val('');
-			  		$('.emoji-wysiwyg-editor').text('');
 					$('.forumreplylist').prepend(response);
+					$('.forumreply').val('');
+				    $('.emoji-wysiwyg-editor').text('');
 					var original =jQuery('.f-single-post').first().find('p').html();
 				   	var converted = emojione.toImage(original);
 					jQuery('.f-single-post').first().find('p').html(converted);
+				}
 					hideLoading();
 				}			
 			});	
@@ -1499,7 +1518,7 @@ $(document).on('click','.savegroupname',function()
 	function loadOrgionalImogi()
 	{
 
-		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p").each(function() {
+		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p, .f-single-post .more .morecontent span").each(function() {
 		var original = $(this).html();
 		// use .shortnameToImage if only converting shortnames (for slightly better performance)
 		var converted = emojione.toImage(original);

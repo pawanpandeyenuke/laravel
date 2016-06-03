@@ -1259,7 +1259,10 @@ comments;
 		$args = Input::all();
 		ForumPost::where('id',$args['forumpostid'])->delete();
 		ForumLikes::where('post_id',$args['forumpostid'])->delete();
+		$reply_id_arr = ForumReply::where('post_id',$args['forumpostid'])->pluck('id')->toArray();
 		ForumReply::where('post_id',$args['forumpostid'])->delete();
+		ForumReplyComments::whereIn('reply_id',$reply_id_arr)->delete();
+		ForumReplyLikes::whereIn('reply_id',$reply_id_arr)->delete();
 		$count = ForumPost::where('forum_category_breadcrum',$args['breadcrum'])->get()->count();
 		echo $count;
 	}
@@ -1276,15 +1279,20 @@ comments;
 	{
 		$arguments = Input::all();
 		//print_r($arguments);die;
-		if($arguments['forumtitle'] != "")
-		{
+		if($arguments['forumtitle'] != ""){
+			$check = ForumReply::where('post_id',$arguments['id'])->get()->count();
+			if($check == 0){
+			
 			ForumPost::where('id',$arguments['id'])->update(['title'=>$arguments['forumtitle']]);
 			$data = ['id'=>$arguments['id'],
 					 'title'=>$arguments['forumtitle']];
 
 			echo json_encode($data);
-		}
-		else
+		   }
+		   else
+		   	echo "rep";
+
+	   }else
 			echo "Post something to update.";
 
 	}
@@ -1356,7 +1364,10 @@ comments;
 	{
 		$forumpost = Input::get('forumpostid');
 		$userid = Auth::User()->id;
-
+		$check = ForumPost::where('id',$forumpost)->get();
+		if($check->isEmpty()){
+			echo "no";
+		}else{
 		$likecheck = ForumLikes::where('owner_id',$userid)->where('post_id',$forumpost)->value('id');
 		if($likecheck == null)
 		{
@@ -1376,6 +1387,7 @@ comments;
 
 		   	echo $likecount; 
 		}
+	 }
 
 	}
 
@@ -1410,7 +1422,10 @@ comments;
 	{
 	    $user = Auth::User();
         $input = Input::all();
-       
+       	$check = ForumPost::where('id',$input['forumpostid'])->get();
+       	if($check->isEmpty())
+       		echo "no";
+       	else{
                 $data = ['reply'=>$input['reply'],
                         'owner_id'=>$user->id,
                         'post_id'=>$input['forumpostid'],
@@ -1430,13 +1445,15 @@ comments;
         		->with('forumpostid',$input['forumpostid'])
         		->with('user',$user)
         		->with('name',$name);
-
+        }
 	}
 
 	public function delForumReply()
 	{
 		$args = Input::all();
 		ForumReply::where('id',$args['forumreplyid'])->delete();
+		ForumReplyComments::where('reply_id',$args['forumreplyid'])->delete();
+		ForumReplyLikes::where('reply_id',$args['forumreplyid'])->delete();
 		$count = ForumReply::where('post_id',$args['forumpostid'])->get()->count();
 		echo $count;
 	}
@@ -1578,7 +1595,10 @@ comments;
 	public function getSubForums()
 	{
 		$input = Input::all();
+		 if($input['forumid'] == "Forum")
+		  	{ echo"No"; exit; }
 		$subforums = Forums::where('parent_id',$input['forumid'])->get();	
+
 		$forums = array('<option value=""></option>');
 		if($subforums->isEmpty())
 			echo 'No';
@@ -1598,11 +1618,11 @@ comments;
 		$input = Input::all();
 		$title = Forums::where('id',$input['forumid'])->value('title');
 		$countries = Country::get();
-		foreach($countries as $data){
-			$country[] = '<option value="'.$data->country_name.'">'.$data->country_name.'</option>';
-		}
-		if($title == "Country"){
 
+		if($title == "Country"){
+			foreach($countries as $data){
+			$country[] = '<option value="'.$data->country_name.'">'.$data->country_name.'</option>';
+			}
 			$country1 = implode('',$country);
 			$arr = ['msg' => 'c',
 					'data'=>$country1];
@@ -1610,8 +1630,9 @@ comments;
 		}
 
 		else if($title == "Country,State,City"){
+			$country[] = "<option>Country</option>";
 			foreach($countries as $data){
-				$country[] = '<option value="'.$data->id.'">'.$data->country_name.'</option>';
+				$country[] = '<option value="'.$data->country_name.'">'.$data->country_name.'</option>';
 			}
 			$country1 = implode('',$country);
 			$arr = ['msg' => 'csc',

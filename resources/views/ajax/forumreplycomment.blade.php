@@ -30,5 +30,5 @@
 								</div>
 							</div>
 						</div>
-						<div class="comment-text replycomment">{{$comment->reply_comment}}</div>
+						<div class="comment-text replycomment"><?php echo nl2br($comment->reply_comment); ?></div>
 					</li>

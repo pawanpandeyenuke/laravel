@@ -22,22 +22,24 @@
 
 										<div class="p-likes">
 											<div class="like-cont">
-												<input type="checkbox" name="" id="checkbox{{$data->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$data->id}}" {{ isset($likedata[0])?'checked':'' }}/>	
-												<label for="checkbox{{$data->id}}" class="css-label"></label>
+												<input type="checkbox" name="" id="checkbox_forumpost_{{$data->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$data->id}}" {{ isset($likedata[0])?'checked':'' }}  title="Like Reply"/>	
+												<label for="checkbox_forumpost_{{$data->id}}" title="Like Post" class="css-label"></label>
 											</div>
-											<span class="plike-count">{{$likeCount}}</span>
+											<span class="plike-count" title="Likes">{{$likeCount}}</span>
 										</div>
 
 									</div>
 
 									<div class="f-post-title">
-									<a href="{{url("profile/$userid")}}" title="">
+									<a href="{{url("profile/$userid")}}" title="User Profile">
 										{{$data->user->first_name." ".$data->user->last_name}}
 									</a>
 									@if($data->user->id == Auth::user()->id)
 										<div class="fp-action">
-											<button class="editforumpost" value="{{$data->id}}" title="Edit" ><i class="flaticon-pencil" ></i></button>
-											<button class="forumpostdelete" value="{{$data->id}}" data-breadcrum = "{{$breadcrum}}"><i class="flaticon-garbage" ></i></button>
+										@if($replyCount == 0)
+											<button class="editforumpost" value="{{$data->id}}" title="Edit Post" ><i class="flaticon-pencil" ></i></button>
+										@endif
+											<button class="forumpostdelete" value="{{$data->id}}" title="Delete Post" data-breadcrum = "{{$breadcrum}}"><i class="flaticon-garbage" ></i></button>
 										</div>
 									@endif
 									</div>
@@ -46,8 +48,14 @@
 									
 									<div class="fp-btns text-right">
 										<span class="reply-count">Replies ({{$replyCount}})</span>
-										<a href="{{url("forum-post-reply/$data->id")}}" title="" class="btn btn-primary"><span class="glyphicon glyphicon-share-alt"></span>Reply</a>
+										<a href="{{url("forum-post-reply/$data->id")}}" title="Jump to Reply Section" class="btn btn-primary"><span class="glyphicon glyphicon-share-alt"></span>Reply</a>
 									</div>
 
 								</div><!--/single post-->
 							@endforeach
+<script type="text/javascript">
+	$(document).ready(function() {
+		 loadOrgionalImogi();
+	});
+
+</script>

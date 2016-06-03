@@ -337,6 +337,7 @@ class SearchController extends Controller
     public function searchForum()
     {
         $input = Request::all();
+       // print_r($input);die;
         $mainforum = Forums::where('id',$input['mainforum'])->value('title');
         $breadcrum = $mainforum;
         if($input['check']=='direct'){
@@ -358,8 +359,11 @@ class SearchController extends Controller
             $breadcrum = $breadcrum." > ".$input['search-country']." > ".$input['search-state']." > ".$input['search-city'];
         }
 
+        if($mainforum == "Doctor" && $input['check']!='direct')
+            $breadcrum = $breadcrum." > ".$input['search-diseases'];
+        
         $keyword = strtolower($input['forum-keyword']);
-
+        // print_r($breadcrum);die;
         $replyresult = ForumReply::whereRaw( 'LOWER(`reply`) like ?', array("%".$keyword."%"))
                             ->pluck('post_id')
                             ->toArray();

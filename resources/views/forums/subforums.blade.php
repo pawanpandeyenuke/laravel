@@ -36,115 +36,117 @@ if($mainforum == "Doctor")
 							<div class="fs-breadcrumb"><a href="{{url('forums')}}" title="">Home</a> > {{$mainforum}}</div>
 							<div class="table-responsive">
 								<table class="table">
-			@if(!empty($subforums))
-			  @if($flag == 0)
-				@foreach($subforums as $data)
-				<?php
-				 	$count = \App\ForumPost::where('category_id',$data->id)->get()->count();
-					$fieldsdata = \App\Forums::where('parent_id',$data->id)->value('id');
-					$forumid = $data->id;
-					// print_r($data->updated_at->format('Y-m-d H:i:s') );die;
-					if($data->updated_at->format('Y-m-d H:i:s') == "-0001-11-30 00:00:00")
-							$date = "No Posts";
-					else
-						$date = $data->updated_at->format('d, M h:i a');
-				?>	
+									@if(!empty($subforums))
+									  @if($flag == 0)
+										@foreach($subforums as $data)
+										<?php
+										 	$count = \App\ForumPost::where('category_id',$data->id)->get()->count();
+											$fieldsdata = \App\Forums::where('parent_id',$data->id)->value('id');
+											$forumid = $data->id;
+											// print_r($data->updated_at->format('Y-m-d H:i:s') );die;
+											if($data->updated_at->format('Y-m-d H:i:s') == "-0001-11-30 00:00:00")
+													$date = "No Posts";
+											else
+												$date = $data->updated_at->format('d, M h:i a');
+										?>	
 
-							@if($fieldsdata)
-									<tr>
-										<td>{{ $data->title }}</td>
-										<td>{{$date}}</td>
-				<?php 	$subid1 = \App\Forums::where('parent_id',$data->id)->pluck('id');
-						$count1 = \App\ForumPost::whereIn('category_id',$subid1)->get()->count();
-						?>
-										<td><div class="count text-center"><span>{{$count1}}</span></div></td>
-										<td><a href="{{url("sub-cat-forums/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
-									</tr>
-								@else
-									<tr>
-										<td>{{ $data->title }}</td>
-										<td>{{$date}}</td>
-										<!-- <td>31, Jan 12:00 pm</td> -->
-										<td><div class="count text-center"><span>{{$count}}</span></div></td>
-										<td><a href="{{url("view-forum-posts/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
-									</tr>
-							@endif
-				@endforeach	
-			  @else
-			  	{{ Form::open(array('url' => 'view-forum-posts', 'method' => 'post', 'id' => 'chatsubforumsvalidate')) }}
-					@foreach($subforums as $data)
-                    <?php  
-                        $titledata = explode(' ', $data->title);
-                        if(is_array($titledata)){
-                            $title = strtolower(implode('', $titledata));
-                        }                        
-                    ?>
-					<div class="radio-cont radio-label-left">
-						<input class="group-radio" type="radio" name="subcategory" value="{{ $title }}" id="{{ $title }}">
-						<label for="{{ $title }}">{{ $data->title }}</label>
-						@if($mainforum == 'Doctor')
+													@if($fieldsdata)
+													 <?php  $subid1 = \App\Forums::where('parent_id',$data->id)->pluck('id');
+															$count1 = \App\ForumPost::whereIn('category_id',$subid1)->get()->count(); ?>
+															<tr>
+																<td>{{ $data->title }}</td>
+																<td>{{$date}}</td>
+																<td><div class="count text-center"><span>{{$count1}}</span></div></td>
+																<td><a href="{{url("sub-cat-forums/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
+															</tr>
+														@else
+															<tr>
+																<td>{{ $data->title }}</td>
+																<td>{{$date}}</td>
+																<!-- <td>31, Jan 12:00 pm</td> -->
+																<td><div class="count text-center"><span>{{$count}}</span></div></td>
+																<td><a href="{{url("view-forum-posts/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
+															</tr>
+													@endif
+										@endforeach	
+									  @else
+										 	{!! Form::open(array('url' => 'view-forum-posts', 'method' => 'post', 'id' => 'forum_select_form', ' novalidate' => 'novalidate')) !!}
+												@foreach($subforums as $data)
+									            <?php  
+									                $titledata = explode(' ', $data->title);
+									                if(is_array($titledata)){
+									                    $title = strtolower(implode('', $titledata));
+									                }                        
+									            ?>
+												<div class="radio-cont radio-label-left">
+													<input class="group-radio subcategory" type="radio" name="subcategory" value="{{ $title }}" id="{{ $title }}">
+													<label for="{{ $title }}">{{ $data->title }}</label>
+													@if($mainforum == 'Doctor')
 
-						  @if($title == 'international')
-						  	<div class="subs" style="display:none">
-						  		 <select name="i-diseases" class="search-field boxsize" id="diseases-forum">
-									@foreach($diseases as $doc)					
-										<option value="{{$doc}}">{{$doc}}</option>
-									@endforeach
-								</select>
-						  	</div>
-						  	@endif
-						@endif
+													  @if($title == 'international')
+													  	<div class="subs" style="display:none">
+													  		 <select name="i-diseases" class="search-field boxsize" id="diseases-forum" >
+																@foreach($diseases as $doc)					
+																	<option value="{{$doc}}">{{$doc}}</option>
+																@endforeach
+															</select>
+													  	</div>
+													  	@endif
+													@endif
 
-						@if($title == 'country')
-							<div class="subs" style="display:none">
-							<select name="country1" class="search-field boxsize" id="country">
-								@foreach($countries as $data)					
-										<option value="{{$data}}">{{$data}}</option>
-								@endforeach
-							</select>
-							@if($mainforum == 'Doctor')
-							  <select name="c-diseases" class="search-field boxsize" id="diseases-forum">
-									@foreach($diseases as $doc)					
-										<option value="{{$doc}}">{{$doc}}</option>
-									@endforeach
-								</select>
-							  @endif
-							 </div>
-						@elseif($title == 'country,state,city')
-							<div class="subs" style="display:none">
-								<select name="country" class="search-field boxsize" id="subcountry-forum">
-									<option value="">Country</option>
-									@foreach($countries as $data)					
-										<option value="{{$data}}">{{$data}}</option>
-									@endforeach
-								</select>
+													@if($title == 'country')
+														<div class="subs" style="display:none">
+														<select name="country1" class="search-field boxsize" id="country">
+															@foreach($countries as $data)					
+																	<option value="{{$data}}">{{$data}}</option>
+															@endforeach
+														</select>
+														@if($mainforum == 'Doctor')
+														  <select name="c-diseases" class="search-field boxsize" id="diseases-forum">
+																@foreach($diseases as $doc)					
+																	<option value="{{$doc}}">{{$doc}}</option>
+																@endforeach
+															</select>
+														  @endif
+														 </div>
+													@elseif($title == 'country,state,city')
+														<div class="subs" style="display:none">
+															<select name="country" class="search-field boxsize" id="subcountry-forum">
+																<option value="">Country</option>
+																@foreach($countries as $data)					
+																	<option value="{{$data}}">{{$data}}</option>
+																@endforeach
+															</select>
 
-								<select name="state" class="search-field boxsize" id="substate-forum">
-									<option value="">State</option>
-								</select>
-								
-								<select name="city" class="search-field boxsize" id="subcity-forum">
-									<option value="">City</option>
-								</select>
-							 @if($mainforum == 'Doctor')
-							  <select name="csc-diseases" class="search-field boxsize" id="diseases-forum">
-									@foreach($diseases as $doc)					
-										<option value="{{$doc}}">{{$doc}}</option>
-									@endforeach
-								</select>
-							 @endif
-							</div>
-						@endif
-					</div> 
-					@endforeach
-					<div class="btn-cont text-center">
-						<button type="submit" class="btn btn-primary btn-lg">Enter Forum</button>
-					</div>
-					<input type="hidden" name="mainforum" value=
-					"{{$mainforum}}">
-		    	{{ Form::close() }}
-			  @endif
-			@endif
+															<select name="state" class="search-field boxsize" id="substate-forum">
+																<option value="">State</option>
+															</select>
+															
+															<select name="city" class="search-field boxsize" id="subcity-forum">
+																<option value="">City</option>
+															</select>
+														 @if($mainforum == 'Doctor')
+														  <select name="csc-diseases" class="search-field boxsize" id="diseases-forum">
+																@foreach($diseases as $doc)					
+																	<option value="{{$doc}}">{{$doc}}</option>
+																@endforeach
+															</select>
+														 @endif
+														</div>
+													@endif
+												</div> 
+												@endforeach
+												<div class="alert alert-danger alert-forum" style="display: none;">
+													
+												</div>
+												<div class="btn-cont text-center">
+													<button type="submit" class="btn btn-primary btn-lg">Enter Forum</button>
+												</div>
+												<input type="hidden" name="mainforum" value=
+												"{{$mainforum}}">
+									    	{!! Form::close() !!}
+									  @endif
+									@endif
 								</table>
 							</div>
 						</div><!--/forum search list-->
@@ -156,26 +158,53 @@ if($mainforum == "Doctor")
             </div>
         </div>
     </div><!--/pagedata-->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
  <script type="text/javascript">
  	
  	
  $(document).on('click', '.group-radio', function(){
-
+	
+	$('.alert-forum').hide();
  	if($(this).is(':checked')){
-
 		$(this).closest('.radio-cont').nextAll().find('.subs').hide();
 		$(this).closest('.radio-cont').find('.subs').show();
 		$(this).closest('.radio-cont').prevAll().find('.subs').hide();
-
  	}
 
  });
 
 
+      $( "#forum_select_form" ).submit(function( event ) {
+      if (!$("input[name='subcategory']:checked").val()) {
+      	$('.alert-forum').html('Please select a subcategory to continue.');
+      	$('.alert-forum').show();
+        event.preventDefault();
+    	}
+     else {
+	  if($("input[name='subcategory']:checked").val() == "country,state,city"){
+	  	if($("#subcountry-forum").val()=="" || $("#substate-forum").val()=="" || $("#subcity-forum").val() == ""){
+		  	if($("#subcountry-forum").val()==""){
+		  		$('.alert-forum').html('Please select a country to continue.');
+		  		$("#subcountry-forum").focus();
+		  	}
+		  	else if($("#substate-forum").val()==""){
+		  		$('.alert-forum').html('Please select a state to continue.');
+		  		$("#substate-forum").focus();
+		  	}
+		  	else if($("#subcity-forum").val()==""){
+		  		$('.alert-forum').html('Please select a city to continue.');
+		  		$("#subcity-forum").focus();
+		  	}
+			event.preventDefault();	  	
+		  	$('.alert-forum').show();
+	  	}
+	  }
+    }
+    });
 
-    $("#chatsubforumsvalidate").validate({ 
+
+    $("#forum_select_form").validate({ 
         errorElement: 'span',
         errorClass: 'help-inline',
         rules: {
