@@ -6,26 +6,26 @@
 										
 										<div class="p-likes">
 											<div class="like-cont">
-												<input type="checkbox" name="" id="checkbox{{$forumpostid->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$forumpostid->id}}" />
-												<label for="checkbox{{$forumpostid->id}}" class="css-label"></label>
+												<input type="checkbox" name="" id="checkbox_forumpost_{{$forumpostid->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$forumpostid->id}}" />
+												<label for="checkbox_forumpost_{{$forumpostid->id}}" title="Like Post" class="css-label"></label>
 											</div>
-											<span class="plike-count">0</span>
+											<span class="plike-count" title="Likes">0</span>
 										</div>
 
 									</div>
 									<div class='f-post-title'>
-									<a href="{{url("profile/$user->id")}}" title=''>
+									<a href="{{url("profile/$user->id")}}" title='User Profile'>
 										{{$name}}
 										<a>
 										<div class='fp-action'>
-											<button class='editforumpost' value='{{$forumpostid->id}}'s><i class='flaticon-pencil' data-breadcrum = "{{$breadcrum}}"></i></button>
-											<button class='forumpostdelete' value='{{$forumpostid->id}}' data-breadcrum = "{{$breadcrum}}"><i class='flaticon-garbage'></i></button>
+											<button class='editforumpost' value='{{$forumpostid->id}}'title="Edit Post"><i class='flaticon-pencil' data-breadcrum = "{{$breadcrum}}"></i></button>
+											<button class='forumpostdelete' value='{{$forumpostid->id}}' data-breadcrum = "{{$breadcrum}}" title="Delete Post"><i class='flaticon-garbage'></i></button>
 										</div>
 									</div>
-									<p>{{$forumpostid->title}} </p>
+									<p><?php echo nl2br($forumpostid->title); ?></p>
 									<?php $forumpostid = $forumpostid->id; ?>
 									<div class='fp-btns text-right'>
 										<span class='reply-count'>Replies(0)</span>
-										<a href='{{url("forum-post-reply/$forumpostid")}}' title='' class='btn btn-primary'><span class='glyphicon glyphicon-share-alt'></span>Reply</a>
+										<a href='{{url("forum-post-reply/$forumpostid")}}' title="Jump to Reply Section" class='btn btn-primary'><span class='glyphicon glyphicon-share-alt'></span>Reply</a>
 									</div>
 								</div>

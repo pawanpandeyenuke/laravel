@@ -728,8 +728,10 @@ comments;
 		$postId = Input::get('postId');
 		$userId = Auth::User()->id;
 		
-		$newsFeed = Feed::where('id', '=', $postId)->where('user_by', '=', $userId)->delete();
-		return $newsFeed; 
+		$deletePosts = new Converse;
+		$newsFeed = $deletePosts->onDeletePosts($postId, $userId);
+ 
+		// return $newsFeed; 
 
  	}
 
@@ -1259,7 +1261,10 @@ comments;
 		$args = Input::all();
 		ForumPost::where('id',$args['forumpostid'])->delete();
 		ForumLikes::where('post_id',$args['forumpostid'])->delete();
+		$reply_id_arr = ForumReply::where('post_id',$args['forumpostid'])->pluck('id')->toArray();
 		ForumReply::where('post_id',$args['forumpostid'])->delete();
+		ForumReplyComments::whereIn('reply_id',$reply_id_arr)->delete();
+		ForumReplyLikes::whereIn('reply_id',$reply_id_arr)->delete();
 		$count = ForumPost::where('forum_category_breadcrum',$args['breadcrum'])->get()->count();
 		echo $count;
 	}
@@ -1276,15 +1281,20 @@ comments;
 	{
 		$arguments = Input::all();
 		//print_r($arguments);die;
-		if($arguments['forumtitle'] != "")
-		{
+		if($arguments['forumtitle'] != ""){
+			$check = ForumReply::where('post_id',$arguments['id'])->get()->count();
+			if($check == 0){
+			
 			ForumPost::where('id',$arguments['id'])->update(['title'=>$arguments['forumtitle']]);
 			$data = ['id'=>$arguments['id'],
 					 'title'=>$arguments['forumtitle']];
 
 			echo json_encode($data);
-		}
-		else
+		   }
+		   else
+		   	echo "rep";
+
+	   }else
 			echo "Post something to update.";
 
 	}
@@ -1356,7 +1366,10 @@ comments;
 	{
 		$forumpost = Input::get('forumpostid');
 		$userid = Auth::User()->id;
-
+		$check = ForumPost::where('id',$forumpost)->get();
+		if($check->isEmpty()){
+			echo "no";
+		}else{
 		$likecheck = ForumLikes::where('owner_id',$userid)->where('post_id',$forumpost)->value('id');
 		if($likecheck == null)
 		{
@@ -1376,13 +1389,15 @@ comments;
 
 		   	echo $likecount; 
 		}
+	 }
 
 	}
 
 	public function viewMoreForumPost()
 	{
-		$per_page = 10;
+		$per_page = 5;
 		$page = Input::get('pageid');
+		$call_type = Input::get('call_type');
 		$breadcrum = Input::get('breadcrum');
 		$offset = ($page - 1) * $per_page;
 
@@ -1394,23 +1409,40 @@ comments;
 		        ->orderBy('updated_at','DESC')
 		        ->get();   
 
-			$str  = "No More Results";
+		$str  = "No More Results";
 
-		if(!($posts->isEmpty())){
-			return view('forums.viewmoreforumposts')
-						->with('posts',$posts)
-						->with('breadcrum',$breadcrum);       
+		if($call_type === 'web'){
+			if(!($posts->isEmpty())){
+				return view('forums.viewmoreforumposts')
+							->with('posts',$posts)
+							->with('breadcrum',$breadcrum);       
 			}
 			else{
 				echo $str;
 			}
+		}elseif($call_type === 'api'){
+			if(!($posts->isEmpty())){
+				// echo '<pre>';print_r($posts->count());die;
+				return view('forums-api.ajax-post')
+							->with('forumPosts',$posts)
+							->with('breadcrum',$breadcrum)
+							->render();
+			}
+			else{
+				echo $str;
+			}
+		}
+
 	}
 
 	public function addNewForumReply()
 	{
 	    $user = Auth::User();
         $input = Input::all();
-       
+       	$check = ForumPost::where('id',$input['forumpostid'])->get();
+       	if($check->isEmpty())
+       		echo "no";
+       	else{
                 $data = ['reply'=>$input['reply'],
                         'owner_id'=>$user->id,
                         'post_id'=>$input['forumpostid'],
@@ -1430,13 +1462,15 @@ comments;
         		->with('forumpostid',$input['forumpostid'])
         		->with('user',$user)
         		->with('name',$name);
-
+        }
 	}
 
 	public function delForumReply()
 	{
 		$args = Input::all();
 		ForumReply::where('id',$args['forumreplyid'])->delete();
+		ForumReplyComments::where('reply_id',$args['forumreplyid'])->delete();
+		ForumReplyLikes::where('reply_id',$args['forumreplyid'])->delete();
 		$count = ForumReply::where('post_id',$args['forumpostid'])->get()->count();
 		echo $count;
 	}
@@ -1549,8 +1583,9 @@ comments;
 
 	public function viewMoreForumReply()
 	{
-		$per_page = 10;
+		$per_page = 5;
 		$page = Input::get('pageid');
+		$call_type = Input::get('call_type');
 		$forumpostid = Input::get('forumpostid');
 		$offset = ($page - 1) * $per_page;
 
@@ -1561,24 +1596,79 @@ comments;
             ->skip($offset)
 	        ->take($per_page)
             ->orderBy('updated_at','DESC')
-            ->get();   
+            ->get();
 
-			$str  = "No More Results";
+		$str  = "No More Results";
 
-		if(!($reply->isEmpty())){
-			return view('forums.viewmoreforumreply')
+		if($call_type === 'web'){
+			if(!($reply->isEmpty())){
+				return view('forums.viewmoreforumreply')
 						->with('reply',$reply)
 						->with('forumpostid',$forumpostid);       
 			}
 			else{
 				echo $str;
 			}
+		}elseif($call_type === 'api'){
+			if(!($reply->isEmpty())){
+				return view('forums-api.ajax-reply')
+						->with('replies', $reply)
+						->with('user_id', Input::get('user_id'))
+						->with('forumpostid', $forumpostid);       
+			}
+			else{
+				echo $str;
+			}
+		}
 	}
 
+	public function viewMoreForumComment()
+	{
+		$per_page = 5;
+		$page = Input::get('pageid');
+		$call_type = Input::get('call_type');
+		$forumpostid = Input::get('forumpostid');
+		$offset = ($page - 1) * $per_page;
+
+		$reply_id = Input::get('forumreplyid');
+
+	    $reply = ForumReply::with('user')
+				    ->with('replyLikesCount')
+				    ->with('replyCommentsCount')
+				    ->where('id', $reply_id)
+				    ->first();
+
+		if(empty($reply)){
+			return view('forums-api.forum-not-found')->with('message', 'Post does not exist.')->render();
+		}
+
+	    $replyComments = ForumReplyComments::with('user')
+	    					->where('reply_id', $reply_id)
+				            ->skip($offset)
+					        ->take($per_page)
+	    					->get();
+
+	   	$str = 'No More Results';
+
+	   	if(!($replyComments->isEmpty())){
+			// echo '<pre>';print_r($replyComments);die;
+			return view('forums-api.ajax-comment')
+					->with('reply', $reply)
+					->with('replyComments', $replyComments)
+					->render();	   		
+	   	}else{
+	   		echo $str;
+	   	}
+
+
+	}
 	public function getSubForums()
 	{
 		$input = Input::all();
+		 if($input['forumid'] == "Forum")
+		  	{ echo"No"; exit; }
 		$subforums = Forums::where('parent_id',$input['forumid'])->get();	
+
 		$forums = array('<option value=""></option>');
 		if($subforums->isEmpty())
 			echo 'No';
@@ -1598,11 +1688,11 @@ comments;
 		$input = Input::all();
 		$title = Forums::where('id',$input['forumid'])->value('title');
 		$countries = Country::get();
-		foreach($countries as $data){
-			$country[] = '<option value="'.$data->country_name.'">'.$data->country_name.'</option>';
-		}
-		if($title == "Country"){
 
+		if($title == "Country"){
+			foreach($countries as $data){
+			$country[] = '<option value="'.$data->country_name.'">'.$data->country_name.'</option>';
+			}
 			$country1 = implode('',$country);
 			$arr = ['msg' => 'c',
 					'data'=>$country1];
@@ -1610,8 +1700,9 @@ comments;
 		}
 
 		else if($title == "Country,State,City"){
+			$country[] = "<option>Country</option>";
 			foreach($countries as $data){
-				$country[] = '<option value="'.$data->id.'">'.$data->country_name.'</option>';
+				$country[] = '<option value="'.$data->country_name.'">'.$data->country_name.'</option>';
 			}
 			$country1 = implode('',$country);
 			$arr = ['msg' => 'csc',

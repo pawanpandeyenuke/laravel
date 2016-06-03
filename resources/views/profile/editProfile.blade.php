@@ -593,7 +593,13 @@
 			}
 		});
 
-		$('.datepicker').datepicker();
+		var today = new Date();
+
+		$('.datepicker').datepicker({
+            'format': 'yyyy/mm/dd',
+            'startDate': '01/01/1960',
+            'endDate': today
+		});
 	
 	});
 

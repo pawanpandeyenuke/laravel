@@ -91,7 +91,9 @@
 									@if(Auth::check())
 									@if($data->user->id == Auth::user()->id)
 										<div class="fp-action">
+										@if($replyCount == 0)
 											<button class="editforumpost" value="{{$data->id}}" title="Edit" ><i class="flaticon-pencil" ></i></button>
+										@endif	
 											<button class="forumpostdelete" value="{{$data->id}}" data-breadcrum = "{{$data->forum_category_breadcrum}}" data-search=
 											"1"><i class="flaticon-garbage" ></i></button>
 										</div>

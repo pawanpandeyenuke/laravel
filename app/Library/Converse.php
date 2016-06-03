@@ -1,6 +1,7 @@
 <?php namespace App\Library;
 
 use Validator, Input, Redirect, Request, Session, Hash, DB, Config;
+use App\Feed, App\Comment, App\Like;
 
 class Converse{
 
@@ -132,6 +133,32 @@ class Converse{
 		//print_r($status);die;
 
 	}
+
+
+    /*
+    * @ On delete posts
+    */
+    function onDeletePosts($postId, $userId) {
+
+    	$post = Feed::where('id', '=', $postId)->where('user_by', '=', $userId)->first();
+
+    	$img_url = 'uploads/'.$post->image;
+
+    	$url = public_path($img_url);
+ 
+		$post->delete();
+		Comment::where('feed_id', '=', $postId)->where('commented_by', '=', $userId)->delete();
+		Like::where('feed_id', '=', $postId)->where('user_id', '=', $userId)->delete();
+
+    	if(!empty($post->image)){
+    		unlink($url);
+    	}    
+
+    	return true;	
+        
+    }
+
+
 }
 
 

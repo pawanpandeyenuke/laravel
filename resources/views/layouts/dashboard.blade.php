@@ -53,7 +53,7 @@
 									{!! Form::close() !!}
 							</div>
 						</div>
-            {{ Form::open(array('url' => 'search-forum', 'id' => 'search-forum-dashboard', 'method' => 'post')) }}
+            {!! Form::open(array('url' => 'search-forum', 'id' => 'search-forum-dashboard', 'method' => 'post')) !!}
 						<div class="col-sm-6">
 							<div class="search-field">
               <input type = "hidden" name = "mainforum" value = "Forum">
@@ -62,7 +62,7 @@
 								<button type="submit" class="btn btn-primary btn-srch-top">Search Forum</button>
 							</div>
 						</div>
-            {{Form::close()}}
+            {!! Form::close() !!}
 					</div>
 				</div>
 			</div>
