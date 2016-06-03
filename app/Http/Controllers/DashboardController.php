@@ -239,113 +239,87 @@ class DashboardController extends Controller
     */
     public function groupchat( $input = '' ,$gname=''){   
         $groupid=null;
-        if($input)
-        {
-    if($input!=null && $gname!=null)
-    {
-        $groupid=$input;
-        $checkname=DB::table('groups')->where('id',$input)->value('title');
-        $checkname=strtolower($checkname);
-        $checkname=str_replace(" ","-",$checkname);
-        if($checkname!=$gname)
-        {
-            return redirect('private-group-list');           
-        }
-        else if($checkname==$gname)
-        {
-           $privategroup=Group::with('members')->where('id',$input)->get()->toArray();
-
-                $count=0;
-                foreach ($privategroup[0]['members'] as $mem){
-                    if($mem['member_id']==Auth::User()->id)
-                         $count++;
-                }
-          if(($count==0) && $privategroup[0]['owner_id']!=Auth::User()->id){
-            return redirect('private-group-list');
-          }
-            
-        }
+        if( $input ){
+			if($input!=null && $gname!=null){
+			$groupid=$input;
+			$checkname=DB::table('groups')->where('id',$input)->value('title');
+			$checkname=strtolower($checkname);
+			$checkname=str_replace(" ","-",$checkname);
+				if($checkname!=$gname){
+					return redirect('private-group-list');           
+				} else if($checkname==$gname) {
+					$privategroup=Group::with('members')->where('id',$input)->get()->toArray();
+					$count=0;
+					foreach ($privategroup[0]['members'] as $mem){
+						if($mem['member_id']==Auth::User()->id)
+							 $count++;
+					}
+					if(($count==0) && $privategroup[0]['owner_id']!=Auth::User()->id){
+						return redirect('private-group-list');
+					}
+				}
         
-    }
-    else{
-$groupid=$input;
-$groupname = implode('-', array_map('ucfirst', explode('-', $groupid)));
-$groupname = implode(',', array_map('ucfirst', explode(',', $groupname)));
-$groupname =preg_replace('/(?<! )(?<!^)[A-Z]/',' $0', $groupname);
-$groupname=str_replace(', ',',',$groupname);
-$groupname=str_replace('-','',$groupname);
-$groupname=str_replace('It','IT',$groupname);
-//print_r($groupname);die;
-$result=DB::table('categories')->where('title',$groupname)->value('id');
+			} else {
+				$groupid=$input;
+				$groupname = implode('-', array_map('ucfirst', explode('-', $groupid)));
+				$groupname = implode(',', array_map('ucfirst', explode(',', $groupname)));
+				$groupname =preg_replace('/(?<! )(?<!^)[A-Z]/',' $0', $groupname);
+				$groupname=str_replace(', ',',',$groupname);
+				$groupname=str_replace('-','',$groupname);
+				$groupname=str_replace('It','IT',$groupname);
+				//print_r($groupname);die;
+				$result=DB::table('categories')->where('title',$groupname)->value('id');
 
-if($result==null)
-{
-return redirect('group');
-}
-}
-}
-                        $model = new DefaultGroup;
-                      
-                        if(empty($input))        
-
-                        $input = Request::all();
+				if($result==null) {
+					return redirect('group');
+				}
+			}
+		}
+        $model = new DefaultGroup;
+        if(empty($input)) 
+		$input = Request::all();
+        if( isset($input['subcategory']) ){
+			$res=DB::table('categories')->where('parent_id','!=',0)->pluck('title');
+			$res1=DB::table('categories')->where('parent_id','=',0)->pluck('title');
+			$par=array_unique($res1);
+			$res1=array_map('strtolower',$par);
+			$par=$res1;
+			$sub=array_unique($res);
+			$res=array_map('strtolower',$sub);
+			$sub=$res;
                  
-                 
-               
-                if(isset($input['subcategory']))
-                {
-
-                    $res=DB::table('categories')->where('parent_id','!=',0)->pluck('title');
-                    $res1=DB::table('categories')->where('parent_id','=',0)->pluck('title');
- 
-                    $par=array_unique($res1);
-                    $res1=array_map('strtolower',$par);
-                    $par=$res1;
-
-                    
-
-                    $sub=array_unique($res);
-                    $res=array_map('strtolower',$sub);
-                    $sub=$res;
-                 
-                    $flag=0;
-                    $flag1=0; 
-          // print_r($sub);die;
-                    foreach ($sub as $key) {
-                    $key = str_replace(" ","", $key);
-                    if($input['subcategory']==$key)
-                    {
-                    $flag=1;
-                    }
-                    }
-
-                    foreach ($par as $key) {
-                      $key = str_replace("-", " ", $key);
-                    if($input['parentname']==$key)
-                    {
-                    $flag1=1;
-                    }
-                    }
-
-                    if(($flag==0 || $flag1==0) && $result==null)
-                    {
+			$flag=0;
+			$flag1=0; 
+			// print_r($sub);die;
+			foreach ($sub as $key) {
+				$key = str_replace(" ","", $key);
+				if($input['subcategory']==$key){
+					$flag=1;
+				}
+			}
+			foreach ($par as $key) {
+				$key = str_replace("-", " ", $key);
+				if($input['parentname']==$key){
+					$flag1=1;
+				}
+             }
+			if( ($flag==0 || $flag1==0) && $result==null ){
                 return redirect('group');
-            }
-else {
+            } else {
                 if($input['subcategory']=='international'){
                 
                     unset($input['country']); 
                     $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);
                 
-                }elseif($input['subcategory']=='professionalcourse'){
+                } elseif($input['subcategory']=='professionalcourse'){
                 
                     $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata1']]);
 
-                }elseif($input['subcategory']=='subjects'){
+                } elseif($input['subcategory']=='subjects'){
 
                     $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata']]);
 
-                }elseif($input['subcategory']=='country,state,city'){
+                } elseif($input['subcategory']=='country,state,city'){
                
                     $newinput=(['parentname'=>$input['parentname'],
                     'subcategory'=>'csc',
@@ -353,28 +327,25 @@ else {
                     'state'=>DB::table('state')->where('state_id',$input['state'])->value('state_name'),
                     'city'=>DB::table('city')->where('city_id',$input['city'])->value('city_name')]);       
                
-                }elseif($input['subcategory']=='country'){
+                } elseif ( $input['subcategory']=='country' ){
                 
                     $newinput=(['parentname'=>$input['parentname'],'subcategory'=>'c','country'=>DB::table('country')->where('country_id',$input['country1'])->value('country_name')]);
 
-                }else{
+                } else {
                    
                     $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);       
                 
                 }
 
                 $input=$newinput;
-            // echo '<pre>';print_r($input);die;
- }      
-}
-elseif(isset($input['country'])||isset($input['country'])||isset($input['state'])||isset($input['city'])){
-    return redirect('group');
-}
-
-if($input!=null && $gname!=null)
-{
-    $input=$gname;
-}
+				// echo '<pre>';print_r($input);die;
+			} 
+		} else if(isset($input['country'])||isset($input['country'])||isset($input['state'])||isset($input['city'])){
+				return redirect('group');
+		}
+		if($input!=null && $gname!=null){
+			$input=$gname;
+		}
         if(is_array($input)){
             $groupnamedata = array();
             foreach ($input as $key => $value){
@@ -390,16 +361,13 @@ if($input!=null && $gname!=null)
 
             $groupname = implode('_', $groupnamedata); 
             $groupname=strtolower($groupname);
-        }else{
+        } else {
             $groupname = $input;
         }
-
-            
+  
         if(Request::isMethod('get')){
-
             if(is_array($groupname)){
-                
-                    $updatecheck = $model->where('group_name', $groupname)
+                 $updatecheck = $model->where('group_name', $groupname)
                                 ->where('group_by', Auth::User()->id)
                                 ->get()->toArray();
 
@@ -410,7 +378,7 @@ if($input!=null && $gname!=null)
                     if(empty($updatecheck)){
                         $model = new DefaultGroup;
                         $response = $model->create($defGroup);
-                    }else{
+                    } else{
                         $id = $updatecheck[0]['id'];
                         $response = $model->find($id);
                     }
@@ -418,50 +386,40 @@ if($input!=null && $gname!=null)
                     //Get users of this group
                     $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();          
                 
+            } else {
+				$updatecheck = $model->where('group_name', $groupname)
+							->where('group_by', Auth::User()->id)
+							->get()->toArray();
+
+                $defGroup = array();
+				$defGroup['group_name'] = $groupname;
+				$defGroup['group_by'] = Auth::User()->id;
+				// print_r($defGroup);die;
+				if($defGroup['group_name'] != ''){
+					if(empty($updatecheck)){
+						$model = new DefaultGroup;
+						$response = $model->create($defGroup);
+					}else{
+						$id = $updatecheck[0]['id'];
+						$response = $model->find($id);
+					}
+				}
+               //Get users of this group
+               $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();  
             }
-            else{
-                    $updatecheck = $model->where('group_name', $groupname)
-                                ->where('group_by', Auth::User()->id)
-                                ->get()->toArray();
-
-                    $defGroup = array();
-                    $defGroup['group_name'] = $groupname;
-                    $defGroup['group_by'] = Auth::User()->id;
-                    // print_r($defGroup);die;
-                    if($defGroup['group_name'] != ''){
-                        if(empty($updatecheck)){
-                            $model = new DefaultGroup;
-                            $response = $model->create($defGroup);
-                        }else{
-                            $id = $updatecheck[0]['id'];
-                            $response = $model->find($id);
-                        }
-                    }
-                    //Get users of this group
-                    $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();  
-            }
-
-
         }
         $counter=0;
-        if($groupid!=null)
-        {
-        	    $members=DB::table('members')->where('group_id',$groupid)->pluck('member_id');
-        	    foreach ($members as $key => $value) {
-        	    	if($value==Auth::User()->id)
-        	    	{
-        	    		$counter++;
-        	    	}
-        	    }
-       
-      	if($counter==0 && $input==null)
-
-        {
-        	return redirect('private-group-list');
-        }
-	 }
-
-       
+        if( $groupid!=null ) {
+			$members=DB::table('members')->where('group_id',$groupid)->pluck('member_id');
+			foreach ($members as $key => $value) {
+				if( $value==Auth::User()->id ){
+					$counter++;
+				}
+			}
+			if( $counter==0 && $input==null ) {
+				return redirect('private-group-list');
+			}
+		}
 
         $id=Auth::User()->id;
         $friendid=DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
@@ -475,8 +433,7 @@ if($input!=null && $gname!=null)
                     ->with('pendingfriend',$pendingfriend)
                     ->with('exception',$input)
                     ->with('pgid',$groupid)
-                    ->with('privategroup',$privategroup)
-                    ;
+                    ->with('privategroup',$privategroup);
    }
 
  
@@ -551,7 +508,7 @@ if($input!=null && $gname!=null)
             } 
 
             $time=strtotime($arguments['birthday']);
-            $arguments['birthday']=date('Y-m-d',$time);
+            $arguments['birthday'] = date('Y-m-d',$time);
  
             if($arguments){
 
@@ -565,7 +522,7 @@ if($input!=null && $gname!=null)
                     $file->move(public_path('uploads/user_img'), $image_name);
                 }
                 
-                // $arguments['picture'] = 'uploads/user_img/'.$arguments['picture'];
+                $arguments['country_code'] = empty($arguments['phone_no']) ? '' : $arguments['country_code'];
                 // echo '<pre>';print_r($arguments);die;
                 foreach ($arguments as $key => $value) {
                     if( $key != 'email' && $key != 'password' ){

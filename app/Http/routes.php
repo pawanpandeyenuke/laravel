@@ -122,6 +122,8 @@ Route::post('/ajax/addnewforumreply','AjaxController@addNewForumReply');
 
 Route::post('/ajax/view-more-forum-post','AjaxController@viewMoreForumPost');
 Route::post('/ajax/view-more-forum-reply','AjaxController@viewMoreForumReply');
+Route::post('/ajax/view-more-forum-comment','AjaxController@viewMoreForumComment');
+
 
 
 Route::post('/ajax/delforumreply','AjaxController@delForumReply');
@@ -216,9 +218,15 @@ Route::post('api/get-job-category','ApiController@getJobCategories');
 
 Route::post('api/get-userby-jid','ApiController@getUserByJID');
 
-Route::post('api/post-forum','ApiController@postForum');
 
+Route::post('api/post-forum','ApiController@postForum');
 Route::post('api/post-forum-reply','ApiController@postForumReply');
+
+Route::match(['get', 'post'], 'api/get-forum-post','ApiController@getForumPosts');
+Route::match(['get', 'post'], 'api/get-forum-post-reply','ApiController@getForumPostsReply');
+Route::match(['get', 'post'], 'api/get-forum-post-reply-comment','ApiController@getForumPostsReplyComment');
+
+
 
 /*
 |--------------------------------------------------------------------------

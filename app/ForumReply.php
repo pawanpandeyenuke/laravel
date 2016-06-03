@@ -40,6 +40,6 @@ class ForumReply extends Model
 
 	public function user()
 	{
-       return $this->belongsTo('App\User','owner_id','id')->select(['id','first_name', 'last_name', 'picture']);
+       return $this->belongsTo('App\User','owner_id','id')->select(['id','first_name', 'last_name', 'picture', 'country', 'state', 'city']);
 	}
 }

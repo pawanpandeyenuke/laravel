@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Request, Session, Validator, Input, Cookie;
 use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend,App\ForumLikes,App\ForumReply,App\ForumsDoctor;
-
 class SearchController extends Controller
 {
     
@@ -363,18 +362,20 @@ class SearchController extends Controller
             $breadcrum = $breadcrum." > ".$input['search-diseases'];
         
         $keyword = strtolower($input['forum-keyword']);
-        // print_r($breadcrum);die;
+        //print_r($breadcrum);die;
         $replyresult = ForumReply::whereRaw( 'LOWER(`reply`) like ?', array("%".$keyword."%"))
                             ->pluck('post_id')
                             ->toArray();
+
 
         $results = ForumPost::with('user')
                         ->with('forumPostLikesCount')
                         ->with('replyCount')
                         ->where('forum_category_breadcrum', 'LIKE', $breadcrum.'%')
                         ->whereRaw( 'LOWER(`title`) like ?', array("%".$keyword."%"))
-                        ->orWhere( function( $query ) use ( $replyresult) {
-                            $query->whereIn( 'id', $replyresult); })
+                        ->orWhere( function( $query ) use ( $replyresult, $breadcrum) {
+                            $query->whereIn( 'id', $replyresult)
+                                  ->where('forum_category_breadcrum', 'LIKE', $breadcrum.'%'); })
                         ->orderBy('updated_at','DESC')
                         ->get();
 

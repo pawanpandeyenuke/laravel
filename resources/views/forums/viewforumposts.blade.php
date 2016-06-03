@@ -11,11 +11,12 @@
 	   <div class="container">
 	    <div class="row">
 
-	           @if(Auth::check())
-	            @include('panels.left')
-	           @else
-	            @include('panels.leftguest')
-	           @endif
+			@if(Auth::check())
+				@include('panels.left')
+			@else
+				@include('panels.leftguest')
+			@endif
+
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title green-bg">
@@ -43,7 +44,6 @@
 								@endif
 							</div>
 							<!---END New Forum Post-->
-							
 
 							<div class="modal fade edit-forumpost-popup" id="forumpost-edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost"></div>
 

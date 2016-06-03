@@ -204,7 +204,7 @@ class AjaxController extends Controller
 		echo $commentdata;
 
 		exit;
-	}
+		}
 	}
 
 
@@ -728,8 +728,10 @@ comments;
 		$postId = Input::get('postId');
 		$userId = Auth::User()->id;
 		
-		$newsFeed = Feed::where('id', '=', $postId)->where('user_by', '=', $userId)->delete();
-		return $newsFeed; 
+		$deletePosts = new Converse;
+		$newsFeed = $deletePosts->onDeletePosts($postId, $userId);
+ 
+		// return $newsFeed; 
 
  	}
 
@@ -1393,8 +1395,9 @@ comments;
 
 	public function viewMoreForumPost()
 	{
-		$per_page = 10;
+		$per_page = 5;
 		$page = Input::get('pageid');
+		$call_type = Input::get('call_type');
 		$breadcrum = Input::get('breadcrum');
 		$offset = ($page - 1) * $per_page;
 
@@ -1406,16 +1409,30 @@ comments;
 		        ->orderBy('updated_at','DESC')
 		        ->get();   
 
-			$str  = "No More Results";
+		$str  = "No More Results";
 
-		if(!($posts->isEmpty())){
-			return view('forums.viewmoreforumposts')
-						->with('posts',$posts)
-						->with('breadcrum',$breadcrum);       
+		if($call_type === 'web'){
+			if(!($posts->isEmpty())){
+				return view('forums.viewmoreforumposts')
+							->with('posts',$posts)
+							->with('breadcrum',$breadcrum);       
 			}
 			else{
 				echo $str;
 			}
+		}elseif($call_type === 'api'){
+			if(!($posts->isEmpty())){
+				// echo '<pre>';print_r($posts->count());die;
+				return view('forums-api.ajax-post')
+							->with('forumPosts',$posts)
+							->with('breadcrum',$breadcrum)
+							->render();
+			}
+			else{
+				echo $str;
+			}
+		}
+
 	}
 
 	public function addNewForumReply()
@@ -1566,8 +1583,9 @@ comments;
 
 	public function viewMoreForumReply()
 	{
-		$per_page = 10;
+		$per_page = 5;
 		$page = Input::get('pageid');
+		$call_type = Input::get('call_type');
 		$forumpostid = Input::get('forumpostid');
 		$offset = ($page - 1) * $per_page;
 
@@ -1578,20 +1596,72 @@ comments;
             ->skip($offset)
 	        ->take($per_page)
             ->orderBy('updated_at','DESC')
-            ->get();   
+            ->get();
 
-			$str  = "No More Results";
+		$str  = "No More Results";
 
-		if(!($reply->isEmpty())){
-			return view('forums.viewmoreforumreply')
+		if($call_type === 'web'){
+			if(!($reply->isEmpty())){
+				return view('forums.viewmoreforumreply')
 						->with('reply',$reply)
 						->with('forumpostid',$forumpostid);       
 			}
 			else{
 				echo $str;
 			}
+		}elseif($call_type === 'api'){
+			if(!($reply->isEmpty())){
+				return view('forums-api.ajax-reply')
+						->with('replies', $reply)
+						->with('user_id', Input::get('user_id'))
+						->with('forumpostid', $forumpostid);       
+			}
+			else{
+				echo $str;
+			}
+		}
 	}
 
+	public function viewMoreForumComment()
+	{
+		$per_page = 5;
+		$page = Input::get('pageid');
+		$call_type = Input::get('call_type');
+		$forumpostid = Input::get('forumpostid');
+		$offset = ($page - 1) * $per_page;
+
+		$reply_id = Input::get('forumreplyid');
+
+	    $reply = ForumReply::with('user')
+				    ->with('replyLikesCount')
+				    ->with('replyCommentsCount')
+				    ->where('id', $reply_id)
+				    ->first();
+
+		if(empty($reply)){
+			return view('forums-api.forum-not-found')->with('message', 'Post does not exist.')->render();
+		}
+
+	    $replyComments = ForumReplyComments::with('user')
+	    					->where('reply_id', $reply_id)
+				            ->skip($offset)
+					        ->take($per_page)
+	    					->get();
+
+	   	$str = 'No More Results';
+
+	   	if(!($replyComments->isEmpty())){
+			// echo '<pre>';print_r($replyComments);die;
+			return view('forums-api.ajax-comment')
+					->with('reply', $reply)
+					->with('replyComments', $replyComments)
+					->render();	   		
+	   	}else{
+	   		echo $str;
+	   	}
+
+
+	}
 	public function getSubForums()
 	{
 		$input = Input::all();

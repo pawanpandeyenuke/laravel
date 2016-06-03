@@ -29,7 +29,7 @@
 							   // $ids2 = DB::table('forums')->whereIn('parent_id',$ids1)->pluck('id');
 							   // $count3 = DB::table('forums_post')->whereIn('category_id',$ids2)->count();
 							   // $count = $count1 + $count2 + $count3;
-							   $image = url("/forum_icons/".$data['img_url']);
+							   $image = url("forums-data/forum_icons/".$data['img_url']);
 							            ?>
 
 		                       @if($fieldsData)

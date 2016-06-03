@@ -1,6 +1,7 @@
 <?php namespace App\Library;
 
 use Validator, Input, Redirect, Request, Session, Hash, DB, Config;
+use App\Feed, App\Comment, App\Like;
 
 class Converse{
 
@@ -42,10 +43,10 @@ class Converse{
 	**/
 	public static function createGroup($roomid,$roomname) {
 
-		$node = Config::get('constants.xmpp_host_Url');
-	//	$node='conference.'.$node;
-		$roomname=str_replace(" ","_",$roomname);
-		@exec('sudo  ejabberdctl srg_create '.$roomname.' '.$node.' '.$roomid.' Private_Group My_Group');
+		$node 		= Config::get('constants.xmpp_host_Url');
+		$node 		= 'conference.'.$node;
+		$roomname 	= str_replace(" ","_",$roomname);
+		@exec('sudo ejabberdctl srg_create '.$roomname.' '.$node.' '.$roomid.' Private_Group My_Group');
 
 
 			//	srg-create group host name description display  
@@ -59,8 +60,9 @@ class Converse{
 	public static function deleteGroup($roomname){
 
 		$node = Config::get('constants.xmpp_host_Url');
-		$roomname=str_replace(" ","_",$roomname);
-		$response=@exec('sudo  ejabberdctl srg_delete ' .$roomname.' ' .$node);
+		$node 		= 'conference.'.$node;
+		$roomname	=	str_replace(" ","_",$roomname);
+		$response	=	@exec('sudo  ejabberdctl srg_delete ' .$roomname.' ' .$node);
 			// srg-delete group host  
 	}
 
@@ -71,9 +73,9 @@ class Converse{
 	public static function addUserGroup($roomname,$username){
 
 		$node = Config::get('constants.xmpp_host_Url');
-	//	$node='conference.'.$node;
+		//$node='conference.'.$node;
 		$roomname=str_replace(" ","_",$roomname);
-		$response=@exec('sudo  ejabberdctl srg_user_add '.$username.' '.$node.' '.$roomname.' '.$node);
+		$response=@exec('sudo  ejabberdctl srg_user_add '.$username.' '.$node.' '.$roomname.' conference.'.$node);
 		
 		
 		//srg-user-add user server group host                   Adds user@server to group on host
@@ -131,6 +133,32 @@ class Converse{
 		//print_r($status);die;
 
 	}
+
+
+    /*
+    * @ On delete posts
+    */
+    function onDeletePosts($postId, $userId) {
+
+    	$post = Feed::where('id', '=', $postId)->where('user_by', '=', $userId)->first();
+
+    	$img_url = 'uploads/'.$post->image;
+
+    	$url = public_path($img_url);
+ 
+		$post->delete();
+		Comment::where('feed_id', '=', $postId)->where('commented_by', '=', $userId)->delete();
+		Like::where('feed_id', '=', $postId)->where('user_id', '=', $userId)->delete();
+
+    	if(!empty($post->image)){
+    		unlink($url);
+    	}    
+
+    	return true;	
+        
+    }
+
+
 }
 
 

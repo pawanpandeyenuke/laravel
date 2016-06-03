@@ -1,6 +1,6 @@
 <div class="single-post" data-value="{{$postdata->id}}" id="post_{{$postdata->id}}">
 	<div class="post-header" data-value="{{$postdata->id}}" id="post_{{$postdata->id}}">
-		<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
+		<button type="button" class="p-edit-btn edit-post" title="Edit" ><i class="fa fa-pencil"></i></button>
 		<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 		<div class="row">
 			<div class="col-md-7">
