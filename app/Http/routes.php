@@ -273,6 +273,9 @@ Route::match(['get', 'post'], 'api/get-forum-post-reply-comment','ApiController@
 
 	Route::get('view-forum-posts/{id}','SearchController@viewForumPosts');
 	Route::post('view-forum-posts','SearchController@viewForumPostsOpt');
+	Route::get('view-forum-posts', function(){
+		return redirect('forums');
+	});
 
 	Route::get('demo', 'SearchController@demo');
     Route::get('forum-post-reply/{forumpostid}', 'SearchController@forumPostReply');
