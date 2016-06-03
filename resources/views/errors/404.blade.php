@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Friendz Square</title>
-<link href="css/bootstrap.css" rel="stylesheet">
-<link href="css/font-awesome.min.css" rel="stylesheet" media="all">
-<link href="css/flat-icon/flaticon.css" rel="stylesheet" media="all">
-<link href="css/style.css" rel="stylesheet">
-<link href="css/responsive.css" rel="stylesheet" media="all">
+<link href="{{url('css/bootstrap.css')}}" rel="stylesheet">
+<link href="{{url('css/font-awesome.min.css')}}" rel="stylesheet" media="all">
+<link href="{{url('css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
+<link href="{{url('css/style.css')}}" rel="stylesheet">
+<link href="{{url('css/responsive.css')}}" rel="stylesheet" media="all">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -19,42 +19,66 @@
 </head>
 
 <body>
-<header>
+        <header>
     <div class="container">
         <div class="row">
-            <div class="col-sm-3">
-                <a href="{{url('/')}}" title="" class="logo"><img src="{{url('images/logo.png')}}" alt="Friendz Square"></a>
+            <div class="col-sm-2">
+                <a href="{{url('/')}}" title="" class="logo"><img src="{{url('/images/logo.png')}}" alt="Friendz Square"></a>
             </div>
-            <div class="col-sm-6">
-                <div class="top-search">
-                    <ul class="clearfix">
-                        <li class="search-textbox">
-                            <input type="text" class="search-field" placeholder="Search Friends">
-                        </li>
-                        <li>
-                            <select class="search-field">
-                                <option>Country</option>
-                            </select>
-                        </li>
-                        <li>
-                            <select class="search-field">
-                                <option>State</option>
-                            </select>
-                        </li>
-                        <li>
-                            <select class="search-field">
-                                <option>City</option>
-                            </select>
-                        </li>
-                        <li class="search-btn-cont">
-                            <button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
-                        </li>
-                    </ul>
+            <div class="col-sm-7">
+                <div class="top-search-cont">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="search-field">
+                                {!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
+                                <input type="text" name="searchfriends" id="searchfriends" value="" placeholder="Enter Name" class="form-control">
+                                <button type="submit" class="btn btn-primary btn-srch-top search-btn search">Search Friends</button>
+                                    {!! Form::close() !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="search-field">
+                                <input type="text" name="" value="" placeholder="Enter Keyword" class="form-control">
+                                <button type="button" class="btn btn-primary btn-srch-top">Search Forum</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="header-right-menu text-right">
-                    <a href="#" title="" class="btn btn-primary btn-header-right">Suggestions</a>
+                    <a href="#" title="" class="btn btn-primary btn-header-right" data-toggle="modal" data-target="#myModal">Suggestions</a>
+                              <form id="suggestionform" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" >
+                            <div class="modal fade send-msg-popup" id="myModal" tabindex="-1" role="dialog" aria-labelledby="sendMsgLabel">
+                           
+                              <div class="modal-dialog modal-sm" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="sendMsgLabel" style="text-align: center;">Suggestion Box</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                   <div class="row">
+                                   <div class='alert alert-success successmsg'  style='text-align: center; display: none;'>Thank you for your feedback!<br><a href='#' class='modalshow'>Have another one?</a></div>
+                                    <div class="col-md-10 col-md-offset-1 successmsg">
+                                        <div class="profile-select-cont form-group">
+                                            <textarea name="message_text" class="form-control message_text" placeholder="Enter suggestion" required></textarea>
+                                        </div>
+                                        <div class="profile-select-cont form-group">
+                                            <input name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" placeholder="Enter email" class="form-control useremail" >
+                                        </div>
+                                    </div>
+                                   </div>
+                                    
+                                  </div>
+                                  <div class="modal-footer">
+                                    <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                           </form>
                 </div>
             </div>
         </div>
@@ -92,8 +116,8 @@
     </div>
 </div><!--/pagedata-->
 
-<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{url('js/jquery-1.11.3.min.js')}}"></script>
+<script type="text/javascript" src="{{url('js/bootstrap.min.js')}}"></script>
 </body>
 </html>
 

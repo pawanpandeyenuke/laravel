@@ -1,0 +1,306 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500,700);
+body{
+	font-family: 'Roboto', sans-serif;
+	background: #f2f2f2;
+}
+* { 
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+   box-sizing: border-box; 
+   padding: 0px;
+   margin: 0px;
+}
+.forum-post-list{
+	padding: 15px 20px;
+}
+.clearfix:after {
+   content: " "; /* Older browser do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+.single-post {
+  background: #fff;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  position: relative;
+}
+.post-header {
+  border-bottom: 1px solid #f2f2f2;
+  margin: 0 5px;
+  min-height: 90px;
+  padding: 15px 15px 10px 70px;
+  position: relative;
+}
+span.u-img {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-size: cover !important;
+}
+.post-data p {
+  color: #7e8c8d;
+  font-size: 12px;
+  line-height: 20px;
+}
+.post-header span{
+	display: block;
+}
+.post-header span.title {
+  color: #000;
+  font-weight: 500;
+  font-size: 17px;
+  padding-right: 75px;
+}
+.post-time {
+  position: absolute;
+  right: 0px;
+  top: 13px;
+  width: 100px;
+}
+.post-time span{
+	display: inline-block;
+  font-size: 12px;
+  color: #7e8c8d;
+  position:relative;
+  padding-left: 20px;
+  margin-right: 10px;
+}
+.post-time img{
+  width: 14px;
+  position: absolute;
+  left: 0px;
+  top: 2px;
+}
+span.loc {
+  color: #7e8c8d;
+  font-size: 12px;
+  margin: 5px 0 0;
+  position: relative;
+  padding-left: 17px;
+}
+span.loc img{
+  width: 10px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+.post-data {
+  padding: 10px 15px;
+}
+.post-action {
+  padding: 10px 15px;
+  position: relative;
+}
+.post-action .reply{
+  float: right;
+  position: relative;
+}
+.post-edit-action{
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+.post-edit-action img{
+  width: 28px;
+}
+.post-edit-action button{
+  border: 0px;
+  background: none;
+  padding: 0px;
+  cursor: pointer;
+  outline: none;
+}
+.forum-post-single .single-post{
+  border-radius: 0px;
+}
+.reply-comments{
+  padding-left: 40px;
+}
+.reply-comments .single-post:before{
+  position: absolute;
+  content: '';
+  top: 20px;
+  right: 100%;
+  width: 0; 
+  height: 0; 
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent; 
+  border-right:10px solid #fff; 
+}
+.breadcrumb-cont {
+  color: #535353;
+  font-size: 12px;
+  margin: 10px 0 0 -60px;
+}
+.like-cont input[type=checkbox].css-checkbox {
+  position:absolute; 
+  z-index:-1000; 
+  left:-1000px; 
+  overflow: hidden; 
+  clip: rect(0 0 0 0); 
+  height:1px; 
+  width:1px; 
+  margin:-1px; 
+  padding:0; 
+  border:0;
+}
+
+.like-cont input[type=checkbox].css-checkbox + label.css-label {
+  padding-left: 30px;
+  height: 23px;
+  display: inline-block;
+  line-height: 22px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  font-size: 14px;
+  vertical-align: middle;
+  cursor: pointer;
+
+}
+
+.like-cont input[type=checkbox].css-checkbox:checked + label.css-label {
+  background-position: 0 -23px;
+}
+.like-cont label.css-label {
+  background-image:url('../images/like-btn.png');
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.like-cont input[type=checkbox].css-checkbox + label.css-label span {
+  width: 23px;
+  height: 23px;
+  display: inline-block;
+  background: #92E7DC;
+  color: #000;
+  text-align: center;
+  line-height: 23px;
+  font-weight: 400;
+  border-radius: 50%;
+}
+.btn-reply {
+  width: 102px;
+  display: inline-block;
+  background: #92E7DC;
+  color: #000;
+  border: 0px;
+  font-size: 12px;
+  padding: 6px 10px;
+  text-decoration: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.post-action .reply-count {
+  font-size: 12px;
+  color: #8E8E8E;
+  display: inline-block;
+  padding: 0 10px;
+}
+.btn-cont.text-right {
+  text-align: right;
+  float: right;
+  width: 73%;
+}
+.clearfix:after {
+   content: " "; /* Older browser do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+.like-cont {
+  float: left;
+  width: 27%;
+}
+.view-more {
+  width: 100%;
+  font-size: 20px;
+  color: #7e8c8d;
+  background: #fff;
+  border: 0px;
+  padding: 10px 10px;
+}
+.reply-action{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.reply-action button img{
+  width: 6px;
+}
+.reply-action button{
+  background: none;
+  border: 0px;
+  outline: none;
+}
+.reply-action .dropdown-menu{
+  left: auto;
+  right: 0px;
+}
+.reply-post-cont .post-header{
+  min-height: 72px;
+}
+.post-time.time-bottom{
+  width: 190px;
+}
+.like-bottom{
+  float: none;
+  width: 100%;
+}
+.rpost-comments {
+  display: inline-block;
+  margin: 0 0 5px 15px;
+}
+.rpost-comments img{
+  width: 23px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+.rpost-comments a {
+  position: relative;
+  padding: 0 0 0 35px;
+}
+.rpost-comments span{
+  width: 23px;
+  height: 23px;
+  display: inline-block;
+  background: #92E7DC;
+  color: #000;
+  text-align: center;
+  line-height: 23px;
+  font-weight: 400;
+  border-radius: 50%;
+}
+.time-comment-bottom{
+  color: #7e8c8d;
+  font-size: 11px;
+}
+.no-bottom-padding{
+  padding-bottom: 0px !important;
+}
+@media only screen and (max-width: 479px){
+.post-time {
+  position: relative;
+  top: 0;
+  width: 100%;
+}
+.post-header span.title{
+  padding-right: 0px;
+}
+.post-time.time-bottom{
+  position: absolute;
+  right: 0;
+  top: 0px;
+  width: 100px;
+}
+}

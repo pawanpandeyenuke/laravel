@@ -1023,7 +1023,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	});
 
 
-		$(document).on('click','.load-more-forumpost',function(){
+	$(document).on('click','.load-more-forumpost',function(){
 		$('.loading-text').hide();
 		$('.loading-img').show();
 		var current = $(this);
@@ -1034,7 +1034,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		$.ajax({
 			'url' : '/ajax/view-more-forum-post',
 			'type' : 'post',
-			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum },
+			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, call_type: 'web' },
 			'success' : function(data){
 				if(data != 'No More Results'){		
 					pageid = pageid + 1;
@@ -1050,7 +1050,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		});
 	});
 
-		$(document).on('click','.load-more-forumreply',function(){
+	$(document).on('click','.load-more-forumreply',function(){
 		$('.loading-text').hide();
 		$('.loading-img').show();
 		var current = $(this);
@@ -1058,7 +1058,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		$.ajax({
 			'url' : '/ajax/view-more-forum-reply',
 			'type' : 'post',
-			'data' : { 'pageid': pageid ,'forumpostid' : forumpostid },
+			'data' : { 'pageid': pageid ,'forumpostid' : forumpostid, 'call_type': 'web' },
 			'success' : function(data){
 				if(data != 'No More Results'){		
 					pageid = pageid + 1;
@@ -1383,7 +1383,7 @@ $(document).on('click','.savegroupname',function()
 
 	});
 
-		$(document).on('click', '.likeforumpost', function(){		
+	$(document).on('click', '.likeforumpost', function(){		
 		//var _token = $('#postform input[name=_token]').val();
 		var forumPostID = $(this).data('forumpostid');
 		// var user_id = $('#user_id').val();
