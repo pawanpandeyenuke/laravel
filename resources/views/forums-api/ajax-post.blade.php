@@ -26,6 +26,19 @@
 
 	<div class="single-post">
 		<div class="post-header">
+		  	@if($user_id)
+		  		@if($user_id == $user->id)
+					<div class="dropdown reply-action">
+						<button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							<li><a href="#">Edit</a></li>
+							<li><a href="#">Delete</a></li>
+						</ul>
+					</div>
+			  	@endif
+		  	@endif
 			<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
 			<span class="title">{{ $user->first_name }}</span>
 			<div class="post-time">

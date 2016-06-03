@@ -1395,7 +1395,7 @@ comments;
 
 	public function viewMoreForumPost()
 	{
-		$per_page = 5;
+		$per_page = 10;
 		$page = Input::get('pageid');
 		$call_type = Input::get('call_type');
 		$breadcrum = Input::get('breadcrum');
@@ -1411,7 +1411,7 @@ comments;
 
 		$str  = "No More Results";
 
-		if($call_type === 'web'){
+		if($call_type == 'web'){
 			if(!($posts->isEmpty())){
 				return view('forums.viewmoreforumposts')
 							->with('posts',$posts)
@@ -1420,12 +1420,13 @@ comments;
 			else{
 				echo $str;
 			}
-		}elseif($call_type === 'api'){
+		}elseif($call_type == 'api'){
 			if(!($posts->isEmpty())){
-				// echo '<pre>';print_r($posts->count());die;
+				$per_page = 5;
 				return view('forums-api.ajax-post')
 							->with('forumPosts',$posts)
 							->with('breadcrum',$breadcrum)
+							->with('user_id', Input::get('user_id'))
 							->render();
 			}
 			else{
@@ -1583,7 +1584,7 @@ comments;
 
 	public function viewMoreForumReply()
 	{
-		$per_page = 5;
+		$per_page = 10;
 		$page = Input::get('pageid');
 		$call_type = Input::get('call_type');
 		$forumpostid = Input::get('forumpostid');
@@ -1610,6 +1611,7 @@ comments;
 				echo $str;
 			}
 		}elseif($call_type === 'api'){
+			$per_page = 5;
 			if(!($reply->isEmpty())){
 				return view('forums-api.ajax-reply')
 						->with('replies', $reply)
