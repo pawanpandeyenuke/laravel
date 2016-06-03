@@ -508,7 +508,7 @@ class DashboardController extends Controller
             } 
 
             $time=strtotime($arguments['birthday']);
-            $arguments['birthday']=date('Y-m-d',$time);
+            $arguments['birthday'] = date('Y-m-d',$time);
  
             if($arguments){
 
@@ -522,7 +522,7 @@ class DashboardController extends Controller
                     $file->move(public_path('uploads/user_img'), $image_name);
                 }
                 
-                // $arguments['picture'] = 'uploads/user_img/'.$arguments['picture'];
+                $arguments['country_code'] = empty($arguments['phone_no']) ? '' : $arguments['country_code'];
                 // echo '<pre>';print_r($arguments);die;
                 foreach ($arguments as $key => $value) {
                     if( $key != 'email' && $key != 'password' ){

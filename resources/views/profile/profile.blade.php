@@ -149,7 +149,9 @@
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-technology"></i>Contact</div></td>
 													<td>
-														<span style="font-weight:500">{{!empty($user->country_code)?'+ '.$user->country_code.' -':'N/A'}}</span>
+														@if(!empty($user->phone_no))
+															<span style="font-weight:500">{{!empty($user->country_code)?'+ '.$user->country_code.' -':'N/A'}}</span>
+														@endif
 														<span style="font-weight:500">{{!empty($user->phone_no)?$user->phone_no:'N/A'}}</span>
 													</td>
 												</tr>

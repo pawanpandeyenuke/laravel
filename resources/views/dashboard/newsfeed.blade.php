@@ -7,7 +7,7 @@
 			<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 				@if($data->user->id == Auth::User()->id)
 
-				<button type="button" class="p-edit-btn edit-post" data-toggle="modal" title="Edit" data-target=".edit-post-popup"><i class="fa fa-pencil"></i></button>
+				<button type="button" class="p-edit-btn edit-post" title="Edit" ><i class="fa fa-pencil"></i></button>
 
 				<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 				@endif

@@ -731,7 +731,7 @@ comments;
 		$deletePosts = new Converse;
 		$newsFeed = $deletePosts->onDeletePosts($postId, $userId);
  
-		return $newsFeed; 
+		// return $newsFeed; 
 
  	}
 
