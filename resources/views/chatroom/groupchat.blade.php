@@ -187,45 +187,46 @@ $groupid = str_replace('/', '-', $groupid);
                                     <div id="gccollapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="gcheadingThree">
                                       <div class="panel-body">
                                         <div class="chat-user-list StyleScroll">
-                                          <ul>
-                                            @foreach($privategroup as $data)
-                                              <?php  
 
-                                              $privategroupname=$data['title'];
-                                              $privategroupid=strtolower($privategroupname);
-                                              $privategroupid=str_replace(" ","_",$privategroupid);
+                                <ul>
+                    @foreach($privategroup as $data)
+                    <?php  
 
-                                              $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
+                        $privategroupname=$data['title'];
+                        $privategroupid=strtolower($privategroupname);
+                        $privategroupid=str_replace(" ","_",$privategroupid);
+                         
+                        $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
+			
+                            $namestr='';
+                            $name=array();
+                            $count=0;
+                        foreach ($data['members'] as $mem) {
+                                if($mem['member_id']==Auth::User()->id)
+                                {
+                                    $name[]="You";
+                                    $count++;
+                                }
+                                else{
+                                $name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+                                }
+                            }
 
-                                              $namestr='';
-                                              $name=array();
-                                              $count=0; ?>
-                                              @foreach ($data['members'] as $mem) 
-                                                @if($mem['member_id']==Auth::User()->id)
-                                                  <?php
-                                                    $name[]="You";
-                                                    $count++;
-                                                  ?>
-                                                @else
-                                                  <?php $name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name'); ?>
-                                                @endif
-                                              @endforeach
+                            $namestr=implode(",",$name);
 
-                                              <?php $namestr=implode(",",$name); ?>
-
-                                              @if(!($count==0) || $data['owner_id']==Auth::User()->id) 
-                                                <li>
-                                                  <div class="chat-user-outer" >
-                                                    <a href="{{url('private-group-detail/<?php echo $data['id']; ?>)}}" >
-                                                      <span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
-                                                      <span class="title">{{$data['title']}}</span>
-                                                    </a>
-                                                    <button onclick="openChatRoom('<?php echo str_replace( ' ','_', $data['title'].'_'.$data['id'] ); ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
-                                                  </div>
-                                                </li>
-                                              @endif
-                                            @endforeach
-                                          </ul>
+                            if(!($count==0) || $data['owner_id']==Auth::User()->id) {   ?>
+                               <li>
+								   <div	class="pvt-room-list" style="position:relative;" >
+										<a href="{{url('private-group-detail/<?php echo $data['id']; ?>)}}" >
+											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
+											<span class="title">{{$data['title']}}</span>
+										</a>
+										<button onclick="openChatRoom('<?php echo str_replace( ' ','_', $data['title'].'_'.$data['id'] ); ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
+                                   </div>
+                               </li>
+							<?php } ?>
+                         @endforeach
+					</ul>
                                      </div><!--/chat user list-->
                                       </div>
                                     </div>
@@ -295,6 +296,7 @@ $groupid = str_replace('/', '-', $groupid);
       require(['converse'], function (converse) {
         
                 conObj = converse;
+                
                 converse.initialize({                           
                   prebind: true,
                   bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
@@ -307,6 +309,8 @@ $groupid = str_replace('/', '-', $groupid);
                   message_carbons: true,
                   send_initial_presence:true,
                   roster_groups: true ,
+                  forward_messages: true,
+                  auto_join_rooms: [{'jid': 'group3_3@friendzsquare.com', 'nick': 'Group3' }]
                 });
                 // jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                 // jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
@@ -340,10 +344,23 @@ $groupid = str_replace('/', '-', $groupid);
                   jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click(); 
                 }
 
-              if(groupname != '' || groupid != '')
-              {
-                openChatGroup(groupname, groupid);
-              }
+				if( groupname != '' || groupid != '' ){
+					console.log(groupid);
+					// converse.rooms.open('haeri@conference.friendzsquare.com', 'mycustomnick');
+					openChatGroup(groupname, groupid);
+					// converse.rooms.open(groupname, groupid);
+                }
+				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
+					console.log( 'room open' );
+				});
+				conObj.listen.on('chatBoxOpened', function (event, chatbox) { 
+					console.log( 'box open' ); 
+				});
+				conObj.listen.on('chatBoxToggled', function (event, chatbox) { 
+					console.log( 'box total' );
+				});
+            
+              
 
            });
 
@@ -542,15 +559,16 @@ function openChatbox( xmpusername,username ){
 
 }
 
- function hideOpendBox()
-       {
-              $(".chatroom:visible").each(function()    {
-                $(this).find('.icon-minus').click();
-                });
-                $(".chatbox:visible").each(function()   {
-                $(this).find('.icon-minus').click();
-                });
-       } 
+ function hideOpendBox(){
+	 /**
+	 $(".chatroom:visible").each(function()    {
+		$(this).find('.icon-minus').click();
+		});
+		$(".chatbox:visible").each(function()   {
+		$(this).find('.icon-minus').click();
+	});
+   **/
+}
   function openChatGroup(grpname,grpjid)
        {
         // alert(grpjid);
@@ -565,7 +583,8 @@ function openChatbox( xmpusername,username ){
             }
        }
 	function openChatRoom( room, roomname ){
-		converse.rooms.open( room+'@<?= Config::get('constants.xmpp_host_Url') ?>', roomname );	
+		hideOpendBox();
+		converse.rooms.open( room+'@conference.<?= Config::get('constants.xmpp_host_Url') ?>', roomname );	
 	}
 
     $('.status-r-btn').on('click',function(){
