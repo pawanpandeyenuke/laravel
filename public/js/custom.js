@@ -1036,6 +1036,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, call_type: 'web' },
 			'success' : function(data){
+				alert(data);
 				if(data != 'No More Results'){		
 					pageid = pageid + 1;
 					$('.loading-text').show();
