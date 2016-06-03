@@ -1936,7 +1936,9 @@ class ApiController extends Controller
 	public function getForumPosts()
 	{
 		try{
+
 			$breadcrumb = Request::get('breadcrumb');
+            $breadcrumb = urldecode($breadcrumb);
 
 	        $posts = ForumPost::with('user')
 	                        ->with('forumPostLikesCount')
