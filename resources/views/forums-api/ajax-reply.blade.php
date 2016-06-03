@@ -16,6 +16,8 @@
 			$replyLikessCount = isset($reply->replyLikesCount[0]) ? $reply->replyLikesCount[0]['replyLikesCount'] : 0;
 
 			$replyCommentsCount = isset($reply->replyCommentsCount[0]) ? $reply->replyCommentsCount[0]['replyCommentsCount'] : 0;
+
+			$pic = !empty($replyUser->picture) ? $replyUser->picture : url('images/user-thumb.jpg');
 		?>
 		<div class="single-post">
 			<div class="post-header">
@@ -33,10 +35,10 @@
 				  	@endif
 			  	@endif
 
-				<span class="u-img" style="background: url('<?= url($replyUser->picture) ?>');"></span>
+				<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
 				<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name}}</span>
 				<span class="loc">
-					<img src="{{url('forums-data/images/location.png')}}" alt="">{{ $replyLocation }}
+					<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($replyLocation)?$replyLocation:'N/A' }}
 				</span>
 			</div>
 

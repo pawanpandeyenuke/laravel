@@ -3,9 +3,10 @@
 @section('title', 'Forum Post Reply')
 
 @section('content')
-	
+
 	<?php
 		$user = $checkpost['user'];
+
 		$likesCount = isset($checkpost->forumPostLikesCount[0]) ? $checkpost->forumPostLikesCount[0]['forumlikescount'] : 0;
 	
 		$rawCountry = [$user->city, $user->state, $user->country];
@@ -17,19 +18,20 @@
 		$location = implode(', ', $rawCountry);
 		$postTitle = !empty($checkpost->title) ? $checkpost->title : '';
 		$breadcrumb = !empty($checkpost->forum_category_breadcrum) ? $checkpost->forum_category_breadcrum : '';
+		$pic = !empty($user->picture) ? $user->picture : 'images/user-thumb.jpg';
 
 	?>
 	<div class="forum-post-list">
 		<div class="single-post">
 			<div class="post-header">
-				<span class="u-img" style="background: url('<?= url($user->picture) ?>');"></span>
+				<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
 				<span class="title">{{ $user->first_name.' '.$user->last_name }}</span>
 				<div class="post-time">
 					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">{{ $checkpost->updated_at->format('D jS') }}</span>
 					<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="">{{ $checkpost->updated_at->format('h:i A') }}</span>
 				</div>
 				<span class="loc">
-					<img src="images/location.png" alt="">{{$location}}
+					<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($location)?$location:'N/A' }}
 				</span>
 				<div class="breadcrumb-cont">
 					<?= $breadcrumb ?>
@@ -53,7 +55,6 @@
 
 			@foreach($replies as $reply)
 				<?php 
-					// echo '<pre>';print_r($reply->owner_id);die; 
 					$replyUser = $reply->user;
 
 					$rawReplyCountry = [$replyUser->city, $replyUser->state, $replyUser->country];
@@ -69,6 +70,7 @@
 					$replyLikessCount = isset($reply->replyLikesCount[0]) ? $reply->replyLikesCount[0]['replyLikesCount'] : 0;
 
 					$replyCommentsCount = isset($reply->replyCommentsCount[0]) ? $reply->replyCommentsCount[0]['replyCommentsCount'] : 0;
+					$replyUserPic = !empty($replyUser->picture) ? $replyUser->picture : 'images/user-thumb.jpg';
 				?>
 				<div class="single-post">
 					<div class="post-header">
@@ -85,14 +87,13 @@
 								</div>
 						  	@endif
 					  	@endif
-
-						<span class="u-img" style="background: url('<?= url($replyUser->picture) ?>');"></span>
+<?php // print_r($reply_data);die; ?>
+						<span class="u-img" style="background: url('<?= url($replyUserPic) ?>');"></span>
 						<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name}}</span>
 						<span class="loc">
-							<img src="{{url('forums-data/images/location.png')}}" alt="">{{ $replyLocation }}
+							<img src="{{url('/forums-data/images/location.png')}}" alt="">{{ !empty($replyLocation)?$replyLocation:'N/A' }}
 						</span>
 					</div>
-
 					<div class="post-data">
 						<p>{{ $reply_data }}</p>
 					</div>
@@ -116,7 +117,6 @@
 			@endforeach
 
 		</div>
-
 		@if($replies->count() >= 5)
 			<div class="load-more-btn-cont text-center">
 				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumreply" data-forumpostid = "{{$checkpost->id}}">View More</button>
