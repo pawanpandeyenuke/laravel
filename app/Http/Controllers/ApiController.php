@@ -5,7 +5,7 @@ use Mail;
 use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
 use App\Http\Controllers\Controller;
-use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments;
+use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments,App\ForumsDoctor;
 use Validator, Input, Redirect, Request, Session, Hash, DB;
 use \Exception;
 
@@ -2180,6 +2180,24 @@ class ApiController extends Controller
 	        }
 	    }
 
+	public function getForumCategories()
+	{
+		$this->data = Forums::all();
+		$this->status = 'success';
+		$this->message = null;
+		
+		return $this->output();
+	}
+
+	public function getDoctorCategories()
+	{
+		$this->data = ForumsDoctor::all();
+		$this->status = 'success';
+		$this->message = null;
+		
+		return $this->output();
+	}
+
 	public function postForum()
 	{
 		try{
@@ -2188,18 +2206,36 @@ class ApiController extends Controller
 			if($user->isEmpty())
 				throw new Exception("No matching record for the user.", 1);
 			else{
-				$breadcrumb = explode(" > ", $args['breadcrumb']);
-				
-				foreach ($breadcrumb as $key => $value) {
-					$breadcrumb[$key] = Forums::where('title',$value)->value('id');
-				}
-				//print_r($breadcrumb);die;
-				if(in_array("", $breadcrumb)){
-					throw new Exception("Wrong breadcrumb", 1);
-				}
-				else{
-				
-				}
+					$forum_category_breadcrum = $args['breadcrumb'];
+					$id_array = explode(" > ", $forum_category_breadcrum);
+
+					foreach ($id_array as $key => $value) {
+					$id_array[$key] = Forums::where('title',$value)->value('id');
+					Forums::where('id',$id_array[$key])->update(['updated_at'=>date('Y-m-d H:i:s',time())]);      	
+					$cat_id = $id_array[$key];
+					}
+					$forum_category_id = implode(",", $id_array);
+
+					if($cat_id == null)
+					$cat_id = "opt";
+
+					$data = ['title'=>$args['post'],
+					'owner_id'=>$args['user_id'],
+					'category_id'=>$cat_id,
+					'forum_category_id'=>$forum_category_id,
+					'forum_category_breadcrum'=>$forum_category_breadcrum,
+					'created_at'=>date('Y-m-d H:i:s',time()),
+					'updated_at'=>date('Y-m-d H:i:s',time())];
+
+					$forumpost = new Forumpost;
+					$this->message = 'Your forum post has been saved successfully.';
+        			$this->status = 'success';
+					$post = $forumpost->create($data);
+					$this->data = ForumPost::with('user')
+						                    ->with('forumPostLikesCount')
+						                    ->with('replyCount')
+						                    ->where('id',$post->id)
+						                    ->get();
 			}
 				
 		}
@@ -2208,6 +2244,120 @@ class ApiController extends Controller
 		}
 
 		return $this->output();		
+	}
+
+	public function likeForumPost()
+	{
+		try{
+			$args = Request::all();
+			$user = User::where('id',$args['user_id'])->get();
+			if($user->isEmpty())
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				$post_check = ForumPost::where('id',$args['post_id'])->value('id');
+				if($post_check == null)
+					throw new Exception("No such forum post exist.", 1);
+				else{
+					$this->status = 'success';
+					$likecheck = ForumLikes::where('owner_id',$args['user_id'])->where('post_id',$args['post_id'])->value('id');
+					if($likecheck == null){
+						$likedata = ['liked'=>'Yes',
+									 'owner_id'=>$args['user_id'],
+									 'post_id'=>$args['post_id']];
+
+					   $forumlike = new ForumLikes;
+					   $this->message = 'Liked Post';
+					   $this->data = $forumlike->create($likedata);
+					} else{
+        				ForumLikes::where('owner_id',$args['user_id'])->where('post_id',$args['post_id'])->delete();
+        				$this->message = 'Unliked Post';
+					}
+
+				}
+					  
+			}
+				
+		}
+		catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();		
+	}
+
+	public function deleteForumPost()
+	{
+		try{
+			$args = Request::all();
+			$user = User::where('id',$args['user_id'])->get();
+			if($user->isEmpty())
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				$post_check = ForumPost::where('id',$args['post_id'])->value('owner_id');
+				if($post_check == null)
+					throw new Exception("No such forum post exist.", 1);
+				else{
+					if($post_check != $args['user_id'])
+						throw new Exception("This user is not the owner of the forum post.", 1);
+					else{
+						ForumPost::where('id',$args['post_id'])->delete();
+						ForumLikes::where('post_id',$args['post_id'])->delete();
+						$reply_id_arr = ForumReply::where('post_id',$args['post_id'])->pluck('id')->toArray();
+						ForumReply::where('post_id',$args['post_id'])->delete();
+						ForumReplyComments::whereIn('reply_id',$reply_id_arr)->delete();
+						ForumReplyLikes::whereIn('reply_id',$reply_id_arr)->delete();
+						$this->status = "success";
+						$this->message = "Post deleted successfully.";
+					}
+
+				}
+					  
+			}
+				
+		}
+		catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+	}
+
+	public function editForumPost()
+	{
+		try{
+			$args = Request::all();
+			$user = User::where('id',$args['user_id'])->get();
+			if($user->isEmpty())
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				$post_check = ForumPost::where('id',$args['post_id'])->get();
+				if($post_check->isEmpty())
+					throw new Exception("No such forum post exist.", 1);
+				else{
+					$reply_count = ForumReply::where('post_id',$post_check->id)->get()->count();
+					if($post_check->owner_id != $args['user_id'])
+						throw new Exception("This user is not the owner of the forum post.", 1);
+					else if($reply_count > 0)
+						throw new Exception("This post can't be edited because the post has a reply on it.", 1);
+					else{
+						ForumPost::where('id',$args['post_id'])->update(['title' => $args['post']]);
+						$this->status = "success";
+						$this->message = "Post updated successfully.";
+						$this->data = ForumPost::with('user')
+				                    ->with('forumPostLikesCount')
+				                    ->with('replyCount')->where('id',$args['post_id'])->get();
+					}
+
+				}
+					  
+			}
+				
+		}
+		catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
 	}
 
 	public function postForumReply()
