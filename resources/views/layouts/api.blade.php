@@ -16,18 +16,20 @@
 	</head>
 
 	<body>
-
+		<div id="google_translate_element"></div>
 		@yield('content')
 
 <script type="text/javascript" src="{{ url('forums-data/js/jquery-1.11.3.min.js') }}"></script>
 <script type="text/javascript" src="{{ url('forums-data/js/bootstrap.min.js') }}"></script>
 <script src="{{url('forums-data/js/emojione.js')}}"></script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 
 
 	window.onload = function() {
 			loadOrgionalImogi();
+			googleTranslateElementInit();
 }
 
 		var pageid = 2;
@@ -195,6 +197,11 @@
 		$(this).html(converted);
 	});
 	}
+
+        function googleTranslateElementInit() {
+ 	  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+	}
+
 
 
 	});
