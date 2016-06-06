@@ -33,7 +33,7 @@
 
 </script>
 </head>
-
+@include('panels.loginpopup')
 <body class="dashboard">
 <div class="page-loading" style="display:none"><img src="{{url('/images/full-loading.gif')}}" alt=""></div>
  <header>
@@ -68,18 +68,19 @@
 			</div>
 			<div class="col-sm-3">
 				<div class="dashboard-header-menu text-right">
+          @if(Auth::check())
 					<ul class="list-inline">
 						<li class="user-info-top">
 							<?php $user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : '/images/user-icon.png';
-							if(Auth::check())
-							{
 							 ?>
 							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
 							{{Auth::User()->first_name}}</a>
 						</li>
 						<li><div class="logout"><a href="{{ url('/logout') }}" title="">Logout</a></div></li>
-						<?php } ?>
 					</ul>
+            @else
+            <a href="#" title="" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Login</a>
+            @endif
 				</div>
 			</div>
 		</div>
