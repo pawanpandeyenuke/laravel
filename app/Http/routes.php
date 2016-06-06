@@ -225,6 +225,7 @@ Route::post('api/forum-post','ApiController@postForum');
 Route::post('api/edit-forum-post','ApiController@editForumPost');
 
 Route::post('api/forum-post-reply','ApiController@postForumReply');
+Route::post('api/edit-forum-reply','ApiController@editForumReply');
 
 Route::match(['get', 'post'], 'api/get-forum-post','ApiController@getForumPosts');
 Route::match(['get', 'post'], 'api/get-forum-post-reply','ApiController@getForumPostsReply');

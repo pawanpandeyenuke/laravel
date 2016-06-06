@@ -30,8 +30,8 @@
 								<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-								<li><a href="#">Edit</a></li>
-								<li><a href="#">Delete</a></li>
+								<li><a href="{{ url("api/get-forum-reply-details?reply_id=$reply->id&user_id=$replyUser->id") }}">Edit</a></li>
+								<li><a href="#" class="forumreplydelete" data-forumpostid="{{$forumpostid}}" data-forumreplyid = "{{$reply->id}}">Delete</a></li>
 							</ul>
 						</div>
 				  	@endif
