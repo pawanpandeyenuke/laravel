@@ -112,13 +112,14 @@
 		$(document).on('click', '.api-likeforumpost', function(){		
 			//var _token = $('#postform input[name=_token]').val();
 			var forumPostID = $(this).data('forumpostid');
+			var userid = $(this).data('userid');
 			// var user_id = $('#user_id').val();
 			// var attrId = $(this).attr('id');	
 			// alert(attrId);
 			var current = $(this);		
 			$.ajax({			
 				'url' : '/ajax/likeforumpost',
-				'data' : { 'forumpostid': forumPostID },
+				'data' : { 'forumpostid': forumPostID, 'user_id':userid },
 				'type' : 'post',
 				'success' : function(response){
 					if(current.is(':checked')){
@@ -136,10 +137,11 @@
 
 		$(document).on('click', '.likeforumreply', function(){
 			var forumreplyid = $(this).data('forumreplyid');
+			var userid = $(this).data('userid');
 			var current = $(this);		
 			$.ajax({			
 				'url' : '/ajax/likeforumreply',
-				'data' : { 'forumreplyid':forumreplyid },
+				'data' : { 'forumreplyid':forumreplyid,  'user_id':userid },
 				'type' : 'post',
 				'success' : function(response){
 					var newresponse = jQuery.parseJSON(response);

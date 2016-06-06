@@ -22,7 +22,7 @@
 
 		$breadcrumb = !empty($posts->forum_category_breadcrum) ? $posts->forum_category_breadcrum : '';
 		$pic = !empty($user->picture) ? $user->picture : url('images/user-thumb.jpg');
-		$likedata = \App\ForumLikes::where(['owner_id' => $user->id, 'post_id' => $posts->id])->get(); 
+		$likedata = \App\ForumLikes::where(['owner_id' => $user_id, 'post_id' => $posts->id])->get(); 
 	?>
 
 	<div class="single-post">
@@ -60,8 +60,14 @@
 		<div class="post-action clearfix">
 			<div class="row-cont clearfix">
 				<div class="like-cont">
-					<input type="checkbox" name="checkboxG1" id="checkboxG1-post-{{$posts->id}}" data-forumpostid="{{$posts->id}}" class="css-checkbox api-likeforumpost" {{ isset($likedata[0])?'checked':'' }}>
-					<label for="checkboxG1-post-{{$posts->id}}" class="css-label"><span class="likescount">{{ $likesCount }}</span></label>
+						@if($user_id)
+							<input type="checkbox" name="checkboxG1" id="checkboxG1-post-{{$posts->id}}" data-forumpostid="{{$posts->id}}" data-userid="{{$user_id}}" class="css-checkbox api-likeforumpost" {{ isset($likedata[0])?'checked':'' }}>
+							<label for="checkboxG1-post-{{$posts->id}}" class="css-label"><span class="likescount">{{ $likesCount }}</span></label>
+						@else
+							<input type="checkbox" name="checkboxG1" id="checkboxG1-guest-post-{{$posts->id}}" class="css-checkbox">
+							<label for="checkboxG1-guest-post-{{$posts->id}}" class="css-label"><span class="likescount">
+							{{ $likesCount }}</span></label>
+						@endif
 				</div>
 				<div class="btn-cont text-right">
 					<span class="reply-count">
