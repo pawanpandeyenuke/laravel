@@ -1395,7 +1395,7 @@ comments;
 
 	public function viewMoreForumPost()
 	{
-		$per_page = 5;
+		$per_page = 10;
 		$page = Input::get('pageid');
 		$call_type = Input::get('call_type');
 		$breadcrum = Input::get('breadcrum');
@@ -1583,7 +1583,7 @@ comments;
 
 	public function viewMoreForumReply()
 	{
-		$per_page = 5;
+		$per_page = 10;
 		$page = Input::get('pageid');
 		$call_type = Input::get('call_type');
 		$forumpostid = Input::get('forumpostid');
