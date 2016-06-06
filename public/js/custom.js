@@ -1034,7 +1034,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		$.ajax({
 			'url' : '/ajax/view-more-forum-post',
 			'type' : 'post',
-			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, call_type: 'web' },
+			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, 'call_type': 'web' },
 			'success' : function(data){
 				if(data != 'No More Results'){		
 					pageid = pageid + 1;
@@ -1387,7 +1387,7 @@ $(document).on('click','.savegroupname',function()
 		//var _token = $('#postform input[name=_token]').val();
 		var forumPostID = $(this).data('forumpostid');
 		// var user_id = $('#user_id').val();
-		var current = $(this);		
+		var current = $(this);	
 		$.ajax({			
 			'url' : '/ajax/likeforumpost',
 			'data' : { 'forumpostid':forumPostID },
@@ -1406,6 +1406,7 @@ $(document).on('click','.savegroupname',function()
 					else{
 						$('#checkbox_forumpost_'+forumPostID).prop('checked',false);
 						$('#checkbox_forumpost_replypage_'+forumPostID).prop('checked',false);
+
 					}
 					current.parents('.p-likes').find('.plike-count').html(response);
 					current.parents('.fp-likes').find('.plike-count').html(response);

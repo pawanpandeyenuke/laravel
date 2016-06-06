@@ -18,6 +18,8 @@
 			$replyCommentsCount = isset($reply->replyCommentsCount[0]) ? $reply->replyCommentsCount[0]['replyCommentsCount'] : 0;
 
 			$pic = !empty($replyUser->picture) ? $replyUser->picture : url('images/user-thumb.jpg');
+
+			$likedata = \App\ForumReplyLikes::where(['owner_id' => $replyUser->id, 'reply_id' => $reply->id])->get();
 		?>
 		<div class="single-post">
 			<div class="post-header">
@@ -48,7 +50,7 @@
 			<div class="post-action clearfix">
 				<div class="row-cont clearfix">
 					<div class="like-cont like-bottom">
-						<input type="checkbox" name="checkboxG1" id="checkboxG1-reply-{{$reply->id}}" data-forumreplyid="{{$reply->id}}" class="css-checkbox likeforumreply">
+						<input type="checkbox" name="checkboxG1" id="checkboxG1-reply-{{$reply->id}}" data-forumreplyid="{{$reply->id}}" class="css-checkbox likeforumreply" {{ isset($likedata[0])?'checked':'' }}>
 						<label for="checkboxG1-reply-{{$reply->id}}" class="css-label"><span class="replies-like-count">{{ $replyLikessCount }}</span></label>
 
 						<div class="rpost-comments">
