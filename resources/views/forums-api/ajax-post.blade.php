@@ -22,6 +22,7 @@
 
 		$breadcrumb = !empty($posts->forum_category_breadcrum) ? $posts->forum_category_breadcrum : '';
 		$pic = !empty($user->picture) ? $user->picture : url('images/user-thumb.jpg');
+		$likedata = \App\ForumLikes::where(['owner_id' => $user->id, 'post_id' => $posts->id])->get(); 
 	?>
 
 	<div class="single-post">
@@ -33,8 +34,8 @@
 							<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
 						</button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-							<li><a href="#">Edit</a></li>
-							<li><a href="#">Delete</a></li>
+							<li><a href="{{ url("api/get-forum-post-details?post_id=$posts->id&user_id=$user->id") }}">Edit</a></li>
+							<li><a href="#" class="forumpostdelete" data-postid="{{$posts->id}}" data-breadcrum = "{{$posts->forum_category_breadcrum}}">Delete</a></li>
 						</ul>
 					</div>
 			  	@endif
@@ -59,7 +60,7 @@
 		<div class="post-action clearfix">
 			<div class="row-cont clearfix">
 				<div class="like-cont">
-					<input type="checkbox" name="checkboxG1" id="checkboxG1-post-{{$posts->id}}" data-forumpostid="{{$posts->id}}" class="css-checkbox api-likeforumpost">
+					<input type="checkbox" name="checkboxG1" id="checkboxG1-post-{{$posts->id}}" data-forumpostid="{{$posts->id}}" class="css-checkbox api-likeforumpost" {{ isset($likedata[0])?'checked':'' }}>
 					<label for="checkboxG1-post-{{$posts->id}}" class="css-label"><span class="likescount">{{ $likesCount }}</span></label>
 				</div>
 				<div class="btn-cont text-right">

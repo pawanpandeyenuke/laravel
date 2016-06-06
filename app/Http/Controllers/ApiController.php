@@ -2211,6 +2211,10 @@ class ApiController extends Controller
 			if($user->isEmpty())
 				throw new Exception("No matching record for the user.", 1);
 			else{
+
+				if($args['post'] == "")
+					throw new Exception("Post can't be empty.", 1);
+					
 					$forum_category_breadcrum = $args['breadcrumb'];
 					$id_array = explode(" > ", $forum_category_breadcrum);
 
@@ -2251,7 +2255,7 @@ class ApiController extends Controller
 		return $this->output();		
 	}
 
-	public function likeForumPost()
+/*	public function likeForumPost()
 	{
 		try{
 			$args = Request::all();
@@ -2326,7 +2330,7 @@ class ApiController extends Controller
 
 		return $this->output();	
 	}
-
+*/
 	public function editForumPost()
 	{
 		try{
@@ -2335,8 +2339,9 @@ class ApiController extends Controller
 			if($user->isEmpty())
 				throw new Exception("No matching record for the user.", 1);
 			else{
-				$post_check = ForumPost::where('id',$args['post_id'])->get();
-				if($post_check->isEmpty())
+				$post_check = ForumPost::where('id',$args['post_id'])->first();
+				//print_r($post_check);die;
+				if(!isset($post_check->id))
 					throw new Exception("No such forum post exist.", 1);
 				else{
 					$reply_count = ForumReply::where('post_id',$post_check->id)->get()->count();

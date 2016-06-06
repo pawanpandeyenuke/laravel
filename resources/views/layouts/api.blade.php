@@ -21,8 +21,14 @@
 
 <script type="text/javascript" src="{{ url('forums-data/js/jquery-1.11.3.min.js') }}"></script>
 <script type="text/javascript" src="{{ url('forums-data/js/bootstrap.min.js') }}"></script>
+<script src="{{url('forums-data/js/emojione.js')}}"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+
+
+	window.onload = function() {
+			loadOrgionalImogi();
+}
 
 		var pageid = 2;
 		$(document).on('click','.load-more-forumpost',function(){			
@@ -115,6 +121,14 @@
 				'data' : { 'forumpostid': forumPostID },
 				'type' : 'post',
 				'success' : function(response){
+					if(current.is(':checked')){
+					$('#checkboxG1-post-'+forumPostID).prop('checked',true);
+					$('checkboxG1-post-replypage-'+forumPostID).prop('checked',true);
+					}
+					else{
+						$('#checkboxG1-post-'+forumPostID).prop('checked',false);
+						$('checkboxG1-post-replypage-'+forumPostID).prop('checked',false);						
+					}
 					current.closest('.like-cont').find('.likescount').html(response);
 				}			
 			});	
@@ -139,6 +153,31 @@
 				}			
 			});	
 		});
+
+			$(document).on('click', '.forumpostdelete', function(){
+			var current = $(this);
+			var forumpostid = $(this).data('postid');
+			var breadcrum = $(this).data('breadcrum');	
+			$.ajax({
+			'url' : '/ajax/delforumpost',
+			'type' : 'post',
+			'data' : {'forumpostid' : forumpostid , 'breadcrum' : breadcrum},
+			'success' : function(response){		 
+				current.closest('.single-post').hide();
+			  }
+			});
+		});
+
+	function loadOrgionalImogi()
+	{
+	
+		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p, .f-single-post .more .morecontent span").each(function() {
+		var original = $(this).html();
+		// use .shortnameToImage if only converting shortnames (for slightly better performance)
+		var converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
+	}
 
 
 	});
