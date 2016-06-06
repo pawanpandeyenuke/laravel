@@ -2449,4 +2449,39 @@ class ApiController extends Controller
 
 		return $this->output();	
 	}
+
+	public function postForumComment()
+	{
+		try{
+			$args = Request::all();
+			$user = User::where('id',$args['user_id'])->get();
+			if($user->isEmpty())
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				$reply_check = ForumReply::where('id',$args['reply_id'])->value('id');
+				if($reply_check == null)
+					throw new Exception("No such forum reply exist.", 1);
+				else{
+					$arr = ['reply_comment'=>$args['comment'],
+							'owner_id'=>$args['user_id'],
+							'reply_id'=>$args['reply_id']];
+		               
+        		$forumcomment = new ForumReplyComments;
+        		$this->message = 'Your comment has been saved successfully.';
+        		$this->status = 'success';
+        		$comment = $forumcomment->create($arr);
+				$this->data = ForumReplyComments::with('user')
+								->where('id', $comment->id)
+								->get();
+				}
+					  
+			}
+				
+		}
+		catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();			
+	}
 }
