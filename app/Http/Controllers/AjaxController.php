@@ -1365,7 +1365,18 @@ comments;
 	public function likeForumPost()
 	{
 		$forumpost = Input::get('forumpostid');
-		$userid = Auth::User()->id;
+		$user_id = Input::get('user_id');
+		if($user_id == "")
+			$userid = Auth::User()->id;
+		else{
+			$user = User::where('id',$user_id)->get();
+			if($user->isEmpty()){
+				print_r("No such user in database.");die;
+			}
+			else
+				$userid = $user_id;
+		}
+		
 		$check = ForumPost::where('id',$forumpost)->get();
 		if($check->isEmpty()){
 			echo "no";
@@ -1505,7 +1516,17 @@ comments;
 	public function likeForumReply()
 	{
 		$forumreplyid = Input::get('forumreplyid');
-		$userid = Auth::User()->id;
+		$user_id = Input::get('user_id');
+		if($user_id == "")
+			$userid = Auth::User()->id;
+		else{
+			$user = User::where('id',$user_id)->get();
+			if($user->isEmpty()){
+				print_r("No such user in database.");die;
+			}
+			else
+				$userid = $user_id;
+		}
 
 		$likecheck = ForumReplyLikes::where('owner_id',$userid)->where('reply_id',$forumreplyid)->value('id');
 		if($likecheck == null)

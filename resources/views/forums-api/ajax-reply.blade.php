@@ -19,7 +19,7 @@
 
 			$pic = !empty($replyUser->picture) ? $replyUser->picture : url('images/user-thumb.jpg');
 
-			$likedata = \App\ForumReplyLikes::where(['owner_id' => $replyUser->id, 'reply_id' => $reply->id])->get();
+			$likedata = \App\ForumReplyLikes::where(['owner_id' => $user_id, 'reply_id' => $reply->id])->get();
 		?>
 		<div class="single-post">
 			<div class="post-header">
@@ -50,8 +50,13 @@
 			<div class="post-action clearfix">
 				<div class="row-cont clearfix">
 					<div class="like-cont like-bottom">
-						<input type="checkbox" name="checkboxG1" id="checkboxG1-reply-{{$reply->id}}" data-forumreplyid="{{$reply->id}}" class="css-checkbox likeforumreply" {{ isset($likedata[0])?'checked':'' }}>
-						<label for="checkboxG1-reply-{{$reply->id}}" class="css-label"><span class="replies-like-count">{{ $replyLikessCount }}</span></label>
+							@if($user_id)
+								<input type="checkbox" name="checkboxG1" id="checkboxG1-reply-{{$reply->id}}" data-forumreplyid="{{$reply->id}}" data-userid = "{{$user_id}}" class="css-checkbox likeforumreply" {{ isset($likedata[0])?'checked':'' }}>
+								<label for="checkboxG1-reply-{{$reply->id}}" class="css-label"><span class="replies-like-count">{{ $replyLikessCount }}</span></label>
+							@else
+								<input type="checkbox" name="checkboxG1" id="guest-reply-{{$reply->id}}" class="css-checkbox">
+								<label for="guest-reply-{{$reply->id}}" class="css-label"><span class="replies-like-count">{{ $replyLikessCount }}</span></label>
+							@endif
 
 						<div class="rpost-comments">
 							<a href="{{ url('api/get-forum-post-reply-comment?reply_id='.$reply->id) }}" title=""><img src="{{url('forums-data/images/comment-icon.png')}}" alt=""><span class="replies-comment-count">{{ $replyCommentsCount }}</span></a>

@@ -2017,6 +2017,7 @@ class ApiController extends Controller
 		try{
 
 			$reply_id = Request::get('reply_id');
+			$user_id = Request::get('user_id');
 
 		    $reply = ForumReply::with('user')
 					    ->with('replyLikesCount')
@@ -2030,10 +2031,11 @@ class ApiController extends Controller
 
 		    $replyComments = ForumReplyComments::with('user')->where('reply_id', $reply_id)->get();
  
-			// echo '<pre>';print_r($replyComments);die;
+			//echo '<pre>';print_r($replyComments);die;
 			return view('forums-api.forum-post-reply-comments')
 					->with('reply', $reply)
 					->with('replyComments', $replyComments->take(5))
+					->with('user_id',$user_id)
 					->render();
 
 		}catch(Exception $e){
