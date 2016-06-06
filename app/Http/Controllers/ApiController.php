@@ -2393,7 +2393,12 @@ class ApiController extends Controller
         		$forumreply = new ForumReply;
         		$this->message = 'Your reply has been saved successfully.';
         		$this->status = 'success';
-        		$this->data = $forumreply->create($data);
+        		$reply  = $forumreply->create($data);
+			$this->data = ForumReply::with('user')
+				                   ->with('replyLikesCount')
+                				   ->with('replyCommentsCount')
+				                    ->where('id',$reply->id)
+				                    ->get();
 
 				}
 					  
