@@ -170,6 +170,21 @@
 			});
 		});
 
+		$(document).on('click','.forumreplydelete',function(){
+		var current = $(this);
+		var forumreplyid = $(this).data('forumreplyid');
+		var forumpostid = $(this).data('forumpostid');
+			$.ajax({
+			'url' : '/ajax/delforumreply',
+			'type' : 'post',
+			'data' : {'forumreplyid' : forumreplyid , 'forumpostid' : forumpostid},
+			'success' : function(response){		 
+				current.closest('.single-post').hide();
+			}
+		});
+
+	});
+
 	function loadOrgionalImogi()
 	{
 	

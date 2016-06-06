@@ -1997,7 +1997,7 @@ class ApiController extends Controller
 	                ->get();
 
 			return view('forums-api.forum-post-reply')
-					->with('replies', $replies->take(5))
+					->with('replies', $replies->take(10))
 					->with('checkpost', $checkpost)
 					->with('user_id', $user_id)
 					->render();
@@ -2393,7 +2393,12 @@ class ApiController extends Controller
         		$forumreply = new ForumReply;
         		$this->message = 'Your reply has been saved successfully.';
         		$this->status = 'success';
-        		$this->data = $forumreply->create($data);
+        		$reply = $forumreply->create($data);
+				$this->data = ForumReply::with('user')
+				                    ->with('replyLikesCount')
+                					->with('replyCommentsCount')
+				                    ->where('id',$reply->id)
+				                    ->get();
 
 				}
 					  
@@ -2405,5 +2410,43 @@ class ApiController extends Controller
 		}
 
 		return $this->output();		
+	}
+
+	public function editForumReply()
+	{
+		try{
+			$args = Request::all();
+			$user = User::where('id',$args['user_id'])->get();
+			if($user->isEmpty())
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				$reply_check = ForumReply::where('id',$args['reply_id'])->first();
+				//print_r($post_check);die;
+				if(!isset($reply_check->id))
+					throw new Exception("No such forum reply exist.", 1);
+				else{
+					if($reply_check->owner_id != $args['user_id'])
+						throw new Exception("This user is not the owner of the forum reply.", 1);
+					else{
+						ForumReply::where('id',$args['reply_id'])->update(['reply' => $args['reply']]);
+						$this->status = "success";
+						$this->message = "Post updated successfully.";
+						$this->data = ForumReply::with('user')
+					                    ->with('replyLikesCount')
+		            					->with('replyCommentsCount')
+					                    ->where('id',$args['reply_id'])
+					                    ->get();
+					}
+
+				}
+					  
+			}
+				
+		}
+		catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
 	}
 }
