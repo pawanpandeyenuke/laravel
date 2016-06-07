@@ -3145,3 +3145,11 @@ margin-left: -15px;
     top: 5px;
     z-index: 1;
 }
+/****** For Fixing body shifting to right ******/
+body {
+  padding-right: 0px !important
+}
+
+.modal-open {
+  overflow-y: auto;
+}

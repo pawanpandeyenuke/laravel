@@ -1,6 +1,9 @@
+							<?php $userid = $forumreply->user->id; ?>
 							<div class="f-single-post" id="forumreply_{{$forumreply->id}}">
 										<div class="p-user">
+											<a href = "{{url("profile/$userid")}}" title = "User Profile">
 											<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
+											</a>
 											<div class="p-likes ml">
 											<div class="like-cont">
 												<input type="checkbox" name="" id="checkbox_forumreply_{{$forumreply->id}}" class="css-checkbox likeforumreply" data-forumreplyid="{{$forumreply->id}}" />
@@ -17,7 +20,7 @@
 										</div>
 
 										<div class="f-post-title">
-											{{$name}}
+											<a href = "{{url("profile/$userid")}}" title = "User Profile">{{$name}}</a>
 											<div class="fp-meta">
 												<span class="p-date"><i class="flaticon-days"></i> {{$forumreply->updated_at->format('d M Y')}}</span>
 												<span class="p-time"><i class="flaticon-time"></i> {{$forumreply->updated_at->format('h:i A')}}</span>
