@@ -1565,6 +1565,7 @@ comments;
 
 		return view('ajax.getforumpostbox')
 				->with('reply',$reply)
+				->with('reply_id',$reply_id)
 				->with('replyComments',$replyComments);
 	}
 
@@ -1782,7 +1783,6 @@ comments;
 				echo $str;
 			}	
 	}
-
 
 }
 	

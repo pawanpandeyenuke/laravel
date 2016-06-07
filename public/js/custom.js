@@ -394,6 +394,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		});
 
 	});
+		
 
 	/**
 	* Friend request tabs ajax call handling.

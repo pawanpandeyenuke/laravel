@@ -230,9 +230,10 @@ span.loc img{
   padding: 10px 10px;
 }
 .reply-action{
-  position: absolute;
-  right: 10px;
-  top: 10px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 9;
 }
 .reply-action button img{
   width: 6px;
@@ -304,3 +305,7 @@ span.loc img{
   width: 100px;
 }
 }
+.forum-post-list .post-data p img {
+    width: 25px;
+}
+

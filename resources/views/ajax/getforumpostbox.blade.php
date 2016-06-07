@@ -1,4 +1,5 @@
 		<div class="single-post">
+		<span style="display: none;" class="popup_reply_id">{{$reply_id}}</span>
 			<div class="pop-post-header">
 				<div class="post-header">
 					<div class="row">

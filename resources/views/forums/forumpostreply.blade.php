@@ -117,7 +117,9 @@
 											$likedata = \App\ForumReplyLikes::where(['owner_id' => Auth::User()->id, 'reply_id' => $forumreply->id])->get();
 
 										?>
+											<a href = "{{url("profile/$userid")}}" title = "User Profile">
 											<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
+											</a>
 											<div class="p-likes ml">
 											<div class="like-cont">
 											@if(Auth::check())
@@ -139,7 +141,7 @@
 										</div>
 
 										<div class="f-post-title">
-											{{$name}}
+											<a href = "{{url("profile/$userid")}}" title = "User Profile">{{$name}}</a>
 											<div class="fp-meta">
 												<span class="p-date"><i class="flaticon-days"></i> {{$forumreply->updated_at->format('d M Y')}}</span>
 												<span class="p-time"><i class="flaticon-time"></i> {{$forumreply->updated_at->format('h:i A')}}</span>
