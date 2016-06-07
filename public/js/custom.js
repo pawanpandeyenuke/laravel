@@ -1042,9 +1042,7 @@ $('.btn-upload-icon').find(".badge").remove();
 					$('.loading-img').hide();
 					current.parents('.forum-srch-list').find('.forumpostlist').append(data);
 				}else{
-					current.text('No more results');
-					current.removeClass('.load-more-forumpost');
-					//$('.load-btn').text('No more results')
+					current.parents('.load-more-btn-cont').html("<button title='View More Replies' class='btn btn-primary btn-smbtn-sm' type='button'>No more results</button>");
 				}
 			}	
 		});
@@ -1066,9 +1064,7 @@ $('.btn-upload-icon').find(".badge").remove();
 					$('.loading-img').hide();
 					current.parents('.forum-srch-list').find('.forumreplylist').append(data);
 				}else{
-					current.text('No more results');
-					current.removeClass('.load-more-forumreply');
-					//$('.load-btn').text('No more results')
+					current.parents('.load-more-btn-cont').html("<button title='View More Replies' class='btn btn-primary btn-smbtn-sm' type='button'>No more results</button>");
 				}
 			}	
 		});
@@ -1091,9 +1087,7 @@ $('.btn-upload-icon').find(".badge").remove();
 					$('.loading-img').hide();
 					current.parents('.forum-srch-list').find('.forumpostlist').append(data);
 				}else{
-					current.text('No more results');
-					current.removeClass('.load-more-forumreply');
-					//$('.load-btn').text('No more results')
+					current.parents('.load-more-btn-cont').html("<button title='View More Replies' class='btn btn-primary btn-smbtn-sm' type='button'>No more results</button>");
 				}
 			}	
 		});

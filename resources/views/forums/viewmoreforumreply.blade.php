@@ -28,7 +28,7 @@
 											<div class="p-likes ml">
 												<a href="#" class="popupforumreply" title="Open Comments" data-replyid = "{{$forumreply->id}}">
 													<i class="fa fa-comment" aria-hidden="true"></i> 
-													<span class="plike-count" id="forumreplycomment_{{$forumreply->id}}" title="Commments">{{$commentCount}}</span>
+													<span class="plike-count" id="forumreplycomment_{{$forumreply->id}}" title="Comments">{{$commentCount}}</span>
 												</a>
 											</div>
 										</div>
