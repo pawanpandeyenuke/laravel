@@ -1,6 +1,10 @@
 <?php 
 	$mainforums = \App\Forums::where('parent_id',0)->select('id','title')->get();
 	$diseases = \App\ForumsDoctor::pluck('title')->toArray();
+	if(isset($keyword))
+		$key = $keyword;
+	else
+		$key = "";
 ?>				
 				{!! Form::open(array('url' => 'search-forum','id' => 'search-forum-layout', 'method' => 'post')) !!}
 						<div class="forum-filter">
@@ -22,7 +26,7 @@
 								</div>
 								</div>
 								<div class="col-md-4">
-									<input type="text" name="forum-keyword" value="" id="forum-keyword-layout" placeholder="Enter Keyword" class="form-control">
+									<input type="text" name="forum-keyword" value="{{$key}}" id="forum-keyword-layout" placeholder="Enter Keyword" class="form-control">
 								</div>
 							</div>
 							<div class="row">

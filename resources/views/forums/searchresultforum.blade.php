@@ -31,7 +31,7 @@
 								 <div class="fs-breadcrumb">Search Result</div>
 
 								<div class="forum-post-cont">
-									<div class="posts-count search-forum-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{$postscount}}</span> Posts</div>
+									<div class="posts-count search-forum-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{$postscount}}</span> Posts found for "{{$keyword}}"</div>
 								</div><!--/forum post cont-->
 
 								@if(Auth::check())
@@ -103,7 +103,8 @@
 									@endif
 									</div>
 
-									<p> {{$data->title}} </p>
+									<p> <b>{{$data->forum_category_breadcrum}}</b><br>
+										{{$data->title}} </p>
 
 									<div class="fp-btns text-right">
 										<span class="reply-count">Replies ({{$replyCount}})</span>

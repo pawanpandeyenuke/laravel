@@ -7,7 +7,7 @@ use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, Ap
 
 use App\Library\Converse, Google_Client, Mail;
 
-use Request, Session, Validator, Input, Cookie;
+use Request, Session, Validator, Input, Cookie, Hash;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -29,7 +29,6 @@ class DashboardController extends Controller
 
 	public function dashboard()
 	{
-
         try{ 
             $xmppusername = User::where('id',Auth::User()->id)->value('xmpp_username');
 

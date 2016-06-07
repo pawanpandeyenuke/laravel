@@ -144,7 +144,7 @@
                                 <?php //echo '<pre>';print_r($countries);die;?>
 
                             <div class="form-group">
-                                <select class="form-control icon-field" name ="" id="mob-country">
+                                <select class="form-control icon-field" name ="country" id="mob-country">
                                     @foreach($countries as $key => $country)
                                         <option value="{{ $key }}">{{ $country }}</option>
                                     @endforeach

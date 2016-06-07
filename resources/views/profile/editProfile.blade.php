@@ -3,6 +3,7 @@
 @section('content')
 
 <?php
+// print_r($education);die;
 	if(!empty($user->country)){
 
 		//$country = DB::table('country')->where('country_id', '=', $user->country)->value('country_name'); 
@@ -412,7 +413,7 @@
 													</div>
 												</div> 
 
-											@endif										
+											@endif	
 										</div>
 										<div id="addedRows"></div>										
 									</div>
