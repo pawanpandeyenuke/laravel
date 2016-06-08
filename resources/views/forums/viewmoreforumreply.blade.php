@@ -14,9 +14,10 @@
 										 	$userid = $user->id;
 											$profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 											$name = $user->first_name." ".$user->last_name;
-
+											if(Auth::check())
 											$likedata = \App\ForumReplyLikes::where(['owner_id' => Auth::User()->id, 'reply_id' => $forumreply->id])->get();
-
+											else
+											 $likedata = "";
 										?>
 										<a href = "{{url("profile/$userid")}}" title = "User Profile">
 											<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
@@ -42,11 +43,13 @@
 												<span class="p-date"><i class="flaticon-days"></i> {{$forumreply->updated_at->format('d M Y')}}</span>
 												<span class="p-time"><i class="flaticon-time"></i> {{$forumreply->updated_at->format('h:i A')}}</span>
 											</div>
+											@if(Auth::check())
 											@if($userid == Auth::User()->id)
 											<div class="fp-action">
 											<button class='editforumreply' title="Edit Reply" value='{{$forumreply->id}}'data-forumpostid = "{{$forumpostid}}"><i class='flaticon-pencil'></i></button>
 											<button class='forumreplydelete' value='{{$forumreply->id}}' data-forumpostid = "{{$forumpostid}}" title="Delete Reply"><i class='flaticon-garbage'></i></button>
 											</div>
+											@endif
 											@endif
 										</div>
 										<p class="more3"><?php echo nl2br($forumreply->reply); ?></p>

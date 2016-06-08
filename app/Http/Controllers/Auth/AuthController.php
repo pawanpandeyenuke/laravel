@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 	
-use Auth;
+use Auth,Hash;
 use DB;
 use App\Library\Converse;
 use Socialite;
-use App\User,Mail,Session;
+use App\User,App\Country,Mail,Session;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -52,6 +52,7 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
+
         return Validator::make($data, [
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
@@ -68,17 +69,23 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
+        
         $confirmation_code = str_random(30);
- 
+        $raw_token = $data['first_name'].date('Y-m-d H:i:s',time()).$data['last_name'].$data['email'];
+        $access_token = Hash::make($raw_token);
+        $data['country'] = Country::where('country_id',$data['country'])->value('country_name');
+        //print_r($access_token);die;
         $userdata = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'country' => $data['country'],
             'country_code' => str_replace('+', '', $data['country_code']),
 	        'phone_no' => $data['phone_no'],
             'confirmation_code' => $confirmation_code,
-            'is_email_verified' => 'N'
+            'is_email_verified' => 'N',
+            'access_token' => $access_token
         ]);
         $xmpp_username = $userdata->first_name.$userdata->id;
         $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);

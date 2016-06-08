@@ -29,7 +29,6 @@ class DashboardController extends Controller
 
 	public function dashboard()
 	{
-
         try{ 
             $xmppusername = User::where('id',Auth::User()->id)->value('xmpp_username');
 

@@ -232,6 +232,7 @@ Route::post('api/forum-post-comment','ApiController@postForumComment');
 Route::match(['get', 'post'], 'api/get-forum-post','ApiController@getForumPosts');
 Route::match(['get', 'post'], 'api/get-forum-post-reply','ApiController@getForumPostsReply');
 Route::match(['get', 'post'], 'api/get-forum-post-reply-comment','ApiController@getForumPostsReplyComment');
+
 Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getForumPostsDetails');
 
 

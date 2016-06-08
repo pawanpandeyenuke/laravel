@@ -36,6 +36,7 @@
 									<a href="{{url("profile/$userid")}}" title="User Profile">
 										{{$data->user->first_name." ".$data->user->last_name}}
 									</a>
+									@if(Auth::check())
 									@if($data->user->id == Auth::user()->id)
 										<div class="fp-action">
 										@if($replyCount == 0)
@@ -43,6 +44,7 @@
 										@endif
 											<button class="forumpostdelete" value="{{$data->id}}" title="Delete Post" data-breadcrum = "{{$breadcrum}}"><i class="flaticon-garbage" ></i></button>
 										</div>
+									@endif
 									@endif
 									</div>
 

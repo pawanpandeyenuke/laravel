@@ -38,25 +38,26 @@ return [
 	'facebook' => [
     		'client_id' => '147417315641264',
     		'client_secret' => '796d800b177429195b9994152301c82f',
-    		'redirect' => 'http://friendzsquare.com/callback/facebook',
+    		'redirect' => 'http://stage.friendzsquare.com/callback/facebook',
 	],
  
 	'twitter' => [
             'client_id' => 'tu7f4c1WegVX2UzybYkHbKQnu',
             'client_secret' => 'pavx5Ies5YtKSFL675hsyBKPXdvTtILmd6jS3lSe8k6JJdsfTC',
-            'redirect' => 'http://friendzsquare.com/callback/twitter',
+            'redirect' => 'http://stage.friendzsquare.com/callback/twitter',
+	    'scopes' => 'email',
 	],
     
 	'google' => [
             'client_id' => '497778402485-761fpbrmt0vucml85gk7be49c8fpmi7b.apps.googleusercontent.com',
             'client_secret' => 'edvSDQiJBSwgsgPSmems9RnA',
-            'redirect' => 'http://friendzsquare.com/callback/google',
+            'redirect' => 'http://stage.friendzsquare.com/callback/google',
 	],
     
 	'linkedin' => [
     		'client_id' => '75kno0ahk9abe7',
     		'client_secret' => '4c3Cjv0urMvDVWqa',
-    		'redirect' => 'http://friendzsquare.com/callback/linkedin', 
+    		'redirect' => 'http://stage.friendzsquare.com/callback/linkedin', 
 
 	],
     

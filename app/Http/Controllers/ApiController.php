@@ -1939,6 +1939,7 @@ class ApiController extends Controller
 
 			$breadcrumb = Request::get('breadcrumb');
 			$user_id = Request::get('user_id');
+			$access_token = Request::get('access_token');
 
 		        $breadcrumb = urldecode($breadcrumb);
 
@@ -1948,9 +1949,17 @@ class ApiController extends Controller
 	                        ->where('forum_category_breadcrum',$breadcrumb)
 	                        ->orderBy('updated_at','DESC')
 	                        ->get();
+	        if($user_id != ""){      
+			$user_check = User::where('id',$user_id)->first();
+			  // print_r($user_check->access_token);die;
 
-			// echo '<pre>';print_r($posts->isEmpty());die;
-
+			if($user_check == "")
+				return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
+			else{
+				if($access_token != $user_check->access_token)
+				 return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
+			}
+			}
 			if($posts->isEmpty()){
 				return view('forums-api.forum-not-found')->with('message', 'Post does not exist.')->render();
 			}
@@ -1977,7 +1986,7 @@ class ApiController extends Controller
 
 			$post_id = Request::get('post_id');
 			$user_id = Request::get('user_id');
-
+			$access_token = Request::get('access_token');
 		        $checkpost = ForumPost::with('user')
 	                        ->with('forumPostLikesCount')
 	                        ->where('id',$post_id)
@@ -1986,6 +1995,17 @@ class ApiController extends Controller
 //print_r($checkpost);die;
 			if(empty($checkpost)){
 				return view('forums-api.forum-not-found')->with('message', 'Reply does not exist.')->render();
+			}
+			if($user_id != ""){      
+			$user_check = User::where('id',$user_id)->first();
+			  // print_r($user_check->access_token);die;
+
+			if($user_check == "")
+				return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
+			else{
+				if($access_token != $user_check->access_token)
+				 return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
+			}
 			}
 
 
@@ -2018,6 +2038,7 @@ class ApiController extends Controller
 
 			$reply_id = Request::get('reply_id');
 			$user_id = Request::get('user_id');
+			$access_token = Request::get('access_token');
 
 		    $reply = ForumReply::with('user')
 					    ->with('replyLikesCount')
@@ -2028,6 +2049,19 @@ class ApiController extends Controller
 			if(empty($reply)){
 				return view('forums-api.forum-not-found')->with('message', 'Post does not exist.')->render();
 			}
+			
+			if($user_id != ""){      
+			$user_check = User::where('id',$user_id)->first();
+			  // print_r($user_check->access_token);die;
+
+			if($user_check == "")
+				return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
+			else{
+				if($access_token != $user_check->access_token)
+				 return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
+			}
+			}
+
 
 		    $replyComments = ForumReplyComments::with('user')->where('reply_id', $reply_id)->get();
  

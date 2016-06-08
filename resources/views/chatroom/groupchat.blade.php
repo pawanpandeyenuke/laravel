@@ -214,10 +214,12 @@ $groupid = str_replace('/', '-', $groupid);
 
                             $namestr=implode(",",$name);
 
-                            if(!($count==0) || $data['owner_id']==Auth::User()->id) {   ?>
+                            if(!($count==0) || $data['owner_id']==Auth::User()->id) { 
+                            $pri_id = $data['id'];
+                              ?>
                                <li>
 								   <div	class="pvt-room-list" style="position:relative;" >
-										<a href="{{url('private-group-detail/<?php echo $data['id']; ?>)}}" >
+										<a href="{{url("private-group-detail/$pri_id")}}" >
 											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
 											<span class="title">{{$data['title']}}</span>
 										</a>

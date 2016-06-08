@@ -24,7 +24,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'gender', 'birthday', 'phone_no', 'country', 'state', 'city', 'fb_id', 'linked_id', 'twitter_id', 'google_id', 'push_token', 'device_type', 'xmpp_username', 'xmpp_password', 'is_email_verified', 'status','marital_status', 'country_code' ];
+    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'gender', 'confirmation_code', 'birthday', 'phone_no', 'country', 'state', 'city', 'fb_id', 'linked_id', 'twitter_id', 'google_id', 'push_token', 'device_type', 'xmpp_username', 'xmpp_password', 'is_email_verified', 'status','marital_status', 'country_code', 'access_token' ];
 
     /**
      * The attributes excluded from the model's JSON form.
