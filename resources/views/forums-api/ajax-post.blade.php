@@ -34,9 +34,9 @@
 							<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
 						</button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-							@if($repliesCount == 0)
+						 @if($repliesCount == 0)
 							<li><a href="{{ url("api/get-forum-post-details?post_id=$posts->id&user_id=$user->id&post_data=$postTitle") }}">Edit</a></li>
-							@endif
+						 @endif
 							<li><a href="#" class="forumpostdelete" data-postid="{{$posts->id}}" data-breadcrum = "{{$posts->forum_category_breadcrum}}">Delete</a></li>
 						</ul>
 					</div>

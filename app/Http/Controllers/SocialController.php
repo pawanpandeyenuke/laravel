@@ -28,6 +28,10 @@ class SocialController extends Controller
 					$user = new User;
 					$tempEmail = explode('@', $providerUser['email']);
 					$providerUser['password'] = Hash::make($tempEmail[0]);
+					$raw_token = $providerUser['first_name'].date('Y-m-d H:i:s',time()).$providerUser['last_name'].$providerUser['email'];
+        				$access_token = Hash::make($raw_token);
+					$providerUser['access_token'] = $access_token;
+					//print_r($user);die;
 					$userDbObj = $user->create($providerUser);
 
 /*				//Saving xmpp-username and xmpp-pasword into database.
@@ -92,7 +96,7 @@ class SocialController extends Controller
 				break;
 			
 			case 'twitter':
-			
+				echo '<pre>';print_r($providerUser);die;
 				$email = 'demo.user@twitter.com';
 				$nameRaw = explode(' ', $providerUser->getName());
 				
