@@ -31,6 +31,7 @@
 
 @section('content')
 <?php 
+
 $groupid=$groupname;
 $groupname = implode(' ', array_map('ucfirst', explode('_', $groupid)));
 $groupname = implode(',', array_map('ucfirst', explode(',', $groupname)));
@@ -51,7 +52,6 @@ if($pgid){
   }
 }
 $groupid = str_replace('/', '-', $groupid);
-
 ?>
 <div class="page-data dashboard-body">
         <div class="container">

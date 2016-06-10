@@ -14,10 +14,16 @@
 										 	$userid = $user->id;
 											$profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 											$name = $user->first_name." ".$user->last_name;
-											if(Auth::check())
-											$likedata = \App\ForumReplyLikes::where(['owner_id' => Auth::User()->id, 'reply_id' => $forumreply->id])->get();
+											if(Auth::check()){
+											$likedata = \App\ForumLikes::where(['owner_id' => Auth::User()->id, 'post_id' => $forumreply->id])->get(); 
+											
+											if($user->id == Auth::User()->id)
+												$temp_class = "";
 											else
-											 $likedata = "";
+												$temp_class = "without-action-btn";
+											}else{
+												$temp_class = "without-action-btn";
+											}
 										?>
 										<a href = "{{url("profile/$userid")}}" title = "User Profile">
 											<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
@@ -28,6 +34,7 @@
 												<label for="checkbox_forumreply_{{$forumreply->id}}" title="Like Reply" class="css-label"></label>
 											</div>
 											<span class="plike-count forumreplylike" title="Likes">{{$likeCount}}</span>
+											</div>
 											<div class="p-likes ml">
 												<a href="#" class="popupforumreply" title="Open Comments" data-replyid = "{{$forumreply->id}}">
 													<i class="fa fa-comment" aria-hidden="true"></i> 
@@ -35,9 +42,8 @@
 												</a>
 											</div>
 										</div>
-										</div>
 
-										<div class="f-post-title">
+										<div class="f-post-title {{$temp_class}}">
 											<a href = "{{url("profile/$userid")}}" title = "User Profile">{{$name}}</a>
 											<div class="fp-meta">
 												<span class="p-date"><i class="flaticon-days"></i> {{$forumreply->updated_at->format('d M Y')}}</span>

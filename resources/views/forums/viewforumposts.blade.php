@@ -1,7 +1,8 @@
-@extends('layouts.dashboard')
-
 <?php
  ?>
+@extends('layouts.dashboard')
+
+
 
 <style type="text/css">
 	.boxsize{width:200px;}
@@ -63,8 +64,17 @@
 												$replyCount = 0;
 									$userid = $user->id;
 									$profileimage = !empty($data->user->picture) ? $user->picture : '/images/user-thumb.jpg';
-									if(Auth::check())
+									if(Auth::check()){
 									$likedata = \App\ForumLikes::where(['owner_id' => Auth::User()->id, 'post_id' => $data->id])->get(); 
+									
+									if($user->id == Auth::User()->id)
+										$temp_class = "";
+									else
+										$temp_class = "without-action-btn";
+									}
+									else{
+										$temp_class = "";
+									}
 									?>
 										<a href="{{url("profile/$userid")}}" title="User Profile">
 											<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
@@ -87,7 +97,7 @@
 
 									</div>
 
-									<div class="f-post-title">
+									<div class="f-post-title {{$temp_class}}">
 									<a href="{{url("profile/$userid")}}" title="User Profile">
 										{{$data->user->first_name." ".$data->user->last_name}}
 									</a>
@@ -102,14 +112,13 @@
 									@endif
 									@endif
 									</div>
+									<p ><?php 
 
-									<p ><?php echo nl2br($data->title); ?></p>
-
+									echo nl2br($data->title); ?></p>
 									<div class="fp-btns text-right">
 										<span class="reply-count">Replies ({{$replyCount}})</span>
 										<a href="{{url("forum-post-reply/$data->id")}}" title="Jump to Reply Section" class="btn btn-primary"><span class="glyphicon glyphicon-share-alt"></span>Reply</a>
 									</div>
-
 								</div><!--/single post-->
 							@endforeach
 							</div>

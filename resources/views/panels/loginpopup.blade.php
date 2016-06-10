@@ -63,9 +63,8 @@
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 <script src="http://malsup.github.com/jquery.form.js"></script>
 <script type="text/javascript">
-    
-    $("#loginform").ajaxForm(function(response) { 
 
+    $("#loginform").ajaxForm(function(response) { 
          
     if(response){
             $('.password').next('.help-block').find('.verifymsg').hide();

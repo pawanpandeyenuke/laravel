@@ -84,7 +84,7 @@
 												<div class="p-data-title"><i class="flaticon-web-1"></i>Country</div>
 											</div>
 											<div class="col-sm-6">
-												<select name="country" style="max-width: 180px;" id="profile_country" >	
+												<select name="country" class="pr-edit" id="profile_country" >	
 													<?php 
 														foreach ($countries as $key => $value) { 
 															if($user->country == $value)
@@ -109,7 +109,7 @@
 												<div class="p-data-title"><i class="flaticon-gps"></i>State</div>
 											</div>
 											<div class="col-sm-6">
-												<select name="state" style="max-width: 180px;" id="profile_state">
+												<select name="state"  class="pr-edit" id="profile_state">
 													<option value="">State</option>	
 													<?php 
 													if(isset($all_states) && isset($user->state)){
@@ -131,7 +131,7 @@
 												<div class="p-data-title"><i class="flaticon-city"></i>City</div>
 											</div>
 											<div class="col-sm-6">
-												<select name="city" style="max-width: 180px;" id="profile_city" >
+												<select name="city"  class="pr-edit" id="profile_city" >
 													<option value="">City</option>	
 													<?php 
 													if(isset($all_cities) && isset($user->city)){
@@ -426,7 +426,7 @@
 											</div>
 											<div class="col-sm-6">
 												<div class="slt-cont">
-													<select name="job_area" style="max-width: 180px;" id="jobarea" >
+													<select name="job_area" class="pr-edit" id="jobarea" >
 														<option>Current Job Area</option>
 														<?php 
 															if(isset($jobarea)){
@@ -440,7 +440,7 @@
 														<?php } } ?>
 													</select>
  
-													<select name="job_category" style="max-width: 180px;" id="jobcategory" >
+													<select name="job_category" class="pr-edit" id="jobcategory" >
 														<option >Job Category</option>
 														<?php 
 														if(isset($jobarea) && isset($education)){

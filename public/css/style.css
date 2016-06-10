@@ -1357,12 +1357,13 @@ a:hover{
   left:0px;
   top:0px;
 }
-.pr-edit {
+.pr-edit , .pe-row .ph-field .ph-input{
   border-radius: 3px;
   border: 1px solid #000;
   padding: 0px 5px;
   background: none;
   margin: 0 2px 5px;
+  width: 200px;
 }
 .pr-field {
   margin: 0 0 3px;
@@ -2738,6 +2739,7 @@ textarea{
 }
 .forum-srch-list {
   margin: 20px 0 0;
+  min-height: 500px;
 }
 .forum-srch-list .count span{
   background: #A0F0E6;
@@ -3124,7 +3126,7 @@ margin-left: -15px;
     left: 22px;
     padding-left: 11px;
     position: absolute;
-    top: 6px;
+    top: 1px;
     width: 50px;
 }
 .pe-row .ph-field::after {
@@ -3132,7 +3134,7 @@ margin-left: -15px;
     font-size: 15px;
     left: 20px;
     position: absolute;
-    top: 6px;
+    top: 1px;
     z-index: 1;
 }
 .pe-row .ph-field .ph-input{
@@ -3142,7 +3144,7 @@ margin-left: -15px;
     content: "-" !important;
     left: 70px;
     position: absolute;
-    top: 5px;
+    top: 1px;
     z-index: 1;
 }
 /****** For Fixing body shifting to right ******/
@@ -3152,4 +3154,30 @@ body {
 
 .modal-open {
   overflow-y: auto;
+}
+
+.fp-master-header-right .fp-likes .like-cont{
+	left: 0;
+    position: absolute;
+    top: 1px;
+}
+.f-single-post .p-likes i:before {
+    font-size: 22px;
+    color: #D5D5D5;
+    margin: 0 0 0 2px;
+}
+.f-post-title.without-action-btn .fp-meta{
+	right: 0px;
+}
+.pe-row .radio-cont {
+    margin: 0;
+    text-align: center;
+    width: 100px;
+}
+.study-data-outer select, .study-data-outer input{
+	background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 1px solid #000;
+    border-radius: 3px;
+    margin: 0 2px 5px;
+    padding: 0 5px;
 }
