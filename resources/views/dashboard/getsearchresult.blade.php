@@ -1,5 +1,8 @@
 <?php
-$id1=Auth::User()->id;
+if(Auth::check())
+	$id1=Auth::User()->id;
+else
+	$id1 = "";
 $count=0;	
 		?>
 	
@@ -22,11 +25,17 @@ $count=0;
 				</div>
 			</div>
 			<div class="col-sm-6">
+		@if(Auth::check())
 	<?php 
 		$count++;
+		if(Auth::check()){
 		$status1=DB::table('friends')->where('user_id',$data['id'])->where('friend_id',Auth::User()->id)->value('status');
 		$status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',Auth::User()->id)->value('status');
-
+		}
+		else{
+			$status1 = null;
+			$status2 = null;
+		}
 
 				if($status1 == 'Pending'){
 			?>
@@ -79,6 +88,11 @@ $count=0;
 
 
 				<?php } ?>
+				@else
+				<div class="text-right">
+						<a type="button" class="btn btn-primary btn-full" href="{{url('/register')}}">Add Friend</a>
+					</div>
+				@endif
 			</div>
 		</div>
 	</li>

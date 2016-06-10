@@ -155,7 +155,8 @@
 											<div class="col-sm-6 ph-field">
 												<!-- <input type="text" name="phone_no" class="pr-edit numeric" maxlength="15" value="{{ $user->phone_no }}"> -->
 
-											    <input type="text" name="country_code" class="country-code-field numeric" value="{{ $user->country_code }}" placeholder="000" >
+											    <span name="country_code" class="country-code-field-span country-code-field numeric" value="{{ $user->country_code }}" placeholder="000" >{{ $user->country_code }}</span>
+											    <input type="hidden" name="country_code" class="country-code-field" value="{{ $user->country_code }}" />
 											    <input type="text" class="ph-input numeric" name = "phone_no" id="mobileContact" value="{{ $user->phone_no }}">
 											</div>
 										</div>
@@ -530,6 +531,7 @@
 								var mobCode = response[0].phonecode;
 								// alert(mobCode);
 								$('.country-code-field').val(mobCode);
+								$('.country-code-field-span').html(mobCode);
 								$('.country-code-field').attr('data-value', mobCode);
                         		var validArray = getValidationArray(mobCode);
 							}			

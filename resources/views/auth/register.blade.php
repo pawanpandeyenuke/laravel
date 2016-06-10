@@ -153,7 +153,8 @@
                             </div>
 
                             <div class="form-group ph-field">
-                                <input type="text" name="country_code" class="country-code-field numeric" value="" placeholder="000" >
+                                <span  class="country-code-field country-code-field-span numeric"></span> 
+                                <input type="hidden" name="country_code" class="country-code-field numeric" value="" placeholder="000" >
                                 <input type="text" class="form-control icon-field numeric" name = "phone_no" placeholder="Mobile" id="mobileContact">
                                 <span class="field-icon flaticon-smartphone-with-blank-screen"></span>
                             </div>
@@ -254,6 +255,7 @@ $(document).ready(function () {
                         var mobCode = response[0].phonecode;
 
                         $('.country-code-field').val(mobCode);
+                        $('.country-code-field-span').html(mobCode);
                         $('.country-code-field').attr('data-value', mobCode);
                         var validArray = getValidationArray(mobCode);
                     }

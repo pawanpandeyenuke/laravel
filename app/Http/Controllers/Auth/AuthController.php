@@ -74,7 +74,14 @@ class AuthController extends Controller
         $raw_token = $data['first_name'].date('Y-m-d H:i:s',time()).$data['last_name'].$data['email'];
         $access_token = Hash::make($raw_token);
         $data['country'] = Country::where('country_id',$data['country'])->value('country_name');
-        //print_r($access_token);die;
+        $min = countryMobileLength($data['country_code']);
+        $len = strlen($data['phone_no']);
+        if($len > $min[$data['country_code']]['max'] || $len < $min[$data['country_code']]['min'])
+                 { 
+                    $data['phone_no'] = "";
+                    $data['country_code'] = "";
+                }
+
         $userdata = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
