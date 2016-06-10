@@ -1233,9 +1233,11 @@ comments;
 		$page = Input::get('pageid');
 		$keyword = Input::get('keyword');
 		$offset = ($page - 1) * $per_page;
-		$user_id = Auth::User()->id;
-
-				$model = User::where('id','!=',Auth::User()->id)
+		if(Auth::check())
+			$user_id = Auth::User()->id;
+		else
+			$user_id = "";
+			 $model = User::where('id','!=',$user_id)
                             ->where('first_name','LIKE','%'. $keyword.'%')
                             ->orWhere('last_name','LIKE','%'. $keyword.'%')
                             ->skip($offset)

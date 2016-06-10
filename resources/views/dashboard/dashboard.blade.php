@@ -344,5 +344,12 @@
 			$('.btn-post').prop('disabled',true);
 					
 	});
+
+	$(document).on("click","#status_up_btn",function(){
+			$('#image-holder').empty();
+			$('#fileUpload').val('');
+			$('.badge').html('');
+		});	
+
 </script>
 
