@@ -345,11 +345,10 @@
 					
 	});
 
-	$(document).on("click","#status_up_btn",function(){
+		$(document).on("click","#status_up_btn",function(){
 			$('#image-holder').empty();
 			$('#fileUpload').val('');
 			$('.badge').html('');
 		});	
-
 </script>
 

@@ -25,7 +25,7 @@ $count=0;
 				</div>
 			</div>
 			<div class="col-sm-6">
-	@if(Auth::check())
+		@if(Auth::check())
 	<?php 
 		$count++;
 		if(Auth::check()){

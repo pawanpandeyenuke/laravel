@@ -168,15 +168,14 @@
 									</div>
 									<div class="col-sm-6">
 										<div class="text-right">
-												<a href="{{url('/register')}}" class="btn btn-primary btn-full invite" id='invite'>Add Friend</a>
+												<a href="{{url('/register')}}" class="btn btn-primary btn-full" id='invite'>Add Friend</a>
 										</div>
 									</div>
 								</div>
 							</li>
 					@endforeach
 				</ul>
-				@endif
-											<?php	
+				@endif <?php	
 												if($count > 10)
 												{
 											 ?>
@@ -188,10 +187,6 @@
 											<?php } ?>
 
 							  			</div>
-					    		
-						
-						
-
 								    </div>
 						  		</div>						    
 						  	</div>

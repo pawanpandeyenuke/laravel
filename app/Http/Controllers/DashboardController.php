@@ -521,6 +521,10 @@ class DashboardController extends Controller
                     $file->move(public_path('uploads/user_img'), $image_name);
                 }
                 
+                $min = countryMobileLength($arguments['country_code']);
+                $len = strlen($arguments['phone_no']);
+                 if($len > $min[$arguments['country_code']]['max'] || $len < $min[$arguments['country_code']]['min'])
+                    $arguments['phone_no'] = "";
                 $arguments['country_code'] = empty($arguments['phone_no']) ? '' : $arguments['country_code'];
                 // echo '<pre>';print_r($arguments);die;
                 foreach ($arguments as $key => $value) {
