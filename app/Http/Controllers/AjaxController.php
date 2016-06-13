@@ -1686,6 +1686,8 @@ comments;
 
 
 	}
+
+	
 	public function getSubForums()
 	{
 		$input = Input::all();

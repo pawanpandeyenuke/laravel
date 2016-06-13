@@ -2221,6 +2221,11 @@ class ApiController extends Controller
 	        }
 	    }
 
+
+	/*
+	* @Forum web api's starts from here.
+	*
+	*/
 	public function getForumCategories()
 	{
 		$this->data = Forums::all();
@@ -2291,82 +2296,7 @@ class ApiController extends Controller
 		return $this->output();		
 	}
 
-/*	public function likeForumPost()
-	{
-		try{
-			$args = Request::all();
-			$user = User::where('id',$args['user_id'])->get();
-			if($user->isEmpty())
-				throw new Exception("No matching record for the user.", 1);
-			else{
-				$post_check = ForumPost::where('id',$args['post_id'])->value('id');
-				if($post_check == null)
-					throw new Exception("No such forum post exist.", 1);
-				else{
-					$this->status = 'success';
-					$likecheck = ForumLikes::where('owner_id',$args['user_id'])->where('post_id',$args['post_id'])->value('id');
-					if($likecheck == null){
-						$likedata = ['liked'=>'Yes',
-									 'owner_id'=>$args['user_id'],
-									 'post_id'=>$args['post_id']];
 
-					   $forumlike = new ForumLikes;
-					   $this->message = 'Liked Post';
-					   $this->data = $forumlike->create($likedata);
-					} else{
-        				ForumLikes::where('owner_id',$args['user_id'])->where('post_id',$args['post_id'])->delete();
-        				$this->message = 'Unliked Post';
-					}
-
-				}
-					  
-			}
-				
-		}
-		catch(Exception $e){
-			$this->message = $e->getMessage();
-		}
-
-		return $this->output();		
-	}
-
-	public function deleteForumPost()
-	{
-		try{
-			$args = Request::all();
-			$user = User::where('id',$args['user_id'])->get();
-			if($user->isEmpty())
-				throw new Exception("No matching record for the user.", 1);
-			else{
-				$post_check = ForumPost::where('id',$args['post_id'])->value('owner_id');
-				if($post_check == null)
-					throw new Exception("No such forum post exist.", 1);
-				else{
-					if($post_check != $args['user_id'])
-						throw new Exception("This user is not the owner of the forum post.", 1);
-					else{
-						ForumPost::where('id',$args['post_id'])->delete();
-						ForumLikes::where('post_id',$args['post_id'])->delete();
-						$reply_id_arr = ForumReply::where('post_id',$args['post_id'])->pluck('id')->toArray();
-						ForumReply::where('post_id',$args['post_id'])->delete();
-						ForumReplyComments::whereIn('reply_id',$reply_id_arr)->delete();
-						ForumReplyLikes::whereIn('reply_id',$reply_id_arr)->delete();
-						$this->status = "success";
-						$this->message = "Post deleted successfully.";
-					}
-
-				}
-					  
-			}
-				
-		}
-		catch(Exception $e){
-			$this->message = $e->getMessage();
-		}
-
-		return $this->output();	
-	}
-*/
 	public function editForumPost()
 	{
 		try{
