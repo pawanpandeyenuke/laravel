@@ -300,7 +300,6 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 	Route::post('dashboard', 'DashboardController@dashboard');
 	Route::get('settings/privacy', 'DashboardController@settings');	
 	Route::post('settings/privacy', 'DashboardController@settings');
-	//Route::get('/', 'DashboardController@dashboard');	
 	Route::get('chatroom', 'DashboardController@chatroom');
 	Route::get('friends', 'DashboardController@friendRequests');
 	Route::get('invite-friends', 'ContactImporter@inviteFriends');
@@ -309,11 +308,18 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 
 	Route::get('group', 'DashboardController@group');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
-	Route::get('subgroup/{parentid}/{name}', 'DashboardController@subgroup');
-	Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
-	Route::get('groupchat', 'DashboardController@groupchat');	
+	// Route::get('subgroup/{parentid}/{name}', 'DashboardController@subgroup');
+	// Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
+	Route::get('groupchat/{id}', 'DashboardController@groupchat1');
+		Route::get('groupchat', function(){
+			return redirect('group');
+	});
+	Route::post('groupchat', 'DashboardController@groupchat1');	
 
-	Route::get('groupchat/pg/{groupid}/{groupname}','DashboardController@groupchat');
+	Route::get('groupchat/pg/{groupid}','DashboardController@privateGroupChat');
+
+	Route::get('friends-chat','DashboardController@friendsChat');
+	
 
 	Route::get('profile/{id}', 'DashboardController@profile');
 	Route::post('profile/{id}', 'DashboardController@profile');

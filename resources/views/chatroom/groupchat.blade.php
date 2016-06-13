@@ -31,27 +31,7 @@
 
 @section('content')
 <?php 
-
-$groupid=$groupname;
-$groupname = implode(' ', array_map('ucfirst', explode('_', $groupid)));
-$groupname = implode(',', array_map('ucfirst', explode(',', $groupname)));
-$groupname =preg_replace('/(?<! )(?<!^)[A-Z]/',' $0', $groupname);
-$old=array('Moviereview','Schoolreviews','Coachingclass',"It,","Collegereview ","Singlesfemales","Singlesmale","Legalquestions"
-            ,"Professionalcourse","Bicyclesandsidecars","suvs","van","Studyquestions","Fortuneteller","Emergencyblooddonation"
-            ,"Studyquestions","Seekhelp","-",'Csc','C ');
-$new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Review ","Singles Females","Singles Male ",
-            "Legal Questions ","Professional Course ","Bicycles and Sidecars","Suvs","Van","Study Questions","Fortune Teller"
-            ,"Emergency Blood Donation","Study Questions","Seek Help","","","");
-
- $groupname=str_replace($old,$new,$groupname);
-
-
-if($pgid){
-  if($pgid != $groupid){
-    $groupid=$groupid."_".$pgid;
-  }
-}
-$groupid = str_replace('/', '-', $groupid);
+$groupid = $group_jid;
 ?>
 <div class="page-data dashboard-body">
         <div class="container">
@@ -76,26 +56,44 @@ $groupid = str_replace('/', '-', $groupid);
                                     <div class="panel-heading" role="tab" id="gcheadingOne">
                                       <h4 class="panel-title">
                                       <?php
-                                      	if($exception==null)
-                                      	{
+                                      	if($exception==null){
                                       		$pubclass="class=collapsed";
                                       		$pubexpand="false";
                                       		$pubdivid="panel-collapse collapse";
 
-                                      		$priclass="";
-                                      		$priexpand="true";
-                                      		$pridivid="panel-collapse collapse in";
+                                          $priclass="class=collapsed";
+                                          $priexpand="false";
+                                          $pridivid="panel-collapse collapse";
 
-                                      	}
+                                      		$friclass="";
+                                      		$friexpand="true";
+                                      		$fridivid="panel-collapse collapse in";
+                                      	}else if($exception == "private"){
+                                          $priclass="";
+                                          $priexpand="true";
+                                          $pridivid="panel-collapse collapse in";
+
+                                          $pubclass="class=collapsed";
+                                          $pubexpand="false";
+                                          $pubdivid="panel-collapse collapse";
+
+                                          $friclass="class=collapsed";
+                                          $friexpand="false";
+                                          $fridivid="panel-collapse collapse";
+                                        }
                                       	else
                                       	{
                                       		$pubclass="";
                                       		$pubexpand="true";
                                       		$pubdivid="panel-collapse collapse in";
+
+                                          $priclass="class=collapsed";
+                                          $priexpand="false";
+                                          $pridivid="panel-collapse collapse";
                                       	
-                                      		$priclass="class=collapsed";
-                                      		$priexpand="false";
-                                      		$pridivid="panel-collapse collapse";
+                                      		$friclass="class=collapsed";
+                                      		$friexpand="false";
+                                      		$fridivid="panel-collapse collapse";
                                       	}
 
                                        ?>
@@ -108,10 +106,11 @@ $groupid = str_replace('/', '-', $groupid);
                                     <div id="gccollapseOne" class="{{$pubdivid}}" role="tabpanel" aria-labelledby="gcheadingOne">
                                       <div class="panel-body">
                                         <div class="chat-header-small text-center">
-                                          <i class="flaticon-people"></i> <b>{{$groupname}}</b>
+                                          <i class="flaticon-people"></i> <b><?php echo ($exception == "private")?"":$groupname; ?></b>
                                         </div>
                                         <div class="chat-user-list StyleScroll">
                                           <ul>
+                                            @if(!empty($userdata))
                                             @foreach($userdata as $data)
 
                                               <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; ?>
@@ -148,6 +147,7 @@ $groupid = str_replace('/', '-', $groupid);
                                                   </a>
                                               </li>
                                             @endforeach
+                                            @endif
                                           </ul>
                                         </div><!--/chat user list-->
                                       </div>
@@ -156,12 +156,12 @@ $groupid = str_replace('/', '-', $groupid);
                                   <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="gcheadingTwo">
                                       <h4 class="panel-title">
-                                        <a {{$priclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseTwo" aria-expanded="{{$priexpand}}" aria-controls="gccollapseTwo">
+                                        <a {{$friclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseTwo" aria-expanded="{{$friexpand}}" aria-controls="gccollapseTwo">
                                           Chat with friends
                                         </a>
                                       </h4>
                                     </div>
-                                    <div id="gccollapseTwo" class="{{$pridivid}}" role="tabpanel" aria-labelledby="gcheadingTwo">
+                                    <div id="gccollapseTwo" class="{{$fridivid}}" role="tabpanel" aria-labelledby="gcheadingTwo">
                                       <div class="panel-body">
                                         <div class="chat-list-search">
                                             <div class="form-group">
@@ -179,12 +179,12 @@ $groupid = str_replace('/', '-', $groupid);
                                   <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="gcheadingThree">
                                       <h4 class="panel-title">
-                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseThree" aria-expanded="false" aria-controls="gccollapseThree">
+                                        <a {{$priclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseThree" aria-expanded="{{$priexpand}}" aria-controls="gccollapseThree">
                                           Private group chat
                                         </a>
                                       </h4>
                                     </div>
-                                    <div id="gccollapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="gcheadingThree">
+                                    <div id="gccollapseThree" class="{{$pridivid}}" role="tabpanel" aria-labelledby="gcheadingThree">
                                       <div class="panel-body">
                                         <div class="chat-user-list StyleScroll">
 
@@ -192,9 +192,9 @@ $groupid = str_replace('/', '-', $groupid);
                     @foreach($privategroup as $data)
                     <?php  
 
-                        $privategroupname=$data['title'];
+                        $privategroupname=$data['title'].'_'.$data['id'];
                         $privategroupid=strtolower($privategroupname);
-                        $privategroupid=str_replace(" ","_",$privategroupid);
+                        $privategroupid=str_replace(" ","-",$privategroupid);
                          
                         $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
 			
@@ -223,7 +223,7 @@ $groupid = str_replace('/', '-', $groupid);
 											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
 											<span class="title">{{$data['title']}}</span>
 										</a>
-										<button onclick="openChatRoom('<?php echo str_replace( ' ','_', $data['title'].'_'.$data['id'] ); ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
+										<button onclick="openChatRoom('<?php echo $privategroupid; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
                                    </div>
                                </li>
 							<?php } ?>
@@ -287,7 +287,7 @@ $groupid = str_replace('/', '-', $groupid);
     var conObj;
     var groupname = "{{$groupname}}";
     var groupid = "{{$groupid}}";
-    var pgid = "{{$pgid}}";
+
 
 
 
@@ -534,7 +534,7 @@ $groupid = str_replace('/', '-', $groupid);
      }
 
 
-
+/*
 function openChatbox( xmpusername,username ){
    //var chatbox=conObj.chats.get(xmpusername+chatserver);
    //console.log(chatbox);
@@ -559,7 +559,7 @@ function openChatbox( xmpusername,username ){
    }   
 
 
-}
+}*/
 
  function hideOpendBox(){
 	 /**

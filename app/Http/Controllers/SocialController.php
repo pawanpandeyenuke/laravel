@@ -29,7 +29,7 @@ class SocialController extends Controller
 					$tempEmail = explode('@', $providerUser['email']);
 					$providerUser['password'] = Hash::make($tempEmail[0]);
 					$raw_token = $providerUser['first_name'].date('Y-m-d H:i:s',time()).$providerUser['last_name'].$providerUser['email'];
-        				$access_token = Hash::make($raw_token);
+        			$access_token = Hash::make($raw_token);
 					$providerUser['access_token'] = $access_token;
 					//print_r($user);die;
 					$userDbObj = $user->create($providerUser);

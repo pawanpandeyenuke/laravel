@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers,App\BroadcastMembers,App\Forums;
+use Auth, App\Feed, DB, App\Setting, App\Category,App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers,App\BroadcastMembers,App\Forums;
 
 use App\Library\Converse, Google_Client, Mail;
 
@@ -205,29 +205,185 @@ class DashboardController extends Controller
     *   Group sub chatrooms ajax call handling.
     *   Ajaxcontroller@groupchatrooms
     */
-    public function subgroup( $parentid = '', $name = '' )
+    public function subgroup( $parentid = '')
     {
 
         // print_r();die;
         $subgroups = '';
          if($parentid){
-            $data = DB::table('categories')->where(['parent_id' => $parentid])->where(['status' => 'Active'])->get();
+            $data = Category::where(['parent_id' => $parentid])->where(['status' => 'Active'])->get();
+            $name_check = Category::where('id',$parentid)->value('title');
+            //print_r($name_check);die;
 
-            if( !empty( $data ) ){
-                $subgroups = $data;
+            if($data->isEmpty())
+            {
+                if($name_check == "")
+                    return redirect('group');
+                else
+                    return redirect('groupchat/'.$parentid);
             }
+            else
+                $subgroups = $data;
+
         }
         
-        if($name){
-           $varexp =explode('-', $name);
-           $name =implode(' ', $varexp);
-        }
+        // if($name){
+        //    $varexp =explode('-', $name);
+        //    $name =implode(' ', $varexp);
+        // }
 
         // print_r($name);die;
 
         return view('chatroom.subgroups') 
                 ->with('subgroups', $subgroups)
-                ->with('group_name', $name);
+                ->with('group_name', $name_check);
+
+    }
+
+    public function groupchat1($groupid = "")
+    {
+        $private_group_check = "pub" ;
+        $id=Auth::User()->id;
+        if($groupid){
+            $check_name = Category::where('id',$groupid)->value('title');
+            if($check_name == null)
+                return redirect('group');
+            else{
+                $check_if_parent = Category::where('parent_id',$groupid)->value('id');
+                if($check_if_parent != null)
+                    return redirect('subgroup/'.$groupid);
+            }
+                //Get users of this group
+            $group_jid = strtolower(str_replace([' ', '/', ','], '-', $check_name));
+
+        }else{
+        $input = Request::all();
+        $parent_name = strtolower(str_replace([' ', '/', ','], '-', $input['parentname']));
+                if($input['subcategory']=='International'){
+                    $check_name = $input['parentname'].' '.$input['subcategory'];
+                    $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
+                    $sub_name = $input['subcategory'];
+                }
+                   
+
+                 elseif($input['subcategory']=='Professional Course'){
+                    $check_name = $input['parentname'].' '.$input['subcategory'].' '.$input['coursedata1'];
+                     $sub_name = $input['subcategory'].'_'.$input['coursedata1'];
+                 }
+                   
+
+                 elseif($input['subcategory']=='Subjects'){
+                    $check_name = $input['parentname'].' '.$input['subcategory'].' '.$input['coursedata'];
+                    $sub_name = $input['subcategory'].'_'.$input['coursedata'];
+                 }
+                    
+
+                 elseif($input['subcategory']=='Country,State,City'){
+                    $check_name = $input['parentname'].' '.$input['country'].', '.$input['state'].', '.$input['city'];
+                    $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
+                    $sub_name = 'csc'.'_'.$input['country'].'_'.$input['state'].'_'.$input['city'];
+                 }
+                    
+
+                 elseif ( $input['subcategory']=='Country' ){
+                    $check_name = $input['parentname'].' '.$input['country1'];
+                    $sub_name = 'c'.'_'.$input['country1'];
+                 }
+               
+                $sub_name = str_replace([' ', '/', ','],'-',$sub_name);           
+                $group_jid = strtolower(str_replace(" ", "_", $parent_name.'_'.$sub_name));
+        }
+
+            $model = new DefaultGroup;
+            $updatecheck = $model->where('group_name', $group_jid)
+                                ->where('group_by', Auth::User()->id)
+                                ->get()->toArray();
+            $defGroup = array();
+            $defGroup['group_name'] = $group_jid;
+            $defGroup['group_by'] = Auth::User()->id;
+            if(empty($updatecheck))
+                $model->create($defGroup);
+
+
+            $usersData = DefaultGroup::with('user')->where('group_name', $group_jid)->get()->toArray();
+            
+            $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+
+            $pendingfriend = DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+            
+            $private_group_array = GroupMembers::where('member_id',$id)->pluck('group_id');
+            
+            $privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
+
+                 return view('chatroom.groupchat')
+                    ->with('groupname', $check_name)
+                    ->with('group_jid',$group_jid)
+                    ->with('userdata', $usersData)
+                    ->with('friendid',$friendid)
+                    ->with('authid',$id)
+                    ->with('pendingfriend',$pendingfriend)
+                    ->with('exception',$private_group_check)
+                    ->with('privategroup',$privategroup);
+    }
+
+    public function privateGroupChat($groupid = "")
+    {
+        $private_group_check = "private";
+        $usersData = "";
+        $id = Auth::User()->id;
+            if($groupid){
+                $group_check = Group::where('id',$groupid)->value('title');
+                if($group_check == null)
+                    return redirect('private-group-list');
+                else{
+                    $group_jid = strtolower(str_replace([' ', '/', ','], '-', $group_check)).'_'.$groupid;
+
+                    $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+
+                    $pendingfriend = DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+                    
+                    $private_group_array = GroupMembers::where('member_id',Auth::User()->id)->pluck('group_id');
+            
+                    $privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
+                }
+
+        }
+
+                return view('chatroom.groupchat')
+                    ->with('groupname', $group_check)
+                    ->with('group_jid',$group_jid)
+                    ->with('userdata', $usersData)
+                    ->with('friendid',$friendid)
+                    ->with('authid',$id)
+                    ->with('pendingfriend',$pendingfriend)
+                    ->with('exception',$private_group_check)
+                    ->with('privategroup',$privategroup);
+    }
+
+    public function friendsChat()
+    {
+        $private_group_check = null ;
+        $check_name = "";
+        $group_jid = "";
+        $usersData = "";
+        $id = Auth::User()->id;
+        $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+
+        $pendingfriend = DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+        
+        $private_group_array = GroupMembers::where('member_id',$id)->pluck('group_id');
+        
+        $privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
+
+         return view('chatroom.groupchat')
+                    ->with('groupname', $check_name)
+                    ->with('group_jid',$group_jid)
+                    ->with('userdata', $usersData)
+                    ->with('friendid',$friendid)
+                    ->with('authid',$id)
+                    ->with('pendingfriend',$pendingfriend)
+                    ->with('exception',$private_group_check)
+                    ->with('privategroup',$privategroup);
 
     }
 
