@@ -3095,7 +3095,7 @@ div#forumreply-edit-modal {
  width: 20px;
 }
 #conversejs .chatbox .box-flyout {
-	height: 549px !important;
+	height: 490px !important;
 	border: 0px !important;
 }
 div#chat-system {
@@ -3108,7 +3108,7 @@ margin-left: -15px;
     border-bottom: 1px solid #E2E2E2 !important;
 }
 #conversejs a{
-	display: none !important;
+	/*display: none !important;*/
 }
 #conversejs .chat-head {
     padding: 15px 10px;
