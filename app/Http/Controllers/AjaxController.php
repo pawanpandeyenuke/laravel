@@ -1233,9 +1233,11 @@ comments;
 		$page = Input::get('pageid');
 		$keyword = Input::get('keyword');
 		$offset = ($page - 1) * $per_page;
-		$user_id = Auth::User()->id;
-
-				$model = User::where('id','!=',Auth::User()->id)
+		if(Auth::check())
+			$user_id = Auth::User()->id;
+		else
+			$user_id="";
+				$model = User::where('id','!=',$user_id)
                             ->where('first_name','LIKE','%'. $keyword.'%')
                             ->orWhere('last_name','LIKE','%'. $keyword.'%')
                             ->skip($offset)
@@ -1245,11 +1247,14 @@ comments;
                             ->toArray();
 		
 			$modelcount = count($model);
+
+			$auth = ($user_id != '') ? 1 : 0;
 			
 			if($model){
 			return view('dashboard.getsearchresult')
 					->with('model',$model)
-					->with('modelcount',$modelcount);          
+					->with('modelcount',$modelcount)
+					->with('auth',$auth);          
 			}
 			else{
 				echo "No more results";

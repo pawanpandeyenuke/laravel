@@ -319,12 +319,11 @@ class DashboardController extends Controller
                     $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata']]);
 
                 } elseif($input['subcategory']=='country,state,city'){
-               
                     $newinput=(['parentname'=>$input['parentname'],
                     'subcategory'=>'csc',
-                    'country'=>DB::table('country')->where('country_name',$input['country'])->value('country_name'),
-                    'state'=>DB::table('state')->where('state_id',$input['state'])->value('state_name'),
-                    'city'=>DB::table('city')->where('city_id',$input['city'])->value('city_name')]);       
+                    'country'=>$input['country'],
+                    'state'=>$input['state'],
+                    'city'=>$input['city']]);       
                
                 } elseif ( $input['subcategory']=='country' ){
                 
@@ -357,7 +356,6 @@ class DashboardController extends Controller
                     $groupnamedata[] = $value;
                 }
             }
-
             $groupname = implode('_', $groupnamedata); 
             $groupname=strtolower($groupname);
         } else {
@@ -521,6 +519,10 @@ class DashboardController extends Controller
                     $file->move(public_path('uploads/user_img'), $image_name);
                 }
                 
+                $min = countryMobileLength($arguments['country_code']);
+                $len = strlen($arguments['phone_no']);
+                 if($len > $min[$arguments['country_code']]['max'] || $len < $min[$arguments['country_code']]['min'])
+                    $arguments['phone_no'] = "";
                 $arguments['country_code'] = empty($arguments['phone_no']) ? '' : $arguments['country_code'];
                 // echo '<pre>';print_r($arguments);die;
                 foreach ($arguments as $key => $value) {

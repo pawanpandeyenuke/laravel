@@ -2296,7 +2296,6 @@ class ApiController extends Controller
 		return $this->output();		
 	}
 
-
 	public function editForumPost()
 	{
 		try{

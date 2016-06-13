@@ -87,7 +87,7 @@
 		    <div class="panel-heading" role="tab" id="headingSeven">
 		      <h4 class="panel-title">
 		        <a class="without-arrow" href="{{ url('/forums') }}">
-		          <i class="flaticon-icon-88206"></i>Forums
+		          <i class="flaticon-user-profile"></i>Forums
 		        </a>
 		      </h4>
 		    </div>

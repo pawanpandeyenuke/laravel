@@ -23,29 +23,29 @@
 
 							            $fieldsData = DB::table('forums')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); 
 
-							   // $count1 = DB::table('forums_post')->where('category_id',$data->id)->count();
-							   // $ids1 = DB::table('forums')->where('parent_id',$data->id)->pluck('id');
-							   // $count2 = DB::table('forums_post')->whereIn('category_id',$ids1)->count();
-							   // $ids2 = DB::table('forums')->whereIn('parent_id',$ids1)->pluck('id');
-							   // $count3 = DB::table('forums_post')->whereIn('category_id',$ids2)->count();
-							   // $count = $count1 + $count2 + $count3;
+							   /*$count1 = DB::table('forums_post')->where('category_id',$data->id)->count();
+							   $ids1 = DB::table('forums')->where('parent_id',$data->id)->pluck('id');
+							   $count2 = DB::table('forums_post')->whereIn('category_id',$ids1)->count();
+							   $ids2 = DB::table('forums')->whereIn('parent_id',$ids1)->pluck('id');
+							   $count3 = DB::table('forums_post')->whereIn('category_id',$ids2)->count();
+							   $count = $count1 + $count2 + $count3;*/
 							   $image = url("forums-data/forum_icons/".$data['img_url']);
 							            ?>
 
-		                       @if($fieldsData)
+		                    @if($fieldsData)
 							<div class="col-sm-4">
-								<div class="forum-btn">
-									<a href="{{url("sub-forums/$data->id")}}" title="">
-										<img src="{{$image}}" alt="">
+								<div class="cat-btn-outer">
+									<a href="{{url("sub-forums/$data->id")}}" class="cat-btn" title="">
+										<img src="{{$image}}" alt=""><br>
 										<span>{{ $data->title }}</span>
 									</a>
 								</div>
 							</div>
 							@else
 							<div class="col-sm-4">
-								<div class="forum-btn">
-									<a href="{{url("view-forum-posts/$data->id")}}" title="">
-										<img src="{{$image}}" alt="">
+								<div class="cat-btn-outer">
+									<a href="{{url("view-forum-posts/$data->id")}}" class="cat-btn" title="">
+										<img src="{{$image}}" alt=""><br>
 										<span>{{ $data->title }}</span>
 									</a>
 								</div>
