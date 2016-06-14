@@ -890,11 +890,11 @@ class DashboardController extends Controller
                         'owner_id'=>$userid,
                        );  
 
-                $groupid=str_replace(' ','_',$input['groupname']);
-                $groupid=strtolower($groupid);
-                $converse=new Converse;
+                $groupid   = preg_replace('/\s+/', '_', $input['groupname']);
+                $groupid   = strtolower($groupid);
+                $converse  = new Converse;
                 $groupdata = Group::create($data);
-                $groupname=$input['groupname']."_".$groupdata->id;
+                $groupname = $groupid."_".$groupdata->id;
 				$converse->createGroup($groupid,$groupname);
 				foreach ($input['groupmembers'] as $data) {
 					$data1 = array(
@@ -902,16 +902,15 @@ class DashboardController extends Controller
 								'member_id'=>$data,
 								'status'=>'Joined',
 							);
-                        GroupMembers::insert($data1);  
+                     GroupMembers::insert($data1);  
                 }
 
        
-			$xmp=DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
-			$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
-			foreach ($xmp as $key => $value) {
-				$converse->broadcast($userXamp,$value,$Message);
-			}
-
+				$xmp = DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
+				$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
+				foreach ($xmp as $key => $value) {
+					$converse->broadcast($userXamp,$value,$Message);
+				}
             return redirect(url('private-group-list'));       
 		}  else {
           return redirect()->back();
