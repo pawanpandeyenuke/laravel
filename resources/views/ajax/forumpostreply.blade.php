@@ -10,13 +10,14 @@
 												<label for="checkbox_forumreply_{{$forumreply->id}}" title="Like Reply" class="css-label"></label>
 											</div>
 											<span class="plike-count forumreplylike" title="Likes">0</span>
+											</div>
 											<div class="p-likes ml">
 												<a href="#" class="popupforumreply" title="Open Comments" data-replyid = "{{$forumreply->id}}">
 													<i class="fa fa-comment" aria-hidden="true"></i> 
 													<span class="plike-count" id="forumreplycomment_{{$forumreply->id}}" title="Comments">0</span>
 												</a>
 											</div>
-										</div>
+										
 										</div>
 
 										<div class="f-post-title">

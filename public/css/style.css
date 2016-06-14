@@ -2780,6 +2780,7 @@ textarea{
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
   margin: 0 0 15px;
+  word-wrap: break-word;
 }
 .f-single-post .p-user {
 	width: 80px;
@@ -3181,6 +3182,6 @@ body {
     margin: 0 2px 5px;
     padding: 0 5px;
 }
-.dash{
-	right: 50px;
+.forum-master-post p{
+	word-wrap: break-word;
 }

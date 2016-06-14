@@ -202,22 +202,13 @@ class DashboardController extends Controller
     }
 
 
-    /**
-    *   Group sub chatrooms ajax call handling.
-    *   Ajaxcontroller@groupchatrooms
-    */
     public function subgroup( $parentid = '')
     {
-
-        // print_r();die;
         $subgroups = '';
          if($parentid){
             $data = Category::where(['parent_id' => $parentid])->where(['status' => 'Active'])->get();
-            $name_check = Category::where('id',$parentid)->value('title');
-            //print_r($name_check);die;
-
-            if($data->isEmpty())
-            {
+            $name_check = Category::where('id',$parentid)->value('title');;
+            if($data->isEmpty()){
                 if($name_check == "")
                     return redirect('group');
                 else
@@ -227,19 +218,17 @@ class DashboardController extends Controller
                 $subgroups = $data;
 
         }
-        
-        // if($name){
-        //    $varexp =explode('-', $name);
-        //    $name =implode(' ', $varexp);
-        // }
-
-        // print_r($name);die;
 
         return view('chatroom.subgroups') 
                 ->with('subgroups', $subgroups)
                 ->with('group_name', $name_check);
 
     }
+
+    /**
+    *   Group sub chatrooms ajax call handling.
+    *   Ajaxcontroller@groupchatrooms
+    */
 
     public function groupchat($groupid = "")
     {

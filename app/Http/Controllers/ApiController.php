@@ -2447,4 +2447,9 @@ class ApiController extends Controller
 
 		return $this->output();			
 	}
+
+	public function chatImagePage()
+	{
+		return view('chat_image');die;
+	}
 }
