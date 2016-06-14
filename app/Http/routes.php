@@ -142,6 +142,8 @@ Route::post('/ajax/view-more-search-forum','AjaxController@viewMoreSearchForum')
  * @Api Routes..
  *
  **/
+Route::post('v1/upload-chat-image','ApiController@uploadChatImage');
+
 Route::post('api/signin', 'ApiController@signin');
 Route::post('api/signup', 'ApiController@signup');
 Route::post('api/forget-Password', 'ApiController@forgetPassword');
