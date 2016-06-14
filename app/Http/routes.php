@@ -107,23 +107,17 @@ Route::post('/private-group-detail/ajax/groupimage','AjaxController@groupImage')
 Route::post('/ajax/login','AjaxController@login');
 
 Route::post('/ajax/delforumpost','AjaxController@delForumPost');
-
 Route::post('/ajax/editforumpost','AjaxController@editForumPost');
 Route::post('/ajax/editnewforumpost','AjaxController@editNewForumPost');
-
-
 Route::post('/ajax/addnewforumpost','AjaxController@addNewForumPost');
-
-Route::post('/ajax/mob-country-code','AjaxController@mobCountryCode');
-
 Route::post('/ajax/likeforumpost','AjaxController@likeForumPost');
-
 Route::post('/ajax/addnewforumreply','AjaxController@addNewForumReply');
 
 Route::post('/ajax/view-more-forum-post','AjaxController@viewMoreForumPost');
 Route::post('/ajax/view-more-forum-reply','AjaxController@viewMoreForumReply');
 Route::post('/ajax/view-more-forum-comment','AjaxController@viewMoreForumComment');
 
+Route::post('/ajax/mob-country-code','AjaxController@mobCountryCode');
 
 
 Route::post('/ajax/delforumreply','AjaxController@delForumReply');
@@ -269,8 +263,6 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 	Route::post('/forums', 'SearchController@forumsList');
 
 	Route::get('sub-forums/{parentid}', 'SearchController@subForums');
-
-	Route::get('sub-forums/{parentid}/{name}', 'SearchController@subForums');
 
 	Route::get('sub-forums', 'SearchController@subForums');
 	Route::post('sub-forums', 'SearchController@subForums');

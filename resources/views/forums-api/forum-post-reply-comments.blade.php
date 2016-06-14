@@ -30,8 +30,8 @@
 				<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
 				<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name }}</span>
 				<div class="post-time">
-					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">28-03-2016</span>
-					<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="">09:45 AM</span>
+					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">{{ $reply->updated_at->format('D jS') }}</span>
+					<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="">{{ $reply->updated_at->format('h:i A') }}</span>
 				</div>
 				<span class="loc">
 					<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($replyLocati)?$replyLocation:'N/A' }}
