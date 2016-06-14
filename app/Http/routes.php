@@ -229,7 +229,7 @@ Route::match(['get', 'post'], 'api/get-forum-post-reply-comment','ApiController@
 
 Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getForumPostsDetails');
 
-
+Route::get('api/chat_image_page','ApiController@chatImagePage');
 
 /*
 |--------------------------------------------------------------------------
