@@ -701,6 +701,9 @@ class DashboardController extends Controller
 			$xmp=DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
 
 			$converse->removeUserGroup($groupname,$xmp);
+			$Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
+			
+			$converse->broadcast($userXamp,$value,$Message);
 
             GroupMembers::where('group_id',$privategroupid)->where('member_id',Auth::User()->id)->delete();
         }
@@ -709,87 +712,63 @@ class DashboardController extends Controller
         return view('privategroup.list')->with('privategroup',$privategroup);
     }
 
-    public function privateGroupAdd()
-    {
+    public function privateGroupAdd() {
 
-          if(Request::isMethod('post'))
-        {
+        if( Request::isMethod('post') ){
 
-            $userid=Auth::User()->id;
-            $input=Request::all();
-       
+            $userid = Auth::User()->id;
+            $userXamp = Auth::User()->xmpp_username;
+            $input = Request::all();
  
-        if(isset($input['groupmembers'])&&$input['groupname']!=null)
-            {
+			if( isset($input['groupmembers']) && $input['groupname'] != null ){
                 array_push($input['groupmembers'],$userid);
-                
                 $members=implode(",",$input['groupmembers']);
-    
                 $data = array(
                         'title'=>$input['groupname'],
                         'status'=>'Active',
                         'owner_id'=>$userid,
-                            );  
-
-
+                       );  
 
                 $groupid=str_replace(' ','_',$input['groupname']);
-
                 $groupid=strtolower($groupid);
-
-                    $converse=new Converse;
-
-                
+                $converse=new Converse;
                 $groupdata = Group::create($data);
-				
-                 $groupname=$input['groupname']."_".$groupdata->id;
-          
-                    $converse->createGroup($groupid,$groupname);
-
-                foreach ($input['groupmembers'] as $data) {
-                    
-                
-                 $data1 = array(
-                        'group_id'=>$groupdata->id,
-                        'member_id'=>$data,
-                        'status'=>'Joined',
-                            );
-               
+                $groupname=$input['groupname']."_".$groupdata->id;
+				$converse->createGroup($groupid,$groupname);
+				foreach ($input['groupmembers'] as $data) {
+					$data1 = array(
+								'group_id'=>$groupdata->id,
+								'member_id'=>$data,
+								'status'=>'Joined',
+							);
                         GroupMembers::insert($data1);  
                 }
 
        
-        $xmp=DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
-       
-        foreach ($xmp as $key => $value) {
-            
-            $converse->addUserGroup($groupname,$value);
+			$xmp=DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
+			$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
+			foreach ($xmp as $key => $value) {
+				$converse->broadcast($userXamp,$value,$Message);
+			}
 
-        }
+            return redirect(url('private-group-list'));       
+		}  else {
+          return redirect()->back();
+		}
+      }
 
-                return redirect(url('private-group-list'));       
-            }
-            else
-            {
-                return redirect()->back();
-            }
-    }
-
-     $friends=Friend::with('user')
+		$friends=Friend::with('user')
                     ->with('user')
                     ->where('friend_id', '=', Auth::User()->id)
                     ->where('status', '=', 'Accepted')
                     ->get()
                     ->toArray();
 
-                return view('privategroup.add')->with('friends',$friends);   
-
+     return view( 'privategroup.add' )->with( 'friends' ,$friends );
   }
 
-  public function privateGroupDetail($privategroupid='')
-  {
-    if($privategroupid)
-    {
+  public function privateGroupDetail( $privategroupid = '' ){
+    if( $privategroupid ){
         //$title=DB::table('groups')->where('id',$privategroupid)->value('title');
         $groupdetail = Group::where('id',$privategroupid)->get()->toArray();
         $ownerid=DB::table('groups')->where('id',$privategroupid)->value('owner_id');
@@ -810,9 +789,7 @@ class DashboardController extends Controller
                ->with('ownerid',$ownerid)
                ->with('friends',$friends);   
     }
-
   }
-
 
     public function demopage()
     {
