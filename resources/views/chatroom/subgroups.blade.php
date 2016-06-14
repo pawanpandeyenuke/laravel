@@ -52,25 +52,25 @@ unset($countries[0]);
 															@if($title == 'country')
 																<div class="subs" style="display:none">
 																{!! Form::select('country1', $countries, null, array(
-																	'class' => 'search-field boxsize',
+																	'class' => 'search-field boxsize pr-edit',
 																	'id' => 'country',
 																	
 																)); !!}
 																</div>
 															@elseif($title == 'country,state,city')
 																<div class="subs" style="display:none">
-																	<select name="country" class="search-field boxsize" id="subcountry">
+																	<select name="country" class="search-field boxsize pr-edit" id="subcountry">
 																		<option value="">Country</option>
 																		@foreach($countries as $data)					
 																			<option value="{{$data}}">{{$data}}</option>
 																		@endforeach
 																	</select>
 
-																	<select name="state" class="search-field boxsize" id="substate">
+																	<select name="state" class="search-field boxsize pr-edit" id="substate">
 																		<option value="">State</option>
 																	</select>
 																	
-																	<select name="city" class="search-field boxsize" id="subcity">
+																	<select name="city" class="search-field boxsize pr-edit" id="subcity">
 																		<option value="">City</option>
 																	</select>
 																</div>
@@ -81,7 +81,7 @@ unset($countries[0]);
 																	<?php $courses = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->pluck('title');
 																	 
 																	?>
-																	<select name="coursedata1" class="boxsize">
+																	<select name="coursedata1" class="boxsize pr-edit">
 																		<option value="">Select</option>
 																		@foreach($courses as $data)					
 																			<option value="{{$data}}">{{$data}}</option>
@@ -94,7 +94,7 @@ unset($countries[0]);
 																	
 																	
 																	?>
-																	<select name="coursedata" class="boxsize">
+																	<select name="coursedata" class="boxsize pr-edit">
 																		<option value="">Select</option>
 																		@foreach($courses as $data)					
 																			<option value="{{$data}}">{{$data}}</option>

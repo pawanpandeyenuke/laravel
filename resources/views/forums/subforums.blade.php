@@ -85,7 +85,7 @@ if($mainforum == "Doctor")
 
 													  @if($title == 'international')
 													  	<div class="subs" style="display:none">
-													  		 <select name="i-diseases" class="search-field boxsize" id="diseases-forum" >
+													  		 <select name="i-diseases" class="search-field boxsize pr-edit" id="diseases-forum" >
 																@foreach($diseases as $doc)					
 																	<option value="{{$doc}}">{{$doc}}</option>
 																@endforeach
@@ -96,13 +96,13 @@ if($mainforum == "Doctor")
 
 													@if($title == 'country')
 														<div class="subs" style="display:none">
-														<select name="country1" class="search-field boxsize" id="country">
+														<select name="country1" class="search-field boxsize pr-edit" id="country">
 															@foreach($countries as $data)					
 																	<option value="{{$data}}">{{$data}}</option>
 															@endforeach
 														</select>
 														@if($mainforum == 'Doctor')
-														  <select name="c-diseases" class="search-field boxsize" id="diseases-forum">
+														  <select name="c-diseases" class="search-field boxsize pr-edit" id="diseases-forum">
 																@foreach($diseases as $doc)					
 																	<option value="{{$doc}}">{{$doc}}</option>
 																@endforeach
@@ -111,22 +111,22 @@ if($mainforum == "Doctor")
 														 </div>
 													@elseif($title == 'country,state,city')
 														<div class="subs" style="display:none">
-															<select name="country" class="search-field boxsize" id="subcountry-forum">
+															<select name="country" class="search-field boxsize pr-edit" id="subcountry-forum">
 																<option value="">Country</option>
 																@foreach($countries as $data)					
 																	<option value="{{$data}}">{{$data}}</option>
 																@endforeach
 															</select>
 
-															<select name="state" class="search-field boxsize" id="substate-forum">
+															<select name="state" class="search-field boxsize pr-edit" id="substate-forum">
 																<option value="">State</option>
 															</select>
 															
-															<select name="city" class="search-field boxsize" id="subcity-forum">
+															<select name="city" class="search-field boxsize pr-edit" id="subcity-forum">
 																<option value="">City</option>
 															</select>
 														 @if($mainforum == 'Doctor')
-														  <select name="csc-diseases" class="search-field boxsize" id="diseases-forum">
+														  <select name="csc-diseases" class="search-field boxsize pr-edit" id="diseases-forum">
 																@foreach($diseases as $doc)					
 																	<option value="{{$doc}}">{{$doc}}</option>
 																@endforeach

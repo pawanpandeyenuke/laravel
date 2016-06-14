@@ -319,12 +319,11 @@ class DashboardController extends Controller
                     $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata']]);
 
                 } elseif($input['subcategory']=='country,state,city'){
-               
                     $newinput=(['parentname'=>$input['parentname'],
                     'subcategory'=>'csc',
-                    'country'=>DB::table('country')->where('country_name',$input['country'])->value('country_name'),
-                    'state'=>DB::table('state')->where('state_id',$input['state'])->value('state_name'),
-                    'city'=>DB::table('city')->where('city_id',$input['city'])->value('city_name')]);       
+                    'country'=>$input['country'],
+                    'state'=>$input['state'],
+                    'city'=>$input['city']]);       
                
                 } elseif ( $input['subcategory']=='country' ){
                 
@@ -357,7 +356,6 @@ class DashboardController extends Controller
                     $groupnamedata[] = $value;
                 }
             }
-
             $groupname = implode('_', $groupnamedata); 
             $groupname=strtolower($groupname);
         } else {
