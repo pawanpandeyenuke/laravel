@@ -2221,6 +2221,11 @@ class ApiController extends Controller
 	        }
 	    }
 
+
+	/*
+	* @Forum web api's starts from here.
+	*
+	*/
 	public function getForumCategories()
 	{
 		$this->data = Forums::all();

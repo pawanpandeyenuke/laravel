@@ -1,7 +1,10 @@
 @extends('layouts.dashboard')
 
-<?php $groupnamestr = ucwords($group_name);
+<?php 
+// print_r($group_name);die;
+$groupnamestr = ucwords($group_name);
 unset($countries[0]);
+// print_r($countries);die;
  ?>
 
 <style type="text/css">
@@ -19,7 +22,7 @@ unset($countries[0]);
 					<div class="col-sm-6">
 						<div class="shadow-box page-center-data no-margin-top">
 
-							{{ Form::open(array('url' => 'groupchat', 'method' => 'get', 'id' => 'chatsubgroupsvalidate')) }}
+							{{ Form::open(array('url' => 'groupchat', 'method' => 'post', 'id' => 'chatsubgroupsvalidate')) }}
 							<div class="page-title">
 
 								<i class="flaticon-balloon"></i>{{$groupnamestr}}
@@ -42,20 +45,21 @@ unset($countries[0]);
 								                                $title = strtolower(implode('', $titledata));
 
 								                            }
-								                            
+								                            if($data->title == "Country,State,City")
+								                            	$data->title = "Country, State, City";
 								                        ?>
 
 														<div class="radio-cont radio-label-left">
-															<input class="group-radio" type="radio" name="subcategory" value="{{ $title }}" id="{{ $title }}"></input>
+															<input class="group-radio" type="radio" name="subcategory" value="{{ $data->title }}" id="{{ $title }}"></input>
 															<label for="{{ $title }}">{{ $data->title }}</label>
 
 															@if($title == 'country')
 																<div class="subs" style="display:none">
-																{!! Form::select('country1', $countries, null, array(
-																	'class' => 'search-field boxsize pr-edit',
-																	'id' => 'country',
-																	
-																)); !!}
+																<select name="country1" class="search-field boxsize pr-edit" id="country">
+																		@foreach($countries as $data)					
+																			<option value="{{$data}}">{{$data}}</option>
+																		@endforeach
+																	</select>
 																</div>
 															@elseif($title == 'country,state,city')
 																<div class="subs" style="display:none">

@@ -1116,7 +1116,10 @@ comments;
 		$groupname=$groupname."_".$input;
 		$converse=new Converse;
 		$converse->deleteGroup($groupname);
-
+		
+		$Message = json_encode( array( 'type' => 'privatechatremove', 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
+		$converse->broadcast($userXamp,$value,$Message);
+		
 		Group::where('id',$input)->where('owner_id',Auth::User()->id)->delete();
 		GroupMembers::where('group_id',$input)->delete();
 
@@ -1691,6 +1694,8 @@ comments;
 
 
 	}
+
+	
 	public function getSubForums()
 	{
 		$input = Input::all();

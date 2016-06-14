@@ -107,23 +107,17 @@ Route::post('/private-group-detail/ajax/groupimage','AjaxController@groupImage')
 Route::post('/ajax/login','AjaxController@login');
 
 Route::post('/ajax/delforumpost','AjaxController@delForumPost');
-
 Route::post('/ajax/editforumpost','AjaxController@editForumPost');
 Route::post('/ajax/editnewforumpost','AjaxController@editNewForumPost');
-
-
 Route::post('/ajax/addnewforumpost','AjaxController@addNewForumPost');
-
-Route::post('/ajax/mob-country-code','AjaxController@mobCountryCode');
-
 Route::post('/ajax/likeforumpost','AjaxController@likeForumPost');
-
 Route::post('/ajax/addnewforumreply','AjaxController@addNewForumReply');
 
 Route::post('/ajax/view-more-forum-post','AjaxController@viewMoreForumPost');
 Route::post('/ajax/view-more-forum-reply','AjaxController@viewMoreForumReply');
 Route::post('/ajax/view-more-forum-comment','AjaxController@viewMoreForumComment');
 
+Route::post('/ajax/mob-country-code','AjaxController@mobCountryCode');
 
 
 Route::post('/ajax/delforumreply','AjaxController@delForumReply');
@@ -270,8 +264,6 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 
 	Route::get('sub-forums/{parentid}', 'SearchController@subForums');
 
-	Route::get('sub-forums/{parentid}/{name}', 'SearchController@subForums');
-
 	Route::get('sub-forums', 'SearchController@subForums');
 	Route::post('sub-forums', 'SearchController@subForums');
 
@@ -300,7 +292,6 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 	Route::post('dashboard', 'DashboardController@dashboard');
 	Route::get('settings/privacy', 'DashboardController@settings');	
 	Route::post('settings/privacy', 'DashboardController@settings');
-	//Route::get('/', 'DashboardController@dashboard');	
 	Route::get('chatroom', 'DashboardController@chatroom');
 	Route::get('friends', 'DashboardController@friendRequests');
 	Route::get('invite-friends', 'ContactImporter@inviteFriends');
@@ -309,11 +300,18 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 
 	Route::get('group', 'DashboardController@group');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
-	Route::get('subgroup/{parentid}/{name}', 'DashboardController@subgroup');
-	Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
-	Route::get('groupchat', 'DashboardController@groupchat');	
+	// Route::get('subgroup/{parentid}/{name}', 'DashboardController@subgroup');
+	// Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
+	Route::get('groupchat/{id}', 'DashboardController@groupchat');
+		Route::get('groupchat', function(){
+			return redirect('group');
+	});
+	Route::post('groupchat', 'DashboardController@groupchat');	
 
-	Route::get('groupchat/pg/{groupid}/{groupname}','DashboardController@groupchat');
+	Route::get('groupchat/pg/{groupid}','DashboardController@privateGroupChat');
+
+	Route::get('friends-chat','DashboardController@friendsChat');
+	
 
 	Route::get('profile/{id}', 'DashboardController@profile');
 	Route::post('profile/{id}', 'DashboardController@profile');

@@ -93,7 +93,7 @@ $title1=str_replace(" ","-",$title1);
 								<?php }else{ ?>
 								<li><a href="{{url("private-group-list/".$groupid)}}" title=""  class="btn btn-primary userleave">Leave Group</a></li>
 								<?php } ?>
-								<li><a href="{{url("groupchat/pg/".$groupid."/".$title1)}}" title=""  class="btn btn-primary startchat">Start Chat</a></li>
+								<li><a href="{{url("groupchat/pg/".$groupid)}}" title=""  class="btn btn-primary startchat">Start Chat</a></li>
 								</ul>
 
 							<div class="bcast-list" style="display: none;">
