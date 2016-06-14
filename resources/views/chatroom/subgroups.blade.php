@@ -45,7 +45,8 @@ unset($countries[0]);
 								                                $title = strtolower(implode('', $titledata));
 
 								                            }
-								                            
+								                            if($data->title == "Country,State,City")
+								                            	$data->title = "Country, State, City";
 								                        ?>
 
 														<div class="radio-cont radio-label-left">

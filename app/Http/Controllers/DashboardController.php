@@ -29,6 +29,7 @@ class DashboardController extends Controller
 
 	public function dashboard()
 	{
+
         try{ 
             $xmppusername = User::where('id',Auth::User()->id)->value('xmpp_username');
 
@@ -240,7 +241,7 @@ class DashboardController extends Controller
 
     }
 
-    public function groupchat1($groupid = "")
+    public function groupchat($groupid = "")
     {
         $private_group_check = "pub" ;
         $id=Auth::User()->id;
@@ -253,8 +254,8 @@ class DashboardController extends Controller
                 if($check_if_parent != null)
                     return redirect('subgroup/'.$groupid);
             }
-                //Get users of this group
-            $group_jid = strtolower(str_replace([' ', '/', ','], '-', $check_name));
+        //Get users of this group
+        $group_jid = strtolower(str_replace([' ', '/', ','], '-', $check_name));
 
         }else{
         $input = Request::all();
@@ -278,7 +279,7 @@ class DashboardController extends Controller
                  }
                     
 
-                 elseif($input['subcategory']=='Country,State,City'){
+                 elseif($input['subcategory']=='Country, State, City'){
                     $check_name = $input['parentname'].' '.$input['country'].', '.$input['state'].', '.$input['city'];
                     $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
                     $sub_name = 'csc'.'_'.$input['country'].'_'.$input['state'].'_'.$input['city'];
@@ -288,6 +289,11 @@ class DashboardController extends Controller
                  elseif ( $input['subcategory']=='Country' ){
                     $check_name = $input['parentname'].' '.$input['country1'];
                     $sub_name = 'c'.'_'.$input['country1'];
+                 }
+
+                 else{
+                    $check_name = $input['parentname'].' '.$input['subcategory'];
+                    $sub_name = $input['subcategory'];
                  }
                
                 $sub_name = str_replace([' ', '/', ','],'-',$sub_name);           
@@ -384,7 +390,6 @@ class DashboardController extends Controller
                     ->with('pendingfriend',$pendingfriend)
                     ->with('exception',$private_group_check)
                     ->with('privategroup',$privategroup);
-
     }
 
 
@@ -392,7 +397,7 @@ class DashboardController extends Controller
     *   Enter chatrooms ajax call handling.
     *   Ajaxcontroller@enterchatroom
     */
-    public function groupchat( $input = '' ,$gname=''){   
+    /*public function groupchat( $input = '' ,$gname=''){   
         $groupid=null;
         if( $input ){
 			if($input!=null && $gname!=null){
@@ -588,7 +593,7 @@ class DashboardController extends Controller
                     ->with('pgid',$groupid)
                     ->with('privategroup',$privategroup);
    }
-
+*/
  
 
     public function profile( $id )

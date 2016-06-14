@@ -302,11 +302,11 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
 	// Route::get('subgroup/{parentid}/{name}', 'DashboardController@subgroup');
 	// Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
-	Route::get('groupchat/{id}', 'DashboardController@groupchat1');
+	Route::get('groupchat/{id}', 'DashboardController@groupchat');
 		Route::get('groupchat', function(){
 			return redirect('group');
 	});
-	Route::post('groupchat', 'DashboardController@groupchat1');	
+	Route::post('groupchat', 'DashboardController@groupchat');	
 
 	Route::get('groupchat/pg/{groupid}','DashboardController@privateGroupChat');
 

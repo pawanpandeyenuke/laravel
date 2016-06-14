@@ -291,7 +291,7 @@ $groupid = $group_jid;
     var conObj;
     var groupname = "{{$groupname}}";
     var groupid = "{{$groupid}}";
-
+    var exception = "{{$exception}}";
 
     var is_first = true;  
 
@@ -314,7 +314,7 @@ $groupid = $group_jid;
                   send_initial_presence:true,
                   roster_groups: true ,
                   forward_messages: true,
-                  auto_join_rooms: [{'jid': 'group3_3@friendzsquare.com', 'nick': 'Group3' }]
+                  // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
                 // jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                 // jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
@@ -353,7 +353,7 @@ $groupid = $group_jid;
 					// converse.rooms.open('haeri@conference.friendzsquare.com', 'mycustomnick');
 					openChatGroup(groupname, groupid);
 					// converse.rooms.open(groupname, groupid);
-                }
+        }
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
 					console.log( 'room open' );
 				});
