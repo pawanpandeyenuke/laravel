@@ -197,9 +197,9 @@ $groupid = $group_jid;
                     @foreach($privategroup as $data)
                     <?php  
 
-                        $privategroupname=$data['title'].'_'.$data['id'];
-                        $privategroupid=strtolower($privategroupname);
-                        $privategroupid=str_replace(" ","-",$privategroupid);
+						$privategroupname = preg_replace('/\s+/', '_',$data['title']);
+                        $privategroupname = strtolower($privategroupname);
+                        $privategroupid   = $privategroupname.'_'.$data['id'];
                          
                         $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
 			
@@ -494,7 +494,7 @@ function openChatbox( xmpusername,username ){
        }
 	function openChatRoom( room, roomname ){
 		hideOpendBox();
-		converse.rooms.open( room+'@conference.<?= Config::get('constants.xmpp_host_Url') ?>', roomname );	
+		converse.rooms.open( room+'@conference.<?= Config::get('constants.xmpp_host_Url') ?>' );	
 	}
 
     $('.status-r-btn').on('click',function(){
