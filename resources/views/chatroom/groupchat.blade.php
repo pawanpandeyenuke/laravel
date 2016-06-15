@@ -197,9 +197,9 @@ $groupid = $group_jid;
                     @foreach($privategroup as $data)
                     <?php  
 
-                        $privategroupname=$data['title'].'_'.$data['id'];
-                        $privategroupid=strtolower($privategroupname);
-                        $privategroupid=str_replace(" ","-",$privategroupid);
+						$privategroupname = preg_replace('/\s+/', '_',$data['title']);
+                        $privategroupname = strtolower($privategroupname);
+                        $privategroupid   = $privategroupname.'_'.$data['id'];
                          
                         $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
 			
