@@ -2448,7 +2448,6 @@ class ApiController extends Controller
 		return $this->output();			
 	}
 
-
 	public function uploadChatImage(){
 		try{
 			$status="Failed";
@@ -2480,4 +2479,8 @@ class ApiController extends Controller
 	  return  json_encode(array('status'=>$status,'message'=>$message,'url'=>$url1,'name'=>$url,'type'=>'image'));
 	}
 
+	public function chatImagePage()
+	{
+		return view('chat_image');die;
+	}
 }
