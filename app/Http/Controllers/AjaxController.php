@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
 ,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments;
 
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
 use App\DefaultGroup;
@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth, Mail;
 use XmppPrebind;
-use \Exception;
+use \Exception,Route;
 use App\Library\Converse, Config;
+use Illuminate\Support\Facades\Request;
 
 class AjaxController extends Controller
 {
@@ -76,8 +77,12 @@ class AjaxController extends Controller
 		}else{
 
 			if(Auth::attempt(['email' => $email, 'password'=>$password , 'is_email_verified'=>
-				'Y'], $log))
+				'Y'], $log)){
+				//$current_url = Request::path();
+				//print_r($current_url);die;
 				echo 'success';
+			}
+				
 			else{
 				$verified = User::where('email',$email)->value('is_email_verified');
 				if($verified == 'N')
@@ -1793,6 +1798,6 @@ comments;
 				echo $str;
 			}	
 	}
-
+	
 }
 	
