@@ -897,6 +897,7 @@ class DashboardController extends Controller
 					$xmp = DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
 					$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
 					foreach ($xmp as $key => $value) {
+						$converse->addUserGroup( $groupname,$value );
 						$converse->broadcast($userXamp,$value,$Message);
 					}
 				return redirect(url('private-group-list'));       
