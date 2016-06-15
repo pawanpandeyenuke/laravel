@@ -18,7 +18,9 @@
   padding: 5px 0;
     }
 </style>
-
+<?php
+    $prev_url = URL::previous();
+ ?>
 @include('panels.loginpopup')
 
 @if (Session::has('success'))
@@ -184,6 +186,7 @@
                         <label for="terms" class="css-label" style="color: #0c0c0c" >I agree to the following<a href="{{url('terms-conditions')}}" style="color:#3ab29f "> terms and conditions</a>.</label>
                         </div>
                      </div>
+                     <input type="hidden" name="url" value = "{{$prev_url}}"/>
                         </div>
                                 <div class="form-groups">
                                     <div class="btn-cont text-center">
@@ -273,11 +276,6 @@ $(document).ready(function () {
             $('#mobileContact').prop('minlength', validArray.min);
             $('#mobileContact').prop('maxlength', validArray.max);
 
-        });
-
-
-        $(document).on('blur', '#mobileContact', function(){
-
             $('#mobileContact').parent().find('#groupname-error').remove();
 
             var array = $('.country-code-field').data('value');
@@ -290,7 +288,14 @@ $(document).ready(function () {
                 $('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
             }
 
+
         });
+
+
+/*        $(document).on('blur', '#mobileContact', function(){
+
+    
+        });*/
 
  
     $("#registerForm").validate({ 

@@ -16,7 +16,9 @@
 	</head>
 
 	<body>
-	<div id="google_translate_element"></div>
+		
+		<div id="google_translate_element"></div>
+		
 		@yield('content')
 
 <script type="text/javascript" src="{{ url('forums-data/js/jquery-1.11.3.min.js') }}"></script>
@@ -202,10 +204,7 @@
    new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
 	}
 
-        function googleTranslateElementInit() {
- 	  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
-	}
-
+  
 
 
 	});

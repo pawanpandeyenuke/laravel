@@ -137,6 +137,7 @@ Route::post('/ajax/getsubforums-2','AjaxController@getSubForums2');
 
 Route::post('/ajax/view-more-search-forum','AjaxController@viewMoreSearchForum');
 
+Route::post('/ajax/get-path','AjaxController@getCurrentPath');
 
 /**
  * @Api Routes..

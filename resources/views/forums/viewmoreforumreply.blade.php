@@ -30,8 +30,13 @@
 										</a>
 											<div class="p-likes ml">
 											<div class="like-cont">
+												@if(Auth::check())
 												<input type="checkbox" name="" id="checkbox_forumreply_{{$forumreply->id}}" class="css-checkbox likeforumreply" data-forumreplyid="{{$forumreply->id}}" {{ isset($likedata[0])?'checked':'' }}/>
 												<label for="checkbox_forumreply_{{$forumreply->id}}" title="Like Reply" class="css-label"></label>
+												@else
+												<input type="checkbox" disabled="disabled" id="guest-view-more-reply2" class="css-checkbox"/>
+												<label for="guest-view-more-reply2" data-toggle="modal" data-target="#LoginPop" class="css-label"></label>
+												@endif
 											</div>
 											<span class="plike-count forumreplylike" title="Likes">{{$likeCount}}</span>
 											</div>
