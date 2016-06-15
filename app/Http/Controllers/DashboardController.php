@@ -854,7 +854,7 @@ class DashboardController extends Controller
 			$converse->removeUserGroup($groupname,$xmp);
 			$Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
 			
-			$converse->broadcast($userXamp,$value,$Message);
+			$converse->broadcast($userXamp,$xmp,$Message);
 
             GroupMembers::where('group_id',$privategroupid)->where('member_id',Auth::User()->id)->delete();
         }
