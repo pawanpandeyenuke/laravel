@@ -2448,6 +2448,37 @@ class ApiController extends Controller
 		return $this->output();			
 	}
 
+	public function uploadChatImage(){
+                try{
+                        $status="Failed";
+                $message="";
+                $url1="";
+                        $input = Request::all();
+                        if( $input )
+                        {
+                                if( Request::hasFile('chatsendimage') )
+                                {
+                                                                                // Upload file
+                                        $fileToBeUploaded = Request::file('chatsendimage');
+                                        $url = time().'--'.implode('_',explode(' ',$fileToBeUploaded->getClientOriginalName()));
+                                        $fileToBeUploaded->move('uploads/media/chat_images/', $url);
+                                        $url1=url('uploads/media/chat_images/'.$url);
+                                        // Add entry
+
+                                        $status = 'success';
+                                        $message = 'Image uploaded successfuly.';
+                                }
+                        }
+
+                }catch(Exception $e)
+                {
+                        $message = $e->getMessage();//'Image not uploaded.';//
+                        $status='Failed';
+                }
+
+          return  json_encode(array('status'=>$status,'message'=>$message,'url'=>$url1,'name'=>$url,'type'=>'image'));
+    }
+
 	public function chatImagePage()
 	{
 		return view('chat_image');die;
