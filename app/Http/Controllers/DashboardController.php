@@ -844,6 +844,7 @@ class DashboardController extends Controller
 
         if($privategroupid)
         {
+			$userXamp = Auth::User()->xmpp_username;
 			$groupname = DB::table('groups')->where('id',$privategroupid)->value('title');
 			$groupname=$groupname."_".$privategroupid;
 
