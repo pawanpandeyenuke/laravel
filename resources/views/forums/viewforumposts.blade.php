@@ -46,7 +46,7 @@
 									</div>
 									@else
 									<div class="text-right">
-									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Create a Post</button>
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Create Post</button>
 									</div>
 									<!-- <div class="alert alert-info" role="alert">Please <a data-toggle="modal" data-target="#LoginPop" href="#" title="">click here</a> for login, to create a post.</div> -->
 									@endif
