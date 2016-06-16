@@ -58,8 +58,8 @@ $title1=str_replace(" ","-",$title1);
 											}
 											$user_picture = !empty($data['picture']) ? $data['picture'] : '/images/user-thumb.jpg';
 											 ?>
-											<div class="single-list">
-												<div class="row" data-gid={{$groupid}}>
+											<div class="single-list private-member-{{$data['id']}}">
+												<div class="row" data-gid="{{$groupid}}">
 													<div class="col-sm-9">
 														<div class="bclist-detail">
 															<div class="bc-img" style="background: url('{{$user_picture}}');"></div>
@@ -74,7 +74,7 @@ $title1=str_replace(" ","-",$title1);
 														<?php if($data['id']==$ownerid){ ?>
 														<span disabled="disabled" style="font-size: 15px"><br>Admin</span>
 														<?php }else if($ownerid==Auth::User()->id){ ?>
-															<button type="button" value="{{$data['id']}}" class="bl-del-btn deluser"><i class="fa fa-trash"></i></button>
+															<button type="button" value="{{$data['id']}}" data-forumtype = "del-private-member" data-gid="{{$groupid}}" class="bl-del-btn del-confirm-forum"><i class="fa fa-trash"></i></button>
 														<?php } ?>
 														</div>
 													</div>

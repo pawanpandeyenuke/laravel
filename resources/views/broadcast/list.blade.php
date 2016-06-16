@@ -23,7 +23,7 @@
 								$namestr=implode(",",$name);
 
 							 ?>
-								<div class="single-list" data-broadcastid="{{$data['id']}}">
+								<div class="single-list broadcast_{{$data['id']}}" data-broadcastid="{{$data['id']}}">
 									<div class="row">
 										<div class="col-sm-9">
 											<div class="bclist-detail bclist1">
@@ -40,7 +40,7 @@
 										</div>
 										<div class="col-sm-3">
 											<div class="bl-del text-right">
-												<button type="button" value="{{$data['id']}}" class="bl-del-btn broadcastdel"><i class="fa fa-trash"></i></button>
+												<button type="button" value="{{$data['id']}}" data-forumtype = "broadcast" class="bl-del-btn del-confirm-forum"><i class="fa fa-trash"></i></button>
 											</div>
 										</div>
 									</div>
