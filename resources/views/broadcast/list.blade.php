@@ -8,7 +8,7 @@
    			 @include('panels.left')
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
-					<div class="page-title no-left-padding">Create New Broadcast List</div>
+					<div class="page-title no-left-padding">Broadcast List</div>
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
 							<div class="bcast-list no-margin">
