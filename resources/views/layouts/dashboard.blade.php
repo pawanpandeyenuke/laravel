@@ -38,7 +38,7 @@
 <div class="page-loading" style="display:none"><img src="{{url('/images/full-loading.gif')}}" alt=""></div>
  <header>
 	<div class="container">
-		<div class="row">
+		<div class="row header-row-full">
 			<div class="col-sm-2">
 				<a href="/dashboard" title="" class="logo"><img src="{{url('/images/logo.png')}}" alt="Friendz Square"></a>
 			</div>

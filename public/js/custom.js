@@ -1151,8 +1151,8 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'data' : {'bid' : id},
 			'success' : function(data){
-		 
-				current.closest('.single-list').hide();
+		 		$('.broadcast_'+id).remove();
+				$('#forum-confirm-modal').modal('hide');
 			}
 		});
 	});
@@ -1195,28 +1195,41 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'data' : {'pid' : id},
 			'success' : function(data){
-		 
-				current.closest('.single-list').hide();
-				
+		 		$('.private-group_'+id).remove();
+		 		$('#forum-confirm-modal').modal('hide');
 			}
 		});
 	});
 
+	$(document).on('click','.userleave',function()
+	{
+		var current = $(this);
+		var id=current.val();
 	
+		$.ajax({
+			'url' : '/ajax/leaveprivategroup',
+			'type' : 'post',
+			'data' : {'pid' : id},
+			'success' : function(data){
+		 		$('.private-group_'+id).remove();
+		 		$('#forum-confirm-modal').modal('hide');
+			}
+		});
+	});
+
 	$(document).on('click','.deluser',function()
 	{
 		var current = $(this);
 		var id=current.val();
-		var gid=current.closest('.row').data('gid');
+		var gid=current.data('gid');
 
 		$.ajax({
 			'url' : '/ajax/deluser',
 			'type' : 'post',
 			'data' : {'uid' : id,'gid':gid},
 			'success' : function(data){
-		 
-				current.closest('.single-list').hide();
-				
+				$('.private-member-'+id).remove();
+				$('#forum-confirm-modal').modal('hide');
 			}
 		});
 	});
@@ -1261,13 +1274,13 @@ $(document).on('click','.savegroupname',function()
 	$(document).on('click', '.del-confirm-forum', function(){
 	showLoading();
 	var type = $(this).data('forumtype'); 
-	var post_id = $(this).val();
-	var reply_id = $(this).val();
+	var type_id = $(this).val();
 	var breadcrum = $(this).data('breadcrum');
 	var reply_post_id = $(this).data('forumpostid');
+	var gid = $(this).data('gid');
 	$.ajax({
 		'url' : '/ajax/forum-del-confirm',
-		'data' : {'type':type, 'post_id' : post_id, 'reply_id' : reply_id, 'breadcrum' : breadcrum, 'reply_post_id' : reply_post_id},
+		'data' : {'type':type, 'type_id' : type_id, 'breadcrum' : breadcrum, 'reply_post_id' : reply_post_id, 'gid' : gid},
 		'type' : 'post',
 		'success' : function(response){
 			if(response){

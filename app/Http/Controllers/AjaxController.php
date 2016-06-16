@@ -1808,7 +1808,26 @@ comments;
 				echo $str;
 			}	
 	}
+	
+	public function leavePrivateGroup(){
 
+	$privategroupid = Input::get('pid');
+	$userXamp = Auth::User()->xmpp_username;
+	$groupname = DB::table('groups')->where('id',$privategroupid)->value('title');
+	$groupname=$groupname."_".$privategroupid;
+
+	$converse=new Converse;
+	$xmp=DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
+
+	$converse->removeUserGroup($groupname,$xmp);
+	$Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
+	
+	$converse->broadcast($userXamp,$xmp,$Message);
+
+    GroupMembers::where('group_id',$privategroupid)->where('member_id',Auth::User()->id)->delete();
+
+    }
+	
 	public function forumDelConfirm()
 	{
 		$input = Input::all();
@@ -1816,21 +1835,52 @@ comments;
 		if($input['type'] == "post"){
 
 			$data = ['class' => "forumpostdelete",
-					 'id' => $input['post_id'],
+					 'id' => $input['type_id'],
 					 'breadcrum'=> $input['breadcrum'],
-					 'reply_post_id' => "", 
-					 'heading' => "Delete Post",
+					 'reply_post_id' => "",
+					 'gid' => "", 
 					 'message' => "All the replies and comments related to this post will be deleted. Are you sure you want to delete this post?"];
 		
 		}else if($input['type'] == "reply"){
 
 			$data = ['class' => "forumreplydelete",
-					 'id' => $input['reply_id'],
+					 'id' => $input['type_id'],
 					 'breadcrum'=> "",
 					 'reply_post_id' => $input['reply_post_id'],
-					 'heading' => "Delete Reply",
+					 'gid' => "",
 					 'message' => "All the comments related to this post will be deleted. Are you sure you want to delete this reply?"];
+		}else if($input['type'] == "broadcast"){
+				$data = ['class' => "broadcastdel",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => "",
+					 'message' => "Are you sure you want to delete this broadcast?"];
+
+		}else if($input['type'] == "private"){
+				$data = ['class' => "delprivategroup",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => "",
+					 'message' => "Are you sure you want to delete this group?"];
+
+		}else if($input['type'] == "private-leave"){
+				$data = ['class' => "userleave",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => "",
+					 'message' => "Are you sure you want to leave this group?"];
+		}else if($input['type'] == "del-private-member"){
+				$data = ['class' => "deluser",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => $input['gid'],
+					 'message' => "Are you sure you want to delete this user from  the group?"];
 		}
+
 
 		return view('forums.deleteconfirmbox')
 			   		->with('data',$data);

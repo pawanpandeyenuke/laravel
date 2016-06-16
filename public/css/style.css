@@ -1850,6 +1850,7 @@ width:495px;
 }
 #conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom{
    margin: 0 5px 10px 0;
+   padding: 2px 5px;
 }
 .page-title.req-search {
   position: relative;
@@ -3221,4 +3222,15 @@ body {
 }
 .pop-post-text{
 	padding-bottom: 0px;
+}
+@media (min-width: 768px) {
+.header-row-full > .col-sm-2 {
+    width: 17.5%;
+}
+.header-row-full > .col-sm-7 {
+    width: 64.5%;
+}
+.header-row-full > .col-sm-3 {
+    width: 18%;
+}
 }

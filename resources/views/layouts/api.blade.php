@@ -17,7 +17,7 @@
 
 	<body>
 		
-		<div id="google_translate_element"></div>
+		<div class = "text-center" id="google_translate_element"></div>
 		
 		@yield('content')
 
