@@ -1808,6 +1808,33 @@ comments;
 				echo $str;
 			}	
 	}
+
+	public function forumDelConfirm()
+	{
+		$input = Input::all();
+
+		if($input['type'] == "post"){
+
+			$data = ['class' => "forumpostdelete",
+					 'id' => $input['post_id'],
+					 'breadcrum'=> $input['breadcrum'],
+					 'reply_post_id' => "", 
+					 'heading' => "Delete Post",
+					 'message' => "All the replies and comments related to this post will be deleted. Are you sure you want to delete this post?"];
+		
+		}else if($input['type'] == "reply"){
+
+			$data = ['class' => "forumreplydelete",
+					 'id' => $input['reply_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => $input['reply_post_id'],
+					 'heading' => "Delete Reply",
+					 'message' => "All the comments related to this post will be deleted. Are you sure you want to delete this reply?"];
+		}
+
+		return view('forums.deleteconfirmbox')
+			   		->with('data',$data);
+	}
 	
 }
 	

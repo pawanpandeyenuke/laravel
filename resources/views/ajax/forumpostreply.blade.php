@@ -28,7 +28,7 @@
 											</div>
 											<div class="fp-action">
 											<button class='editforumreply' value='{{$forumreply->id}}' data-forumpostid = "{{$forumpostid}}" title="Edit Reply"><i class='flaticon-pencil'></i></button>
-											<button class='forumreplydelete' title="Delete Reply" value='{{$forumreply->id}}' data-forumpostid = "{{$forumpostid}}"><i class='flaticon-garbage'></i></button>
+											<button class='del-confirm-forum' data-forumtype = "reply" title="Delete Reply" value='{{$forumreply->id}}' data-forumpostid = "{{$forumpostid}}" ><i class='flaticon-garbage'></i></button>
 											</div>
 										</div>
 

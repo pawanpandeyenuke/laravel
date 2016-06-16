@@ -59,6 +59,15 @@
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingSeven">
 		      <h4 class="panel-title">
+		        <a class="without-arrow" href="{{ url('/forums') }}">
+		          <i class="flaticon-user-profile"></i>Forums
+		        </a>
+		      </h4>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingSeven">
+		      <h4 class="panel-title">
 		        <a class="without-arrow" href="{{ url('broadcast-list')}}">
 		          <i class="flaticon-icon-89571"></i>Broadcast
 		        </a>
@@ -82,17 +91,7 @@
 		        </a>
 		      </h4>
 		    </div>
-		  </div>
-		   <div class="panel panel-default">
-		    <div class="panel-heading" role="tab" id="headingSeven">
-		      <h4 class="panel-title">
-		        <a class="without-arrow" href="{{ url('/forums') }}">
-		          <i class="flaticon-user-profiles"></i>Forums
-		        </a>
-		      </h4>
-		    </div>
-		  </div>
-	 
+		  </div> 
 		</div>
 	</div><!--/dashboard sidemenu-->
 </div>

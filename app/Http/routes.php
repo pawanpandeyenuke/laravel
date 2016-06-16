@@ -139,6 +139,8 @@ Route::post('/ajax/view-more-search-forum','AjaxController@viewMoreSearchForum')
 
 Route::post('/ajax/get-path','AjaxController@getCurrentPath');
 
+Route::post('/ajax/forum-del-confirm','AjaxController@forumDelConfirm');
+
 /**
  * @Api Routes..
  *

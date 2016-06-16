@@ -1,5 +1,5 @@
 <!-- Login Popup -->
-<div class="modal fade" id="LoginPop" tabindex="-1" role="dialog" aria-labelledby="LoginPopLabel">
+<div class="modal fade" id="LoginPop" tabindex="-1" role="dialog" aria-labelledby="LoginPopLabel" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-body">
