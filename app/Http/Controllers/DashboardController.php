@@ -884,7 +884,9 @@ class DashboardController extends Controller
 					$converse  = new Converse;
 					$groupdata = Group::create($data);
 					$groupname = $groupid."_".$groupdata->id;
+					
 					$converse->createGroup($groupid,$groupname);
+					
 					foreach ($input['groupmembers'] as $data) {
 						$data1 = array(
 									'group_id'=>$groupdata->id,
