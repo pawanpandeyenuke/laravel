@@ -51,8 +51,8 @@
 								<input type="checkbox" name="checkboxG4" id="checkboxG4" class="css-checkbox likeforumreply" data-forumreplyid="{{$replyid}}" {{ isset($likedata[0])?'checked':'' }} />
 								<label for="checkboxG4" class="css-label"><span class="forumreplylike">{{$likeCount}}</span> <span>Likes</span></label>
 							@else
-							   <input type="checkbox" name="guest-popup" id="guest-popup" class="css-checkbox"/>
-								<label for="guest-popup" class="css-label"><span class="forumreplylike">{{$likeCount}}</span> <span>Likes</span></label>
+							   <input type="checkbox" disabled = "disabled" name="guest-popup" id="guest-popup" class="css-checkbox"/>
+								<label for="guest-popup" data-toggle="modal" data-target="#LoginPop" class="css-label"><span class="forumreplylike">{{$likeCount}}</span> <span>Likes</span></label>
 							@endif
 							</div>
 						</li>
@@ -105,14 +105,21 @@
 				
 			</div>
 		</div>
-		@if(Auth::check())
+		
 		<div class="pop-post-comment post-comment">
+			@if(Auth::check())
 			<div class="emoji-field-cont cmnt-field-cont">
 				<textarea type="text" class="form-control comment-field reply-comment-text" data-emojiable="true" placeholder="Type here..."></textarea>
 				<button type="button" class="btn-icon btn-cmnt replycomment" value="{{$replyid}}"><i class="flaticon-letter"></i></button>
 			</div>
+			@else
+			<div class="text-right">
+			  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Comment</button>
+			</div>
+				<!-- <div class="text-center">Please <a data-toggle="modal" data-target="#LoginPop" href="#" title="">click here</a> for login, to create a post.</div> -->
+			@endif
 		</div>
-		@endif
+
 
  <script type="text/javascript" src="{{url('/js/bootstrap-filestyle.min.js')}}"></script>
 <script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>

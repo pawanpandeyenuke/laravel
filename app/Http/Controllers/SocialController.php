@@ -96,8 +96,8 @@ class SocialController extends Controller
 				break;
 			
 			case 'twitter':
-				echo '<pre>';print_r($providerUser);die;
-				$email = 'demo.user@twitter.com';
+				//echo '<pre>';print_r($providerUser->getEmail());die;
+				//$email = $providerUser->getNickname().'@twitter.com';
 				$nameRaw = explode(' ', $providerUser->getName());
 				
 				$userData = array(
@@ -105,7 +105,7 @@ class SocialController extends Controller
 					'nickname' => $providerUser->getNickname(),
 					'first_name' => $nameRaw[0],
 					'last_name' => $nameRaw[1],
-					'email' => $email, //$providerUser->getEmail(),
+					'email' => $providerUser->getEmail(),
 					'avatar' => $providerUser->getAvatar()
 				);
 				break;

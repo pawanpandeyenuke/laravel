@@ -1850,6 +1850,7 @@ width:495px;
 }
 #conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom{
    margin: 0 5px 10px 0;
+   padding: 2px 5px;
 }
 .page-title.req-search {
   position: relative;
@@ -2775,7 +2776,7 @@ textarea{
 }
 .f-single-post{
   position: relative;
-  padding: 0 0 0 95px;
+  padding: 0 0 0 100px;
   min-height: 125px;
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
@@ -2787,7 +2788,8 @@ textarea{
   font-size: 10px;
   position: absolute;
   left: 0px;
-  top: 0px;	
+  top: 0px;
+  color: #000;	
 }
 .f-single-post .p-user span{
 	display: block;
@@ -2837,7 +2839,7 @@ textarea{
 }
 .f-single-post .f-post-title{
   position: relative;
-  font-size: 13px;
+  font-size: 14px;
   color: #000;
   border-bottom: 1px solid #ccc;
   padding-bottom: 5px;
@@ -2861,16 +2863,18 @@ textarea{
   font-size: 12px;
 }
 .f-single-post p{
-  font-size: 12px;
+  color: #555;
+    font-size: 13px;
+    line-height: 20px;
 }
 .f-single-post .p-user:after{
-  width: 1px;
-  height: 80px;
-  position: absolute;
-  content: '';
-  background: #ccc;
-  right: -5px;
-  top: 10px;
+  	background: #ccc none repeat scroll 0 0;
+	content: "";
+	height: 90px;
+	position: absolute;
+	right: -5px;
+	top: 0;
+	width: 1px;
 }
 .fp-btns .btn{
   padding: 0px 15px;
@@ -3006,7 +3010,7 @@ div#forumreply-edit-modal {
 
 .fix-header {
   margin: 0 -30px;
-  padding: 10px 30px;
+  padding: 10px 30px 5px;
   background: #fff;
 }
 .stick {
@@ -3184,4 +3188,49 @@ body {
 }
 .forum-master-post p{
 	word-wrap: break-word;
+}
+.forum-srch-list .fs-breadcrumb{
+	margin: 0 -30px;
+	padding: 10px 30px 5px;
+}
+.alert-info {
+    background-color: #A0F0E6;
+    border-color: #bce8f1;
+    color: #39847A;
+    text-align: center;
+}
+.f-post-form .alert-info{
+	margin: 0px;
+}
+.fp-master-header-right {
+    color: #000;
+}
+.fp-master-header-right .p-date, .fp-master-header-right .p-time {
+    font-size: 13px;
+}
+.forum-master-post p{
+	color: #555;
+}
+.fp-master-header-right span i::before {
+    font-size: 14px;
+}
+.pop-post-header .post-time li {
+    font-size: 13px;
+}
+.post-list .single-post p, .post-list .single-post .post-time{
+	color: #555;
+}
+.pop-post-text{
+	padding-bottom: 0px;
+}
+@media (min-width: 768px) {
+.header-row-full > .col-sm-2 {
+    width: 17.5%;
+}
+.header-row-full > .col-sm-7 {
+    width: 64.5%;
+}
+.header-row-full > .col-sm-3 {
+    width: 18%;
+}
 }

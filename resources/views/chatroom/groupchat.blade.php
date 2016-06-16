@@ -353,16 +353,7 @@ $groupid = $group_jid;
 					// converse.rooms.open('haeri@conference.friendzsquare.com', 'mycustomnick');
 					openChatGroup(groupname, groupid);
 					// converse.rooms.open(groupname, groupid);
-        }
-				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
-					console.log( 'room open' );
-				});
-				conObj.listen.on('chatBoxOpened', function (event, chatbox) { 
-					console.log( 'box open' ); 
-				});
-				conObj.listen.on('chatBoxToggled', function (event, chatbox) { 
-					console.log( 'box total' );
-				});
+				}
             
               
 
@@ -470,14 +461,21 @@ function openChatbox( xmpusername,username ){
 }*/
 
  function hideOpendBox(){
-	 /**
+	 
+	 console.log( $( '.chatbox' ).length );
+	$( '.chatbox' ).each( function(){
+		console.log( $(this).find( '.icon-minus' ).length );
+		
+		$(this).find('.icon-minus').click();
+	});
+	
 	 $(".chatroom:visible").each(function()    {
 		$(this).find('.icon-minus').click();
 		});
 		$(".chatbox:visible").each(function()   {
 		$(this).find('.icon-minus').click();
 	});
-   **/
+   
 }
   function openChatGroup(grpname,grpjid)
        {
@@ -494,7 +492,7 @@ function openChatbox( xmpusername,username ){
        }
 	function openChatRoom( room, roomname ){
 		hideOpendBox();
-		converse.rooms.open( room+'@conference.<?= Config::get('constants.xmpp_host_Url') ?>' );	
+		conObj.rooms.open( room+'@conference.<?= Config::get('constants.xmpp_host_Url') ?>' );	
 	}
 
     $('.status-r-btn').on('click',function(){

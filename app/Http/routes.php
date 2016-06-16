@@ -137,11 +137,18 @@ Route::post('/ajax/getsubforums-2','AjaxController@getSubForums2');
 
 Route::post('/ajax/view-more-search-forum','AjaxController@viewMoreSearchForum');
 
+Route::post('/ajax/get-path','AjaxController@getCurrentPath');
+
+Route::post('/ajax/forum-del-confirm','AjaxController@forumDelConfirm');
+
+Route::post('/ajax/leaveprivategroup','AjaxController@leavePrivateGroup');
 
 /**
  * @Api Routes..
  *
  **/
+Route::post('v1/upload-chat-image','ApiController@uploadChatImage');
+
 Route::post('api/signin', 'ApiController@signin');
 Route::post('api/signup', 'ApiController@signup');
 Route::post('api/forget-Password', 'ApiController@forgetPassword');

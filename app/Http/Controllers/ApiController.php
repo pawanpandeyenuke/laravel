@@ -2449,7 +2449,8 @@ class ApiController extends Controller
 	}
 
 	public function uploadChatImage(){
-                try{
+		
+	try{
                         $status="Failed";
                 $message="";
                 $url1="";

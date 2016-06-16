@@ -89,11 +89,13 @@
       $( "#search-forum-layout" ).submit(function( event ) {
       var city = ['56','57','60','72','234','241'];
       var searchkey = $('#forum-keyword-layout').val();
+      var parent = $('.getsubcategory').val();
       if(searchkey == '' || city.indexOf($('#search-subforums').val()) != -1 ){
-      	if(searchkey == ""){
-        $('#forum-keyword-layout').attr('placeholder', 'Enter Keyword').focus();
+      	if(searchkey == "" && parent == "Forum"){
+        $('.getsubcategory').attr('placeholder', 'Enter Keyword').focus();
         event.preventDefault();
    		}
+   		// if(search)
         
       	if(($('#search-country').val() == "Country" || $('#search-state').val() == "State" || $('#search-city').val() == "City" || $('#search-city').val() == "") && city.indexOf($('#search-subforums').val()) != -1 )
       	{

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
 ,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments;
 
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
 use App\DefaultGroup;
@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth, Mail;
 use XmppPrebind;
-use \Exception;
+use \Exception,Route;
 use App\Library\Converse, Config;
+use Illuminate\Support\Facades\Request;
 
 class AjaxController extends Controller
 {
@@ -76,8 +77,12 @@ class AjaxController extends Controller
 		}else{
 
 			if(Auth::attempt(['email' => $email, 'password'=>$password , 'is_email_verified'=>
-				'Y'], $log))
+				'Y'], $log)){
+				//$current_url = Request::path();
+				//print_r($current_url);die;
 				echo 'success';
+			}
+				
 			else{
 				$verified = User::where('email',$email)->value('is_email_verified');
 				if($verified == 'N')
@@ -1250,7 +1255,7 @@ comments;
 			$user_id = Auth::User()->id;
 		else
 			$user_id="";
-				$model = User::where('id','!=',$user_id)
+	           $model = User::where('id','!=',$user_id)
                             ->where('first_name','LIKE','%'. $keyword.'%')
                             ->orWhere('last_name','LIKE','%'. $keyword.'%')
                             ->skip($offset)
@@ -1803,6 +1808,83 @@ comments;
 				echo $str;
 			}	
 	}
+	
+	public function leavePrivateGroup(){
 
+	$privategroupid = Input::get('pid');
+	$userXamp = Auth::User()->xmpp_username;
+	$groupname = DB::table('groups')->where('id',$privategroupid)->value('title');
+	$groupname=$groupname."_".$privategroupid;
+
+	$converse=new Converse;
+	$xmp=DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
+
+	$converse->removeUserGroup($groupname,$xmp);
+	$Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
+	
+	$converse->broadcast($userXamp,$xmp,$Message);
+
+    GroupMembers::where('group_id',$privategroupid)->where('member_id',Auth::User()->id)->delete();
+
+    }
+	
+	public function forumDelConfirm()
+	{
+		$input = Input::all();
+
+		if($input['type'] == "post"){
+
+			$data = ['class' => "forumpostdelete",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> $input['breadcrum'],
+					 'reply_post_id' => "",
+					 'gid' => "", 
+					 'message' => "All the replies and comments related to this post will be deleted. Are you sure you want to delete this post?"];
+		
+		}else if($input['type'] == "reply"){
+
+			$data = ['class' => "forumreplydelete",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => $input['reply_post_id'],
+					 'gid' => "",
+					 'message' => "All the comments related to this post will be deleted. Are you sure you want to delete this reply?"];
+		}else if($input['type'] == "broadcast"){
+				$data = ['class' => "broadcastdel",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => "",
+					 'message' => "Are you sure you want to delete this broadcast?"];
+
+		}else if($input['type'] == "private"){
+				$data = ['class' => "delprivategroup",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => "",
+					 'message' => "Are you sure you want to delete this group?"];
+
+		}else if($input['type'] == "private-leave"){
+				$data = ['class' => "userleave",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => "",
+					 'message' => "Are you sure you want to leave this group?"];
+		}else if($input['type'] == "del-private-member"){
+				$data = ['class' => "deluser",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => $input['gid'],
+					 'message' => "Are you sure you want to delete this user from  the group?"];
+		}
+
+
+		return view('forums.deleteconfirmbox')
+			   		->with('data',$data);
+	}
+	
 }
 	

@@ -24,8 +24,13 @@
 
 										<div class="p-likes">
 											<div class="like-cont">
+											   @if(Auth::check())
 												<input type="checkbox" name="" id="checkbox_forumpost_{{$data->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$data->id}}" {{ isset($likedata[0])?'checked':'' }}  title="Like Reply"/>	
 												<label for="checkbox_forumpost_{{$data->id}}" title="Like Post" class="css-label"></label>
+											   @else
+											   <input type="checkbox" disabled="disabled" name="" id="guest-view-more-post" class="css-checkbox"/>
+											   <label for="guest-view-more-post"  data-toggle="modal" data-target="#LoginPop" class="css-label"></label>
+											   @endif
 											</div>
 											<span class="plike-count" title="Likes">{{$likeCount}}</span>
 										</div>
@@ -42,7 +47,7 @@
 										@if($replyCount == 0)
 											<button class="editforumpost" value="{{$data->id}}" title="Edit Post" ><i class="flaticon-pencil" ></i></button>
 										@endif
-											<button class="forumpostdelete" value="{{$data->id}}" title="Delete Post" data-breadcrum = "{{$breadcrum}}"><i class="flaticon-garbage" ></i></button>
+											<button class="del-confirm-forum" value="{{$data->id}}" data-forumtype = "post" title="Delete Post" data-breadcrum = "{{$breadcrum}}"><i class="flaticon-garbage" ></i></button>
 										</div>
 									@endif
 									@endif
