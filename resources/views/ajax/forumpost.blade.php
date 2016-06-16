@@ -21,7 +21,7 @@
 										<a>
 										<div class='fp-action'>
 											<button class='editforumpost' value='{{$forumpostid->id}}'title="Edit Post"><i class='flaticon-pencil' data-breadcrum = "{{$breadcrum}}"></i></button>
-											<button class='forumpostdelete' value='{{$forumpostid->id}}' data-breadcrum = "{{$breadcrum}}" title="Delete Post"><i class='flaticon-garbage'></i></button>
+											<button class='del-confirm-forum' value='{{$forumpostid->id}}' data-forumtype = "post" data-breadcrum = "{{$breadcrum}}" title="Delete Post"><i class='flaticon-garbage'></i></button>
 										</div>
 									</div>
 									<p><?php echo nl2br($forumpostid->title); ?></p>

@@ -38,6 +38,15 @@
 		    </div>
 		  </div>
 		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingSeven">
+		      <h4 class="panel-title">
+		        <a class="without-arrow" href="{{ url('/forums') }}">
+		          <i class="flaticon-user-profile"></i>Forums
+		        </a>
+		      </h4>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingFive">
 		      <h4 class="panel-title">
 		      	<?php $uid = Auth::User()->id; ?>
@@ -79,15 +88,6 @@
 		      <h4 class="panel-title">
 		        <a class="without-arrow" href="{{ url('invite-friends') }}">
 		          <i class="flaticon-icon-88206"></i>Invite Friends
-		        </a>
-		      </h4>
-		    </div>
-		  </div>
-		   <div class="panel panel-default">
-		    <div class="panel-heading" role="tab" id="headingSeven">
-		      <h4 class="panel-title">
-		        <a class="without-arrow" href="{{ url('/forums') }}">
-		          <i class="flaticon-user-profile"></i>Forums
 		        </a>
 		      </h4>
 		    </div>

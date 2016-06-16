@@ -58,7 +58,7 @@
 											@if($userid == Auth::User()->id)
 											<div class="fp-action">
 											<button class='editforumreply' title="Edit Reply" value='{{$forumreply->id}}'data-forumpostid = "{{$forumpostid}}"><i class='flaticon-pencil'></i></button>
-											<button class='forumreplydelete' value='{{$forumreply->id}}' data-forumpostid = "{{$forumpostid}}" title="Delete Reply"><i class='flaticon-garbage'></i></button>
+											<button class='del-confirm-forum' data-forumtype = "reply" value='{{$forumreply->id}}' data-forumpostid = "{{$forumpostid}}" title="Delete Reply"><i class='flaticon-garbage'></i></button>
 											</div>
 											@endif
 											@endif

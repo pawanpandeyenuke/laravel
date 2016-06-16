@@ -116,7 +116,7 @@
 										@if($replyCount == 0)
 											<button class="editforumpost" value="{{$data->id}}" title="Edit Post" ><i class="flaticon-pencil" ></i></button>
 										@endif	
-											<button class="forumpostdelete" value="{{$data->id}}" title="Delete Post" data-breadcrum = "{{$breadcrum}}"><i class="flaticon-garbage" ></i></button>
+											<button class="del-confirm-forum" value="{{$data->id}}" title="Delete Post" data-forumtype = "post" data-breadcrum = "{{$breadcrum}}"><i class="flaticon-garbage" ></i></button>
 										</div>
 									@endif
 									@endif

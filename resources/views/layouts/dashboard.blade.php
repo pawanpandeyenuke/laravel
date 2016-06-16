@@ -86,6 +86,8 @@
 		</div>
 	</div>
 
+<div class="modal fade" id="forum-confirm-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
 	<!--- Suggestion Popup -->
 
 		  <form id="suggestionform1" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" >

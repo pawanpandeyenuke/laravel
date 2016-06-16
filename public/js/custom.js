@@ -1,6 +1,4 @@
 $(document).ready(function(){
-
-	
 	$( "#searchform" ).submit(function( event ) {
 		var searchkey = $('#searchfriends').val();
 		if(searchkey == ''){
@@ -1257,30 +1255,52 @@ $(document).on('click','.savegroupname',function()
 		});
 	}
 	});
+
+	/***** Forum Delete Confirmation Box****/
+
+	$(document).on('click', '.del-confirm-forum', function(){
+	showLoading();
+	var type = $(this).data('forumtype'); 
+	var post_id = $(this).val();
+	var reply_id = $(this).val();
+	var breadcrum = $(this).data('breadcrum');
+	var reply_post_id = $(this).data('forumpostid');
+	$.ajax({
+		'url' : '/ajax/forum-del-confirm',
+		'data' : {'type':type, 'post_id' : post_id, 'reply_id' : reply_id, 'breadcrum' : breadcrum, 'reply_post_id' : reply_post_id},
+		'type' : 'post',
+		'success' : function(response){
+			if(response){
+				$("#forum-confirm-modal").append(response);
+				$("#forum-confirm-modal").modal();
+				hideLoading();
+			}
+		}
+	});
+	$("#forum-confirm-modal").html('');
+	});
+	
 	
 	/***** Forum Post Delete ****/
 
 	$(document).on('click','.forumpostdelete',function(){
-		showLoading();
 		var current = $(this);
 		var forumpostid = $(this).val();
 		var breadcrum = $(this).data('breadcrum');
-		var search = $(this).data('search');
-		if(search == 1)
-		{
+	
 			var scount = parseInt($('.search-forum-count').find('.count').html());
 			var newcount = scount - 1;
-		}
+
 			$.ajax({
 			'url' : '/ajax/delforumpost',
 			'type' : 'post',
 			'data' : {'forumpostid' : forumpostid , 'breadcrum' : breadcrum},
 			'success' : function(response){
 				$('.posts-count').find('.count').html(' '+response);		 
-				current.closest('.f-single-post').hide();
-				if(search == 1)
-					$('.search-forum-count').find('.count').html(newcount);
-				hideLoading();
+				// current.closest('.f-single-post').hide();
+				$('#forumpost_'+forumpostid).hide();
+				$('.search-forum-count').find('.count').html(newcount);
+				$('#forum-confirm-modal').modal('hide');
 			}
 		});
 
@@ -1289,7 +1309,6 @@ $(document).on('click','.savegroupname',function()
 	/***** Forum Reply Delete ****/
 
 	$(document).on('click','.forumreplydelete',function(){
-		showLoading();
 		var current = $(this);
 		var forumreplyid = $(this).val();
 		var forumpostid = $(this).data('forumpostid');
@@ -1299,8 +1318,10 @@ $(document).on('click','.savegroupname',function()
 			'data' : {'forumreplyid' : forumreplyid , 'forumpostid' : forumpostid},
 			'success' : function(response){
 				$('.posts-count').find('.forumreplycount').html(' '+response);		 
-				current.closest('.f-single-post').hide();
-				hideLoading();
+				// current.closest('.f-single-post').hide();
+				$('#forumreply_'+forumreplyid).hide();
+				$('#forum-confirm-modal').modal('hide');
+
 			}
 		});
 
