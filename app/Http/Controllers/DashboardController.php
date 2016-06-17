@@ -336,7 +336,7 @@ class DashboardController extends Controller
                     return redirect('private-group-list');
                 else{
 					
-					$group_jid = preg_replace('/\s+/', '_',$group_check)
+					$group_jid = preg_replace('/\s+/', '_',$group_check);
                     $group_jid = strtolower($group_jid).'_'.$groupid;
 
                     $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
