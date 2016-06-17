@@ -245,7 +245,6 @@ $groupid = $group_jid;
                         <div class="col-sm-8">
                             <div id="chat-system"></div>
                         </div>
-                        <a onclick="return hideOpendBox();" href="javascript:void(0)" >Hide All</a>
                     </div>
                 </div>
 <!--END-->
@@ -263,6 +262,7 @@ $groupid = $group_jid;
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script type="text/javascript" src="{{url('/converse/jquery.form.js')}}"></script>
 <script type="text/javascript" src="{{url('/converselib/demo_converse.nojquery.min.js')}}"></script>
+
 <!-- <script type="text/javascript" src="{{url('/converse/converse.nojquery.min.js')}}"></script> -->
 <script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 
@@ -305,6 +305,7 @@ $groupid = $group_jid;
 						openChatGroup( groupid, groupname);
 					}
 				});
+
                 converse.initialize({                           
                   prebind: true,
                   bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
@@ -320,6 +321,8 @@ $groupid = $group_jid;
                   forward_messages: true,
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
+                
+				
                 // jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                 // jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
 
@@ -454,6 +457,16 @@ function openChatbox( xmpusername,username ){
 
 
 }*/
+
+$(document).ready(function() {
+	$( document ).on( 'click' , '.restore-chat' , function(){
+		//var Bjid = $(this).data( 'bid' );
+		var jid = Base64.decode($(this).data( 'bid' ));
+		hideOpendBox( jid );
+		conObj.rooms.open( jid );
+	});
+});
+
 function hideOpendBox( grpname ){
 	$( '.privatechat' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
