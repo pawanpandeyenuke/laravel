@@ -228,7 +228,7 @@ $groupid = $group_jid;
 											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
 											<span class="title">{{$data['title']}}</span>
 										</a>
-										<button onclick="openChatRoom('<?php echo $privategroupid; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
+										<button onclick="openChatGroup('<?php echo $privategroupid; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
                                    </div>
                                </li>
 							<?php } ?>
@@ -245,6 +245,7 @@ $groupid = $group_jid;
                         <div class="col-sm-8">
                             <div id="chat-system"></div>
                         </div>
+                        <a onclick="return hideOpendBox();" href="javascript:void(0)" >Hide All</a>
                     </div>
                 </div>
 <!--END-->
@@ -298,9 +299,12 @@ $groupid = $group_jid;
     jQuery(document).ready(function(){
 
       require(['converse'], function (converse) {
-        
-                conObj = converse;
-                
+               conObj = converse;
+               conObj.listen.on('initialized', function (event) { 
+					if( groupname != '' || groupid != '' ){
+						openChatGroup( groupid, groupname);
+					}
+				});
                 converse.initialize({                           
                   prebind: true,
                   bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
@@ -321,10 +325,7 @@ $groupid = $group_jid;
 
                 /* pawanpandey Code */
                 
-                  var minimizedIcon = $(".icon-minus");
-                  $.each(minimizedIcon, function(i,v){
-                    v.click();
-                  });
+
 
                   $('.minimized-chats-flyout .chat-head:first .restore-chat').click();
 
@@ -335,7 +336,7 @@ $groupid = $group_jid;
 
 
                 /* pawanpandey Code */
-
+				/**
                 $(".chatroom:visible").each(function()  {
                   checkChatboxAndChatRoom(this);
                 });                     
@@ -347,13 +348,9 @@ $groupid = $group_jid;
                 if(is_first){
                   jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click(); 
                 }
-
-				if( groupname != '' || groupid != '' ){
-					console.log(groupid);
-					// converse.rooms.open('haeri@conference.friendzsquare.com', 'mycustomnick');
-					openChatGroup(groupname, groupid);
-					// converse.rooms.open(groupname, groupid);
-				}
+				**/
+				
+				
             
               
 
@@ -409,24 +406,22 @@ $groupid = $group_jid;
      function openChatbox(xmpusername,username)
      {
          conObj =converse;
-        var ss=conObj.contacts.get(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
-         if(ss==null)
-         {  
-      console.log(ss);   
+         var ss=conObj.contacts.get(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+         if( ss==null ){  
              conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
          }
-        conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+         conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
      }
 
 
     function checkChatboxAndChatRoom(obj)
-     {
+    {
          var id=$(obj).attr('id');
          if(id!='controlbox')
          {
             if(!is_first)
             {                       
-            $(obj).find('.icon-minus').click();
+				$(obj).find('.icon-minus').click();
             }
             is_first=false; 
          }
@@ -459,56 +454,45 @@ function openChatbox( xmpusername,username ){
 
 
 }*/
-
- function hideOpendBox(){
-	 
-	 console.log( $( '.chatbox' ).length );
-	$( '.chatbox' ).each( function(){
-		console.log( $(this).find( '.icon-minus' ).length );
-		
-		$(this).find('.icon-minus').click();
+function hideOpendBox( grpname ){
+	$( '.privatechat' ).each( function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var getChat = conObj.chats.get(jid);
+		if( jid == grpname ){
+			getChat.close();
+		} else {
+			getChat.minimize();
+		}
 	});
-	
-	 $(".chatroom:visible").each(function()    {
-		$(this).find('.icon-minus').click();
-		});
-		$(".chatbox:visible").each(function()   {
-		$(this).find('.icon-minus').click();
+	$( '.chatroom' ).each( function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var getRooms = conObj.rooms.get(jid);
+		if( jid == grpname ){
+			getRooms.close();
+		} else {
+			getRooms.minimize();
+		}
 	});
-   
 }
-  function openChatGroup(grpname,grpjid)
-       {
-        // alert(grpjid);
-           var minbox=$("#min-"+grpjid);
-            hideOpendBox();
-            if(minbox.length>0)
-            {           
-            minbox.click();
-            }
-            else{
-               conObj.rooms.open(grpjid+conferencechatserver);
-            }
-       }
-	function openChatRoom( room, roomname ){
-		hideOpendBox();
-		conObj.rooms.open( room+'@conference.<?= Config::get('constants.xmpp_host_Url') ?>' );	
+
+function openChatGroup( grpjid,grpname ){
+	hideOpendBox( grpjid+conferencechatserver );
+	conObj.rooms.open( grpjid+conferencechatserver );
+}
+
+$('.status-r-btn').on('click',function(){
+	if ( $('#status_img_up').is(':checked') ) {
+		$('.status-img-up').show();
+	} else {
+		$('.status-img-up').hide();
 	}
+});
 
-    $('.status-r-btn').on('click',function(){
-        if ( $('#status_img_up').is(':checked') ) { 
-        $('.status-img-up').show();
-      }
-      else{
-        $('.status-img-up').hide();
-      }
-    });
-
-    $('.dropdown.keep-open').on({
-    "shown.bs.dropdown": function() { this.closable = false; },
-    "click":             function() { this.closable = true; },
-    "hide.bs.dropdown":  function() { return this.closable; }
-    });
+$('.dropdown.keep-open').on({
+	"shown.bs.dropdown": function() { this.closable = false; },
+	"click":             function() { this.closable = true; },
+	"hide.bs.dropdown":  function() { return this.closable; }
+});
 
 
 
