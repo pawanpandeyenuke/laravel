@@ -880,6 +880,7 @@ a:hover{
 .page-center-data{
 	background:#fff;
 	padding-bottom:30px;
+	min-height: 335px;
 }
 .page-title{
 	padding: 10px 10px 10px 43px;
@@ -1681,6 +1682,7 @@ width:495px;
 	padding: 0px;
 	border: 0px;
 	height: 180px;
+	/*height: 300px;*/
 }
 .popup-list-without-img .single-post {
   margin: 0px;
@@ -1691,6 +1693,9 @@ width:495px;
 }
 .popup-list-without-img .comments-list ul{
 	padding: 0 15px;
+}
+.popup-list-without-img .comments-list:focus{
+	outline: none;
 }
 .nicescroll-cursors{
 	z-index:999999;
@@ -2182,6 +2187,9 @@ textarea{
 	background: url('../images/acc-arrow-down.png') no-repeat right center;
   padding: 10px 15px;
   background-color: #99EAE0;
+}
+.group-chat-cont .panel-group .panel-heading a:focus{
+	outline: none;
 }
 .group-chat-cont .panel-group .panel-heading a.collapsed{
 	background: url('../images/acc-arrow-right.png') no-repeat right center;
@@ -2758,7 +2766,7 @@ textarea{
 }
 .f-post-form .emoji-wysiwyg-editor{
   border-color: #ccc;
-  padding: 0 120px 0 45px !important;
+  padding: 10px 120px 5px 45px !important;
 }
 .f-post-form .emoji-picker-icon{
   font-size: 30px;
