@@ -3126,10 +3126,13 @@ margin-left: -15px;
 #conversejs .chat-head {
     padding: 15px 10px;
     height: auto;
-    background: #F5F5F5 !important;
+    background: #92e7dc !important;
 }
 #conversejs .icon-happy:before{
 	color: #7DD0C6 !important;
+}
+#conversejs .box-flyout .chatbox-btn {
+    display: none !important;
 }
 .pe-row .ph-field .form-control{
 
