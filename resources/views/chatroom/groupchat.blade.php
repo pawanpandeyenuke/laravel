@@ -300,7 +300,7 @@ $groupid = $group_jid;
 
       require(['converse'], function (converse) {
                conObj = converse;
-               conObj.listen.on('initialized', function (event) { 
+               conObj.listen.on('connected', function (event) {
 					if( groupname != '' || groupid != '' ){
 						openChatGroup( groupid, groupname);
 					}
