@@ -244,7 +244,7 @@ class DashboardController extends Controller
                     return redirect('subgroup/'.$groupid);
             }
 			//Get users of this group
-			$group_jid = str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'], '-', $check_name);
+			$group_jid = str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'], '_', $check_name);
 			$group_jid = preg_replace('/\s+/', '_',$group_jid);
 			$group_jid = strtolower($group_jid);
 		
@@ -287,7 +287,7 @@ class DashboardController extends Controller
                     $sub_name = $input['subcategory'];
                  }
                
-                $sub_name = str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'],'-',$sub_name);           
+                $sub_name = str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'],'_',$sub_name);           
                 
                 $group_jid = preg_replace('/\s+/', '_',$parent_name.'_'.$sub_name);
                 $group_jid = strtolower($group_jid);
@@ -335,7 +335,9 @@ class DashboardController extends Controller
                 if($group_check == null)
                     return redirect('private-group-list');
                 else{
-                    $group_jid = strtolower(str_replace([' ', '/', ','], '-', $group_check)).'_'.$groupid;
+					
+					$group_jid = preg_replace('/\s+/', '_',$group_check)
+                    $group_jid = strtolower($group_jid).'_'.$groupid;
 
                     $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 
