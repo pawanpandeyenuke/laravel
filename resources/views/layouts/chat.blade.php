@@ -34,7 +34,7 @@
 <body class="dashboard">
  <header>
 	<div class="container">
-		<div class="row">
+		<div class="row header-row-full">
 			<div class="col-sm-2">
 				<a href="/dashboard" title="" class="logo"><img src="/images/logo.png" alt="Friendz Square"></a>
 			</div>
