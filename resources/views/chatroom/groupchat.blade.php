@@ -104,7 +104,7 @@ $groupid = $group_jid;
                                        ?>
                                         <a {{$pubclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseOne" aria-expanded=
                                         "{{$pubexpand}}" aria-controls="gccollapseOne">
-                                          Public group chat
+                                          Public Group Chat
                                         </a>
                                       </h4>
                                     </div>
@@ -162,7 +162,7 @@ $groupid = $group_jid;
                                     <div class="panel-heading" role="tab" id="gcheadingTwo">
                                       <h4 class="panel-title">
                                         <a {{$friclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseTwo" aria-expanded="{{$friexpand}}" aria-controls="gccollapseTwo">
-                                          Chat with friends
+                                          Chat with Friends
                                         </a>
                                       </h4>
                                     </div>
@@ -185,7 +185,7 @@ $groupid = $group_jid;
                                     <div class="panel-heading" role="tab" id="gcheadingThree">
                                       <h4 class="panel-title">
                                         <a {{$priclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseThree" aria-expanded="{{$priexpand}}" aria-controls="gccollapseThree">
-                                          Private group chat
+                                          Private Group Chat
                                         </a>
                                       </h4>
                                     </div>

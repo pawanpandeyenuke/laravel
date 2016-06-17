@@ -21,7 +21,7 @@
 								<div class="col-md-4">
 								<div class="search-subforums">
 									<select class="form-control" id="search-subforums" name="search-subforums">
-									<option>SubCategory</option>
+									<option>Sub Category</option>
 									</select>
 								</div>
 								</div>

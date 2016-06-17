@@ -72,9 +72,7 @@
     }else{
         $('.login-footer').show();
     }
-
-
-
+    
     $("#loginform").ajaxForm(function(response) { 
          
     if(response){
