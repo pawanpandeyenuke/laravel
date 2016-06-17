@@ -243,12 +243,14 @@ class DashboardController extends Controller
                 if($check_if_parent != null)
                     return redirect('subgroup/'.$groupid);
             }
-        //Get users of this group
-        $group_jid = strtolower(str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'], '-', $check_name));
-
-        }else{
-        $input = Request::all();
-        $parent_name = strtolower(str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'], '-', $input['parentname']));
+			//Get users of this group
+			$group_jid = str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'], '-', $check_name);
+			$group_jid = preg_replace('/\s+/', '_',$group_jid);
+			$group_jid = strtolower($group_jid);
+		
+        } else {
+			$input = Request::all();
+			$parent_name = strtolower(str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'], '-', $input['parentname']));
                 if($input['subcategory']=='International'){
                     $check_name = $input['parentname'].' '.$input['subcategory'];
                     $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
@@ -286,7 +288,9 @@ class DashboardController extends Controller
                  }
                
                 $sub_name = str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'],'-',$sub_name);           
-                $group_jid = strtolower(str_replace(" ", "_", $parent_name.'_'.$sub_name));
+                
+                $group_jid = preg_replace('/\s+/', '_',$parent_name.'_'.$sub_name);
+                $group_jid = strtolower($group_jid);
         }
 
             $model = new DefaultGroup;
