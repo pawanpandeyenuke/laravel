@@ -131,34 +131,34 @@
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country</div></td>
 													<td> 
-														<span style="font-weight:500">{{ !empty($user->country)?$user->country:'N/A'}}</span>
+														<span style="font-weight:500">{{ !empty($user->country)?$user->country:'NA'}}</span>
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-gps"></i>State</div></td>
 													<td>
-														<span style="font-weight:500">{{!empty($user->state)?$user->state:'N/A'}}</span>
+														<span style="font-weight:500">{{!empty($user->state)?$user->state:'NA'}}</span>
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-city"></i>City</div></td>
 													<td>
-														<span style="font-weight:500">{{!empty($user->city)?$user->city:'N/A'}}</span>
+														<span style="font-weight:500">{{!empty($user->city)?$user->city:'NA'}}</span>
 													</td>
 												</tr>
 												<tr>
-													<td><div class="p-data-title"><i class="flaticon-technology"></i>Contact</div></td>
+													<td><div class="p-data-title"><i class="flaticon-technology"></i>Mobile Contact</div></td>
 													<td>
 														@if(!empty($user->phone_no))
-															<span style="font-weight:500">{{!empty($user->country_code)?'+ '.$user->country_code.' -':'N/A'}}</span>
+															<span style="font-weight:500">{{!empty($user->country_code)?'+ '.$user->country_code.' -':'NA'}}</span>
 														@endif
-														<span style="font-weight:500">{{!empty($user->phone_no)?$user->phone_no:'N/A'}}</span>
+														<span style="font-weight:500">{{!empty($user->phone_no)?$user->phone_no:'NA'}}</span>
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-calendar"></i>Date of Birth <span style="">[it's confidential] </span> </div></td>
 													<td>
-														<span style="font-weight:500">{{!empty($user->birthday)?$user->birthday:'N/A'}}</span>
+														<span style="font-weight:500">{{!empty($user->birthday)?date('d F Y',strtotime($user->birthday)):'NA'}}</span>
 													</td>
 												</tr>
 												<tr>
@@ -195,7 +195,7 @@
 															@if(!empty($value->country_of_establishment) && !empty($value->state_of_establishment) && !empty($value->city_of_establishment))
 																	{{$value->country_of_establishment}}, {{$value->state_of_establishment}}, {{$value->city_of_establishment}}
 															@else
-																	N/A
+																	NA
 															@endif
 															</span> 
 														</div>
@@ -205,19 +205,19 @@
 												<?php $customcounter++; ?>
 												@endforeach
 												<tr>
-													<td><div class="p-data-title"><i class="flaticon-graduation"></i>Currently Studing</div></td>
+													<td><div class="p-data-title"><i class="flaticon-graduation"></i>Currently Studying</div></td>
 													<td>
 														<span style="font-weight:500">{{$currentlystudy}}</span>
 													</td>
 												</tr>
 												<tr>
-													<td><div class="p-data-title"><i class="flaticon-vintage"></i>Current profession Industry</div></td>
+													<td><div class="p-data-title"><i class="flaticon-vintage"></i>Current Profession Industry</div></td>
 													<td>
 														@if(!empty($user->job_category) && !empty($user->job_area))
 															<span style="font-weight:500">{{$user->job_category}},</span>
 												   		<br><span style="font-weight:500">{{$user->job_area}}</span>
 												  	@else
-												  		N/A
+												  		NA
 												  	@endif
 													</td>
 												</tr>

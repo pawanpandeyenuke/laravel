@@ -401,7 +401,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	$(document).on('click', '.friendstabs', function(){    
 		var type = $(this).data('reqtype');
 		var current = $(this);
-
+		showLoading();
 		//current.closest('.tab-style-no-border').find('.active').find('ul').hide();
 		$.ajax({
 			'url' : 'ajax/getfriendslist',
@@ -446,7 +446,7 @@ $('.btn-upload-icon').find(".badge").remove();
 
 				if(!(response))
 					current.closest('.tab-style-no-border').find('.active').find('.aftersearch').html("");
-				 //current.find('.count').html("0");
+				 hideLoading();
 			}
 		});
 	});
@@ -799,7 +799,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	*
 	**/
 	$(document).on('click', '.search-btn-small', function(){    
-			
+		showLoading();	
 		var type = $(this).data('reqtype');
 		var current = $(this);
 		var name=current.closest('.search-box').find('.searchtabtext').val();
@@ -813,6 +813,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'success' : function(response){
 				//var type = response.type;
 				var getelem = current.closest('.tab-style-no-border').find('.active').find('.aftersearch').html(response);
+				hideLoading();
 			}
 		});
 	});
@@ -965,8 +966,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	*/
 	var pageid = 2;
 	$(document).on('click','.load-more-friend',function(){
-		$('.loading-text').hide();
-		$('.loading-img').show();
+		$('.load-more-friend').text('Loading...');
 		var current = $(this);
 		var reqType = current.closest('.friends-list').find('.active').data('value');
 		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
@@ -976,6 +976,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'data' : { 'pageid': pageid, 'reqType': reqType, 'lastid': current.data( 'last-id' ) },
 			'success' : function(data){
+				$('.load-more-friend').text('View More');
 				if(data != 'No more results'){		
 					pageid = pageid + 1;
 					$('.loading-text').show();
@@ -994,8 +995,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	});
 
 	$(document).on('click','.load-more-all',function(){
-		$('.loading-text').hide();
-		$('.loading-img').show();
+		$('.load-more-all').text('Loading...');
 		var current = $(this);
 		var keyword = $(this).data('key');
 		//alert(keyword);
@@ -1006,6 +1006,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'data' : { 'pageid': pageid , 'keyword' : keyword },
 			'success' : function(data){
+				$('.load-more-all').text('View More');
 				if(data != 'No more results'){		
 					pageid = pageid + 1;
 					$('.loading-text').show();
@@ -1023,8 +1024,7 @@ $('.btn-upload-icon').find(".badge").remove();
 
 
 	$(document).on('click','.load-more-forumpost',function(){
-		$('.loading-text').hide();
-		$('.loading-img').show();
+		$('.load-more-forumpost').text('Loading...');
 		var current = $(this);
 		var breadcrum = $(this).data('breadcrum');
 		//alert(keyword);
@@ -1035,6 +1035,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, 'call_type': 'web' },
 			'success' : function(data){
+				$('.load-more-forumpost').text('View More');
 				if(data != 'No More Results'){		
 					pageid = pageid + 1;
 					$('.loading-text').show();
@@ -1048,8 +1049,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	});
 
 	$(document).on('click','.load-more-forumreply',function(){
-		$('.loading-text').hide();
-		$('.loading-img').show();
+		$('.load-more-forumreply').text('Loading...');
 		var current = $(this);
 		var forumpostid = $(this).data('forumpostid');
 		$.ajax({
@@ -1057,10 +1057,9 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'data' : { 'pageid': pageid ,'forumpostid' : forumpostid, 'call_type': 'web' },
 			'success' : function(data){
+				$('.load-more-forumreply').text('View More');
 				if(data != 'No More Results'){		
 					pageid = pageid + 1;
-					$('.loading-text').show();
-					$('.loading-img').hide();
 					current.parents('.forum-srch-list').find('.forumreplylist').append(data);
 				}else{
 					current.parents('.load-more-btn-cont').html("<button title='View More Replies' class='btn btn-primary btn-smbtn-sm' type='button'>No more results</button>");
@@ -1070,8 +1069,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	});
 
 		$(document).on('click','.load-more-search-forum',function(){
-		$('.loading-text').hide();
-		$('.loading-img').show();
+		$(this).text('Loading...');
 		var current = $(this);
 		var breadcrum = $(this).data('breadcrum');
 		var keyword = $(this).data('keyword');
@@ -1080,6 +1078,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'data' : { 'pageid': pageid,'breadcrum': breadcrum ,'keyword' : keyword },
 			'success' : function(data){
+				$(this).text('View More');
 				if(data != 'No More Results'){		
 					pageid = pageid + 1;
 					$('.loading-text').show();

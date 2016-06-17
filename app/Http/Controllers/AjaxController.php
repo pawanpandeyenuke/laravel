@@ -1722,7 +1722,7 @@ comments;
 		if($subforums->isEmpty())
 			echo 'No';
 		else{
-			$subforumArr[] = "<option>SubCategory</option>";
+			$subforumArr[] = "<option>Sub Category</option>";
 		foreach($subforums as $query){
 		if($query->title == "Country,State,City")
 		 	$query->title = "City";			

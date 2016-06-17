@@ -155,7 +155,7 @@
                             </div>
 
                             <div class="form-group ph-field">
-                                <span  class="country-code-field country-code-field-span numeric"></span> 
+                                <span  class="country-code-field country-code-field-span numeric"><font color="#999">00</font></span> 
                                 <input type="hidden" name="country_code" class="country-code-field numeric" value="" placeholder="000" >
                                 <input type="text" class="form-control icon-field numeric" name = "phone_no" placeholder="Mobile" id="mobileContact">
                                 <span class="field-icon flaticon-smartphone-with-blank-screen"></span>
