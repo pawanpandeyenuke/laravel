@@ -301,7 +301,8 @@ $groupid = $group_jid;
       require(['converse'], function (converse) {
                conObj = converse;
                conObj.listen.on('initialized', function (event) {
-					if( groupname != '' || groupid != '' ){
+					if( groupname != '' || groupid != '' ) {
+						console.log( 'open Chat' );
 						openChatGroup( groupid, groupname);
 					}
 				});
