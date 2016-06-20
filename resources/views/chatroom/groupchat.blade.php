@@ -228,7 +228,7 @@ $groupid = $group_jid;
 											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
 											<span class="title">{{$data['title']}}</span>
 										</a>
-										<button onclick="openChatGroup('<?php echo $privategroupid; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
+										<button onclick="return openChatGroup('<?php echo $privategroupid; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
                                    </div>
                                </li>
 							<?php } ?>
@@ -413,6 +413,7 @@ $groupid = $group_jid;
          if( ss==null ){  
              conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
          }
+         hideOpendBox( xmpusername );
          conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
      }
 
@@ -471,7 +472,7 @@ function hideOpendBox( grpname ){
 	$( '.privatechat' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getChat = conObj.chats.get(jid);
-		if( jid == grpname ){
+		if( jid == grpname+chatserver ){
 			getChat.close();
 		} else {
 			getChat.minimize();
@@ -480,7 +481,7 @@ function hideOpendBox( grpname ){
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
-		if( jid == grpname ){
+		if( jid == grpname+conferencechatserver ){
 			getRooms.close();
 		} else {
 			getRooms.minimize();
@@ -489,7 +490,7 @@ function hideOpendBox( grpname ){
 }
 
 function openChatGroup( grpjid,grpname ){
-	hideOpendBox( grpjid+conferencechatserver );
+	hideOpendBox( grpjid );
 	conObj.rooms.open( grpjid+conferencechatserver );
 }
 
