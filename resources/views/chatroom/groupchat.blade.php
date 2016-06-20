@@ -302,6 +302,7 @@ $groupid = $group_jid;
                conObj = converse;
                conObj.listen.on('connected', function (event) {
 					if( groupname != '' || groupid != '' ){
+						console.log( 'open chat room' );
 						openChatGroup( groupid, groupname);
 					}
 				});
@@ -330,7 +331,7 @@ $groupid = $group_jid;
                 
 
 
-                  $('.minimized-chats-flyout .chat-head:first .restore-chat').click();
+                  
 
 /*                  $('.icon-minus').each(function(){
                     $(this).trigger('click');
@@ -463,7 +464,8 @@ $(document).ready(function() {
 	$( document ).on( 'click' , '.restore-chat' , function(){
 		//var Bjid = $(this).data( 'bid' );
 		var jid = Base64.decode($(this).data( 'bid' ));
-		hideOpendBox( jid );
+		var xmppName  = jid.replace(chatserver,'');
+		hideOpendBox( xmppName );
 		conObj.rooms.open( jid );
 	});
 });
