@@ -300,10 +300,9 @@ $groupid = $group_jid;
 
       require(['converse'], function (converse) {
                conObj = converse;
-               conObj.listen.on('connected', function (event) {
+               conObj.listen.on('initialized', function (event) {
 					if( groupname != '' || groupid != '' ){
-						console.log( 'open chat room' );
-						openChatGroup( groupid, groupname);
+						//openChatGroup( groupid, groupname);
 					}
 				});
 
@@ -458,11 +457,16 @@ function openChatbox( xmpusername,username ){
    }   
 
 
-}*/
-
+}
+*/
 $(document).ready(function() {
-	$( document ).on( 'click' , '.restore-chat' , function(){
-		//var Bjid = $(this).data( 'bid' );
+	$( document ).on( 'click' , '.restore-chat.chatgroup' , function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var xmppName  = jid.replace(conferencechatserver,'');
+		hideOpendBox( xmppName );
+		conObj.rooms.open( jid );
+	});
+	$( document ).on( 'click' , '.restore-chat.singlechat' , function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var xmppName  = jid.replace(chatserver,'');
 		hideOpendBox( xmppName );
