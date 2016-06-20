@@ -365,7 +365,7 @@ $groupid = $group_jid;
           var user_id = current.closest('.info').data('id');
           
           $.ajax({
-            'url' : 'ajax/sendrequest',
+            'url' : "{{url('/ajax/sendrequest')}}",
             'type' : 'post',
             'data' : {'user_id' : user_id },
             'success' : function(data){
@@ -379,7 +379,7 @@ $groupid = $group_jid;
         $(document).on('click','#search',function() {
             var name=$('.searchtxt').val();
                $.ajax({
-                'url' : 'ajax/searchfriend',
+                'url' : "{{url('/ajax/searchfriend')}}",
                 'type' : 'post',
                 'data' : {'name':name},
                 'success' : function(data){
@@ -393,7 +393,7 @@ $groupid = $group_jid;
             if(key == 13){
                 var name=$('.searchtxt').val();
                    $.ajax({
-                    'url' : 'ajax/searchfriend',
+                    'url' : "{{url('/ajax/searchfriend')}}",
                     'type' : 'post',
                     'data' : {'name':name},
                     'success' : function(data){
