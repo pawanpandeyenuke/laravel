@@ -984,7 +984,7 @@ comments;
 
 		if (stripos($name, $input) !== false) {
 			  $data[] = '<li > 
-				<a href="#" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
+				<a href="javascript:void(0)" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
 					<span class="chat-thumb"style="background: url('.$user_picture.');"></span>
 					<span class="title">'.$name.'</span>
 				</a>
