@@ -302,7 +302,7 @@ $groupid = $group_jid;
                conObj = converse;
                conObj.listen.on('initialized', function (event) {
 					if( groupname != '' || groupid != '' ){
-						//openChatGroup( groupid, groupname);
+						openChatGroup( groupid, groupname);
 					}
 				});
 
