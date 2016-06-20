@@ -303,7 +303,10 @@ $groupid = $group_jid;
                conObj.listen.on('initialized', function (event) {
 					if( groupname != '' || groupid != '' ) {
 						console.log( 'open Chat' );
-						openChatGroup( groupid, groupname);
+						setTimeout( function(){ 
+							openChatGroup( groupid, groupname);
+						}  , 3000 );
+						
 					}
 				});
 
