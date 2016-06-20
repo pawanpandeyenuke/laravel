@@ -471,7 +471,7 @@ $(document).ready(function() {
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var xmppName  = jid.replace(chatserver,'');
 		hideOpendBox( xmppName );
-		conObj.rooms.open( jid );
+		conObj.chats.open( jid );
 	});
 });
 
