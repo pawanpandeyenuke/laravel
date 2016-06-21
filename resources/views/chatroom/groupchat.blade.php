@@ -228,7 +228,7 @@ $groupid = $group_jid;
 											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
 											<span class="title">{{$data['title']}}</span>
 										</a>
-										<button onclick="openChatGroup('<?php echo $privategroupid; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
+										<button onclick="return openChatGroup('<?php echo $privategroupid; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
                                    </div>
                                </li>
 							<?php } ?>
@@ -300,9 +300,13 @@ $groupid = $group_jid;
 
       require(['converse'], function (converse) {
                conObj = converse;
-               conObj.listen.on('initialized', function (event) { 
-					if( groupname != '' || groupid != '' ){
-						openChatGroup( groupid, groupname);
+               conObj.listen.on('initialized', function (event) {
+					if( groupname != '' || groupid != '' ) {
+						console.log( 'open Chat' );
+						setTimeout( function(){ 
+							openChatGroup( groupid, groupname);
+						}  , 3000 );
+						
 					}
 				});
 
@@ -330,7 +334,7 @@ $groupid = $group_jid;
                 
 
 
-                  $('.minimized-chats-flyout .chat-head:first .restore-chat').click();
+                  
 
 /*                  $('.icon-minus').each(function(){
                     $(this).trigger('click');
@@ -365,7 +369,7 @@ $groupid = $group_jid;
           var user_id = current.closest('.info').data('id');
           
           $.ajax({
-            'url' : 'ajax/sendrequest',
+            'url' : "{{url('/ajax/sendrequest')}}",
             'type' : 'post',
             'data' : {'user_id' : user_id },
             'success' : function(data){
@@ -379,7 +383,7 @@ $groupid = $group_jid;
         $(document).on('click','#search',function() {
             var name=$('.searchtxt').val();
                $.ajax({
-                'url' : 'ajax/searchfriend',
+                'url' : "{{url('/ajax/searchfriend')}}",
                 'type' : 'post',
                 'data' : {'name':name},
                 'success' : function(data){
@@ -393,7 +397,7 @@ $groupid = $group_jid;
             if(key == 13){
                 var name=$('.searchtxt').val();
                    $.ajax({
-                    'url' : 'ajax/searchfriend',
+                    'url' : "{{url('/ajax/searchfriend')}}",
                     'type' : 'post',
                     'data' : {'name':name},
                     'success' : function(data){
@@ -413,6 +417,7 @@ $groupid = $group_jid;
          if( ss==null ){  
              conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
          }
+         hideOpendBox( xmpusername );
          conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
      }
 
@@ -456,14 +461,20 @@ function openChatbox( xmpusername,username ){
    }   
 
 
-}*/
-
+}
+*/
 $(document).ready(function() {
-	$( document ).on( 'click' , '.restore-chat' , function(){
-		//var Bjid = $(this).data( 'bid' );
+	$( document ).on( 'click' , '.restore-chat.chatgroup' , function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
-		hideOpendBox( jid );
+		var xmppName  = jid.replace(conferencechatserver,'');
+		hideOpendBox( xmppName );
 		conObj.rooms.open( jid );
+	});
+	$( document ).on( 'click' , '.restore-chat.singlechat' , function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var xmppName  = jid.replace(chatserver,'');
+		hideOpendBox( xmppName );
+		conObj.chats.open( jid );
 	});
 });
 
@@ -471,7 +482,7 @@ function hideOpendBox( grpname ){
 	$( '.privatechat' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getChat = conObj.chats.get(jid);
-		if( jid == grpname ){
+		if( jid == grpname+chatserver ){
 			getChat.close();
 		} else {
 			getChat.minimize();
@@ -480,7 +491,7 @@ function hideOpendBox( grpname ){
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
-		if( jid == grpname ){
+		if( jid == grpname+conferencechatserver ){
 			getRooms.close();
 		} else {
 			getRooms.minimize();
@@ -489,7 +500,7 @@ function hideOpendBox( grpname ){
 }
 
 function openChatGroup( grpjid,grpname ){
-	hideOpendBox( grpjid+conferencechatserver );
+	hideOpendBox( grpjid );
 	conObj.rooms.open( grpjid+conferencechatserver );
 }
 

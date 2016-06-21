@@ -328,16 +328,21 @@ class DashboardController extends Controller
                     return redirect()->back();
                 
             }
+
             $check_end = Category::where('parent_id',end($id_arr))->value('id');
             if($check_end != null)
                 return redirect()->back();
         //Get users of this group
 
-        $group_jid = strtolower(str_replace($replace_array, '-', $breadcrumb));
+        //$group_jid = strtolower(str_replace($replace_array, '-', $breadcrumb));
+        $group_jid = preg_replace('/\s+/', '_',$breadcrumb);
+        $group_jid = strtolower($group_jid);
+        //print_r($group_jid);die;
 
         }else{
         $input = Request::all();
         $parent_name = strtolower(str_replace($replace_array, '-', $input['parentname']));
+
                 if($input['subcategory']=='International'){
                     $check_name = $input['parentname'].' > '.$input['subcategory'];
                     $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
@@ -374,8 +379,11 @@ class DashboardController extends Controller
                     $sub_name = $input['subcategory'];
                  }
                
+
                 $sub_name = str_replace($replace_array,'-',$sub_name);           
-                $group_jid = strtolower(str_replace(" ", "_", $parent_name.'_'.$sub_name));
+                $group_jid = preg_replace('/\s+/', '_',$parent_name.'_'.$sub_name);
+                $group_jid = strtolower($group_jid);
+
         }
 
             $model = new DefaultGroup;
@@ -420,7 +428,9 @@ class DashboardController extends Controller
                 if($group_check == null)
                     return redirect('private-group-list');
                 else{
-                    $group_jid = strtolower(str_replace([' ', '/', ','], '-', $group_check)).'_'.$groupid;
+					
+					$group_jid = preg_replace('/\s+/', '_',$group_check);
+                    $group_jid = strtolower($group_jid).'_'.$groupid;
 
                     $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 
