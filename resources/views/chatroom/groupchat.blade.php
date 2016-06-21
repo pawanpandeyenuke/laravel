@@ -274,7 +274,7 @@ $groupid = $group_jid;
 ?>
  
 <script type="text/javascript">
-
+	var encoderoomid = '';
     var userImage="{{$userpic}}";
  
     var defaultImage="{{url('/images/user-thumb.jpg')}}";
