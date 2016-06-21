@@ -95,7 +95,10 @@
 
         else if(response == "success"){
             var url_c = window.location.pathname;
-            window.location = url_c;
+           if(url_c == "/newpassword")
+		window.location = "/";
+	  else
+		window.location = url_c;
         }else{
             var obj = jQuery.parseJSON( response );
             if( obj.email != null ){

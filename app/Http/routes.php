@@ -381,7 +381,7 @@ Route::get('api/chat_image_page','ApiController@chatImagePage');
 
 	Route::get('register/verify/{confirmation_code}', [
     'as' => 'confirmation_path',
-    'uses' => 'Auth\AuthController@confirm'
+    'uses' => 'SearchController@confirm'
 	]);
 
 
