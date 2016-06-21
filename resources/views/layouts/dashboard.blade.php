@@ -90,7 +90,7 @@
 </div>
 	<!--- Suggestion Popup -->
 
-		  <form id="suggestionform1" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" >
+		  <form id="suggestionform1" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" data-backdrop="static" data-keyboard="false">
                             <div class="modal fade send-msg-popup" id="myModal" tabindex="-1" role="dialog" aria-labelledby="sendMsgLabel">
                            
                               <div class="modal-dialog modal-sm" role="document">
