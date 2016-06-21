@@ -196,39 +196,36 @@ $groupid = $group_jid;
                                 <ul>
                     @foreach($privategroup as $data)
                     <?php  
-
-						$privategroupname = preg_replace('/\s+/', '_',$data['title']);
+						/**
+						$privategroupname = preg_replace('/[^A-Za-z0-9\-]/', '_',$data['title']);
                         $privategroupname = strtolower($privategroupname);
                         $privategroupid   = $privategroupname.'_'.$data['id'];
-                         
+                        **/ 
                         $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
 			
                             $namestr='';
                             $name=array();
                             $count=0;
-                        foreach ($data['members'] as $mem) {
-                                if($mem['member_id']==Auth::User()->id)
-                                {
+							foreach ($data['members'] as $mem) {
+                                if( $mem['member_id']==Auth::User()->id ){
                                     $name[]="You";
                                     $count++;
-                                }
-                                else{
-                                $name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+                                } else {
+									$name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
                                 }
                             }
 
                             $namestr=implode(",",$name);
-
-                            if(!($count==0) || $data['owner_id']==Auth::User()->id) { 
-                            $pri_id = $data['id'];
-                              ?>
+							if(!($count==0) || $data['owner_id']==Auth::User()->id) { 
+								$pri_id = $data['id'];
+                             ?>
                                <li>
 								   <div	class="pvt-room-list" style="position:relative;" >
 										<a href="{{url("private-group-detail/$pri_id")}}" >
 											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
 											<span class="title">{{$data['title']}}</span>
 										</a>
-										<button onclick="return openChatGroup('<?php echo $privategroupid; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
+										<button onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
                                    </div>
                                </li>
 							<?php } ?>
