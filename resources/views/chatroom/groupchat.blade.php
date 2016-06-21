@@ -307,6 +307,7 @@ $groupid = $group_jid;
 					}
 				});
 				converse.listen.on('chatBoxOpened', function (event, chatbox) { 
+					console.log( event );
 					console.log( chatbox );
 				});
                 converse.initialize({                           
