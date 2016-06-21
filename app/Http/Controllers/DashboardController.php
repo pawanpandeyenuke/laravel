@@ -225,6 +225,67 @@ class DashboardController extends Controller
 
     }
 
+    public function subCatGroup($parentid = "")
+    {
+        if($parentid){
+            $breadcrumb = "";
+            $store_id = "";
+            $id_arr = explode('-',$parentid);
+
+            foreach ($id_arr as $key => $value) {
+              $cat = Category::where('id',$value)->first();
+                if($cat){
+                    if($key == 0){
+                        if($cat->parent_id != 0)
+                            return redirect()->back();
+                        else{
+                            $store_id = $cat->id;
+                            $next_url = url('sub-cat-group/'.$store_id);
+                            if(sizeof($id_arr) == 1)
+                                $title_id = $cat->title;
+                            else
+                                $title_id = "<a href='$next_url'>$cat->title</a>";
+                            $breadcrumb .= ' > '.$title_id;
+                        }
+                    }else{
+                        $check = Category::where('parent_id',$id_arr[$key-1])->first();
+                        if($check->id="" || $check->selection == "Y")
+                            return redirect()->back();
+                        else{
+                            $store_id .= '-'.$cat->id;
+                            $next_url = url('sub-cat-group/'.$store_id);   
+                            if(end($id_arr))
+                               $title_id = $cat->title; 
+                            else
+                                $title_id = "<a href='$next_url'>$cat->title</a>";
+                            $breadcrumb .= ' > '.$title_id;
+                        }
+                             
+                    }
+
+                } else if($cat == "")
+                    return redirect()->back();
+ 
+            }
+            // print_r($breadcrumb);die;
+                    $last_id = end($id_arr);
+                    $sub_groups = Category::where('parent_id',$last_id)->get();
+
+                    if($sub_groups->isEmpty())
+                        return redirect()->back();
+
+                    return view('chatroom.subcatgroups')
+                            ->with('parent_id',$parentid)
+                            ->with('breadcrumb',$breadcrumb)
+                            ->with('subgroup',$sub_groups);
+            }
+            else
+                return redirect('group');
+
+
+        }
+    
+
     /**
     *   Group sub chatrooms ajax call handling.
     *   Ajaxcontroller@groupchatrooms
@@ -234,32 +295,63 @@ class DashboardController extends Controller
     {
         $private_group_check = "pub" ;
         $id=Auth::User()->id;
+        $replace_array =  [' ', '/', ',', '(', ')', "'", '.', ':', ';','&'];
         if($groupid){
-            $check_name = Category::where('id',$groupid)->value('title');
-            if($check_name == null)
-                return redirect('group');
-            else{
-                $check_if_parent = Category::where('parent_id',$groupid)->value('id');
-                if($check_if_parent != null)
-                    return redirect('subgroup/'.$groupid);
+            $breadcrumb="";
+            $check_name = "";
+  
+            $id_arr = explode('-',$groupid);
+            foreach ($id_arr as $key => $value) {//10-46-147
+              $cat = Category::where('id',$value)->first();
+                if($cat){
+                    if($key == 0){
+                        if($cat->parent_id != 0)
+                            return redirect()->back();
+                        else{
+        
+                            $breadcrumb .= $cat->title;
+                            $check_name .= $cat->title;
+                        }
+                    }else{
+                        
+                        $check = Category::where('parent_id',$id_arr[$key-1])->value('title');
+                        if($check == null){  
+                        }
+                            //return redirect()->back();
+                         else{
+                            $breadcrumb .= '_'.$cat->title;
+                            $check_name .= ' '.$cat->title;
+                         }
+                             
+                    }
+                } else if($cat == "")
+                    return redirect()->back();
+                
             }
-			//Get users of this group
-			$group_jid = str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'], '_', $check_name);
-			$group_jid = preg_replace('/\s+/', '_',$group_jid);
-			$group_jid = strtolower($group_jid);
-		
-        } else {
-			$input = Request::all();
-			$parent_name = strtolower(str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'], '-', $input['parentname']));
+
+            $check_end = Category::where('parent_id',end($id_arr))->value('id');
+            if($check_end != null)
+                return redirect()->back();
+        //Get users of this group
+
+        //$group_jid = strtolower(str_replace($replace_array, '-', $breadcrumb));
+        $group_jid = preg_replace('/\s+/', '_',$breadcrumb);
+        $group_jid = strtolower($group_jid);
+        //print_r($group_jid);die;
+
+        }else{
+        $input = Request::all();
+        $parent_name = strtolower(str_replace($replace_array, '-', $input['parentname']));
+
                 if($input['subcategory']=='International'){
-                    $check_name = $input['parentname'].' '.$input['subcategory'];
+                    $check_name = $input['parentname'].' > '.$input['subcategory'];
                     $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
                     $sub_name = $input['subcategory'];
                 }
                    
 
                  elseif($input['subcategory']=='Professional Course'){
-                    $check_name = $input['parentname'].' '.$input['subcategory'].' '.$input['coursedata1'];
+                    $check_name = $input['parentname'].' > '.$input['subcategory'].' > '.$input['coursedata1'];
                      $sub_name = $input['subcategory'].'_'.$input['coursedata1'];
                  }
                    
@@ -287,10 +379,11 @@ class DashboardController extends Controller
                     $sub_name = $input['subcategory'];
                  }
                
-                $sub_name = str_replace([' ', '/', ',', '(', ')', "'", '.', ':', ';'],'_',$sub_name);           
-                
+
+                $sub_name = str_replace($replace_array,'-',$sub_name);           
                 $group_jid = preg_replace('/\s+/', '_',$parent_name.'_'.$sub_name);
                 $group_jid = strtolower($group_jid);
+
         }
 
             $model = new DefaultGroup;
@@ -306,9 +399,9 @@ class DashboardController extends Controller
 
             $usersData = DefaultGroup::with('user')->where('group_name', $group_jid)->get()->toArray();
             
-            $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+            $friendid = Friend::where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 
-            $pendingfriend = DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+            $pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
             
             $private_group_array = GroupMembers::where('member_id',$id)->pluck('group_id');
             

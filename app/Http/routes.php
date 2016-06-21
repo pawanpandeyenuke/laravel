@@ -307,8 +307,7 @@ Route::get('api/chat_image_page','ApiController@chatImagePage');
 
 	Route::get('group', 'DashboardController@group');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
-	// Route::get('subgroup/{parentid}/{name}', 'DashboardController@subgroup');
-	// Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
+	Route::get('sub-cat-group/{parentid}','DashboardController@subCatGroup');
 	Route::get('groupchat/{id}', 'DashboardController@groupchat');
 		Route::get('groupchat', function(){
 			return redirect('group');
