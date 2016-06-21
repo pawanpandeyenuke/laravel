@@ -3201,7 +3201,7 @@ body {
 	word-wrap: break-word;
 }
 .forum-srch-list .fs-breadcrumb{
-	margin: 0 -30px;
+	margin: 0 -30px -1px;
 	padding: 10px 30px 5px;
 }
 .alert-info {
@@ -3244,4 +3244,78 @@ body {
 .header-row-full > .col-sm-3 {
     width: 18%;
 }
+}
+
+/****20-06-16*****/
+.btn-tab-cont{
+  padding: 0 30px;
+  text-align: center;
+}
+.btn-tab-cont .nav-tabs > li{
+}
+.btn-tab-cont .nav-tabs > li > a {
+	border: 0px;
+  background: #92e7dc;
+  color: #000;
+  border-radius: 3px;
+  font-size: 16px;
+  padding: 12px 20px;
+  min-width: 150px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0px 0px 3px 0px #005a4f;
+}
+.btn-tab-cont .nav-tabs > li.active > a, .btn-tab-cont .nav-tabs > li.active > a:hover, .btn-tab-cont .nav-tabs > li.active > a:focus{
+	border: 0px;
+  background: #5e948d;
+  color: #fff;
+}
+.btn-tab-cont .nav-tabs{
+	border: 0px;
+}
+.btn-tab-cont .tab-content{
+	margin: 100px 0 0;
+}
+.btn-tab-cont .tab-content label{
+	text-align: left;
+  display: block;
+  font-size: 18px;
+  color: #000;
+  font-weight: 400;
+}
+.btn-tab-cont .tab-content select{
+  border-color: #a5a5a5;
+  height: 34px;
+}
+.btn-tab-cont .tab-btn-cont{
+  margin: 100px 0 0;
+}
+.btn-tab-cont .tab-btn-cont .btn{
+  width: 170px;
+}
+.sub-cat-list{
+	padding: 0 50px;
+	margin-top: -30px;
+}
+.sub-cat-list ul{
+	margin: 0px;
+	padding: 0px;
+}
+.sub-cat-list li{
+	list-style: none;
+}
+.sub-cat-list li a{
+  display: block;
+  color: #4b4b4b;
+  font-size: 16px;
+  padding: 13px 0;
+  border-bottom: 1px solid #efefef;
+  position: relative;
+  background: url('../images/tab-arrow.png') 98% center no-repeat;
+}
+.fs-breadcrumb.margin-bottom {
+	margin-bottom: 25px;
+}
+.margin-top20 {
+    margin-top: 20px;
 }

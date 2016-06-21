@@ -393,5 +393,29 @@ class SearchController extends Controller
     {
     	return view('demo');
     }
+
+    public function confirm($confirmation_code)
+    {
+      if( ! $confirmation_code)
+        {
+            Session::put('error',"Wrong confirmation code!");
+           return redirect('/');
+        }
+
+        $user = User::where('confirmation_code',$confirmation_code)->first();
+
+        if ( ! $user)
+        {
+             Session::put('error',"No user with matching verification code found!");
+             return redirect('/');
+        }
+
+        $user->is_email_verified = 'Y';
+        $user->confirmation_code = null;
+        $user->save();
+
+        Session::put('success',"Your account has been successfully verified!");
+        return redirect('/');
+    }
   
 }

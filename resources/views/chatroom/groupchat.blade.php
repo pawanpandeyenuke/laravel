@@ -110,7 +110,7 @@ $groupid = $group_jid;
                                     </div>
                                     <div id="gccollapseOne" class="{{$pubdivid}}" role="tabpanel" aria-labelledby="gcheadingOne">
                                       <div class="panel-body">
-                                        <div class="chat-header-small text-center">
+                                        <div class="chat-header-small">
                                           <i class="flaticon-people"></i> <b><?php echo ($exception == "private")?"":$groupname; ?></b>
                                         </div>
                                         <div class="chat-user-list StyleScroll">
