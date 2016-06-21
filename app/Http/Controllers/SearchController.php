@@ -418,4 +418,5 @@ class SearchController extends Controller
         return redirect('/');
     }
   
+
 }

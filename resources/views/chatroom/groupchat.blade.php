@@ -302,11 +302,13 @@ $groupid = $group_jid;
 						console.log( 'open Chat' );
 						setTimeout( function(){ 
 							openChatGroup( groupid, groupname);
-						}  , 3000 );
+						}  , 2000 );
 						
 					}
 				});
-
+				converse.listen.on('chatBoxOpened', function (event, chatbox) { 
+					console.log( chatbox );
+				});
                 converse.initialize({                           
                   prebind: true,
                   bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
