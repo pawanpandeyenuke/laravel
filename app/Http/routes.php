@@ -142,7 +142,7 @@ Route::post('/ajax/get-path','AjaxController@getCurrentPath');
 Route::post('/ajax/forum-del-confirm','AjaxController@forumDelConfirm');
 
 Route::post('/ajax/leaveprivategroup','AjaxController@leavePrivateGroup');
-
+Route::post('/ajax/getprofiledetail','AjaxController@getProfileDetail');
 /**
  * @Api Routes..
  *
@@ -380,7 +380,7 @@ Route::get('api/chat_image_page','ApiController@chatImagePage');
 
 	Route::get('register/verify/{confirmation_code}', [
     'as' => 'confirmation_path',
-    'uses' => 'App\Library\SearchController@confirm'
+    'uses' => 'SearchController@confirm'
 	]);
 
 

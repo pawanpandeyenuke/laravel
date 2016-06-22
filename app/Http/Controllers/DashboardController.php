@@ -335,7 +335,7 @@ class DashboardController extends Controller
         //Get users of this group
 
         //$group_jid = strtolower(str_replace($replace_array, '-', $breadcrumb));
-        $group_jid = preg_replace('/\s+/', '_',$breadcrumb);
+        $group_jid = preg_replace('/[^A-Za-z0-9\-]/', '_',$breadcrumb);
         $group_jid = strtolower($group_jid);
         //print_r($group_jid);die;
 
@@ -381,7 +381,7 @@ class DashboardController extends Controller
                
 
                 $sub_name = str_replace($replace_array,'-',$sub_name);           
-                $group_jid = preg_replace('/\s+/', '_',$parent_name.'_'.$sub_name);
+                $group_jid = preg_replace('/[^A-Za-z0-9\-]/', '_',$parent_name.'_'.$sub_name);
                 $group_jid = strtolower($group_jid);
 
         }
@@ -424,13 +424,13 @@ class DashboardController extends Controller
         $usersData = "";
         $id = Auth::User()->id;
             if($groupid){
-                $group_check = Group::where('id',$groupid)->value('title');
-                if($group_check == null)
+                $group_check = Group::where('id',$groupid)->select('group_jid','title')->first();
+                if(empty($group_check))
                     return redirect('private-group-list');
                 else{
 					
-					$group_jid = preg_replace('/\s+/', '_',$group_check);
-                    $group_jid = strtolower($group_jid).'_'.$groupid;
+					$group_jid = $group_check->group_jid;
+                    $group_name = $group_check->title;
 
                     $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 
@@ -444,7 +444,7 @@ class DashboardController extends Controller
         }
 
                 return view('chatroom.groupchat')
-                    ->with('groupname', $group_check)
+                    ->with('groupname', $group_name)
                     ->with('group_jid',$group_jid)
                     ->with('userdata', $usersData)
                     ->with('friendid',$friendid)
@@ -752,16 +752,20 @@ class DashboardController extends Controller
 					array_push($input['groupmembers'],$userid);
 					$members=implode(",",$input['groupmembers']);
 					$data = array(
-							'title'=>$input['groupname'],
-							'status'=>'Active',
-							'owner_id'=>$userid,
-						   );  
+								'title'=>$input['groupname'],
+								'status'=>'Active',
+								'owner_id'=>$userid,
+						    );  
 
-					$groupid   = preg_replace('/\s+/', '_', $input['groupname']);
+					$groupid   = preg_replace('/[^A-Za-z0-9\-]/', '_', $input['groupname']);
 					$groupid   = strtolower($groupid);
 					$converse  = new Converse;
 					$groupdata = Group::create($data);
 					$groupname = $groupid."_".$groupdata->id;
+					
+					$PrivateGroup = Group::find($groupdata->id);
+					$PrivateGroup->group_jid = $groupname;
+					$PrivateGroup->update();
 					
 					$converse->createGroup($groupid,$groupname);
 					

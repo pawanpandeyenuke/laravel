@@ -196,39 +196,36 @@ $groupid = $group_jid;
                                 <ul>
                     @foreach($privategroup as $data)
                     <?php  
-
-						$privategroupname = preg_replace('/\s+/', '_',$data['title']);
+						/**
+						$privategroupname = preg_replace('/[^A-Za-z0-9\-]/', '_',$data['title']);
                         $privategroupname = strtolower($privategroupname);
                         $privategroupid   = $privategroupname.'_'.$data['id'];
-                         
+                        **/ 
                         $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
 			
                             $namestr='';
                             $name=array();
                             $count=0;
-                        foreach ($data['members'] as $mem) {
-                                if($mem['member_id']==Auth::User()->id)
-                                {
+							foreach ($data['members'] as $mem) {
+                                if( $mem['member_id']==Auth::User()->id ){
                                     $name[]="You";
                                     $count++;
-                                }
-                                else{
-                                $name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+                                } else {
+									$name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
                                 }
                             }
 
                             $namestr=implode(",",$name);
-
-                            if(!($count==0) || $data['owner_id']==Auth::User()->id) { 
-                            $pri_id = $data['id'];
-                              ?>
+							if(!($count==0) || $data['owner_id']==Auth::User()->id) { 
+								$pri_id = $data['id'];
+                             ?>
                                <li>
 								   <div	class="pvt-room-list" style="position:relative;" >
 										<a href="{{url("private-group-detail/$pri_id")}}" >
 											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
 											<span class="title">{{$data['title']}}</span>
 										</a>
-										<button onclick="return openChatGroup('<?php echo $privategroupid; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
+										<button onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
                                    </div>
                                </li>
 							<?php } ?>
@@ -274,7 +271,7 @@ $groupid = $group_jid;
 ?>
  
 <script type="text/javascript">
-
+	var encoderoomid = '';
     var userImage="{{$userpic}}";
  
     var defaultImage="{{url('/images/user-thumb.jpg')}}";
@@ -305,11 +302,26 @@ $groupid = $group_jid;
 						console.log( 'open Chat' );
 						setTimeout( function(){ 
 							openChatGroup( groupid, groupname);
-						}  , 3000 );
+						}  , 2000 );
 						
 					}
 				});
-
+				
+				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
+					var jidStr = chatbox.model.get('jid');
+					var xmpp = jidStr.replace("@<?= Config::get('constants.xmpp_host_Url') ?>","");
+					$.ajax({
+						'url' : "{{url('/ajax/getprofiledetail')}}",
+						'type' : 'post',
+						'async' : false,
+						'dataType' : 'json',
+						'data' : {'xmpp':xmpp},
+						'success' : function(data){
+							$(".profileavatar").attr( "style", 'background: url("'+data.image+'")' );
+						}       
+					});
+				});
+				
                 converse.initialize({                           
                   prebind: true,
                   bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
