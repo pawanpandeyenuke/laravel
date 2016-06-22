@@ -586,7 +586,7 @@ comments;
 		
 		$countryid = Country::where(['country_name' => $input['countryId']])->value('country_id');		
 		$statequeries = State::where(['country_id' => $countryid])->get();		
-		$states = array('<option value="">State</option>');
+		$states = array('<option value="">Select State</option>');
 		foreach($statequeries as $query){			
 			$states[] = '<option value="'.$query->state_name.'">'.$query->state_name.'</option>';
 		}		
@@ -604,7 +604,7 @@ comments;
 		// echo $input['stateId'];die;
 		$cityid = State::where(['state_name' => $input['stateId']])->value('state_id');
 		$cityqueries = City::where(['state_id' => $cityid])->get();
-		$city = array('<option value="">City</option>');
+		$city = array('<option value="">Select City</option>');
 		foreach($cityqueries as $query){			
 			$city[] = '<option value="'.$query->city_name.'">'.$query->city_name.'</option>';
 		}		
@@ -1753,13 +1753,19 @@ comments;
 		$input = Input::all();
 		 if($input['forumid'] == "Forum")
 		  	{ echo"No"; exit; }
-		$subforums = Forums::where('parent_id',$input['forumid'])->get();	
+		$subforums = Forums::where('parent_id',$input['forumid'])->get();
+		$mainforum = Forums::where('id',$input['forumid'])->value('selection');
 
 		$forums = array('<option value=""></option>');
 		if($subforums->isEmpty())
 			echo 'No';
 		else{
-			$subforumArr[] = "<option>Sub Category</option>";
+			if($mainforum == "Y"){
+				$subforumArr[] = "<option value='sub-opt'>Select Option</option>";
+			}		
+			else{
+				$subforumArr[] = "<option value='sub-opt'>Select Sub Category</option>";
+			}
 		foreach($subforums as $query){
 		if($query->title == "Country,State,City")
 		 	$query->title = "City";			
@@ -1776,6 +1782,7 @@ comments;
 		$countries = Country::get();
 
 		if($title == "Country"){
+			$country[] = "<option value='Country'>Select Country</option>";
 			foreach($countries as $data){
 			$country[] = '<option value="'.$data->country_name.'">'.$data->country_name.'</option>';
 			}
@@ -1786,7 +1793,7 @@ comments;
 		}
 
 		else if($title == "Country,State,City"){
-			$country[] = "<option>Country</option>";
+			$country[] = "<option value='Country'>Select Country</option>";
 			foreach($countries as $data){
 				$country[] = '<option value="'.$data->country_name.'">'.$data->country_name.'</option>';
 			}
@@ -1800,6 +1807,7 @@ comments;
 			echo "hide";
 		}
 		else if($title == "Professional Course" || $title == "Subjects"){
+			$subforumArr[] = "<option >Select Option</option>";
 			$subforums = Forums::where('parent_id',$input['forumid'])->get();
 			foreach($subforums as $query){			
 			$subforumArr[] = '<option value="'.$query->id.'">'.$query->title.'</option>';

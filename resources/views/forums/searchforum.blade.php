@@ -7,14 +7,14 @@
 		$key = "";
 
 $check_val = "";
-	// print_r($old);die;
+
 ?>				
 				{!! Form::open(array('url' => 'search-forum','id' => 'search-forum-layout', 'method' => 'post')) !!}
 						<div class="forum-filter">
 							<div class="row">
 								<div class="col-md-4">
-									<select class="form-control getsubcategory" name="mainforum">
-									<option value="Forum">Forum</option>	
+									<select class="form-control getsubcategory" id="getsubcategory" name="mainforum">
+									<option value="Forum">Select Category</option>	
 									@foreach($mainforums as $data)
 								<?php 	
 									if(isset($old['mainforum']) && $old['mainforum'] != "" && $old['mainforum'] == $data->id)
@@ -31,16 +31,31 @@ $check_val = "";
 								<div class="search-subforums">
 										<?php 
 											if(isset($old['search-subforums']) && $old['search-subforums'] != ""){
-											 	$sub_id = $old['search-subforums'];
-											 	$sub_title = \App\Forums::where('id',$old['search-subforums'])->value('title');
+											 	//$sub_id = $old['search-subforums'];
+											 	//$sub_title = \App\Forums::where('id',$old['search-subforums'])->value('title');
 												$check_val = "sub";
+												$options = \App\Forums::where('parent_id',$old['mainforum'])->get();
 											}else{
 											 	$sub_id = "";
 											 	$sub_title = "Sub Category";
+											 	$options = "";
 											}
 										?>
 									<select class="form-control" id="search-subforums" name="search-subforums">
-										<option value="{{ $sub_id }}">{{ $sub_title }}</option>
+										<option value="sub-opt">Select Sub Category</option>
+										@if(!empty($options))
+											@foreach($options as $option)
+												<?php 	
+												if($option->title == "Country,State,City")
+														$option->title = "City";
+													if(isset($old['search-subforums']) && $old['search-subforums'] != "" && $old['search-subforums'] == $option->id)
+														$selected_opt = "selected";
+													else
+														$selected_opt = "";
+												?>
+												<option value = "{{ $option->id }}" {{$selected_opt}}> {{ $option->title }} </option> 
+											@endforeach
+										@endif
 									</select>
 								</div>
 								</div>
@@ -52,67 +67,111 @@ $check_val = "";
 								<div class="col-md-4">
 									<?php 
 										if(isset($old['search-country1']) && $old['search-country1'] != "" && $old['check'] == "c"){
-											$country1_name = $old['search-country1'];
 											$disp = "";
 											$check_val = "c";
 										}else{
-											$country1_name = "";
 											$disp = "display: none;";
 										}
 									?>
 								<div class="search-country1" style="{{ $disp }}">
 									<select class="form-control" id="search-country1" name="search-country1">
-										<option value="{{ $country1_name }}">{{ $country1_name }}</option>
+										@foreach($countries as $country1)
+										<?php 
+											if(isset($old['search-country1']) && $old['search-country1']!="" && $country1 == $old['search-country1'])
+												$country1_select = "selected";
+											else
+												$country1_select = "";
+										?>
+										<option value="{{ $country1 }}" {{ $country1_select }}>{{ $country1 }}</option>
+										@endforeach
 									</select>
 								 </div>
 								 	<?php 
 										if(isset($old['check']) && $old['check'] == "csc"){
 											$country_name = $old['search-country'];
-											$state_name = $old['search-state'];
-											$city_name = $old['search-city'];
+											$state_arr = \App\State::where('country_id',\App\Country::where('country_name',$old['search-country'])->value('country_id'))->get();
+											$city_arr = \App\City::where('state_id',\App\State::where('state_name',$old['search-state'])->value('state_id'))->get();
 											$csc_disp = "";
 											$check_val = "csc";
 										}else{
 											$country_name = "";
-											$state_name = "";
-											$city_name = "";
+											$state_arr = "";
+											$city_arr = "";
 											$csc_disp = "display: none;";
 										}
 									?>
 								<div class="search-country" style="{{ $csc_disp }}">
 									<select class="form-control csc" id="search-country" name="search-country">
-										<option value = "{{ $country_name }}">{{ $country_name }}</option>
+										@foreach($countries as $country)
+										<?php 
+											if(isset($old['check']) && $old['check'] == "csc" && $country == $old['search-country'])
+												$country_select = "selected";
+											else
+												$country_select = "";
+										?>
+										<option value = "{{ $country }}" {{$country_select}}>{{ $country }}</option>
+										@endforeach
 									</select>
 								 </div>
 								</div>
 								<div class="col-md-4">
 									<?php 
 										if(isset($old['check']) && $old['check'] == "subfor"){
-											$subject_id = $old['search-subject1'];
-											$subject_name = \App\Forums::where('id',$old['search-subject1'])->value('title');
+											$subject_arr = \App\Forums::where('parent_id',$old['search-subforums'])->get();
 											$check_val = "subfor";
 											$subject_display = "";
 										}else{
 											$subject_id = "";
-											$subject_name = "";
+											$subject_arr = "";
 											$subject_display = "display: none;";
 										}
 									?>
 								<div class="search-subject1" style="{{ $subject_display }}">
 								<select class="form-control" id="search-subject1" name="search-subject1">
-								<option value="{{ $subject_id }}">{{ $subject_name }}</option>
+									<option>Select Option</option>
+									@if(!empty($subject_arr))
+										@foreach($subject_arr as $subject)
+										<?php 
+											if(isset($old['check']) && $old['check'] == "subfor" && $subject->id == $old['search-subject1'])
+												$subject_select = "selected";
+											else
+												$subject_select = "";
+										?>
+										<option value="{{ $subject->id }}" {{ $subject_select }}>{{ $subject->title }}</option>
+										@endforeach
+									@endif
 								</select>
 								</div>
 								<div class="search-state" style="{{ $csc_disp }}">
 									<select class="form-control csc" id="search-state" name="search-state">
-										<option value="{{ $state_name }}">{{ $state_name }}</option>
+									@if(!empty($state_arr))
+										@foreach($state_arr as $state)
+										<?php 
+											if(isset($old['check']) && $old['check'] == "csc" && $state->state_name == $old['search-state'])
+												$state_select = "selected";
+											else
+												$state_select = "";
+										?>
+										<option value = "{{ $state->state_name  }}" {{$state_select}}>{{ $state->state_name  }}</option>
+										@endforeach
+									@endif
 									</select>
 								</div>
 								</div>
 								<div class="col-md-4">
 								<div class="search-city" style="{{ $csc_disp }}">
 									<select class="form-control csc" id="search-city" name="search-city">
-										<option value="{{ $city_name }}">{{ $city_name }}</option>
+									@if(!empty($city_arr))
+										@foreach($city_arr as $city)
+										<?php 
+											if(isset($old['check']) && $old['check'] == "csc" && $city->city_name == $old['search-city'])
+												$city_select = "selected";
+											else
+												$city_select = "";
+										?>
+										<option value = "{{ $city->city_name }}" {{$city_select}}>{{ $city->city_name  }}</option>
+										@endforeach
+									@endif
 									</select>
 								</div>
 								</div>
@@ -128,6 +187,7 @@ $check_val = "";
 								?>
 								<div class="col-md-4 search-diseases" style="{{ $d_disp }}">
 									<select class="form-control csc" id="search-diseases" name="search-diseases">
+										<option value="disease">Select Options</option>
 									@foreach($diseases as $diseases)
 										<?php
 												if(isset($old['search-diseases']) && $old['search-diseases'] != "" && $old['search-diseases'] == $diseases)
@@ -157,16 +217,60 @@ $check_val = "";
 <!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script> -->
 <script type="text/javascript">
 
-      $( "#search-forum-layout" ).submit(function( event ) {
+	window.onload = function(){
+		var url_c = window.location.pathname;
+		var arr = url_c.split('/');
+		if(arr[1] == 'sub-forums'){
+			$("#getsubcategory").val(arr[2]);
+			var forumid = arr[2];
+			$.ajax({	
+			'url' : '/ajax/getsubforums',
+			'data' : { 'forumid' : forumid },
+			'type' : 'post',
+			'success' : function(response){
+				if(response == 'No')
+				{
+					$('.search-check').val('direct');
+					$('.search-subforums').hide();				
+      				$('#search-subforums').hide();		
+				}else{
+					$('.search-subforums').show();				
+					$('#search-subforums').show();				
+					$('#search-subforums').html(response);
+				}
+			}			
+		});
+		}
+		
+	} 
+	
+
+     $( "#search-forum-layout" ).submit(function( event ) {
+      if($('.search-check').val() == "c" && $('#search-country1').val() == "Country"){
+      	$('#search-country1').focus();
+      	$('.alert-search-forum').html('Please select country.');
+      	$('.alert-search-forum').show();
+      	event.preventDefault();
+      }
+
+      if($("#getsubcategory option:selected").text() == "Doctor" && $('#search-subforums').val()!="sub-opt" && $('#search-diseases').val() == "disease"){
+      	$('#search-diseases').focus();
+      	$('.alert-search-forum').html('Please select an option.');
+      	$('.alert-search-forum').show();
+      	event.preventDefault();	
+      }
+
       var searchkey = $('#forum-keyword-layout').val();
       var parent = $('.getsubcategory').val();
-      if(searchkey == '' || $("#search-subforums option:selected").text() == 'City'){
-      	if(searchkey == "" && parent == "Forum"){
-        $('.getsubcategory').attr('placeholder', 'Enter Keyword').focus();
+      
+      if(searchkey == "" && parent == "Forum"){
+        // $('.getsubcategory').attr('placeholder', 'Enter Keyword').focus();
+        $('#forum-keyword-layout').focus();
         event.preventDefault();
    		}
-   		// if(search)
-        
+
+      if(searchkey == '' || $("#search-subforums option:selected").text() == 'City'){
+      	
       	if(($('#search-country').val() == "Country" || $('#search-state').val() == "State" || $('#search-city').val() == "City" || $('#search-city').val() == "") &&  $("#search-subforums option:selected").text() == 'City')
       	{
       		if($('#search-country').val() == "Country"){
@@ -216,6 +320,7 @@ $check_val = "";
 					$('.search-check').val('direct');
 		var forumid = $(this).val();
 		var _token = $('#searchform input[name=_token]').val();
+		$('#search-subforums').attr('disabled',true);	
 		$.ajax({			
 			'url' : '/ajax/getsubforums',
 			'data' : { 'forumid' : forumid },
@@ -224,10 +329,14 @@ $check_val = "";
 				if(response == 'No')
 				{
 					$('.search-check').val('direct');
-      				$('#search-subforums').html('');				
+					$('.search-subforums').hide();				
+      				$('#search-subforums').hide();
+      				$('#search-subforums').attr('disabled',false);
 				}else{
+					$('.search-subforums').show();				
+					$('#search-subforums').show();				
 					$('#search-subforums').html(response);
-	
+					$('#search-subforums').attr('disabled',false);
 				}
 			}			
 		});	
@@ -252,7 +361,7 @@ $check_val = "";
 					$('#search-country').html("");
 					$('#search-state').html("");
 					$('#search-city').html("");
-		if($('.getsubcategory').val() == 12)
+		if($("#getsubcategory option:selected").text() == "Doctor")
 		{
 				$('.search-diseases').show();
 				$('#search-diseases').show();
@@ -285,8 +394,8 @@ $check_val = "";
 						$('.search-city').show();
 						$('#search-city').show();
 						$('#search-country').html(jresponse.data);
-						$('#search-state').html("<option>State</option>");
-						$('#search-city').html("<option>City</option>");
+						$('#search-state').html("<option>Select State</option>");
+						$('#search-city').html("<option>Select City</option>");
 					}
 					else if(jresponse.msg == 'subfor')
 					{
@@ -302,30 +411,34 @@ $check_val = "";
 		
 	$('#search-country').change(function(){
 		$('.alert-search-forum').hide();	
-		$('#search-city').html("<option value='City'>City</option>");
+		$('#search-city').html("<option value='City'>Select City</option>");
 		var countryId = $(this).val();
 		var _token = $('#searchform input[name=_token]').val();
+		$('#search-state').attr('disabled',true);
 		$.ajax({			
 			'url' : '/ajax/getstates',
 			'data' : { 'countryId' : countryId, '_token' : _token },
 			'type' : 'post',
 			'success' : function(response){		
 				$('#search-state').html(response);
+				$('#search-state').attr('disabled',false);
 			}			
 		});	
 	});
 
 	$('#search-state').change(function(){
 		$('.alert-search-forum').hide();	
-		$('#search-city').html("<option value='City'>City</option>");
+		$('#search-city').html("<option value='City'>Select City</option>");
 		var stateId = $(this).val();
 		var _token = $('#searchform input[name=_token]').val();
+		$('#search-city').attr('disabled',true);
 		$.ajax({			
 			'url' : '/ajax/getcities',
 			'data' : { 'stateId' : stateId, '_token' : _token },
 			'type' : 'post',
 			'success' : function(response){
 				$('#search-city').html(response);
+				$('#search-city').attr('disabled',false);
 			}			
 		});	
 	});

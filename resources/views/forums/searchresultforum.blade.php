@@ -1,8 +1,12 @@
 @extends('layouts.dashboard')
 
 <?php
-	if($keyword == "")
+	if($keyword == ""){
+		// print_r($breadcrum);
+		$breadcrum = rtrim($breadcrum, ' > ');
 		$show = $breadcrum;
+		// print_r($breadcrum);die;
+	}
 	else
 		$show = $keyword;
  ?>
