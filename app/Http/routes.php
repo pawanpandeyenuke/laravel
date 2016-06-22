@@ -289,7 +289,7 @@ Route::get('api/chat_image_page','ApiController@chatImagePage');
     Route::get('forum-post-reply/{forumpostid}', 'SearchController@forumPostReply');
 
     Route::post('search-forum', 'SearchController@searchForum');
-   
+	Route::get('search-forum', 'SearchController@searchForumGet');
 
 	Route::group(['middleware' => 'web'], function () {
     Route::auth();
