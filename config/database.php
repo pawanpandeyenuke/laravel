@@ -57,6 +57,7 @@ return [
             'host'      => env('DB_HOST', 'localhost'),
             'database'  => env('DB_DATABASE', 'friendzsquare'),
             'username'  => env('DB_USERNAME', 'root'),
+
 //	        'password'  => env('DB_PASSWORD', 'root123'),
 //	    	'password'  => env('DB_PASSWORD', 'root123');
 //          'charset'   => 'utf8',

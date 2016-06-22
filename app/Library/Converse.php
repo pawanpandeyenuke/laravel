@@ -101,8 +101,8 @@ class Converse
 	public static function setVcard($username, $fieldValue){
 
 		$node = Config::get('constants.xmpp_host_Url');
-		$fieldName = 'image';
-		$fieldValue = base64_encode ( $fieldValue );
+		$fieldName = 'BINVAL';
+		$fieldValue = base64_encode( $fieldValue );
 
 		return @exec('sudo ejabberdctl set-vcard '.$username.' '.$node.' '.$fieldName.' "'.$fieldValue.'" 2>&1', $output, $status);
 
