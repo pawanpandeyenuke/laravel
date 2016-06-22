@@ -142,7 +142,7 @@ Route::post('/ajax/get-path','AjaxController@getCurrentPath');
 Route::post('/ajax/forum-del-confirm','AjaxController@forumDelConfirm');
 
 Route::post('/ajax/leaveprivategroup','AjaxController@leavePrivateGroup');
-
+Route::post('/ajax/getprofiledetail','AjaxController@getProfileDetail');
 /**
  * @Api Routes..
  *

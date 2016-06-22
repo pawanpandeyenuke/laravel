@@ -306,10 +306,22 @@ $groupid = $group_jid;
 						
 					}
 				});
-				converse.listen.on('chatBoxOpened', function (event, chatbox) { 
-					console.log( event );
-					console.log( chatbox );
+				
+				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
+					var jidStr = chatbox.model.get('jid');
+					var xmpp = jidStr.replace("@<?= Config::get('constants.xmpp_host_Url') ?>","");
+					$.ajax({
+						'url' : "{{url('/ajax/getprofiledetail')}}",
+						'type' : 'post',
+						'async' : false,
+						'dataType' : 'json',
+						'data' : {'xmpp':xmpp},
+						'success' : function(data){
+							$(".profileavatar").attr( "style", 'background: url("'+data.image+'")' );
+						}       
+					});
 				});
+				
                 converse.initialize({                           
                   prebind: true,
                   bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
