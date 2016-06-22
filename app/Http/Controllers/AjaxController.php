@@ -289,7 +289,7 @@ comments;
 
 		exit;
 	}
-
+	/**
 	public function getxmppuser(){
 
 		$status=0;
@@ -312,7 +312,7 @@ comments;
 
 		return $sessionInfo;
  	}
-	
+	**/
 	public function getProfileDetail(){
 		$arguments = Input::all();
 		$Image = '';
@@ -323,7 +323,7 @@ comments;
 				$Image = '/uploads/user_img/'.$user->profile_pic_url;
 			}
 		}
-		json_decode( array( 'image' => $Image ) );
+		echo json_encode( array( 'image' => $Image ) );
 	}
 
 	public function getxmppuser(){
