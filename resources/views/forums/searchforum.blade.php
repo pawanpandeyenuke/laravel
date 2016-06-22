@@ -5,6 +5,9 @@
 		$key = $keyword;
 	else
 		$key = "";
+
+$check_val = "";
+	// print_r($old);die;
 ?>				
 				{!! Form::open(array('url' => 'search-forum','id' => 'search-forum-layout', 'method' => 'post')) !!}
 						<div class="forum-filter">
@@ -12,16 +15,32 @@
 								<div class="col-md-4">
 									<select class="form-control getsubcategory" name="mainforum">
 									<option value="Forum">Forum</option>	
-									@foreach($mainforums as $data)				
-										<option value="{{$data->id}}">{{$data->title}}</option>
+									@foreach($mainforums as $data)
+								<?php 	
+									if(isset($old['mainforum']) && $old['mainforum'] != "" && $old['mainforum'] == $data->id)
+										$selected = "selected";
+									else
+										$selected = "";
+								?>
+										<option value="{{$data->id}}" {{ $selected }}>{{$data->title}}</option>
 									@endforeach
 									</select>
 								</div>
 								<!-- <div class="subs" style="display: none;"> -->
 								<div class="col-md-4">
 								<div class="search-subforums">
+										<?php 
+											if(isset($old['search-subforums']) && $old['search-subforums'] != ""){
+											 	$sub_id = $old['search-subforums'];
+											 	$sub_title = \App\Forums::where('id',$old['search-subforums'])->value('title');
+												$check_val = "sub";
+											}else{
+											 	$sub_id = "";
+											 	$sub_title = "Sub Category";
+											}
+										?>
 									<select class="form-control" id="search-subforums" name="search-subforums">
-									<option>Sub Category</option>
+										<option value="{{ $sub_id }}">{{ $sub_title }}</option>
 									</select>
 								</div>
 								</div>
@@ -31,40 +50,92 @@
 							</div>
 							<div class="row">
 								<div class="col-md-4">
-								<div class="search-country1" style="display: none;">
+									<?php 
+										if(isset($old['search-country1']) && $old['search-country1'] != "" && $old['check'] == "c"){
+											$country1_name = $old['search-country1'];
+											$disp = "";
+											$check_val = "c";
+										}else{
+											$country1_name = "";
+											$disp = "display: none;";
+										}
+									?>
+								<div class="search-country1" style="{{ $disp }}">
 									<select class="form-control" id="search-country1" name="search-country1">
-										<option>India</option>
+										<option value="{{ $country1_name }}">{{ $country1_name }}</option>
 									</select>
 								 </div>
-								<div class="search-country" style="display: none;">
+								 	<?php 
+										if(isset($old['check']) && $old['check'] == "csc"){
+											$country_name = $old['search-country'];
+											$state_name = $old['search-state'];
+											$city_name = $old['search-city'];
+											$csc_disp = "";
+											$check_val = "csc";
+										}else{
+											$country_name = "";
+											$state_name = "";
+											$city_name = "";
+											$csc_disp = "display: none;";
+										}
+									?>
+								<div class="search-country" style="{{ $csc_disp }}">
 									<select class="form-control csc" id="search-country" name="search-country">
-										<option>India</option>
+										<option value = "{{ $country_name }}">{{ $country_name }}</option>
 									</select>
 								 </div>
 								</div>
 								<div class="col-md-4">
-								<div class="search-subject1" style="display: none;">
+									<?php 
+										if(isset($old['check']) && $old['check'] == "subfor"){
+											$subject_id = $old['search-subject1'];
+											$subject_name = \App\Forums::where('id',$old['search-subject1'])->value('title');
+											$check_val = "subfor";
+											$subject_display = "";
+										}else{
+											$subject_id = "";
+											$subject_name = "";
+											$subject_display = "display: none;";
+										}
+									?>
+								<div class="search-subject1" style="{{ $subject_display }}">
 								<select class="form-control" id="search-subject1" name="search-subject1">
-								<option>Options</option>
+								<option value="{{ $subject_id }}">{{ $subject_name }}</option>
 								</select>
 								</div>
-								<div class="search-state" style="display: none;">
+								<div class="search-state" style="{{ $csc_disp }}">
 									<select class="form-control csc" id="search-state" name="search-state">
-										<option>State</option>
+										<option value="{{ $state_name }}">{{ $state_name }}</option>
 									</select>
 								</div>
 								</div>
 								<div class="col-md-4">
-								<div class="search-city" style="display: none;">
+								<div class="search-city" style="{{ $csc_disp }}">
 									<select class="form-control csc" id="search-city" name="search-city">
-										<option>City</option>
+										<option value="{{ $city_name }}">{{ $city_name }}</option>
 									</select>
 								</div>
 								</div>
-								<div class="col-md-4 search-diseases" style="display: none;">
+								<?php 
+									if(isset($old['search-diseases']) && $old['search-diseases'] != ""){
+										if((\App\Forums::where('id',$old['mainforum'])->value('title') == "Doctor") && $old['check'] != "direct")
+											$d_disp = "";
+										else
+											$d_disp = "display: none;";
+									}
+									else
+											$d_disp = "display: none;";
+								?>
+								<div class="col-md-4 search-diseases" style="{{ $d_disp }}">
 									<select class="form-control csc" id="search-diseases" name="search-diseases">
 									@foreach($diseases as $diseases)
-										<option value = "{{$diseases}}">{{$diseases}}</option>
+										<?php
+												if(isset($old['search-diseases']) && $old['search-diseases'] != "" && $old['search-diseases'] == $diseases)
+													$selected = "selected";
+												else
+													$selected = "";
+										?>
+										<option value = "{{$diseases}}" {{$selected}}>{{$diseases}}</option>
 									@endforeach
 									</select>
 								</div>
@@ -78,7 +149,7 @@
 									</div>
 								</div>
 							</div>
-							<input type="hidden" name="check" class="search-check" value="" />
+							<input type="hidden" name="check" class="search-check" value="{{ $check_val }}" />
 						{!! Form::close() !!}
 						</div><!--/forum filter-->
 
@@ -87,17 +158,16 @@
 <script type="text/javascript">
 
       $( "#search-forum-layout" ).submit(function( event ) {
-      var city = ['56','57','60','72','234','241'];
       var searchkey = $('#forum-keyword-layout').val();
       var parent = $('.getsubcategory').val();
-      if(searchkey == '' || city.indexOf($('#search-subforums').val()) != -1 ){
+      if(searchkey == '' || $("#search-subforums option:selected").text() == 'City'){
       	if(searchkey == "" && parent == "Forum"){
         $('.getsubcategory').attr('placeholder', 'Enter Keyword').focus();
         event.preventDefault();
    		}
    		// if(search)
         
-      	if(($('#search-country').val() == "Country" || $('#search-state').val() == "State" || $('#search-city').val() == "City" || $('#search-city').val() == "") && city.indexOf($('#search-subforums').val()) != -1 )
+      	if(($('#search-country').val() == "Country" || $('#search-state').val() == "State" || $('#search-city').val() == "City" || $('#search-city').val() == "") &&  $("#search-subforums option:selected").text() == 'City')
       	{
       		if($('#search-country').val() == "Country"){
       			$('#search-country').focus();

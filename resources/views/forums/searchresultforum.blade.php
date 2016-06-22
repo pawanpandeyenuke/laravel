@@ -34,8 +34,10 @@
 						 	<!-- <div class="fix-header"> -->
 								 <div class="fs-breadcrumb">Search Result</div>
 
-								<div class="forum-post-cont">
-									<div class="posts-count search-forum-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{$postscount}}</span> Posts found for "{{$show}}"</div>
+								<div class="forum-post-cont">		
+									<div class="posts-count search-forum-count"><i class="flaticon-two-post-it"></i>
+										<span class = "count"> {{$postscount}}</span> Posts found for "{{$show}}"
+									</div>
 								</div><!--/forum post cont-->
 
 							<div class="modal fade edit-forumpost-popup" id="forumpost-edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost"></div>
@@ -115,6 +117,7 @@
 							</div>
 							@endif
 						</div><!--/forum search list-->
+				
 					</div>
 				</div><!--/page center data-->
 				<div class="shadow-box bottom-ad"><img src="{{url('images/bottom-ad.jpg')}}" alt="" class="img-responsive"></div>
