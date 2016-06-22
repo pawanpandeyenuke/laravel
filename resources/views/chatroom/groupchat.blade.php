@@ -309,6 +309,7 @@ $groupid = $group_jid;
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
 					var jidStr = chatbox.model.get('jid');
+					var BoxId  = chatbox.model.get('box_id');
 					var xmpp = jidStr.replace("@<?= Config::get('constants.xmpp_host_Url') ?>","");
 					$.ajax({
 						'url' : "{{url('/ajax/getprofiledetail')}}",
@@ -317,7 +318,7 @@ $groupid = $group_jid;
 						'dataType' : 'json',
 						'data' : {'xmpp':xmpp},
 						'success' : function(data){
-							$(".profileavatar").attr( "style", 'background: url("'+data.image+'")' );
+							$( "#"+BoxId ).find(".profileavatar").attr( "style", 'background: url("'+data.image+'")' );
 						}       
 					});
 				});
