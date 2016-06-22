@@ -318,7 +318,9 @@ $groupid = $group_jid;
 						'dataType' : 'json',
 						'data' : {'xmpp':xmpp},
 						'success' : function(data){
-							$( "#"+BoxId ).find(".profileavatar").attr( "style", 'background: url("'+data.image+'")' );
+							if( typeof data.image !== undefined  ){
+								$( "#"+BoxId ).find(".profileavatar").attr( "style", 'background: url("'+data.image+'")' );
+							}
 						}       
 					});
 				});
