@@ -36,27 +36,7 @@
 
 @section('content')
 <?php 
-
-$groupid=$groupname;
-$groupname = implode(' ', array_map('ucfirst', explode('_', $groupid)));
-$groupname = implode(',', array_map('ucfirst', explode(',', $groupname)));
-$groupname =preg_replace('/(?<! )(?<!^)[A-Z]/',' $0', $groupname);
-$old=array('Moviereview','Schoolreviews','Coachingclass',"It,","Collegereview ","Singlesfemales","Singlesmale","Legalquestions"
-            ,"Professionalcourse","Bicyclesandsidecars","suvs","van","Studyquestions","Fortuneteller","Emergencyblooddonation"
-            ,"Studyquestions","Seekhelp","-",'Csc','C ');
-$new=array('Movie Review','School Reviews','Coaching Class',"IT,","College Review ","Singles Females","Singles Male ",
-            "Legal Questions ","Professional Course ","Bicycles and Sidecars","Suvs","Van","Study Questions","Fortune Teller"
-            ,"Emergency Blood Donation","Study Questions","Seek Help","","","");
-
- $groupname=str_replace($old,$new,$groupname);
-
-
-if($pgid){
-  if($pgid != $groupid){
-    $groupid=$groupid."_".$pgid;
-  }
-}
-$groupid = str_replace('/', '-', $groupid);
+$groupid = $group_jid;
 ?>
 <div class="page-data dashboard-body">
         <div class="container">
@@ -81,42 +61,61 @@ $groupid = str_replace('/', '-', $groupid);
                                     <div class="panel-heading" role="tab" id="gcheadingOne">
                                       <h4 class="panel-title">
                                       <?php
-                                      	if($exception==null)
-                                      	{
+                                      	if($exception==null){
                                       		$pubclass="class=collapsed";
                                       		$pubexpand="false";
                                       		$pubdivid="panel-collapse collapse";
 
-                                      		$priclass="";
-                                      		$priexpand="true";
-                                      		$pridivid="panel-collapse collapse in";
+                                          $priclass="class=collapsed";
+                                          $priexpand="false";
+                                          $pridivid="panel-collapse collapse";
 
-                                      	}
+                                      		$friclass="";
+                                      		$friexpand="true";
+                                      		$fridivid="panel-collapse collapse in";
+                                      	}else if($exception == "private"){
+                                          $priclass="";
+                                          $priexpand="true";
+                                          $pridivid="panel-collapse collapse in";
+
+                                          $pubclass="class=collapsed";
+                                          $pubexpand="false";
+                                          $pubdivid="panel-collapse collapse";
+
+                                          $friclass="class=collapsed";
+                                          $friexpand="false";
+                                          $fridivid="panel-collapse collapse";
+                                        }
                                       	else
                                       	{
                                       		$pubclass="";
                                       		$pubexpand="true";
                                       		$pubdivid="panel-collapse collapse in";
+
+                                          $priclass="class=collapsed";
+                                          $priexpand="false";
+                                          $pridivid="panel-collapse collapse";
                                       	
-                                      		$priclass="class=collapsed";
-                                      		$priexpand="false";
-                                      		$pridivid="panel-collapse collapse";
+                                      		$friclass="class=collapsed";
+                                      		$friexpand="false";
+                                      		$fridivid="panel-collapse collapse";
                                       	}
 
                                        ?>
                                         <a {{$pubclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseOne" aria-expanded=
                                         "{{$pubexpand}}" aria-controls="gccollapseOne">
-                                          Public group chat
+                                          Public Group Chat
                                         </a>
                                       </h4>
                                     </div>
                                     <div id="gccollapseOne" class="{{$pubdivid}}" role="tabpanel" aria-labelledby="gcheadingOne">
                                       <div class="panel-body">
-                                        <div class="chat-header-small text-center">
-                                          <i class="flaticon-people"></i> <b>{{$groupname}}</b>
+                                        <div class="chat-header-small">
+                                          <i class="flaticon-people"></i> <b><?php echo ($exception == "private")?"":$groupname; ?></b>
                                         </div>
                                         <div class="chat-user-list StyleScroll">
                                           <ul>
+                                            @if(!empty($userdata))
                                             @foreach($userdata as $data)
 
                                               <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; ?>
@@ -153,6 +152,7 @@ $groupid = str_replace('/', '-', $groupid);
                                                   </a>
                                               </li>
                                             @endforeach
+                                            @endif
                                           </ul>
                                         </div><!--/chat user list-->
                                       </div>
@@ -161,12 +161,12 @@ $groupid = str_replace('/', '-', $groupid);
                                   <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="gcheadingTwo">
                                       <h4 class="panel-title">
-                                        <a {{$priclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseTwo" aria-expanded="{{$priexpand}}" aria-controls="gccollapseTwo">
-                                          Chat with friends
+                                        <a {{$friclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseTwo" aria-expanded="{{$friexpand}}" aria-controls="gccollapseTwo">
+                                          Chat with Friends
                                         </a>
                                       </h4>
                                     </div>
-                                    <div id="gccollapseTwo" class="{{$pridivid}}" role="tabpanel" aria-labelledby="gcheadingTwo">
+                                    <div id="gccollapseTwo" class="{{$fridivid}}" role="tabpanel" aria-labelledby="gcheadingTwo">
                                       <div class="panel-body">
                                         <div class="chat-list-search">
                                             <div class="form-group">
@@ -184,51 +184,48 @@ $groupid = str_replace('/', '-', $groupid);
                                   <div class="panel panel-default">
                                     <div class="panel-heading" role="tab" id="gcheadingThree">
                                       <h4 class="panel-title">
-                                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseThree" aria-expanded="false" aria-controls="gccollapseThree">
-                                          Private group chat
+                                        <a {{$priclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseThree" aria-expanded="{{$priexpand}}" aria-controls="gccollapseThree">
+                                          Private Group Chat
                                         </a>
                                       </h4>
                                     </div>
-                                    <div id="gccollapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="gcheadingThree">
+                                    <div id="gccollapseThree" class="{{$pridivid}}" role="tabpanel" aria-labelledby="gcheadingThree">
                                       <div class="panel-body">
                                         <div class="chat-user-list StyleScroll">
 
                                 <ul>
                     @foreach($privategroup as $data)
                     <?php  
-
-                        $privategroupname=$data['title'];
-                        $privategroupid=strtolower($privategroupname);
-                        $privategroupid=str_replace(" ","_",$privategroupid);
-                         
+						/**
+						$privategroupname = preg_replace('/[^A-Za-z0-9\-]/', '_',$data['title']);
+                        $privategroupname = strtolower($privategroupname);
+                        $privategroupid   = $privategroupname.'_'.$data['id'];
+                        **/ 
                         $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
 			
                             $namestr='';
                             $name=array();
                             $count=0;
-                        foreach ($data['members'] as $mem) {
-                                if($mem['member_id']==Auth::User()->id)
-                                {
+							foreach ($data['members'] as $mem) {
+                                if( $mem['member_id']==Auth::User()->id ){
                                     $name[]="You";
                                     $count++;
-                                }
-                                else{
-                                $name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+                                } else {
+									$name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
                                 }
                             }
 
                             $namestr=implode(",",$name);
-
-                            if(!($count==0) || $data['owner_id']==Auth::User()->id) { 
-                            $pri_id = $data['id'];
-                              ?>
+							if(!($count==0) || $data['owner_id']==Auth::User()->id) { 
+								$pri_id = $data['id'];
+                             ?>
                                <li>
 								   <div	class="pvt-room-list" style="position:relative;" >
 										<a href="{{url("private-group-detail/$pri_id")}}" >
 											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
 											<span class="title">{{$data['title']}}</span>
 										</a>
-										<button onclick="openChatRoom('<?php echo str_replace( ' ','_', $data['title'].'_'.$data['id'] ); ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
+										<button onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
                                    </div>
                                </li>
 							<?php } ?>
@@ -262,6 +259,7 @@ $groupid = str_replace('/', '-', $groupid);
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script type="text/javascript" src="{{url('/converse/jquery.form.js')}}"></script>
 <script type="text/javascript" src="{{url('/converselib/demo_converse.nojquery.min.js')}}"></script>
+
 <!-- <script type="text/javascript" src="{{url('/converse/converse.nojquery.min.js')}}"></script> -->
 <script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 
@@ -273,7 +271,7 @@ $groupid = str_replace('/', '-', $groupid);
 ?>
  
 <script type="text/javascript">
-
+	var encoderoomid = '';
     var userImage="{{$userpic}}";
  
     var defaultImage="{{url('/images/user-thumb.jpg')}}";
@@ -291,16 +289,42 @@ $groupid = str_replace('/', '-', $groupid);
     var conObj;
     var groupname = "{{$groupname}}";
     var groupid = "{{$groupid}}";
-    var pgid = "{{$pgid}}";
+    var exception = "{{$exception}}";
 
     var is_first = true;  
 
     jQuery(document).ready(function(){
 
       require(['converse'], function (converse) {
-        
-                conObj = converse;
-                
+               conObj = converse;
+               conObj.listen.on('initialized', function (event) {
+					if( groupname != '' || groupid != '' ) {
+						console.log( 'open Chat' );
+						setTimeout( function(){ 
+							openChatGroup( groupid, groupname);
+						}  , 2000 );
+						
+					}
+				});
+				
+				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
+					var jidStr = chatbox.model.get('jid');
+					var BoxId  = chatbox.model.get('box_id');
+					var xmpp = jidStr.replace("@<?= Config::get('constants.xmpp_host_Url') ?>","");
+					$.ajax({
+						'url' : "{{url('/ajax/getprofiledetail')}}",
+						'type' : 'post',
+						'async' : false,
+						'dataType' : 'json',
+						'data' : {'xmpp':xmpp},
+						'success' : function(data){
+							if( typeof data.image !== undefined  ){
+								$( "#"+BoxId ).find(".profileavatar").attr( "style", 'background: url("'+data.image+'")' );
+							}
+						}       
+					});
+				});
+				
                 converse.initialize({                           
                   prebind: true,
                   bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
@@ -314,19 +338,18 @@ $groupid = str_replace('/', '-', $groupid);
                   send_initial_presence:true,
                   roster_groups: true ,
                   forward_messages: true,
-                  auto_join_rooms: [{'jid': 'group3_3@friendzsquare.com', 'nick': 'Group3' }]
+                  // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
+                
+				
                 // jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                 // jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
 
                 /* pawanpandey Code */
                 
-                  var minimizedIcon = $(".icon-minus");
-                  $.each(minimizedIcon, function(i,v){
-                    v.click();
-                  });
 
-                  $('.minimized-chats-flyout .chat-head:first .restore-chat').click();
+
+                  
 
 /*                  $('.icon-minus').each(function(){
                     $(this).trigger('click');
@@ -335,7 +358,7 @@ $groupid = str_replace('/', '-', $groupid);
 
 
                 /* pawanpandey Code */
-
+				/**
                 $(".chatroom:visible").each(function()  {
                   checkChatboxAndChatRoom(this);
                 });                     
@@ -347,22 +370,9 @@ $groupid = str_replace('/', '-', $groupid);
                 if(is_first){
                   jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click(); 
                 }
-
-				if( groupname != '' || groupid != '' ){
-					console.log(groupid);
-					// converse.rooms.open('haeri@conference.friendzsquare.com', 'mycustomnick');
-					openChatGroup(groupname, groupid);
-					// converse.rooms.open(groupname, groupid);
-                }
-				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
-					console.log( 'room open' );
-				});
-				conObj.listen.on('chatBoxOpened', function (event, chatbox) { 
-					console.log( 'box open' ); 
-				});
-				conObj.listen.on('chatBoxToggled', function (event, chatbox) { 
-					console.log( 'box total' );
-				});
+				**/
+				
+				
             
               
 
@@ -374,7 +384,7 @@ $groupid = str_replace('/', '-', $groupid);
           var user_id = current.closest('.info').data('id');
           
           $.ajax({
-            'url' : 'ajax/sendrequest',
+            'url' : "{{url('/ajax/sendrequest')}}",
             'type' : 'post',
             'data' : {'user_id' : user_id },
             'success' : function(data){
@@ -388,7 +398,7 @@ $groupid = str_replace('/', '-', $groupid);
         $(document).on('click','#search',function() {
             var name=$('.searchtxt').val();
                $.ajax({
-                'url' : 'ajax/searchfriend',
+                'url' : "{{url('/ajax/searchfriend')}}",
                 'type' : 'post',
                 'data' : {'name':name},
                 'success' : function(data){
@@ -402,7 +412,7 @@ $groupid = str_replace('/', '-', $groupid);
             if(key == 13){
                 var name=$('.searchtxt').val();
                    $.ajax({
-                    'url' : 'ajax/searchfriend',
+                    'url' : "{{url('/ajax/searchfriend')}}",
                     'type' : 'post',
                     'data' : {'name':name},
                     'success' : function(data){
@@ -418,31 +428,30 @@ $groupid = str_replace('/', '-', $groupid);
      function openChatbox(xmpusername,username)
      {
          conObj =converse;
-        var ss=conObj.contacts.get(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
-         if(ss==null)
-         {  
-      console.log(ss);   
+         var ss=conObj.contacts.get(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+         if( ss==null ){  
              conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
          }
-        conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+         hideOpendBox( xmpusername );
+         conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
      }
 
 
     function checkChatboxAndChatRoom(obj)
-     {
+    {
          var id=$(obj).attr('id');
          if(id!='controlbox')
          {
             if(!is_first)
             {                       
-            $(obj).find('.icon-minus').click();
+				$(obj).find('.icon-minus').click();
             }
             is_first=false; 
          }
      }
 
 
-
+/*
 function openChatbox( xmpusername,username ){
    //var chatbox=conObj.chats.get(xmpusername+chatserver);
    //console.log(chatbox);
@@ -468,49 +477,61 @@ function openChatbox( xmpusername,username ){
 
 
 }
-
- function hideOpendBox(){
-	 /**
-	 $(".chatroom:visible").each(function()    {
-		$(this).find('.icon-minus').click();
-		});
-		$(".chatbox:visible").each(function()   {
-		$(this).find('.icon-minus').click();
+*/
+$(document).ready(function() {
+	$( document ).on( 'click' , '.restore-chat.chatgroup' , function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var xmppName  = jid.replace(conferencechatserver,'');
+		hideOpendBox( xmppName );
+		conObj.rooms.open( jid );
 	});
-   **/
+	$( document ).on( 'click' , '.restore-chat.singlechat' , function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var xmppName  = jid.replace(chatserver,'');
+		hideOpendBox( xmppName );
+		conObj.chats.open( jid );
+	});
+});
+
+function hideOpendBox( grpname ){
+	$( '.privatechat' ).each( function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var getChat = conObj.chats.get(jid);
+		if( jid == grpname+chatserver ){
+			getChat.close();
+		} else {
+			getChat.minimize();
+		}
+	});
+	$( '.chatroom' ).each( function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var getRooms = conObj.rooms.get(jid);
+		if( jid == grpname+conferencechatserver ){
+			getRooms.close();
+		} else {
+			getRooms.minimize();
+		}
+	});
 }
-  function openChatGroup(grpname,grpjid)
-       {
-        // alert(grpjid);
-           var minbox=$("#min-"+grpjid);
-            hideOpendBox();
-            if(minbox.length>0)
-            {           
-            minbox.click();
-            }
-            else{
-               conObj.rooms.open(grpjid+conferencechatserver);
-            }
-       }
-	function openChatRoom( room, roomname ){
-		hideOpendBox();
-		converse.rooms.open( room+'@conference.<?= Config::get('constants.xmpp_host_Url') ?>', roomname );	
+
+function openChatGroup( grpjid,grpname ){
+	hideOpendBox( grpjid );
+	conObj.rooms.open( grpjid+conferencechatserver );
+}
+
+$('.status-r-btn').on('click',function(){
+	if ( $('#status_img_up').is(':checked') ) {
+		$('.status-img-up').show();
+	} else {
+		$('.status-img-up').hide();
 	}
+});
 
-    $('.status-r-btn').on('click',function(){
-        if ( $('#status_img_up').is(':checked') ) { 
-        $('.status-img-up').show();
-      }
-      else{
-        $('.status-img-up').hide();
-      }
-    });
-
-    $('.dropdown.keep-open').on({
-    "shown.bs.dropdown": function() { this.closable = false; },
-    "click":             function() { this.closable = true; },
-    "hide.bs.dropdown":  function() { return this.closable; }
-    });
+$('.dropdown.keep-open').on({
+	"shown.bs.dropdown": function() { this.closable = false; },
+	"click":             function() { this.closable = true; },
+	"hide.bs.dropdown":  function() { return this.closable; }
+});
 
 
 

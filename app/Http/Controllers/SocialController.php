@@ -29,7 +29,7 @@ class SocialController extends Controller
 					$tempEmail = explode('@', $providerUser['email']);
 					$providerUser['password'] = Hash::make($tempEmail[0]);
 					$raw_token = $providerUser['first_name'].date('Y-m-d H:i:s',time()).$providerUser['last_name'].$providerUser['email'];
-        				$access_token = Hash::make($raw_token);
+        			$access_token = Hash::make($raw_token);
 					$providerUser['access_token'] = $access_token;
 					//print_r($user);die;
 					$userDbObj = $user->create($providerUser);
@@ -96,8 +96,8 @@ class SocialController extends Controller
 				break;
 			
 			case 'twitter':
-				echo '<pre>';print_r($providerUser);die;
-				$email = 'demo.user@twitter.com';
+				//echo '<pre>';print_r($providerUser->getEmail());die;
+				//$email = $providerUser->getNickname().'@twitter.com';
 				$nameRaw = explode(' ', $providerUser->getName());
 				
 				$userData = array(
@@ -105,7 +105,7 @@ class SocialController extends Controller
 					'nickname' => $providerUser->getNickname(),
 					'first_name' => $nameRaw[0],
 					'last_name' => $nameRaw[1],
-					'email' => $email, //$providerUser->getEmail(),
+					'email' => $providerUser->getEmail(),
 					'avatar' => $providerUser->getAvatar()
 				);
 				break;

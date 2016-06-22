@@ -137,11 +137,18 @@ Route::post('/ajax/getsubforums-2','AjaxController@getSubForums2');
 
 Route::post('/ajax/view-more-search-forum','AjaxController@viewMoreSearchForum');
 
+Route::post('/ajax/get-path','AjaxController@getCurrentPath');
 
+Route::post('/ajax/forum-del-confirm','AjaxController@forumDelConfirm');
+
+Route::post('/ajax/leaveprivategroup','AjaxController@leavePrivateGroup');
+Route::post('/ajax/getprofiledetail','AjaxController@getProfileDetail');
 /**
  * @Api Routes..
  *
  **/
+Route::post('v1/upload-chat-image','ApiController@uploadChatImage');
+
 Route::post('api/signin', 'ApiController@signin');
 Route::post('api/signup', 'ApiController@signup');
 Route::post('api/forget-Password', 'ApiController@forgetPassword');
@@ -229,7 +236,7 @@ Route::match(['get', 'post'], 'api/get-forum-post-reply-comment','ApiController@
 
 Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getForumPostsDetails');
 
-
+Route::get('api/chat_image_page','ApiController@chatImagePage');
 
 /*
 |--------------------------------------------------------------------------
@@ -282,7 +289,7 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
     Route::get('forum-post-reply/{forumpostid}', 'SearchController@forumPostReply');
 
     Route::post('search-forum', 'SearchController@searchForum');
-   
+	Route::get('search-forum', 'SearchController@searchForumGet');
 
 	Route::group(['middleware' => 'web'], function () {
     Route::auth();
@@ -292,7 +299,6 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 	Route::post('dashboard', 'DashboardController@dashboard');
 	Route::get('settings/privacy', 'DashboardController@settings');	
 	Route::post('settings/privacy', 'DashboardController@settings');
-	//Route::get('/', 'DashboardController@dashboard');	
 	Route::get('chatroom', 'DashboardController@chatroom');
 	Route::get('friends', 'DashboardController@friendRequests');
 	Route::get('invite-friends', 'ContactImporter@inviteFriends');
@@ -301,11 +307,17 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 
 	Route::get('group', 'DashboardController@group');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
-	Route::get('subgroup/{parentid}/{name}', 'DashboardController@subgroup');
-	Route::get('groupchat/{parentname}', 'DashboardController@groupchat');
-	Route::get('groupchat', 'DashboardController@groupchat');	
+	Route::get('sub-cat-group/{parentid}','DashboardController@subCatGroup');
+	Route::get('groupchat/{id}', 'DashboardController@groupchat');
+		Route::get('groupchat', function(){
+			return redirect('group');
+	});
+	Route::post('groupchat', 'DashboardController@groupchat');	
 
-	Route::get('groupchat/pg/{groupid}/{groupname}','DashboardController@groupchat');
+	Route::get('groupchat/pg/{groupid}','DashboardController@privateGroupChat');
+
+	Route::get('friends-chat','DashboardController@friendsChat');
+	
 
 	Route::get('profile/{id}', 'DashboardController@profile');
 	Route::post('profile/{id}', 'DashboardController@profile');
@@ -368,7 +380,7 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 
 	Route::get('register/verify/{confirmation_code}', [
     'as' => 'confirmation_path',
-    'uses' => 'Auth\AuthController@confirm'
+    'uses' => 'SearchController@confirm'
 	]);
 
 

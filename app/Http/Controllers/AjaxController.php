@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
 ,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments;
 
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
 use App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth, Mail;
-use XmppPrebind;
-use \Exception;
+
+use \Exception,Route;
 use App\Library\Converse, Config;
+use Illuminate\Support\Facades\Request;
 
 class AjaxController extends Controller
 {
@@ -76,8 +77,12 @@ class AjaxController extends Controller
 		}else{
 
 			if(Auth::attempt(['email' => $email, 'password'=>$password , 'is_email_verified'=>
-				'Y'], $log))
+				'Y'], $log)){
+				//$current_url = Request::path();
+				//print_r($current_url);die;
 				echo 'success';
+			}
+				
 			else{
 				$verified = User::where('email',$email)->value('is_email_verified');
 				if($verified == 'N')
@@ -284,8 +289,7 @@ comments;
 
 		exit;
 	}
-
-
+	/**
 	public function getxmppuser(){
 
 		$status=0;
@@ -306,11 +310,56 @@ comments;
 			$status = 1;
 		}
 
-		// $sessionInfo['status']=$status;	  
-		// echo json_encode($sessionInfo); 
-		// exit;
 		return $sessionInfo;
  	}
+	**/
+
+	
+	public function getProfileDetail(){
+		$arguments = Input::all();
+		$Image = '';
+		if( isset($arguments['xmpp']) && !empty($arguments['xmpp']) ) {
+			$xmppusername = $arguments['xmpp'];
+			$user = User::where('xmpp_username', $xmppusername)->first();
+			if( $user ){
+				$Image = '/uploads/user_img/'.$user->profile_pic_url;
+			}
+		}
+		echo json_encode( array( 'image' => $Image ) );
+	}
+
+
+	public function getxmppuser(){
+
+		$status=0;
+		$authuser = Auth::User();
+
+		if ( !empty($authuser->xmpp_username) && !empty($authuser->xmpp_password) ) 
+		{
+			$response = Converse::ejabberdConnect( $authuser );
+			if(!is_array($response)){				
+                $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
+				$response = Converse::ejabberdConnect( $xmppUserDetails );
+			}
+		}else{
+			$xmppUserDetails = Converse::createUserXmppDetails($authuser);
+            $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
+			$response = Converse::ejabberdConnect( $xmppUserDetails );
+		}
+
+		if(is_array($response) && count($response) > 0)
+		{
+			$status = 1;
+		}
+
+		$response['status']=$status;	  
+		// echo json_encode($sessionInfo); 
+		// exit;
+		return $response;
+ 	}
+
+
+
 
 
 	public function searchfriend(){
@@ -979,7 +1028,7 @@ comments;
 
 		if (stripos($name, $input) !== false) {
 			  $data[] = '<li > 
-				<a href="#" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
+				<a href="javascript:void(0)" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
 					<span class="chat-thumb"style="background: url('.$user_picture.');"></span>
 					<span class="title">'.$name.'</span>
 				</a>
@@ -1111,18 +1160,25 @@ comments;
 
 	public function delPrivateGroup()
 	{
-		$input=Input::get('pid');
-		$groupname = DB::table('groups')->where('id',$input)->value('title');
-		$groupname=$groupname."_".$input;
-		$converse=new Converse;
+		$input = Input::get('pid');
+		$userXamp = Auth::User()->xmpp_username;
+		
+		$groupname  = DB::table('groups')->where('id',$input)->value('title');
+		$groupname  = preg_replace('/\s+/', '_', $groupname);
+		$groupname  = strtolower($groupname);
+		$groupname  = $groupname."_".$input;
+		$converse = new Converse;
 		$converse->deleteGroup($groupname);
 		
-		$Message = json_encode( array( 'type' => 'privatechatremove', 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
-		$converse->broadcast($userXamp,$value,$Message);
+		$Message = json_encode( array( 'type' => 'privatechatdelete', 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
+		$xmp = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$input)->pluck('xmpp_username');		
+		foreach ($xmp as $key => $value) {
+			$converse->broadcast($userXamp,$value,$Message);
+		}
 		
 		Group::where('id',$input)->where('owner_id',Auth::User()->id)->delete();
 		GroupMembers::where('group_id',$input)->delete();
-
+		
 
 	}
 
@@ -1133,15 +1189,18 @@ comments;
 	public function delUser()
 	{
 		$input=Input::all();
-
+		$userXamp  = Auth::User()->xmpp_username;
 		$groupname = DB::table('groups')->where('id',$input['gid'])->value('title');
-		$groupname=$groupname."_".$input['gid'];
+		$groupname = preg_replace('/\s+/', '_', $groupname);
+		$groupname = strtolower($groupname);
+		$groupname = $groupname."_".$input['gid'];
 		
-		$converse=new Converse;
-		$xmp=DB::table('users')->where('id',$input['uid'])->value('xmpp_username');            
-      
-        $converse->removeUserGroup($groupname,$xmp);
-
+		$converse	= new Converse;
+		$xmp		= DB::table('users')->where('id',$input['uid'])->value('xmpp_username');            
+		$converse->removeUserGroup($groupname,$xmp);
+        $Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
+		$converse->broadcast($userXamp,$xmp,$Message);
+		
 		GroupMembers::where('group_id',$input['gid'])->where('member_id',$input['uid'])->delete();
 	}
 
@@ -1240,7 +1299,7 @@ comments;
 			$user_id = Auth::User()->id;
 		else
 			$user_id="";
-				$model = User::where('id','!=',$user_id)
+	           $model = User::where('id','!=',$user_id)
                             ->where('first_name','LIKE','%'. $keyword.'%')
                             ->orWhere('last_name','LIKE','%'. $keyword.'%')
                             ->skip($offset)
@@ -1707,7 +1766,7 @@ comments;
 		if($subforums->isEmpty())
 			echo 'No';
 		else{
-			$subforumArr[] = "<option>SubCategory</option>";
+			$subforumArr[] = "<option>Sub Category</option>";
 		foreach($subforums as $query){
 		if($query->title == "Country,State,City")
 		 	$query->title = "City";			
@@ -1793,6 +1852,83 @@ comments;
 				echo $str;
 			}	
 	}
+	
+	public function leavePrivateGroup(){
 
+		$privategroupid = Input::get('pid');
+		$userXamp = Auth::User()->xmpp_username;
+		$groupname = DB::table('groups')->where('id',$privategroupid)->value('title');
+		$groupname=$groupname."_".$privategroupid;
+
+		$converse=new Converse;
+		$xmp=DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
+
+		$converse->removeUserGroup($groupname,$xmp);
+		$Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
+		
+		$converse->broadcast($userXamp,$xmp,$Message);
+
+		GroupMembers::where('group_id',$privategroupid)->where('member_id',Auth::User()->id)->delete();
+
+    }
+	
+	public function forumDelConfirm()
+	{
+		$input = Input::all();
+
+		if($input['type'] == "post"){
+
+			$data = ['class' => "forumpostdelete",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> $input['breadcrum'],
+					 'reply_post_id' => "",
+					 'gid' => "", 
+					 'message' => "All the replies and comments related to this post will be deleted. Are you sure you want to delete this post?"];
+		
+		}else if($input['type'] == "reply"){
+
+			$data = ['class' => "forumreplydelete",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => $input['reply_post_id'],
+					 'gid' => "",
+					 'message' => "All the comments related to this post will be deleted. Are you sure you want to delete this reply?"];
+		}else if($input['type'] == "broadcast"){
+				$data = ['class' => "broadcastdel",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => "",
+					 'message' => "Are you sure you want to delete this broadcast?"];
+
+		}else if($input['type'] == "private"){
+				$data = ['class' => "delprivategroup",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => "",
+					 'message' => "Are you sure you want to delete this group?"];
+
+		}else if($input['type'] == "private-leave"){
+				$data = ['class' => "userleave",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => "",
+					 'message' => "Are you sure you want to leave this group?"];
+		}else if($input['type'] == "del-private-member"){
+				$data = ['class' => "deluser",
+					 'id' => $input['type_id'],
+					 'breadcrum'=> "",
+					 'reply_post_id' => "",
+					 'gid' => $input['gid'],
+					 'message' => "Are you sure you want to delete this user from  the group?"];
+		}
+
+
+		return view('forums.deleteconfirmbox')
+			   		->with('data',$data);
+	}
+	
 }
 	

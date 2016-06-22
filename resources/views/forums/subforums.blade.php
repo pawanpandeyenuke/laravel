@@ -18,11 +18,11 @@ if($mainforum == "Doctor")
 	   <div class="container">
 	    <div class="row">
 
-	      	@if(Auth::check())
-	            @include('panels.left')
-	           @else
-	            @include('panels.leftguest')
-	           @endif
+				@if(Auth::check())
+			      @include('panels.left')
+			  @else
+			      @include('panels.leftguest')
+			  @endif
 	     <div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title green-bg">
@@ -31,13 +31,12 @@ if($mainforum == "Doctor")
 
 					<div class="padding-data-inner">
 						@include('forums.searchforum')
-						
+						@if($flag == 0)
 						<div class="forum-srch-list">
-							<div class="fs-breadcrumb"><a href="{{url('forums')}}" title="">Home</a> > {{$mainforum}}</div>
+							<div class="fs-breadcrumb margin-bottom"><a href="{{url('forums')}}" title="">Home</a> > {{$mainforum}}</div>
 							<div class="table-responsive">
 								<table class="table">
 									@if(!empty($subforums))
-									  @if($flag == 0)
 										@foreach($subforums as $data)
 										<?php
 										 	$count = \App\ForumPost::where('category_id',$data->id)->get()->count();
@@ -48,10 +47,8 @@ if($mainforum == "Doctor")
 													$date = "No Posts";
 											else
 												$date = $data->updated_at->format('d, M h:i a');
-										?>	
-
-													@if($fieldsdata)
-													 <?php  $subid1 = \App\Forums::where('parent_id',$data->id)->pluck('id');
+										?>	@if($fieldsdata)
+													 <?php $subid1 = \App\Forums::where('parent_id',$data->id)->pluck('id');
 															$count1 = \App\ForumPost::whereIn('category_id',$subid1)->get()->count(); ?>
 															<tr>
 																<td>{{ $data->title }}</td>
@@ -63,93 +60,141 @@ if($mainforum == "Doctor")
 															<tr>
 																<td>{{ $data->title }}</td>
 																<td>{{$date}}</td>
-																<!-- <td>31, Jan 12:00 pm</td> -->
 																<td><div class="count text-center"><span>{{$count}}</span></div></td>
 																<td><a href="{{url("view-forum-posts/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
 															</tr>
 													@endif
 										@endforeach	
-									  @else
-										 	{!! Form::open(array('url' => 'view-forum-posts', 'method' => 'post', 'id' => 'forum_select_form', ' novalidate' => 'novalidate')) !!}
-												@foreach($subforums as $data)
-									            <?php  
-									                $titledata = explode(' ', $data->title);
-									                if(is_array($titledata)){
-									                    $title = strtolower(implode('', $titledata));
-									                }                        
-									            ?>
-												<div class="radio-cont radio-label-left">
-													<input class="group-radio subcategory" type="radio" name="subcategory" value="{{ $title }}" id="{{ $title }}">
-													<label for="{{ $title }}">{{ $data->title }}</label>
-													@if($mainforum == 'Doctor')
-
-													  @if($title == 'international')
-													  	<div class="subs" style="display:none">
-													  		 <select name="i-diseases" class="search-field boxsize pr-edit" id="diseases-forum" >
-																@foreach($diseases as $doc)					
-																	<option value="{{$doc}}">{{$doc}}</option>
-																@endforeach
-															</select>
-													  	</div>
-													  	@endif
-													@endif
-
-													@if($title == 'country')
-														<div class="subs" style="display:none">
-														<select name="country1" class="search-field boxsize pr-edit" id="country">
-															@foreach($countries as $data)					
-																	<option value="{{$data}}">{{$data}}</option>
-															@endforeach
-														</select>
-														@if($mainforum == 'Doctor')
-														  <select name="c-diseases" class="search-field boxsize pr-edit" id="diseases-forum">
-																@foreach($diseases as $doc)					
-																	<option value="{{$doc}}">{{$doc}}</option>
-																@endforeach
-															</select>
-														  @endif
-														 </div>
-													@elseif($title == 'country,state,city')
-														<div class="subs" style="display:none">
-															<select name="country" class="search-field boxsize pr-edit" id="subcountry-forum">
-																<option value="">Country</option>
-																@foreach($countries as $data)					
-																	<option value="{{$data}}">{{$data}}</option>
-																@endforeach
-															</select>
-
-															<select name="state" class="search-field boxsize pr-edit" id="substate-forum">
-																<option value="">State</option>
-															</select>
-															
-															<select name="city" class="search-field boxsize pr-edit" id="subcity-forum">
-																<option value="">City</option>
-															</select>
-														 @if($mainforum == 'Doctor')
-														  <select name="csc-diseases" class="search-field boxsize pr-edit" id="diseases-forum">
-																@foreach($diseases as $doc)					
-																	<option value="{{$doc}}">{{$doc}}</option>
-																@endforeach
-															</select>
-														 @endif
-														</div>
-													@endif
-												</div> 
-												@endforeach
-												<div class="alert alert-danger alert-forum" style="display: none;">
-													
-												</div>
-												<div class="btn-cont text-center">
-													<button type="submit" class="btn btn-primary btn-lg">Enter Forum</button>
-												</div>
-												<input type="hidden" name="mainforum" value=
-												"{{$mainforum}}">
-									    	{!! Form::close() !!}
-									  @endif
-									@endif
+										@endif
 								</table>
 							</div>
 						</div><!--/forum search list-->
+						@else
+				 			<div class="fs-breadcrumb margin-bottom">
+									Home > {{$mainforum}}
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<div class="btn-tab-cont">
+				 						<ul class="nav nav-tabs row" role="tablist">
+												@foreach($subforums as $data)
+ <?php  
+									                $titledata = explode(' ', $data->title);
+									                if(is_array($titledata)){
+									                    $title = strtolower(implode('', $titledata));
+									                } 
+									                if($data->title == "Country,State,City"){
+					                            	$data->title = "Country, State, City";
+					                            	$aria = "csc-tab";
+						                            }
+						                            else if($data->title == "Country")
+						                            	$aria = "country-tab";
+						                            else if($data->title == "International")
+						                            	$aria = "international";                    
+?>
+												 <li role="presentation" class="col-md-4"><a href="#{{$aria}}" aria-controls="{{$aria}}" role="tab" data-toggle="tab">{{$data->title}}</a></li>
+												@endforeach
+											</ul>
+											<div class="tab-content">
+												  <div role="tabpanel" class="tab-pane" id="international">
+													    {!! Form::open(array('url' => 'view-forum-posts', 'method' => 'post', 'id' => 'forum_select_form_int', ' novalidate' => 'novalidate')) !!}
+														    	<input type="hidden" name="mainforum" value="{{$mainforum}}" />
+														    	<input type="hidden" name="subcategory" value="international" />
+													    	@if($mainforum == "Doctor")
+													    		<div class="row">
+													    			<div class="col-md-4 col-md-offset-4">
+													    				<select name="i-diseases" class="form-control">
+														    				@foreach($diseases as $doc)					
+																				<option value="{{$doc}}">{{$doc}}</option>
+																			@endforeach
+																		</select>
+													    			</div>
+													    		</div>
+													    	@endif
+																	<div class="tab-btn-cont">
+																		<button type="submit" class="btn btn-primary">Enter Forum</button>
+																	</div>
+														  {{ Form::close() }}
+												  </div>
+
+												  <div role="tabpanel" class="tab-pane" id="country-tab">
+															{!! Form::open(array('url' => 'view-forum-posts', 'method' => 'post', 'id' => 'forum_select_form_country', ' novalidate' => 'novalidate')) !!}
+													    		<input type="hidden" name="mainforum" value="{{$mainforum}}" />
+													    		<input type="hidden" name="subcategory" value="country" />
+																<div class="row">
+																	<?php 
+																		if($mainforum == "Doctor")
+																			$cls = "col-md-offset-2";
+																		else
+																			$cls = "col-md-offset-4";
+																	?>
+																	<div class="col-md-4 {{$cls}}">
+																		<select name="country1" class="form-control">
+																			@foreach($countries as $data)					
+																				<option value="{{$data}}">{{$data}}</option>
+																			@endforeach
+																		</select>
+																	</div>
+																	@if($mainforum == "Doctor")
+																	<div class="col-md-4">
+													    				<select name="c-diseases" class="form-control">
+													    					@foreach($diseases as $doc)					
+																				<option value="{{$doc}}">{{$doc}}</option>
+																			@endforeach
+																		</select>
+																	</div>
+																	@endif
+																</div>
+																<div class="tab-btn-cont">
+																	<button type="submit" class="btn btn-primary">Enter Forum</button>
+																</div>
+															{{ Form::close() }}
+												  </div>
+
+												  <div role="tabpanel" class="tab-pane" id="csc-tab">
+													   	{!! Form::open(array('url' => 'view-forum-posts', 'method' => 'post', 'id' => 'forum_select_form', ' novalidate' => 'novalidate')) !!}
+														    	<input type="hidden" name="mainforum" value="{{$mainforum}}" />
+														    	<input type="hidden" name="subcategory" value="country,state,city" />
+																<div class="row">
+																	<div class="col-md-4">
+																		<select name="country" class="form-control" id="subcountry-forum">
+																				<option value="">Country</option>
+																			@foreach($countries as $data)					
+																				<option value="{{$data}}">{{$data}}</option>
+																			@endforeach
+																		</select>
+																	</div>
+																	<div class="col-md-4">
+																			<select name="state" class="form-control" id="substate-forum">
+																					<option>State</option>
+																			</select>
+																	</div>
+																	<div class="col-md-4">
+																			<select name="city" class="form-control" id="subcity-forum">
+																					<option>City</option>
+																			</select>
+																	</div>
+																	@if($mainforum == "Doctor")
+																	<div class="col-md-4 col-md-offset-4 margin-top20">
+												    				<select name="csc-diseases" class="form-control">
+												    					@foreach($diseases as $doc)					
+																				<option value="{{$doc}}">{{$doc}}</option>
+																			@endforeach
+																		</select>
+																	</div>
+												    			@endif
+																</div>
+																<div class="tab-btn-cont">
+																		<button type="submit" class="btn btn-primary csc">Enter Forum</button>
+																</div>
+															{{ Form::close() }}
+												  </div>
+											</div>
+									 	</div>
+								</div>
+						  </div>									 
+						@endif
 					</div>
 				</div><!--/page center data-->
 				<div class="shadow-box bottom-ad"><img src="{{url('images/bottom-ad.jpg')}}" alt="" class="img-responsive"></div>
@@ -161,48 +206,6 @@ if($mainforum == "Doctor")
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
  <script type="text/javascript">
- 	
- 	
- $(document).on('click', '.group-radio', function(){
-	
-	$('.alert-forum').hide();
- 	if($(this).is(':checked')){
-		$(this).closest('.radio-cont').nextAll().find('.subs').hide();
-		$(this).closest('.radio-cont').find('.subs').show();
-		$(this).closest('.radio-cont').prevAll().find('.subs').hide();
- 	}
-
- });
-
-
-      $( "#forum_select_form" ).submit(function( event ) {
-      if (!$("input[name='subcategory']:checked").val()) {
-      	$('.alert-forum').html('Please select a subcategory to continue.');
-      	$('.alert-forum').show();
-        event.preventDefault();
-    	}
-     else {
-	  if($("input[name='subcategory']:checked").val() == "country,state,city"){
-	  	if($("#subcountry-forum").val()=="" || $("#substate-forum").val()=="" || $("#subcity-forum").val() == ""){
-		  	if($("#subcountry-forum").val()==""){
-		  		$('.alert-forum').html('Please select a country to continue.');
-		  		$("#subcountry-forum").focus();
-		  	}
-		  	else if($("#substate-forum").val()==""){
-		  		$('.alert-forum').html('Please select a state to continue.');
-		  		$("#substate-forum").focus();
-		  	}
-		  	else if($("#subcity-forum").val()==""){
-		  		$('.alert-forum').html('Please select a city to continue.');
-		  		$("#subcity-forum").focus();
-		  	}
-			event.preventDefault();	  	
-		  	$('.alert-forum').show();
-	  	}
-	  }
-    }
-    });
-
 
     $("#forum_select_form").validate({ 
         errorElement: 'span',
@@ -210,7 +213,8 @@ if($mainforum == "Doctor")
         rules: {
             subcategory: { required: true },
             country: { required: true },
-            state: { required: true }
+            state: { required: true },
+            city: {required:true}
         },
         messages:{
             subcategory:{
@@ -221,7 +225,10 @@ if($mainforum == "Doctor")
             },
             state:{
                 required: "State is required."
-            }
+            },
+            city:{
+                required: "City is required."
+            } 
         }
     });
 

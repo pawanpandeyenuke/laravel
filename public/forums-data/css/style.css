@@ -47,6 +47,7 @@ span.u-img {
   color: #7e8c8d;
   font-size: 12px;
   line-height: 20px;
+  word-wrap: break-word;
 }
 .post-header span{
 	display: block;

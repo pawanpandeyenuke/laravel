@@ -35,7 +35,7 @@
 							if(!($count==0) || $data['owner_id']==Auth::User()->id)
 							{          
 							?>
-								<div class="single-list" data-groupid="">
+								<div class="single-list private-group_{{$data['id']}}" data-groupid="">
 									<div class="row">
 										<div class="col-sm-9">
 											<div class="bclist-detail bclist1">
@@ -51,9 +51,9 @@
 										<div class="col-sm-3">
 											<div class="bl-del text-right">
 											<?php if($data['owner_id']==Auth::User()->id){ ?>
-												<button type="button" value="{{$data['id']}}" class="bl-del-btn delprivategroup"><i class="fa fa-trash"></i></button>
+												<button type="button" value="{{$data['id']}}" class="bl-del-btn del-confirm-forum" data-forumtype = "private"><i class="fa fa-trash"></i></button>
 												<?php } else{ ?>
-												<a href="{{url("private-group-list/".$data['id'])}}" title=""  class="btn btn-primary userleave">Leave Group</a>
+												<button value="{{$data['id']}}" title=""  class="btn btn-primary del-confirm-forum" data-forumtype = "private-leave">Leave Group</button>
 												<?php }?>
 											</div>
 										</div>

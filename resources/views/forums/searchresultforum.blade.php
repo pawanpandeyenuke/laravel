@@ -1,6 +1,10 @@
 @extends('layouts.dashboard')
 
 <?php
+	if($keyword == "")
+		$show = $breadcrum;
+	else
+		$show = $keyword;
  ?>
 
 <style type="text/css">
@@ -30,19 +34,11 @@
 						 	<!-- <div class="fix-header"> -->
 								 <div class="fs-breadcrumb">Search Result</div>
 
-								<div class="forum-post-cont">
-									<div class="posts-count search-forum-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{$postscount}}</span> Posts found for "{{$keyword}}"</div>
+								<div class="forum-post-cont">		
+									<div class="posts-count search-forum-count"><i class="flaticon-two-post-it"></i>
+										<span class = "count"> {{$postscount}}</span> Posts found for "{{$show}}"
+									</div>
 								</div><!--/forum post cont-->
-
-								@if(Auth::check())
-								<!---New Forum Post-->
-							<!-- 	<div class="f-post-form">
-									<textarea name="topic" class="form-control forumpost" data-emojiable="true"></textarea>
-									<button type="button" class="btn btn-primary addforumpost" value="$breadcrum">Submit</button>
-								</div> -->
-							<!-- </div> -->
-							<!---END New Forum Post-->
-							@endif
 
 							<div class="modal fade edit-forumpost-popup" id="forumpost-edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost"></div>
 
@@ -96,7 +92,7 @@
 										@if($replyCount == 0)
 											<button class="editforumpost" value="{{$data->id}}" title="Edit" ><i class="flaticon-pencil" ></i></button>
 										@endif	
-											<button class="forumpostdelete" value="{{$data->id}}" data-breadcrum = "{{$data->forum_category_breadcrum}}" data-search=
+											<button class="del-confirm-forum" data-forumtype = "post" value="{{$data->id}}" data-breadcrum = "{{$data->forum_category_breadcrum}}" data-search=
 											"1"><i class="flaticon-garbage" ></i></button>
 										</div>
 									@endif
@@ -121,6 +117,7 @@
 							</div>
 							@endif
 						</div><!--/forum search list-->
+				
 					</div>
 				</div><!--/page center data-->
 				<div class="shadow-box bottom-ad"><img src="{{url('images/bottom-ad.jpg')}}" alt="" class="img-responsive"></div>

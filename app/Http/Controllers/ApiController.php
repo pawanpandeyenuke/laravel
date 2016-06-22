@@ -1090,6 +1090,19 @@ class ApiController extends Controller
 				$friend->user_id = $arguments['user_id'];
 				$request = $friend->save();
 
+				// @ Send push notification on request accept action
+				if( $request ){
+					$user = User::find($arguments['user_id']);
+					$friend = User::find($arguments['friend_id']);
+			 		$subjectName = $user->first_name.' '.$user->last_name;
+			 		$parameters = array(
+			 				'token' => $friend->push_token,
+			 				'device_type' => $friend->device_type,
+			 				'message' => "$subjectName has accepted your friend request",
+			 			);
+					$response = Converse::notifyMe( $parameters );
+				}
+
 				// Add friends to roster in API.
 				$arrayOfIds = array($arguments['user_id'], $arguments['friend_id']);
 				$udetail = User::whereIn('id', $arrayOfIds)->get()->toArray();
@@ -2446,5 +2459,42 @@ class ApiController extends Controller
 		}
 
 		return $this->output();			
+	}
+
+	public function uploadChatImage(){
+		
+	try{
+                        $status="Failed";
+                $message="";
+                $url1="";
+                        $input = Request::all();
+                        if( $input )
+                        {
+                                if( Request::hasFile('chatsendimage') )
+                                {
+                                                                                // Upload file
+                                        $fileToBeUploaded = Request::file('chatsendimage');
+                                        $url = time().'--'.implode('_',explode(' ',$fileToBeUploaded->getClientOriginalName()));
+                                        $fileToBeUploaded->move('uploads/media/chat_images/', $url);
+                                        $url1=url('uploads/media/chat_images/'.$url);
+                                        // Add entry
+
+                                        $status = 'success';
+                                        $message = 'Image uploaded successfuly.';
+                                }
+                        }
+
+                }catch(Exception $e)
+                {
+                        $message = $e->getMessage();//'Image not uploaded.';//
+                        $status='Failed';
+                }
+
+          return  json_encode(array('status'=>$status,'message'=>$message,'url'=>$url1,'name'=>$url,'type'=>'image'));
+    }
+
+	public function chatImagePage()
+	{
+		return view('chat_image');die;
 	}
 }

@@ -63,8 +63,8 @@
 												<input type="checkbox" name="" id="checkbox_forumpost_replypage_{{$post->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$post->id}}" {{ isset($likedata[0])?'checked':'' }}/>	
 												<label for="checkbox_forumpost_replypage_{{$post->id}}" title="Like Post" class="css-label"></label>
 											  @else
-											  <input type="checkbox" name="" id="guest-reply" class="css-checkbox"/>
-											  <label for="guest-reply" class="css-label"></label>
+											  <input type="checkbox" disabled="disabled" name="" id="guest-reply" class="css-checkbox"/>
+											  <label for="guest-reply" data-toggle="modal" data-target="#LoginPop" class="css-label"></label>
 											  @endif
 											  </div>
 											  <span class="plike-count" title="Likes">{{$likeCount}}</span>
@@ -78,7 +78,9 @@
 								<p> {{$post->title}} </p>
 								<div class="text-right">
 								@if(Auth::check())
-								  <button type="button" class="btn btn-primary mpost-rply-btn" title="Write a reply">Reply</button>
+								  <!-- <button type="button" class="btn btn-primary mpost-rply-btn" title="Write a reply">Reply</button> -->
+								@else
+								  <button type="button" data-toggle="modal" data-target="#LoginPop" class="btn btn-primary" title="Write a reply">Reply</button>
 								@endif
 								</div>
 							</div>
@@ -86,14 +88,14 @@
 							<div class="forum-post-replies">
 							
 								<div class="forum-post-cont">
-									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class="forumreplycount"> {{$replycount}}</span> Posts</div>
+									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class="forumreplycount"> {{$replycount}}</span> Replies</div>
 								</div><!--/forum post cont-->
-
-								<div class="f-post-form f-post-reply-form">
+							@if(Auth::check())
+								<div class="f-post-form">
 									<textarea name="" class="form-control forumreply" data-emojiable="true"></textarea>
 									<button type="button" class="btn btn-primary forumpostreply" data-forumpostid = "{{$post->id}}" title="Click to post a Reply">Submit</button>
 								</div>
-
+							@endif
 								<div class="modal fade edit-forumpost-popup" id="forumreply-edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost"></div>
 
 						<div class="f-post-list-outer clearfix forumreplylist">
@@ -132,8 +134,8 @@
 												<input type="checkbox" name="" id="checkbox_forumreply_{{$forumreply->id}}" class="css-checkbox likeforumreply" data-forumreplyid="{{$forumreply->id}}" {{ isset($likedata[0])?'checked':'' }}/>
 												<label for="checkbox_forumreply_{{$forumreply->id}}" title="Like Reply" class="css-label"></label>
 											@else
-												<input type="checkbox" id="guest-reply2" class="css-checkbox"/>
-												<label for="guest-reply2" class="css-label"></label>
+												<input type="checkbox" disabled="disabled" id="guest-reply2" class="css-checkbox"/>
+												<label for="guest-reply2" data-toggle="modal" data-target="#LoginPop" class="css-label"></label>
 											@endif
 											</div>
 											<span class="plike-count forumreplylike"  title="Likes">{{$likeCount}}</span>
@@ -157,7 +159,7 @@
 											@if($userid == Auth::User()->id)
 											<div class="fp-action">
 											<button class='editforumreply' value='{{$forumreply->id}}'data-forumpostid = "{{$post->id}}" title="Edit Reply"><i class='flaticon-pencil'></i></button>
-											<button class='forumreplydelete' title="Delete Reply" value='{{$forumreply->id}}' data-forumpostid = "{{$post->id}}"><i class='flaticon-garbage'></i></button>
+											<button class='del-confirm-forum' data-forumtype = "reply" title="Delete Reply" value='{{$forumreply->id}}' data-forumpostid = "{{$post->id}}"><i class='flaticon-garbage'></i></button>
 											</div>
 											@endif
 											@endif

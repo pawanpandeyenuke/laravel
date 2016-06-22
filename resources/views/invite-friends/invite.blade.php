@@ -35,7 +35,7 @@
 								{{Form::open()}}
 								<div class="b-cast-name">
 									<input type="text" name="emails" value="{{ old('emails') }}" class="form-control bcast-field" placeholder="Enter email address">
-									<span class="field-info">*Enter multiple Email addresses by separating them with comma.</span>
+									<span class="field-info">* Enter multiple emails by separating them with a comma.</span>
 									<div class="btn-cont text-center">
 										<!-- <a href="#" title="" class="btn btn-primary">Invite</a> -->
 										<button class="btn btn-primary btn-lg" type="submit">Invite</button>

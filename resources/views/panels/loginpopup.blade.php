@@ -1,5 +1,5 @@
 <!-- Login Popup -->
-<div class="modal fade" id="LoginPop" tabindex="-1" role="dialog" aria-labelledby="LoginPopLabel">
+<div class="modal fade" id="LoginPop" tabindex="-1" role="dialog" aria-labelledby="LoginPopLabel" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-body">
@@ -56,6 +56,9 @@
                 </div>
 
       </div>
+      <div class="modal-footer text-center login-footer">
+        Not registered yet? <a style="cursor:pointer" href = "{{url('register')}}" title="">Click here</a>
+      </div>
     </div>
   </div>
 </div>
@@ -64,6 +67,12 @@
 <script src="http://malsup.github.com/jquery.form.js"></script>
 <script type="text/javascript">
 
+    if(window.location.pathname == "/" || window.location.pathname == "/register"){
+        $('.login-footer').hide();
+    }else{
+        $('.login-footer').show();
+    }
+    
     $("#loginform").ajaxForm(function(response) { 
          
     if(response){
@@ -85,7 +94,11 @@
             window.location = 'send-verification-link';
 
         else if(response == "success"){
-            window.location = '/dashboard';
+            var url_c = window.location.pathname;
+           if(url_c == "/newpassword")
+		window.location = "/";
+	  else
+		window.location = url_c;
         }else{
             var obj = jQuery.parseJSON( response );
             if( obj.email != null ){

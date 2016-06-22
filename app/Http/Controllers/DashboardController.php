@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use Auth, App\Feed, DB, App\Setting, App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers,App\BroadcastMembers,App\Forums;
+use Auth, App\Feed, DB, App\Setting, App\Category,App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers,App\BroadcastMembers,App\Forums;
 
 use App\Library\Converse, Google_Client, Mail;
 
@@ -29,6 +29,7 @@ class DashboardController extends Controller
 
 	public function dashboard()
 	{
+
         try{ 
             $xmppusername = User::where('id',Auth::User()->id)->value('xmpp_username');
 
@@ -201,239 +202,283 @@ class DashboardController extends Controller
     }
 
 
+    public function subgroup( $parentid = '')
+    {
+        $subgroups = '';
+         if($parentid){
+            $data = Category::where(['parent_id' => $parentid])->where(['status' => 'Active'])->get();
+            $name_check = Category::where('id',$parentid)->value('title');;
+            if($data->isEmpty()){
+                if($name_check == "")
+                    return redirect('group');
+                else
+                    return redirect('groupchat/'.$parentid);
+            }
+            else
+                $subgroups = $data;
+
+        }
+
+        return view('chatroom.subgroups') 
+                ->with('subgroups', $subgroups)
+                ->with('group_name', $name_check);
+
+    }
+
+    public function subCatGroup($parentid = "")
+    {
+        if($parentid){
+            $breadcrumb = "";
+            $store_id = "";
+            $id_arr = explode('-',$parentid);
+
+            foreach ($id_arr as $key => $value) {
+              $cat = Category::where('id',$value)->first();
+                if($cat){
+                    if($key == 0){
+                        if($cat->parent_id != 0)
+                            return redirect()->back();
+                        else{
+                            $store_id = $cat->id;
+                            $next_url = url('sub-cat-group/'.$store_id);
+                            if(sizeof($id_arr) == 1)
+                                $title_id = $cat->title;
+                            else
+                                $title_id = "<a href='$next_url'>$cat->title</a>";
+                            $breadcrumb .= ' > '.$title_id;
+                        }
+                    }else{
+                        $check = Category::where('parent_id',$id_arr[$key-1])->first();
+                        if($check->id="" || $check->selection == "Y")
+                            return redirect()->back();
+                        else{
+                            $store_id .= '-'.$cat->id;
+                            $next_url = url('sub-cat-group/'.$store_id);   
+                            if(end($id_arr))
+                               $title_id = $cat->title; 
+                            else
+                                $title_id = "<a href='$next_url'>$cat->title</a>";
+                            $breadcrumb .= ' > '.$title_id;
+                        }
+                             
+                    }
+
+                } else if($cat == "")
+                    return redirect()->back();
+ 
+            }
+            // print_r($breadcrumb);die;
+                    $last_id = end($id_arr);
+                    $sub_groups = Category::where('parent_id',$last_id)->get();
+
+                    if($sub_groups->isEmpty())
+                        return redirect()->back();
+
+                    return view('chatroom.subcatgroups')
+                            ->with('parent_id',$parentid)
+                            ->with('breadcrumb',$breadcrumb)
+                            ->with('subgroup',$sub_groups);
+            }
+            else
+                return redirect('group');
+
+
+        }
+    
+
     /**
     *   Group sub chatrooms ajax call handling.
     *   Ajaxcontroller@groupchatrooms
     */
-    public function subgroup( $parentid = '', $name = '' )
+
+    public function groupchat($groupid = "")
     {
-
-        // print_r();die;
-        $subgroups = '';
-         if($parentid){
-            $data = DB::table('categories')->where(['parent_id' => $parentid])->where(['status' => 'Active'])->get();
-
-            if( !empty( $data ) ){
-                $subgroups = $data;
-            }
-        }
-        
-        if($name){
-           $varexp =explode('-', $name);
-           $name =implode(' ', $varexp);
-        }
-
-        // print_r($name);die;
-
-        return view('chatroom.subgroups') 
-                ->with('subgroups', $subgroups)
-                ->with('group_name', $name);
-
-    }
-
-
-    /**
-    *   Enter chatrooms ajax call handling.
-    *   Ajaxcontroller@enterchatroom
-    */
-    public function groupchat( $input = '' ,$gname=''){   
-        $groupid=null;
-        if( $input ){
-			if($input!=null && $gname!=null){
-			$groupid=$input;
-			$checkname=DB::table('groups')->where('id',$input)->value('title');
-			$checkname=strtolower($checkname);
-			$checkname=str_replace(" ","-",$checkname);
-				if($checkname!=$gname){
-					return redirect('private-group-list');           
-				} else if($checkname==$gname) {
-					$privategroup=Group::with('members')->where('id',$input)->get()->toArray();
-					$count=0;
-					foreach ($privategroup[0]['members'] as $mem){
-						if($mem['member_id']==Auth::User()->id)
-							 $count++;
-					}
-					if(($count==0) && $privategroup[0]['owner_id']!=Auth::User()->id){
-						return redirect('private-group-list');
-					}
-				}
-        
-			} else {
-				$groupid=$input;
-				$groupname = implode('-', array_map('ucfirst', explode('-', $groupid)));
-				$groupname = implode(',', array_map('ucfirst', explode(',', $groupname)));
-				$groupname =preg_replace('/(?<! )(?<!^)[A-Z]/',' $0', $groupname);
-				$groupname=str_replace(', ',',',$groupname);
-				$groupname=str_replace('-','',$groupname);
-				$groupname=str_replace('It','IT',$groupname);
-				//print_r($groupname);die;
-				$result=DB::table('categories')->where('title',$groupname)->value('id');
-
-				if($result==null) {
-					return redirect('group');
-				}
-			}
-		}
-        $model = new DefaultGroup;
-        if(empty($input)) 
-		$input = Request::all();
-        if( isset($input['subcategory']) ){
-			$res=DB::table('categories')->where('parent_id','!=',0)->pluck('title');
-			$res1=DB::table('categories')->where('parent_id','=',0)->pluck('title');
-			$par=array_unique($res1);
-			$res1=array_map('strtolower',$par);
-			$par=$res1;
-			$sub=array_unique($res);
-			$res=array_map('strtolower',$sub);
-			$sub=$res;
-                 
-			$flag=0;
-			$flag1=0; 
-			// print_r($sub);die;
-			foreach ($sub as $key) {
-				$key = str_replace(" ","", $key);
-				if($input['subcategory']==$key){
-					$flag=1;
-				}
-			}
-			foreach ($par as $key) {
-				$key = str_replace("-", " ", $key);
-				if($input['parentname']==$key){
-					$flag1=1;
-				}
-             }
-			if( ($flag==0 || $flag1==0) && $result==null ){
-                return redirect('group');
-            } else {
-                if($input['subcategory']=='international'){
-                
-                    unset($input['country']); 
-                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);
-                
-                } elseif($input['subcategory']=='professionalcourse'){
-                
-                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata1']]);
-
-                } elseif($input['subcategory']=='subjects'){
-
-                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory'],'coursedata'=>$input['coursedata']]);
-
-                } elseif($input['subcategory']=='country,state,city'){
-                    $newinput=(['parentname'=>$input['parentname'],
-                    'subcategory'=>'csc',
-                    'country'=>$input['country'],
-                    'state'=>$input['state'],
-                    'city'=>$input['city']]);       
-               
-                } elseif ( $input['subcategory']=='country' ){
-                
-                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>'c','country'=>DB::table('country')->where('country_id',$input['country1'])->value('country_name')]);
-
-                } else {
-                   
-                    $newinput=(['parentname'=>$input['parentname'],'subcategory'=>$input['subcategory']]);       
-                
-                }
-
-                $input=$newinput;
-				// echo '<pre>';print_r($input);die;
-			} 
-		} else if(isset($input['country'])||isset($input['country'])||isset($input['state'])||isset($input['city'])){
-				return redirect('group');
-		}
-		if($input!=null && $gname!=null){
-			$input=$gname;
-		}
-        if(is_array($input)){
-            $groupnamedata = array();
-            foreach ($input as $key => $value){
-                $rawdata = explode(' ', $value);
-                if(is_array($rawdata)){ 
-
-                    $data = implode('', $rawdata);
-                    $groupnamedata[] = $data;
-                }else{
-                    $groupnamedata[] = $value;
-                }
-            }
-            $groupname = implode('_', $groupnamedata); 
-            $groupname=strtolower($groupname);
-        } else {
-            $groupname = $input;
-        }
+        $private_group_check = "pub" ;
+        $id=Auth::User()->id;
+        $replace_array =  [' ', '/', ',', '(', ')', "'", '.', ':', ';','&'];
+        if($groupid){
+            $breadcrumb="";
+            $check_name = "";
   
-        if(Request::isMethod('get')){
-            if(is_array($groupname)){
-                 $updatecheck = $model->where('group_name', $groupname)
+            $id_arr = explode('-',$groupid);
+            foreach ($id_arr as $key => $value) {//10-46-147
+              $cat = Category::where('id',$value)->first();
+                if($cat){
+                    if($key == 0){
+                        if($cat->parent_id != 0)
+                            return redirect()->back();
+                        else{
+        
+                            $breadcrumb .= $cat->title;
+                            $check_name .= $cat->title;
+                        }
+                    }else{
+                        
+                        $check = Category::where('parent_id',$id_arr[$key-1])->value('title');
+                        if($check == null){  
+                        }
+                            //return redirect()->back();
+                         else{
+                            $breadcrumb .= '_'.$cat->title;
+                            $check_name .= ' '.$cat->title;
+                         }
+                             
+                    }
+                } else if($cat == "")
+                    return redirect()->back();
+                
+            }
+
+            $check_end = Category::where('parent_id',end($id_arr))->value('id');
+            if($check_end != null)
+                return redirect()->back();
+        //Get users of this group
+
+        //$group_jid = strtolower(str_replace($replace_array, '-', $breadcrumb));
+        $group_jid = preg_replace('/[^A-Za-z0-9\-]/', '_',$breadcrumb);
+        $group_jid = strtolower($group_jid);
+        //print_r($group_jid);die;
+
+        }else{
+        $input = Request::all();
+        $parent_name = strtolower(str_replace($replace_array, '-', $input['parentname']));
+
+                if($input['subcategory']=='International'){
+                    $check_name = $input['parentname'].' > '.$input['subcategory'];
+                    $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
+                    $sub_name = $input['subcategory'];
+                }
+                   
+
+                 elseif($input['subcategory']=='Professional Course'){
+                    $check_name = $input['parentname'].' > '.$input['subcategory'].' > '.$input['coursedata1'];
+                     $sub_name = $input['subcategory'].'_'.$input['coursedata1'];
+                 }
+                   
+
+                 elseif($input['subcategory']=='Subjects'){
+                    $check_name = $input['parentname'].' '.$input['subcategory'].' '.$input['coursedata'];
+                    $sub_name = $input['subcategory'].'_'.$input['coursedata'];
+                 }
+                    
+
+                 elseif($input['subcategory']=='Country, State, City'){
+                    $check_name = $input['parentname'].' '.$input['country'].', '.$input['state'].', '.$input['city'];
+                    $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
+                    $sub_name = 'csc'.'_'.$input['country'].'_'.$input['state'].'_'.$input['city'];
+                 }
+                    
+
+                 elseif ( $input['subcategory']=='Country' ){
+                    $check_name = $input['parentname'].' '.$input['country1'];
+                    $sub_name = 'c'.'_'.$input['country1'];
+                 }
+
+                 else{
+                    $check_name = $input['parentname'].' '.$input['subcategory'];
+                    $sub_name = $input['subcategory'];
+                 }
+               
+
+                $sub_name = str_replace($replace_array,'-',$sub_name);           
+                $group_jid = preg_replace('/[^A-Za-z0-9\-]/', '_',$parent_name.'_'.$sub_name);
+                $group_jid = strtolower($group_jid);
+
+        }
+
+            $model = new DefaultGroup;
+            $updatecheck = $model->where('group_name', $group_jid)
                                 ->where('group_by', Auth::User()->id)
                                 ->get()->toArray();
+            $defGroup = array();
+            $defGroup['group_name'] = $group_jid;
+            $defGroup['group_by'] = Auth::User()->id;
+            if(empty($updatecheck))
+                $model->create($defGroup);
 
-                    $defGroup = array();
-                    $defGroup['group_name'] = $groupname;
-                    $defGroup['group_by'] = Auth::User()->id;
 
-                    if(empty($updatecheck)){
-                        $model = new DefaultGroup;
-                        $response = $model->create($defGroup);
-                    } else{
-                        $id = $updatecheck[0]['id'];
-                        $response = $model->find($id);
-                    }
+            $usersData = DefaultGroup::with('user')->where('group_name', $group_jid)->get()->toArray();
+            
+            $friendid = Friend::where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 
-                    //Get users of this group
-                    $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();          
-                
-            } else {
-				$updatecheck = $model->where('group_name', $groupname)
-							->where('group_by', Auth::User()->id)
-							->get()->toArray();
+            $pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+            
+            $private_group_array = GroupMembers::where('member_id',$id)->pluck('group_id');
+            
+            $privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
 
-                $defGroup = array();
-				$defGroup['group_name'] = $groupname;
-				$defGroup['group_by'] = Auth::User()->id;
-				// print_r($defGroup);die;
-				if($defGroup['group_name'] != ''){
-					if(empty($updatecheck)){
-						$model = new DefaultGroup;
-						$response = $model->create($defGroup);
-					}else{
-						$id = $updatecheck[0]['id'];
-						$response = $model->find($id);
-					}
-				}
-               //Get users of this group
-               $usersData = $model->with('user')->where('group_name', $groupname)->get()->toArray();  
-            }
-        }
-        $counter=0;
-        if( $groupid!=null ) {
-			$members=DB::table('members')->where('group_id',$groupid)->pluck('member_id');
-			foreach ($members as $key => $value) {
-				if( $value==Auth::User()->id ){
-					$counter++;
-				}
-			}
-			if( $counter==0 && $input==null ) {
-				return redirect('private-group-list');
-			}
-		}
-
-        $id=Auth::User()->id;
-        $friendid=DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
-        $pendingfriend=DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
-        $privategroup=Group::with('members')->orderBy('id','DESC')->get()->toArray();
-        return view('chatroom.groupchat')
-                    ->with('groupname', $groupname)
+                 return view('chatroom.groupchat')
+                    ->with('groupname', $check_name)
+                    ->with('group_jid',$group_jid)
                     ->with('userdata', $usersData)
                     ->with('friendid',$friendid)
                     ->with('authid',$id)
                     ->with('pendingfriend',$pendingfriend)
-                    ->with('exception',$input)
-                    ->with('pgid',$groupid)
+                    ->with('exception',$private_group_check)
                     ->with('privategroup',$privategroup);
-   }
+    }
 
- 
+    public function privateGroupChat($groupid = "")
+    {
+        $private_group_check = "private";
+        $usersData = "";
+        $id = Auth::User()->id;
+            if($groupid){
+                $group_check = Group::where('id',$groupid)->select('group_jid','title')->first();
+                if(empty($group_check))
+                    return redirect('private-group-list');
+                else{
+					
+					$group_jid = $group_check->group_jid;
+                    $group_name = $group_check->title;
+
+                    $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+
+                    $pendingfriend = DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+                    
+                    $private_group_array = GroupMembers::where('member_id',Auth::User()->id)->pluck('group_id');
+            
+                    $privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
+                }
+
+        }
+
+                return view('chatroom.groupchat')
+                    ->with('groupname', $group_name)
+                    ->with('group_jid',$group_jid)
+                    ->with('userdata', $usersData)
+                    ->with('friendid',$friendid)
+                    ->with('authid',$id)
+                    ->with('pendingfriend',$pendingfriend)
+                    ->with('exception',$private_group_check)
+                    ->with('privategroup',$privategroup);
+    }
+
+    public function friendsChat()
+    {
+        $private_group_check = null ;
+        $check_name = "";
+        $group_jid = "";
+        $usersData = "";
+        $id = Auth::User()->id;
+        $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+
+        $pendingfriend = DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+        
+        $private_group_array = GroupMembers::where('member_id',$id)->pluck('group_id');
+        
+        $privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
+
+         return view('chatroom.groupchat')
+                    ->with('groupname', $check_name)
+                    ->with('group_jid',$group_jid)
+                    ->with('userdata', $usersData)
+                    ->with('friendid',$friendid)
+                    ->with('authid',$id)
+                    ->with('pendingfriend',$pendingfriend)
+                    ->with('exception',$private_group_check)
+                    ->with('privategroup',$privategroup);
+    }
 
     public function profile( $id )
     {
@@ -508,7 +553,7 @@ class DashboardController extends Controller
             $arguments['birthday'] = date('Y-m-d',$time);
  
             if($arguments){
-
+                // echo '<pre>';print_r($arguments);die;
                 unset($arguments['_token']);
 
                 //Check for image upload.
@@ -519,12 +564,24 @@ class DashboardController extends Controller
                     $file->move(public_path('uploads/user_img'), $image_name);
                 }
                 
-                $min = countryMobileLength($arguments['country_code']);
-                $len = strlen($arguments['phone_no']);
-                 if($len > $min[$arguments['country_code']]['max'] || $len < $min[$arguments['country_code']]['min'])
-                    $arguments['phone_no'] = "";
-                $arguments['country_code'] = empty($arguments['phone_no']) ? '' : $arguments['country_code'];
-                // echo '<pre>';print_r($arguments);die;
+                if($arguments['country_code'] != 0 && $arguments['phone_no'] != null){
+                    $min = countryMobileLength($arguments['country_code']);
+                    $len = strlen($arguments['phone_no']);
+                    
+                    if(array_key_exists($arguments['country_code'], $min)){
+                        if($len > $min[$arguments['country_code']]['max'] || $len < $min[$arguments['country_code']]['min']){
+                            $arguments['phone_no'] = "";                        
+                        }
+                    }
+                    // print_r($min[$arguments['country_code']]['max']);die;
+                    $arguments['country_code'] = empty($arguments['phone_no']) ? '' : $arguments['country_code'];
+                }
+
+
+                if(empty($arguments['state'])){
+                    $arguments['city'] = '';
+                }
+
                 foreach ($arguments as $key => $value) {
                     if( $key != 'email' && $key != 'password' ){
                         User::where([ 'id' => $id ])
@@ -691,22 +748,6 @@ class DashboardController extends Controller
     
     public function privateGroupList($privategroupid='')
     {
-
-        if($privategroupid)
-        {
-			$groupname = DB::table('groups')->where('id',$privategroupid)->value('title');
-			$groupname=$groupname."_".$privategroupid;
-
-			$converse=new Converse;
-			$xmp=DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
-
-			$converse->removeUserGroup($groupname,$xmp);
-			$Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
-			
-			$converse->broadcast($userXamp,$value,$Message);
-
-            GroupMembers::where('group_id',$privategroupid)->where('member_id',Auth::User()->id)->delete();
-        }
         $privategroup=Group::with('members')->orderBy('id','DESC')->get()->toArray();
 
         return view('privategroup.list')->with('privategroup',$privategroup);
@@ -714,48 +755,53 @@ class DashboardController extends Controller
 
     public function privateGroupAdd() {
 
-        if( Request::isMethod('post') ){
+		  if( Request::isMethod('post') ){
+				$userid = Auth::User()->id;
+				$userXamp = Auth::User()->xmpp_username;
+				$input = Request::all();
+	 
+				if( isset($input['groupmembers']) && $input['groupname'] != null ){
+					array_push($input['groupmembers'],$userid);
+					$members=implode(",",$input['groupmembers']);
+					$data = array(
+								'title'=>$input['groupname'],
+								'status'=>'Active',
+								'owner_id'=>$userid,
+						    );  
 
-            $userid = Auth::User()->id;
-            $userXamp = Auth::User()->xmpp_username;
-            $input = Request::all();
- 
-			if( isset($input['groupmembers']) && $input['groupname'] != null ){
-                array_push($input['groupmembers'],$userid);
-                $members=implode(",",$input['groupmembers']);
-                $data = array(
-                        'title'=>$input['groupname'],
-                        'status'=>'Active',
-                        'owner_id'=>$userid,
-                       );  
+					$groupid   = preg_replace('/[^A-Za-z0-9\-]/', '_', $input['groupname']);
+					$groupid   = strtolower($groupid);
+					$converse  = new Converse;
+					$groupdata = Group::create($data);
+					$groupname = $groupid."_".$groupdata->id;
+					
+					$PrivateGroup = Group::find($groupdata->id);
+					$PrivateGroup->group_jid = $groupname;
+					$PrivateGroup->update();
+					
+					$converse->createGroup($groupid,$groupname);
+					
+					foreach ($input['groupmembers'] as $data) {
+						$data1 = array(
+									'group_id'=>$groupdata->id,
+									'member_id'=>$data,
+									'status'=>'Joined',
+								);
+						 GroupMembers::insert($data1);  
+					}
 
-                $groupid=str_replace(' ','_',$input['groupname']);
-                $groupid=strtolower($groupid);
-                $converse=new Converse;
-                $groupdata = Group::create($data);
-                $groupname=$input['groupname']."_".$groupdata->id;
-				$converse->createGroup($groupid,$groupname);
-				foreach ($input['groupmembers'] as $data) {
-					$data1 = array(
-								'group_id'=>$groupdata->id,
-								'member_id'=>$data,
-								'status'=>'Joined',
-							);
-                        GroupMembers::insert($data1);  
-                }
-
-       
-			$xmp=DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
-			$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
-			foreach ($xmp as $key => $value) {
-				$converse->broadcast($userXamp,$value,$Message);
+		   
+					$xmp = DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
+					$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
+					foreach ($xmp as $key => $value) {
+						$converse->addUserGroup( $groupname,$value );
+						$converse->broadcast($userXamp,$value,$Message);
+					}
+				return redirect(url('private-group-list'));       
+			}  else {
+			  return redirect()->back();
 			}
-
-            return redirect(url('private-group-list'));       
-		}  else {
-          return redirect()->back();
 		}
-      }
 
 		$friends=Friend::with('user')
                     ->with('user')
@@ -796,48 +842,5 @@ class DashboardController extends Controller
         return view('dashboard.demopage');
     }
 
-
-    /*
-     * @return Response For Push Notification In IOS
-     */
-    public function pushNotificationIphone()
-    {   
-        $data = array(
-            'message' => "this is message",
-            'token' => 'cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262'
-        );
-        
-        $msg = 'Message not delivered';   
-        
-        if(iphonePushNotification($data))
-            $msg='Message successfully delivered';  
-
-        return $msg;
-    }
-
-
-    /*
-     * @return Response For Push Notification In Android
-     */
-    public function pushNotificationAndroid()
-    {   
-        $data=array('registration_ids'=>array( 'APA91bGsmuvwZ8N0Fhc8JflH_t3agUK_MNQn6mZEvgkBw2hb2_P9yrnLOSAjgtk_vUgj50In5xAvPD5NH4J-gm_MrGYf9JpPJ7qPKo6e9cUa7tdHXEseSaw' ),
-            'data'=>array(
-                            'message'   => 'Here is a message from Mayank123',
-                            'title'     => 'From: Mayank123',
-                            'subtitle'  => 'My-subtitle',
-                            'tickerText'    => 'My tickerText',
-                            'vibrate'   => 1,
-                            'sound'     => 1,
-                            'largeIcon' => 'large_icon',
-                            'smallIcon' => 'small_icon'
-                        ));
-        $msg='Message not delivered';   
-        
-        if(androidPushNotification($data)) $msg='Message successfully delivered';
-        return $msg;
-    }
-
-   
 
 }

@@ -159,32 +159,25 @@ class SearchController extends Controller
 
     public function subForums($parentid='')
     {
-        if($parentid)
-        {
-        /* Redirecting for wrong parent id in URL */
-        $r1 = DB::table('forums')->where('id',$parentid)->where('parent_id','!=',0)->value('title');
-        $r2=DB::table('forums')->where('id',$parentid)->value('id');
-        if($r1!=null || $r2==null || $r2==3 || $r2==7 || $r2==9 || $r2==14 || $r2==19 || $r2==21)
-        {
-            return redirect('forums');
-        }
-        /******************END************************/
+        if($parentid){
 
+        $r1 = Forums::where('id',$parentid)->where('parent_id',0)->first();
+        if($r1 == "")
+            return redirect('forums');
+    
            $mainforum=Forums::where('id',$parentid)->value('title');
            $subforums = Forums::where('parent_id',$parentid)->get();
-
+           if($subforums->isEmpty())
+                    return redirect()->back();
         }
         else
-        {
-         return redirect('forums');   
-        }
+             return redirect('forums');   
+
 
         $flag = 0;
-        $ids = [4,5,6,12,15,17,20];
 
-        if(in_array($parentid, $ids)){
+        if($r1->selection == "Y")
             $flag = 1;
-        }
 
         return view('forums.subforums')
                 ->with('mainforum',$mainforum)
@@ -220,15 +213,9 @@ class SearchController extends Controller
     	/*************************/
 
     	$parent = Forums::where('parent_id',$id)->value('id');
-    	$parent2 = Forums::where('id',$id)->value('id');
-    	if($parent != null || $parent2 == null)
+    	$parent2 = Forums::where('id',$id)->value('title');
+    	if($parent != null || $parent2 == null || $parent2 == "International" || $parent2 == "Country" || $parent2 == "Country,State,City")
     		return redirect('forums');
-
-        $ids = [54,55,56,57,58,59,60,70,71,72,230,233,234,239,240,241];
-
-        if(in_array($id, $ids)){
-            return redirect('forums');
-        }
 
     	/************************/
         $categoryname = Forums::where('id',$id)->value('title');
@@ -335,8 +322,10 @@ class SearchController extends Controller
 
     public function searchForum()
     {
+  
+
         $input = Request::all();
-       // print_r($input);die;
+        // print_r($input);die;
         $mainforum = Forums::where('id',$input['mainforum'])->value('title');
         $breadcrum = $mainforum;
         if($input['check']=='direct'){
@@ -362,7 +351,7 @@ class SearchController extends Controller
             $breadcrum = $breadcrum." > ".$input['search-diseases'];
         
         $keyword = strtolower($input['forum-keyword']);
-        //print_r($breadcrum);die;
+
         $replyresult = ForumReply::whereRaw( 'LOWER(`reply`) like ?', array("%".$keyword."%"))
                             ->pluck('post_id')
                             ->toArray();
@@ -380,18 +369,65 @@ class SearchController extends Controller
                         ->get();
 
             $count = $results->count();
-            $results = $results->take(10);
-
-       return view('forums.searchresultforum')
+            $results = $results->take(10); 
+                    return view('forums.searchresultforum')
                 ->with('postscount',$count)
                 ->with('keyword',$keyword)
                 ->with('breadcrum',$breadcrum)
-                ->with('posts',$results);
+                ->with('posts',$results)
+                ->with('old',$input);
+
+     
+        
+
+    
+    }
+
+    public function searchForumGet()
+    {
+            $count = 0;
+            $keyword = '';
+            $breadcrum = '';
+            $results = [];
+            $input=[];
+
+                return view('forums.searchresultforum')
+                ->with('postscount',$count)
+                ->with('keyword',$keyword)
+                ->with('breadcrum',$breadcrum)
+                ->with('posts',$results)
+                ->with('old',$input);
+            
     }
 
     public function demo()
     {
     	return view('demo');
     }
+
+    public function confirm($confirmation_code)
+    {
+      if( ! $confirmation_code)
+        {
+            Session::put('error',"Wrong confirmation code!");
+           return redirect('/');
+        }
+
+        $user = User::where('confirmation_code',$confirmation_code)->first();
+
+        if ( ! $user)
+        {
+             Session::put('error',"No user with matching verification code found!");
+             return redirect('/');
+        }
+
+        $user->is_email_verified = 'Y';
+        $user->confirmation_code = null;
+        $user->save();
+
+        Session::put('success',"Your account has been successfully verified!");
+        return redirect('/');
+    }
   
+
 }

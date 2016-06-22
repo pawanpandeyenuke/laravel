@@ -22,7 +22,7 @@
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingThree">
 		      <h4 class="panel-title">
-		        <a href="{{url('/groupchat')}}" class="without-arrow">
+		        <a href="{{url('friends-chat')}}" class="without-arrow">
 		          <i class="flaticon-balloon"></i>Chat with Friends
 		        </a>
 		      </h4>
@@ -33,6 +33,15 @@
 		      <h4 class="panel-title">
 		        <a style="cursor:pointer" href="{{ url('group') }}" class="without-arrow">
 		          <i class="flaticon-balloon"></i>Chat Room
+		        </a>
+		      </h4>
+		    </div>
+		  </div>
+		  <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingSeven">
+		      <h4 class="panel-title">
+		        <a class="without-arrow" href="{{ url('/forums') }}">
+		          <i class="flaticon-user-profile"></i>Forums
 		        </a>
 		      </h4>
 		    </div>
@@ -79,15 +88,6 @@
 		      <h4 class="panel-title">
 		        <a class="without-arrow" href="{{ url('invite-friends') }}">
 		          <i class="flaticon-icon-88206"></i>Invite Friends
-		        </a>
-		      </h4>
-		    </div>
-		  </div>
-		   <div class="panel panel-default">
-		    <div class="panel-heading" role="tab" id="headingSeven">
-		      <h4 class="panel-title">
-		        <a class="without-arrow" href="{{ url('/forums') }}">
-		          <i class="flaticon-user-profile"></i>Forums
 		        </a>
 		      </h4>
 		    </div>

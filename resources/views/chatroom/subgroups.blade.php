@@ -1,7 +1,10 @@
 @extends('layouts.dashboard')
 
-<?php $groupnamestr = ucwords($group_name);
+<?php 
+// print_r($group_name);die;
+$groupnamestr = ucwords($group_name);
 unset($countries[0]);
+// print_r($countries);die;
  ?>
 
 <style type="text/css">
@@ -16,111 +19,106 @@ unset($countries[0]);
 
 	            @include('panels.left')
 
-					<div class="col-sm-6">
-						<div class="shadow-box page-center-data no-margin-top">
+			<div class="col-sm-6">
+				<div class="shadow-box page-center-data no-margin-top">
+					<div class="page-title">
+						<i class="flaticon-balloon"></i>{{$group_name}}
+					</div>
 
-							{{ Form::open(array('url' => 'groupchat', 'method' => 'get', 'id' => 'chatsubgroupsvalidate')) }}
-							<div class="page-title">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="btn-tab-cont">
 
-								<i class="flaticon-balloon"></i>{{$groupnamestr}}
+							  <!-- Nav tabs -->
+							  <ul class="nav nav-tabs row" role="tablist">
+								@foreach($subgroups as $data)
+										<?php  
+					                            $titledata = explode(' ', $data->title);
+					                            if(is_array($titledata)){
+					                                $title = strtolower(implode('', $titledata));
 
-							</div>
-							@if (Session::has('error'))
-								<div class="alert alert-danger">{!! Session::get('error') !!}</div>
-							@endif	
-							<div class="row">
-								<div class="col-md-8 col-md-offset-3">
-									<div class="radio-outer-full">
+					                            }
+					                            if($data->title == "Country,State,City"){
+					                            	$data->title = "Country, State, City";
+					                            	$aria = "csc-tab";
+					                            }
+					                            else if($data->title == "Country")
+					                            	$aria = "country-tab";
+					                            else if($data->title == "International")
+					                            	$aria = "international";
+									       ?>
+							    <li role="presentation" class="col-md-4"><a href="#{{$aria}}" aria-controls="{{$aria}}" role="tab" data-toggle="tab">{{$data->title}}</a></li>
+							   @endforeach
+							  </ul>
+
+							  <!-- Tab panes -->
+							  <div class="tab-content">
+							    <div role="tabpanel" class="tab-pane" id="international">
+							    	{{ Form::open(array('url' => 'groupchat', 'method' => 'post', 'id' => 'internationalform')) }}
+							    	<input type="hidden" name="parentname" value="{{$group_name}}" />
+							    	<input type="hidden" name="subcategory" value="International" />
+										<div class="tab-btn-cont">
+											<button type="submit" class="btn btn-primary">Start Chat</button>
+										</div>
+									{{ Form::close() }}
+							    </div>
+							    <div role="tabpanel" class="tab-pane" id="country-tab">
+							    	{{ Form::open(array('url' => 'groupchat', 'method' => 'post', 'id' => 'countryform')) }}
+							    	<input type="hidden" name="parentname" value="{{$group_name}}" />
+							    	<input type="hidden" name="subcategory" value="Country" />
 										<div class="row">
-											<div class="col-sm-8 col-sm-offset-3">
-
-												@if(!empty($subgroups))
-													@foreach($subgroups as $data)
-								                        <?php  
-								                            $titledata = explode(' ', $data->title);
-								                            if(is_array($titledata)){
-								                                $title = strtolower(implode('', $titledata));
-
-								                            }
-								                            
-								                        ?>
-
-														<div class="radio-cont radio-label-left">
-															<input class="group-radio" type="radio" name="subcategory" value="{{ $title }}" id="{{ $title }}"></input>
-															<label for="{{ $title }}">{{ $data->title }}</label>
-
-															@if($title == 'country')
-																<div class="subs" style="display:none">
-																{!! Form::select('country1', $countries, null, array(
-																	'class' => 'search-field boxsize pr-edit',
-																	'id' => 'country',
-																	
-																)); !!}
-																</div>
-															@elseif($title == 'country,state,city')
-																<div class="subs" style="display:none">
-																	<select name="country" class="search-field boxsize pr-edit" id="subcountry">
-																		<option value="">Country</option>
-																		@foreach($countries as $data)					
-																			<option value="{{$data}}">{{$data}}</option>
-																		@endforeach
-																	</select>
-
-																	<select name="state" class="search-field boxsize pr-edit" id="substate">
-																		<option value="">State</option>
-																	</select>
-																	
-																	<select name="city" class="search-field boxsize pr-edit" id="subcity">
-																		<option value="">City</option>
-																	</select>
-																</div>
-
-															@elseif($title == 'professionalcourse')
-
-																<div class="subs" style="display:none">
-																	<?php $courses = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->pluck('title');
-																	 
-																	?>
-																	<select name="coursedata1" class="boxsize pr-edit">
-																		<option value="">Select</option>
-																		@foreach($courses as $data)					
-																			<option value="{{$data}}">{{$data}}</option>
-																		@endforeach
-																	</select>
-																</div>
-															@elseif($title == 'subjects')
-																<div class="subs" style="display:none">
-																	<?php $courses = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->pluck('title'); 
-																	
-																	
-																	?>
-																	<select name="coursedata" class="boxsize pr-edit">
-																		<option value="">Select</option>
-																		@foreach($courses as $data)					
-																			<option value="{{$data}}">{{$data}}</option>
-																		@endforeach
-																	</select>
-																</div>
-
-															@endif
-														</div>
-
+											<div class="col-md-4 col-md-offset-4">
+												<!-- <label>Country</label> -->
+												<select name="country1" class="form-control">
+													@foreach($countries as $data)					
+														<option value="{{$data}}">{{$data}}</option>
 													@endforeach
-												@endif
-
+												</select>
 											</div>
 										</div>
-									</div>
-									<input type="hidden" name="parentname" value="{{$group_name}}"></input>
-								</div>
+										<div class="tab-btn-cont">
+											<button type="submit" class="btn btn-primary">Start Chat</button>
+										</div>
+									{{ Form::close() }}
+							    </div>
+							    <div role="tabpanel" class="tab-pane" id="csc-tab">
+							    	{{ Form::open(array('url' => 'groupchat', 'method' => 'post', 'id' => 'chatsubgroupsvalidate')) }}
+							    	<input type="hidden" name="parentname" value="{{$group_name}}" />
+							    	<input type="hidden" name="subcategory" value="Country, State, City" />
+										<div class="row">
+											<div class="col-md-4">
+												<select name="country" class="form-control" id="subcountry">
+													<option value="">Country</option>
+													@foreach($countries as $data)					
+													<option value="{{$data}}">{{$data}}</option>
+													@endforeach
+												</select>
+											</div>
+											<div class="col-md-4">
+												<select name="state" class="form-control" id="substate">
+													<option>State</option>
+												</select>
+											</div>
+											<div class="col-md-4">
+												<select name="city" class="form-control" id="subcity">
+													<option>City</option>
+												</select>
+											</div>
+										</div>
+										<div class="tab-btn-cont">
+											<button type="submit" class="btn btn-primary csc">Start Chat</button>
+										</div>
+									{{ Form::close() }}
+							    </div>
+							  </div>
+
 							</div>
-							<div class="btn-cont text-center">
-								<button type="submit" class="btn btn-primary btn-lg">Enter Chat</button>
-							</div>
-							{{ Form::close() }}
-						</div><!--/page center data-->
-						<div class="shadow-box bottom-ad"><img src="{{url("/images/bottom-ad.jpg")}}" alt="" class="img-responsive"></div>
+						</div>
 					</div>
+
+				</div><!--/page center data-->
+				<div class="shadow-box bottom-ad"><img src="{{url('images/bottom-ad.jpg')}}" alt="" class="img-responsive"></div>
+			</div>
 
  				@include('panels.right')
 
@@ -135,7 +133,6 @@ unset($countries[0]);
 
  	if($(this).is(':checked')){
 
- 		// alert('asdfsa');
 		$(this).closest('.radio-cont').nextAll().find('.subs').hide();
 		$(this).closest('.radio-cont').find('.subs').show();
 		$(this).closest('.radio-cont').prevAll().find('.subs').hide();
@@ -152,7 +149,8 @@ unset($countries[0]);
         rules: {
             subcategory: { required: true },
             country: { required: true },
-            state: { required: true }
+            state: { required: true },
+            city: {required: true}
         },
         messages:{
             subcategory:{
@@ -163,6 +161,9 @@ unset($countries[0]);
             },
             state:{
                 required: "State is required."
+            },
+            city:{
+                required: "City is required."
             }
         }
     });

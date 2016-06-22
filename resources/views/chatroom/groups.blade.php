@@ -18,18 +18,8 @@
 
 								    @foreach($parent_category as $data)
 
-							        <?php /*$titledata = explode(',', $data->title);
-							            if(is_array($titledata)){
-							                $title1 = strtolower(implode('', $titledata));
-
-							                $exp = explode(' ', $title1);
-							                if(is_array($exp))
-							                    $title = implode('', $exp);
-							   	             else
-							                    $title = $title1;
-							            } */// echo '<pre>';print_r($title);die;
-
-							            $fieldsData = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); 
+							        <?php 
+							            $fieldsData = \App\Category::where('parent_id',$data->id)->get(); 
 
 							            $nameexp = explode(' ', $data->title);
 							            $catname = implode('-', $nameexp);
@@ -38,10 +28,16 @@
 							            $image = url("/category_images/".$data['img_url']);
 							            ?>
 
-		                                @if($fieldsData)
+		                                @if(!($fieldsData->isEmpty()))
+		                                <?php
+		                                	if(\App\Category::where('id',$data->id)->value('selection') == "N")
+		                                		$next_url = url("sub-cat-group/".$data->id);
+		                                	else
+		                                		$next_url = url("subgroup/".$data->id);
+		                                 ?>
 											<div class="col-sm-4">
 												<div class="cat-btn-outer">
-													<a href="{{url("subgroup/$data->id/$name")}}" title="" class="cat-btn">
+													<a href="{{$next_url}}" title="" class="cat-btn">
 													<img src="{{$image}}"><br>
 													{{ $data->title }}</a>
 												</div>
@@ -49,7 +45,7 @@
 										@else
 											<div class="col-sm-4">
 												<div class="cat-btn-outer">
-													<a href="{{url("groupchat/$name")}}" title="" class="cat-btn">
+													<a href="{{url("groupchat/$data->id")}}" title="" class="cat-btn">
 													<img src="{{$image}}"><br>
 													{{ $data->title }}</a>
 												</div>

@@ -36,13 +36,22 @@
 									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{$postscount}}</span> Posts</div>
 								</div><!--/forum post cont-->
 
-								@if(Auth::check())
+								
 								<!---New Forum Post-->
-								<div class="f-post-form">
-									<textarea name="topic" class="form-control forumpost" data-emojiable="true"></textarea>
-									<button type="button" class="btn btn-primary addforumpost" value="{{$breadcrum}}">Submit</button>
-								</div>
-								@endif
+								
+									@if(Auth::check())
+									<div class="f-post-form">
+										<textarea name="topic" class="form-control forumpost" data-emojiable="true"></textarea>
+										<button type="button" class="btn btn-primary addforumpost" value="{{$breadcrum}}">Submit</button>
+									</div>
+									@else
+									<div class="text-right">
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Create Post</button>
+									</div>
+									<!-- <div class="alert alert-info" role="alert">Please <a data-toggle="modal" data-target="#LoginPop" href="#" title="">click here</a> for login, to create a post.</div> -->
+									@endif
+								
+								
 							</div>
 							<!---END New Forum Post-->
 
@@ -88,8 +97,8 @@
 												<input type="checkbox" name="" title="Like Post" id="checkbox_forumpost_{{$data->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$data->id}}" {{ isset($likedata[0])?'checked':'' }}/>	
 												<label for="checkbox_forumpost_{{$data->id}}" title="Like Post" class="css-label"></label>
 											@else
-											<input type="checkbox" name="" id="guest" class="css-checkbox"/>
-											  <label for="guest" class="css-label"></label>
+											<input type="checkbox" disabled="disabled" name="" id="guest" class="css-checkbox"/>
+											  <label for="guest" data-toggle="modal" data-target="#LoginPop" class="css-label"></label>
 											@endif
 											</div>
 											<span class="plike-count" title="Likes">{{$likeCount}}</span>
@@ -107,7 +116,7 @@
 										@if($replyCount == 0)
 											<button class="editforumpost" value="{{$data->id}}" title="Edit Post" ><i class="flaticon-pencil" ></i></button>
 										@endif	
-											<button class="forumpostdelete" value="{{$data->id}}" title="Delete Post" data-breadcrum = "{{$breadcrum}}"><i class="flaticon-garbage" ></i></button>
+											<button class="del-confirm-forum" value="{{$data->id}}" title="Delete Post" data-forumtype = "post" data-breadcrum = "{{$breadcrum}}"><i class="flaticon-garbage" ></i></button>
 										</div>
 									@endif
 									@endif

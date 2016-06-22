@@ -533,7 +533,7 @@
 
 		this.visible = false;
 		this.emojiarea = emojiarea;
-		EmojiMenu.menuZIndex = 5000;
+		EmojiMenu.menuZIndex = 50;
 		this.$menu = $('<div>');
 		this.$menu.addClass('emoji-menu');
     this.$menu.attr('data-id', self.id);
