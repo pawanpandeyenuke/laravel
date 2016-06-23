@@ -76,19 +76,23 @@ class AuthController extends Controller
         $access_token = Hash::make($raw_token);
 
         $data['country'] = Country::where('country_id',$data['country'])->value('country_name');
-        if($data['country_code'] != 0 || $data['phone_no'] != "")
+
+        if($data['country_code'] != 0 && $data['phone_no'] != null)
         {
-        $min = countryMobileLength($data['country_code']);
-        $len = strlen($data['phone_no']);
-        if($len > $min[$data['country_code']]['max'] || $len < $min[$data['country_code']]['min'])
-                 { 
-                    $data['phone_no'] = "";
-                    $data['country_code'] = "";
-                }
+            // echo 'asdad';die;
+            $min = countryMobileLength($data['country_code']);
+            $len = strlen($data['phone_no']);
+            if($len > $min[$data['country_code']]['max'] || $len < $min[$data['country_code']]['min'])
+            { 
+                $data['phone_no'] = "";
+                $data['country_code'] = "";
+            }
 
         }
+
         if(!(isset($data['gender'])))
             $data['gender'] = "";
+
         $userdata = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
@@ -100,7 +104,8 @@ class AuthController extends Controller
             'gender' => $data['gender'],
             'confirmation_code' => $confirmation_code,
             'is_email_verified' => 'N',
-            'access_token' => $access_token
+            'access_token' => $access_token,
+            'picture' => '/images/user-thumb.jpg'
         ]);
         
         $user = User::find($userdata->id);
