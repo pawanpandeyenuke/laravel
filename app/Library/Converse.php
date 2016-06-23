@@ -171,20 +171,23 @@ class Converse
 		$user = User::find($userId);
 		$friend = User::find($friendId);
  		$subjectName = $user->first_name.' '.$user->last_name;
-
- 		$message = "$subjectName has accepted your friend request";
-
- 		// $response = 'Message was not delivered';
+		//return $friend->device_type;die;
+ 		$message = "Akash has accepted your friend request";
+		$res = '';
+		$res = self::pushNotificationIphone( $message, '0d4fb37908eb64690c5c3c0d00b66be6efa557473fc1c552ab9464d6a8b1dc00' );
+/* 		// $response = 'Message was not delivered';
  		if( $friend->device_type == 'IPHONE' ){
  			// @ Call IOS function for push notification
- 			self::pushNotificationIphone( $message, $friend->push_token );
+ 			$res = self::pushNotificationIphone( $message, $friend->push_token );
 
  		}elseif( $friend->device_type == 'ANDROID' ){
  			// @ Call Android function for push notification
- 			self::pushNotificationAndroid( $message, $friend->push_token );
+ 			$res = self::pushNotificationAndroid( $message, $friend->push_token );
 
  		}
- 		//return $response;
+*/
+ 		return $res;
+
  	}
 
 
@@ -198,11 +201,11 @@ class Converse
             'token' => $token //'cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262'
         );
 
-        iphonePushNotification($data);
-/*        if(iphonePushNotification($data))
+
+        if(iphonePushNotification($data))
             $response = 'Message successfully delivered';  
 
-        return $response;*/
+        return $response;
 
     }
 

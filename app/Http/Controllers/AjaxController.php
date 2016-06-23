@@ -674,7 +674,7 @@ comments;
 	public function accept()
 	{
 		$input=Input::all();
-		
+//echo 'xxxxxxxx';die;
      	$data = array(
 			'friend_id'=>$input['user_id'],
 			'user_id'=>$input['friend_id'],
@@ -697,7 +697,7 @@ comments;
 
 		// @ Send push notification on request accept action
 		$response = Converse::notifyMe( $input['user_id'], $input['friend_id'] );
-
+//		echo $response;die;
 	}
 	/*
 	* Reject request from another user.
