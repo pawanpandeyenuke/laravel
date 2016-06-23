@@ -208,8 +208,6 @@ class Converse
         return $response;
 
     }
-
-
 	
 	// @ Return Response For Push Notification In Android
     static function pushNotificationAndroid( $message, $token )

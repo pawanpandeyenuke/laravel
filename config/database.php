@@ -61,13 +61,8 @@ return [
 //	    	'password'  => env('DB_PASSWORD', 'root123');
 //          'charset'   => 'utf8',
 //          'collation' => 'utf8_unicode_ci',
-
-
 //           'password'  => env('DB_PASSWORD', 'root123'),
-
 //           'password'  => env('DB_PASSWORD', 'root'),
-
-
             'charset'   => 'utf8mb4',
             'collation' => 'utf8mb4_bin',
 
