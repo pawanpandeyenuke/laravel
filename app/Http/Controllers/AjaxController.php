@@ -315,19 +315,25 @@ comments;
 	**/
 
 	
-	public function getProfileDetail(){
+	public function getGroupDetail(){
 		$arguments = Input::all();
 		$Image = '';
-		if( isset($arguments['xmpp']) && !empty($arguments['xmpp']) ) {
-			$xmppusername = $arguments['xmpp'];
-			$user = User::where('xmpp_username', $xmppusername)->first();
-			if( isset($user->profile_pic_url) && !empty($user->profile_pic_url) ) {
-				$Image = '/uploads/user_img/'.$user->profile_pic_url;
+		if( isset($arguments['group_jid'])  ) {
+			$xmpp = $arguments['group_jid'];
+			$Group = Group::where('group_jid', $xmpp)->first();
+			if( isset($Group->title) && !empty($Group->title) ) {
+				$Title = $Group->title;
 			} else {
-				$Image = '/images/user-thumb.png';
+				$Title = $xmpp;
+			}
+			if( isset($Group->picture) && !empty($Group->picture) ) {
+				$Image = '/uploads/'.$Group->picture;
+			} else {
+				$Image = '/images/groupdefault.png';
 			}
 		}
-		echo json_encode( array( 'image' => $Image ) );
+		echo json_encode( array( 'image' => $Image , 'title' => $Title ) );
+		exit();
 	}
 
 
