@@ -1090,6 +1090,19 @@ class ApiController extends Controller
 				$friend->user_id = $arguments['user_id'];
 				$request = $friend->save();
 
+				// @ Send push notification on request accept action
+				if( $request ){
+					$user = User::find($arguments['user_id']);
+					$friend = User::find($arguments['friend_id']);
+			 		$subjectName = $user->first_name.' '.$user->last_name;
+			 		$parameters = array(
+			 				'token' => $friend->push_token,
+			 				'device_type' => $friend->device_type,
+			 				'message' => "$subjectName has accepted your friend request",
+			 			);
+					$response = Converse::notifyMe( $parameters );
+				}
+
 				// Add friends to roster in API.
 				$arrayOfIds = array($arguments['user_id'], $arguments['friend_id']);
 				$udetail = User::whereIn('id', $arrayOfIds)->get()->toArray();
@@ -1938,6 +1951,47 @@ class ApiController extends Controller
 		try{
 
 			$breadcrumb = Request::get('breadcrumb');
+			$keyword = Request::get('keyword');
+			$access_token = Request::get('access_token');
+			$user_id = Request::get('user_id');
+			$access_token = Request::get('access_token');
+
+			$breadcrumb = urldecode($breadcrumb);
+
+			$posts = ForumPost::with('user')->with('forumPostLikesCount')->with('replyCount');
+
+			if($keyword){
+				$posts = $posts->whereRaw( 'LOWER(`title`) like ?', array("%".$keyword."%"));
+			}
+			
+			if($breadcrumb){
+				$posts = $posts->orWhere('forum_category_breadcrum', $breadcrumb);
+			}
+
+			$posts = $posts->orderBy('updated_at','DESC')->get(); //->toArray();
+			// echo '<pre>';print_r($posts);die;
+
+	        if($user_id != ""){
+				$user_check = User::where('id',$user_id)->first();
+
+				if($user_check == ""){
+					return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
+				}else{
+					if($access_token != $user_check->access_token)
+					return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
+				}
+			}
+
+			if($posts->isEmpty()){
+				return view('forums-api.forum-not-found')->with('message', 'Post does not exist.')->render();
+			}
+
+			return view('forums-api.forum-posts')
+					->with('posts', $posts->take(5))
+					->with('user_id', $user_id)
+					->render();
+
+/*			$breadcrumb = Request::get('breadcrumb');
 			$user_id = Request::get('user_id');
 			$access_token = Request::get('access_token');
 
@@ -1950,9 +2004,8 @@ class ApiController extends Controller
 	                        ->orderBy('updated_at','DESC')
 	                        ->get();
 	        if($user_id != ""){      
-			$user_check = User::where('id',$user_id)->first();
-			  // print_r($user_check->access_token);die;
-
+				$user_check = User::where('id',$user_id)->first();
+			  	
 			if($user_check == "")
 				return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
 			else{
@@ -1967,7 +2020,7 @@ class ApiController extends Controller
 			return view('forums-api.forum-posts')
 					->with('posts', $posts->take(5))
 					->with('user_id', $user_id)
-					->render();
+					->render();*/
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();

@@ -11,7 +11,7 @@ use App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth, Mail;
-use XmppPrebind;
+
 use \Exception,Route;
 use App\Library\Converse, Config;
 use Illuminate\Support\Facades\Request;
@@ -313,6 +313,8 @@ comments;
 		return $sessionInfo;
  	}
 	**/
+
+	
 	public function getProfileDetail(){
 		$arguments = Input::all();
 		$Image = '';
@@ -328,31 +330,38 @@ comments;
 		echo json_encode( array( 'image' => $Image ) );
 	}
 
+
 	public function getxmppuser(){
 
 		$status=0;
-		$user_id = Auth::User()->id;
-		$node = Config::get('constants.xmpp_host_Url');
+		$authuser = Auth::User();
 
-		$user = User::find($user_id);
-		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
+		if ( !empty($authuser->xmpp_username) && !empty($authuser->xmpp_password) ) 
 		{
-			// print_r('$xmppPrebind');die;
-			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', 'FS', false, false);
-			//print_r($xmppPrebind);die;
-			$username = $user->xmpp_username;
-			$password = $user->xmpp_password;
-			$xmppPrebind->connect($username, $password);
-			$xmppPrebind->auth();
-			$sessionInfo = $xmppPrebind->getSessionInfo();
+			$response = Converse::ejabberdConnect( $authuser );
+			if(!is_array($response)){				
+                $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
+				$response = Converse::ejabberdConnect( $xmppUserDetails );
+			}
+		}else{
+			$xmppUserDetails = Converse::createUserXmppDetails($authuser);
+            $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
+			$response = Converse::ejabberdConnect( $xmppUserDetails );
+		}
+
+		if(is_array($response) && count($response) > 0)
+		{
 			$status = 1;
 		}
 
-		// $sessionInfo['status']=$status;	  
+		$response['status']=$status;	  
 		// echo json_encode($sessionInfo); 
 		// exit;
-		return $sessionInfo;
+		return $response;
  	}
+
+
+
 
 
 	public function searchfriend(){
@@ -586,7 +595,7 @@ comments;
 		
 		$countryid = Country::where(['country_name' => $input['countryId']])->value('country_id');		
 		$statequeries = State::where(['country_id' => $countryid])->get();		
-		$states = array('<option value="">State</option>');
+		$states = array('<option value="">Select State</option>');
 		foreach($statequeries as $query){			
 			$states[] = '<option value="'.$query->state_name.'">'.$query->state_name.'</option>';
 		}		
@@ -604,7 +613,7 @@ comments;
 		// echo $input['stateId'];die;
 		$cityid = State::where(['state_name' => $input['stateId']])->value('state_id');
 		$cityqueries = City::where(['state_id' => $cityid])->get();
-		$city = array('<option value="">City</option>');
+		$city = array('<option value="">Select City</option>');
 		foreach($cityqueries as $query){			
 			$city[] = '<option value="'.$query->city_name.'">'.$query->city_name.'</option>';
 		}		
@@ -1753,13 +1762,19 @@ comments;
 		$input = Input::all();
 		 if($input['forumid'] == "Forum")
 		  	{ echo"No"; exit; }
-		$subforums = Forums::where('parent_id',$input['forumid'])->get();	
+		$subforums = Forums::where('parent_id',$input['forumid'])->get();
+		$mainforum = Forums::where('id',$input['forumid'])->value('selection');
 
 		$forums = array('<option value=""></option>');
 		if($subforums->isEmpty())
 			echo 'No';
 		else{
-			$subforumArr[] = "<option>Sub Category</option>";
+			if($mainforum == "Y"){
+				$subforumArr[] = "<option value='sub-opt'>Select Option</option>";
+			}		
+			else{
+				$subforumArr[] = "<option value='sub-opt'>Select Sub Category</option>";
+			}
 		foreach($subforums as $query){
 		if($query->title == "Country,State,City")
 		 	$query->title = "City";			
@@ -1776,6 +1791,7 @@ comments;
 		$countries = Country::get();
 
 		if($title == "Country"){
+			$country[] = "<option value='Country'>Select Country</option>";
 			foreach($countries as $data){
 			$country[] = '<option value="'.$data->country_name.'">'.$data->country_name.'</option>';
 			}
@@ -1786,7 +1802,7 @@ comments;
 		}
 
 		else if($title == "Country,State,City"){
-			$country[] = "<option>Country</option>";
+			$country[] = "<option value='Country'>Select Country</option>";
 			foreach($countries as $data){
 				$country[] = '<option value="'.$data->country_name.'">'.$data->country_name.'</option>';
 			}
@@ -1800,6 +1816,7 @@ comments;
 			echo "hide";
 		}
 		else if($title == "Professional Course" || $title == "Subjects"){
+			$subforumArr[] = "<option >Select Option</option>";
 			$subforums = Forums::where('parent_id',$input['forumid'])->get();
 			foreach($subforums as $query){			
 			$subforumArr[] = '<option value="'.$query->id.'">'.$query->title.'</option>';
