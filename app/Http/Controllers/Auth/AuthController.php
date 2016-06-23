@@ -70,12 +70,11 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-         // print_r($data);die;
-         // print_r($this->redirectTo);die;
+
         $confirmation_code = str_random(30);
         $raw_token = $data['first_name'].date('Y-m-d H:i:s',time()).$data['last_name'].$data['email'];
         $access_token = Hash::make($raw_token);
-        //if(isset($data['phone_no']))
+
         $data['country'] = Country::where('country_id',$data['country'])->value('country_name');
         if($data['country_code'] != 0 || $data['phone_no'] != "")
         {
@@ -107,14 +106,6 @@ class AuthController extends Controller
         $user = User::find($userdata->id);
 
         $xmppUserDetails = Converse::createUserXmppDetails($userdata);
-        echo '<pre>';print_r($xmppUserDetails);die;
-
-/*        $xmpp_username = $userdata->first_name.$userdata->id;
-        $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
-       
-        $user->xmpp_username = strtolower($xmpp_username);
-        $user->xmpp_password = $xmpp_password;
-        $user->save();*/
 
         $useremail = $data['email'];
         $username = $data['first_name']." ".$data['last_name'];

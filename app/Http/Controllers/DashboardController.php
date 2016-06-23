@@ -500,6 +500,7 @@ class DashboardController extends Controller
 	public function editUserProfile( $id )
 	{	        
         $arguments = Request::all();
+        // echo '<pre>';print_r($arguments);die;
         $user = new User();
         
         if(Request::isMethod('post')){
@@ -527,8 +528,8 @@ class DashboardController extends Controller
             		$education->graduation_year = $getCommonEduArgs['graduation_year'][$key];
             		$education->education_establishment = $getCommonEduArgs['education_establishment'][$key];
             		$education->country_of_establishment = $getCommonEduArgs['country_of_establishment'][$key];
-            		$education->state_of_establishment = $getCommonEduArgs['state_of_establishment'][$key];
-            		$education->city_of_establishment = $getCommonEduArgs['city_of_establishment'][$key];
+            		$education->state_of_establishment = isset($getCommonEduArgs['state_of_establishment'][$key]) ? $getCommonEduArgs['state_of_establishment'][$key] : '';
+            		$education->city_of_establishment = isset($getCommonEduArgs['city_of_establishment'][$key]) ? $getCommonEduArgs['city_of_establishment'][$key] : '';
 
             		$education->save(); 
             	}
