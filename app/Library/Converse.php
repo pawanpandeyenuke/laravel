@@ -166,13 +166,16 @@ class Converse
 
 
  	// @ Send notifications across devices
- 	static function notifyMe( $userId, $friendId )
+ 	static function notifyMe( $userId, $friendId, $type )
  	{
 		$user = User::find($userId);
 		$friend = User::find($friendId);
  		$subjectName = $user->first_name.' '.$user->last_name;
 
- 		$message = "$subjectName has accepted your friend request";
+ 		if($type == 'accept')
+ 			$message = "$subjectName has accepted your friend request";
+ 		elseif($type == 'request')
+ 			$message = "$subjectName wants to be your friend";
 
  		// $response = 'Message was not delivered';
  		if( $friend->device_type == 'IPHONE' ){

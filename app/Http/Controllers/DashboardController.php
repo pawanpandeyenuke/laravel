@@ -842,10 +842,23 @@ class DashboardController extends Controller
     }
   }
 
-    public function demopage()
+/*    public function demopage()
     {
-        return view('dashboard.demopage');
-    }
+   
+        //$data=array('message'=>"this is message",'token'=>'a7f3ce41a55f14991283a71eb094293a9bcbfbc1bde81df3ad28951938603116');
+        $MessageReceive = array(
+            'reciever_profile_id'   => 0,
+            'reciever_user_id'      => 0,
+            'sender_profile_id'     => 0,
+            'sender_user_id'        => 0,
+        );
+        $data=array('message'=>"this is message",'token'=>'e78e904d5da22b2492675b4904bdf9d5c22e5a6be91ef379fc7762d08ebb77f5','Message_received' => $MessageReceive );
+        $msg='Message not delivered';   
+        
+        if(iphonePushNotification($data)) $msg='Message successfully delivered';
+       return $msg;
+        // return view('dashboard.demopage');
+    } */       
 
 
 }

@@ -696,7 +696,7 @@ comments;
 		}
 
 		// @ Send push notification on request accept action
-		$response = Converse::notifyMe( $input['user_id'], $input['friend_id'] );
+		$response = Converse::notifyMe( $input['user_id'], $input['friend_id'], 'accept' );
 
 	}
 	/*
@@ -919,11 +919,11 @@ comments;
 	public function sendRequest()
 	{
 		$input=Input::all();
-		$id=Auth::User()->id;
-		$friend=$input['user_id'];
+		$id = Auth::User()->id;
+		$friend = $input['user_id'];
 	
-		$status1=DB::table('friends')->where('user_id',$id)->where('friend_id',$friend)->value('status');
-		$status2=DB::table('friends')->where('user_id',$friend)->where('friend_id',$id)->value('status');
+		$status1 = DB::table('friends')->where('user_id',$id)->where('friend_id',$friend)->value('status');
+		$status2 = DB::table('friends')->where('user_id',$friend)->where('friend_id',$id)->value('status');
 		
 		if($status1==null && $status2==null){
 			DB::table('friends')->insert(['user_id'=>$id,'friend_id'=>$friend,'status'=>'Pending']);
@@ -932,6 +932,9 @@ comments;
 		}elseif($status2==null){
 			DB::table('friends')->where('user_id',$id)->where('friend_id',$friend)->update(['status'=>'Pending','user_id'=>$friend,'friend_id'=>$id]);	
 		}
+
+        // @ Send push notification on send request action
+		$response = Converse::notifyMe( $id, $friend, 'request' );
 	
 	}
 	/** Cancel Sent Friend Request **/
