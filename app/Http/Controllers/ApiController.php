@@ -1101,6 +1101,20 @@ class ApiController extends Controller
 				$this->status = 'success';
 				$this->message = 'Friend request accepted.';
 
+
+                                // @ Send push notification on request accept action
+                        /*        if( $request ){
+                                        $user = User::find($arguments['user_id']);
+                                        $friend = User::find($arguments['friend_id']);
+                                        $subjectName = $user->first_name.' '.$user->last_name;
+                                        $parameters = array(
+                                                        'token' => $friend->push_token,
+                                                        'device_type' => $friend->device_type,
+                                                        'message' => "$subjectName has accepted your friend request",
+                                                );
+                                        Converse::notifyMe( $parameters );
+                                }
+			*/
 			}
 
 		}catch(Exception $e){

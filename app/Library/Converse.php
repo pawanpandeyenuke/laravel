@@ -172,7 +172,7 @@ class Converse
 		$friend = User::find($friendId);
  		$subjectName = $user->first_name.' '.$user->last_name;
 
- 		$message = "$subjectName has accepted your friend request",
+ 		$message = "$subjectName has accepted your friend request";
 
  		// $response = 'Message was not delivered';
  		if( $friend->device_type == 'IPHONE' ){
@@ -181,10 +181,10 @@ class Converse
 
  		}elseif( $friend->device_type == 'ANDROID' ){
  			// @ Call Android function for push notification
- 			self::pushNotificationAndroid( $message, $parameters['push_token'] );
+ 			self::pushNotificationAndroid( $message, $friend->push_token );
 
  		}
- 		// return $response;
+ 		//return $response;
  	}
 
 

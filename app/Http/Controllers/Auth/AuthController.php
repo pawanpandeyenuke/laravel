@@ -89,8 +89,10 @@ class AuthController extends Controller
             }
 
         }
+
         if(!(isset($data['gender'])))
             $data['gender'] = "";
+
         $userdata = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
