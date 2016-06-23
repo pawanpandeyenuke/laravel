@@ -332,16 +332,19 @@ class DashboardController extends Controller
             $check_end = Category::where('parent_id',end($id_arr))->value('id');
             if($check_end != null)
                 return redirect()->back();
-        //Get users of this group
+			//Get users of this group
 
-        //$group_jid = strtolower(str_replace($replace_array, '-', $breadcrumb));
-        $group_jid = preg_replace('/[^A-Za-z0-9\-]/', '_',$breadcrumb);
-        $group_jid = strtolower($group_jid);
-        //print_r($group_jid);die;
+			//$group_jid = strtolower(str_replace($replace_array, '-', $breadcrumb));
+			$group_jid = preg_replace('/[^A-Za-z0-9\-]/', '_',$breadcrumb);
+			$group_jid = strtolower($group_jid);
+			
+			$GroupImage = Category::where('id',current($id_arr))->value( 'img_url' );
+			
+			//print_r($group_jid);die;
 
-        }else{
-        $input = Request::all();
-        $parent_name = strtolower(str_replace($replace_array, '-', $input['parentname']));
+        } else {
+			$input = Request::all();
+			$parent_name = strtolower(str_replace($replace_array, '-', $input['parentname']));
 
                 if($input['subcategory']=='International'){
                     $check_name = $input['parentname'].' > '.$input['subcategory'];
@@ -383,7 +386,8 @@ class DashboardController extends Controller
                 $sub_name = str_replace($replace_array,'-',$sub_name);           
                 $group_jid = preg_replace('/[^A-Za-z0-9\-]/', '_',$parent_name.'_'.$sub_name);
                 $group_jid = strtolower($group_jid);
-
+                
+                $GroupImage = Category::where('title',$input['parentname'])->value( 'img_url' );
         }
 
             $model = new DefaultGroup;
@@ -395,7 +399,6 @@ class DashboardController extends Controller
             $defGroup['group_by'] = Auth::User()->id;
             if(empty($updatecheck))
                 $model->create($defGroup);
-
 
             $usersData = DefaultGroup::with('user')->where('group_name', $group_jid)->get()->toArray();
             
@@ -410,6 +413,7 @@ class DashboardController extends Controller
                  return view('chatroom.groupchat')
                     ->with('groupname', $check_name)
                     ->with('group_jid',$group_jid)
+                    ->with('group_image',$GroupImage)
                     ->with('userdata', $usersData)
                     ->with('friendid',$friendid)
                     ->with('authid',$id)

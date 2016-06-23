@@ -66,7 +66,7 @@ return [
 
 //           'password'  => env('DB_PASSWORD', 'root123'),
 
-           'password'  => env('DB_PASSWORD', 'root'),
+           'password'  => env('DB_PASSWORD', ''),
 
 
             'charset'   => 'utf8mb4',
