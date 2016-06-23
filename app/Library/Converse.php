@@ -166,29 +166,31 @@ class Converse
 
 
  	// @ Send notifications across devices
- 	static function notifyMe( $parameters )
+ 	static function notifyMe( $userId, $friendId )
  	{
+		$user = User::find($userId);
+		$friend = User::find($friendId);
+ 		$subjectName = $user->first_name.' '.$user->last_name;
 
- 		$response = 'Message was not delivered';
+ 		$message = "$subjectName has accepted your friend request",
 
- 		if( $parameters['device_type'] === 'IPHONE' ){
+ 		// $response = 'Message was not delivered';
+ 		if( $friend->device_type == 'IPHONE' ){
  			// @ Call IOS function for push notification
- 			$response = self::pushNotificationIphone( $parameters['message'], 'cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262' );
+ 			self::pushNotificationIphone( $message, $friend->push_token );
 
- 		}elseif( $parameters['device_type'] === 'ANDROID' ){
+ 		}elseif( $friend->device_type == 'ANDROID' ){
  			// @ Call Android function for push notification
- 			$response = self::pushNotificationAndroid( $parameters['message'], $parameters['push_token'] );
+ 			self::pushNotificationAndroid( $message, $parameters['push_token'] );
 
  		}
-
- 		return $response;
-
+ 		// return $response;
  	}
 
 
     // @ Return Response For Push Notification In IOS
     static function pushNotificationIphone( $message, $token )
-    {   
+    {
         $response = 'Message not delivered';
 
         $data = array(
@@ -196,10 +198,11 @@ class Converse
             'token' => $token //'cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262'
         );
 
-        if(iphonePushNotification($data))
+        iphonePushNotification($data);
+/*        if(iphonePushNotification($data))
             $response = 'Message successfully delivered';  
 
-        return $response;
+        return $response;*/
 
     }
 

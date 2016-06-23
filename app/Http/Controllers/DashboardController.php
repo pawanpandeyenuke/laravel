@@ -500,6 +500,10 @@ class DashboardController extends Controller
 	public function editUserProfile( $id )
 	{	        
         $arguments = Request::all();
+
+        if(Auth::User()->id != $id)
+            return redirect('/');
+        
         // echo '<pre>';print_r($arguments);die;
         $user = new User();
         

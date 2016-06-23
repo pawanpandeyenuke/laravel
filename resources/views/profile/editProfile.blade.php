@@ -254,7 +254,7 @@
 																<div class="col-sm-4">
 																	<div class="p-data-title"><i class="flaticon-graduation"></i>Education level</div>
 																		<select id="educationlevel" name="education_level[]" style="max-width: 180px;" >
-																			<option>Education level</option>
+																			<option value="">Education level</option>
 																			<?php foreach ($educationLevel as $key => $value) { 
 																				if(isset($data->education_level)){
 																					if($data->education_level == $value)
@@ -270,7 +270,7 @@
 																<div class="col-sm-4">
 																	<div class="p-data-title"><i class="flaticon-graduation"></i>Specialization</div>
 																		<select name="specialization[]" id="specialization" style="max-width: 180px;" >
-																			<option >Specialization</option>
+																			<option value="">Specialization</option>
 																			<?php foreach ($specialization as $key => $value) { 
 																				if(isset($data->specialization)){
 																				if($data->specialization == $value)
@@ -315,6 +315,7 @@
 																<div class="col-sm-4">
 																	<div class="p-data-title"><i class="flaticon-gps"></i>State of Establishment</div>
 																	<select name="state_of_establishment[]" class="state" data-put="#city">
+																		<option value="">State</option>
 																		@foreach($all_states_estab as $value)
 																		<?php if($data->state_of_establishment == $value)
 																				$selected = 'Selected'; 
@@ -327,6 +328,7 @@
 																<div class="col-sm-4">
 																	<div class="p-data-title"><i class="flaticon-city"></i>City of Establishment</div>
 																	<select name="city_of_establishment[]" class="city" >
+																		<option value="">City</option>
 																		@foreach($all_cities_estab as $value)
 																		<?php if($data->city_of_establishment == $value)
 																				$selected = 'Selected'; 

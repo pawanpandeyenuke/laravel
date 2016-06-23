@@ -687,16 +687,17 @@ comments;
 
 		Friend::insert($data);
 
-   		$udetail=User::whereIn('id',$input)->get()->toArray();
+   		$udetail = User::whereIn('id',$input)->get()->toArray();
    		// echo '<pre>';print_r($udetail);die;
-		  if(count($udetail)==2)
-			{
+		if(count($udetail)==2){
 			$converse = new Converse;
 			$converse->addFriend($udetail[0]['xmpp_username'],$udetail[1]['xmpp_username'],
 								$udetail[1]['first_name'],$udetail[0]['first_name']);       
-			}
+		}
 
-			
+		// @ Send push notification on request accept action
+		$response = Converse::notifyMe( $input['user_id'], $input['friend_id'] );
+
 	}
 	/*
 	* Reject request from another user.
