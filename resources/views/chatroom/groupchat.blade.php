@@ -430,8 +430,9 @@ $groupid = $group_jid;
          if( ss==null ){  
              conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
          }
-         hideOpendBox( xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>' );
-         conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+         if( hideOpendBox( xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>' ) ){
+			conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+		}
      }
 
 
@@ -488,11 +489,13 @@ $(document).ready(function() {
 });
 
 function hideOpendBox( grpname ){
+	var resultreturn = true;
 	$( '.privatechat' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getChat = conObj.chats.get(jid);
 		if( jid == grpname ){
 			getChat.maximize();
+			resultreturn = false;
 		} else {
 			getChat.minimize();
 		}
@@ -502,15 +505,18 @@ function hideOpendBox( grpname ){
 		var getRooms = conObj.rooms.get(jid);
 		if( jid == grpname ){
 			getRooms.maximize();
+			resultreturn = false;
 		} else {
 			getRooms.minimize();
 		}
 	});
+	return resultreturn;
 }
 
 function openChatGroup( grpjid,grpname ){
-	hideOpendBox( grpjid+conferencechatserver );
-	conObj.rooms.open( grpjid+conferencechatserver );
+	if( hideOpendBox( grpjid+conferencechatserver ) ){
+		conObj.rooms.open( grpjid+conferencechatserver );
+	}
 }
 
 $('.status-r-btn').on('click',function(){
