@@ -178,6 +178,7 @@
 
 												<?php $customcounter = 1; ?>
 												@foreach($education as $value)
+												<?php //echo '<pre>';print_r($value);die; ?>
 												<tr>
 													<td>
 														@if($customcounter == 1)
