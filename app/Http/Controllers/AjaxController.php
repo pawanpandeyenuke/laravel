@@ -319,8 +319,10 @@ comments;
 		if( isset($arguments['xmpp']) && !empty($arguments['xmpp']) ) {
 			$xmppusername = $arguments['xmpp'];
 			$user = User::where('xmpp_username', $xmppusername)->first();
-			if( $user ){
+			if( isset($user->profile_pic_url) && !empty($user->profile_pic_url) ) {
 				$Image = '/uploads/user_img/'.$user->profile_pic_url;
+			} else {
+				$Image = '/images/user-thumb.png';
 			}
 		}
 		echo json_encode( array( 'image' => $Image ) );
