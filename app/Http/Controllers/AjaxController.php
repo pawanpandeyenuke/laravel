@@ -11,7 +11,7 @@ use App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use App\Feed, Auth, Mail;
-use XmppPrebind;
+
 use \Exception,Route;
 use App\Library\Converse, Config;
 use Illuminate\Support\Facades\Request;
@@ -313,6 +313,8 @@ comments;
 		return $sessionInfo;
  	}
 	**/
+
+	
 	public function getProfileDetail(){
 		$arguments = Input::all();
 		$Image = '';
@@ -328,31 +330,38 @@ comments;
 		echo json_encode( array( 'image' => $Image ) );
 	}
 
+
 	public function getxmppuser(){
 
 		$status=0;
-		$user_id = Auth::User()->id;
-		$node = Config::get('constants.xmpp_host_Url');
+		$authuser = Auth::User();
 
-		$user = User::find($user_id);
-		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
+		if ( !empty($authuser->xmpp_username) && !empty($authuser->xmpp_password) ) 
 		{
-			// print_r('$xmppPrebind');die;
-			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', 'FS', false, false);
-			//print_r($xmppPrebind);die;
-			$username = $user->xmpp_username;
-			$password = $user->xmpp_password;
-			$xmppPrebind->connect($username, $password);
-			$xmppPrebind->auth();
-			$sessionInfo = $xmppPrebind->getSessionInfo();
+			$response = Converse::ejabberdConnect( $authuser );
+			if(!is_array($response)){				
+                $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
+				$response = Converse::ejabberdConnect( $xmppUserDetails );
+			}
+		}else{
+			$xmppUserDetails = Converse::createUserXmppDetails($authuser);
+            $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
+			$response = Converse::ejabberdConnect( $xmppUserDetails );
+		}
+
+		if(is_array($response) && count($response) > 0)
+		{
 			$status = 1;
 		}
 
-		// $sessionInfo['status']=$status;	  
+		$response['status']=$status;	  
 		// echo json_encode($sessionInfo); 
 		// exit;
-		return $sessionInfo;
+		return $response;
  	}
+
+
+
 
 
 	public function searchfriend(){

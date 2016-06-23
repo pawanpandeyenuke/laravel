@@ -286,7 +286,7 @@
 																<div class="col-sm-4">
 																	<div class="p-data-title"><i class="flaticon-graduation"></i>Year</div>
 																	<select id="graduationyears" name="graduation_year[]">
-																		<!-- <option>Year</option> -->
+																		<option value="">Year</option>
 																		@foreach($gradYear as $valuedata)
 																			<option value="{{$valuedata}}">{{ $valuedata }}</option>
 																		@endforeach
@@ -488,7 +488,7 @@
 				'data' : { 'countryId' : countryId },
 				'type' : 'post',
 				'success' : function(response){	
-					current.closest('.pe-row').find('.state').html(response);
+					current.closest('.row').find('.state').html(response);
 					// $('.state').html(response);
 				}			
 			});	
@@ -501,7 +501,7 @@
 				'data' : { 'stateId' : stateId },
 				'type' : 'post',
 				'success' : function(response){	
-					current.closest('.pe-row').find('.city').html(response);			
+					current.closest('.row').find('.city').html(response);			
 					// $('.city').html(response);
 				}			
 			});	
@@ -511,6 +511,10 @@
 
 		$(document).on('change', '#profile_country', function(){
 			var countryId = $(this).val();
+
+			$('#profile_state').html('<option>State</option>');
+			$('#profile_city').html('<option>City</option>');
+			
 			var _token = $('#searchform input[name=_token]').val();
 			$('#mobileContact').val('');
 			if(countryId != ''){

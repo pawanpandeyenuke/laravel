@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Support\Facades\Request;
+
 class AuthController extends Controller
 {
     /*
@@ -69,12 +70,11 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-         // print_r($data);die;
-         // print_r($this->redirectTo);die;
+
         $confirmation_code = str_random(30);
         $raw_token = $data['first_name'].date('Y-m-d H:i:s',time()).$data['last_name'].$data['email'];
         $access_token = Hash::make($raw_token);
-        //if(isset($data['phone_no']))
+
         $data['country'] = Country::where('country_id',$data['country'])->value('country_name');
         if($data['country_code'] != 0 || $data['phone_no'] != "")
         {
@@ -102,13 +102,10 @@ class AuthController extends Controller
             'is_email_verified' => 'N',
             'access_token' => $access_token
         ]);
-        $xmpp_username = $userdata->first_name.$userdata->id;
-        $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
-
+        
         $user = User::find($userdata->id);
-        $user->xmpp_username = strtolower($xmpp_username);
-        $user->xmpp_password = $xmpp_password;
-        $user->save();
+
+        $xmppUserDetails = Converse::createUserXmppDetails($userdata);
 
         $useremail = $data['email'];
         $username = $data['first_name']." ".$data['last_name'];
@@ -126,12 +123,13 @@ class AuthController extends Controller
 
 
         DB::table('settings')->insert(['setting_title'=>'friend-request','setting_value'=>'All','user_id'=>$userdata->id]);
+
         $converse = new Converse;
-        $response = $converse->register($xmpp_username, $xmpp_password);
+        $response = $converse->register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
         
         Session::put('success', 'Thanks for signing up! Please check your email to verify your account.');
         
-        $vcard = $converse->setVcard($xmpp_username, $user->picture);
+        $vcard = $converse->setVcard($xmppUserDetails->xmpp_username, $user->picture);
          
         $this->redirectTo = $data['url'];
         return $userdata;

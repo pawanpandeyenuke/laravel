@@ -2,6 +2,10 @@
 <?php
 
 	$gender = isset($user->gender) ? $user->gender : '';
+	// echo $gender;die;
+	if(empty($gender)){
+		$gender = 'N/A';
+	}
 	$maritalstatus = isset($user->marital_status) ? $user->marital_status : ''; 
 	$currentlystudy = isset($user)?$user->currently_studying:'';
 
@@ -14,10 +18,6 @@
 	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 	
 	
 	}
-
-	$gender = isset($user->gender) ? $user->gender : '';
-	$maritalstatus = isset($user->marital_status) ? $user->marital_status : ''; 
-
 
 	$categoryid = DB::table('job_area')->where('job_area',$user->job_area)->value('job_area_id');
 	$all_job_cat = DB::table('job_category')->where('job_area_id',$categoryid)->pluck('job_category');
@@ -131,34 +131,36 @@
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country</div></td>
 													<td> 
-														<span style="font-weight:500">{{ !empty($user->country)?$user->country:'NA'}}</span>
+														<span style="font-weight:500">{{ !empty($user->country)?$user->country:'N/A'}}</span>
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-gps"></i>State</div></td>
 													<td>
-														<span style="font-weight:500">{{!empty($user->state)?$user->state:'NA'}}</span>
+														<span style="font-weight:500">{{!empty($user->state)?$user->state:'N/A'}}</span>
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-city"></i>City</div></td>
 													<td>
-														<span style="font-weight:500">{{!empty($user->city)?$user->city:'NA'}}</span>
+														<span style="font-weight:500">{{!empty($user->city)?$user->city:'N/A'}}</span>
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-technology"></i>Mobile Contact</div></td>
 													<td>
-														@if(!empty($user->phone_no))
-															<span style="font-weight:500">{{!empty($user->country_code)?'+ '.$user->country_code.' -':'NA'}}</span>
+														@if(!empty($user->phone_no) && !empty($user->country_code))
+															<span style="font-weight:500">{{!empty($user->country_code)?'+ '.$user->country_code.' -':'N/A'}}</span>
+															<span style="font-weight:500">{{!empty($user->phone_no)?$user->phone_no:'N/A'}}</span>
+														@else
+															<span style="font-weight:500">N/A</span>
 														@endif
-														<span style="font-weight:500">{{!empty($user->phone_no)?$user->phone_no:'NA'}}</span>
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-calendar"></i>Date of Birth <span style="">[it's confidential] </span> </div></td>
 													<td>
-														<span style="font-weight:500">{{!empty($user->birthday)?date('d F Y',strtotime($user->birthday)):'NA'}}</span>
+														<span style="font-weight:500">{{!empty($user->birthday)?date('d F Y',strtotime($user->birthday)):'N/A'}}</span>
 													</td>
 												</tr>
 												<tr>
@@ -195,7 +197,7 @@
 															@if(!empty($value->country_of_establishment) && !empty($value->state_of_establishment) && !empty($value->city_of_establishment))
 																	{{$value->country_of_establishment}}, {{$value->state_of_establishment}}, {{$value->city_of_establishment}}
 															@else
-																	NA
+																	N/A
 															@endif
 															</span> 
 														</div>
@@ -217,7 +219,7 @@
 															<span style="font-weight:500">{{$user->job_category}},</span>
 												   		<br><span style="font-weight:500">{{$user->job_area}}</span>
 												  	@else
-												  		NA
+												  		N/A
 												  	@endif
 													</td>
 												</tr>

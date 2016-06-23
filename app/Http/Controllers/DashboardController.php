@@ -500,6 +500,7 @@ class DashboardController extends Controller
 	public function editUserProfile( $id )
 	{	        
         $arguments = Request::all();
+        // echo '<pre>';print_r($arguments);die;
         $user = new User();
         
         if(Request::isMethod('post')){
@@ -527,8 +528,8 @@ class DashboardController extends Controller
             		$education->graduation_year = $getCommonEduArgs['graduation_year'][$key];
             		$education->education_establishment = $getCommonEduArgs['education_establishment'][$key];
             		$education->country_of_establishment = $getCommonEduArgs['country_of_establishment'][$key];
-            		$education->state_of_establishment = $getCommonEduArgs['state_of_establishment'][$key];
-            		$education->city_of_establishment = $getCommonEduArgs['city_of_establishment'][$key];
+            		$education->state_of_establishment = isset($getCommonEduArgs['state_of_establishment'][$key]) ? $getCommonEduArgs['state_of_establishment'][$key] : '';
+            		$education->city_of_establishment = isset($getCommonEduArgs['city_of_establishment'][$key]) ? $getCommonEduArgs['city_of_establishment'][$key] : '';
 
             		$education->save(); 
             	}
@@ -553,7 +554,7 @@ class DashboardController extends Controller
             $arguments['birthday'] = date('Y-m-d',$time);
  
             if($arguments){
-
+                // echo '<pre>';print_r($arguments);die;
                 unset($arguments['_token']);
 
                 //Check for image upload.
@@ -564,12 +565,24 @@ class DashboardController extends Controller
                     $file->move(public_path('uploads/user_img'), $image_name);
                 }
                 
-                $min = countryMobileLength($arguments['country_code']);
-                $len = strlen($arguments['phone_no']);
-                 if($len > $min[$arguments['country_code']]['max'] || $len < $min[$arguments['country_code']]['min'])
-                    $arguments['phone_no'] = "";
-                $arguments['country_code'] = empty($arguments['phone_no']) ? '' : $arguments['country_code'];
-                // echo '<pre>';print_r($arguments);die;
+                if($arguments['country_code'] != 0 && $arguments['phone_no'] != null){
+                    $min = countryMobileLength($arguments['country_code']);
+                    $len = strlen($arguments['phone_no']);
+                    
+                    if(array_key_exists($arguments['country_code'], $min)){
+                        if($len > $min[$arguments['country_code']]['max'] || $len < $min[$arguments['country_code']]['min']){
+                            $arguments['phone_no'] = "";                        
+                        }
+                    }
+                    // print_r($min[$arguments['country_code']]['max']);die;
+                    $arguments['country_code'] = empty($arguments['phone_no']) ? '' : $arguments['country_code'];
+                }
+
+
+                if(empty($arguments['state'])){
+                    $arguments['city'] = '';
+                }
+
                 foreach ($arguments as $key => $value) {
                     if( $key != 'email' && $key != 'password' ){
                         User::where([ 'id' => $id ])
@@ -830,48 +843,5 @@ class DashboardController extends Controller
         return view('dashboard.demopage');
     }
 
-
-    /*
-     * @return Response For Push Notification In IOS
-     */
-    public function pushNotificationIphone()
-    {   
-        $data = array(
-            'message' => "this is message",
-            'token' => 'cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262'
-        );
-        
-        $msg = 'Message not delivered';   
-        
-        if(iphonePushNotification($data))
-            $msg='Message successfully delivered';  
-
-        return $msg;
-    }
-
-
-    /*
-     * @return Response For Push Notification In Android
-     */
-    public function pushNotificationAndroid()
-    {   
-        $data=array('registration_ids'=>array( 'APA91bGsmuvwZ8N0Fhc8JflH_t3agUK_MNQn6mZEvgkBw2hb2_P9yrnLOSAjgtk_vUgj50In5xAvPD5NH4J-gm_MrGYf9JpPJ7qPKo6e9cUa7tdHXEseSaw' ),
-            'data'=>array(
-                            'message'   => 'Here is a message from Mayank123',
-                            'title'     => 'From: Mayank123',
-                            'subtitle'  => 'My-subtitle',
-                            'tickerText'    => 'My tickerText',
-                            'vibrate'   => 1,
-                            'sound'     => 1,
-                            'largeIcon' => 'large_icon',
-                            'smallIcon' => 'small_icon'
-                        ));
-        $msg='Message not delivered';   
-        
-        if(androidPushNotification($data)) $msg='Message successfully delivered';
-        return $msg;
-    }
-
-   
 
 }

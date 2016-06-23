@@ -1536,7 +1536,7 @@ $(document).on('click','.savegroupname',function()
 	{
 		window.emojiPicker = new EmojiPicker({
 			emojiable_selector: '[data-emojiable=true]',
-			assetsPath: 'lib/img/',
+			assetsPath: '/lib/img/',
 			popupButtonClasses: 'fa fa-smile-o'
       	});
       window.emojiPicker.discover();
