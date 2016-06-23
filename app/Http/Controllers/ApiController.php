@@ -1954,7 +1954,6 @@ class ApiController extends Controller
 			$keyword = Request::get('keyword');
 			$access_token = Request::get('access_token');
 			$user_id = Request::get('user_id');
-			$access_token = Request::get('access_token');
 
 			$breadcrumb = urldecode($breadcrumb);
 
@@ -1990,37 +1989,6 @@ class ApiController extends Controller
 					->with('posts', $posts->take(5))
 					->with('user_id', $user_id)
 					->render();
-
-/*			$breadcrumb = Request::get('breadcrumb');
-			$user_id = Request::get('user_id');
-			$access_token = Request::get('access_token');
-
-		        $breadcrumb = urldecode($breadcrumb);
-
-		        $posts = ForumPost::with('user')
-	                        ->with('forumPostLikesCount')
-	                        ->with('replyCount')
-	                        ->where('forum_category_breadcrum',$breadcrumb)
-	                        ->orderBy('updated_at','DESC')
-	                        ->get();
-	        if($user_id != ""){      
-				$user_check = User::where('id',$user_id)->first();
-			  	
-			if($user_check == "")
-				return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
-			else{
-				if($access_token != $user_check->access_token)
-				 return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
-			}
-			}
-			if($posts->isEmpty()){
-				return view('forums-api.forum-not-found')->with('message', 'Post does not exist.')->render();
-			}
-
-			return view('forums-api.forum-posts')
-					->with('posts', $posts->take(5))
-					->with('user_id', $user_id)
-					->render();*/
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
