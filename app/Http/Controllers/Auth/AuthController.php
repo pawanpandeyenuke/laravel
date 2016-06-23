@@ -76,14 +76,14 @@ class AuthController extends Controller
         $access_token = Hash::make($raw_token);
 
         $data['country'] = Country::where('country_id',$data['country'])->value('country_name');
-        if($data['country_code'] != 0 || $data['phone_no'] != "")
+        if($data['country_code'] != 0 && $data['phone_no'] != null)
         {
-        $min = countryMobileLength($data['country_code']);
-        $len = strlen($data['phone_no']);
-        if($len > $min[$data['country_code']]['max'] || $len < $min[$data['country_code']]['min'])
-                 { 
-                    $data['phone_no'] = "";
-                    $data['country_code'] = "";
+	        $min = countryMobileLength($data['country_code']);
+	        $len = strlen($data['phone_no']);
+	        if($len > $min[$data['country_code']]['max'] || $len < $min[$data['country_code']]['min'])
+                { 
+			$data['phone_no'] = "";
+                        $data['country_code'] = "";
                 }
 
         }

@@ -173,7 +173,7 @@ class Converse
 
  		if( $parameters['device_type'] === 'IPHONE' ){
  			// @ Call IOS function for push notification
- 			$response = self::pushNotificationIphone( $parameters['message'], 'cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262' );
+ 			$response = self::pushNotificationIphone( $parameters['message'], $parameters['token']);
 
  		}elseif( $parameters['device_type'] === 'ANDROID' ){
  			// @ Call Android function for push notification
@@ -181,7 +181,7 @@ class Converse
 
  		}
 
- 		return $response;
+ 		//return $response;
 
  	}
 
@@ -199,7 +199,7 @@ class Converse
         if(iphonePushNotification($data))
             $response = 'Message successfully delivered';  
 
-        return $response;
+        //return $response;
 
     }
 
