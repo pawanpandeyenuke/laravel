@@ -320,7 +320,7 @@ $groupid = $group_jid;
 					if( waitProfile == 1 ){
 						var jidStr = chatbox.model.get('jid');
 						hideOpendBox( jidStr );
-					}
+					}					
 				});
 				
                 converse.initialize({                           
