@@ -344,7 +344,7 @@ $groupid = $group_jid;
 						});
 					}	
 				});
-				
+		
 				converse.listen.on('disconnected', function (event) { 
 					console.log( 'disconnected' );
 				});
