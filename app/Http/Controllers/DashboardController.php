@@ -428,15 +428,15 @@ class DashboardController extends Controller
         $usersData = "";
         $id = Auth::User()->id;
             if($groupid){
-                $group_check = Group::where('id',$groupid)->select('group_jid','title')->first();
+                $group_check = Group::where('id',$groupid)->select('group_jid','title','picture')->first();
                 if(empty($group_check))
                     return redirect('private-group-list');
                 else{
 					
 					$group_jid = $group_check->group_jid;
                     $group_name = $group_check->title;
-
-                    $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+					$GroupImage = $group_check->picture;
+					$friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 
                     $pendingfriend = DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
                     
@@ -446,16 +446,16 @@ class DashboardController extends Controller
                 }
 
         }
-
-                return view('chatroom.groupchat')
-                    ->with('groupname', $group_name)
-                    ->with('group_jid',$group_jid)
-                    ->with('userdata', $usersData)
-                    ->with('friendid',$friendid)
-                    ->with('authid',$id)
-                    ->with('pendingfriend',$pendingfriend)
-                    ->with('exception',$private_group_check)
-                    ->with('privategroup',$privategroup);
+		return view('chatroom.groupchat')
+			->with('groupname', $group_name)
+			->with('group_jid',$group_jid)
+			->with('userdata', $usersData)
+			->with('group_image',$GroupImage)
+			->with('friendid',$friendid)
+			->with('authid',$id)
+			->with('pendingfriend',$pendingfriend)
+			->with('exception',$private_group_check)
+			->with('privategroup',$privategroup);
     }
 
     public function friendsChat()
