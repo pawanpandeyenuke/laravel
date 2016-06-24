@@ -545,7 +545,7 @@ function hideOpendBox( grpname , actiontype ){
 
 function openChatGroup( grpjid,grpname ){
 	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver , grpname );
+		conObj.rooms.open( grpjid+conferencechatserver );
 	}
 }
 
