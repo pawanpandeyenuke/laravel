@@ -2946,6 +2946,18 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
 #conversejs .occupants, #conversejs .chat-toolbar li.toggle-occupants {
     display: none;
 }
+.profileavatar {
+    background-size: cover !important;
+    border-radius: 5px;
+    height: 40px;
+    left: 8px;
+    position: absolute;
+    top: 8px;
+    width: 40px;
+}
+#conversejs .chatbox .chat-title{
+  padding: 0 0 0 50px;
+}
 .post-list .single-post .date-time-list, .comments-list .date-time-list {
 	margin: 2px -13px 0 0px;
 }

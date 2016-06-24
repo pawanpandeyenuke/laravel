@@ -297,9 +297,6 @@ $groupid = $group_jid;
 	var waitProfile = 0;
 	
     jQuery(document).ready(function(){
-		setTimeout( function(){ 
-			waitProfile = 1;
-		}  , 8000 );
       require(['converse'], function (converse) {
                conObj = converse;
                conObj.listen.on('initialized', function (event) {
@@ -311,18 +308,19 @@ $groupid = $group_jid;
 				});
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
-					if( waitProfile == 1 ){
-						var jidStr = chatbox.model.get('jid');
+					var jidStr = chatbox.model.get('jid');
+					setTimeout( function(){ 
 						hideOpendBox( jidStr );
-					}
+					}  , 2000 );
 				});
 				
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
 					var jidStr = chatbox.model.get('jid');
-					var xmpp = jidStr.replace( '@conference.<?= Config::get('constants.xmpp_host_Url') ?>' , '' );
-					if( waitProfile == 1 ){
+					setTimeout( function(){ 
 						hideOpendBox( jidStr );
-					}
+					}  , 2000 );
+					
+					var xmpp = jidStr.replace( '@conference.<?= Config::get('constants.xmpp_host_Url') ?>' , '' );
 					if( xmpp ==  groupid ){
 						chatbox.$el.find( '.chat-title' ).html( '<?php echo $groupname; ?>' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
@@ -347,6 +345,9 @@ $groupid = $group_jid;
 					}	
 				});
 				
+				converse.listen.on('disconnected', function (event) { 
+					console.log( 'disconnected' );
+				});
                 converse.initialize({                           
                   prebind: true,
                   bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
@@ -504,21 +505,21 @@ function openChatbox( xmpusername,username ){
 $(document).ready(function() {
 	$( document ).on( 'click' , '.restore-chat.chatgroup' , function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
-		hideOpendBox( jid );
+		hideOpendBox( jid , 2 );
 	});
 	$( document ).on( 'click' , '.restore-chat.singlechat' , function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
-		hideOpendBox( jid );
+		hideOpendBox( jid , 2 );
 	});
 });
 
-function hideOpendBox( grpname ){
+function hideOpendBox( grpname , actiontype = 1 ){
 	var resultreturn = true;
 	$( '.privatechat' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getChat = conObj.chats.get(jid);
 		if( jid == grpname ){
-			if( $(this).css('display') == 'none' ){
+			if( $(this).css('display') == 'none' && actiontype == 1 ){
 				getChat.maximize();
 			}
 			resultreturn = false;
@@ -531,7 +532,7 @@ function hideOpendBox( grpname ){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
 		if( jid == grpname ){
-			if( $(this).css('display') == 'none' ){
+			if( $(this).css('display') == 'none' && actiontype == 1 ){
 				getRooms.maximize();
 			}
 			resultreturn = false;
@@ -543,8 +544,8 @@ function hideOpendBox( grpname ){
 }
 
 function openChatGroup( grpjid,grpname ){
-	if( hideOpendBox( grpjid+conferencechatserver ) ){
-		conObj.rooms.open( grpjid+conferencechatserver );
+	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
+		conObj.rooms.open( grpjid+conferencechatserver , grpname );
 	}
 }
 
