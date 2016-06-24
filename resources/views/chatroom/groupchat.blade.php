@@ -310,14 +310,14 @@ $groupid = $group_jid;
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
 					var jidStr = chatbox.model.get('jid');
 					setTimeout( function(){ 
-						hideOpendBox( jidStr );
+						hideOpendBox( jidStr, 2 );
 					}  , 2000 );
 				});
 				
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
 					var jidStr = chatbox.model.get('jid');
 					setTimeout( function(){ 
-						hideOpendBox( jidStr );
+						hideOpendBox( jidStr, 2 );
 					}  , 2000 );
 					
 					var xmpp = jidStr.replace( '@conference.<?= Config::get('constants.xmpp_host_Url') ?>' , '' );
@@ -345,10 +345,10 @@ $groupid = $group_jid;
 					}	
 				});
 		
-				converse.listen.on('disconnected', function (event) { 
+				conObj.listen.on('disconnected', function (event) { 
 					console.log( 'disconnected' );
 				});
-                converse.initialize({                           
+                conObj.initialize({                           
                   prebind: true,
                   bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
                   keepalive: true,
@@ -455,7 +455,7 @@ $groupid = $group_jid;
          if( ss==null ){  
              conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
          }
-         if( hideOpendBox( xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>' ) ){
+         if( hideOpendBox( xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>' , 1 ) ){
 			conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
 		}
      }
@@ -513,7 +513,7 @@ $(document).ready(function() {
 	});
 });
 
-function hideOpendBox( grpname , actiontype = 1 ){
+function hideOpendBox( grpname , actiontype ){
 	var resultreturn = true;
 	$( '.privatechat' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
