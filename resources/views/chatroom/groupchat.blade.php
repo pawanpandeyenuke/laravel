@@ -352,15 +352,16 @@ $groupid = $group_jid;
                   prebind: true,
                   bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
                   keepalive: true,
+                  show_desktop_notifications: false,
                   jid: '<?= Auth::User()->xmpp_username ?>@<?= Config::get('constants.xmpp_host_Url') ?>',
                   authentication: 'prebind',
                   prebind_url: "{{url('/ajax/getxmppuser')}}",
-                  allow_logout: false,
-                  debug: false ,
-                  message_carbons: true,
                   send_initial_presence:true,
-                  roster_groups: true ,
-                  forward_messages: true,
+				  ping_interval: 0,
+				  message_carbons: true,
+				  forward_messages: true,
+				  allow_logout: false,
+				  debug: false,
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
                 
