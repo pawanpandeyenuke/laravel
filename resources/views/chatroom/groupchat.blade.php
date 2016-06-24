@@ -344,7 +344,7 @@ $groupid = $group_jid;
 						});
 					}	
 				});
-				
+		
 				conObj.listen.on('disconnected', function (event) { 
 					console.log( 'disconnected' );
 				});
@@ -544,7 +544,9 @@ function hideOpendBox( grpname , actiontype ){
 }
 
 function openChatGroup( grpjid,grpname ){
-	conObj.rooms.open( grpjid+conferencechatserver );
+	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
+		conObj.rooms.open( grpjid+conferencechatserver , grpname );
+	}
 }
 
 $('.status-r-btn').on('click',function(){
