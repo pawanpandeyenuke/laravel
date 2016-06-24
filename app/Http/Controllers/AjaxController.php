@@ -702,7 +702,7 @@ comments;
 		}
 
 		// @ Send push notification on request accept action
-		$response = Converse::notifyMe( $input['user_id'], $input['friend_id'] );
+		$response = Converse::notifyMe( $input['user_id'], $input['friend_id'], 'accept' );
 //		echo $response;die;
 	}
 	/*
@@ -938,7 +938,10 @@ comments;
 		}elseif($status2==null){
 			DB::table('friends')->where('user_id',$id)->where('friend_id',$friend)->update(['status'=>'Pending','user_id'=>$friend,'friend_id'=>$id]);	
 		}
-	
+
+	        // @ Send push notification on send request action
+		$response = Converse::notifyMe( $id, $friend, 'request' );
+
 	}
 	/** Cancel Sent Friend Request **/
 	public function cancelRequest()
@@ -950,7 +953,9 @@ comments;
 		
 		if($input['friend_id'] == Auth::User()->id)
 			Friend::where('user_id',$input['friend_id'])->where('friend_id',$input['user_id'])->delete();	
+
 	}
+
  
 
 	public function sendImage(){
