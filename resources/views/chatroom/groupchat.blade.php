@@ -313,7 +313,7 @@ $groupid = $group_jid;
 						hideOpendBox( jidStr, 2 );
 					}  , 2000 );
 				});
-				
+				/**
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
 					var jidStr = chatbox.model.get('jid');
 					setTimeout( function(){ 
@@ -344,7 +344,7 @@ $groupid = $group_jid;
 						});
 					}	
 				});
-		
+				**/
 				conObj.listen.on('disconnected', function (event) { 
 					console.log( 'disconnected' );
 				});
