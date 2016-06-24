@@ -320,11 +320,11 @@ $groupid = $group_jid;
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
 					var jidStr = chatbox.model.get('jid');
 					var xmpp = jidStr.replace( '@conference.<?= Config::get('constants.xmpp_host_Url') ?>' , '' );
-					
 					if( waitProfile == 1 ){
 						hideOpendBox( jidStr );
 					}
 					if( xmpp ==  groupid ){
+						chatbox.$el.find( '.chat-title' ).html( '<?php echo $groupname; ?>' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
 							chatbox.$content.find( '.profileavatar' ).attr( "style", "background: url('<?php echo $group_image; ?>');" );
 						<?php } ?>
@@ -516,17 +516,22 @@ function hideOpendBox( grpname ){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getChat = conObj.chats.get(jid);
 		if( jid == grpname ){
-			getChat.maximize();
+			if( $(this).css('display') == 'none' ){
+				getChat.maximize();
+			}
 			resultreturn = false;
 		} else {
 			getChat.minimize();
 		}
 	});
+	
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
 		if( jid == grpname ){
-			getRooms.maximize();
+			if( $(this).css('display') == 'none' ){
+				getRooms.maximize();
+			}
 			resultreturn = false;
 		} else {
 			getRooms.minimize();
