@@ -327,7 +327,9 @@ $groupid = $group_jid;
 						chatbox.$el.find( '.chat-title' ).html( '<?php echo $groupname; ?>' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
 							chatbox.$content.find( '.profileavatar' ).attr( "style", "background: url('<?php echo $group_image; ?>');" );
-						<?php } ?>
+						<?php } else { ?>
+							chatbox.$content.find( '.profileavatar' ).attr( "style", "background: url('/images/groupdefault.png');" );
+						<?php	} ?>
 					} else {
 						$.ajax({
 							'url' : "/ajax/getgroupdeatils",
