@@ -1,5 +1,5 @@
 <?php 
-	$mainforums = \App\Forums::where('parent_id',0)->select('id','title')->get();
+	$mainforums = \App\Forums::where('parent_id',0)->orderBy('display_order')->select('id','title')->get();
 	$diseases = \App\ForumsDoctor::pluck('title')->toArray();
 	if(isset($keyword))
 		$key = $keyword;

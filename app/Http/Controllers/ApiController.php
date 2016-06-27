@@ -2243,7 +2243,7 @@ class ApiController extends Controller
 	*/
 	public function getForumCategories()
 	{
-		$this->data = Forums::all();
+		$this->data = Forums::orderBy('display_order')->get();
 		$this->status = 'success';
 		$this->message = null;
 		

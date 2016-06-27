@@ -152,7 +152,7 @@ class SearchController extends Controller
 
      public function forumsList()
     {
-        $mainforums = Forums::where('parent_id',0)->get();
+        $mainforums = Forums::where('parent_id',0)->orderBy('display_order')->get();
         return view('forums.mainforums')
             ->with('forums',$mainforums);
     }
