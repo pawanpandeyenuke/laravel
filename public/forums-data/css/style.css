@@ -162,7 +162,7 @@ span.loc img{
   font-size: 14px;
   vertical-align: middle;
   cursor: pointer;
-
+  margin: 0;
 }
 
 .like-cont input[type=checkbox].css-checkbox:checked + label.css-label {
