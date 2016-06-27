@@ -601,7 +601,7 @@ comments;
 		
 		$countryid = Country::where(['country_name' => $input['countryId']])->value('country_id');		
 		$statequeries = State::where(['country_id' => $countryid])->get();		
-		$states = array('<option value="">Select State</option>');
+		$states = array('<option value="State">Select State</option>');
 		foreach($statequeries as $query){			
 			$states[] = '<option value="'.$query->state_name.'">'.$query->state_name.'</option>';
 		}		
@@ -619,7 +619,7 @@ comments;
 		// echo $input['stateId'];die;
 		$cityid = State::where(['state_name' => $input['stateId']])->value('state_id');
 		$cityqueries = City::where(['state_id' => $cityid])->get();
-		$city = array('<option value="">Select City</option>');
+		$city = array('<option value="City">Select City</option>');
 		foreach($cityqueries as $query){			
 			$city[] = '<option value="'.$query->city_name.'">'.$query->city_name.'</option>';
 		}		
