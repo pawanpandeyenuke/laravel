@@ -311,14 +311,14 @@ $groupid = $group_jid;
 					var jidStr = chatbox.model.get('jid');
 					setTimeout( function(){ 
 						hideOpendBox( jidStr, 2 );
-					}  , 2000 );
+					}  , 1500 );
 				});
 				
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
 					var jidStr = chatbox.model.get('jid');
 					setTimeout( function(){ 
 						hideOpendBox( jidStr, 2 );
-					}  , 2000 );
+					}  , 2500 );
 					
 					var xmpp = jidStr.replace( '@conference.<?= Config::get('constants.xmpp_host_Url') ?>' , '' );
 					if( xmpp ==  groupid ){
