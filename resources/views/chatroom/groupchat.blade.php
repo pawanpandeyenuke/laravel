@@ -306,7 +306,7 @@ $groupid = $group_jid;
 						}  , 3000 );
 					}
 				});
-				/**
+				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
 					var jidStr = chatbox.model.get('jid');
 					setTimeout( function(){ 
@@ -337,14 +337,14 @@ $groupid = $group_jid;
 							'data' : { group_jid: xmpp },
 							'success' : function(data){
 								if( data.title !== undefined ){
-									chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url("+data.image+");" );
+									chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
 									chatbox.$el.find( '.chat-title' ).html( data.title );
 								}	
 							}
 						});
 					}	
 				});
-				**/
+				
 				conObj.listen.on('disconnected', function (event) { 
 					console.log( 'disconnected' );
 				});
