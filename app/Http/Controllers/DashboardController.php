@@ -491,7 +491,11 @@ class DashboardController extends Controller
         if($user == null)
             return redirect('/');
         $education = EducationDetails::where('user_id', $id)->get();
-                    
+
+        foreach($education as $key => $value) {
+            if($value->education_level == "")
+                unset($education[$key]);
+        }        
         // echo '<pre>';print_r($education);die;
 
         return view('profile.profile')
