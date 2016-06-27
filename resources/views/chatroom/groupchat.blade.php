@@ -368,8 +368,7 @@ $groupid = $group_jid;
 				  debug: false,
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
-                
-			
+              
 				
                 // jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                 // jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
@@ -551,7 +550,7 @@ function hideOpendBox( grpname , actiontype ){
 
 function openChatGroup( grpjid,grpname ){
 	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver );
+		conObj.rooms.open( grpjid+conferencechatserver, '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
 	}
 }
 
