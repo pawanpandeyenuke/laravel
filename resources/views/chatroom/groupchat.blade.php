@@ -309,9 +309,7 @@ $groupid = $group_jid;
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
 					var jidStr = chatbox.model.get('jid');
-					setTimeout( function(){ 
-						hideOpendBox( jidStr, 2 );
-					}  , 500 );
+					hideOpendBox( jidStr, 2 );
 				});
 				
 				conObj.listen.on('renderMessage', function (event, message) { 
