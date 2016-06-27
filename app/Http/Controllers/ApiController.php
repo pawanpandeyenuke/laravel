@@ -1034,6 +1034,7 @@ class ApiController extends Controller
 			}
 
             // @ Send push notification on send request action
+
 			$response = Converse::notifyMe( $arguments['user_id'], $arguments['friend_id'], 'request' );
 
 		}catch(Exception $e){

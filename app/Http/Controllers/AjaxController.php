@@ -680,7 +680,7 @@ comments;
 	public function accept()
 	{
 		$input=Input::all();
-		
+//echo 'xxxxxxxx';die;
      	$data = array(
 			'friend_id'=>$input['user_id'],
 			'user_id'=>$input['friend_id'],
@@ -941,7 +941,7 @@ comments;
 
         // @ Send push notification on send request action
 		$response = Converse::notifyMe( $id, $friend, 'request' );
-	
+
 	}
 	/** Cancel Sent Friend Request **/
 	public function cancelRequest()
@@ -953,7 +953,9 @@ comments;
 		
 		if($input['friend_id'] == Auth::User()->id)
 			Friend::where('user_id',$input['friend_id'])->where('friend_id',$input['user_id'])->delete();	
+
 	}
+
  
 
 	public function sendImage(){

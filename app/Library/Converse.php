@@ -165,6 +165,7 @@ class Converse
  	}
 
 
+
  	// @ Send notifications across devices
  	static function notifyMe( $userId, $friendId, $type )
  	{
@@ -191,6 +192,7 @@ class Converse
  	}
 
 
+
     // @ Return Response For Push Notification In IOS
     static function pushNotificationIphone( $message, $token )
     {
@@ -201,11 +203,11 @@ class Converse
             'token' => $token //'cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262'
         );
 
-        iphonePushNotification($data);
+	iphonePushNotification($data);
 /*        if(iphonePushNotification($data))
             $response = 'Message successfully delivered';  
 
-        return $response;*/
+        return $response; */
 
     }
 	

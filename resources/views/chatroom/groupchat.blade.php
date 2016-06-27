@@ -297,9 +297,6 @@ $groupid = $group_jid;
 	var waitProfile = 0;
 	
     jQuery(document).ready(function(){
-		setTimeout( function(){ 
-			waitProfile = 1;
-		}  , 8000 );
       require(['converse'], function (converse) {
                conObj = converse;
                conObj.listen.on('initialized', function (event) {
@@ -311,23 +308,26 @@ $groupid = $group_jid;
 				});
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
-					if( waitProfile == 1 ){
-						var jidStr = chatbox.model.get('jid');
-						hideOpendBox( jidStr );
-					}
+					var jidStr = chatbox.model.get('jid');
+					setTimeout( function(){ 
+						hideOpendBox( jidStr, 2 );
+					}  , 2000 );
 				});
 				
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
 					var jidStr = chatbox.model.get('jid');
-					var xmpp = jidStr.replace( '@conference.<?= Config::get('constants.xmpp_host_Url') ?>' , '' );
+					setTimeout( function(){ 
+						hideOpendBox( jidStr, 2 );
+					}  , 2000 );
 					
-					if( waitProfile == 1 ){
-						hideOpendBox( jidStr );
-					}
+					var xmpp = jidStr.replace( '@conference.<?= Config::get('constants.xmpp_host_Url') ?>' , '' );
 					if( xmpp ==  groupid ){
+						chatbox.$el.find( '.chat-title' ).html( '<?php echo $groupname; ?>' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
-							chatbox.$content.find( '.profileavatar' ).attr( "style", "background: url('<?php echo $group_image; ?>');" );
-						<?php } ?>
+							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('<?php echo $group_image; ?>');" );
+						<?php } else { ?>
+							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/images/groupdefault.png');" );
+						<?php	} ?>
 					} else {
 						$.ajax({
 							'url' : "/ajax/getgroupdeatils",
@@ -344,20 +344,24 @@ $groupid = $group_jid;
 						});
 					}	
 				});
-				
-                converse.initialize({                           
+		
+				conObj.listen.on('disconnected', function (event) { 
+					console.log( 'disconnected' );
+				});
+                conObj.initialize({                           
                   prebind: true,
                   bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
                   keepalive: true,
+                  show_desktop_notifications: false,
                   jid: '<?= Auth::User()->xmpp_username ?>@<?= Config::get('constants.xmpp_host_Url') ?>',
                   authentication: 'prebind',
                   prebind_url: "{{url('/ajax/getxmppuser')}}",
-                  allow_logout: false,
-                  debug: false ,
-                  message_carbons: true,
                   send_initial_presence:true,
-                  roster_groups: true ,
-                  forward_messages: true,
+				  ping_interval: 0,
+				  message_carbons: true,
+				  forward_messages: true,
+				  allow_logout: false,
+				  debug: false,
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
                 
@@ -452,7 +456,7 @@ $groupid = $group_jid;
          if( ss==null ){  
              conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
          }
-         if( hideOpendBox( xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>' ) ){
+         if( hideOpendBox( xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>' , 1 ) ){
 			conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
 		}
      }
@@ -502,31 +506,36 @@ function openChatbox( xmpusername,username ){
 $(document).ready(function() {
 	$( document ).on( 'click' , '.restore-chat.chatgroup' , function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
-		hideOpendBox( jid );
+		hideOpendBox( jid , 2 );
 	});
 	$( document ).on( 'click' , '.restore-chat.singlechat' , function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
-		hideOpendBox( jid );
+		hideOpendBox( jid , 2 );
 	});
 });
 
-function hideOpendBox( grpname ){
+function hideOpendBox( grpname , actiontype ){
 	var resultreturn = true;
 	$( '.privatechat' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getChat = conObj.chats.get(jid);
 		if( jid == grpname ){
-			getChat.maximize();
+			if( $(this).css('display') == 'none' && actiontype == 1 ){
+				getChat.maximize();
+			}
 			resultreturn = false;
 		} else {
 			getChat.minimize();
 		}
 	});
+	
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
 		if( jid == grpname ){
-			getRooms.maximize();
+			if( $(this).css('display') == 'none' && actiontype == 1 ){
+				getRooms.maximize();
+			}
 			resultreturn = false;
 		} else {
 			getRooms.minimize();
@@ -536,7 +545,7 @@ function hideOpendBox( grpname ){
 }
 
 function openChatGroup( grpjid,grpname ){
-	if( hideOpendBox( grpjid+conferencechatserver ) ){
+	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
 		conObj.rooms.open( grpjid+conferencechatserver );
 	}
 }
