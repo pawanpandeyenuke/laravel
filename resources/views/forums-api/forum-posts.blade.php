@@ -70,7 +70,7 @@
 							<input type="checkbox" name="checkboxG1" id="checkboxG1-post-{{$post->id}}" data-forumpostid="{{$post->id}}" data-userid="{{$user_id}}" class="css-checkbox api-likeforumpost" {{ isset($likedata[0])?'checked':'' }}>
 							<label for="checkboxG1-post-{{$post->id}}" class="css-label"><span class="likescount">{{ $likesCount }}</span></label>
 						@else
-							<input type="checkbox" name="checkboxG1" id="checkboxG1-guest-post-{{$post->id}}" class="css-checkbox">
+							<input type="checkbox" disabled="disabled" name="checkboxG1" id="checkboxG1-guest-post-{{$post->id}}" class="css-checkbox">
 							<label for="checkboxG1-guest-post-{{$post->id}}" class="css-label"><span class="likescount">
 							{{ $likesCount }}</span></label>
 						@endif
