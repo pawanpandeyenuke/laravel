@@ -327,7 +327,7 @@ comments;
 				$Title = $xmpp;
 			}
 			if( isset($Group->picture) && !empty($Group->picture) ) {
-				$Image = '/uploads/'.$Group->picture;
+				$Image = $Group->picture;
 			} else {
 				$Image = '/images/groupdefault.png';
 			}
