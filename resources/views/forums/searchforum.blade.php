@@ -53,7 +53,7 @@ $check_val = "";
 													else
 														$selected_opt = "";
 												?>
-												<option value = "{{ $option->id }}" {{$selected_opt}}> {{ $option->title }} </option> 
+												<option value = "{{ $option->id }}" {{$selected_opt}}>{{$option->title}}</option> 
 											@endforeach
 										@endif
 									</select>

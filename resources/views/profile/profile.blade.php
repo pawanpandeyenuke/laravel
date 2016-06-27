@@ -4,7 +4,7 @@
 	$gender = isset($user->gender) ? $user->gender : '';
 	// echo $gender;die;
 	if(empty($gender)){
-		$gender = 'N/A';
+		$gender = 'NA';
 	}
 	$maritalstatus = isset($user->marital_status) ? $user->marital_status : ''; 
 	$currentlystudy = isset($user)?$user->currently_studying:'';
@@ -131,36 +131,36 @@
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country</div></td>
 													<td> 
-														<span style="font-weight:500">{{ !empty($user->country)?$user->country:'N/A'}}</span>
+														<span style="font-weight:500">{{ !empty($user->country)?$user->country:'NA'}}</span>
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-gps"></i>State</div></td>
 													<td>
-														<span style="font-weight:500">{{!empty($user->state)?$user->state:'N/A'}}</span>
+														<span style="font-weight:500">{{!empty($user->state)?$user->state:'NA'}}</span>
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-city"></i>City</div></td>
 													<td>
-														<span style="font-weight:500">{{!empty($user->city)?$user->city:'N/A'}}</span>
+														<span style="font-weight:500">{{!empty($user->city)?$user->city:'NA'}}</span>
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-technology"></i>Mobile Contact</div></td>
 													<td>
 														@if(!empty($user->phone_no) && !empty($user->country_code))
-															<span style="font-weight:500">{{!empty($user->country_code)?'+ '.$user->country_code.' -':'N/A'}}</span>
-															<span style="font-weight:500">{{!empty($user->phone_no)?$user->phone_no:'N/A'}}</span>
+															<span style="font-weight:500">{{!empty($user->country_code)?'+ '.$user->country_code.' -':'NA'}}</span>
+															<span style="font-weight:500">{{!empty($user->phone_no)?$user->phone_no:'NA'}}</span>
 														@else
-															<span style="font-weight:500">N/A</span>
+															<span style="font-weight:500">NA</span>
 														@endif
 													</td>
 												</tr>
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-calendar"></i>Date of Birth <span style="">[it's confidential] </span> </div></td>
 													<td>
-														<span style="font-weight:500">{{!empty($user->birthday)?date('d F Y',strtotime($user->birthday)):'N/A'}}</span>
+														<span style="font-weight:500">{{!empty($user->birthday)?date('d F Y',strtotime($user->birthday)):'NA'}}</span>
 													</td>
 												</tr>
 												<tr>
@@ -177,8 +177,8 @@
 												</tr>
 
 												<?php $customcounter = 1; ?>
+												<?php //echo '<pre>';print_r($education->toArray());die; ?>
 												@foreach($education as $value)
-												<?php //echo '<pre>';print_r($value);die; ?>
 												<tr>
 													<td>
 														@if($customcounter == 1)
@@ -189,17 +189,34 @@
 														<div class="slt-cont">
 															<span style="font-weight:500">{{$value->education_level}}</span> in <span style="font-weight:500">{{$value->specialization}}</span>  
 															<br/>
-															<span>Batch of </span><span style="font-weight:500">{{$value->graduation_year}}</span> 
-															<br/>
-															<span>from </span><span style="font-weight:500">{{$value->education_establishment}}</span> 
-															<br/>
+															@if($value->graduation_year != 0)
+																<span>Batch of </span><span style="font-weight:500">{{$value->graduation_year}}</span> 
+																<br/>
+															@endif
+															@if($value->education_establishment != "")
+																<span>from </span><span style="font-weight:500">{{$value->education_establishment}}</span> 
+																<br/>
+															@endif
 															<span style="font-weight:500">
 
-															@if(!empty($value->country_of_establishment) && !empty($value->state_of_establishment) && !empty($value->city_of_establishment))
-																	{{$value->country_of_establishment}}, {{$value->state_of_establishment}}, {{$value->city_of_establishment}}
-															@else
-																	N/A
-															@endif
+															<?php 
+																$educountry = $value->country_of_establishment;
+																if($educountry == "")
+																	$location  = 'NA';
+																else{
+																	$edustate = $value->state_of_establishment;
+																	if($edustate == "")
+																		$location = $educountry;
+																	else{
+																		$educity = $value->city_of_establishment;
+																		if($educity == "")
+																			$location = $educountry.", ".$edustate;
+																		else
+																			$location = $educountry.", ".$edustate.", ".$educity;
+																	}
+																}
+															?>
+																{{$location}}
 															</span> 
 														</div>
 													</td>
@@ -220,7 +237,7 @@
 															<span style="font-weight:500">{{$user->job_category}},</span>
 												   		<br><span style="font-weight:500">{{$user->job_area}}</span>
 												  	@else
-												  		N/A
+												  		<span style="font-weight:500">NA</span>
 												  	@endif
 													</td>
 												</tr>

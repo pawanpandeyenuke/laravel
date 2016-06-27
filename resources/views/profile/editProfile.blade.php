@@ -3,16 +3,9 @@
 @section('content')
 
 <?php
-// print_r($education);die;
+	// print_r($user);die;
+
 	if(!empty($user->country)){
-
-		//$country = DB::table('country')->where('country_id', '=', $user->country)->value('country_name'); 
-
-		//$all_states = DB::table('state')->where('country_id', '=', $user->country)->pluck('state_name','state_id'); 
-
-		//$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
-
-	 	//$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 
 
 		$countryid = DB::table('country')->where('country_name', '=', $user->country)->value('country_id'); 
 		$all_states = DB::table('state')->where('country_id', '=', $countryid)->pluck('state_name','state_id'); 
@@ -20,9 +13,8 @@
 		$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
 	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 	
 
-		
-
 	}
+
 
 	$gender = isset($user->gender) ? $user->gender : '';
 	$maritalstatus = isset($user->marital_status) ? $user->marital_status : ''; 
@@ -112,7 +104,7 @@
 												<select name="state"  class="pr-edit" id="profile_state">
 													<option value="">State</option>	
 													<?php 
-													if(isset($all_states) && isset($user->state)){
+													if(!empty($all_states)){
 														foreach ($all_states as $key => $value) { 
 														if($value == $user->state)
 															$selected = 'Selected'; 
@@ -288,7 +280,13 @@
 																	<select id="graduationyears" name="graduation_year[]">
 																		<option value="">Year</option>
 																		@foreach($gradYear as $valuedata)
-																			<option value="{{$valuedata}}">{{ $valuedata }}</option>
+																			<?php
+																				if($valuedata == $data->graduation_year)
+																					$selected = 'selected';
+																				else
+																					$selected = '';
+																			?>
+																			<option value="{{$valuedata}}" {{$selected}}>{{ $valuedata }}</option>
 																		@endforeach
 																	</select>
 																</div>
@@ -349,8 +347,8 @@
 												<div class="row">
 													<div class="col-sm-4">
 														<div class="p-data-title"><i class="flaticon-graduation"></i>Education level</div>
-															<select name="education_level[]" style="max-width: 180px;" >
-																<option>Education level</option>
+															<select id="educationlevel" name="education_level[]" style="max-width: 180px;" >
+																<option value="">Education level</option>
 																<?php foreach ($educationLevel as $key => $value) { 
 																	if(isset($data->education_level)){
 																		if($data->education_level == $value)
@@ -365,8 +363,8 @@
 													</div>
 													<div class="col-sm-4">
 														<div class="p-data-title"><i class="flaticon-graduation"></i>Specialization</div>
-															<select name="specialization[]" style="max-width: 180px;" >
-																<option >Specialization</option>
+															<select id="specialization" name="specialization[]" style="max-width: 180px;" >
+																<option value="">Specialization</option>
 																<?php foreach ($specialization as $key => $value) { 
 																	if(isset($data->specialization)){
 																	if($data->specialization == $value)
@@ -381,7 +379,7 @@
 													</div>
 													<div class="col-sm-4">
 														<div class="p-data-title"><i class="flaticon-graduation"></i>Year</div>
-														<select class="" name="graduation_year[]">
+														<select class="" id="graduationyears" name="graduation_year[]">
 															<option>Year</option>
 															@foreach($gradYear as $valuedata)
 																<option value="{{$valuedata}}">{{ $valuedata }}</option>
@@ -396,7 +394,7 @@
 													</div>
 													<div class="col-sm-4">
 														<div class="p-data-title"><i class="flaticon-web-1"></i>Country of Establishment</div>
-														<select name="country_of_establishment[]" class="country" data-put="#state">
+														<select name="country_of_establishment[]" id="edu_country" class="country" data-put="#state">
 															@foreach($countries as $countrydata)
 																<option value="<?php echo $countrydata; ?>" <?php echo $selected; ?> ><?php echo $countrydata; ?></option>
 															@endforeach
@@ -405,13 +403,13 @@
 													<div class="col-sm-4">
 														<div class="p-data-title"><i class="flaticon-gps"></i>State of Establishment</div>
 														<select name="state_of_establishment[]" class="state" data-put="#city">
-															<option>Option</option>
+															<option value="">Option</option>
 														</select>
 													</div>
 													<div class="col-sm-4">
 														<div class="p-data-title"><i class="flaticon-city"></i>City of Establishment</div>
 														<select name="city_of_establishment[]" class="city">
-															<option>Option</option>
+															<option value="">Option</option>
 														</select>
 													</div>
 												</div> 
@@ -429,7 +427,7 @@
 											<div class="col-sm-6">
 												<div class="slt-cont">
 													<select name="job_area" class="pr-edit" id="jobarea" >
-														<option>Current Job Area</option>
+														<option value="">Current Job Area</option>
 														<?php 
 															if(isset($jobarea)){
 															foreach ($jobarea as $key => $value) { 
@@ -443,7 +441,7 @@
 													</select>
  
 													<select name="job_category" class="pr-edit" id="jobcategory" >
-														<option >Job Category</option>
+														<option value="">Job Category</option>
 														<?php 
 														if(isset($jobarea) && isset($education)){
 															foreach ($all_job_cat as $key => $value) { 
