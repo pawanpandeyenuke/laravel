@@ -311,7 +311,11 @@ $groupid = $group_jid;
 					var jidStr = chatbox.model.get('jid');
 					setTimeout( function(){ 
 						hideOpendBox( jidStr, 2 );
-					}  , 1500 );
+					}  , 500 );
+				});
+				
+				conObj.listen.on('renderMessage', function (event, message) { 
+					console.log( message );
 				});
 				
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
@@ -365,6 +369,7 @@ $groupid = $group_jid;
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
                 
+			
 				
                 // jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
                 // jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
