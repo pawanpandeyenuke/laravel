@@ -1230,7 +1230,7 @@ comments;
 		$UserId   = Auth::User()->id;
 		$Result   = [ 'limit' => 0 , 'status' => 0 ];
 		try {
-			$CheckStatus = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['groups.group_jid' => $GroupJid, 'members.member_id' => $UserId] )->select( 'status' )->first();
+			$CheckStatus = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['groups.group_jid' => $GroupJid, 'members.member_id' => $UserId] )->select( 'members.status' )->first();
 			if( isset( $CheckStatus->status ) && $CheckStatus->status == 'Pending' ) {
 				$Result['status']	= 1;
 				$TotalCount = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['members.member_id' => $UserId,'members.status' => 'Joined'] )->count();
@@ -1239,10 +1239,10 @@ comments;
 				}
 			}
 		} catch( Exception $e) {
-			 $e->getMessage();
+			echo  $e->getMessage();
+			exit();
 		}
 		echo json_encode( $Result );
-		exit();
 	}
 /**
 	for s chat list
