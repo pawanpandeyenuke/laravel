@@ -320,7 +320,7 @@ $groupid = $group_jid;
 					var jidStr = chatbox.model.get('jid');
 					setTimeout( function(){ 
 						hideOpendBox( jidStr, 2 );
-					}  , 2500 );
+					}  , 2000 );
 					
 					var xmpp = jidStr.replace( '@conference.<?= Config::get('constants.xmpp_host_Url') ?>' , '' );
 					if( xmpp ==  groupid ){
