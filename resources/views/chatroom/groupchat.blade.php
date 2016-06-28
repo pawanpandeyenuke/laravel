@@ -522,7 +522,7 @@ function hideOpendBox( grpname , actiontype ){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getChat = conObj.chats.get(jid);
 		if( jid == grpname ){
-			if( $(this).css('display') == 'none' && actiontype == 1 ){
+			if( actiontype == 1 ){
 				getChat.maximize();
 			}
 			resultreturn = false;
@@ -535,7 +535,7 @@ function hideOpendBox( grpname , actiontype ){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
 		if( jid == grpname ){
-			if( $(this).css('display') == 'none' && actiontype == 1 ){
+			if( actiontype == 1 ){
 				getRooms.maximize();
 			}
 			resultreturn = false;
