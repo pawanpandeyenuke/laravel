@@ -551,7 +551,31 @@ function openChatGroup( grpjid,grpname ){
 		conObj.rooms.open( grpjid+conferencechatserver, '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
 	}
 }
-
+function openFirstChat( grpjid ){
+	
+	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
+		conObj.rooms.open( grpjid+conferencechatserver, '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
+		$( '.chatnotification' ).remove();
+		$.ajax({
+			'url' : "/ajax/getchatgroup",
+			'type' : 'post',
+			'async' : false,
+			'dataType' : 'json',
+			'data' : { group_jid: grpjid },
+			'success' : function(data){
+				var ChatHtml = '';
+				$.each( data.data , function( i, v){
+					ChatHtml += '<li><div style="position:relative;" class="pvt-room-list">';
+						ChatHtml += '<a href="http://lfriendsquare.com/private-group-detail/'+v.id+'">';
+						ChatHtml += '<span style="background: url('+ ((v.picture != '' ) ? v.picture : "/images/post-img-big.jpg")+');" class="chat-thumb"></span>';
+						ChatHtml += '<span class="title">'+v.title+'</span></a>';
+						ChatHtml += '<button class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\');">Chat</button></div></li>';
+				});
+				$('#gccollapseThree').find( '.chat-user-list' ).html( '<ul>'+ChatHtml+'</ul>' );
+			}
+		});
+	}
+}
 $('.status-r-btn').on('click',function(){
 	if ( $('#status_img_up').is(':checked') ) {
 		$('.status-img-up').show();

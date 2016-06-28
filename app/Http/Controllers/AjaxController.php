@@ -1230,7 +1230,7 @@ comments;
 		$UserId   = Auth::User()->id;
 		$Result   = [ 'limit' => 0 , 'status' => 0 ];
 		try {
-			$CheckStatus = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['groups.group_jid' => $GroupJid, 'members.member_id' => $UserId] )->select( 'members.status' )->first();
+			$CheckStatus = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['groups.group_jid' => $GroupJid, 'members.member_id' => $UserId, 'groups.status' => 'Active' ] )->select( 'members.status' )->first();
 			if( isset( $CheckStatus->status ) && $CheckStatus->status == 'Pending' ) {
 				$Result['status']	= 1;
 				$TotalCount = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['members.member_id' => $UserId,'members.status' => 'Joined'] )->count();
@@ -1248,9 +1248,20 @@ comments;
 	for s chat list
 **/	
 	public function getChatGroupList(){
-		
-		
-		
+		$Request = Input::all();
+		$GroupJid = $Request['group_jid'];
+		$UserId   = Auth::User()->id;	
+		$Result   = ['data' => '' ];
+		$MemberGroup = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['groups.group_jid' => $GroupJid, 'members.member_id' => $UserId, 'groups.status' => 'Active','members.status' => 'Pending'] )->select( 'members.id' )->first();		
+		if( isset($MemberGroup->id) && !empty($MemberGroup->id) ){
+			$MemberID = $MemberGroup->id;
+			$PrivateGroupMember = GroupMembers::find($MemberID);
+			$PrivateGroupMember->status = 'Joined';
+			$PrivateGroupMember->update();
+			$UserGroup = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['members.member_id' => $UserId,'members.status' => 'Joined'] )->select( 'groups.group_jid','groups.title','groups.picture','groups.id' )->orderBy('groups.id', 'desc')->get();
+			$Result['data']  = $UserGroup;
+		}
+		echo json_encode( $Result );
 	}
 
 /**

@@ -798,7 +798,7 @@ class DashboardController extends Controller
 						$data1 = array(
 									'group_id'=>$groupdata->id,
 									'member_id'=>$data,
-									'status'=>'Joined',
+									'status'=>'Pending',
 								);
 						 GroupMembers::insert($data1);  
 					}
