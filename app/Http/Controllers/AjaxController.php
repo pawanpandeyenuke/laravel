@@ -1891,7 +1891,7 @@ comments;
 		$xmp			=	DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
 
 		$converse->removeUserGroup($GroupName,$xmp);
-		$Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode('left the group '.$GroupTitle) ) );
+		$Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode('left the group '.$GroupTitle) ) );
 		
 		$xmp = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$privategroupid)->pluck('xmpp_username');		
 		foreach ($xmp as $key => $value) {
