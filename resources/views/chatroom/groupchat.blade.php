@@ -309,11 +309,11 @@ $groupid = $group_jid;
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
 					var jidStr = chatbox.model.get('jid');
-					hideOpendBox( jidStr, 2 );
+					hideOpendBox( jidStr, 1 );
 				});
 				
 				conObj.listen.on('renderMessage', function (event, message) { 
-					console.log( message );
+					//console.log( message );
 				});
 				
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 

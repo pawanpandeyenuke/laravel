@@ -1183,7 +1183,7 @@ comments;
 			$GroupTitle  = $GroupDetails->title;
 			$converse = new Converse;
 			$converse->deleteGroup($GroupName);
-			$Message = json_encode( array( 'type' => 'privatechatdelete', 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => $GroupTitle.' has been removed.' ) );
+			$Message = json_encode( array( 'type' => 'privatechatdelete', 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode($GroupTitle.' has been removed.') ) );
 			$xmp = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$input)->pluck('xmpp_username');		
 			foreach ($xmp as $key => $value) {
 				$converse->broadcast($userXamp,$value,$Message);
@@ -1220,6 +1220,37 @@ comments;
 			$converse->broadcast($userXamp,$xmp,$Message);
 		
 		GroupMembers::where('group_id',$input['gid'])->where('member_id',$input['uid'])->delete();
+	}
+/**
+	for chat member status
+**/	
+	public function getNewChatGroup(){
+		$Request = Input::all();
+		$GroupJid = $Request['group_jid'];
+		$UserId   = Auth::User()->id;
+		$Result   = [ 'limit' => 0 , 'status' => 0 ];
+		try {
+			$CheckStatus = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['groups.group_jid' => $GroupJid, 'members.member_id' => $UserId] )->select( 'status' )->first();
+			if( isset( $CheckStatus->status ) && $CheckStatus->status == 'Pending' ) {
+				$Result['status']	= 1;
+				$TotalCount = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['members.member_id' => $UserId,'members.status' => 'Joined'] )->count();
+				if( $TotalCount < 15 ){
+					$Result['limit'] = 1;
+				}
+			}
+		} catch( Exception $e) {
+			 $e->getMessage();
+		}
+		echo json_encode( $Result );
+		exit();
+	}
+/**
+	for s chat list
+**/	
+	public function getChatGroupList(){
+		
+		
+		
 	}
 
 /**

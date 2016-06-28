@@ -803,7 +803,6 @@ class DashboardController extends Controller
 						 GroupMembers::insert($data1);  
 					}
 
-		   
 					$xmp = DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
 					$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname, 'message' => base64_encode('You are invited for '.$GroupTitle) ) );
 					foreach ($xmp as $key => $value) {
