@@ -1,8 +1,4 @@
-<?php
- ?>
 @extends('layouts.dashboard')
-
-
 
 <style type="text/css">
 	.boxsize{width:200px;}
@@ -146,23 +142,21 @@
             </div>
         </div>
     </div><!--/pagedata-->
-@endsection
-{!! Session::forget('error') !!}
+
 <!--<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
 <script src="{{url('/lib/js/emoji-picker.js')}}"></script> -->
 
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script> -->
 <script type="text/javascript">
 	
 	window.onload = function() {
-
-			window.emojiPicker = new EmojiPicker({
+/*			window.emojiPicker = new EmojiPicker({
 			emojiable_selector: '[data-emojiable=true]',
 			assetsPath: '/lib/img/',
 			popupButtonClasses: 'fa fa-smile-o'
       	});
       window.emojiPicker.discover();
-      loadOrgionalImogi();
+      loadOrgionalImogi();*/
 
       var w = $('#sticky-anchor').width();
 		$('.fix-header').css('width',w+60);
@@ -224,3 +218,5 @@
 
 
 </script>
+@endsection
+{!! Session::forget('error') !!}

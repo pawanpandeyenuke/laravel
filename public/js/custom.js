@@ -1068,9 +1068,9 @@ $('.btn-upload-icon').find(".badge").remove();
 		});
 	});
 
-	$(document).on('click','.load-more-search-forum',function(){
-		$(this).text('Loading...');
+		$(document).on('click','.load-more-search-forum',function(){
 		var current = $(this);
+		current.text('Loading...');
 		var breadcrum = $(this).data('breadcrum');
 		var keyword = $(this).data('keyword');
 		$.ajax({

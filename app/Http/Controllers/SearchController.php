@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 // use Illuminate\Http\Request;
 
-use App\Http\Requests;
+use App\Http\Requests,Config;
 use Request, Session, Validator, Input, Cookie;
 use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend,App\ForumLikes,App\ForumReply,App\ForumsDoctor;
 class SearchController extends Controller
@@ -93,11 +93,11 @@ class SearchController extends Controller
             'subject' => $subject,
             'usermail'=>$usermail
         );
-
+        $email_const = Config::get('constants.feedback_email');
         if($email != ''){
         Mail::send('emails.suggestion', $data, function($message) use($email, $subject) {
         $message->from($email, 'User Feedback');
-        $message->to('adi490162@gmail.com')->subject($subject);
+        $message->to($email_const)->subject($subject);
     });
         }
     }
@@ -165,7 +165,7 @@ class SearchController extends Controller
         if($r1 == "")
             return redirect('forums');
     
-           $mainforum=Forums::where('id',$parentid)->value('title');
+           $mainforum=Forums::where('id',$parentid)->first();
            $subforums = Forums::where('parent_id',$parentid)->get();
            if($subforums->isEmpty())
                     return redirect()->back();
@@ -288,11 +288,11 @@ class SearchController extends Controller
         if($input['mainforum'] == "Doctor"){
          
          if($input['subcategory'] == "international")
-                $breadcrum = $breadcrum."International > ".$input['i-diseases'];
+                $breadcrum = $breadcrum."International > ".$input['idiseases'];
          else if($input['subcategory'] == "country")
-                $breadcrum = $breadcrum.$input['country1']." > ".$input['c-diseases'];
+                $breadcrum = $breadcrum.$input['country1']." > ".$input['cdiseases'];
           else if($input['subcategory'] == 'country,state,city')
-                $breadcrum = $breadcrum.$input['country']." > ".$input['state']." > ".$input['city']." > ".$input['csc-diseases'];  
+                $breadcrum = $breadcrum.$input['country']." > ".$input['state']." > ".$input['city']." > ".$input['cscdiseases'];  
          
          }else{
 

@@ -601,7 +601,7 @@ comments;
 		
 		$countryid = Country::where(['country_name' => $input['countryId']])->value('country_id');		
 		$statequeries = State::where(['country_id' => $countryid])->get();		
-		$states = array('<option value="State">Select State</option>');
+		$states = array('<option value="">Select State</option>');
 		foreach($statequeries as $query){			
 			$states[] = '<option value="'.$query->state_name.'">'.$query->state_name.'</option>';
 		}		
@@ -619,7 +619,7 @@ comments;
 		// echo $input['stateId'];die;
 		$cityid = State::where(['state_name' => $input['stateId']])->value('state_id');
 		$cityqueries = City::where(['state_id' => $cityid])->get();
-		$city = array('<option value="City">Select City</option>');
+		$city = array('<option value="">Select City</option>');
 		foreach($cityqueries as $query){			
 			$city[] = '<option value="'.$query->city_name.'">'.$query->city_name.'</option>';
 		}		
@@ -961,14 +961,10 @@ comments;
 	public function sendImage(){
      $status=0;
      $message="";
-     //$url=url();
-
 
       $image = $_FILES["chatsendimage"]["name"];
-      //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
       
       $path=public_path().''.'/uploads/media/chat_images/';
-// echo '<pre>'; print_r($path);die;
 
 			$uploadedfile = $_FILES['chatsendimage']['tmp_name'];
 			$name = $_FILES['chatsendimage']['name'];
@@ -980,19 +976,6 @@ comments;
 			$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
 			$tmp = $uploadedfile;
 				if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
-            //$rootFolder=base_path();
-            // $image = Yii::$app->image->load($path.$actual_image_name);
-            
-        	
-            //$image->resize(200, 200);
-            //$image->save();
-
-
-            // $image= Image::make($path.$actual_image_name);
-            // $image->resize(200,200);
-            // $image->save();
-
-        //   ========== $data = Yii::$app->request->baseUrl.'/images/media/chat_images/'. $actual_image_name;
            
             $data='/uploads/media/chat_images/'.$actual_image_name;
            
@@ -1001,7 +984,7 @@ comments;
             if ($chatType == "group"){}//chat type check
             else{           
              $message=$_SERVER['HTTP_HOST'].$data;
-    $status=1;
+   			 $status=1;
             }                              
         } else
          $message= "Failed to send try again.";    
@@ -1017,7 +1000,6 @@ comments;
 
        public function searchfriendlist()
        {
-
   			    $input=Input::get('name');
 
 				$friend = Friend::with('friends')->with('user')
@@ -1027,7 +1009,7 @@ comments;
      					->toArray();
               
                 $data=array();
-	$count=0;
+				$count=0;
 
 	$msg="Sorry, no such friend found.";
 	foreach ($friend as $key => $value) 

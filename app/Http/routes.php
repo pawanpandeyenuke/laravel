@@ -386,6 +386,7 @@ Route::get('api/chat_image_page','ApiController@chatImagePage');
     'uses' => 'SearchController@confirm'
 	]);
 
-
+	Route::get('change-password','DashboardController@changePassword');
+	Route::post('change-password','DashboardController@changePassword');
 
 });

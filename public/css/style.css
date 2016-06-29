@@ -3325,11 +3325,30 @@ body {
   position: relative;
   background: url('../images/tab-arrow.png') 98% center no-repeat;
 }
-.fs-breadcrumb.margin-bottom {
+/*.fs-breadcrumb.margin-bottom {
 	margin-bottom: 25px;
-}
+}*/
 .margin-top20 {
     margin-top: 20px;
+}
+body{
+	background: #e9faf8 none repeat scroll 0 0;
+}
+header{
+	background: #fff;
+}
+.panel-default > .panel-heading{
+	background: #a0f0e6;
+}
+.forum-srch-list .table tr:nth-child(1) td{
+	border-top: 0px;
+}
+
+.page-title .img-icon {
+    left: 10px;
+    position: absolute;
+    top: 8px;
+    width: 25px;
 }
 .msg-notification span.profile-pic, .msg-notification span.chat-msg-author {
     display: none !important;
@@ -3347,3 +3366,4 @@ body {
 .msg-notification span.chat-msg-content::before {
     border: medium none !important;
 }
+

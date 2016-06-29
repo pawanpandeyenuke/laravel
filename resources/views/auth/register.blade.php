@@ -183,7 +183,7 @@
                         <div class="form-group">
                         <div class = "checkbox-cont">
                         <input type="checkbox" name="terms" id="terms" class="css-checkbox">
-                        <label for="terms" class="css-label" style="color: #0c0c0c" >I agree to the following<a href="{{url('terms-conditions')}}" style="color:#3ab29f "> terms and conditions</a>.</label>
+                        <label for="terms" class="css-label" style="color: #0c0c0c" >I agree to the following<a href="{{url('terms-conditions')}}" style="color:#3ab29f "> Terms and Conditions</a>.</label>
                         </div>
                      </div>
                      <input type="hidden" name="url" value = "{{$prev_url}}"/>
@@ -195,7 +195,7 @@
                                 </div>
                         </div>
                     </div>
-       </form>
+                </form>
                     <div class="or-divider"><span>Or</span></div>
                  <div class="small-text">Your social networking login details would be kept confidential.</div>                 
                     <div class="social-login top-margin">
@@ -214,7 +214,7 @@
     <div class="page-footer">
         <div class="text-center">
             <ul>
-                <li><a href="#" title="">Terms Privacy</a></li>
+                <li><a href="{{url('terms-conditions')}}" title="">Terms Privacy</a></li>
                 <li><a href="#" title="">&copy; 2015 friendzsquare</a></li>
             </ul>
         </div>
