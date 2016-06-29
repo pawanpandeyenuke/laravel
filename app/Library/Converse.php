@@ -101,7 +101,7 @@ class Converse
 		
 		$node = Config::get('constants.xmpp_host_Url');
 		$subject = "";
-		$result2 = @exec( "ejabberdctl send_message groupchat '".$groupfrom."@conference.".$node."/".$userfrom."' ".$userto."@".$node." '".$subject."' '".$msg."'");
+		$result2 = @exec( "sudo ejabberdctl send_message groupchat '".$groupfrom."@conference.".$node."/".$userfrom."' ".$userto."@".$node." '".$subject."' '".$msg."'");
 		//echo $result2;exit;
 	}
 
