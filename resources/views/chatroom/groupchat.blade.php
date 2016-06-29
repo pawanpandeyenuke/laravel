@@ -326,7 +326,7 @@ $groupid = $group_jid;
 					if( xmpp ==  groupid ){
 						chatbox.$el.find( '.chat-title' ).html( '<?php echo $groupname; ?>' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
-							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('<?php echo $group_image; ?>');" );
+							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
 						<?php } else { ?>
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/images/groupdefault.png');" );
 						<?php	} ?>
@@ -339,7 +339,7 @@ $groupid = $group_jid;
 							'data' : { group_jid: xmpp },
 							'success' : function(data){
 								if( data.title !== undefined ){
-									chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
+									chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/uploads/"+data.image+"');" );
 									chatbox.$el.find( '.chat-title' ).html( data.title );
 								}	
 							}

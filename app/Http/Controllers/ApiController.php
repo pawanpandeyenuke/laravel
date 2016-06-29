@@ -2205,8 +2205,7 @@ class ApiController extends Controller
 	 */
 	protected function output()
 	{
-		// $this->data = empty($this->data) ? null : $this->data;
-
+		$this->data = empty($this->data) ? null : $this->data;
 		return json_encode(array(
 			'status' => $this->status, 
 			'message' => $this->message,

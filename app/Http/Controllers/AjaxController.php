@@ -1337,7 +1337,7 @@ comments;
 			$image_name = time()."_GI_".strtoupper($file->getClientOriginalName());
 			$input['groupimage'] = $image_name;
 			$file->move(public_path('uploads'), $image_name);
-			$img = "/uploads/".$input['groupimage'];
+			$img = $input['groupimage'];
 		}
 
 		DB::table('groups')->where('id',$input['groupid'])->update(['picture' => $img]);
