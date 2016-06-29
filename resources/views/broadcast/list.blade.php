@@ -1,6 +1,7 @@
 @extends('layouts.dashboard')
 <?php //print_r($broadcast);die; ?>
 @section('content')
+
 <div class="page-data dashboard-body">
 	<div class="container">
 		<div class="row">
@@ -12,7 +13,6 @@
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
 							<div class="bcast-list no-margin">
-								
 							@foreach($broadcast as $data)
 							<?php
 							$namestr='';
@@ -47,6 +47,12 @@
 								</div>
 							@endforeach
 							</div>
+							@if (Session::has('error'))
+								<div class="alert alert-danger">{!! Session::get('error') !!}</div>
+							@endif
+							@if (Session::has('success'))
+								<div class="alert alert-success">{!! Session::get('success') !!}</div>
+							@endif
 							<div class="add-blist text-center">
 								<a href="{{url('broadcast-add')}}" title="" class="add-blist-btn"><i class="fa fa-plus"></i></a>
 							</div>

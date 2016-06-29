@@ -2,7 +2,7 @@
 
 <?php 
 // print_r($group_name);die;
-$groupnamestr = ucwords($group_name);
+$groupnamestr = ucwords($p_group->title);
 unset($countries[0]);
 // print_r($countries);die;
  ?>
@@ -18,11 +18,13 @@ unset($countries[0]);
 	            <div class="row">
 
 	            @include('panels.left')
-
+<?php 
+			$icon_url = url('category_images/'.$p_group->img_url);
+?>
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title">
-						<i class="flaticon-balloon"></i>{{$group_name}}
+						<img src="{{$icon_url}}" alt="" class="img-icon"> {{$p_group->title}}
 					</div>
 
 					<div class="row">
@@ -31,6 +33,14 @@ unset($countries[0]);
 
 							  <!-- Nav tabs -->
 							  <ul class="nav nav-tabs row" role="tablist">
+							  	<?php 
+							  		//print_r($subgroups->count());die;
+							  	?>
+							  	@if($subgroups->count() == 1)
+							  		<?php $li_class = "col-md-offset-4" ?>
+							  	@else
+							  		<?php $li_class = ""; ?>
+							  	@endif
 								@foreach($subgroups as $data)
 										<?php  
 					                            $titledata = explode(' ', $data->title);
@@ -47,7 +57,7 @@ unset($countries[0]);
 					                            else if($data->title == "International")
 					                            	$aria = "international";
 									       ?>
-							    <li role="presentation" class="col-md-4"><a href="#{{$aria}}" aria-controls="{{$aria}}" role="tab" data-toggle="tab">{{$data->title}}</a></li>
+							    <li role="presentation" class="col-md-4 {{$li_class}}"><a href="#{{$aria}}" aria-controls="{{$aria}}" role="tab" data-toggle="tab">{{$data->title}}</a></li>
 							   @endforeach
 							  </ul>
 
@@ -55,7 +65,7 @@ unset($countries[0]);
 							  <div class="tab-content">
 							    <div role="tabpanel" class="tab-pane" id="international">
 							    	{{ Form::open(array('url' => 'groupchat', 'method' => 'post', 'id' => 'internationalform')) }}
-							    	<input type="hidden" name="parentname" value="{{$group_name}}" />
+							    	<input type="hidden" name="parentname" value="{{$p_group->title}}" />
 							    	<input type="hidden" name="subcategory" value="International" />
 										<div class="tab-btn-cont">
 											<button type="submit" class="btn btn-primary">Start Chat</button>
@@ -64,12 +74,13 @@ unset($countries[0]);
 							    </div>
 							    <div role="tabpanel" class="tab-pane" id="country-tab">
 							    	{{ Form::open(array('url' => 'groupchat', 'method' => 'post', 'id' => 'countryform')) }}
-							    	<input type="hidden" name="parentname" value="{{$group_name}}" />
+							    	<input type="hidden" name="parentname" value="{{$p_group->title}}" />
 							    	<input type="hidden" name="subcategory" value="Country" />
 										<div class="row">
 											<div class="col-md-4 col-md-offset-4">
 												<!-- <label>Country</label> -->
 												<select name="country1" class="form-control">
+													<option value="">Select Country</option>
 													@foreach($countries as $data)					
 														<option value="{{$data}}">{{$data}}</option>
 													@endforeach
@@ -83,12 +94,12 @@ unset($countries[0]);
 							    </div>
 							    <div role="tabpanel" class="tab-pane" id="csc-tab">
 							    	{{ Form::open(array('url' => 'groupchat', 'method' => 'post', 'id' => 'chatsubgroupsvalidate')) }}
-							    	<input type="hidden" name="parentname" value="{{$group_name}}" />
+							    	<input type="hidden" name="parentname" value="{{$p_group->title}}" />
 							    	<input type="hidden" name="subcategory" value="Country, State, City" />
 										<div class="row">
 											<div class="col-md-4">
 												<select name="country" class="form-control" id="subcountry">
-													<option value="">Country</option>
+													<option value="">Select Country</option>
 													@foreach($countries as $data)					
 													<option value="{{$data}}">{{$data}}</option>
 													@endforeach
@@ -128,20 +139,6 @@ unset($countries[0]);
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
  <script type="text/javascript">
- 	
- $(document).on('click', '.group-radio', function(){
-
- 	if($(this).is(':checked')){
-
-		$(this).closest('.radio-cont').nextAll().find('.subs').hide();
-		$(this).closest('.radio-cont').find('.subs').show();
-		$(this).closest('.radio-cont').prevAll().find('.subs').hide();
-
- 	}
-
- });
-
-
 
     $("#chatsubgroupsvalidate").validate({ 
         errorElement: 'span',
@@ -168,6 +165,19 @@ unset($countries[0]);
         }
     });
 
+    
+        $("#countryform").validate({ 
+        errorElement: 'span',
+        errorClass: 'help-inline',
+        rules: {
+            country1: { required: true }
+        },
+        messages:{
+            country1:{
+                required: "Country is required."
+            }
+        }
+    });
 
 
 	$('#subcountry').change(function(){

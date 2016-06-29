@@ -27,6 +27,14 @@ return [
 
 	// Xmpp-prebind
 	'xmpp_host_Url'=>'friendzsquare.com',
+
+	'feedback_email' => 'adi490162@gmail.com',
+
+	'broadcast_limit' => 10,
+
+	'private_group_limit' => 5,
+
+	'private_members' => 10,
 ]
 
 ?>

@@ -29,7 +29,7 @@
 								}
 							}
 
-			$group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
+							$group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
 							$namestr=implode(",",$name);
 
 							if(!($count==0) || $data['owner_id']==Auth::User()->id)
@@ -62,6 +62,12 @@
 								<?php } ?>
 						@endforeach
 							</div>
+							@if (Session::has('error'))
+								<div class="alert alert-danger">{!! Session::get('error') !!}</div>
+							@endif
+							@if (Session::has('success'))
+								<div class="alert alert-success">{!! Session::get('success') !!}</div>
+							@endif
 							<div class="add-blist text-center">
 								<a href="{{url('private-group-add')}}" title="" class="add-blist-btn"><i class="fa fa-plus"></i></a>
 							</div>

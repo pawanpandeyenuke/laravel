@@ -205,7 +205,7 @@ $(".multiple-slt").select2();
 	
 
 	window.onload = function() {
-
+		alert('hi');
 			window.emojiPicker = new EmojiPicker({
 			emojiable_selector: '[data-emojiable=true]',
 			assetsPath: '/lib/img/',

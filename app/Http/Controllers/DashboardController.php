@@ -188,14 +188,14 @@ class DashboardController extends Controller
         $xmppusername = User::where('id',Auth::User()->id)->value('xmpp_username');
 
         $defGroup = DefaultGroup::where('group_by',Auth::User()->id)->lists('group_name');
-
+        
         foreach ($defGroup as $value) {
             $converse = new Converse;
             $response = $converse->removeUserGroup($value, $xmppusername);    
             // print_r($response);die;
         }
 
-        DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
+        DefaultGroup::where('group_by',Auth::User()->id)->delete();
 
         return view('chatroom.groups');
 
@@ -207,9 +207,9 @@ class DashboardController extends Controller
         $subgroups = '';
          if($parentid){
             $data = Category::where(['parent_id' => $parentid])->where(['status' => 'Active'])->get();
-            $name_check = Category::where('id',$parentid)->value('title');;
+            $name_check = Category::where('id',$parentid)->first();
             if($data->isEmpty()){
-                if($name_check == "")
+                if($name_check->title == "")
                     return redirect('group');
                 else
                     return redirect('groupchat/'.$parentid);
@@ -221,7 +221,7 @@ class DashboardController extends Controller
 
         return view('chatroom.subgroups') 
                 ->with('subgroups', $subgroups)
-                ->with('group_name', $name_check);
+                ->with('p_group', $name_check);
 
     }
 
@@ -269,6 +269,7 @@ class DashboardController extends Controller
             }
             // print_r($breadcrumb);die;
                     $last_id = end($id_arr);
+                    $img_icon = Category::where('id',$id_arr[0])->value('img_url');
                     $sub_groups = Category::where('parent_id',$last_id)->get();
 
                     if($sub_groups->isEmpty())
@@ -277,7 +278,8 @@ class DashboardController extends Controller
                     return view('chatroom.subcatgroups')
                             ->with('parent_id',$parentid)
                             ->with('breadcrumb',$breadcrumb)
-                            ->with('subgroup',$sub_groups);
+                            ->with('subgroup',$sub_groups)
+                            ->with('icon_url',$img_icon);
             }
             else
                 return redirect('group');
@@ -685,16 +687,14 @@ class DashboardController extends Controller
 
         echo '<pre>';print_r(json_encode($array));die;*/
 
-        if(Request::isMethod('post'))
-        {
+        $userid=Auth::User()->id;
 
-            $userid=Auth::User()->id;
+        if(Request::isMethod('post'))
+        { 
             $input=Request::all();
-           
-        
+            
         if(isset($input['broadcastuser'])&&$input['broadcastname']!=null)
             {
-
                 $members=implode(",",$input['broadcastuser']);
                 
                 $data = array(
@@ -724,6 +724,11 @@ class DashboardController extends Controller
 
         }
 
+    $broadcast_count = Broadcast::where('user_id',$userid)->get()->count();
+    if($broadcast_count > Config::get('constants.broadcast_limit')){
+        Session::put('error', "Sorry, you can only add upto ".Config::get('constants.broadcast_limit')." broadcasts.");
+        return redirect()->back();
+    }
 
     $friends=Friend::with('user')
                     ->with('user')
@@ -768,8 +773,8 @@ class DashboardController extends Controller
 
     public function privateGroupAdd() {
 
-		  if( Request::isMethod('post') ){
 				$userid = Auth::User()->id;
+          if( Request::isMethod('post') ){
 				$userXamp = Auth::User()->xmpp_username;
 				$input = Request::all();
 	 
@@ -802,8 +807,7 @@ class DashboardController extends Controller
 								);
 						 GroupMembers::insert($data1);  
 					}
-
-					$xmp = DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
+					$xmp = User::whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
 					$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname, 'message' => base64_encode('You are invited for '.$GroupTitle) ) );
 					foreach ($xmp as $key => $value) {
 						$converse->addUserGroup( $groupname,$value );
@@ -815,9 +819,14 @@ class DashboardController extends Controller
 			}
 		}
 
+            $group_count = Group::where('owner_id',$userid)->get()->count();
+            if($group_count >= Config::get('constants.private_group_limit')){
+            Session::put('error', "Sorry, you can only create upto ".Config::get('constants.private_group_limit')." private groups.");
+            return redirect()->back();
+            }
 		$friends=Friend::with('user')
                     ->with('user')
-                    ->where('friend_id', '=', Auth::User()->id)
+                    ->where('friend_id', '=', $userid)
                     ->where('status', '=', 'Accepted')
                     ->get()
                     ->toArray();
@@ -867,5 +876,23 @@ class DashboardController extends Controller
         // return view('dashboard.demopage');
     } */       
 
+    public function changePassword()
+    {
+        if(Request::isMethod('post')){
+            $input = Request::all();
+            if(Auth::check()){
+                $ret_password = User::where('id',Auth::User()->id)->value('password');
+                if(Hash::check($input['old_password'], Auth::User()->password)){
+                    User::where('id',Auth::User()->id)->update(['password' => bcrypt($input['new_password'])]);
+                    return redirect()->back()->with('success',"Password changed succesfully.");
+                }else{
+                    return redirect()->back()->with('error',"Old password doesn't match our records.");
+                }
+            }
+            else
+                return redirect()->back();
+        }   
+        return view('auth.passwords.change');
+    }
 
 }
