@@ -1176,7 +1176,6 @@ comments;
 	{
 		$input = Input::get('pid');
 		$userXamp = Auth::User()->xmpp_username;
-		
 		try{
 			$GroupDetails  = DB::table('groups')->where('id',$input)->select('title','group_jid')->first();
 			$GroupName  = $GroupDetails->group_jid;
@@ -1258,9 +1257,9 @@ comments;
 			$PrivateGroupMember = GroupMembers::find($MemberID);
 			$PrivateGroupMember->status = 'Joined';
 			$PrivateGroupMember->update();
-			$UserGroup = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['members.member_id' => $UserId,'members.status' => 'Joined'] )->select( 'groups.group_jid','groups.title','groups.picture','groups.id' )->orderBy('groups.id', 'desc')->get();
-			$Result['data']  = $UserGroup;
 		}
+		$UserGroup = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['members.member_id' => $UserId,'members.status' => 'Joined'] )->select( 'groups.group_jid','groups.title','groups.picture','groups.id' )->orderBy('groups.id', 'desc')->get();
+		$Result['data']  = $UserGroup;
 		echo json_encode( $Result );
 	}
 
