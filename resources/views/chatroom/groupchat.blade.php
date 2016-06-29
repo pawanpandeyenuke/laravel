@@ -326,7 +326,7 @@ $groupid = $group_jid;
 					if( xmpp ==  groupid ){
 						chatbox.$el.find( '.chat-title' ).html( '<?php echo $groupname; ?>' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
-							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('<?php echo $group_image; ?>');" );
+							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
 						<?php } else { ?>
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/images/groupdefault.png');" );
 						<?php	} ?>
@@ -553,29 +553,34 @@ function openChatGroup( grpjid,grpname ){
 }
 function openFirstChat( grpjid ){
 	
-	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
+	if( hideOpendBox( grpjid+conferencechatserver, 1 ) ){
 		conObj.rooms.open( grpjid+conferencechatserver, '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
 		$( '.chatnotification' ).remove();
-		$.ajax({
-			'url' : "/ajax/getchatgroup",
-			'type' : 'post',
-			'async' : false,
-			'dataType' : 'json',
-			'data' : { group_jid: grpjid },
-			'success' : function(data){
-				var ChatHtml = '';
-				$.each( data.data , function( i, v){
-					ChatHtml += '<li><div style="position:relative;" class="pvt-room-list">';
-						ChatHtml += '<a href="http://lfriendsquare.com/private-group-detail/'+v.id+'">';
-						ChatHtml += '<span style="background: url('+ ((v.picture != '' ) ? v.picture : "/images/post-img-big.jpg")+');" class="chat-thumb"></span>';
-						ChatHtml += '<span class="title">'+v.title+'</span></a>';
-						ChatHtml += '<button class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\');">Chat</button></div></li>';
-				});
-				$('#gccollapseThree').find( '.chat-user-list' ).html( '<ul>'+ChatHtml+'</ul>' );
-			}
-		});
+		groupChatRefresh( grpjid+conferencechatserver );
 	}
 }
+function groupChatRefresh( jid ){
+	var grpjid = jid.replace( conferencechatserver , '' );
+	$.ajax({
+		'url' : "/ajax/getchatgroup",
+		'type' : 'post',
+		'async' : false,
+		'dataType' : 'json',
+		'data' : { group_jid: grpjid },
+		'success' : function(data){
+			var ChatHtml = '';
+			$.each( data.data , function( i, v){
+				ChatHtml += '<li><div style="position:relative;" class="pvt-room-list">';
+					ChatHtml += '<a href="http://lfriendsquare.com/private-group-detail/'+v.id+'">';
+					ChatHtml += '<span style="background: url('+ ((v.picture != '' ) ? v.picture : "/images/post-img-big.jpg")+');" class="chat-thumb"></span>';
+					ChatHtml += '<span class="title">'+v.title+'</span></a>';
+					ChatHtml += '<button class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\');">Chat</button></div></li>';
+			});
+			$('#gccollapseThree').find( '.chat-user-list' ).html( '<ul>'+ChatHtml+'</ul>' );
+		}
+	});
+}
+
 $('.status-r-btn').on('click',function(){
 	if ( $('#status_img_up').is(':checked') ) {
 		$('.status-img-up').show();
