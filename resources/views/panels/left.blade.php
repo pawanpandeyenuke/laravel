@@ -56,6 +56,15 @@
 		      </h4>
 		    </div>
 		  </div>
+		   <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingSix">
+		      <h4 class="panel-title">
+		        <a href="{{ url('change-password') }}" class="without-arrow">
+		          <i class="flaticon-tool"></i>Change Password
+		        </a>
+		      </h4>
+		    </div>
+		  </div>
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingSix">
 		      <h4 class="panel-title">
