@@ -781,8 +781,8 @@ class DashboardController extends Controller
 								'status'=>'Active',
 								'owner_id'=>$userid,
 						    );  
-
-					$groupid   = preg_replace('/[^A-Za-z0-9\-]/', '_', $input['groupname']);
+					$GroupTitle = $input['groupname'];	
+					$groupid   = preg_replace('/[^A-Za-z0-9\-]/', '_', $GroupTitle);
 					$groupid   = strtolower($groupid);
 					$converse  = new Converse;
 					$groupdata = Group::create($data);
@@ -798,14 +798,13 @@ class DashboardController extends Controller
 						$data1 = array(
 									'group_id'=>$groupdata->id,
 									'member_id'=>$data,
-									'status'=>'Joined',
+									'status'=>'Pending',
 								);
 						 GroupMembers::insert($data1);  
 					}
 
-		   
 					$xmp = DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
-					$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => '' ) );
+					$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname, 'message' => base64_encode('You are invited for '.$GroupTitle) ) );
 					foreach ($xmp as $key => $value) {
 						$converse->addUserGroup( $groupname,$value );
 						$converse->broadcast($userXamp,$value,$Message);

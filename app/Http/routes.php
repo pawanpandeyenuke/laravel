@@ -143,6 +143,9 @@ Route::post('/ajax/forum-del-confirm','AjaxController@forumDelConfirm');
 
 Route::post('/ajax/leaveprivategroup','AjaxController@leavePrivateGroup');
 Route::post('/ajax/getgroupdeatils','AjaxController@getGroupDetail');
+
+Route::post('/ajax/getnewchatgroup','AjaxController@getNewChatGroup');
+Route::post('/ajax/getchatgroup','AjaxController@getChatGroupList');
 /**
  * @Api Routes..
  *
