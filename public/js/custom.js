@@ -1068,7 +1068,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		});
 	});
 
-		$(document).on('click','.load-more-search-forum',function(){
+	$(document).on('click','.load-more-search-forum',function(){
 		$(this).text('Loading...');
 		var current = $(this);
 		var breadcrum = $(this).data('breadcrum');
@@ -1078,7 +1078,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'type' : 'post',
 			'data' : { 'pageid': pageid,'breadcrum': breadcrum ,'keyword' : keyword },
 			'success' : function(data){
-				$(this).text('View More');
+				current.text('View More');
 				if(data != 'No More Results'){		
 					pageid = pageid + 1;
 					$('.loading-text').show();
