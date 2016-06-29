@@ -580,6 +580,26 @@ function groupChatRefresh( jid ){
 		}
 	});
 }
+/**
+** use for remove opened chat group imidiate
+**/
+function removeChatroom( jid ){
+	var privateChat = conObj.rooms.get( jid );
+	privateChat.close();
+}
+/**
+** use for remove opened chat group with time limit
+**/
+function removeGroup( jid ){
+	var privateChat = conObj.rooms.get( jid );
+	privateChat.$el.find('.chat-content').hide();
+	privateChat.$el.find('.sendXMPPMessage').hide();
+	privateChat.$el.find('.chat-area').append( '<div class="chat-notification" >You are removed from group</div>' );
+	setTimeout( function(){
+		privateChat.close();
+		$( '.minimized-chats-flyout > .restore-chattr:first' ).find( '.restore-chat' ).click();
+	}  , 5000 );
+}
 
 $('.status-r-btn').on('click',function(){
 	if ( $('#status_img_up').is(':checked') ) {
