@@ -3331,3 +3331,19 @@ body {
 .margin-top20 {
     margin-top: 20px;
 }
+.msg-notification span.profile-pic, .msg-notification span.chat-msg-author {
+    display: none !important;
+}
+.msg-notification {
+    min-height: 0;
+    padding: 0 !important;
+}
+.msg-notification span.chat-msg-content {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0 !important;
+    color: #ff0000 !important;
+    font-size: 12px !important;
+    padding: 0px 10px !important;
+}
+.msg-notification span.chat-msg-content::before {
+    border: medium none !important;
+}

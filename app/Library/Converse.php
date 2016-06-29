@@ -96,6 +96,13 @@ class Converse
 		//echo $result2;exit;
 	}
 
+	// @ (Broadcast) Send message in chatroom.
+	public static function broadcastchatroom($userfrom,$groupto,$msg){
+		$node = Config::get('constants.xmpp_host_Url');
+		$subject = "Broadcast group Subject";
+		$result2 = @exec( "ejabberdctl send_message groupchat ".$userfrom."@".$node." ".$groupto."@conference.".$node." '".$subject."' '".$msg."'");
+		//echo $result2;exit;
+	}
 
 	// @ Set users vCard.
 	public static function setVcard($username, $fieldValue){
