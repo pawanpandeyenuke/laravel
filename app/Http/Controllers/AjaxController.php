@@ -1181,14 +1181,12 @@ comments;
 			$GroupName  	= $GroupDetails->group_jid;
 			$GroupTitle  	= $GroupDetails->title;
 			$Message 		= json_encode( array( 'type' => 'privatechatdelete', 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode($GroupTitle.' has been removed.') ) );
-			
+			$converse = new Converse;
 			$xmp = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$input)->pluck('xmpp_username');		
 			foreach ($xmp as $key => $value) {
 				$converse->broadcastchatroom($GroupName,Auth::User()->first_name.' '.Auth::User()->last_name,$value,$Message);
 			}
-			
-			
-			$converse = new Converse;
+
 			$converse->deleteGroup($GroupName);
 			Group::where('id',$input)->where('owner_id',Auth::User()->id)->delete();
 			GroupMembers::where('group_id',$input)->delete();
