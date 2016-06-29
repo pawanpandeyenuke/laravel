@@ -5899,7 +5899,6 @@ button.close {
 .modal-open .modal {
   overflow-x: hidden;
   overflow-y: auto;
-  z-index: 999998;
 }
 .modal-dialog {
   position: relative;

@@ -22,7 +22,6 @@
 </script>
 </head>
 	<body>
-		<div class="page-loading" style="display:none"><img src="{{url('/images/full-loading.gif')}}" alt=""></div>
 		<header>
 	<div class="container">
 		<div class="row">
