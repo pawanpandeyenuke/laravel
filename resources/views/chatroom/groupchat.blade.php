@@ -267,7 +267,7 @@ $groupid = $group_jid;
 <?php 
  
   $img = Auth::User()->picture; 
-  $userpic = !empty($img)? url($img) : url('/images/user-thumb.png');
+  $userpic = !empty($img)? url($img) : url('/images/user-icon.png');
   
   
 ?>
