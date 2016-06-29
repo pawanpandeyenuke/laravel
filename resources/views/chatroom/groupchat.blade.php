@@ -339,7 +339,7 @@ $groupid = $group_jid;
 							'data' : { group_jid: xmpp },
 							'success' : function(data){
 								if( data.title !== undefined ){
-									chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/uploads/"+data.image+"');" );
+									chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
 									chatbox.$el.find( '.chat-title' ).html( data.title );
 								}	
 							}

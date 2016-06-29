@@ -327,7 +327,7 @@ comments;
 				$Title = $xmpp;
 			}
 			if( isset($Group->picture) && !empty($Group->picture) ) {
-				$Image = $Group->picture;
+				$Image = '/uploads/'.$Group->picture;
 			} else {
 				$Image = '/images/groupdefault.png';
 			}
@@ -1181,7 +1181,13 @@ comments;
 			$GroupName  	= $GroupDetails->group_jid;
 			$GroupTitle  	= $GroupDetails->title;
 			$Message 		= json_encode( array( 'type' => 'privatechatdelete', 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode($GroupTitle.' has been removed.') ) );
-			$converse->broadcastchatroom($userXamp,$GroupName,$Message);
+			
+			$xmp = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$input)->pluck('xmpp_username');		
+			foreach ($xmp as $key => $value) {
+				$converse->broadcastchatroom($GroupName,Auth::User()->first_name.' '.Auth::User()->last_name,$value,$Message);
+			}
+			
+			
 			$converse = new Converse;
 			$converse->deleteGroup($GroupName);
 			Group::where('id',$input)->where('owner_id',Auth::User()->id)->delete();
@@ -1206,13 +1212,15 @@ comments;
 		
 		$converse	= new Converse;
 		$xmp		= DB::table('users')->where('id',$input['uid'])->value('xmpp_username','');
-		$converse->removeUserGroup($GroupName,$xmp);
-		
+
 		$MemberDetails = User::find($input['uid']);
 		
         $Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode( $MemberDetails->first_name.' '.$MemberDetails->last_name.' remove from group chat') ) );
-		$converse->broadcastchatroom($userXamp,$GroupName,$Message);
-		
+		$xmp = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$input['gid'])->pluck('xmpp_username');		
+		foreach ($xmp as $key => $value) {
+			$converse->broadcastchatroom($GroupName,Auth::User()->first_name.' '.Auth::User()->last_name,$value,$Message);
+		}
+		$converse->removeUserGroup($GroupName,$xmp);
 		GroupMembers::where('group_id',$input['gid'])->where( 'member_id', $input['uid'] )->delete();
 	}
 /**
@@ -1925,11 +1933,12 @@ comments;
 		$converse		= new Converse;
 		
 		$xmp			=	DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
-
+		$Message 		= json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode( Auth::User()->first_name.' '.Auth::User()->last_name.' left the group '.$GroupTitle) ) );
+		$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$privategroupid)->pluck('xmpp_username');		
+		foreach ($xmp as $key => $value) {
+			$converse->broadcastchatroom($GroupName,Auth::User()->first_name.' '.Auth::User()->last_name,$value,$Message);
+		}
 		$converse->removeUserGroup($GroupName,$xmp);
-		$Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode( Auth::User()->first_name.' '.Auth::User()->last_name.' left the group '.$GroupTitle) ) );
-		$converse->broadcastchatroom($userXamp,$GroupName,$Message);
-
 		GroupMembers::where('group_id',$privategroupid)->where('member_id',Auth::User()->id)->delete();
 
     }

@@ -97,10 +97,10 @@ class Converse
 	}
 
 	// @ (Broadcast) Send message in chatroom.
-	public static function broadcastchatroom($userfrom,$groupto,$msg){
+	public static function broadcastchatroom($groupfrom,$userfrom,$userto,$msg){
 		$node = Config::get('constants.xmpp_host_Url');
-		$subject = "Broadcast group Subject";
-		$result2 = @exec( "ejabberdctl send_message groupchat ".$userfrom."@".$node." ".$groupto."@conference.".$node." '".$subject."' '".$msg."'");
+		$subject = "";
+		$result2 = @exec( "ejabberdctl send_message groupchat '".$groupfrom."@conference".$node."/".$userfrom."' ".$userto."@.".$node." '".$subject."' '".$msg."'");
 		//echo $result2;exit;
 	}
 
