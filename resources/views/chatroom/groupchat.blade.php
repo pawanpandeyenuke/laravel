@@ -222,7 +222,7 @@ $groupid = $group_jid;
                                <li>
 								   <div	class="pvt-room-list" style="position:relative;" >
 										<a href="{{url("private-group-detail/$pri_id")}}" >
-											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
+											<span class="chat-thumb" style="background: url(/uploads/<?= $group_picture ?>);"></span>
 											<span class="title">{{$data['title']}}</span>
 										</a>
 										<button onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
