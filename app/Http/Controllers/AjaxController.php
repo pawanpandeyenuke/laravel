@@ -321,18 +321,23 @@ comments;
 		if( isset($arguments['group_jid'])  ) {
 			$xmpp = $arguments['group_jid'];
 			$Group = Group::where('group_jid', $xmpp)->first();
-			if( isset($Group->title) && !empty($Group->title) ) {
-				$Title = $Group->title;
+			if( $Group ){
+				$Status = 1;
+				if( isset($Group->title) && !empty($Group->title) ) {
+					$Title = $Group->title;
+				} else {
+					$Title = $xmpp;
+				}
+				if( isset($Group->picture) && !empty($Group->picture) ) {
+					$Image = '/uploads/'.$Group->picture;
+				} else {
+					$Image = '/images/post-img-big.jpg';
+				}
 			} else {
-				$Title = $xmpp;
-			}
-			if( isset($Group->picture) && !empty($Group->picture) ) {
-				$Image = '/uploads/'.$Group->picture;
-			} else {
-				$Image = '/images/post-img-big.jpg';
+				$Status = 0;
 			}
 		}
-		echo json_encode( array( 'image' => $Image , 'title' => $Title ) );
+		echo json_encode( array( 'image' => $Image , 'title' => $Title, 'status' => $Status ) );
 		exit();
 	}
 
