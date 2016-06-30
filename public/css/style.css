@@ -3366,4 +3366,19 @@ header{
 .msg-notification span.chat-msg-content::before {
     border: medium none !important;
 }
+.chatnotification {
+    background-color: #e9faf8;
+    display: block;
+    font-size: 13px;
+    padding: 7px 10px;
+    width: 100%;
+}
+.chatnotification a {
+    background-color: #5df7e3;
+    border-radius: 8px;
+    color: #000;
+    margin-left: 10px;
+    padding: 3px 10px;
+    display: inline-block;
+}
 
