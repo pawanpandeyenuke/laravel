@@ -353,11 +353,16 @@ $groupid = $group_jid;
 							'dataType' : 'json',
 							'data' : { group_jid: xmpp },
 							'success' : function(data){
-								if( data.title !== undefined ){
-									chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
-									chatbox.$el.find( '.chat-title' ).html( data.title );
-									chatName[jidStr] = data.title;
-								}	
+								if( data.status == 1 ){
+									if( data.title !== undefined ){
+										chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
+										chatbox.$el.find( '.chat-title' ).html( data.title );
+										chatName[jidStr] = data.title;
+									}	
+								} else {
+									chatbox.close();
+									groupChatRefresh( '' );
+								}
 							}
 						});
 					}	
