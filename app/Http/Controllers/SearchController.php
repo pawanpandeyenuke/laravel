@@ -95,7 +95,7 @@ class SearchController extends Controller
         );
         $email_const = Config::get('constants.feedback_email');
         if($email != ''){
-        Mail::send('emails.suggestion', $data, function($message) use($email, $subject) {
+        Mail::send('emails.suggestion', $data, function($message) use($email, $subject,$email_const) {
         $message->from($email, 'User Feedback');
         $message->to($email_const)->subject($subject);
     });
