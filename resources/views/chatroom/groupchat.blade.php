@@ -300,6 +300,7 @@ $groupid = $group_jid;
       require(['converse'], function (converse) {
                conObj = converse;
                conObj.listen.on('initialized', function (event) {
+				   
 					if( groupname != '' || groupid != '' ) {
 						setTimeout( function(){
 							closePublic( groupid );
@@ -593,16 +594,17 @@ function removeChatroom( jid ){
 /**
 ** use for remove opened chat group with time limit
 **/
-function removeGroup( jid ){
-	var privateChat = conObj.rooms.get( jid );
-	privateChat.$el.find('.chat-content').hide();
-	privateChat.$el.find('.sendXMPPMessage').hide();
-	privateChat.$el.find('.chat-area').append( '<div class="chat-notification" >You are removed from group</div>' );
+function removeGroup( chatbox ){
+	chatbox.$el.find('.chat-content').hide();
+	chatbox.$el.find('.sendXMPPMessage').hide();
+	chatbox.$el.find('.chat-area').append( '<div class="chat-notification" >You are removed from group</div>' );
 	setTimeout( function(){
-		privateChat.close();
+		chatbox.close();
 		$( '.minimized-chats-flyout > .restore-chattr:first' ).find( '.restore-chat' ).click();
 	}  , 5000 );
 }
+
+
 /** 
 * show only one public group
 **/
