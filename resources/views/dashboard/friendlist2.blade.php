@@ -1,4 +1,4 @@
-		
+	
 		<?php 
 
 		if($model1!=null)
@@ -81,7 +81,9 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 						<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
 					</div>
 
-				<?php } ?>
+				<?php }
+				$last_id = $data['id'];
+				 ?>
 			</div>
 		</div>
 	</li>
@@ -90,11 +92,15 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 
 	<?php } else
 		{
+		
          ?>
- <ul>
+ 
+@if(empty($model))
+		<div class="no-result">No friends found.</div>
+@else
+<ul>
 @foreach($model as $data) 
 	<?php 
-//print_r($model);die;
 		if($data['friend_id'] == Auth::User()->id){
 			$name = $data['user']['first_name'].' '.$data['user']['last_name'];
 		$profileimage = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg';
@@ -167,17 +173,20 @@ $status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',A
 			</div>
 		</div>
 	</li>
-	<?php } ?>
+	<?php }
+		$last_id = $data['id'];
+	 ?>
+
 	@endforeach
 		</ul>
 		<?php if($count > 10){ 
 			//print_r("die here");die;
 			?>
-			<div class="load-btn load-more-friend">
+			<div class="load-btn load-more-friend-search" data-last-id = "{{$last_id}}" data-keyword="{{$keyword}}">
 			<span class="loading-text">View more</span>
 			<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
 		</div>
 		<?php } ?>
-
+@endif
 	<?php } ?>
 

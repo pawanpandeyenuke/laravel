@@ -133,7 +133,7 @@
 							<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
 					</div>	
 
-					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null)){
+					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null) && $data['id']!=Auth::User()->id){
 
 					?>	
 					<div class="text-right">

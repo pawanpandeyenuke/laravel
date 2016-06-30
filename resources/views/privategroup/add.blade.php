@@ -32,15 +32,13 @@
 						@endforeach
 								</select>
 							</div>
-
-				
 							<div class="btn-cont text-center">
 								<ul class="list-inline">
 									<li><input type="submit" title="" class="btn btn-primary" value="Save"/></li>
 									<li><a href="{{url('private-group-list')}}" title="" class="btn btn-primary">Cancel</a></li>
 								</ul>
 							</div>
-			{!! Form::close() !!}
+					{!! Form::close() !!}
 						</div>
 					</div>
 
@@ -62,6 +60,18 @@
 
 $(document).ready(function () {
 
+ 	/*	var last_valid_selection = null;
+
+	   $('#select-multiuser').change(function(event) {
+        if ($(this).val().length > <?php echo Config::get('constants.private_members'); ?>) {
+          $('#membermsg').show();
+          $(this).val(last_valid_selection);
+        } else {
+          last_valid_selection = $(this).val();
+          $('#membermsg').hide();
+        }
+      });
+*/
 	$( "#privategroupform" ).submit(function( event ) {
 		var stack = $('.b-valid');
 		$.each(stack, function(i,v){

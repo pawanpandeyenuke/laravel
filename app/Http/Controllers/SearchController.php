@@ -40,7 +40,7 @@ class SearchController extends Controller
             if( $authUserId != '' ){
                 
                 // User cannot search himself.
-                $model = $model->where('id', '!=', $authUserId);
+               // $model = $model->where('id', '!=', $authUserId);
 
                 // Search for user's who are not friends with me.
                 $model = $model->whereNotIn('id', Friend::where('user_id', '=', $authUserId)

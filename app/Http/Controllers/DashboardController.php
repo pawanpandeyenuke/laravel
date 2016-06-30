@@ -321,7 +321,7 @@ class DashboardController extends Controller
                             //return redirect()->back();
                          else{
                             $breadcrumb .= '_'.$cat->title;
-                            $check_name .= ' '.$cat->title;
+                            $check_name .= ' > '.$cat->title;
                          }
                              
                     }
@@ -339,7 +339,7 @@ class DashboardController extends Controller
 			$group_jid = preg_replace('/[^A-Za-z0-9\-]/', '_',$breadcrumb);
 			$group_jid = strtolower($group_jid);
 			
-			$GroupImage = Category::where('id',current($id_arr))->value( 'img_url' );
+			$GroupImage = Category::where('id',$id_arr[0])->value( 'img_url' );
 			
 			//print_r($group_jid);die;
 
@@ -361,25 +361,27 @@ class DashboardController extends Controller
                    
 
                  elseif($input['subcategory']=='Subjects'){
-                    $check_name = $input['parentname'].' '.$input['subcategory'].' '.$input['coursedata'];
+                    $check_name = $input['parentname'].' > '.$input['subcategory'].' > '.$input['coursedata'];
                     $sub_name = $input['subcategory'].'_'.$input['coursedata'];
                  }
                     
 
                  elseif($input['subcategory']=='Country, State, City'){
-                    $check_name = $input['parentname'].' '.$input['country'].', '.$input['state'].', '.$input['city'];
+
+                    $check_name = $input['parentname'].' > '.$input['country'].', '.$input['state'].', '.$input['city'];
                     $input['subcategory'] = preg_replace('/[^A-Za-z0-9\-]/', '_',$input['subcategory']);
+
                     $sub_name = 'csc'.'_'.$input['country'].'_'.$input['state'].'_'.$input['city'];
                  }
                     
 
                  elseif ( $input['subcategory']=='Country' ){
-                    $check_name = $input['parentname'].' '.$input['country1'];
+                    $check_name = $input['parentname'].' > '.$input['country1'];
                     $sub_name = 'c'.'_'.$input['country1'];
                  }
 
                  else{
-                    $check_name = $input['parentname'].' '.$input['subcategory'];
+                    $check_name = $input['parentname'].' > '.$input['subcategory'];
                     $sub_name = $input['subcategory'];
                  }
                
@@ -461,6 +463,7 @@ class DashboardController extends Controller
         $check_name = "";
         $group_jid = "";
         $usersData = "";
+        $GroupImage="";
         $id = Auth::User()->id;
         $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 
@@ -476,6 +479,7 @@ class DashboardController extends Controller
                     ->with('userdata', $usersData)
                     ->with('friendid',$friendid)
                     ->with('authid',$id)
+                    ->with('group_image',$GroupImage)
                     ->with('pendingfriend',$pendingfriend)
                     ->with('exception',$private_group_check)
                     ->with('privategroup',$privategroup);

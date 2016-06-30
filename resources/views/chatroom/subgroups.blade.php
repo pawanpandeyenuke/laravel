@@ -107,12 +107,12 @@ unset($countries[0]);
 											</div>
 											<div class="col-md-4">
 												<select name="state" class="form-control" id="substate">
-													<option>State</option>
+													<option>Select State</option>
 												</select>
 											</div>
 											<div class="col-md-4">
 												<select name="city" class="form-control" id="subcity">
-													<option>City</option>
+													<option>Select City</option>
 												</select>
 											</div>
 										</div>

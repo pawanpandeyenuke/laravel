@@ -111,7 +111,10 @@ $groupid = $group_jid;
                                     <div id="gccollapseOne" class="{{$pubdivid}}" role="tabpanel" aria-labelledby="gcheadingOne">
                                       <div class="panel-body">
                                         <div class="chat-header-small">
-                                          <i class="flaticon-people"></i> <b><?php echo ($exception == "private")?"":$groupname; ?></b>
+                                          <?php 
+                                                $icon_url = url('category_images/'.$group_image); 
+                                          ?>
+                                          <img src="{{$icon_url}}" alt="" class="img-icon"><b><?php echo ($exception == "private")?"":$groupname; ?></b>
                                         </div>
                                         <div class="chat-user-list StyleScroll">
                                           <ul>

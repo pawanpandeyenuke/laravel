@@ -79,7 +79,7 @@ if($mainforum->title == "Doctor")
 
 							<div class="row">
 								<div class="col-md-12">
-									<div class="btn-tab-cont">
+									<div class="btn-tab-cont margin-top">
 				 						<ul class="nav nav-tabs row" role="tablist">
 												@foreach($subforums as $data)
  <?php  
