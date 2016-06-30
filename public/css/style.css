@@ -3142,6 +3142,7 @@ margin-left: -15px;
 }
 #conversejs .icon-happy:before{
 	color: #7DD0C6 !important;
+	font-size: 18px !important;
 }
 #conversejs .box-flyout .chatbox-btn {
     display: none !important;
@@ -3383,3 +3384,20 @@ header{
 	font-weight:700; 
 	font-size:15pt;
 }
+.chatnotification {
+    background-color: #e9faf8;
+    display: block;
+    font-size: 13px;
+    padding: 7px 10px;
+    width: 100%;
+}
+.chatnotification a {
+    background-color: #5df7e3;
+    border-radius: 8px;
+    color: #000;
+    margin-left: 10px;
+    padding: 3px 10px;
+    display: inline-block;
+}
+
+

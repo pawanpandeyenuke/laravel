@@ -293,8 +293,7 @@ class DashboardController extends Controller
     *   Ajaxcontroller@groupchatrooms
     */
 
-    public function groupchat($groupid = "")
-    {
+    public function groupchat( $groupid = "" ){
         $private_group_check = "pub" ;
         $id=Auth::User()->id;
         $replace_array =  [' ', '/', ',', '(', ')', "'", '.', ':', ';','&'];
@@ -302,7 +301,7 @@ class DashboardController extends Controller
             $breadcrumb="";
             $check_name = "";
   
-            $id_arr = explode('-',$groupid);
+            $id_arr = explode('_',$groupid);
             foreach ($id_arr as $key => $value) {//10-46-147
               $cat = Category::where('id',$value)->first();
                 if($cat){
@@ -350,7 +349,7 @@ class DashboardController extends Controller
 
                 if($input['subcategory']=='International'){
                     $check_name = $input['parentname'].' > '.$input['subcategory'];
-                    $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
+                    $input['subcategory'] = preg_replace('/[^A-Za-z0-9\-]/', '_',$input['subcategory']);
                     $sub_name = $input['subcategory'];
                 }
                    
@@ -368,8 +367,10 @@ class DashboardController extends Controller
                     
 
                  elseif($input['subcategory']=='Country, State, City'){
+
                     $check_name = $input['parentname'].' > '.$input['country'].', '.$input['state'].', '.$input['city'];
-                    $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
+                    $input['subcategory'] = preg_replace('/[^A-Za-z0-9\-]/', '_',$input['subcategory']);
+
                     $sub_name = 'csc'.'_'.$input['country'].'_'.$input['state'].'_'.$input['city'];
                  }
                     
@@ -380,7 +381,7 @@ class DashboardController extends Controller
                  }
 
                  else{
-                    $check_name = $input['parentname'].' '.$input['subcategory'];
+                    $check_name = $input['parentname'].' > '.$input['subcategory'];
                     $sub_name = $input['subcategory'];
                  }
                
@@ -391,39 +392,35 @@ class DashboardController extends Controller
                 
                 $GroupImage = Category::where('title',$input['parentname'])->value( 'img_url' );
         }
+		$group_jid = $group_jid.'_pub';
+		$model = new DefaultGroup;
+		$updatecheck = $model->where('group_name', $group_jid)
+							->where('group_by', Auth::User()->id)
+							->get()->toArray();
+		$defGroup = array();
+		$defGroup['group_name'] = $group_jid;
+		$defGroup['group_by'] = Auth::User()->id;
+		if(empty($updatecheck))
+			$model->create($defGroup);
 
-            $model = new DefaultGroup;
-            $updatecheck = $model->where('group_name', $group_jid)
-                                ->where('group_by', Auth::User()->id)
-                                ->get()->toArray();
-            $defGroup = array();
-            $defGroup['group_name'] = $group_jid;
-            $defGroup['group_by'] = Auth::User()->id;
-            if(empty($updatecheck))
-                $model->create($defGroup);
+		$usersData = DefaultGroup::with('user')->where('group_name', $group_jid)->get()->toArray();
+		$friendid = Friend::where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+		$pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+		$private_group_array = GroupMembers::where('member_id',$id)->pluck('group_id');
+		$privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
 
-            $usersData = DefaultGroup::with('user')->where('group_name', $group_jid)->get()->toArray();
-            
-            $friendid = Friend::where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
-
-            $pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
-            
-            $private_group_array = GroupMembers::where('member_id',$id)->pluck('group_id');
-            
-            $privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
-
-                 return view('chatroom.groupchat')
-                    ->with('groupname', $check_name)
-                    ->with('group_jid',$group_jid)
-                    ->with('group_image',$GroupImage)
-                    ->with('userdata', $usersData)
-                    ->with('friendid',$friendid)
-                    ->with('authid',$id)
-                    ->with('pendingfriend',$pendingfriend)
-                    ->with('exception',$private_group_check)
-                    ->with('privategroup',$privategroup);
-    }
-
+		 return view('chatroom.groupchat')
+			->with('groupname', $check_name)
+			->with('group_jid',$group_jid)
+			->with('group_image',$GroupImage)
+			->with('userdata', $usersData)
+			->with('friendid',$friendid)
+			->with('authid',$id)
+			->with('pendingfriend',$pendingfriend)
+			->with('exception',$private_group_check)
+			->with('privategroup',$privategroup);
+    } 
+	
     public function privateGroupChat($groupid = "")
     {
         $private_group_check = "private";
@@ -772,11 +769,13 @@ class DashboardController extends Controller
 
         return view('privategroup.list')->with('privategroup',$privategroup);
     }
-
+	/** 
+	 * create private chat room/xmpp open chat room as private
+	 **/
     public function privateGroupAdd() {
 
-				$userid = Auth::User()->id;
-          if( Request::isMethod('post') ){
+		$userid = Auth::User()->id;
+        if( Request::isMethod('post') ){
 				$userXamp = Auth::User()->xmpp_username;
 				$input = Request::all();
 	 
@@ -793,7 +792,7 @@ class DashboardController extends Controller
 					$groupid   = strtolower($groupid);
 					$converse  = new Converse;
 					$groupdata = Group::create($data);
-					$groupname = $groupid."_".$groupdata->id;
+					$groupname = $groupid."_".$groupdata->id.'_pvt';
 					
 					$PrivateGroup = Group::find($groupdata->id);
 					$PrivateGroup->group_jid = $groupname;
@@ -821,11 +820,11 @@ class DashboardController extends Controller
 			}
 		}
 
-            $group_count = Group::where('owner_id',$userid)->get()->count();
-            if($group_count >= Config::get('constants.private_group_limit')){
+        $group_count = Group::where('owner_id',$userid)->get()->count();
+        if($group_count >= Config::get('constants.private_group_limit')){
             Session::put('error', "Sorry, you can only create upto ".Config::get('constants.private_group_limit')." private groups.");
             return redirect()->back();
-            }
+        }
 		$friends=Friend::with('user')
                     ->with('user')
                     ->where('friend_id', '=', $userid)

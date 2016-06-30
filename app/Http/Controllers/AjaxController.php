@@ -329,7 +329,7 @@ comments;
 			if( isset($Group->picture) && !empty($Group->picture) ) {
 				$Image = '/uploads/'.$Group->picture;
 			} else {
-				$Image = '/images/groupdefault.png';
+				$Image = '/images/post-img-big.jpg';
 			}
 		}
 		echo json_encode( array( 'image' => $Image , 'title' => $Title ) );
