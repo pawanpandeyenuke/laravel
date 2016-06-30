@@ -285,8 +285,8 @@ $groupid = $group_jid;
 
     var parent="<?php echo Request::get('parentname'); ?>";
 
-    var Base64 = {_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
-
+    var Base64 = {_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(r){var t,e,o,a,h,n,c,d="",C=0;for(r=Base64._utf8_encode(r);C<r.length;)t=r.charCodeAt(C++),e=r.charCodeAt(C++),o=r.charCodeAt(C++),a=t>>2,h=(3&t)<<4|e>>4,n=(15&e)<<2|o>>6,c=63&o,isNaN(e)?n=c=64:isNaN(o)&&(c=64),d=d+this._keyStr.charAt(a)+this._keyStr.charAt(h)+this._keyStr.charAt(n)+this._keyStr.charAt(c);return d},decode:function(r){var t,e,o,a,h,n,c,d="",C=0;for(r=r.replace(/[^A-Za-z0-9\+\/\=]/g,"");C<r.length;)a=this._keyStr.indexOf(r.charAt(C++)),h=this._keyStr.indexOf(r.charAt(C++)),n=this._keyStr.indexOf(r.charAt(C++)),c=this._keyStr.indexOf(r.charAt(C++)),t=a<<2|h>>4,e=(15&h)<<4|n>>2,o=(3&n)<<6|c,d+=String.fromCharCode(t),64!=n&&(d+=String.fromCharCode(e)),64!=c&&(d+=String.fromCharCode(o));return d=Base64._utf8_decode(d)},_utf8_encode:function(r){r=r.replace(/\r\n/g,"\n");for(var t="",e=0;e<r.length;e++){var o=r.charCodeAt(e);128>o?t+=String.fromCharCode(o):o>127&&2048>o?(t+=String.fromCharCode(o>>6|192),t+=String.fromCharCode(63&o|128)):(t+=String.fromCharCode(o>>12|224),t+=String.fromCharCode(o>>6&63|128),t+=String.fromCharCode(63&o|128))}return t},_utf8_decode:function(r){for(var t="",e=0,o=c1=c2=0;e<r.length;)o=r.charCodeAt(e),128>o?(t+=String.fromCharCode(o),e++):o>191&&224>o?(c2=r.charCodeAt(e+1),t+=String.fromCharCode((31&o)<<6|63&c2),e+=2):(c2=r.charCodeAt(e+1),c3=r.charCodeAt(e+2),t+=String.fromCharCode((15&o)<<12|(63&c2)<<6|63&c3),e+=3);return t}};
+   
     var conferencechatserver = '@conference.<?= Config::get('constants.xmpp_host_Url') ?>';
     var conObj;
     var groupname = "{{$groupname}}";
@@ -301,22 +301,25 @@ $groupid = $group_jid;
                conObj = converse;
                conObj.listen.on('initialized', function (event) {
 					if( groupname != '' || groupid != '' ) {
-						setTimeout( function(){ 
-							openChatGroup( groupid, groupname);
+						setTimeout( function(){
+							closePublic( groupid );
 						}  , 3000 );
 					}
 				});
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
+					chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
 					var jidStr = chatbox.model.get('jid');
 					hideOpendBox( jidStr, 1 );
+					
 				});
 				
 				conObj.listen.on('renderMessage', function (event, message) { 
 					//console.log( message );
 				});
 				
-				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
+				conObj.listen.on('chatRoomOpened', function (event, chatbox) {
+					chatbox.$el.attr( 'data-bid', Base64.encode(chatbox.model.get('jid')) );
 					var jidStr = chatbox.model.get('jid');
 					setTimeout( function(){ 
 						hideOpendBox( jidStr, 2 );
@@ -328,7 +331,7 @@ $groupid = $group_jid;
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
 						<?php } else { ?>
-							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/images/groupdefault.png');" );
+							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/images/post-img-big.jpg');" );
 						<?php	} ?>
 					} else {
 						$.ajax({
@@ -600,7 +603,37 @@ function removeGroup( jid ){
 		$( '.minimized-chats-flyout > .restore-chattr:first' ).find( '.restore-chat' ).click();
 	}  , 5000 );
 }
-
+/** 
+* show only one public group
+**/
+function closePublic( grpname ){
+	var openChat = 1;
+	$( '.privatechat' ).each( function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var getChat = conObj.chats.get(jid);
+			getChat.minimize();
+	});
+	
+	$( '.chatroom' ).each( function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var getRooms = conObj.rooms.get(jid);
+		var xmpp = jid.replace( conferencechatserver , '' );
+		if( xmpp == grpname ){
+			getRooms.maximize();
+			openChat = 0;
+		} else {
+			var grouptype = xmpp.substr(xmpp.length - 3);
+			if( grouptype == 'pub' ){
+				getRooms.close();
+			} else {
+				getRooms.minimize();
+			}
+		}
+	});
+	if( openChat == 1 ){
+		conObj.rooms.open( grpname+conferencechatserver, '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
+	}
+}
 $('.status-r-btn').on('click',function(){
 	if ( $('#status_img_up').is(':checked') ) {
 		$('.status-img-up').show();
