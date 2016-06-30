@@ -76,7 +76,7 @@ $count=0;
 					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
 				</div>
 
-					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null)){
+					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null) && $data['id']!=Auth::User()->id){
 
 					?>	
 					<div class="text-right">

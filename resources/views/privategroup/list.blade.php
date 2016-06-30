@@ -68,8 +68,9 @@
 							@if (Session::has('success'))
 								<div class="alert alert-success">{!! Session::get('success') !!}</div>
 							@endif
+							<div class="alert alert-danger" id="ajaxmsg" style="display:none;"><?php echo "Sorry, you can only create upto ".Config::get('constants.private_group_limit')." private groups."; ?></div>
 							<div class="add-blist text-center">
-								<a href="{{url('private-group-add')}}" title="" class="add-blist-btn"><i class="fa fa-plus"></i></a>
+								<a href="#create-group" title="" class="add-blist-btn add-pglist-btn"><i class="fa fa-plus"></i></a>
 							</div>
 						</div>
 					</div>
@@ -81,4 +82,14 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	
+	$(document).on('click','.add-pglist-btn',function(){
+			var len = $(".bcast-list > div").length;
+			if(len >= <?php echo Config::get('constants.private_group_limit'); ?>)
+				$('#ajaxmsg').show();
+			else
+				window.location = "private-group-add";
+	});
+</script>
 @endsection

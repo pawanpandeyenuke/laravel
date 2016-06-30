@@ -52,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
 
         // echo '<pre>';print_r(get_class($data));die;
         $preparedData = array();
-        $preparedData[0] = 'Country';
+        //$preparedData[0] = 'Country';
         foreach( $data as $val ){
 
             $preparedData[$val->country_id] = $val->country_name;

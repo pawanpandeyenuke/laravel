@@ -147,8 +147,8 @@
                                 <div class="contentEditable" align='center'>
                                   <p  style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
                                     Thanks for creating an account with FriendzSquare.
-                                    Please follow the link below to verify your email address
-                                    {{ URL::to('register/verify/'.$confirmation_code)}}.<br/>
+                                    Please follow the link below to verify your email address <a href="{{ URL::to('register/verify/'.$confirmation_code)}}">
+                                    {{ URL::to('register/verify/'.$confirmation_code)}}</a>.<br/>
                                     <br>
                                     <br>
                                     <br>

@@ -3366,4 +3366,20 @@ header{
 .msg-notification span.chat-msg-content::before {
     border: medium none !important;
 }
-
+.btn-tab-cont.margin-top {
+    margin-top: 20px;
+}
+.chat-header-small .img-icon {
+    margin-right: 10px;
+    width: 25px;
+}
+.broadcastbtn {
+    padding: 0 10px;
+}
+.no-result {
+	text-align:center; 
+	width=100%; 
+	margin-top:10%; 
+	font-weight:700; 
+	font-size:15pt;
+}

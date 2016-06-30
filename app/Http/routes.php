@@ -78,7 +78,7 @@ Route::post('ajax/sendimage','AjaxController@sendImage');
 Route::post('ajax/searchfriend','AjaxController@searchfriendlist');
 
 Route::post('ajax/searchtabfriend','AjaxController@searchTabFriend');
-
+Route::post('/ajax/view-more-friends-search','AjaxController@searchTabFriendMore');
 
 Route::post('/ajax/delbroadcast','AjaxController@delBroadcast');
 
@@ -251,10 +251,10 @@ Route::get('api/chat_image_page','ApiController@chatImagePage');
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-	Route::get('test', function()
+	/*Route::get('test', function()
 	{
-    dd(Config::get('mail'));
-	});
+    	return view('auth.emails.password');
+	});*/
 	Route::get('/redirect/{provider}', 'SocialController@redirect');
 	Route::get('/callback/{provider}', 'SocialController@callback');
 

@@ -1059,12 +1059,12 @@ comments;
 		$model2=array();
 
 		if($type=='all'){
-			$model1=User::where('id','!=',Auth::User()->id)->where('first_name','LIKE','%'.$name.'%')->get()->toArray();
+			$model1=User::where('id','!=',Auth::User()->id)->where('first_name','LIKE','%'.$name.'%')->take(10)->get()->toArray();
 		}else{
 			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $type ) {
 							self::queryBuilder( $query, $type );
 						})->get();
-			//$count = $model->count();
+			//$model=$model->take(10);
 			$model = $model->toArray();
 		}
 
@@ -1078,15 +1078,64 @@ comments;
 
 				if (stripos($n, $name) !== false) {
 					$model2[] =$value;
-					$count ++;
+					
 				}
 			}
 		}
 		//print_r($model2);die;
+		$count = count($model2);
+		$model2 = array_slice($model2, 0, 10);
 		return view('dashboard.friendlist2')
 					->with('model',$model2)
 					->with('model1',$model1)
-					->with('count',$count);
+					->with('count',$count)
+					->with('keyword',$name);
+	}
+
+	public function searchTabFriendMore()
+	{
+		$input = Input::all();
+		$page = $input['pageid'];
+		$type=$input['type'];
+		$name=$input['name'];
+
+		$per_page = 10;
+		$offset = ($page - 1) * $per_page;
+
+		$model1=array();
+		$model= '';
+		$model2=array();
+
+		if($type=='all'){
+			$model1=User::where('id','!=',Auth::User()->id)->where('first_name','LIKE','%'.$name.'%')->take(10)->get()->toArray();
+		}else{
+			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $type ) {
+							self::queryBuilder( $query, $type );
+						})->take($per_page)->skip($offset)->get();
+			$model = $model->toArray();
+		}
+
+		if($model!=null){
+			foreach ($model as $key => $value) {
+
+				if($type == 'current'|| $type == 'recieved')
+					$n=$value['user']['first_name']." ".$value['user']['last_name'];
+				else
+					$n=$value['friends']['first_name']." ".$value['friends']['last_name'];
+
+				if (stripos($n, $name) !== false) {
+					$model2[] =$value;
+					
+				}
+			}
+		}
+		//print_r($model2);die;
+		return view('dashboard.friendlist2More')
+					->with('model',$model2)
+					->with('model1',$model1)
+					//->with('count',$count)
+					->with('keyword',$name);
+
 	}
 
 /**
@@ -1341,8 +1390,8 @@ comments;
 			$user_id = Auth::User()->id;
 		else
 			$user_id="";
-	           $model = User::where('id','!=',$user_id)
-                            ->where('first_name','LIKE','%'. $keyword.'%')
+	           $model = User:://where('id','!=',$user_id)
+                             where('first_name','LIKE','%'. $keyword.'%')
                             ->orWhere('last_name','LIKE','%'. $keyword.'%')
                             ->skip($offset)
                             ->take($per_page)
