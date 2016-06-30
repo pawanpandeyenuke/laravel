@@ -204,7 +204,7 @@ $groupid = $group_jid;
                         $privategroupname = strtolower($privategroupname);
                         $privategroupid   = $privategroupname.'_'.$data['id'];
                         **/ 
-                        $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
+                        $group_picture = !empty($data['picture']) ? '/uploads/'.$data['picture'] : '/images/post-img-big.jpg';
 			
                             $namestr='';
                             $name=array();
@@ -225,7 +225,7 @@ $groupid = $group_jid;
                                <li>
 								   <div	class="pvt-room-list" style="position:relative;" >
 										<a href="{{url("private-group-detail/$pri_id")}}" >
-											<span class="chat-thumb" style="background: url(/uploads/<?= $group_picture ?>);"></span>
+											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
 											<span class="title">{{$data['title']}}</span>
 										</a>
 										<button onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
@@ -521,7 +521,31 @@ function openChatbox( xmpusername,username ){
 
 }
 */
+
+/** 
+* Bootstrap custom collapsed 
+**/
+function bootstrapCustomCollapse( collapsedtarget ){
+	$('.panel').each( function(){
+		var HeadingID = $(this).find('.panel-heading').attr('id');
+		if( HeadingID == collapsedtarget ){
+			$( this ).find('.panel-heading a').removeClass( 'collapsed' );
+			$( this ).find('.panel-heading a').attr('aria-expanded', 'true' );
+			$( this ).find( '.panel-collapse' ).addClass( 'in' );
+			$( this ).find('.panel-collapse').attr('aria-expanded', 'true' );
+			$( this ).find('.panel-collapse').attr('style', '' );
+		} else {
+			$( this ).find('.panel-heading a').addClass( 'collapsed' );
+			$( this ).find('.panel-heading a').attr('aria-expanded', 'false' );
+			$( this ).find( '.panel-collapse' ).removeClass( 'in' );
+			$( this ).find('.panel-collapse').attr('aria-expanded', 'false' );
+			$( this ).find('.panel-collapse').attr('style', 'height: 0px;' );
+		}
+	});
+}
+
 $(document).ready(function() {
+	$("#gccollapseThree").click();
 	$( document ).on( 'click' , '.restore-chat.chatgroup' , function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		hideOpendBox( jid , 2 );
