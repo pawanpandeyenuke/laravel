@@ -353,11 +353,16 @@ $groupid = $group_jid;
 							'dataType' : 'json',
 							'data' : { group_jid: xmpp },
 							'success' : function(data){
-								if( data.title !== undefined ){
-									chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
-									chatbox.$el.find( '.chat-title' ).html( data.title );
-									chatName[jidStr] = data.title;
-								}	
+								if( data.status == 1 ){
+									if( data.title !== undefined ){
+										chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
+										chatbox.$el.find( '.chat-title' ).html( data.title );
+										chatName[jidStr] = data.title;
+									}	
+								} else {
+									chatbox.close();
+									groupChatRefresh( '' );
+								}
 							}
 						});
 					}	
@@ -380,6 +385,7 @@ $groupid = $group_jid;
 				  forward_messages: true,
 				  allow_logout: false,
 				  debug: false,
+				  auto_subscribe: true,
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
               
