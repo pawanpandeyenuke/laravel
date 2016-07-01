@@ -385,6 +385,7 @@ $groupid = $group_jid;
 				  forward_messages: true,
 				  allow_logout: false,
 				  debug: false,
+				  auto_subscribe: true,
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
               
