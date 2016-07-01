@@ -21,7 +21,6 @@
 <?php
     $prev_url = URL::previous();
  ?>
-@include('panels.loginpopup')
 
 @if (Session::has('success'))
  <div class="alert alert-success">{!! Session::get('success') !!}</div>

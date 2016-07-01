@@ -60,7 +60,7 @@
 										<!-- <input type="text" class="form-control" data-emojiable="true" placeholder="What’s on your mind?"> -->
 										{!! Form::textarea('message', null, array(
 												'id' => 'newsfeed', 
-												'class' => 'form-control',
+												'class' => 'form-control status',
 												'data-emojiable' => true,
 												'placeholder' => 'What’s on your mind?',
 												'data-emojiable' => 'true',
@@ -317,8 +317,6 @@
 		</div>
 	</div><!--/pagedata-->
 
-
-@endsection
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 <script type="text/javascript">
 		$(document).on("click",".btn-post",function(){
@@ -350,5 +348,26 @@
 			$('#fileUpload').val('');
 			$('.badge').html('');
 		});	
+
+		$('#postform').submit(function(event){
+				//if($('.status').val()== "" && $('#image-holder').is(':empty')){
+					if($('#status_up_btn').is(':checked')){
+						if($('.status').val()== ""){
+							$('.status').focus();
+							event.preventDefault();
+						}
+						
+					}
+					if($('#status_img_up').is(':checked')){
+						if($('.status').val()== "" && $('#image-holder').is(':empty')){
+							$('.status').focus();
+							event.preventDefault();
+						}
+					}
+					
+					
+				//}
+		});
 </script>
 
+@endsection

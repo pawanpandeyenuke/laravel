@@ -108,11 +108,11 @@ if($mainforum->title == "Doctor")
 													    		<div class="row">
 													    			<div class="col-md-4 col-md-offset-4">
 													    				<select name="idiseases" class="form-control">
-													    					<option value="">Select Option</option>
-														    				@foreach($diseases as $doc)					
-																				<option value="{{$doc}}">{{$doc}}</option>
-																			@endforeach
-																		</select>
+														    					<option value="">Select Option</option>
+															    				@foreach($diseases as $doc)					
+																					<option value="{{$doc}}">{{$doc}}</option>
+																					@endforeach
+																			</select>
 													    			</div>
 													    		</div>
 													    	@endif
@@ -135,20 +135,20 @@ if($mainforum->title == "Doctor")
 																	?>
 																	<div class="col-md-4 {{$cls}}">
 																		<select name="country1" class="form-control">
-																			<option value="">Select Country</option>
-																			@foreach($countries as $data)					
+																				<option value="">Select Country</option>
+																				@foreach($countries as $data)					
 																				<option value="{{$data}}">{{$data}}</option>
-																			@endforeach
+																				@endforeach
 																		</select>
 																	</div>
 																	@if($mainforum->title == "Doctor")
 																	<div class="col-md-4">
 													    				<select name="cdiseases" class="form-control">
-													    					<option value="">Select Option</option>
-													    					@foreach($diseases as $doc)					
-																				<option value="{{$doc}}">{{$doc}}</option>
-																			@endforeach
-																		</select>
+														    					<option value="">Select Option</option>
+														    					@foreach($diseases as $doc)					
+																					<option value="{{$doc}}">{{$doc}}</option>
+																					@endforeach
+																			</select>
 																	</div>
 																	@endif
 																</div>
@@ -163,34 +163,34 @@ if($mainforum->title == "Doctor")
 														    	<input type="hidden" name="mainforum" value="{{$mainforum->title}}" />
 														    	<input type="hidden" name="subcategory" value="country,state,city" />
 																<div class="row">
-																	<div class="col-md-4">
-																		<select name="country" class="form-control" id="subcountry-forum">
-																				<option value="">Select Country</option>
-																			@foreach($countries as $data)					
-																				<option value="{{$data}}">{{$data}}</option>
-																			@endforeach
-																		</select>
-																	</div>
-																	<div class="col-md-4">
-																			<select name="state" class="form-control" id="substate-forum">
-																					<option>Select State</option>
+																		<div class="col-md-4">
+																			<select name="country" class="form-control" id="subcountry-forum">
+																					<option value="">Select Country</option>
+																					@foreach($countries as $data)					
+																					<option value="{{$data}}">{{$data}}</option>
+																					@endforeach
 																			</select>
-																	</div>
-																	<div class="col-md-4">
-																			<select name="city" class="form-control" id="subcity-forum">
-																					<option>Select City</option>
-																			</select>
-																	</div>
-																	@if($mainforum->title == "Doctor")
-																	<div class="col-md-4 col-md-offset-4 margin-top20">
-												    				<select name="cscdiseases" class="form-control">
-												    					<option value="">Select Option</option>
-												    					@foreach($diseases as $doc)					
-																				<option value="{{$doc}}">{{$doc}}</option>
-																			@endforeach
-																		</select>
-																	</div>
-												    			@endif
+																		</div>
+																		<div class="col-md-4">
+																				<select name="state" class="form-control" id="substate-forum">
+																						<option>Select State</option>
+																				</select>
+																		</div>
+																		<div class="col-md-4">
+																				<select name="city" class="form-control" id="subcity-forum">
+																						<option>Select City</option>
+																				</select>
+																		</div>
+																		@if($mainforum->title == "Doctor")
+																		<div class="col-md-4 col-md-offset-4 margin-top20">
+													    					<select name="cscdiseases" class="form-control">
+													    							<option value="">Select Option</option>
+													    							@foreach($diseases as $doc)					
+																						<option value="{{$doc}}">{{$doc}}</option>
+																						@endforeach
+																				</select>
+																		</div>
+													    			@endif
 																</div>
 																<div class="tab-btn-cont">
 																		<button type="submit" class="btn btn-primary csc">Enter Forum</button>
@@ -210,7 +210,6 @@ if($mainforum->title == "Doctor")
             </div>
         </div>
     </div><!--/pagedata-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
  <script type="text/javascript">
 

@@ -3399,5 +3399,11 @@ header{
     padding: 3px 10px;
     display: inline-block;
 }
-
-
+.tab-content span.help-inline {
+    bottom: -20px;
+    left: 15px;
+    position: absolute;
+}
+.btn-tab-cont .nav-tabs > li > a:focus{
+	outline: none;
+}

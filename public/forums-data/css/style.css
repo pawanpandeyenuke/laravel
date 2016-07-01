@@ -11,7 +11,7 @@ body{
    margin: 0px;
 }
 .forum-post-list{
-	padding: 15px 20px;
+	padding: 7px 3px;
 }
 .clearfix:after {
    content: " "; /* Older browser do not support empty content */
@@ -309,4 +309,3 @@ span.loc img{
 .forum-post-list .post-data p img {
     width: 25px;
 }
-

@@ -21,6 +21,7 @@
 
 </script>
 </head>
+@include('panels.loginpopup')
 	<body>
 		<header>
 	<div class="container">
@@ -69,7 +70,7 @@
                                    <div class='alert alert-success successmsg'  style='text-align: center; display: none;'>Thank you for your feedback!<br><a href='#' class='modalshow'>Have another one?</a></div>
                                     <div class="col-md-10 col-md-offset-1 successmsg">
                                         <div class="profile-select-cont form-group">
-                                            <textarea name="message_text" class="form-control message_text" placeholder="Enter suggestion" required></textarea>
+                                            <textarea name="message_text" class="form-control message_text" placeholder="Enter suggestion"></textarea>
                                         </div>
                                         <div class="profile-select-cont form-group">
                                             <input name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" placeholder="Enter email" class="form-control useremail" >
@@ -103,6 +104,80 @@
 
 		{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 	<script type="text/javascript" >
+
+	   $("#loginform").submit(function(event){
+              $('.login').text('Please Wait..');
+              $('.login').prop('disabled',true);
+    });
+
+    if(window.location.pathname == "/" || window.location.pathname == "/register"){
+        $('.login-footer').hide();
+    }else{
+        $('.login-footer').show();
+    }
+    
+    $("#loginform").ajaxForm(function(response) { 
+         
+    if(response){
+            $('.password').next('.help-block').find('.verifymsg').hide();
+        
+        if(response === "These credentials do not match our records.")
+        {
+            var current = $('.password');
+            current.next('.help-block').find('.verifymsg').hide();
+            current.css('border-color','#a94442');
+            current.next('.help-block').find('.errormsg').text(response).css('color','#a94442');
+            $('.emailid').css('border-color','#a94442');
+            $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+            $('.login').text('Login');
+            $('.login').prop('disabled',false);
+
+        }
+
+        if(response === "verification")
+            window.location = 'send-verification-link';
+
+        else if(response == "success"){
+            var url_c = window.location.pathname;
+           if(url_c == "/newpassword")
+		window.location = "/";
+	  else
+		window.location = url_c;
+        }else{
+            var obj = jQuery.parseJSON( response );
+            if( obj.email != null ){
+
+                var current = $('.emailid');
+                current.next('.help-block').find('.verifymsg').hide();
+                current.css('border-color','#a94442');
+                current.next('.help-block').find('.errormsg').text(obj.email).css('color','#a94442');
+
+                if( obj.password == null ){
+                    $('.password').next('.help-block').find('.errormsg').text("").css('color','#333333');
+                    current.next('.help-block').find('.verifymsg').hide();
+                    $('.password').css('border-color','#333333');
+                }
+            }
+            if( obj.password != null ){     
+                var current = $('.password');
+                current.next('.help-block').find('.verifymsg').hide();              
+                current.css('border-color','#a94442');
+                current.next('.help-block').find('.errormsg').text(obj.password).css('color','#a94442');
+
+                if( obj.email == null ){
+                    $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+                    current.next('.help-block').find('.verifymsg').hide();
+                    $('.emailid').css('border-color','#333333');
+                }
+            }
+                 $('.login').text('Login');
+                 $('.login').prop('disabled',false);
+        }
+    
+    }
+    
+});
+
  
 		$( "#searchform" ).submit(function( event ) {
 			var searchkey = $('#searchfriends').val();
@@ -119,6 +194,23 @@
 				event.preventDefault();
 			}
 		});
+
+		  $("#suggestionform").validate({ 
+          errorElement: 'span',
+          errorClass: 'help-inline',
+          rules: {
+              message_text: { required: true },
+              email: {email: true}
+          },
+          messages:{
+              message_text:{
+                  required: "Please write something to send your suggestion."
+              },
+              email:{
+                  email: "Please check your email format."
+              }
+          }
+      });
  
 		$("#suggestionform").ajaxForm(function(response) {
 			if(response == "success")
