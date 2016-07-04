@@ -196,7 +196,7 @@ $groupid = $group_jid;
                                       <div class="panel-body">
                                         <div class="chat-user-list StyleScroll">
 
-                                <ul>
+                                          <ul>
                     @foreach($privategroup as $data)
                     <?php  
 						/**
@@ -204,7 +204,7 @@ $groupid = $group_jid;
                         $privategroupname = strtolower($privategroupname);
                         $privategroupid   = $privategroupname.'_'.$data['id'];
                         **/ 
-                        $group_picture = !empty($data['picture']) ? '/uploads/'.$data['picture'] : '/images/post-img-big.jpg';
+                        $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
 			
                             $namestr='';
                             $name=array();
@@ -222,18 +222,18 @@ $groupid = $group_jid;
 							if(!($count==0) || $data['owner_id']==Auth::User()->id) { 
 								$pri_id = $data['id'];
                              ?>
-                               <li>
-								   <div	class="pvt-room-list" style="position:relative;" >
-										<a href="{{url("private-group-detail/$pri_id")}}" >
-											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
-											<span class="title">{{$data['title']}}</span>
-										</a>
-										<button onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
-                                   </div>
-                               </li>
-							<?php } ?>
-                         @endforeach
-					</ul>
+                                          <li>
+                        								    <div	class="pvt-room-list" style="position:relative;" >
+                            										<a href="{{url("private-group-detail/$pri_id")}}" >
+                            											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
+                            											<span class="title">{{$data['title']}}</span>
+                            										</a>
+                            										<button onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
+                                             </div>
+                                          </li>
+							           <?php } ?>
+                                    @endforeach
+					                             </ul>
                                      </div><!--/chat user list-->
                                       </div>
                                     </div>
@@ -385,6 +385,7 @@ $groupid = $group_jid;
 				  forward_messages: true,
 				  allow_logout: false,
 				  debug: false,
+				  auto_subscribe: true,
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
               
