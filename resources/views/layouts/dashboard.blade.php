@@ -21,6 +21,28 @@
 <link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
 
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+
+
+<script src="http://malsup.github.com/jquery.form.js"></script> 
+<script type="text/javascript" src="{{url('/fancybox/jquery.fancybox.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/fileinput.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/custom.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/bootstrap-filestyle.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/bootstrap-datepicker.min.js')}}"></script>
+<script src="{{url('/c-lib/lib/js/emojione.js')}}"></script>
+<script src="{{url('/js/select2.min.js')}}"></script>
+<!--Emoji libraries-->
+<script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>
+<script src="{{url('/lib/js/tether.min.js')}}"></script>
+<script src="{{url('/lib/js/config.js')}}"></script>
+<script src="{{url('/lib/js/util.js')}}"></script>
+<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
+<script src="{{url('/lib/js/emoji-picker.js')}}"></script>
+<script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
+
+
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -130,31 +152,12 @@
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <?php } ?>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
+<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script> -->
 
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
-
-<script src="http://malsup.github.com/jquery.form.js"></script> 
-<script type="text/javascript" src="{{url('/fancybox/jquery.fancybox.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/fileinput.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/custom.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap-filestyle.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap-datepicker.min.js')}}"></script>
-<script src="{{url('/c-lib/lib/js/emojione.js')}}"></script>
-<script src="{{url('/js/select2.min.js')}}"></script>
-<!--Emoji libraries-->
-<script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>
-<script src="{{url('/lib/js/tether.min.js')}}"></script>
-<script src="{{url('/lib/js/config.js')}}"></script>
-<script src="{{url('/lib/js/util.js')}}"></script>
-<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
-<script src="{{url('/lib/js/emoji-picker.js')}}"></script>
-<script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
+<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script> -->
 
  
 </body>
@@ -279,8 +282,6 @@
       $('.useremail').val('');
     });
 
-    
-	
 </script>
 
 

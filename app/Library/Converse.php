@@ -106,13 +106,13 @@ class Converse
 	}
 
 	// @ Set users vCard.
-	public static function setVcard($username, $fieldValue){
+	public static function setVcard($username, $fieldValue, $ImageType){
 
 		$node = Config::get('constants.xmpp_host_Url');
 		$fieldName = 'BINVAL';
-		$fieldValue = base64_encode( $fieldValue );
-
-		return @exec('sudo ejabberdctl set-vcard '.$username.' '.$node.' '.$fieldName.' "'.$fieldValue.'" 2>&1', $output, $status);
+		$fieldType = 'TYPE';
+		@exec('sudo ejabberdctl set-vcard '.$username.' '.$node.' '.$fieldName.' "'.$fieldValue.'" 2>&1', $output, $status);
+		@exec('sudo ejabberdctl set-vcard '.$username.' '.$node.' '.$fieldType.' "'.$ImageType.'" 2>&1', $output, $status);
 
 	}
 

@@ -10,6 +10,15 @@
 <link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/style.css')}}" rel="stylesheet">
 <link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
+
+		<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>	
+		<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script src="http://malsup.github.com/jquery.form.js"></script> 
+		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -94,16 +103,10 @@
 </header><!--/header-->
 		
 		@yield('content')
-		<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>	
-		<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-		<script src="http://malsup.github.com/jquery.form.js"></script> 
-		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
 
 		{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
-	<script type="text/javascript" >
+<script type="text/javascript" >
 
 	   $("#loginform").submit(function(event){
               $('.login').text('Please Wait..');

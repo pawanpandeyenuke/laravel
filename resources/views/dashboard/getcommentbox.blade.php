@@ -137,7 +137,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 </div>
 
 
-<script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
+<!-- <script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
 <script src="/lib/js/nanoscroller.min.js"></script>
 <script src="/lib/js/tether.min.js"></script>
 <script src="/lib/js/config.js"></script>
@@ -145,7 +145,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 <script src="/lib/js/jquery.emojiarea.js"></script>
 <script src="/lib/js/emoji-picker.js"></script>
 <script src="/js/jquery.nicescroll.min.js"></script>
-<script src="c-lib/lib/js/emojione.js"></script>
+<script src="c-lib/lib/js/emojione.js"></script> -->
 <script>
 
 	$(document).ready(function(){

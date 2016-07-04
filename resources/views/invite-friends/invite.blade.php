@@ -78,10 +78,10 @@
 	</div>
 </div>
  
-@endsection
+
 
 <script src="http://connect.facebook.net/en_US/all.js"></script>
-<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<!-- <script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script> -->
 <script src="//js.live.net/v5.0/wl.js"></script>
  
 <div id="fb-root"></div>
@@ -168,3 +168,4 @@
 		});
 	}
 </script>
+@endsection

@@ -804,13 +804,11 @@ $('.btn-upload-icon').find(".badge").remove();
 	*
 	**/
 	$(document).on('click', '.search-btn-small', function(){    
-		showLoading();	
 		var type = $(this).data('reqtype');
 		var current = $(this);
 		var name=current.closest('.search-box').find('.searchtabtext').val();
-
-		//alert('Hello');
-		
+		if(name != ""){
+			showLoading();	
 		$.ajax({
 			'url' : 'ajax/searchtabfriend',
 			'data' : {'type' : type,'name' : name},
@@ -822,6 +820,10 @@ $('.btn-upload-icon').find(".badge").remove();
 				hideLoading();
 			}
 		});
+	}else{
+		current.closest('.search-box').find('.searchtabtext').focus();
+		hideLoading();
+	}
 	});
 
 	$(document).on('keypress', '.searchtabtext', function(e){

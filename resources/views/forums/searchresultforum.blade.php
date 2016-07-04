@@ -130,12 +130,12 @@
             </div>
         </div>
     </div><!--/pagedata-->
-@endsection
-{!! Session::forget('error') !!}
+
+
 <!--<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
 <script src="{{url('/lib/js/emoji-picker.js')}}"></script> -->
 
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script> -->
 <script type="text/javascript">
 	
 	window.onload = function() {
@@ -170,3 +170,5 @@
 
 
 </script>
+@endsection
+{!! Session::forget('error') !!}

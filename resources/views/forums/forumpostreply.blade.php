@@ -185,11 +185,11 @@
             </div>
         </div>
     </div><!--/pagedata-->
-@endsection
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+
+<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 <script type="text/javascript" src="{{url('/js/fileinput.min.js')}}"></script>
 <script type="text/javascript" src="{{url('/fancybox/jquery.fancybox.js')}}"></script>
-<script src="{{url('/js/select2.min.js')}}"></script>
+<script src="{{url('/js/select2.min.js')}}"></script> -->
 <script type="text/javascript">
 $(".multiple-slt").select2();
 
@@ -202,10 +202,7 @@ $(".multiple-slt").select2();
 	});
 	//$('.popup').fancybox();
 
-	
-
 	window.onload = function() {
-		alert('hi');
 			window.emojiPicker = new EmojiPicker({
 			emojiable_selector: '[data-emojiable=true]',
 			assetsPath: '/lib/img/',
@@ -262,5 +259,5 @@ $(".multiple-slt").select2();
 
 
 </script>
-</body>
-</html>
+
+@endsection
