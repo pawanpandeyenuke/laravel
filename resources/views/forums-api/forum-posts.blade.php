@@ -29,7 +29,7 @@
 				$pic = !empty($user->picture) ? $user->picture : 'images/user-thumb.jpg';
 				$likedata = \App\ForumLikes::where(['owner_id' => $user_id, 'post_id' => $post->id])->get(); 
 			?>
-			<div class="single-post">
+			<div class="single-post" id="forumpost_{{$post->id}}">
 				<div class="post-header">
 				  	@if($user_id)
 				  		@if($user_id == $user->id)
@@ -41,7 +41,7 @@
 								@if($repliesCount == 0)
 									<li><a href="{{ url("api/get-forum-post-details?post_id=$post->id&user_id=$user->id&post_data=$postTitle") }}">Edit</a></li>
 								@endif
-									<li><a href="#" class="forumpostdelete" data-postid="{{$post->id}}" data-breadcrum = "{{$post->forum_category_breadcrum}}">Delete</a></li>
+									<li><a href="#" class="del-confirm-api" data-type="post" data-postid="{{$post->id}}" data-breadcrum = "{{$post->forum_category_breadcrum}}">Delete</a></li>
 								</ul>
 							</div>
 					  	@endif
@@ -89,13 +89,11 @@
 		@endforeach
 
 	</div>
-
 		@if($posts->count() >= 5)
 			<div class="load-more-btn-cont text-center">
-				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumpost" data-breadcrum = "{{$breadcrumb}}">View More</button>
+				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumpost loading-btn" data-breadcrum = "{{$breadcrumb}}">View More</button>
 			</div>
 		@endif
-
 <div class="userid" data-id="{{$user_id}}"></div>
 
 @endsection
