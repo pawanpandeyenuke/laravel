@@ -1,4 +1,4 @@
-<div class="col-sm-3">
+<div class="col-sm-3 side-ad-col">
 	<div class="side-btn">
 		<a href="#" title="" data-toggle="modal" data-target="#myModal" class="btn btn-lg btn-full btn-primary">Suggestions</a>
 

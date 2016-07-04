@@ -1,4 +1,5 @@
-<div class="col-sm-3">
+<div class="col-sm-3 sidebar-menu-col">
+	<button type="button" class="mob-menu-btn">Menu</button>
 	<div class="dashboard-sidemenu">
 		<div class="panel-group" id="side_acc_menu" role="tablist" aria-multiselectable="true">
 		  <div class="panel panel-default">

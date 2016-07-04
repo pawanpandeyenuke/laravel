@@ -30,7 +30,7 @@
 
 			@include('panels.left')
 
-				<div class="col-sm-6">
+				<div class="col-sm-6 mid-db-body">
 					<div class="status-tab">
 							<!-- Nav tabs -->
 							<ul class="list-inline">

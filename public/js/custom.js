@@ -1,4 +1,9 @@
 $(document).ready(function(){
+	//menu dd button
+    $(document).on('click','.mob-menu-btn',function(){
+    	$('.dashboard-sidemenu').slideToggle();
+    });
+    
 	$( "#searchform" ).submit(function( event ) {
 		var searchkey = $('#searchfriends').val();
 		if(searchkey == ''){
