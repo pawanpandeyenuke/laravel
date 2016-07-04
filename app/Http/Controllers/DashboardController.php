@@ -576,6 +576,13 @@ class DashboardController extends Controller
                     $image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
                     $arguments['picture'] = '/uploads/user_img/'.$image_name;
                     $file->move(public_path('uploads/user_img'), $image_name);
+                    
+                     $path 			= public_path('uploads/user_img').'/'.$image_name;
+					 $ImageData 	= file_get_contents($path);
+					 $ImageType 	= pathinfo($path, PATHINFO_EXTENSION);
+					 $ImageData 	= base64_encode($ImageData);
+					 $image_name 	= Converse::setVcard($userProfData->xmpp_username, $ImageData, $ImageType);
+                    
                 }
                 
                 if($arguments['country_code'] != 0 && $arguments['phone_no'] != null){
