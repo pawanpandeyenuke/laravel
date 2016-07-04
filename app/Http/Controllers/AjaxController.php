@@ -1995,7 +1995,7 @@ comments;
 					 'breadcrum'=> "",
 					 'reply_post_id' => $input['reply_post_id'],
 					 'gid' => "",
-					 'message' => "All the comments related to this post will be deleted. Are you sure you want to delete this reply?"];
+					 'message' => "All the comments related to this reply will be deleted. Are you sure you want to delete this reply?"];
 		}else if($input['type'] == "broadcast"){
 				$data = ['class' => "broadcastdel",
 					 'id' => $input['type_id'],

@@ -104,7 +104,7 @@
 
 		@if($replyComments->count() >= 5)
 			<div class="load-more-btn-cont text-center">
-				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumcommets" data-forumreplyid = "{{$reply->id}}">View More</button>
+				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumcommets loading-btn" data-forumreplyid = "{{$reply->id}}">View More</button>
 			</div>
 		@endif
 

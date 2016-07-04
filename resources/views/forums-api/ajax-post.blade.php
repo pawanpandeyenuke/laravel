@@ -25,7 +25,7 @@
 		$likedata = \App\ForumLikes::where(['owner_id' => $user_id, 'post_id' => $posts->id])->get(); 
 	?>
 
-	<div class="single-post">
+	<div class="single-post" id="forumpost_{{$posts->id}}">
 		<div class="post-header">
 		  	@if($user_id)
 		  		@if($user_id == $user->id)
@@ -37,7 +37,7 @@
 						 @if($repliesCount == 0)
 							<li><a href="{{ url("api/get-forum-post-details?post_id=$posts->id&user_id=$user->id&post_data=$postTitle") }}">Edit</a></li>
 						 @endif
-							<li><a href="#" class="forumpostdelete" data-postid="{{$posts->id}}" data-breadcrum = "{{$posts->forum_category_breadcrum}}">Delete</a></li>
+							<li><a href="#" class="del-confirm-api" data-type="post" data-postid="{{$posts->id}}" data-breadcrum = "{{$posts->forum_category_breadcrum}}">Delete</a></li>
 						</ul>
 					</div>
 			  	@endif
@@ -83,4 +83,24 @@
 	</div>
 
 @endforeach
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		loadOrgionalImogi();
+	
+
+	function loadOrgionalImogi()
+	{
+	
+		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p, .f-single-post .more .morecontent span").each(function() {
+		var original = $(this).html();
+		// use .shortnameToImage if only converting shortnames (for slightly better performance)
+		var converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
+	}
+	
+});
+</script>
  

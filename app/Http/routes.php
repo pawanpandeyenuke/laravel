@@ -241,6 +241,8 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 
 Route::get('api/chat_image_page','ApiController@chatImagePage');
 
+Route::post('/api/api-del-confirm','ApiController@confirmBox');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes

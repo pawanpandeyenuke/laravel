@@ -21,7 +21,7 @@
 
 			$likedata = \App\ForumReplyLikes::where(['owner_id' => $user_id, 'reply_id' => $reply->id])->get();
 		?>
-		<div class="single-post">
+		<div class="single-post" id="forumreply_{{$reply->id}}">
 			<div class="post-header">
 			  	@if($user_id)
 			  		@if($user_id == $reply->owner_id)
@@ -31,7 +31,7 @@
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 								<li><a href="{{ url("api/get-forum-reply-details?reply_id=$reply->id&user_id=$replyUser->id&reply_data=$reply_data") }}">Edit</a></li>
-								<li><a href="#" class="forumreplydelete" data-forumpostid="{{$forumpostid}}" data-forumreplyid = "{{$reply->id}}">Delete</a></li>
+								<li><a href="#" class="del-confirm-api" data-type="reply" data-forumpostid="{{$forumpostid}}" data-forumreplyid = "{{$reply->id}}">Delete</a></li>
 							</ul>
 						</div>
 				  	@endif
@@ -70,3 +70,23 @@
 			</div>
 		</div>
 	@endforeach
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		loadOrgionalImogi();
+	
+
+	function loadOrgionalImogi()
+	{
+	
+		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p, .f-single-post .more .morecontent span").each(function() {
+		var original = $(this).html();
+		// use .shortnameToImage if only converting shortnames (for slightly better performance)
+		var converted = emojione.toImage(original);
+		$(this).html(converted);
+	});
+	}
+	
+});
+</script>

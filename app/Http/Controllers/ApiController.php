@@ -6,7 +6,8 @@ use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments,App\ForumsDoctor;
-use Validator, Input, Redirect, Request, Session, Hash, DB;
+use Validator, Redirect, Request, Session, Hash, DB;
+use Illuminate\Support\Facades\Input;
 use \Exception;
 
 class ApiController extends Controller
@@ -2497,5 +2498,31 @@ class ApiController extends Controller
 	public function chatImagePage()
 	{
 		return view('chat_image');die;
+	}
+
+	public function confirmBox()
+	{
+		$input = Input::all();
+		if($input['type'] == "post"){
+
+			$data = ['class' => "forumpostdelete",
+					 'postid' => $input['postid'],
+					 'breadcrum'=> $input['breadcrum'],
+					 'forumpostid' => "",
+					 'forumreplyid' => "",
+					 'message' => "All the replies and comments related to this post will be deleted. Are you sure you want to delete this post?"];
+		
+		}else if($input['type'] == "reply"){
+
+			$data = ['class' => "forumreplydelete",
+					 'postid' => "",
+					 'breadcrum'=> "",
+					 'forumpostid' => $input['forumpostid'],
+					 'forumreplyid' => $input['forumreplyid'],
+					 'message' => "All the comments related to this reply will be deleted. Are you sure you want to delete this reply?"];
+		}
+
+		return view('forums-api.confirmbox')
+			   		->with('data',$data);
 	}
 }
