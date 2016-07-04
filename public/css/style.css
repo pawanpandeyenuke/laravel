@@ -3407,3 +3407,6 @@ header{
 .btn-tab-cont .nav-tabs > li > a:focus{
 	outline: none;
 }
+.mob-menu-btn{
+	display: none;
+}
