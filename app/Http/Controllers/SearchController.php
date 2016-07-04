@@ -325,7 +325,7 @@ class SearchController extends Controller
   
 
         $input = Request::all();
-        // print_r($input);die;
+        //print_r($input);die;
         $mainforum = Forums::where('id',$input['mainforum'])->value('title');
         $breadcrum = $mainforum;
         if($input['check']=='direct'){

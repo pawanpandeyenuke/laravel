@@ -6,7 +6,7 @@
 	else
 		$key = "";
 
-$check_val = "";
+$check_val = "direct";
 
 ?>				
 				{!! Form::open(array('url' => 'search-forum','id' => 'search-forum-layout', 'method' => 'post')) !!}
@@ -209,11 +209,16 @@ $check_val = "";
 									</div>
 								</div>
 							</div>
+							<?php
+								if(isset($old['mainforum']) && isset($old['search-subforums']) && $old['search-subforums'] == "sub-opt" && $old['mainforum'] == "Forum"){
+									$check_val = "direct";
+								}
+							?>
 							<input type="hidden" name="check" class="search-check" value="{{ $check_val }}" />
 						{!! Form::close() !!}
 						</div><!--/forum filter-->
 
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script> -->
 <!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script> -->
 <script type="text/javascript">
 

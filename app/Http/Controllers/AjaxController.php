@@ -1114,7 +1114,7 @@ comments;
 		}else{
 			$model=Friend::with('user')->with('friends')->with('user')->where( function( $query ) use ( $type ) {
 							self::queryBuilder( $query, $type );
-						})->take($per_page)->skip($offset)->get();
+						})->get();
 			$model = $model->toArray();
 		}
 
@@ -1132,7 +1132,7 @@ comments;
 				}
 			}
 		}
-		//print_r($model2);die;
+		$model2 = array_slice($model2, $offset, $offset+$per_page);
 		return view('dashboard.friendlist2More')
 					->with('model',$model2)
 					->with('model1',$model1)
@@ -1154,23 +1154,18 @@ comments;
 
 	public function sendBroadcast()
 	{
-		$input=Input::all();
-		$msg=$input['msg'];
-		$uid=Auth::User()->id;
-		$members=DB::table('broadcast_members')->where('broadcast_id',$input['bid'])->pluck('member_id');
-        //$mem=explode(",",$members);
+		$input = Input::all();
+		$msg = $input['msg'];
+		$uid = Auth::User()->id;
+		$members = BroadcastMembers::where('broadcast_id',$input['bid'])->pluck('member_id');
 
-        $xmpu1=DB::table('users')->where('id',$uid)->value('xmpp_username');
+        $xmpu1 = User::where('id',$uid)->value('xmpp_username');
         $converse = new Converse;
-        $xmpu2=DB::table('users')->whereIn('id',$members)->pluck('xmpp_username');
+        $xmpu2 = User::whereIn('id',$members)->pluck('xmpp_username');
 
         foreach ($xmpu2 as $key => $value) {
-        	
         	$converse->broadcast($xmpu1,$value,$input['msg']);
-
         }
-   //      	
-			// addFriend
 
 		$date = date('d M Y,h:i a', time());
 		     $data = array(
@@ -1182,9 +1177,6 @@ comments;
                 
                 BroadcastMessages::insert($data);
 				$model=new BroadcastMessages;
-
-			
-							
 
 						$data1 = '<div class="single-message">
 										<div class="clearfix">
@@ -1211,7 +1203,7 @@ comments;
 		$input = Input::get('pid');
 		$userXamp = Auth::User()->xmpp_username;
 		try{
-			$GroupDetails  	= DB::table('groups')->where('id',$input)->select('title','group_jid')->first();
+			$GroupDetails  	= Group::where('id',$input)->select('title','group_jid')->first();
 			$GroupName  	= $GroupDetails->group_jid;
 			$GroupTitle  	= $GroupDetails->title;
 			$Message 		= json_encode( array( 'type' => 'privatechatdelete', 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode($GroupTitle.' has been removed.') ) );
@@ -1238,12 +1230,12 @@ comments;
 	{
 		$input=Input::all();
 		$userXamp  = Auth::User()->xmpp_username;
-		$GroupDetail 	= DB::table('groups')->where('id',$input['gid'])->select('title','group_jid')->first();
+		$GroupDetail 	= Group::where('id',$input['gid'])->select('title','group_jid')->first();
 		$GroupName  	= $GroupDetail->group_jid;
 		$GroupTitle  	= $GroupDetail->title;
 		
 		$converse	= new Converse;
-		$xmp		= DB::table('users')->where('id',$input['uid'])->value('xmpp_username','');
+		$xmp		= User::where('id',$input['uid'])->value('xmpp_username','');
 
 		$MemberDetails = User::find($input['uid']);
 		
@@ -1341,11 +1333,6 @@ comments;
 			//'type' => $type,
 			'username' => $username,
 		);
-
-/*			 Mail::raw($message,function ($m)  use($value, $subject){
-                	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
-                    	$m->to($value,"Friend")->subject($subject);
-*/
 			Mail::send('emails.invite', $data, function($message) use($value, $subject) {
 			$message->from('no-reply@friendzsquare.com', 'Friend Square');
 			$message->to($value)->subject($subject);
@@ -1362,9 +1349,7 @@ comments;
 				$emails = $invalid[0];
 				echo $emails.' is an invalid email address and counld not be invited.';
 			}
-		}
-		// echo '<pre>';print_r($invalid);
-		// echo '<pre>';print_r($valid);die;		
+		}	
 	}
 
 	public function groupImage()
@@ -1419,44 +1404,49 @@ comments;
 
 	public function delForumPost()
 	{
-		$args = Input::all();
-		ForumPost::where('id',$args['forumpostid'])->delete();
-		ForumLikes::where('post_id',$args['forumpostid'])->delete();
-		$reply_id_arr = ForumReply::where('post_id',$args['forumpostid'])->pluck('id')->toArray();
-		ForumReply::where('post_id',$args['forumpostid'])->delete();
-		ForumReplyComments::whereIn('reply_id',$reply_id_arr)->delete();
-		ForumReplyLikes::whereIn('reply_id',$reply_id_arr)->delete();
-		$count = ForumPost::where('forum_category_breadcrum',$args['breadcrum'])->get()->count();
-		echo $count;
+		if(Auth::check()){
+			$args = Input::all();
+			ForumPost::where('id',$args['forumpostid'])->delete();
+			ForumLikes::where('post_id',$args['forumpostid'])->delete();
+			$reply_id_arr = ForumReply::where('post_id',$args['forumpostid'])->pluck('id')->toArray();
+			ForumReply::where('post_id',$args['forumpostid'])->delete();
+			ForumReplyComments::whereIn('reply_id',$reply_id_arr)->delete();
+			ForumReplyLikes::whereIn('reply_id',$reply_id_arr)->delete();
+			$count = ForumPost::where('forum_category_breadcrum',$args['breadcrum'])->get()->count();
+			echo $count;
+	  }
 	}
 
 	public function editForumPost()
 	{
-		$forumpostid = Input::get('forumpostid');
-		$forumpost = ForumPost::where('id',$forumpostid)->first();
+		if(Auth::check()){
+			$forumpostid = Input::get('forumpostid');
+			$forumpost = ForumPost::where('id',$forumpostid)->first();
 
-		return view('ajax.editforumpost')->with('forumpost', $forumpost);
+			return view('ajax.editforumpost')->with('forumpost', $forumpost);
+		}
 	}
 
 	public function editNewForumPost()
 	{
 		$arguments = Input::all();
-		//print_r($arguments);die;
-		if($arguments['forumtitle'] != ""){
-			$check = ForumReply::where('post_id',$arguments['id'])->get()->count();
-			if($check == 0){
-			
-			ForumPost::where('id',$arguments['id'])->update(['title'=>$arguments['forumtitle']]);
-			$data = ['id'=>$arguments['id'],
-					 'title'=>$arguments['forumtitle']];
+		if(Auth::check()){
+				if($arguments['forumtitle'] != ""){
+					$check = ForumReply::where('post_id',$arguments['id'])->get()->count();
+					if($check == 0){
+					
+					ForumPost::where('id',$arguments['id'])->update(['title'=>$arguments['forumtitle']]);
+					$data = ['id'=>$arguments['id'],
+							 'title'=>$arguments['forumtitle']];
 
-			echo json_encode($data);
-		   }
-		   else
-		   	echo "rep";
+					echo json_encode($data);
+				   }
+				   else
+				   	echo "rep";
 
-	   }else
-			echo "Post something to update.";
+			   }else
+					echo "Post something to update.";
+		}
 
 	}
 
@@ -1464,43 +1454,44 @@ comments;
     {
     	$user = Auth::User();
         $input = Input::all();
-       	$name = $user->first_name." ".$user->last_name;
+        if(Auth::check()){
+		       	$name = $user->first_name." ".$user->last_name;
 
-        $forum_category_breadcrum = $input['breadcrum'];
-        $id_array = explode(" > ", $forum_category_breadcrum);
+		        $forum_category_breadcrum = $input['breadcrum'];
+		        $id_array = explode(" > ", $forum_category_breadcrum);
 
-        foreach ($id_array as $key => $value) {
-        	$id_array[$key] = Forums::where('title',$value)->value('id');
-  			Forums::where('id',$id_array[$key])->update(['updated_at'=>date('Y-m-d H:i:s',time())]);      	
-        	$cat_id = $id_array[$key];
-        }
- 		$forum_category_id = implode(",", $id_array);
+		        foreach ($id_array as $key => $value) {
+		        	$id_array[$key] = Forums::where('title',$value)->value('id');
+		  			Forums::where('id',$id_array[$key])->update(['updated_at'=>date('Y-m-d H:i:s',time())]);      	
+		        	$cat_id = $id_array[$key];
+		        }
+		 		$forum_category_id = implode(",", $id_array);
 
- 		if($cat_id == null)
- 			$cat_id = "opt";
- 		
-            $data = ['title'=>$input['topic'],
-                    'owner_id'=>$user->id,
-                    'category_id'=>$cat_id,
-                    'forum_category_id'=>$forum_category_id,
-                    'forum_category_breadcrum'=>$forum_category_breadcrum,
-                    'created_at'=>date('Y-m-d H:i:s',time()),
-                    'updated_at'=>date('Y-m-d H:i:s',time())];
-         
-        $forumpost = new Forumpost;
-        $forumpostid = $forumpost->create($data);
-        $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+		 		if($cat_id == null)
+		 			$cat_id = "opt";
+		 		
+		            $data = ['title'=>$input['topic'],
+		                    'owner_id'=>$user->id,
+		                    'category_id'=>$cat_id,
+		                    'forum_category_id'=>$forum_category_id,
+		                    'forum_category_breadcrum'=>$forum_category_breadcrum,
+		                    'created_at'=>date('Y-m-d H:i:s',time()),
+		                    'updated_at'=>date('Y-m-d H:i:s',time())];
+		         
+		        $forumpost = new Forumpost;
+		        $forumpostid = $forumpost->create($data);
+		        $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 
-        
-        return view('ajax.forumpost')
-        		->with('forumpostid',$forumpostid)
-        		// ->with('categoryid',$input['category_id'])
-        		->with('profileimage',$profileimage)
-        		->with('breadcrum',$forum_category_breadcrum)
-        		->with('user',$user)
-        		->with('name',$name);
+		        
+		        return view('ajax.forumpost')
+		        		->with('forumpostid',$forumpostid)
+		        		->with('profileimage',$profileimage)
+		        		->with('breadcrum',$forum_category_breadcrum)
+		        		->with('user',$user)
+		        		->with('name',$name);
 
-		echo $forumpostdata;
+				echo $forumpostdata;
+		}
     }
 
     
@@ -1660,7 +1651,7 @@ comments;
 	public function editNewForumReply()
 	{
 		$arguments = Input::all();
-		//print_r($arguments);die;
+
 		if($arguments['forumreply'] != "")
 		{
 			ForumReply::where('id',$arguments['id'])->update(['reply'=>$arguments['forumreply']]);
@@ -1836,7 +1827,6 @@ comments;
 	   	$str = 'No More Results';
 
 	   	if(!($replyComments->isEmpty())){
-			// echo '<pre>';print_r($replyComments);die;
 			return view('forums-api.ajax-comment')
 					->with('reply', $reply)
 					->with('replyComments', $replyComments)
@@ -1964,7 +1954,7 @@ comments;
 		$GroupTitle 	= $GroupDetails->title;
 		$converse		= new Converse;
 		
-		$xmp			=	DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
+		$xmp			= DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
 		$Message 		= json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode( Auth::User()->first_name.' '.Auth::User()->last_name.' left the group '.$GroupTitle) ) );
 		$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$privategroupid)->pluck('xmpp_username');		
 		foreach ($xmp as $key => $value) {

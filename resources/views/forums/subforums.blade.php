@@ -210,7 +210,8 @@ if($mainforum->title == "Doctor")
             </div>
         </div>
     </div><!--/pagedata-->
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script> -->
+
  <script type="text/javascript">
 
     $("#forum_select_form").validate({ 
@@ -306,6 +307,6 @@ if($mainforum->title == "Doctor")
 		});	
 	});
  </script>
-@endsection
 
+@endsection
 {!! Session::forget('error') !!}

@@ -259,8 +259,8 @@
     </div>
 </div><!--/pagedata-->
 
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script>
+<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script> -->
 <script type="text/javascript" >
 
 function getValidationArray(mobCode){

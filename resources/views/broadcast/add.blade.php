@@ -52,9 +52,8 @@
 		</div>
 	</div>
 </div>
-@endsection
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script> -->
 <script type="text/javascript" >
 
 $(document).ready(function () {
@@ -142,3 +141,4 @@ $(document).ready(function () {
 });
  
 </script>
+@endsection

@@ -317,7 +317,7 @@
 		</div>
 	</div><!--/pagedata-->
 
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script> -->
 <script type="text/javascript">
 		$(document).on("click",".btn-post",function(){
 					    // Opera 8.0+
