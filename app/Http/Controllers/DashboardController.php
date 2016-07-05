@@ -344,7 +344,7 @@ class DashboardController extends Controller
 
         } else {
 			$input = Request::all();
-			$parent_name = strtolower(str_replace($replace_array, '-', $input['parentname']));
+			$parent_name = $input['parentname'];
 
                 if($input['subcategory']=='International'){
                     $check_name = $input['parentname'].' > '.$input['subcategory'];
@@ -385,7 +385,7 @@ class DashboardController extends Controller
                  }
                
 
-                $sub_name = str_replace($replace_array,'-',$sub_name);           
+               // $sub_name = str_replace($replace_array,'-',$sub_name);           
                 $group_jid = preg_replace('/[^A-Za-z0-9\-]/', '_',$parent_name.'_'.$sub_name);
                 $group_jid = strtolower($group_jid);
                 

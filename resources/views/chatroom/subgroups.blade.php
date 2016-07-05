@@ -49,15 +49,20 @@ unset($countries[0]);
 
 					                            }
 					                            if($data->title == "Country,State,City"){
+					                            	$view_title = "City";
 					                            	$data->title = "Country, State, City";
 					                            	$aria = "csc-tab";
 					                            }
-					                            else if($data->title == "Country")
+					                            else if($data->title == "Country"){
+					                            	$view_title = $data->title;
 					                            	$aria = "country-tab";
-					                            else if($data->title == "International")
+					                            }
+					                            else if($data->title == "International"){
+					                            	$view_title = $data->title;
 					                            	$aria = "international";
+					                            }
 									       ?>
-							    <li role="presentation" class="col-md-4 {{$li_class}}"><a href="#{{$aria}}" aria-controls="{{$aria}}" role="tab" data-toggle="tab">{{$data->title}}</a></li>
+							    <li role="presentation" class="col-md-4 {{$li_class}}"><a href="#{{$aria}}" aria-controls="{{$aria}}" role="tab" data-toggle="tab">{{$view_title}}</a></li>
 							   @endforeach
 							  </ul>
 
