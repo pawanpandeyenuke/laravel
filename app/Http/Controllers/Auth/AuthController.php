@@ -134,10 +134,8 @@ class AuthController extends Controller
         $response = $converse->register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
         
         Session::put('success', 'Thanks for signing up! Please check your email to verify your account.');
-        
-        $vcard = $converse->setVcard($xmppUserDetails->xmpp_username, $user->picture);
-         
-        $this->redirectTo = $data['url'];
+    
+        $this->redirectTo = 'send-verification-link';
         return $userdata;
 
         

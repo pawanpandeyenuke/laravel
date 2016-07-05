@@ -2,6 +2,12 @@
 
 <!-- Main Content -->
 @section('content')
+           @if (Session::has('success'))
+                <div class="alert alert-success">{!! Session::get('success') !!}</div>
+                @endif
+                @if (Session::has('error'))
+                <div class="alert alert-danger">{!! Session::get('error') !!}</div>
+                @endif
 <div class="container" style="margin-top:5%">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -9,24 +15,17 @@
                 <div class="panel-heading"><b>Verify your email address to login. Enter email address below to send verification link again.</b></div>
                 <div class="panel-body">
 
-                @if (Session::has('success'))
-                <div class="alert alert-success">{!! Session::get('success') !!}</div>
-                @endif
-                @if (Session::has('error'))
-                <div class="alert alert-danger">{!! Session::get('error') !!}</div>
-                @endif
-
                     @if (session('status'))
                         <div class="alert alert-success">
                             {{ session('status') }}
                         </div>
                     @endif
 
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('send-verification-link') }}">
+                    <form class="form-horizontal" role="form" method="POST" id="verify_email" action="{{ url('send-verification-link') }}">
                         {!! csrf_field() !!}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label class="col-md-4 control-label">E-Mail Address</label>
+                            <label class="col-md-4 control-label">Email Address</label>
 
                             <div class="col-md-6">
                                 <input type="email" class="form-control" name="email" value="{{ old('email') }}">
@@ -52,4 +51,22 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+
+        $("#verify_email").validate({ 
+        errorElement: 'span',
+        errorClass: 'help-inline',
+        rules: {
+            email: { required: true, email: true },
+
+        },
+        messages:{
+            email:{
+                required: "Please enter an email address to verify.",
+                email: "Please enter a valid email address."
+            }
+        }
+    });
+    
+</script>
 @endsection

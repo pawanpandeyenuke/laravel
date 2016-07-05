@@ -374,7 +374,8 @@ Route::post('/api/api-del-confirm','ApiController@confirmBox');
 	Route::post('terms-conditions','SearchController@termsConditions');
 
 	Route::get('send-verification-link','SearchController@verify');
-	Route::post('send-verification-link','SearchController@verify');	
+	Route::post('send-verification-link','SearchController@verify');
+	Route::get('email-verified/{user_id}/{confirmation_code}','SearchController@emailVerified');	
  
 	Route::get('/', function(){
 		if(Auth::check())
