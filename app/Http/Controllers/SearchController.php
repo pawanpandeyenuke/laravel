@@ -110,36 +110,41 @@ class SearchController extends Controller
 
     public function verify()
     {
-        if(Request::isMethod('post')){
-            $arguments = Request::all();
-            $user = User::where('email',$arguments['email'])->first();
-            //print_r($user);die;
-            if($user != null){
-                 if($user->is_email_verified == "Y"){
-                 Session::put('error', 'This email is already verified!');
-                 return redirect()->back();
-             }
-             elseif($user->is_email_verified == "N"){
-                 $useremail = $user->email;
-                $username = $user->first_name." ".$user->last_name;
-                $confirmation_code = str_random(30);
-                User::where('email',$arguments['email'])->update(['confirmation_code'=>$confirmation_code]);
-                $emaildata = array('confirmation_code' => $confirmation_code);
+        Auth::logout();
+        if(!Auth::check()){
+            if(Request::isMethod('post')){
+                $arguments = Request::all();
+                $user = User::where('email',$arguments['email'])->first();
+                //print_r($user);die;
+                if($user != null){
+                     if($user->is_email_verified == "Y"){
+                     Session::put('error', 'This email is already verified!');
+                     return redirect()->back();
+                 }
+                 elseif($user->is_email_verified == "N"){
+                     $useremail = $user->email;
+                    $username = $user->first_name." ".$user->last_name;
+                    $confirmation_code = str_random(30);
+                    User::where('email',$arguments['email'])->update(['confirmation_code'=>$confirmation_code]);
+                    $emaildata = array('confirmation_code' => $confirmation_code);
 
-                    Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
-                    $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
-                    $message->to($useremail,$username)->subject('Verify your email address');
-                    });
-                Session::put('success', 'Verification link sent to '.$useremail.' !');
-                  return redirect()->back();
-             }
-            }
-            else{
-                 Session::put('error', "We can't find a user with that e-mail address.");
-                 return redirect()->back();
+                        Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
+                        $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
+                        $message->to($useremail,$username)->subject('Verify your email address');
+                        });
+                    Session::put('success', 'Verification link sent to '.$useremail.' !');
+                      return redirect()->back();
+                 }
                 }
+                else{
+                     Session::put('error', "We can't find a user with that e-mail address.");
+                     return redirect()->back();
+                    }
+            }
+                return view('verifyemail');
+        }else{
+            return redirect('/');
         }
-            return view('verifyemail');
     }
 
 
@@ -422,11 +427,32 @@ class SearchController extends Controller
         }
 
         $user->is_email_verified = 'Y';
-        $user->confirmation_code = null;
+        //$user->confirmation_code = null;
         $user->save();
 
         Session::put('success',"Your account has been successfully verified!");
-        return redirect('/');
+        return redirect('email-verified/'.$user->id.'/'.$confirmation_code);
+    }
+
+    public function emailVerified($user_id="",$confirmation_code="")
+    {
+        if(!Auth::check()){
+            if($user_id!="" && $confirmation_code!=""){
+                $user = User::find($user_id);
+                if($user){
+                     if($user->confirmation_code == $confirmation_code){
+                            $user->confirmation_code = null;
+                            $user->save();
+                            return view('email-verified');
+                     }
+                    else
+                        return redirect('/');
+                }else{
+                    return redirect('/');           
+                }
+            }
+        }else
+            return redirect('/');
     }
   
 

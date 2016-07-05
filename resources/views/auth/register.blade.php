@@ -333,7 +333,8 @@ $(document).ready(function () {
             email:  { required: true, email: true },
             password:  { required: true, minlength: 8 },
             terms:  { required: true },
-            phone_no: { maxlength: 15 }
+            phone_no: { maxlength: 15 },
+            country: {required:true}
         },
         messages:{
             first_name:{
@@ -355,6 +356,9 @@ $(document).ready(function () {
             },
             phone_no:{
                 maxlength: "Contact number cannot have more than 15 digits."
+            },
+            country:{
+                required: "Please select your country."
             }
         }
     });

@@ -104,7 +104,6 @@
 		
 		@yield('content')
 
-
 		{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 <script type="text/javascript" >
 
@@ -142,10 +141,15 @@
 
         else if(response == "success"){
             var url_c = window.location.pathname;
-           if(url_c == "/newpassword")
-		window.location = "/";
-	  else
-		window.location = url_c;
+           if(url_c == "/newpassword"){
+				window.location = "/";
+			}
+			else if(url_c.indexOf("email-verified") > -1){
+				window.location = "/invite-friends";
+			}
+	  		else{
+				window.location = url_c;
+			}
         }else{
             var obj = jQuery.parseJSON( response );
             if( obj.email != null ){
