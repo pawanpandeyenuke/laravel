@@ -296,12 +296,11 @@ class DashboardController extends Controller
     public function groupchat( $groupid = "" ){
         $private_group_check = "pub" ;
         $id=Auth::User()->id;
-        $replace_array =  [' ', '/', ',', '(', ')', "'", '.', ':', ';','&'];
         if($groupid){
             $breadcrumb="";
             $check_name = "";
   
-            $id_arr = explode('_',$groupid);
+            $id_arr = explode('-',$groupid);
             foreach ($id_arr as $key => $value) {//10-46-147
               $cat = Category::where('id',$value)->first();
                 if($cat){
