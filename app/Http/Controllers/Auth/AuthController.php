@@ -135,7 +135,7 @@ class AuthController extends Controller
         $converse = new Converse;
         $response = $converse->register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
         
-        Session::put('success', 'Thanks for signing up! Please check your email to verify your account.');
+        Session::put('success', 'Verification link has been sent to your registered email. Please check your inbox and verify email.<a href="#" title="" data-toggle="modal" data-target="#LoginPop">  Login</a>');
     
         $this->redirectTo = 'send-verification-link';
         return $userdata;
