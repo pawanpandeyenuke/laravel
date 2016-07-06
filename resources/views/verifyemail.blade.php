@@ -2,17 +2,28 @@
 
 <!-- Main Content -->
 @section('content')
-           @if (Session::has('success'))
-                <div class="alert alert-success">{!! Session::get('success') !!}</div>
-                @endif
-                @if (Session::has('error'))
-                <div class="alert alert-danger">{!! Session::get('error') !!}</div>
-                @endif
+         
 <div class="container" style="margin-top:5%">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading"><b>Verify your email address to login. Enter email address below to send verification link again.</b></div>
+                 @if (Session::has('success'))
+                    <div class="alert alert-success" style="text-align:center;">{!! Session::get('success') !!}</div>
+                    <div style="text-align:center; font-size: 17pt; padding:3%;">OR</div>
+                @endif
+                @if (Session::has('error'))
+                    <div class="alert alert-danger">{!! Session::get('error') !!}</div>
+                @endif
+                <div class="panel panel-default">
+
+                 @if (Session::has('success'))
+                 <?php
+                        $heading =  "If you are facing problems in receiving verification email. Please enter your email address below to resend verification link.";
+                  ?>
+                 @else
+                 <?php $heading = "Enter email address below to send verification link."; ?>
+                 @endif
+                <div class="panel-heading"><b>{{$heading}}</b></div>
+                
                 <div class="panel-body">
 
                     @if (session('status'))
@@ -23,7 +34,7 @@
 
                     <form class="form-horizontal" role="form" method="POST" id="verify_email" action="{{ url('send-verification-link') }}">
                         {!! csrf_field() !!}
-
+                                 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label class="col-md-4 control-label">Email Address</label>
 
@@ -41,7 +52,11 @@
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
+                                     @if(Session::has('success'))
+                                    <i class="fa fa-btn fa-envelope"></i>&nbsp; Resend Verification Link
+                                    @else
                                     <i class="fa fa-btn fa-envelope"></i>&nbsp; Send Email Verification Link
+                                    @endif
                                 </button>
                             </div>
                         </div>

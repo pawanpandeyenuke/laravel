@@ -144,7 +144,7 @@
            if(url_c == "/newpassword"){
 				window.location = "/";
 			}
-			else if(url_c.indexOf("email-verified") > -1){
+			else if(url_c.indexOf("email-verified") > -1 || url_c == "/send-verification-link"){
 				window.location = "/invite-friends";
 			}
 	  		else{

@@ -147,13 +147,12 @@
                                 <div class="contentEditable" align='center'>
                                   <p  style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
                                     Thanks for creating an account with FriendzSquare.
-                                    Please follow the link below to verify your email address <a href="{{ URL::to('register/verify/'.$confirmation_code)}}">
-                                    {{ URL::to('register/verify/'.$confirmation_code)}}</a>.<br/>
+                                    Please <a href="{{ URL::to('register/verify/'.$confirmation_code)}}" style="color:#0c53a3">click here</a> to verify your email address.<br><br>
+                                    </p>
+                                    <span style="text-align:center; font-size: 17pt;">OR</span><br><br>
+                                      <p  style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
+                                      You can paste the following link into your browser : {{URL::to('register/verify/'.$confirmation_code)}}
                                     <br>
-                                    <br>
-                                    <br>
-                                    <br>
-
                                   </p>
                                 </div>
                               </div>
