@@ -7,23 +7,19 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
                  @if (Session::has('success'))
+                 <?php
+                        $heading =  "If you are facing problems in receiving verification email. Please enter your email address below to resend verification link.";
+                  ?>
                     <div class="alert alert-success" style="text-align:center;">{!! Session::get('success') !!}</div>
                     <div style="text-align:center; font-size: 17pt; padding:3%;">OR</div>
+                @else
+                  <?php $heading = "Enter email address below to send verification link."; ?>
                 @endif
                 @if (Session::has('error'))
                     <div class="alert alert-danger">{!! Session::get('error') !!}</div>
                 @endif
                 <div class="panel panel-default">
-
-                 @if (Session::has('success'))
-                 <?php
-                        $heading =  "If you are facing problems in receiving verification email. Please enter your email address below to resend verification link.";
-                  ?>
-                 @else
-                 <?php $heading = "Enter email address below to send verification link."; ?>
-                 @endif
                 <div class="panel-heading"><b>{{$heading}}</b></div>
-                
                 <div class="panel-body">
 
                     @if (session('status'))

@@ -41,7 +41,7 @@
 			</div>
 
 			<div class="post-data">
-				<p>{{ $postTitle }}</p>
+				<p id="forum_post"><?php echo forumPostContents($postTitle,'#'); ?></p>
 			</div>
 			<div class="post-action clearfix">
 				<div class="row-cont clearfix">
@@ -104,7 +104,7 @@
 						</span>
 					</div>
 					<div class="post-data">
-						<p>{{ $reply_data }}</p>
+						<p><?php echo forumPostContents($reply_data,'#'); ?></p>
 					</div>
 					<div class="post-action clearfix">
 						<div class="row-cont clearfix">
@@ -141,4 +141,14 @@
 	<div class="userid" data-id="{{$user_id}}"></div>
 
 @endsection
+
+<script type="text/javascript">
+	
+	window.onload = function() {
+		
+		//$('.morecontent').hide();
+	}
+
+
+</script>
 
