@@ -2748,7 +2748,7 @@ textarea{
 }
 .forum-srch-list {
   margin: 20px 0 0;
-  min-height: 500px;
+  min-height: 600px;
 }
 .forum-srch-list .count span{
   background: #A0F0E6;
@@ -3409,4 +3409,7 @@ header{
 }
 .mob-menu-btn{
 	display: none;
+}
+.stick-margin{
+	margin-top: 220px;
 }
