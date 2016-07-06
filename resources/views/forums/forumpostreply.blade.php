@@ -216,12 +216,14 @@ $(".multiple-slt").select2();
     var div_top = $('#sticky-anchor').offset().top;
     if (window_top > div_top) {
       $('.fix-header').addClass('stick');
+      $('.forum-post-replies').addClass('stick-margin');
       if(i == 1){
       	$("#forum_post .morelink").click();
       	i++;
       }
     } else {
       $('.fix-header').removeClass('stick');
+      $('.forum-post-replies').removeClass('stick-margin');
       //$("#forum_post .morelink").click();
       //i = 1;
     }
