@@ -580,7 +580,7 @@ class DashboardController extends Controller
 					 $ImageData 	= file_get_contents($path);
 					 $ImageType 	= pathinfo($path, PATHINFO_EXTENSION);
 					 $ImageData 	= base64_encode($ImageData);
-					 $image_name 	= Converse::setVcard($userProfData->xmpp_username, $ImageData, $ImageType);
+					 $image_name 	= Converse::setVcard(Auth::User()->xmpp_username, $ImageData, $ImageType);
                     
                 }
                 
@@ -601,7 +601,8 @@ class DashboardController extends Controller
                 if(empty($arguments['state'])){
                     $arguments['city'] = '';
                 }
-
+                $full_name = $arguments['first_name'].' '.$arguments['last_name'];
+                Converse::setNameVcard(Auth::User()->xmpp_username, 'FN', $full_name);
                 foreach ($arguments as $key => $value) {
                     if( $key != 'email' && $key != 'password' ){
                         User::where([ 'id' => $id ])
