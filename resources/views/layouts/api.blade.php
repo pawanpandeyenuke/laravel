@@ -43,6 +43,7 @@
 
 	window.onload = function() {
 			loadOrgionalImogi();
+			$("#forum_post .morelink").click();
 			googleTranslateElementInit();
 	}
 
@@ -223,6 +224,27 @@
 
 	});
 
+	$(document).ready(function() {
+	  var moretext = "More";
+	  var lesstext = "Less";
+		$(document).on('click','.morelink',function(){
+		if($('.morelink').attr('href') == "javascript:void(0);"){
+	      if($(this).hasClass("less")) {
+	          $(this).removeClass("less");
+	          $(this).html(moretext);
+	      } else {
+	          $(this).addClass("less");
+	          $(this).html(lesstext);
+	      } 
+	      $(this).parent().prev().toggle();
+	      $(this).prev().toggle();
+	      return false;
+	      }
+		else{
+		window.location = $('.morelink').attr("href");
+		}
+	  });
+	});
 	function loadOrgionalImogi()
 	{
 	

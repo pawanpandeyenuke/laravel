@@ -309,3 +309,9 @@ span.loc img{
 .forum-post-list .post-data p img {
     width: 25px;
 }
+.morecontent span {
+  display: none;
+}
+.morelink {
+  color: #4EBDAF !important;
+}

@@ -57,7 +57,7 @@
 		</div>
 
 		<div class="post-data">
-			<p>{{ $postTitle }}</p>
+			<p><?php echo nl2br(forumPostContents($postTitle,url('api/get-forum-post-reply?post_id='.$posts->id))); ?></p>
 		</div>
 		<div class="post-action clearfix">
 			<div class="row-cont clearfix">

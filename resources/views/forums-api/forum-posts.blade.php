@@ -7,13 +7,10 @@
 
 		@foreach($posts as $post)
 			<?php 
-			// print_r($user_id);die;
 				$user = $post['user'];
 				$likesCount = isset($post->forumPostLikesCount[0]) ? $post->forumPostLikesCount[0]['forumlikescount'] : 0;
 				$repliesCount = isset($post->replyCount[0]) ? $post->replyCount[0]['replyCount'] : 0;
-				// echo '<pre>';print_r($post->id);//die; 
-				// $repliesCount = $post['replyCount'];
-				
+
 				$rawCountry = [$user->city, $user->state, $user->country];
 				foreach ($rawCountry as $key => $value) {
 					if($value == ''){
@@ -61,7 +58,7 @@
 				</div>
 
 				<div class="post-data">
-					<p>{{ $postTitle }}</p>
+					<p><?php echo nl2br(forumPostContents($postTitle,url('api/get-forum-post-reply?post_id='.$post->id))); ?></p>
 				</div>
 				<div class="post-action clearfix">
 					<div class="row-cont clearfix">

@@ -39,7 +39,7 @@
 					</div>
 				</div><!--/post header-->
 				<div class="pop-post-text clearfix">
-					<p><?php echo nl2br($reply->reply); ?></p>
+					<p><?php echo forumPostContents($reply->reply,'#'); ?></p>
 				</div>
 			</div>
 			<div class="post-footer pop-post-footer">

@@ -45,7 +45,7 @@
 			</div>
 
 			<div class="post-data">
-				<p>{{ $reply_data }}</p>
+				<p><?php echo forumPostContents($reply_data,'#'); ?></p>
 			</div>
 			<div class="post-action clearfix">
 				<div class="row-cont clearfix">
