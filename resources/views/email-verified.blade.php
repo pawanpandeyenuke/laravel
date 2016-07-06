@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading"><b>Account Verified</b></div>
+                <div class="panel-heading"><b>Account Verification</b></div>
                 <div class="panel-body">
 
                     @if (session('status'))
