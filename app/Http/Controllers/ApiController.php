@@ -69,7 +69,7 @@ class ApiController extends Controller
 				
 				$input['password'] = Hash::make($input['password']);
 				$userdata = $user->create($input);
-
+				$full_name = $userdata->first_name.' '.$userdata->last_name;
 				//Saving xmpp-username and xmpp-pasword into database.
 		        $xmpp_username = $userdata->first_name.$userdata->id;
 		        $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
@@ -81,6 +81,7 @@ class ApiController extends Controller
 
 		        $converse = new Converse;
 		        $response = $converse->register($xmpp_username, $xmpp_password);
+				$name = $converse->setNameVcard($user->xmpp_username, 'FN', $full_name);
 
 				$this->status = 'success';
 				$this->message = 'User registered successfully';				
@@ -530,6 +531,12 @@ class ApiController extends Controller
 	                $image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 	                $arguments['picture'] = '/uploads/user_img/'.$image_name;
 	                $file->move(public_path('uploads/user_img'), $image_name);
+
+                 	$path = public_path('uploads/user_img').'/'.$image_name;
+				 	$ImageData = file_get_contents($path);
+				 	$ImageType = pathinfo($path, PATHINFO_EXTENSION);
+					$ImageData = base64_encode($ImageData);
+				 	$image_name = Converse::setVcard($userfind->xmpp_username, $ImageData, $ImageType);
 	            }
  
 				User::where([ 'id' => $arguments['id'] ])->update([ 'picture' => $arguments['picture'] ]);
@@ -585,7 +592,12 @@ class ApiController extends Controller
 
 				if(isset($arguments['password']))
 					throw new Exception("Password cannot be changed.");
- 
+				
+				$userdata = User::find($arguments['id']);
+				$full_name = $userdata->first_name.' '.$userdata->last_name;
+
+ 				Converse::setNameVcard($userdata->xmpp_username, 'FN', $full_name);
+
 				foreach ($arguments as $key => $value) {
 
 					User::where([ 'id' => $arguments['id'] ])

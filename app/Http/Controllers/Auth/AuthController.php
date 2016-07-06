@@ -116,6 +116,8 @@ class AuthController extends Controller
         $useremail = $data['email'];
         $username = $data['first_name']." ".$data['last_name'];
 
+        Converse::setNameVcard($user->xmpp_username, 'FN', $username);
+        
          $emaildata = array(
             'confirmation_code' => $confirmation_code,
         );

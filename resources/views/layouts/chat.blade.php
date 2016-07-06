@@ -70,7 +70,7 @@
 							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
 							{{Auth::User()->first_name}}</a>
 						</li>
-						<li><div class="logout"><a href="{{ url('/logout') }}" title="">Logout</a></div></li>
+						<li><div class="logout"><a class = "logout-link" href="{{ url('/logout') }}" title="">Logout</a></div></li>
 					</ul>
 				</div>
 			</div>

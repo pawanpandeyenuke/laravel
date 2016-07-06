@@ -116,6 +116,13 @@ class Converse
 
 	}
 
+	// @ Set users vCard.
+	public static function setNameVcard($username, $fieldName, $fieldValue){
+		$node = Config::get('constants.xmppHost');
+		return @exec('sudo ejabberdctl set-vcard '.$username.' '.$node.' '.$fieldName.' "'.$fieldValue.'" 2>&1', $output, $status);
+		
+	}
+
 
     // @ On delete posts
     function onDeletePosts($postId, $userId) {
