@@ -530,12 +530,13 @@ class ApiController extends Controller
 	            if( isset($arguments['picture']) && $file != null ){
 	                $image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 	                $arguments['picture'] = '/uploads/user_img/'.$image_name;
+
 	                $file->move(public_path('uploads/user_img'), $image_name);
 
                  	$path = public_path('uploads/user_img').'/'.$image_name;
 				 	$ImageData = file_get_contents($path);
 				 	$ImageType = pathinfo($path, PATHINFO_EXTENSION);
-					$ImageData = base64_encodebase64_encode($ImageData);
+					$ImageData = base64_encode($ImageData);
 				 	$image_name = Converse::setVcard($userfind->xmpp_username, $ImageData, $ImageType);
 	            }
  
