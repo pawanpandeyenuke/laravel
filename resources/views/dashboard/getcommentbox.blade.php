@@ -2,9 +2,9 @@
 $user = $feeddata->user;
 $comments = $feeddata->comments;
 $likes = $feeddata->likes; 
-$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $feeddata->id])->get(); 
-$likecountdata = App\Like::where(['feed_id' => $feeddata->id])->get()->count(); 
-$commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->count(); 
+$likedata = \App\Like::where(['user_id' => Auth::User()->id, 'feed_id' => $feeddata->id])->get(); 
+$likecountdata = \App\Like::where(['feed_id' => $feeddata->id])->get()->count(); 
+$commentscountdata = \App\Comment::where(['feed_id' => $feeddata->id])->get()->count(); 
 ?>
 <div id="AllComment" class="post-list popup_list_with_img" data-value="{{ $feeddata->id }}" id="post_{{ $feeddata->id }}">
 	<div class="container">

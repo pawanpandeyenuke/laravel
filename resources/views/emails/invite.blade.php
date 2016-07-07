@@ -150,7 +150,7 @@
 Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and meet new people. Connect to your friend by<a target='_blank' class='link1' href="{{url('profile/'.$id)}}"> clicking here</a>
 
                                     <br>
-                                    Have questions? Get in touch with us via Facebook or Twitter, or email our support team.
+                                    Have questions? Get in touch with us via Facebook or Twitter, or email our support team at <?php echo Config::get('constants.feedback_email'); ?>.
                                     <br>
                                     <br>
                                     Cheers,

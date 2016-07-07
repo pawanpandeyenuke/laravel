@@ -70,7 +70,6 @@ $(document).ready(function(){
 	     var imgPath = $(this)[0].value;
 	     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
 	     var image_holder = $("#profile-pic-holder");
-	     //image_holder.empty();
 	 
 	     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
 	         if (typeof (FileReader) != "undefined") {
@@ -108,7 +107,6 @@ $('.btn-upload-icon').find(".badge").remove();
 	     var imgPath = $(this)[0].value;
 	     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
 	     var image_holder = $("#groupimageholder");
-	     //image_holder.empty();
 	     var groupid = $(this).data('groupid');
 	
 	     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
@@ -119,30 +117,14 @@ $('.btn-upload-icon').find(".badge").remove();
 	 
 	                 var reader = new FileReader();
 	                 reader.onload = function (e) {
-	                 	//alert($('.g-img').get);
 	                 	$('.btn-upload-icon').find(".badge").remove();
 	                 	$('.g-img').prop("src",e.target.result);
 	                 	e.ta
-	                 	//alert($('.g-img').attr("src"));
 	                 	var imagesrc = $('.g-img').attr("src");
 	                 	var img = imagesrc.split(',');
-	                 	//alert(img[1]);
 	             		var img1 = atob(img[1]);
-	                 	//alert(reader.readAsDataURL(imagesrc));
 
 	                 	$('#uploadgroupimage').trigger('submit');
-
-						// $.ajax({			
-						// 	'url' : '/private-group-detail/ajax/groupimage',
-						// 	'data' : { 'groupid' : groupid, 'imagesrc' : imagesrc},
-						// 	'type' : 'post',
-						// 	'success' : function(response){
-
-						// 	}
-
-						// });
-
-
 	                 }
 	 
 	                 image_holder.show();
@@ -165,7 +147,6 @@ $('.btn-upload-icon').find(".badge").remove();
  		var current = $("#postform");
 		if(response){
 			$('#newsfeed').val('');
-			// $('#image-holder').hide();
 			$('#image-holder img').remove();
 			$('#fileUpload').val('');
 			$('.group-span-filestyle label .badge').html('');
@@ -185,14 +166,6 @@ $('.btn-upload-icon').find(".badge").remove();
 		} 
     }); 
 
-
-/*	// Update profile fields via ajax call.
-	$("#profilesave").ajaxForm(function(response) { 
- 		var current = $("#profilesave");
-		if(response){
-			// alert('custom.js');
-		} 
-    }); */
 
 	$(document).on('click', '#cancel-btn', function(){
 		$('#newsfeed').val('');
@@ -225,7 +198,6 @@ $('.btn-upload-icon').find(".badge").remove();
 			'data' : { '_token' : _token, 'feed_id' : feedId, 'user_id' : user_id, 'liked' : 'Yes' },
 			'type' : 'post',
 			'success' : function(response){
-				//console.log(response);
 				var parseresponse = jQuery.parseJSON(response);
 				 var check="";
 
@@ -261,17 +233,6 @@ $('.btn-upload-icon').find(".badge").remove();
                      	
                      	}
                      }               
-
-
-				//current.next('label.css-label').find('.countspan').html(response);
-
-/*				if(response == 0){
-					current.next().html('');
-					current.next().append('<span class="firstlike">Like</span>');
-				}else if(response >= 0){
-					current.next('label.css-label').find('.firstlike').html(response+' Likes');
-				}*/
-
 			}			
 		});	
 	});
@@ -387,8 +348,6 @@ $('.btn-upload-icon').find(".badge").remove();
 		$(document).on('click', '.popupforumreply', function(){    
 		showLoading();
 		var replyid = $(this).data('replyid');
-		//var feedId = $(this).closest('.single-post').data('value');
-		//var _token = $('#postform input[name=_token]').val();
 		$.ajax({
 			'url' : '/ajax/forumpostreply/get',
 			'data' : { 'replyid' : replyid },
@@ -413,20 +372,13 @@ $('.btn-upload-icon').find(".badge").remove();
 		var type = $(this).data('reqtype');
 		var current = $(this);
 		showLoading();
-		//current.closest('.tab-style-no-border').find('.active').find('ul').hide();
 		$.ajax({
 			'url' : 'ajax/getfriendslist',
 			'data' : {'type' : type},
 			'type' : 'post',
 			'success' : function(response){
-				//alert(response);
 				var jresponse = jQuery.parseJSON(response);
-				// var count = parseInt(response.split('<',1));
-				// var response = response.replace(count+"<","<");
 				pageid=2;
-				// var friendcount = parseInt($('.friendcount').closest('.count').html());
-				// var sentcount = parseInt($('.sentcount').closest('.count').html())
-				// 					current.find('.count').html(count);
 				$('.friendcount').find('.count').html(jresponse.friend);
 				$('.sentcount').find('.count').html(jresponse.sent);
 				$('.recievecount').find('.count').html(jresponse.recieve);
@@ -491,7 +443,6 @@ $('.btn-upload-icon').find(".badge").remove();
 	$(document).on('click', '.postdelete', function(){
 		var current = $('.postdelete');
 		var feedId = current.closest('.modal-content').data('feedid');
-		// alert(feedId);
 		$.ajax({
 			'url' : 'ajax/deletepost',
 			'data' : { 'postId' : feedId },
@@ -511,7 +462,6 @@ $('.btn-upload-icon').find(".badge").remove();
 		showLoading();
 		var commentId = $(this).closest('li').data('value'); 
 		var feedId = $('.single-post').data('value');
-		// alert(feedId);
 		$.ajax({
 			'url' : '/ajax/deletebox',
 			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'deletecomment'},
@@ -554,9 +504,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		showLoading();
 		var current = $('.delete-forum-reply-comment');
 		var forumReplyCommentId = current.closest('.modal-content').data('forumreplycommentid');
-		var forumReplyId = current.closest('.modal-content').data('forumreplyid'); 
-		 //alert(forumReplyCommentId);
-		// alert(forumReplyId);
+		var forumReplyId = current.closest('.modal-content').data('forumreplyid');
 		$.ajax({
 			'url' : '/ajax/del-forum-reply-comment',
 			'data' : {'forumReplyCommentId': forumReplyCommentId, 'forumReplyId' : forumReplyId },
@@ -642,27 +590,6 @@ $('.btn-upload-icon').find(".badge").remove();
 		$('#edit-modal').html('');
 	});
 
-	
-
-/*	$(document).on('click', '#editpostdata', function(){
-		var current = $(this);
-		var postid = current.closest('.modal-content').data('value'); 
-		var postid = current.closest('.modal-content').find('#imageholder img').data('value'); 
-		
-		$.ajax({
-			'url' : 'ajax/editpost',
-			'data' : { 'postid' : postid,  },
-			'type' : 'post',
-			'success' : function(response){
-				$('#edit-modal').append(response);
-				$("#edit-modal").modal();
-			}
-		});
-		$('#edit-modal').html('');
-	});*/
-
-
-
 	$('#state').html('<option value="">State</option>');
 	$('#city').html('<option value="">City</option>');
 
@@ -702,16 +629,6 @@ $('.btn-upload-icon').find(".badge").remove();
 		});	
 	});
  
-
-
-	/*$('.status-r-btn').on('click',function(){
-		if ( $('#status_img_up').is(':checked') ) { 
-	    $('.status-img-up').show();
-	  }
-	  else{
-	  	$('.status-img-up').hide();
-	  }
-	});*/
 
 	$('.status-r-btn').on('click',function(){
 		if ( $('#status_img_up').is(':checked') ) { 
@@ -765,8 +682,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	$(document).on('click','.invite',function(){
 		var current = $(this);
 		var user_id=current.closest('.get_id').data('userid');
-		//var friend_id=current.closest('.get_id').data('friendid');
-		
+
 		$.ajax({
 			'url' : 'ajax/sendrequest',
 			'type' : 'post',
@@ -819,9 +735,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'url' : 'ajax/searchtabfriend',
 			'data' : {'type' : type,'name' : name},
 			'type' : 'post',
-			'success' : function(response){
-				//var type = response.type;
-				
+			'success' : function(response){			
 				var getelem = current.closest('.tab-style-no-border').find('.active').find('.aftersearch').html(response);
 				hideLoading();
 			}
@@ -986,7 +900,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		var current = $(this);
 		var reqType = current.closest('.friends-list').find('.active').data('value');
 		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
-		//alert(abc);
+
 		$.ajax({
 			'url' : '/ajax/viewmorefriends',
 			'type' : 'post',
@@ -1045,9 +959,8 @@ $('.btn-upload-icon').find(".badge").remove();
 		$('.load-more-all').text('Loading...');
 		var current = $(this);
 		var keyword = $(this).data('key');
-		//alert(keyword);
-		//var reqType = current.closest('.friends-list').find('.active').data('value');
 		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
+
 		$.ajax({
 			'url' : '/ajax/viewMoreForAll',
 			'type' : 'post',
@@ -1076,9 +989,8 @@ $('.btn-upload-icon').find(".badge").remove();
 		$('.load-more-forumpost').text('Loading...');
 		var current = $(this);
 		var breadcrum = $(this).data('breadcrum');
-		//alert(keyword);
-		//var reqType = current.closest('.friends-list').find('.active').data('value');
 		var abc=current.closest('.friends-list').find('ul.counting').children('li').length;
+
 		$.ajax({
 			'url' : '/ajax/view-more-forum-post',
 			'type' : 'post',
@@ -1219,7 +1131,6 @@ $('.btn-upload-icon').find(".badge").remove();
 		$('.broadcastbtn').prop('disabled',true);
 		var bid=current.val();
 		var msg=$('.broadcastmsg').val();
-		//var friend_id=current.closest('.get_id').data('friendid');
 		if(msg!=""){
 		$.ajax({
 			'url' : '/ajax/sendbroadcast',
@@ -1229,7 +1140,6 @@ $('.btn-upload-icon').find(".badge").remove();
 				$("#bmsg").append(data);
 				$('.broadcastmsg').val('');
 				$('.broadcastbtn').prop('disabled',false);
-				//current.closest('.get_id').find('.msg2').show(500);
 			}
 		});
 	}else{
@@ -1368,8 +1278,7 @@ $(document).on('click','.savegroupname',function()
 			'type' : 'post',
 			'data' : {'forumpostid' : forumpostid , 'breadcrum' : breadcrum},
 			'success' : function(response){
-				$('.posts-count').find('.count').html(' '+response);		 
-				// current.closest('.f-single-post').hide();
+				$('.posts-count').find('.count').html(' '+response);
 				$('#forumpost_'+forumpostid).hide();
 				$('.search-forum-count').find('.count').html(newcount);
 				$('#forum-confirm-modal').modal('hide');
@@ -1389,11 +1298,9 @@ $(document).on('click','.savegroupname',function()
 			'type' : 'post',
 			'data' : {'forumreplyid' : forumreplyid , 'forumpostid' : forumpostid},
 			'success' : function(response){
-				$('.posts-count').find('.forumreplycount').html(' '+response);		 
-				// current.closest('.f-single-post').hide();
+				$('.posts-count').find('.forumreplycount').html(' '+response);
 				$('#forumreply_'+forumreplyid).hide();
 				$('#forum-confirm-modal').modal('hide');
-
 			}
 		});
 
@@ -1474,10 +1381,9 @@ $(document).on('click','.savegroupname',function()
 	});
 
 	$(document).on('click', '.likeforumpost', function(){		
-		//var _token = $('#postform input[name=_token]').val();
 		var forumPostID = $(this).data('forumpostid');
-		// var user_id = $('#user_id').val();
-		var current = $(this);	
+		var current = $(this);
+
 		$.ajax({			
 			'url' : '/ajax/likeforumpost',
 			'data' : { 'forumpostid':forumPostID },
@@ -1506,10 +1412,9 @@ $(document).on('click','.savegroupname',function()
 	});
 
 		$(document).on('click', '.likeforumreply', function(){		
-		//var _token = $('#postform input[name=_token]').val();
 		var forumreplyid = $(this).data('forumreplyid');
-		// var user_id = $('#user_id').val();
-		var current = $(this);		
+		var current = $(this);
+
 		$.ajax({			
 			'url' : '/ajax/likeforumreply',
 			'data' : { 'forumreplyid':forumreplyid },
@@ -1573,7 +1478,6 @@ $(document).on('click','.savegroupname',function()
 				'data' : { 'replyid':replyid, 'comment':comment },
 				'type' : 'post',
 				'success' : function(response){
-					// alert(response);
 					$('.reply-comment-text').val('');
 					$('.emoji-wysiwyg-editor').text('');				
 					$('.forumreplycommentlist').append(response);
@@ -1605,26 +1509,17 @@ $(document).on('click','.savegroupname',function()
 			popupButtonClasses: 'fa fa-smile-o'
       	});
       window.emojiPicker.discover();
-      //alert(6);
 	}
 
   /*********** To display emoji onload of a page******************/
 	function loadOrgionalImogi()
 	{
-
 		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p, .f-single-post .more .morecontent span").each(function() {
 		var original = $(this).html();
 		// use .shortnameToImage if only converting shortnames (for slightly better performance)
 		var converted = emojione.toImage(original);
 		$(this).html(converted);
 	});
-
-	/*$(".post-list .single-post div").each(function() {
-		var original = $(this).html();
-		// use .shortnameToImage if only converting shortnames (for slightly better performance)
-		var converted = emojione.toImage(original);
-		$(this).html(converted);
-	});*/
 	}
 
 	function showLoading(){

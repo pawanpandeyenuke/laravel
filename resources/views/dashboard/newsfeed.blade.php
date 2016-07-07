@@ -1,7 +1,5 @@
 
-@foreach($feeds as $data)		
-		<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>
-		<?php //echo $data->updated_at->diffForHumans();// die;?>
+@foreach($feeds as $data)
 		<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 
 			<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
@@ -48,10 +46,10 @@
 						<li>
 							<div class="like-cont">
 							<?php 
-								$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $data['id']])->get(); 
+								$likedata = \App\Like::where(['user_id' => Auth::User()->id, 'feed_id' => $data['id']])->get(); 
 
-								$likecountdata = App\Like::where(['feed_id' => $data->id])->get()->count();
-								$commentscountdata = App\Comment::where(['feed_id' => $data->id])->get()->count();  
+								$likecountdata = \App\Like::where(['feed_id' => $data->id])->get()->count();
+								$commentscountdata = \App\Comment::where(['feed_id' => $data->id])->get()->count();  
 							?>
 								<input type="checkbox" name="" id="checkbox{{$data['id']}}" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
 								<label for="checkbox{{$data['id']}}" class="css-label">
@@ -77,7 +75,6 @@
 										$popupclass = 'popupajax';
 									} 													
 							?>
-
 							<a class="{{$popupclass}}" style="cursor:pointer">
 								<span class="icon flaticon-interface-1"></span> 
 								@if($commentscountdata > 0)
@@ -112,14 +109,12 @@
 								<?php 
 									$counter = 1;
 									$offset = count($data['comments']) - 3;
-									// echo $offset;die;
 								foreach($data['comments'] as $commentsData){
 								
-									$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name', 'picture']);
+									$username = \App\User::where('id', $commentsData['commented_by'])->get(['first_name', 'last_name', 'picture']);
 
-									$userId = DB::table('users')->where('id', $commentsData['commented_by'])->get(['id']);
+									$userId = \App\User::where('id', $commentsData['commented_by'])->get(['id']);
 
-									// print_r($username);die;
 									if(!empty($username)){
 
 										$name = $username[0]->first_name.' '.$username[0]->last_name; 

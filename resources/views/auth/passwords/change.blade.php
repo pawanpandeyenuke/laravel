@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Change Password - ')
 @section('content')
 <style type="text/css">
     .panel{

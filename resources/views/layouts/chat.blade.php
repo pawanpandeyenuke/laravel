@@ -4,16 +4,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Friendz Square</title>
+<title>@yield('title')Friendz Square</title>
 <link href="{{url('/css/bootstrap.css')}}" rel="stylesheet">
 <link href="{{url('/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/fancybox/jquery.fancybox.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/fileinput.min.css')}}" rel="stylesheet" media="all">
-
 <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet" media="all">
-<!-- <link href="/converse/converse.min.css" rel="stylesheet" type="text/css" media="screen" > -->
-
 <link href="{{url('/lib/css/nanoscroller.css')}}" rel="stylesheet">
 <link href="{{url('/lib/css/emoji.css')}}" rel="stylesheet">
 <link href="{{url('/css/style.css')}}" rel="stylesheet">

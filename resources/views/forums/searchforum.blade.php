@@ -26,13 +26,10 @@ $check_val = "direct";
 									@endforeach
 									</select>
 								</div>
-								<!-- <div class="subs" style="display: none;"> -->
 								<div class="col-md-4">
 								<div class="search-subforums">
 										<?php 
 											if(isset($old['search-subforums']) && $old['search-subforums'] != ""){
-											 	//$sub_id = $old['search-subforums'];
-											 	//$sub_title = \App\Forums::where('id',$old['search-subforums'])->value('title');
 												$check_val = "sub";
 												$options = \App\Forums::where('parent_id',$old['mainforum'])->get();
 											}else{
@@ -218,8 +215,6 @@ $check_val = "direct";
 						{!! Form::close() !!}
 						</div><!--/forum filter-->
 
-<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script> -->
-<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script> -->
 <script type="text/javascript">
 
 	window.onload = function(){
@@ -269,7 +264,6 @@ $check_val = "direct";
       var parent = $('.getsubcategory').val();
       
       if(searchkey == "" && parent == "Forum"){
-        // $('.getsubcategory').attr('placeholder', 'Enter Keyword').focus();
         $('#forum-keyword-layout').focus();
         event.preventDefault();
    		}
@@ -296,10 +290,6 @@ $check_val = "direct";
 
       }
    	 });
-
-      	// $('#search-subforums').click(function(){
-      		
-      	// });
 	
 		$('.getsubcategory').change(function(){
 					$('.search-country1').hide();

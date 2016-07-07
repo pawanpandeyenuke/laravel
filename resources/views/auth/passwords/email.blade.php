@@ -1,6 +1,5 @@
 @extends('layouts.app')
-
-<!-- Main Content -->
+@section('title', 'Reset Password - ')
 @section('content')
 <div class="default-page">
     <div class="container" style="margin-top:5%">

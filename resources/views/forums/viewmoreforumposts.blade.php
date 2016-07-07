@@ -66,5 +66,4 @@
 	$(document).ready(function() {
 		 loadOrgionalImogi();
 	});
-
 </script>

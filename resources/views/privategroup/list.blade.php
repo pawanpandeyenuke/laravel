@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-<?php //echo '<pre>';print_r($privategroup);die; ?>
+@section('title', 'Private Group - ')
 @section('content')
 <div class="page-data dashboard-body">
 	<div class="container">
@@ -25,7 +25,7 @@
 									$count++;
 								}
 								else{
-								$name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+								$name[]=\App\User::where('id',$mem['member_id'])->value('first_name');
 								}
 							}
 

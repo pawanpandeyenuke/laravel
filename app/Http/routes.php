@@ -384,6 +384,9 @@ Route::post('/api/api-del-confirm','ApiController@confirmBox');
 			return view('auth.register');
 	});
 
+	/*Route::get('mail',function(){
+		return view('emails.invite')->with('username','Aditya')->with('id',"42");
+	});*/
 	Route::get('register/verify/{confirmation_code}', [
     'as' => 'confirmation_path',
     'uses' => 'SearchController@confirm'

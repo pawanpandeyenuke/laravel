@@ -1,5 +1,5 @@
 @extends('layouts.chat')
-
+@section('title', 'Chat - ')
 <style>
 .flyout.box-flyout {
   width: 100% !important;
@@ -130,8 +130,8 @@ $groupid = $group_jid;
                                                   
                                                   @if($data['user']['id'] != Auth::User()->id)
                                                     <?php 
-                                                      $status = DB::table('friends')->where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
-                                                      $status1 = DB::table('friends')->where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
+                                                      $status = \App\Friend::where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
+                                                      $status1 = \App\Friend::where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
                                                       // echo '<pre>';print_r($status1);die;
                                                       ?>
                                                     @if($status != null || $status1 != null)
@@ -214,7 +214,7 @@ $groupid = $group_jid;
                                     $name[]="You";
                                     $count++;
                                 } else {
-									$name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+									$name[]=\App\User::where('id',$mem['member_id'])->value('first_name');
                                 }
                             }
 
