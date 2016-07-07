@@ -19,6 +19,21 @@
 <link href="{{url('/css/style.css')}}" rel="stylesheet">
 <link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
+<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
+
+<!-- Emoji Inclues -->
+<script src="{{url('/c-lib/lib/js/emojione.js')}}"></script>
+<script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>
+<script src="{{url('/lib/js/tether.min.js')}}"></script>
+<script src="{{url('/lib/js/config.js')}}"></script>
+<script src="{{url('/lib/js/util.js')}}"></script>
+<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
+<script src="{{url('/lib/js/emoji-picker.js')}}"></script>
+<script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
+<!-- Emoji Inclues Ends-->
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

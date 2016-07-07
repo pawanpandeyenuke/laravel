@@ -816,7 +816,7 @@ class DashboardController extends Controller
 						 GroupMembers::insert($data1);  
 					}
 					$xmp = User::whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
-					$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname, 'message' => base64_encode('You are invited for '.$GroupTitle) ) );
+					$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname, 'message' => webEncode('You are invited for '.$GroupTitle) ) );
 					foreach ($xmp as $key => $value) {
 						$converse->addUserGroup( $groupname,$value );
 						$converse->broadcast($userXamp,$value,$Message);
