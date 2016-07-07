@@ -3413,3 +3413,24 @@ header{
 .stick-margin{
 	margin-top: 220px;
 }
+#conversejs [data-emojiable="converted"] {
+    display: block !important;
+    height: 0 !important;
+    padding: 0 !important;
+}
+#conversejs .emoji-picker-icon{
+	 color: #8ba5a2;
+    position: absolute;
+    right: 44px !important;
+    top: 13px;
+
+}
+#conversejs .emojione {
+    width: 25px;
+}
+.chat-msg-me .chat-msg-content{
+	margin-right: 60px !important;
+}
+.chat-msg-them .chat-msg-content{
+	margin-left: 60px !important;
+}
