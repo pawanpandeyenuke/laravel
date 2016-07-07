@@ -5,8 +5,8 @@ if($setting==null)
 $setting['contact-request']="Friends of friends";
 $setting['friend-request'] ="Friends of friends";
 }
- //echo '<pre>';print_r($setting);die;
 ?>
+@section('title', 'Settings - ')
 @section('content')
 
 	<div class="page-data dashboard-body">

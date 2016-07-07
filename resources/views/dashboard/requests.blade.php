@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Friends - ')
 @section('content')
 <?php  //print_r($model1);die; ?>
 <style type="text/css">

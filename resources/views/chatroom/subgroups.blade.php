@@ -1,17 +1,13 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Group Chat - ')
 <?php 
-// print_r($group_name);die;
 $groupnamestr = ucwords($p_group->title);
 unset($countries[0]);
-// print_r($countries);die;
  ?>
 
 <style type="text/css">
 	.boxsize{width:200px;}
 </style>
-
-<?php //echo '<pre>' ;print_r($countries);die;?>
 @section('content')
 	<div class="page-data dashboard-body">
 	        <div class="container">

@@ -335,6 +335,14 @@
     } else {
         $Description = 'NA';
     }
+  /*  if($ReadMoreUrl!='')
+        {
+          $Description .= ' <a href="'.$ReadMoreUrl.'" class="readmore-link pull-right">Read More</a>';
+        }
+        else
+        {
+            $Description .= '<span class="morecontent"><span></span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>'
+        }*/
         if($data){
             if($ReadMoreUrl == "#"){
                 $btn_text = "More";
@@ -349,6 +357,9 @@
     return $Description;
 }
 
-
+function webEncode( $String ){
+	//return base64_encode( $String );
+	return $String;
+}
 
 ?>

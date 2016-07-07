@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-<?php //echo '<pre>';	print_r($friends);die; ?>
+@section('title', 'Private Group - ')
 @section('content')
 
 <div class="page-data dashboard-body">
@@ -51,27 +51,10 @@
 </div>
 
 
-
-<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script> -->
-<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script> -->
-
 <script type="text/javascript" >
 
 $(document).ready(function () {
 
- 	/*	var last_valid_selection = null;
-
-	   $('#select-multiuser').change(function(event) {
-        if ($(this).val().length > <?php echo Config::get('constants.private_members'); ?>) {
-          $('#membermsg').show();
-          $(this).val(last_valid_selection);
-        } else {
-          last_valid_selection = $(this).val();
-          $('#membermsg').hide();
-        }
-      });
-*/
 	$( "#privategroupform" ).submit(function( event ) {
 		var stack = $('.b-valid');
 		$.each(stack, function(i,v){
@@ -107,51 +90,6 @@ $(document).ready(function () {
 		$(this).closest('.bcast-list').find('#groupuser-error').remove();
 		$('.select2-selection').removeClass('help-inline');
 	});
-
-/*    $("#privategroupform").validate({ 
-        errorElement: 'span',
-        errorClass: 'help-inline',
-        rules: {
-            groupname: { required: true, number: false },
-            // groupmembers:  { selectcheck: true }
-        },
-        messages:{
-            groupname:{
-                required: "Please enter the name of broadcast.",
-                number: "Please enter a valid broadcast name."
-            },
-            groupmembers:{
-                selectcheck: "Please add at least one contact to broadcast list."
-            }
-        }
-    });
-
-
-	$( "#privategroupform" ).submit(function( event ) {
-		var multiuser = $('#select-multiuser').val();
-		if(multiuser === null){
-			$('#select-multiuser').closest('.bcast-list').append('<span id="groupuser-error" class="help-inline">Please add at least one contact to broadcast list.</span>');
-			$('.select2-selection').addClass('help-inline');
-			event.preventDefault();
-		}
-	});
-
-	$( "#select-multiuser" ).change(function( event ) {
-		$('#select-multiuser').closest('.bcast-list').find('#groupuser-error').remove();
-		$('.select2-selection').removeClass('help-inline');
-		var multiuser = $('#select-multiuser').val();
-		if(multiuser === null){		
-			$('#select-multiuser').closest('.bcast-list').append('<span id="groupuser-error" class="help-inline">Please add at least one contact to broadcast list.</span>');
-			$('.select2-selection').addClass('help-inline');
-		}
-	});*/
-
-
-/*$("#select-multiuser").select2({ maximumSelectionLength: 15}).on( 'select2:select', function(e) {
-	alert($("#select-multiuser").val());
-});*/
-
-
  
 });
 </script>

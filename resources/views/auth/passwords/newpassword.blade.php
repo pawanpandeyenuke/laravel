@@ -1,6 +1,5 @@
 @extends('layouts.app')
-
-<!-- Main Content -->
+@section('title', 'Password Changed - ')
 @section('content')
 
 @include('panels.loginpopup')

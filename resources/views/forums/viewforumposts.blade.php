@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Forums - ')
 <style type="text/css">
 	.boxsize{width:200px;}
 </style>
@@ -44,7 +44,6 @@
 									<div class="text-right">
 									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Create Post</button>
 									</div>
-									<!-- <div class="alert alert-info" role="alert">Please <a data-toggle="modal" data-target="#LoginPop" href="#" title="">click here</a> for login, to create a post.</div> -->
 									@endif
 								
 								
@@ -125,7 +124,6 @@
 								</div><!--/single post-->
 							@endforeach
 							</div>
-							 <!-- <div class="pagination">  </div> -->
 							 @if($postscount > 10)
 							<div class="load-more-btn-cont text-center">
 								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumpost" data-breadcrum = "{{$breadcrum}}">View More</button>

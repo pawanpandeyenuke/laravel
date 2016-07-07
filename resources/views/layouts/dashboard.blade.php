@@ -4,17 +4,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Friendz Square</title>
+<title>@yield('title')Friendz Square</title>
 <link href="{{url('/css/bootstrap.css')}}" rel="stylesheet">
 <link href="{{url('/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/fancybox/jquery.fancybox.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/fileinput.min.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/select2.min.css')}}" rel="stylesheet" media="all">
-
 <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet" media="all">
-<!-- <link href="/converse/converse.min.css" rel="stylesheet" type="text/css" media="screen" > -->
-
 <link href="{{url('/lib/css/nanoscroller.css')}}" rel="stylesheet">
 <link href="{{url('/lib/css/emoji.css')}}" rel="stylesheet">
 <link href="{{url('/css/style.css')}}" rel="stylesheet">
@@ -150,15 +147,6 @@
 { ?>
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <?php } ?>
-
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
-<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
-
-<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script> -->
-
-<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script> -->
-
- 
 </body>
 </html>
 
@@ -236,8 +224,6 @@
     }
     
 });
-
-
 
       $( "#search-forum-dashboard" ).submit(function( event ) {
       var searchkey = $('.forum-keyword-app').val();

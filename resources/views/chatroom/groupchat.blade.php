@@ -1,5 +1,8 @@
 @extends('layouts.chat')
 
+@section('title', 'Chat - ')
+
+@section('content')
 <style>
 .flyout.box-flyout {
   width: 100% !important;
@@ -33,8 +36,6 @@
   left: 3%;
 }
 </style>
-
-@section('content')
 <?php 
 $groupid = $group_jid;
 ?>
@@ -130,8 +131,8 @@ $groupid = $group_jid;
                                                   
                                                   @if($data['user']['id'] != Auth::User()->id)
                                                     <?php 
-                                                      $status = DB::table('friends')->where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
-                                                      $status1 = DB::table('friends')->where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
+                                                      $status = \App\Friend::where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
+                                                      $status1 = \App\Friend::where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
                                                       // echo '<pre>';print_r($status1);die;
                                                       ?>
                                                     @if($status != null || $status1 != null)
@@ -214,7 +215,7 @@ $groupid = $group_jid;
                                     $name[]="You";
                                     $count++;
                                 } else {
-									$name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+									$name[]=\App\User::where('id',$mem['member_id'])->value('first_name');
                                 }
                             }
 
@@ -256,16 +257,10 @@ $groupid = $group_jid;
     </div><!--/pagedata-->
   
  
-@endsection
+
 
 <link href="{{url('/converse/converse.min.css')}}" rel="stylesheet" type="text/css" media="screen" >
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script type="text/javascript" src="{{url('/converse/jquery.form.js')}}"></script>
 <script type="text/javascript" src="{{url('/converselib/demo_converse.nojquery.min.js')}}"></script>
-
-<!-- <script type="text/javascript" src="{{url('/converse/converse.nojquery.min.js')}}"></script> -->
-<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
-
 
 <?php 
  
@@ -276,6 +271,8 @@ $groupid = $group_jid;
 ?>
  
 <script type="text/javascript">
+	jQuery.noConflict();
+	
 	var encoderoomid = '';
     var userImage="{{$userpic}}";
  
@@ -301,6 +298,16 @@ $groupid = $group_jid;
 	setTimeout( function(){
 		waitProfile = 1;
 	}  , 4000 );
+	
+	function webEncode( str ){
+		//return Base64.encode( str );
+		return str;
+	}
+	function webDecode( str ){
+		//return Base64.decode( str );
+		return str;
+	}
+	
     jQuery(document).ready(function(){
       require(['converse'], function (converse) {
                conObj = converse;
@@ -315,13 +322,14 @@ $groupid = $group_jid;
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
 					chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
+					//Emoji Picker
 					var jidStr = chatbox.model.get('jid');
 					if(waitProfile == 1 ){
 						setTimeout( function(){
 							hideOpendBox( jidStr, 2 );
 						}  , 2000 );
 					}
-					
+					renderEmoji( chatbox );
 				});
 				
 				conObj.listen.on('renderMessage', function (event, message) { 
@@ -330,6 +338,9 @@ $groupid = $group_jid;
 				
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) {
 					chatbox.$el.attr( 'data-bid', Base64.encode(chatbox.model.get('jid')) );
+					
+					
+					
 					var jidStr = chatbox.model.get('jid');
 					if(waitProfile == 1 ){
 						setTimeout( function(){
@@ -365,7 +376,8 @@ $groupid = $group_jid;
 								}
 							}
 						});
-					}	
+					}
+					renderEmoji( chatbox );	
 				});
 				
 				conObj.listen.on('disconnected', function (event) { 
@@ -380,6 +392,7 @@ $groupid = $group_jid;
                   authentication: 'prebind',
                   prebind_url: "{{url('/ajax/getxmppuser')}}",
                   send_initial_presence:true,
+                  visible_toolbar_buttons: {'toggle_occupants':false,'clear':false,'emoticons':false,'call': false},
 				  ping_interval: 0,
 				  message_carbons: true,
 				  forward_messages: true,
@@ -426,6 +439,18 @@ $groupid = $group_jid;
 
       });
 
+	$( document ).on( 'keydown', '.emoji-wysiwyg-editor' , function(e) {
+		if(e.which == 13) {
+			var obj = $(this);
+			var t = $.Event("keypress");
+			t.which = 13; //choose the one you want
+			obj.parent().find('textarea').focus();
+			obj.parent().find('textarea').trigger(t);
+			obj.html( "" );
+			setTimeout(function() { obj.focus(); }, 200);
+			
+		}
+	});
 
         $(document).on('click','.invite',function(){
           var current = $(this);
@@ -498,7 +523,24 @@ $groupid = $group_jid;
             is_first=false; 
          }
      }
-
+	/** 
+	*	append emoji in chatbox
+	**/
+	function renderEmoji( chatbox ){
+		setTimeout( function(){
+				// Initializes and creates emoji set from sprite sheet
+				window.emojiPicker = new EmojiPicker({
+					emojiable_selector: chatbox.$el.find('[data-emojiable=true]'),
+					assetsPath: '/lib/img/',
+					popupButtonClasses: 'fa fa-smile-o'
+				});
+				// Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+				// You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+				// It can be called as many times as necessary; previously converted input fields will not be converted again
+				window.emojiPicker.discover();
+		}  , 2000 );
+					
+	}
 
 /*
 function openChatbox( xmpusername,username ){
@@ -697,4 +739,4 @@ $('.dropdown.keep-open').on({
 
 
 </script>
-
+@endsection

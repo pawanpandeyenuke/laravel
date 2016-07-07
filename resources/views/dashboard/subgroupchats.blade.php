@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Group Chat - ')
 @section('content')
 
 <div class="page-data dashboard-body">
@@ -36,7 +36,7 @@
                                     <input class="group-radio" data-value="{{ $title }}" type="radio" name="subcategory" id="{{ $title }}" data-id="{{ $data->title }}"></input>
                                     <label for="{{ $title }}">{{ $data->title }}</label>
                                 </div>
-                                <?php $fieldsData = DB::table('categories')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); ?>
+                                <?php $fieldsData = \App\Category::where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); ?>
                                 @if($fieldsData)
                                 <select name="subgroup" class="selectbox" style="display: none">
                                     @foreach($fieldsData as $val)

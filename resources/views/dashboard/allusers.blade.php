@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+@section('title', 'User Search - ')
 @section('content')
 
 <?php
@@ -85,13 +85,11 @@
 			</div>
 			<div class="col-sm-6">
 			<?php 
-				$status1=DB::table('friends')
-							->where('user_id',$data['id'])
+				$status1= \App\Friend::where('user_id',$data['id'])
 							->where('friend_id',Auth::User()->id)
 							->value('status');
 
-				$status2=DB::table('friends')
-							->where('friend_id',$data['id'])
+				$status2=\App\Friend::where('friend_id',$data['id'])
 							->where('user_id',Auth::User()->id)
 							->value('status');
 
