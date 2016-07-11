@@ -68,6 +68,8 @@ class ApiController extends Controller
 			}else{
 				
 				$input['password'] = Hash::make($input['password']);
+				$confirmation_code = str_random(30);
+				$input['confirmation_code'] = $confirmation_code;
 				$userdata = $user->create($input);
 				$full_name = $userdata->first_name.' '.$userdata->last_name;
 				//Saving xmpp-username and xmpp-pasword into database.
@@ -2538,4 +2540,74 @@ class ApiController extends Controller
 		return view('forums-api.confirmbox')
 			   		->with('data',$data);
 	}
+
+	public function emailVerification()
+	{
+
+		try{
+			$email = Request::get('email');
+			$user = User::where('email',$email)->first();
+			if(empty($user))
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				if($user->is_email_verified == "N"){
+
+					$emaildata = array('confirmation_code' => $user->confirmation_code);
+					$username = $user->first_name." ".$user->last_name;
+					$useremail = $user->email;
+					
+					Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
+						$message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
+						$message->to($useremail,$username)->subject('Verify your email address');
+
+					$this->status = "Success";
+					$this->message = "Verification link has been sent to your registered email address. Please check your inbox and verify your email address.";
+					});
+				}else{
+					throw new Exception("This email id is already verified.", 1);					
+				}
+			}
+					  
+			}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+
+	}
+
+	public function changePassword()
+	{
+		try{
+			$input = Request::all();
+			$user = User::where('id',$input['user_id'])->first();
+			if(empty($user))
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				if(Hash::check($input['old_password'], $user->password)){
+					if(Hash::check($input['old_password'], bcrypt($input['new_password']))) {
+                        throw new Exception("New password can't be same as old password.", 1);
+                    }else{
+                    	if(strlen($input['new_password']) < 8){
+                    		throw new Exception("New password should be atleast 8 characters long.", 1);
+                    	}else{
+		                    $user->password = bcrypt($input['new_password']);
+		                    $user->save();
+		                    $this->status = "Success";
+		                    $this->message = "Password changed successfully";
+		                    $this->data = $user;
+		                }
+                    }
+				}else{
+					throw new Exception("Password doesn't match our records.", 1);	
+				}
+			}		  
+			}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+	}
+
+
 }

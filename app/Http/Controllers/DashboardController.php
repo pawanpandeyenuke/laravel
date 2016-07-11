@@ -810,16 +810,19 @@ class DashboardController extends Controller
         if(Request::isMethod('post')){
             $input = Request::all();
             if(Auth::check()){
-                $ret_password = User::where('id',Auth::User()->id)->value('password');
                 if(Hash::check($input['old_password'], Auth::User()->password)){
                     if(Hash::check($input['old_password'], bcrypt($input['new_password']))) {
                         return redirect()->back()->with('error',"New password can't be same as old password.");
                     }else{
-                    User::where('id',Auth::User()->id)->update(['password' => bcrypt($input['new_password'])]);
-                    return redirect()->back()->with('success',"Password changed succesfully.");
+                        if(strlen($input['new_password']) < 8){
+                            return redirect()->back()->with('error',"New password should be atleast 8 characters long.");
+                        }else{
+                                User::where('id',Auth::User()->id)->update(['password' => bcrypt($input['new_password'])]);
+                             return redirect()->back()->with('success',"Password changed succesfully.");
+                         }
                     }
                 }else{
-                    return redirect()->back()->with('error',"Old password doesn't match our records.");
+                    return redirect()->back()->with('error',"Password doesn't match our records.");
                 }
             }
             else
