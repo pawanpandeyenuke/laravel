@@ -28,6 +28,9 @@
  @if (Session::has('error'))
  <div class="alert alert-danger">{!! Session::get('error') !!}</div>
  @endif
+
+@include('panels.download-app')
+
 <div class="page-data login-page">
     <div class="container">
         <div class="row">
@@ -386,7 +389,8 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
- 
 
+    // Opens popup for app download links
+    $('#sendMsg2').modal('show');
 </script>
 @endsection
