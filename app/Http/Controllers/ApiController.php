@@ -2463,40 +2463,68 @@ class ApiController extends Controller
 		return $this->output();			
 	}
 
-	public function uploadChatImage(){
-		
-	try{
-                        $status="Failed";
-                $message="";
-                $url1="";
-                        $input = Request::all();
-                        if( $input )
-                        {
-                                if( Request::hasFile('chatsendimage') )
-                                {
-                                                                                // Upload file
-                                        $fileToBeUploaded = Request::file('chatsendimage');
-                                        $url = time().'--'.implode('_',explode(' ',$fileToBeUploaded->getClientOriginalName()));
-                                        $fileToBeUploaded->move('uploads/media/chat_images/', $url);
-                                        $url1=url('uploads/media/chat_images/'.$url);
-                                        // Add entry
+	public function uploadChatImage()
+	{		
+		try{
+	        $status="Failed";
+	        $message="";
+	        $url1="";
+	            $input = Request::all();
+	            if( $input )
+	            {
+	                if( Request::hasFile('chatsendimage') )
+	                {
+	                                                                // Upload file
+	                    $fileToBeUploaded = Request::file('chatsendimage');
+	                    $url = time().'--'.implode('_',explode(' ',$fileToBeUploaded->getClientOriginalName()));
+	                    $fileToBeUploaded->move('uploads/media/chat_images/', $url);
+	                    $url1=url('uploads/media/chat_images/'.$url);
+	                    // Add entry
 
-                                        $status = 'success';
-                                        $message = 'Image uploaded successfuly.';
-                                }
-                        }
+	                    $status = 'success';
+	                    $message = 'Image uploaded successfuly.';
+	                }
+	            }
 
-                }catch(Exception $e)
-                {
-                        $message = $e->getMessage();//'Image not uploaded.';//
-                        $status='Failed';
-                }
+	        }catch(Exception $e)
+	        {
+	                $message = $e->getMessage();//'Image not uploaded.';//
+	                $status='Failed';
+	        }
 
           return  json_encode(array('status'=>$status,'message'=>$message,'url'=>$url1,'name'=>$url,'type'=>'image'));
     }
 
+
 	public function chatImagePage()
 	{
 		return view('chat_image');die;
+	}
+
+
+	public function confirmBox()
+	{
+		$input = Input::all();
+		if($input['type'] == "post"){
+
+			$data = ['class' => "forumpostdelete",
+					 'postid' => $input['postid'],
+					 'breadcrum'=> $input['breadcrum'],
+					 'forumpostid' => "",
+					 'forumreplyid' => "",
+					 'message' => "All the replies and comments related to this post will be deleted. Are you sure you want to delete this post?"];
+		
+		}else if($input['type'] == "reply"){
+
+			$data = ['class' => "forumreplydelete",
+					 'postid' => "",
+					 'breadcrum'=> "",
+					 'forumpostid' => $input['forumpostid'],
+					 'forumreplyid' => $input['forumreplyid'],
+					 'message' => "All the comments related to this reply will be deleted. Are you sure you want to delete this reply?"];
+		}
+
+		return view('forums-api.confirmbox')
+			   		->with('data',$data);
 	}
 }
