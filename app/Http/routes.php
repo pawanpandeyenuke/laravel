@@ -243,6 +243,10 @@ Route::get('api/chat_image_page','ApiController@chatImagePage');
 
 Route::post('/api/api-del-confirm','ApiController@confirmBox');
 
+Route::post('/api/email-verification','ApiController@emailVerification');
+
+Route::post('/api/change-password','ApiController@changePassword');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
