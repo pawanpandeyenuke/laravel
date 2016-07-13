@@ -78,7 +78,7 @@ Route::post('ajax/sendimage','AjaxController@sendImage');
 Route::post('ajax/searchfriend','AjaxController@searchfriendlist');
 
 Route::post('ajax/searchtabfriend','AjaxController@searchTabFriend');
-
+Route::post('/ajax/view-more-friends-search','AjaxController@searchTabFriendMore');
 
 Route::post('/ajax/delbroadcast','AjaxController@delBroadcast');
 
@@ -241,6 +241,12 @@ Route::match(['get', 'post'], 'api/get-forum-post-details','ApiController@getFor
 
 Route::get('api/chat_image_page','ApiController@chatImagePage');
 
+Route::post('/api/api-del-confirm','ApiController@confirmBox');
+
+Route::post('/api/email-verification','ApiController@emailVerification');
+
+Route::post('/api/change-password','ApiController@changePassword');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -251,10 +257,10 @@ Route::get('api/chat_image_page','ApiController@chatImagePage');
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-	Route::get('test', function()
+	/*Route::get('test', function()
 	{
-    dd(Config::get('mail'));
-	});
+    	return view('auth.emails.password');
+	});*/
 	Route::get('/redirect/{provider}', 'SocialController@redirect');
 	Route::get('/callback/{provider}', 'SocialController@callback');
 
@@ -372,7 +378,8 @@ Route::get('api/chat_image_page','ApiController@chatImagePage');
 	Route::post('terms-conditions','SearchController@termsConditions');
 
 	Route::get('send-verification-link','SearchController@verify');
-	Route::post('send-verification-link','SearchController@verify');	
+	Route::post('send-verification-link','SearchController@verify');
+	Route::get('email-verified/{user_id}/{confirmation_code}','SearchController@emailVerified');	
  
 	Route::get('/', function(){
 		if(Auth::check())
@@ -381,11 +388,15 @@ Route::get('api/chat_image_page','ApiController@chatImagePage');
 			return view('auth.register');
 	});
 
+	/*Route::get('mail',function(){
+		return view('emails.invite')->with('username','Aditya')->with('id',"42");
+	});*/
 	Route::get('register/verify/{confirmation_code}', [
     'as' => 'confirmation_path',
     'uses' => 'SearchController@confirm'
 	]);
 
-
+	Route::get('change-password','DashboardController@changePassword');
+	Route::post('change-password','DashboardController@changePassword');
 
 });

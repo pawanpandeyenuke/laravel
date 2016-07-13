@@ -1,4 +1,5 @@
-<div class="col-sm-3">
+<div class="col-sm-3 sidebar-menu-col">
+	<button type="button" class="mob-menu-btn">Menu</button>
 	<div class="dashboard-sidemenu">
 		<div class="panel-group" id="side_acc_menu" role="tablist" aria-multiselectable="true">
 		  <div class="panel panel-default">
@@ -52,6 +53,15 @@
 		      	<?php $uid = Auth::User()->id; ?>
 		        <a class="without-arrow" href="{{ url("profile/$uid") }}">
 		          <i class="flaticon-social"></i>Profile
+		        </a>
+		      </h4>
+		    </div>
+		  </div>
+		   <div class="panel panel-default">
+		    <div class="panel-heading" role="tab" id="headingSix">
+		      <h4 class="panel-title">
+		        <a href="{{ url('change-password') }}" class="without-arrow">
+		          <i class="flaticon-tool"></i>Change Password
 		        </a>
 		      </h4>
 		    </div>

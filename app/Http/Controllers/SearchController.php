@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 // use Illuminate\Http\Request;
 
-use App\Http\Requests;
+use App\Http\Requests,Config;
 use Request, Session, Validator, Input, Cookie;
 use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend,App\ForumLikes,App\ForumReply,App\ForumsDoctor;
 class SearchController extends Controller
@@ -40,7 +40,7 @@ class SearchController extends Controller
             if( $authUserId != '' ){
                 
                 // User cannot search himself.
-                $model = $model->where('id', '!=', $authUserId);
+               // $model = $model->where('id', '!=', $authUserId);
 
                 // Search for user's who are not friends with me.
                 $model = $model->whereNotIn('id', Friend::where('user_id', '=', $authUserId)
@@ -93,11 +93,11 @@ class SearchController extends Controller
             'subject' => $subject,
             'usermail'=>$usermail
         );
-
+        $email_const = Config::get('constants.feedback_email');
         if($email != ''){
-        Mail::send('emails.suggestion', $data, function($message) use($email, $subject) {
+        Mail::send('emails.suggestion', $data, function($message) use($email, $subject,$email_const) {
         $message->from($email, 'User Feedback');
-        $message->to('adi490162@gmail.com')->subject($subject);
+        $message->to($email_const)->subject($subject);
     });
         }
     }
@@ -110,36 +110,41 @@ class SearchController extends Controller
 
     public function verify()
     {
-        if(Request::isMethod('post')){
-            $arguments = Request::all();
-            $user = User::where('email',$arguments['email'])->first();
-            //print_r($user);die;
-            if($user != null){
-                 if($user->is_email_verified == "Y"){
-                 Session::put('error', 'This email is already verified!');
-                 return redirect()->back();
-             }
-             elseif($user->is_email_verified == "N"){
-                 $useremail = $user->email;
-                $username = $user->first_name." ".$user->last_name;
-                $confirmation_code = str_random(30);
-                User::where('email',$arguments['email'])->update(['confirmation_code'=>$confirmation_code]);
-                $emaildata = array('confirmation_code' => $confirmation_code);
+        Auth::logout();
+        if(!Auth::check()){
+            if(Request::isMethod('post')){
+                $arguments = Request::all();
+                $user = User::where('email',$arguments['email'])->first();
+                //print_r($user);die;
+                if($user != null){
+                     if($user->is_email_verified == "Y"){
+                     Session::put('error', 'This email is already verified!');
+                     return redirect()->back();
+                 }
+                 elseif($user->is_email_verified == "N"){
+                     $useremail = $user->email;
+                    $username = $user->first_name." ".$user->last_name;
+                    $confirmation_code = str_random(30);
+                    User::where('email',$arguments['email'])->update(['confirmation_code'=>$confirmation_code]);
+                    $emaildata = array('confirmation_code' => $confirmation_code);
 
-                    Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
-                    $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
-                    $message->to($useremail,$username)->subject('Verify your email address');
-                    });
-                Session::put('success', 'Verification link sent to '.$useremail.' !');
-                  return redirect()->back();
-             }
-            }
-            else{
-                 Session::put('error', "We can't find a user with that e-mail address.");
-                 return redirect()->back();
+                        Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
+                        $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
+                        $message->to($useremail,$username)->subject('Verify your email address');
+                        });
+                    Session::put('success', 'Verification link sent to '.$useremail.' !');
+                      return redirect()->back();
+                 }
                 }
+                else{
+                     Session::put('error', "We can't find a user with that e-mail address.");
+                     return redirect()->back();
+                    }
+            }
+                return view('verifyemail');
+        }else{
+            return redirect('/');
         }
-            return view('verifyemail');
     }
 
 
@@ -165,7 +170,7 @@ class SearchController extends Controller
         if($r1 == "")
             return redirect('forums');
     
-           $mainforum=Forums::where('id',$parentid)->value('title');
+           $mainforum=Forums::where('id',$parentid)->first();
            $subforums = Forums::where('parent_id',$parentid)->get();
            if($subforums->isEmpty())
                     return redirect()->back();
@@ -288,11 +293,11 @@ class SearchController extends Controller
         if($input['mainforum'] == "Doctor"){
          
          if($input['subcategory'] == "international")
-                $breadcrum = $breadcrum."International > ".$input['i-diseases'];
+                $breadcrum = $breadcrum."International > ".$input['idiseases'];
          else if($input['subcategory'] == "country")
-                $breadcrum = $breadcrum.$input['country1']." > ".$input['c-diseases'];
+                $breadcrum = $breadcrum.$input['country1']." > ".$input['cdiseases'];
           else if($input['subcategory'] == 'country,state,city')
-                $breadcrum = $breadcrum.$input['country']." > ".$input['state']." > ".$input['city']." > ".$input['csc-diseases'];  
+                $breadcrum = $breadcrum.$input['country']." > ".$input['state']." > ".$input['city']." > ".$input['cscdiseases'];  
          
          }else{
 
@@ -325,7 +330,7 @@ class SearchController extends Controller
   
 
         $input = Request::all();
-        // print_r($input);die;
+        //print_r($input);die;
         $mainforum = Forums::where('id',$input['mainforum'])->value('title');
         $breadcrum = $mainforum;
         if($input['check']=='direct'){
@@ -422,11 +427,32 @@ class SearchController extends Controller
         }
 
         $user->is_email_verified = 'Y';
-        $user->confirmation_code = null;
+        //$user->confirmation_code = null;
         $user->save();
 
         Session::put('success',"Your account has been successfully verified!");
-        return redirect('/');
+        return redirect('email-verified/'.$user->id.'/'.$confirmation_code);
+    }
+
+    public function emailVerified($user_id="",$confirmation_code="")
+    {
+        if(!Auth::check()){
+            if($user_id!="" && $confirmation_code!=""){
+                $user = User::find($user_id);
+                if($user){
+                     if($user->confirmation_code == $confirmation_code){
+                            $user->confirmation_code = null;
+                            $user->save();
+                            return view('email-verified');
+                     }
+                    else
+                        return redirect('/');
+                }else{
+                    return redirect('/');           
+                }
+            }
+        }else
+            return redirect('/');
     }
   
 

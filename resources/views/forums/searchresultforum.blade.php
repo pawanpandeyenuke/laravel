@@ -1,11 +1,9 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Forums - ')
 <?php
 	if($keyword == ""){
-		// print_r($breadcrum);
 		$breadcrum = rtrim($breadcrum, ' > ');
 		$show = $breadcrum;
-		// print_r($breadcrum);die;
 	}
 	else
 		$show = $keyword;
@@ -35,7 +33,6 @@
 
 						<div class="forum-srch-list">
 						 <div id="sticky-anchor"></div>
-						 	<!-- <div class="fix-header"> -->
 								 <div class="fs-breadcrumb">Search Result</div>
 
 								<div class="forum-post-cont">		
@@ -114,7 +111,6 @@
 								</div><!--/single post-->
 							@endforeach
 							</div>
-							  <!-- <div class="pagination">  </div> -->
 							 @if($postscount > 10)
 							<div class="load-more-btn-cont text-center">
 								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-search-forum" data-breadcrum = "{{$breadcrum}}" data-keyword = "{{$keyword}}">View More</button>
@@ -130,12 +126,7 @@
             </div>
         </div>
     </div><!--/pagedata-->
-@endsection
-{!! Session::forget('error') !!}
-<!--<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
-<script src="{{url('/lib/js/emoji-picker.js')}}"></script> -->
 
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 <script type="text/javascript">
 	
 	window.onload = function() {
@@ -170,3 +161,5 @@
 
 
 </script>
+@endsection
+{!! Session::forget('error') !!}

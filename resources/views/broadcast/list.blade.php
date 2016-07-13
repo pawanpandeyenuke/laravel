@@ -1,6 +1,7 @@
 @extends('layouts.dashboard')
-<?php //print_r($broadcast);die; ?>
+@section('title', 'Broadcast - ')
 @section('content')
+
 <div class="page-data dashboard-body">
 	<div class="container">
 		<div class="row">
@@ -12,13 +13,12 @@
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
 							<div class="bcast-list no-margin">
-								
 							@foreach($broadcast as $data)
 							<?php
 							$namestr='';
 							$name=array();
 							foreach ($data['members'] as $mem) {
-								$name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+								$name[]=\App\User::where('id',$mem['member_id'])->value('first_name');
 							}
 								$namestr=implode(",",$name);
 
@@ -47,8 +47,15 @@
 								</div>
 							@endforeach
 							</div>
+							@if (Session::has('error'))
+								<div class="alert alert-danger">{!! Session::get('error') !!}</div>
+							@endif
+							@if (Session::has('success'))
+								<div class="alert alert-success">{!! Session::get('success') !!}</div>
+							@endif
+							<div class="alert alert-danger" id="bajaxmsg" style="display:none;"><?php echo "Sorry, you can only add upto ".Config::get('constants.broadcast_limit')." broadcasts."; ?></div>
 							<div class="add-blist text-center">
-								<a href="{{url('broadcast-add')}}" title="" class="add-blist-btn"><i class="fa fa-plus"></i></a>
+								<a href="#create-broadcast" title="" class="add-blist-btn"><i class="fa fa-plus"></i></a>
 							</div>
 						</div>
 					</div>
@@ -60,4 +67,14 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+
+		$(document).on('click','.add-blist-btn',function(){
+			var len = $(".bcast-list > div").length;
+			if(len >= <?php echo Config::get('constants.broadcast_limit'); ?>)
+				$('#bajaxmsg').show();
+			else
+				window.location = "broadcast-add";
+	});
+</script>
 @endsection

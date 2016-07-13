@@ -40,10 +40,7 @@ class DashboardController extends Controller
                 $response = $converse->removeUserGroup($value, $xmppusername);    
             }
   
-            DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
-
-
-            // echo '<pre>';print_r($friends);die;
+            DefaultGroup::where('group_by',Auth::User()->id)->delete();
 
             $per_page = 5;
 
@@ -58,28 +55,6 @@ class DashboardController extends Controller
                 ->take($per_page)
                 ->get();
 
-            /*$feeds = Feed::with('user')
-                        ->leftJoin('likes', 'likes.feed_id', '=', 'news_feed.id')
-                        ->leftJoin('comments', 'comments.feed_id', '=', 'news_feed.id')
-                        ->groupBy('news_feed.id')
-                        ->get(['news_feed.*','comments.*',DB::raw('count(likes.id) as likes'),DB::raw('count(comments.id) as commentscount')])
-                        ->toArray();*/
-            
-            
-/*            if(Request::isMethod('post'))
-            {
-                $input = Request::all();
-                if($input)
-                {
-                    $feeds = new Feed;
-                    $feeds->message = $input['message'];
-                    $feeds->image = isset($input['image']) ? $input['image'] : '';
-                    $feeds->user_by = Auth::User()->id;
-                    // print_r($feeds->user_by);die;
-                    $feeds->save();
-                }
-                // echo '<pre>';print_r($input);die;
-            }*/
         }catch( Exception $e){
             $this->error = $e->getMessage();
         }
@@ -123,7 +98,6 @@ class DashboardController extends Controller
         }
         
         $settinguser = Setting::where('user_id', '=', Auth::User()->id)->pluck('setting_value', 'setting_title')->toArray();
-        // echo '<pre>';print_r($settinguser);die;
         return view('dashboard.settings')
                 ->with('setting', $settinguser);
     }
@@ -145,7 +119,6 @@ class DashboardController extends Controller
 
     public function friendRequests()
     {
-        // $model1=User::where('id','!=',Auth::User()->id)->take(10)->orderBy('id','desc')->get()->toArray();
         $model1 = Friend::
                     with('user')
                     ->where('friend_id', '=', Auth::User()->id)
@@ -188,14 +161,13 @@ class DashboardController extends Controller
         $xmppusername = User::where('id',Auth::User()->id)->value('xmpp_username');
 
         $defGroup = DefaultGroup::where('group_by',Auth::User()->id)->lists('group_name');
-
+        
         foreach ($defGroup as $value) {
             $converse = new Converse;
             $response = $converse->removeUserGroup($value, $xmppusername);    
-            // print_r($response);die;
         }
 
-        DB::table('default_groups')->where('group_by',Auth::User()->id)->delete();
+        DefaultGroup::where('group_by',Auth::User()->id)->delete();
 
         return view('chatroom.groups');
 
@@ -207,9 +179,9 @@ class DashboardController extends Controller
         $subgroups = '';
          if($parentid){
             $data = Category::where(['parent_id' => $parentid])->where(['status' => 'Active'])->get();
-            $name_check = Category::where('id',$parentid)->value('title');;
+            $name_check = Category::where('id',$parentid)->first();
             if($data->isEmpty()){
-                if($name_check == "")
+                if($name_check->title == "")
                     return redirect('group');
                 else
                     return redirect('groupchat/'.$parentid);
@@ -221,7 +193,7 @@ class DashboardController extends Controller
 
         return view('chatroom.subgroups') 
                 ->with('subgroups', $subgroups)
-                ->with('group_name', $name_check);
+                ->with('p_group', $name_check);
 
     }
 
@@ -267,8 +239,8 @@ class DashboardController extends Controller
                     return redirect()->back();
  
             }
-            // print_r($breadcrumb);die;
                     $last_id = end($id_arr);
+                    $img_icon = Category::where('id',$id_arr[0])->value('img_url');
                     $sub_groups = Category::where('parent_id',$last_id)->get();
 
                     if($sub_groups->isEmpty())
@@ -277,7 +249,8 @@ class DashboardController extends Controller
                     return view('chatroom.subcatgroups')
                             ->with('parent_id',$parentid)
                             ->with('breadcrumb',$breadcrumb)
-                            ->with('subgroup',$sub_groups);
+                            ->with('subgroup',$sub_groups)
+                            ->with('icon_url',$img_icon);
             }
             else
                 return redirect('group');
@@ -291,11 +264,9 @@ class DashboardController extends Controller
     *   Ajaxcontroller@groupchatrooms
     */
 
-    public function groupchat($groupid = "")
-    {
+    public function groupchat( $groupid = "" ){
         $private_group_check = "pub" ;
         $id=Auth::User()->id;
-        $replace_array =  [' ', '/', ',', '(', ')', "'", '.', ':', ';','&'];
         if($groupid){
             $breadcrumb="";
             $check_name = "";
@@ -317,10 +288,9 @@ class DashboardController extends Controller
                         $check = Category::where('parent_id',$id_arr[$key-1])->value('title');
                         if($check == null){  
                         }
-                            //return redirect()->back();
                          else{
                             $breadcrumb .= '_'.$cat->title;
-                            $check_name .= ' '.$cat->title;
+                            $check_name .= ' > '.$cat->title;
                          }
                              
                     }
@@ -332,23 +302,20 @@ class DashboardController extends Controller
             $check_end = Category::where('parent_id',end($id_arr))->value('id');
             if($check_end != null)
                 return redirect()->back();
-			//Get users of this group
 
-			//$group_jid = strtolower(str_replace($replace_array, '-', $breadcrumb));
+			//Get users of this group
 			$group_jid = preg_replace('/[^A-Za-z0-9\-]/', '_',$breadcrumb);
 			$group_jid = strtolower($group_jid);
 			
-			$GroupImage = Category::where('id',current($id_arr))->value( 'img_url' );
-			
-			//print_r($group_jid);die;
+			$GroupImage = Category::where('id',$id_arr[0])->value( 'img_url' );
 
         } else {
 			$input = Request::all();
-			$parent_name = strtolower(str_replace($replace_array, '-', $input['parentname']));
+			$parent_name = $input['parentname'];
 
                 if($input['subcategory']=='International'){
                     $check_name = $input['parentname'].' > '.$input['subcategory'];
-                    $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
+                    $input['subcategory'] = preg_replace('/[^A-Za-z0-9\-]/', '_',$input['subcategory']);
                     $sub_name = $input['subcategory'];
                 }
                    
@@ -360,68 +327,64 @@ class DashboardController extends Controller
                    
 
                  elseif($input['subcategory']=='Subjects'){
-                    $check_name = $input['parentname'].' '.$input['subcategory'].' '.$input['coursedata'];
+                    $check_name = $input['parentname'].' > '.$input['subcategory'].' > '.$input['coursedata'];
                     $sub_name = $input['subcategory'].'_'.$input['coursedata'];
                  }
                     
 
                  elseif($input['subcategory']=='Country, State, City'){
-                    $check_name = $input['parentname'].' '.$input['country'].', '.$input['state'].', '.$input['city'];
-                    $input['subcategory'] = str_replace(' ', '-', $input['subcategory']);
+
+                    $check_name = $input['parentname'].' > '.$input['country'].', '.$input['state'].', '.$input['city'];
+                    $input['subcategory'] = preg_replace('/[^A-Za-z0-9\-]/', '_',$input['subcategory']);
+
                     $sub_name = 'csc'.'_'.$input['country'].'_'.$input['state'].'_'.$input['city'];
                  }
                     
 
                  elseif ( $input['subcategory']=='Country' ){
-                    $check_name = $input['parentname'].' '.$input['country1'];
+                    $check_name = $input['parentname'].' > '.$input['country1'];
                     $sub_name = 'c'.'_'.$input['country1'];
                  }
 
                  else{
-                    $check_name = $input['parentname'].' '.$input['subcategory'];
+                    $check_name = $input['parentname'].' > '.$input['subcategory'];
                     $sub_name = $input['subcategory'];
                  }
-               
-
-                $sub_name = str_replace($replace_array,'-',$sub_name);           
+                         
                 $group_jid = preg_replace('/[^A-Za-z0-9\-]/', '_',$parent_name.'_'.$sub_name);
                 $group_jid = strtolower($group_jid);
                 
                 $GroupImage = Category::where('title',$input['parentname'])->value( 'img_url' );
         }
+		$group_jid = $group_jid.'_pub';
+		$model = new DefaultGroup;
+		$updatecheck = $model->where('group_name', $group_jid)
+							->where('group_by', Auth::User()->id)
+							->get()->toArray();
+		$defGroup = array();
+		$defGroup['group_name'] = $group_jid;
+		$defGroup['group_by'] = Auth::User()->id;
+		if(empty($updatecheck))
+			$model->create($defGroup);
 
-            $model = new DefaultGroup;
-            $updatecheck = $model->where('group_name', $group_jid)
-                                ->where('group_by', Auth::User()->id)
-                                ->get()->toArray();
-            $defGroup = array();
-            $defGroup['group_name'] = $group_jid;
-            $defGroup['group_by'] = Auth::User()->id;
-            if(empty($updatecheck))
-                $model->create($defGroup);
+		$usersData = DefaultGroup::with('user')->where('group_name', $group_jid)->get()->toArray();
+		$friendid = Friend::where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+		$pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+		$private_group_array = GroupMembers::where('member_id',$id)->pluck('group_id');
+		$privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
 
-            $usersData = DefaultGroup::with('user')->where('group_name', $group_jid)->get()->toArray();
-            
-            $friendid = Friend::where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
-
-            $pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
-            
-            $private_group_array = GroupMembers::where('member_id',$id)->pluck('group_id');
-            
-            $privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
-
-                 return view('chatroom.groupchat')
-                    ->with('groupname', $check_name)
-                    ->with('group_jid',$group_jid)
-                    ->with('group_image',$GroupImage)
-                    ->with('userdata', $usersData)
-                    ->with('friendid',$friendid)
-                    ->with('authid',$id)
-                    ->with('pendingfriend',$pendingfriend)
-                    ->with('exception',$private_group_check)
-                    ->with('privategroup',$privategroup);
-    }
-
+		 return view('chatroom.groupchat')
+			->with('groupname', $check_name)
+			->with('group_jid',$group_jid)
+			->with('group_image',$GroupImage)
+			->with('userdata', $usersData)
+			->with('friendid',$friendid)
+			->with('authid',$id)
+			->with('pendingfriend',$pendingfriend)
+			->with('exception',$private_group_check)
+			->with('privategroup',$privategroup);
+    } 
+	
     public function privateGroupChat($groupid = "")
     {
         $private_group_check = "private";
@@ -436,9 +399,9 @@ class DashboardController extends Controller
 					$group_jid = $group_check->group_jid;
                     $group_name = $group_check->title;
 					$GroupImage = $group_check->picture;
-					$friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+					$friendid = Friend::where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 
-                    $pendingfriend = DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+                    $pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
                     
                     $private_group_array = GroupMembers::where('member_id',Auth::User()->id)->pluck('group_id');
             
@@ -464,10 +427,11 @@ class DashboardController extends Controller
         $check_name = "";
         $group_jid = "";
         $usersData = "";
+        $GroupImage="";
         $id = Auth::User()->id;
-        $friendid = DB::table('friends')->where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
+        $friendid = Friend::where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 
-        $pendingfriend = DB::table('friends')->where('user_id',$id)->where('status','Pending')->pluck('friend_id');
+        $pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
         
         $private_group_array = GroupMembers::where('member_id',$id)->pluck('group_id');
         
@@ -479,6 +443,7 @@ class DashboardController extends Controller
                     ->with('userdata', $usersData)
                     ->with('friendid',$friendid)
                     ->with('authid',$id)
+                    ->with('group_image',$GroupImage)
                     ->with('pendingfriend',$pendingfriend)
                     ->with('exception',$private_group_check)
                     ->with('privategroup',$privategroup);
@@ -496,7 +461,6 @@ class DashboardController extends Controller
             if($value->education_level == "")
                 unset($education[$key]);
         }        
-        // echo '<pre>';print_r($education);die;
 
         return view('profile.profile')
                 ->with('user', $user)
@@ -511,8 +475,7 @@ class DashboardController extends Controller
 
         if(Auth::User()->id != $id)
             return redirect('/');
-        
-        // echo '<pre>';print_r($arguments);die;
+
         $user = new User();
         
         if(Request::isMethod('post')){
@@ -566,7 +529,6 @@ class DashboardController extends Controller
             $arguments['birthday'] = date('Y-m-d',$time);
  
             if($arguments){
-                // echo '<pre>';print_r($arguments);die;
                 unset($arguments['_token']);
 
                 //Check for image upload.
@@ -575,6 +537,13 @@ class DashboardController extends Controller
                     $image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
                     $arguments['picture'] = '/uploads/user_img/'.$image_name;
                     $file->move(public_path('uploads/user_img'), $image_name);
+                    
+                     $path 			= public_path('uploads/user_img').'/'.$image_name;
+					 $ImageData 	= file_get_contents($path);
+					 $ImageType 	= pathinfo($path, PATHINFO_EXTENSION);
+					 $ImageData 	= base64_encode($ImageData);
+					 $image_name 	= Converse::setVcard(Auth::User()->xmpp_username, $ImageData, $ImageType);
+                    
                 }
                 
                 if($arguments['country_code'] != 0 && $arguments['phone_no'] != null){
@@ -586,7 +555,6 @@ class DashboardController extends Controller
                             $arguments['phone_no'] = "";                        
                         }
                     }
-                    // print_r($min[$arguments['country_code']]['max']);die;
                     $arguments['country_code'] = empty($arguments['phone_no']) ? '' : $arguments['country_code'];
                 }
 
@@ -594,7 +562,8 @@ class DashboardController extends Controller
                 if(empty($arguments['state'])){
                     $arguments['city'] = '';
                 }
-
+                $full_name = $arguments['first_name'].' '.$arguments['last_name'];
+                Converse::setNameVcard(Auth::User()->xmpp_username, 'FN', $full_name);
                 foreach ($arguments as $key => $value) {
                     if( $key != 'email' && $key != 'password' ){
                         User::where([ 'id' => $id ])
@@ -621,11 +590,8 @@ class DashboardController extends Controller
      {
          $status=0;
          $message="";
-         //$url=url();
-        // echo '<pre>'; print_r($_FILES);die;
 
           $image = $_FILES["chatsendimage"]["name"];
-          //$path = $rootFolder=dirname(Yii::$app->basePath).'/frontend/web/images/media/chat_images/';
           
           $path=public_path().''.'/images/media/chat_images';
 
@@ -638,14 +604,7 @@ class DashboardController extends Controller
            if (in_array($ext, $valid_formats)) {
             $actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
             $tmp = $uploadedfile;
-            if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
-                //$rootFolder=base_path();
-                // $image = Yii::$app->image->load($path.$actual_image_name);
-               // $image->resize(140, 100);
-               // $image->save();
-      
-            //   ========== $data = Yii::$app->request->baseUrl.'/images/media/chat_images/'. $actual_image_name;
-               
+            if (move_uploaded_file($tmp, $path . $actual_image_name)) {                
                 $data=public_path().''.'/images/media/chat_images'.$actual_image_name;
                
                 $chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
@@ -676,25 +635,14 @@ class DashboardController extends Controller
 
     public function broadcastAdd()
     {
-
-/*        $array = [
-                    "user_id"=> 88,
-                    "members"=> [12,32,35,46,57,989,809],
-                    "broadcast_message"=> "Hey! this is a sample broadcast message."
-                ];
-
-        echo '<pre>';print_r(json_encode($array));die;*/
+        $userid=Auth::User()->id;
 
         if(Request::isMethod('post'))
-        {
-
-            $userid=Auth::User()->id;
+        { 
             $input=Request::all();
-           
-        
+            
         if(isset($input['broadcastuser'])&&$input['broadcastname']!=null)
             {
-
                 $members=implode(",",$input['broadcastuser']);
                 
                 $data = array(
@@ -724,6 +672,11 @@ class DashboardController extends Controller
 
         }
 
+    $broadcast_count = Broadcast::where('user_id',$userid)->get()->count();
+    if($broadcast_count > Config::get('constants.broadcast_limit')){
+        Session::put('error', "Sorry, you can only add upto ".Config::get('constants.broadcast_limit')." broadcasts.");
+        return redirect()->back();
+    }
 
     $friends=Friend::with('user')
                     ->with('user')
@@ -746,7 +699,7 @@ class DashboardController extends Controller
                 $namestr='';
                 $name=array();
                 foreach ($broadcastdetail[0]['members'] as $mem) {
-                 $name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+                 $name[]= User::where('id',$mem['member_id'])->value('first_name');
                 }
                   $namestr=implode(",",$name);
                 return view('broadcast.message')
@@ -755,9 +708,7 @@ class DashboardController extends Controller
                         ->with('id',$broadcastid)
                         ->with('messages',$broadcastmessages);
         }
-    }
-
-    
+    } 
     
     public function privateGroupList($privategroupid='')
     {
@@ -765,11 +716,13 @@ class DashboardController extends Controller
 
         return view('privategroup.list')->with('privategroup',$privategroup);
     }
-
+	/** 
+	 * create private chat room/xmpp open chat room as private
+	 **/
     public function privateGroupAdd() {
 
-		  if( Request::isMethod('post') ){
-				$userid = Auth::User()->id;
+		$userid = Auth::User()->id;
+        if( Request::isMethod('post') ){
 				$userXamp = Auth::User()->xmpp_username;
 				$input = Request::all();
 	 
@@ -786,7 +739,7 @@ class DashboardController extends Controller
 					$groupid   = strtolower($groupid);
 					$converse  = new Converse;
 					$groupdata = Group::create($data);
-					$groupname = $groupid."_".$groupdata->id;
+					$groupname = $groupid."_".$groupdata->id.'_pvt';
 					
 					$PrivateGroup = Group::find($groupdata->id);
 					$PrivateGroup->group_jid = $groupname;
@@ -802,9 +755,8 @@ class DashboardController extends Controller
 								);
 						 GroupMembers::insert($data1);  
 					}
-
-					$xmp = DB::table('users')->whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
-					$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname, 'message' => base64_encode('You are invited for '.$GroupTitle) ) );
+					$xmp = User::whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
+					$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname, 'message' => webEncode('You are invited for '.$GroupTitle) ) );
 					foreach ($xmp as $key => $value) {
 						$converse->addUserGroup( $groupname,$value );
 						$converse->broadcast($userXamp,$value,$Message);
@@ -815,9 +767,14 @@ class DashboardController extends Controller
 			}
 		}
 
+        $group_count = Group::where('owner_id',$userid)->get()->count();
+        if($group_count >= Config::get('constants.private_group_limit')){
+            Session::put('error', "Sorry, you can only create upto ".Config::get('constants.private_group_limit')." private groups.");
+            return redirect()->back();
+        }
 		$friends=Friend::with('user')
                     ->with('user')
-                    ->where('friend_id', '=', Auth::User()->id)
+                    ->where('friend_id', '=', $userid)
                     ->where('status', '=', 'Accepted')
                     ->get()
                     ->toArray();
@@ -827,10 +784,9 @@ class DashboardController extends Controller
 
   public function privateGroupDetail( $privategroupid = '' ){
     if( $privategroupid ){
-        //$title=DB::table('groups')->where('id',$privategroupid)->value('title');
         $groupdetail = Group::where('id',$privategroupid)->get()->toArray();
-        $ownerid=DB::table('groups')->where('id',$privategroupid)->value('owner_id');
-        $members=DB::table('members')->where('group_id',$privategroupid)->pluck('member_id');
+        $ownerid=Group::where('id',$privategroupid)->value('owner_id');
+        $members=GroupMembers::where('group_id',$privategroupid)->pluck('member_id');
         $name=User::whereIn('id',$members)->orWhere('id',$ownerid)->get()->toArray();
 
         $friends=Friend::with('user')
@@ -849,23 +805,30 @@ class DashboardController extends Controller
     }
   }
 
-/*    public function demopage()
+    public function changePassword()
     {
-   
-        //$data=array('message'=>"this is message",'token'=>'a7f3ce41a55f14991283a71eb094293a9bcbfbc1bde81df3ad28951938603116');
-        $MessageReceive = array(
-            'reciever_profile_id'   => 0,
-            'reciever_user_id'      => 0,
-            'sender_profile_id'     => 0,
-            'sender_user_id'        => 0,
-        );
-        $data=array('message'=>"this is message",'token'=>'e78e904d5da22b2492675b4904bdf9d5c22e5a6be91ef379fc7762d08ebb77f5','Message_received' => $MessageReceive );
-        $msg='Message not delivered';   
-        
-        if(iphonePushNotification($data)) $msg='Message successfully delivered';
-       return $msg;
-        // return view('dashboard.demopage');
-    } */       
-
+        if(Request::isMethod('post')){
+            $input = Request::all();
+            if(Auth::check()){
+                if(Hash::check($input['old_password'], Auth::User()->password)){
+                    if(Hash::check($input['old_password'], bcrypt($input['new_password']))) {
+                        return redirect()->back()->with('error',"New password can't be same as old password.");
+                    }else{
+                        if(strlen($input['new_password']) < 8){
+                            return redirect()->back()->with('error',"New password should be atleast 8 characters long.");
+                        }else{
+                                User::where('id',Auth::User()->id)->update(['password' => bcrypt($input['new_password'])]);
+                             return redirect()->back()->with('success',"Password changed succesfully.");
+                         }
+                    }
+                }else{
+                    return redirect()->back()->with('error',"Password doesn't match our records.");
+                }
+            }
+            else
+                return redirect()->back();
+        }   
+        return view('auth.passwords.change');
+    }
 
 }

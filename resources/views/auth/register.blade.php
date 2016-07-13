@@ -21,7 +21,6 @@
 <?php
     $prev_url = URL::previous();
  ?>
-@include('panels.loginpopup')
 
 @if (Session::has('success'))
  <div class="alert alert-success">{!! Session::get('success') !!}</div>
@@ -29,6 +28,9 @@
  @if (Session::has('error'))
  <div class="alert alert-danger">{!! Session::get('error') !!}</div>
  @endif
+
+@include('panels.download-app')
+
 <div class="page-data login-page">
     <div class="container">
         <div class="row">
@@ -145,34 +147,67 @@
 
                                 <?php //echo '<pre>';print_r($countries);die;?>
 
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('country') ? ' has-error' : '' }}">
                                 <select class="form-control icon-field" name ="country" id="mob-country">
+                                    <?php unset($countries[0]); ?>
+                                    <option value="">Country</option>
                                     @foreach($countries as $key => $country)
-                                        <option value="{{ $key }}">{{ $country }}</option>
+                                    <?php
+                                        if(old('country')!="" && old('country')==$key)
+                                            $selected = "selected";
+                                        else
+                                            $selected = "";
+                                     ?>
+                                        <option value="{{ $key }}" {{$selected}}>{{ $country }}</option>
                                     @endforeach
                                 </select>
-                                <span class="field-icon flaticon-smartphone-with-blank-screen"></span>
+                                       @if ($errors->has('country'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('country') }}</strong>
+                                        </span>
+                                    @endif
+                                <span class="field-icon flaticon-web-1"></span>                                 
                             </div>
 
                             <div class="form-group ph-field">
-                                <span  class="country-code-field country-code-field-span numeric"><font color="#999">00</font></span> 
-                                <input type="hidden" name="country_code" class="country-code-field numeric" value="" placeholder="000" >
-                                <input type="text" class="form-control icon-field numeric" name = "phone_no" placeholder="Mobile" id="mobileContact">
+                                <?php 
+                                        if(old('country_code') != "")
+                                            $font = "";
+                                        else
+                                            $font = "#999";
+                                ?>
+                                <span  class="country-code-field country-code-field-span numeric"><font color={{$font}}><?php echo (old('country_code') != "")?old('country_code'):"00"; ?></font></span> 
+                                <input type="hidden" name="country_code" class="country-code-field numeric" value="{{ old('country_code') }}" placeholder="000" >
+                                <input type="text" class="form-control icon-field numeric" name = "phone_no" value="{{ old('phone_no') }}" placeholder="Mobile" id="mobileContact">
                                 <span class="field-icon flaticon-smartphone-with-blank-screen"></span>
                             </div>
 
                             <div class="form-group sex-option">
                                     <ul>
                                         <li>I am</li>
+                                        <?php
+                                            if(old('gender') != ""){
+                                                if(old('gender') == "Male"){
+                                                    $male = "checked";
+                                                    $female = "";
+                                                }else{
+                                                    $male = "";
+                                                    $female = "checked";
+                                                }
+                                            }else{
+                                                $male = "";
+                                                $female = "";
+                                            }
+                                        ?>
                                         <li>
                                             <div class="small-radio-cont">
-                                                <input type="radio" name="gender" value="Male" id="radio1" class="css-checkbox" />
+                                                <input type="radio" {{$male}} name="gender" value="Male" id="radio1" class="css-checkbox" />
                                                 <label for="radio1" class="css-label radGroup1">Male</label>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="small-radio-cont">
-                                                <input type="radio" name="gender" value="Female" id="radio2" class="css-checkbox" />
+                                                <input type="radio" {{$female}} name="gender" value="Female" id="radio2" class="css-checkbox" />
                                                 <label for="radio2" class="css-label radGroup1">Female</label>
                                             </div>
                                         </li>
@@ -182,8 +217,14 @@
                     <div class="form-groups">
                         <div class="form-group">
                         <div class = "checkbox-cont">
-                        <input type="checkbox" name="terms" id="terms" class="css-checkbox">
-                        <label for="terms" class="css-label" style="color: #0c0c0c" >I agree to the following<a href="{{url('terms-conditions')}}" style="color:#3ab29f "> terms and conditions</a>.</label>
+                        <?php 
+                                if(old('terms')!="")
+                                    $terms = "checked";
+                                else
+                                    $terms = "";
+                        ?>
+                        <input type="checkbox" name="terms" id="terms" {{$terms}} class="css-checkbox">
+                        <label for="terms" class="css-label" style="color: #0c0c0c" >I agree to the following<a href="{{url('terms-conditions')}}" style="color:#3ab29f "> Terms and Conditions</a>.</label>
                         </div>
                      </div>
                      <input type="hidden" name="url" value = "{{$prev_url}}"/>
@@ -195,7 +236,7 @@
                                 </div>
                         </div>
                     </div>
-       </form>
+                </form>
                     <div class="or-divider"><span>Or</span></div>
                  <div class="small-text">Your social networking login details would be kept confidential.</div>                 
                     <div class="social-login top-margin">
@@ -214,15 +255,15 @@
     <div class="page-footer">
         <div class="text-center">
             <ul>
-                <li><a href="#" title="">Terms Privacy</a></li>
+                <li><a href="{{url('terms-conditions')}}" title="">Terms Privacy</a></li>
                 <li><a href="#" title="">&copy; 2015 friendzsquare</a></li>
             </ul>
         </div>
     </div>
 </div><!--/pagedata-->
 
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script>
+<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<script src="http://malsup.github.com/jquery.form.js"></script> -->
 <script type="text/javascript" >
 
 function getValidationArray(mobCode){
@@ -230,14 +271,10 @@ function getValidationArray(mobCode){
     // console.log(mobCode);
     // alert(mobCode);
     var countryMobValidLengthArray = <?php print_r(json_encode(countryMobileLength(),1));?>;
-
     var countryMobValidLength = countryMobValidLengthArray[mobCode];
-    
     if(countryMobValidLength == undefined){
-        return {min: 0, max: 15};
+        return {min: "0", max: "15"};
     }
-
-    console.log(countryMobValidLength);
     return {min: countryMobValidLength.min, max: countryMobValidLength.max};
     
 }
@@ -260,7 +297,7 @@ $(document).ready(function () {
                         $('.country-code-field').val(mobCode);
                         $('.country-code-field-span').html(mobCode);
                         $('.country-code-field').attr('data-value', mobCode);
-                        var validArray = getValidationArray(mobCode);
+                        //var validArray = getValidationArray(mobCode);
                     }
                 })
 
@@ -268,27 +305,19 @@ $(document).ready(function () {
 
 
         $(document).on('focus', '#mobileContact', function(){
-
-            var array = $('.country-code-field').data('value');
-
+            var array = $('.country-code-field').val();
             var validArray = getValidationArray(array);
-
             $('#mobileContact').prop('minlength', validArray.min);
             $('#mobileContact').prop('maxlength', validArray.max);
 
             $('#mobileContact').parent().find('#groupname-error').remove();
-
-            var array = $('.country-code-field').data('value');
-
-            var validArray = getValidationArray(array);
+            //alert(validArray.min);
 
             var mobileContact = $('#mobileContact').val();
             if(mobileContact.length < validArray.min){
                 // alert('invalid value');
                 $('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
             }
-
-
         });
 
 
@@ -307,7 +336,8 @@ $(document).ready(function () {
             email:  { required: true, email: true },
             password:  { required: true, minlength: 8 },
             terms:  { required: true },
-            phone_no: { maxlength: 15 }
+            phone_no: { maxlength: 15 },
+            country: {required:true}
         },
         messages:{
             first_name:{
@@ -329,6 +359,9 @@ $(document).ready(function () {
             },
             phone_no:{
                 maxlength: "Contact number cannot have more than 15 digits."
+            },
+            country:{
+                required: "Please select your country."
             }
         }
     });
@@ -356,7 +389,8 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
- 
 
+    // Opens popup for app download links
+    $('#sendMsg2').modal('show');
 </script>
 @endsection

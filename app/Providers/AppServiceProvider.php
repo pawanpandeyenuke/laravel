@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
 
         view()->share([
                 'countries' => self::prepare(Country::all(['country_id', 'country_name'])),
-                'parent_category' => Category::where('parent_id', '=', 0)->get(),
+                'parent_category' => Category::where('parent_id', '=', 0)->orderBy('display_order')->get(),
                 'educationLevel' => $educationLevel,
                 'specialization' => $specialization,
                 'gradYear' => $gradYear,
@@ -52,7 +52,7 @@ class AppServiceProvider extends ServiceProvider
 
         // echo '<pre>';print_r(get_class($data));die;
         $preparedData = array();
-        $preparedData[0] = 'Country';
+        //$preparedData[0] = 'Country';
         foreach( $data as $val ){
 
             $preparedData[$val->country_id] = $val->country_name;

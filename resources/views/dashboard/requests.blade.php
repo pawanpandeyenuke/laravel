@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Friends - ')
 @section('content')
 <?php  //print_r($model1);die; ?>
 <style type="text/css">
@@ -24,7 +24,7 @@
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title">
-						<i class="flaticon-people"></i>Friends Request
+						<i class="flaticon-people"></i>Friend Requests
 					</div>
 
 						<div class="tab-style-no-border">
@@ -35,7 +35,7 @@
 						    	<!-- <a class="friendstabs" data-reqtype="all" data-name="All" data-toggle="tab" role="tab" aria-controls="All" href="#All">All Users</a> -->
 						    <!-- </li> -->
 						       <li role="presentation">
-						    	<a class="friendstabs recievecount" data-reqtype="recieved" data-name="Recieved" data-toggle="tab" role="tab" aria-controls="Recieved" href="#Recieved">Recieved (<span class = "count">{{$recievedcount}}</span>)</a>
+						    	<a class="friendstabs recievecount" data-reqtype="recieved" data-name="Recieved" data-toggle="tab" role="tab" aria-controls="Recieved" href="#Recieved">Received (<span class = "count">{{$recievedcount}}</span>)</a>
 						    </li>
 						    <li role="presentation">
 						    	<a class="friendstabs sentcount" data-reqtype="sent" data-name="Sent" data-toggle="tab" role="tab" aria-controls="Send" href="#Send">Sent (<span class = "count">{{$sentcount}}</span>)</a>

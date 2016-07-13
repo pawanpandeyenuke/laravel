@@ -1,4 +1,5 @@
 @extends('layouts.dashboard')
+@section('title', 'Invite - ')
 <head>
 	<meta property="og:url" content="{{url('/')}}" />
 	<meta property="og:type" content="Friendz Square" />
@@ -11,7 +12,6 @@
 
 <?php
 	$servername = Request::root();
-	// echo '<pre>';print_r($servername);die;
 ?>
 
 <div class="page-data dashboard-body">
@@ -32,13 +32,13 @@
 
 
 							<div class="col-md-10 col-md-offset-1">
-								{{Form::open()}}
+								{{Form::open(array('id'=>'invite_form'))}}
 								<div class="b-cast-name">
-									<input type="text" name="emails" value="{{ old('emails') }}" class="form-control bcast-field" placeholder="Enter email address">
+									<input type="text" name="emails" value="{{ old('emails') }}" class="form-control bcast-field invite_email" placeholder="Enter email address">
 									<span class="field-info">* Enter multiple emails by separating them with a comma.</span>
 									<div class="btn-cont text-center">
 										<!-- <a href="#" title="" class="btn btn-primary">Invite</a> -->
-										<button class="btn btn-primary btn-lg" type="submit">Invite</button>
+										<button class="btn btn-primary btn-lg invite_submit" type="submit">Invite</button>
 									</div>
 								</div>
 								{{Form::close()}}
@@ -78,10 +78,9 @@
 	</div>
 </div>
  
-@endsection
+
 
 <script src="http://connect.facebook.net/en_US/all.js"></script>
-<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
 <script src="//js.live.net/v5.0/wl.js"></script>
  
 <div id="fb-root"></div>
@@ -100,6 +99,19 @@
 	    scope: ["wl.basic", "wl.contacts_emails"],
 	    response_type: "token"
 	});
+
+		$("#invite_form").validate({ 
+        errorElement: 'span',
+        errorClass: 'help-inline',
+        rules: {
+            emails: { required: true }
+        },
+        messages:{
+            emails:{
+                required: "Email field can't be left empty."
+            }
+        }
+    });
 
 	jQuery( document ).ready(function() {
 		//live.com api
@@ -168,3 +180,4 @@
 		});
 	}
 </script>
+@endsection

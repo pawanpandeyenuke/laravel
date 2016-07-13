@@ -53,7 +53,7 @@
 									@endif
 									</div>
 
-									<p> {{$data->title}} </p>
+									<p> <?php echo nl2br(forumPostContents($data->title,url('forum-post-reply/'.$data->id))); ?> </p>
 									
 									<div class="fp-btns text-right">
 										<span class="reply-count">Replies ({{$replyCount}})</span>
@@ -66,5 +66,4 @@
 	$(document).ready(function() {
 		 loadOrgionalImogi();
 	});
-
 </script>

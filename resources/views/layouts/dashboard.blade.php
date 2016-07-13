@@ -4,23 +4,41 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Friendz Square</title>
+<title>@yield('title')Friendz Square</title>
 <link href="{{url('/css/bootstrap.css')}}" rel="stylesheet">
 <link href="{{url('/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/fancybox/jquery.fancybox.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/fileinput.min.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/select2.min.css')}}" rel="stylesheet" media="all">
-
 <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet" media="all">
-<!-- <link href="/converse/converse.min.css" rel="stylesheet" type="text/css" media="screen" > -->
-
 <link href="{{url('/lib/css/nanoscroller.css')}}" rel="stylesheet">
 <link href="{{url('/lib/css/emoji.css')}}" rel="stylesheet">
 <link href="{{url('/css/style.css')}}" rel="stylesheet">
 <link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
 
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+
+
+<script src="http://malsup.github.com/jquery.form.js"></script> 
+<script type="text/javascript" src="{{url('/fancybox/jquery.fancybox.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/fileinput.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/custom.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/bootstrap-filestyle.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/bootstrap-datepicker.min.js')}}"></script>
+<script src="{{url('/c-lib/lib/js/emojione.js')}}"></script>
+<script src="{{url('/js/select2.min.js')}}"></script>
+<!--Emoji libraries-->
+<script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>
+<script src="{{url('/lib/js/tether.min.js')}}"></script>
+<script src="{{url('/lib/js/config.js')}}"></script>
+<script src="{{url('/lib/js/util.js')}}"></script>
+<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
+<script src="{{url('/lib/js/emoji-picker.js')}}"></script>
+<script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
+
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -76,7 +94,7 @@
 							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
 							{{Auth::User()->first_name}}</a>
 						</li>
-						<li><div class="logout"><a href="{{ url('/logout') }}" title="">Logout</a></div></li>
+						<li><div class="logout"><a class = "logout-link" href="{{ url('/logout') }}" title="">Logout</a></div></li>
 					</ul>
             @else
             <a href="#" title="" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Login</a>
@@ -104,7 +122,7 @@
                                    <div class='alert alert-success successmsg'  style='text-align: center; display: none;'>Thank you for your feedback!<br><a href='#' class='modalshow'>Have another one?</a></div>
                                     <div class="col-md-10 col-md-offset-1 successmsg">
                                         <div class="profile-select-cont form-group">
-                                            <textarea name="message_text" class="form-control message_text" placeholder="Enter suggestion" required></textarea>
+                                            <textarea name="message_text" class="form-control message_text" placeholder="Enter suggestion" ></textarea>
                                         </div>
                                         <div class="profile-select-cont form-group">
                                             <input name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" placeholder="Enter email" class="form-control useremail" >
@@ -114,7 +132,7 @@
                                     
                                   </div>
                                   <div class="modal-footer">
-                                    <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
+                                    <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary suggest">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                   </div>
                                 </div>
@@ -129,37 +147,83 @@
 { ?>
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <?php } ?>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
-
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-
-<script src="http://malsup.github.com/jquery.form.js"></script> 
-<script type="text/javascript" src="{{url('/fancybox/jquery.fancybox.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/fileinput.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/custom.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap-filestyle.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap-datepicker.min.js')}}"></script>
-<script src="{{url('/c-lib/lib/js/emojione.js')}}"></script>
-<script src="{{url('/js/select2.min.js')}}"></script>
-<!--Emoji libraries-->
-<script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>
-<script src="{{url('/lib/js/tether.min.js')}}"></script>
-<script src="{{url('/lib/js/config.js')}}"></script>
-<script src="{{url('/lib/js/util.js')}}"></script>
-<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
-<script src="{{url('/lib/js/emoji-picker.js')}}"></script>
-<script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
-
- 
 </body>
 </html>
+
 <script type="text/javascript">
 	
+   $("#loginform").submit(function(event){
+              $('.login').text('Please Wait..');
+              $('.login').prop('disabled',true);
+    });
+
+    if(window.location.pathname == "/" || window.location.pathname == "/register"){
+        $('.login-footer').hide();
+    }else{
+        $('.login-footer').show();
+    }
+    
+    $("#loginform").ajaxForm(function(response) { 
+         
+    if(response){
+            $('.password').next('.help-block').find('.verifymsg').hide();
+        
+        if(response === "These credentials do not match our records.")
+        {
+            var current = $('.password');
+            current.next('.help-block').find('.verifymsg').hide();
+            current.css('border-color','#a94442');
+            current.next('.help-block').find('.errormsg').text(response).css('color','#a94442');
+            $('.emailid').css('border-color','#a94442');
+            $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+            $('.login').text('Login');
+            $('.login').prop('disabled',false);
+
+        }
+
+        if(response === "verification")
+            window.location = 'send-verification-link';
+
+        else if(response == "success"){
+            var url_c = window.location.pathname;
+           if(url_c == "/newpassword")
+    window.location = "/";
+    else
+    window.location = url_c;
+        }else{
+            var obj = jQuery.parseJSON( response );
+            if( obj.email != null ){
+
+                var current = $('.emailid');
+                current.next('.help-block').find('.verifymsg').hide();
+                current.css('border-color','#a94442');
+                current.next('.help-block').find('.errormsg').text(obj.email).css('color','#a94442');
+
+                if( obj.password == null ){
+                    $('.password').next('.help-block').find('.errormsg').text("").css('color','#333333');
+                    current.next('.help-block').find('.verifymsg').hide();
+                    $('.password').css('border-color','#333333');
+                }
+            }
+            if( obj.password != null ){     
+                var current = $('.password');
+                current.next('.help-block').find('.verifymsg').hide();              
+                current.css('border-color','#a94442');
+                current.next('.help-block').find('.errormsg').text(obj.password).css('color','#a94442');
+
+                if( obj.email == null ){
+                    $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
+                    current.next('.help-block').find('.verifymsg').hide();
+                    $('.emailid').css('border-color','#333333');
+                }
+            }
+                 $('.login').text('Login');
+                 $('.login').prop('disabled',false);
+        }
+    
+    }
+    
+});
 
       $( "#search-forum-dashboard" ).submit(function( event ) {
       var searchkey = $('.forum-keyword-app').val();
@@ -169,17 +233,29 @@
       }
     });
 
+  $("#suggestionform1").validate({ 
+        errorElement: 'span',
+        errorClass: 'help-inline',
+        rules: {
+            message_text: { required: true },
+            email: {email: true}
+        },
+        messages:{
+            message_text:{
+                required: "Please write something to send your suggestion."
+            },
+            email:{
+                email: "Please check your email format."
+            }
+        }
+    });
+
 	$("#suggestionform1").ajaxForm(function(response) {
       if(response == "success")
       {
         $('.modal-title').hide();
         $('.modal-footer').hide();
-        $('.successmsg').toggle();
-        //setTimeout(function(){
-          //$('#myModal').modal('hide');
-          //$(document).find('.modal-backdrop').remove();
-        //}, 2000);
-             
+        $('.successmsg').toggle();  
       }
     });
 
@@ -191,8 +267,6 @@
       $('.useremail').val('');
     });
 
-    
-	
 </script>
 
 

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Group Chat - ')
 @section('content')
 
 	<div class="page-data dashboard-body">
@@ -7,11 +7,13 @@
 	            <div class="row">
 
 	            @include('panels.left')
-
-	            			<div class="col-sm-6">
+<?php
+	$icon_url = url('category_images/'.$icon_url);
+?>
+	            <div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title">
-						<i class="flaticon-balloon"></i><a href="{{url('group')}}">Chat Room</a> <?= $breadcrumb ?>					</div>
+						<img src="{{$icon_url}}" alt="" class="img-icon"><a href="{{url('group')}}">Chat Room</a> <?= $breadcrumb ?>					</div>
 
 					<div class="row">
 						<div class="col-md-12">

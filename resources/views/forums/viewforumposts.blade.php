@@ -1,9 +1,5 @@
-<?php
- ?>
 @extends('layouts.dashboard')
-
-
-
+@section('title', 'Forums - ')
 <style type="text/css">
 	.boxsize{width:200px;}
 </style>
@@ -48,7 +44,6 @@
 									<div class="text-right">
 									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Create Post</button>
 									</div>
-									<!-- <div class="alert alert-info" role="alert">Please <a data-toggle="modal" data-target="#LoginPop" href="#" title="">click here</a> for login, to create a post.</div> -->
 									@endif
 								
 								
@@ -121,9 +116,7 @@
 									@endif
 									@endif
 									</div>
-									<p ><?php 
-
-									echo nl2br($data->title); ?></p>
+									<p ><?php echo nl2br(forumPostContents($data->title,url('forum-post-reply/'.$data->id))); ?></p>
 									<div class="fp-btns text-right">
 										<span class="reply-count">Replies ({{$replyCount}})</span>
 										<a href="{{url("forum-post-reply/$data->id")}}" title="Jump to Reply Section" class="btn btn-primary"><span class="glyphicon glyphicon-share-alt"></span>Reply</a>
@@ -131,7 +124,6 @@
 								</div><!--/single post-->
 							@endforeach
 							</div>
-							 <!-- <div class="pagination">  </div> -->
 							 @if($postscount > 10)
 							<div class="load-more-btn-cont text-center">
 								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumpost" data-breadcrum = "{{$breadcrum}}">View More</button>
@@ -146,65 +138,13 @@
             </div>
         </div>
     </div><!--/pagedata-->
-@endsection
-{!! Session::forget('error') !!}
-<!--<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
-<script src="{{url('/lib/js/emoji-picker.js')}}"></script> -->
-
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
+    
 <script type="text/javascript">
 	
 	window.onload = function() {
-
-			window.emojiPicker = new EmojiPicker({
-			emojiable_selector: '[data-emojiable=true]',
-			assetsPath: '/lib/img/',
-			popupButtonClasses: 'fa fa-smile-o'
-      	});
-      window.emojiPicker.discover();
-      loadOrgionalImogi();
-
       var w = $('#sticky-anchor').width();
 		$('.fix-header').css('width',w+60);
 	}
-
-
-		// More Less Text
-
-	$(document).ready(function() {
-	  var showChar = 300;
-	  var ellipsestext = "...";
-	  var moretext = "more";
-	  var lesstext = "less";
-	  $('.more').each(function() {
-	      var content = $(this).html();
-
-	      if(content.length > showChar) {
-
-	          var c = content.substr(0, showChar);
-	          var h = content.substr(showChar-1, content.length - showChar);
-
-	          var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
-
-	          $(this).html(html);
-	      }
-
-	  });
-
-	  $(".morelink").click(function(){
-	      if($(this).hasClass("less")) {
-	          $(this).removeClass("less");
-	          $(this).html(moretext);
-	      } else {
-	          $(this).addClass("less");
-	          $(this).html(lesstext);
-	      }
-	      $(this).parent().prev().toggle();
-	      $(this).prev().toggle();
-	      return false;
-	  });
-	});
-	
 
 	//Fix on Scroll
 	function sticky_relocate() {
@@ -224,3 +164,5 @@
 
 
 </script>
+@endsection
+{!! Session::forget('error') !!}

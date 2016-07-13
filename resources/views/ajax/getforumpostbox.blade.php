@@ -39,7 +39,7 @@
 					</div>
 				</div><!--/post header-->
 				<div class="pop-post-text clearfix">
-					<p><?php echo nl2br($reply->reply); ?></p>
+					<p><?php echo forumPostContents($reply->reply,'#'); ?></p>
 				</div>
 			</div>
 			<div class="post-footer pop-post-footer">
@@ -121,7 +121,7 @@
 		</div>
 
 
- <script type="text/javascript" src="{{url('/js/bootstrap-filestyle.min.js')}}"></script>
+<!--  <script type="text/javascript" src="{{url('/js/bootstrap-filestyle.min.js')}}"></script>
 <script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>
 <script src="{{url('/lib/js/tether.min.js')}}"></script>
 <script src="{{url('/lib/js/config.js')}}"></script>
@@ -129,7 +129,7 @@
 <script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
 <script src="{{url('/lib/js/emoji-picker.js')}}"></script>
 <script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
-<script src="{{url('c-lib/lib/js/emojione.js')}}"></script>
+<script src="{{url('c-lib/lib/js/emojione.js')}}"></script> -->
 
 <script>
 $('.popup-list-without-img .comments-list').niceScroll();

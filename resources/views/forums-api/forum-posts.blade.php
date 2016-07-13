@@ -7,13 +7,10 @@
 
 		@foreach($posts as $post)
 			<?php 
-			// print_r($user_id);die;
 				$user = $post['user'];
 				$likesCount = isset($post->forumPostLikesCount[0]) ? $post->forumPostLikesCount[0]['forumlikescount'] : 0;
 				$repliesCount = isset($post->replyCount[0]) ? $post->replyCount[0]['replyCount'] : 0;
-				// echo '<pre>';print_r($post->id);//die; 
-				// $repliesCount = $post['replyCount'];
-				
+
 				$rawCountry = [$user->city, $user->state, $user->country];
 				foreach ($rawCountry as $key => $value) {
 					if($value == ''){
@@ -29,7 +26,7 @@
 				$pic = !empty($user->picture) ? $user->picture : 'images/user-thumb.jpg';
 				$likedata = \App\ForumLikes::where(['owner_id' => $user_id, 'post_id' => $post->id])->get(); 
 			?>
-			<div class="single-post">
+			<div class="single-post" id="forumpost_{{$post->id}}">
 				<div class="post-header">
 				  	@if($user_id)
 				  		@if($user_id == $user->id)
@@ -41,7 +38,7 @@
 								@if($repliesCount == 0)
 									<li><a href="{{ url("api/get-forum-post-details?post_id=$post->id&user_id=$user->id&post_data=$postTitle") }}">Edit</a></li>
 								@endif
-									<li><a href="#" class="forumpostdelete" data-postid="{{$post->id}}" data-breadcrum = "{{$post->forum_category_breadcrum}}">Delete</a></li>
+									<li><a href="#" class="del-confirm-api" data-type="post" data-postid="{{$post->id}}" data-breadcrum = "{{$post->forum_category_breadcrum}}">Delete</a></li>
 								</ul>
 							</div>
 					  	@endif
@@ -61,7 +58,7 @@
 				</div>
 
 				<div class="post-data">
-					<p>{{ $postTitle }}</p>
+					<p><?php echo nl2br(forumPostContents($postTitle,url('api/get-forum-post-reply?post_id='.$post->id))); ?></p>
 				</div>
 				<div class="post-action clearfix">
 					<div class="row-cont clearfix">
@@ -89,13 +86,11 @@
 		@endforeach
 
 	</div>
-
 		@if($posts->count() >= 5)
 			<div class="load-more-btn-cont text-center">
-				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumpost" data-breadcrum = "{{$breadcrumb}}">View More</button>
+				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumpost loading-btn" data-breadcrum = "{{$breadcrumb}}">View More</button>
 			</div>
 		@endif
-
 <div class="userid" data-id="{{$user_id}}"></div>
 
 @endsection

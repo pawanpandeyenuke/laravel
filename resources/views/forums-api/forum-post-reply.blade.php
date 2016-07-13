@@ -41,7 +41,7 @@
 			</div>
 
 			<div class="post-data">
-				<p>{{ $postTitle }}</p>
+				<p id="forum_post"><?php echo forumPostContents($postTitle,'#'); ?></p>
 			</div>
 			<div class="post-action clearfix">
 				<div class="row-cont clearfix">
@@ -82,7 +82,7 @@
 
 					$likedata = \App\ForumReplyLikes::where(['owner_id' => $user_id, 'reply_id' => $reply->id])->get();
 				?>
-				<div class="single-post">
+				<div class="single-post" id="forumreply_{{$reply->id}}">
 					<div class="post-header">
 					  	@if($user_id)
 					  		@if($user_id == $reply->owner_id)
@@ -92,12 +92,11 @@
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 										<li><a href="{{ url("api/get-forum-reply-details?reply_id=$reply->id&user_id=$user->id&reply_data=$reply_data") }}">Edit</a></li>
-										<li><a href="#" class="forumreplydelete" data-forumpostid="{{$checkpost->id}}" data-forumreplyid = "{{$reply->id}}">Delete</a></li>
+										<li><a href="#" class="del-confirm-api" data-type="reply" data-forumpostid="{{$checkpost->id}}" data-forumreplyid = "{{$reply->id}}">Delete</a></li>
 									</ul>
 								</div>
 						  	@endif
 					  	@endif
-<?php // print_r($reply_data);die; ?>
 						<span class="u-img" style="background: url('<?= url($replyUserPic) ?>');"></span>
 						<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name}}</span>
 						<span class="loc">
@@ -105,7 +104,7 @@
 						</span>
 					</div>
 					<div class="post-data">
-						<p>{{ $reply_data }}</p>
+						<p><?php echo forumPostContents($reply_data,'#'); ?></p>
 					</div>
 					<div class="post-action clearfix">
 						<div class="row-cont clearfix">
@@ -134,7 +133,7 @@
 		</div>
 		@if($replies->count() >= 5)
 			<div class="load-more-btn-cont text-center">
-				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumreply" data-forumpostid = "{{$checkpost->id}}">View More</button>
+				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumreply loading-btn" data-forumpostid = "{{$checkpost->id}}">View More</button>
 			</div>
 		@endif
 
@@ -142,4 +141,14 @@
 	<div class="userid" data-id="{{$user_id}}"></div>
 
 @endsection
+
+<script type="text/javascript">
+	
+	window.onload = function() {
+		
+		//$('.morecontent').hide();
+	}
+
+
+</script>
 

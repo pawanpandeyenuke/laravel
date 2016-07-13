@@ -1,5 +1,8 @@
 @extends('layouts.chat')
 
+@section('title', 'Chat - ')
+
+@section('content')
 <style>
 .flyout.box-flyout {
   width: 100% !important;
@@ -33,8 +36,6 @@
   left: 3%;
 }
 </style>
-
-@section('content')
 <?php 
 $groupid = $group_jid;
 ?>
@@ -111,7 +112,10 @@ $groupid = $group_jid;
                                     <div id="gccollapseOne" class="{{$pubdivid}}" role="tabpanel" aria-labelledby="gcheadingOne">
                                       <div class="panel-body">
                                         <div class="chat-header-small">
-                                          <i class="flaticon-people"></i> <b><?php echo ($exception == "private")?"":$groupname; ?></b>
+                                          <?php 
+                                                $icon_url = url('category_images/'.$group_image); 
+                                          ?>
+                                          <img src="{{$icon_url}}" alt="" class="img-icon"><b><?php echo ($exception == "private")?"":$groupname; ?></b>
                                         </div>
                                         <div class="chat-user-list StyleScroll">
                                           <ul>
@@ -127,8 +131,8 @@ $groupid = $group_jid;
                                                   
                                                   @if($data['user']['id'] != Auth::User()->id)
                                                     <?php 
-                                                      $status = DB::table('friends')->where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
-                                                      $status1 = DB::table('friends')->where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
+                                                      $status = \App\Friend::where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
+                                                      $status1 = \App\Friend::where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
                                                       // echo '<pre>';print_r($status1);die;
                                                       ?>
                                                     @if($status != null || $status1 != null)
@@ -193,7 +197,7 @@ $groupid = $group_jid;
                                       <div class="panel-body">
                                         <div class="chat-user-list StyleScroll">
 
-                                <ul>
+                                          <ul>
                     @foreach($privategroup as $data)
                     <?php  
 						/**
@@ -211,7 +215,7 @@ $groupid = $group_jid;
                                     $name[]="You";
                                     $count++;
                                 } else {
-									$name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+									$name[]=\App\User::where('id',$mem['member_id'])->value('first_name');
                                 }
                             }
 
@@ -219,18 +223,18 @@ $groupid = $group_jid;
 							if(!($count==0) || $data['owner_id']==Auth::User()->id) { 
 								$pri_id = $data['id'];
                              ?>
-                               <li>
-								   <div	class="pvt-room-list" style="position:relative;" >
-										<a href="{{url("private-group-detail/$pri_id")}}" >
-											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
-											<span class="title">{{$data['title']}}</span>
-										</a>
-										<button onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
-                                   </div>
-                               </li>
-							<?php } ?>
-                         @endforeach
-					</ul>
+                                          <li>
+                        								    <div	class="pvt-room-list" style="position:relative;" >
+                            										<a href="{{url("private-group-detail/$pri_id")}}" >
+                            											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
+                            											<span class="title">{{$data['title']}}</span>
+                            										</a>
+                            										<button onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
+                                             </div>
+                                          </li>
+							           <?php } ?>
+                                    @endforeach
+					                             </ul>
                                      </div><!--/chat user list-->
                                       </div>
                                     </div>
@@ -253,26 +257,22 @@ $groupid = $group_jid;
     </div><!--/pagedata-->
   
  
-@endsection
+
 
 <link href="{{url('/converse/converse.min.css')}}" rel="stylesheet" type="text/css" media="screen" >
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script type="text/javascript" src="{{url('/converse/jquery.form.js')}}"></script>
 <script type="text/javascript" src="{{url('/converselib/demo_converse.nojquery.min.js')}}"></script>
-
-<!-- <script type="text/javascript" src="{{url('/converse/converse.nojquery.min.js')}}"></script> -->
-<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
-
 
 <?php 
  
   $img = Auth::User()->picture; 
-  $userpic = !empty($img)? url($img) : url('/images/user-thumb.png');
+  $userpic = !empty($img)? url($img) : url('/images/user-thumb.jpg');
   
   
 ?>
  
 <script type="text/javascript">
+	jQuery.noConflict();
+	
 	var encoderoomid = '';
     var userImage="{{$userpic}}";
  
@@ -285,50 +285,76 @@ $groupid = $group_jid;
 
     var parent="<?php echo Request::get('parentname'); ?>";
 
-    var Base64 = {_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9+/=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/rn/g,"n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
-
+    var Base64 = {_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(r){var t,e,o,a,h,n,c,d="",C=0;for(r=Base64._utf8_encode(r);C<r.length;)t=r.charCodeAt(C++),e=r.charCodeAt(C++),o=r.charCodeAt(C++),a=t>>2,h=(3&t)<<4|e>>4,n=(15&e)<<2|o>>6,c=63&o,isNaN(e)?n=c=64:isNaN(o)&&(c=64),d=d+this._keyStr.charAt(a)+this._keyStr.charAt(h)+this._keyStr.charAt(n)+this._keyStr.charAt(c);return d},decode:function(r){var t,e,o,a,h,n,c,d="",C=0;for(r=r.replace(/[^A-Za-z0-9\+\/\=]/g,"");C<r.length;)a=this._keyStr.indexOf(r.charAt(C++)),h=this._keyStr.indexOf(r.charAt(C++)),n=this._keyStr.indexOf(r.charAt(C++)),c=this._keyStr.indexOf(r.charAt(C++)),t=a<<2|h>>4,e=(15&h)<<4|n>>2,o=(3&n)<<6|c,d+=String.fromCharCode(t),64!=n&&(d+=String.fromCharCode(e)),64!=c&&(d+=String.fromCharCode(o));return d=Base64._utf8_decode(d)},_utf8_encode:function(r){r=r.replace(/\r\n/g,"\n");for(var t="",e=0;e<r.length;e++){var o=r.charCodeAt(e);128>o?t+=String.fromCharCode(o):o>127&&2048>o?(t+=String.fromCharCode(o>>6|192),t+=String.fromCharCode(63&o|128)):(t+=String.fromCharCode(o>>12|224),t+=String.fromCharCode(o>>6&63|128),t+=String.fromCharCode(63&o|128))}return t},_utf8_decode:function(r){for(var t="",e=0,o=c1=c2=0;e<r.length;)o=r.charCodeAt(e),128>o?(t+=String.fromCharCode(o),e++):o>191&&224>o?(c2=r.charCodeAt(e+1),t+=String.fromCharCode((31&o)<<6|63&c2),e+=2):(c2=r.charCodeAt(e+1),c3=r.charCodeAt(e+2),t+=String.fromCharCode((15&o)<<12|(63&c2)<<6|63&c3),e+=3);return t}};
+   
     var conferencechatserver = '@conference.<?= Config::get('constants.xmpp_host_Url') ?>';
     var conObj;
     var groupname = "{{$groupname}}";
     var groupid = "{{$groupid}}";
     var exception = "{{$exception}}";
 	var is_first = true;  
-	
+	var chatName = {};
 	var waitProfile = 0;
+	setTimeout( function(){
+		waitProfile = 1;
+	}  , 4000 );
+	
+	function webEncode( str ){
+		//return Base64.encode( str );
+		return str;
+	}
+	function webDecode( str ){
+		//return Base64.decode( str );
+		return str;
+	}
 	
     jQuery(document).ready(function(){
       require(['converse'], function (converse) {
                conObj = converse;
                conObj.listen.on('initialized', function (event) {
+				   
 					if( groupname != '' || groupid != '' ) {
-						setTimeout( function(){ 
-							openChatGroup( groupid, groupname);
+						setTimeout( function(){
+							closePublic( groupid );
 						}  , 3000 );
 					}
 				});
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
+					chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
+					//Emoji Picker
 					var jidStr = chatbox.model.get('jid');
-					hideOpendBox( jidStr, 1 );
+					if(waitProfile == 1 ){
+						setTimeout( function(){
+							hideOpendBox( jidStr, 2 );
+						}  , 2000 );
+					}
+					renderEmoji( chatbox );
 				});
 				
 				conObj.listen.on('renderMessage', function (event, message) { 
 					//console.log( message );
 				});
 				
-				conObj.listen.on('chatRoomOpened', function (event, chatbox) { 
-					var jidStr = chatbox.model.get('jid');
-					setTimeout( function(){ 
-						hideOpendBox( jidStr, 2 );
-					}  , 2000 );
+				conObj.listen.on('chatRoomOpened', function (event, chatbox) {
+					chatbox.$el.attr( 'data-bid', Base64.encode(chatbox.model.get('jid')) );
 					
+					
+					
+					var jidStr = chatbox.model.get('jid');
+					if(waitProfile == 1 ){
+						setTimeout( function(){
+							hideOpendBox( jidStr, 2 );
+						}  , 2000 );
+					}
 					var xmpp = jidStr.replace( '@conference.<?= Config::get('constants.xmpp_host_Url') ?>' , '' );
 					if( xmpp ==  groupid ){
+						chatName[jidStr] = '<?php echo $groupname; ?>';
 						chatbox.$el.find( '.chat-title' ).html( '<?php echo $groupname; ?>' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
-							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('<?php echo $group_image; ?>');" );
+							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
 						<?php } else { ?>
-							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/images/groupdefault.png');" );
+							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/images/post-img-big.jpg');" );
 						<?php	} ?>
 					} else {
 						$.ajax({
@@ -338,13 +364,20 @@ $groupid = $group_jid;
 							'dataType' : 'json',
 							'data' : { group_jid: xmpp },
 							'success' : function(data){
-								if( data.title !== undefined ){
-									chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
-									chatbox.$el.find( '.chat-title' ).html( data.title );
-								}	
+								if( data.status == 1 ){
+									if( data.title !== undefined ){
+										chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
+										chatbox.$el.find( '.chat-title' ).html( data.title );
+										chatName[jidStr] = data.title;
+									}	
+								} else {
+									chatbox.close();
+									groupChatRefresh( '' );
+								}
 							}
 						});
-					}	
+					}
+					renderEmoji( chatbox );	
 				});
 				
 				conObj.listen.on('disconnected', function (event) { 
@@ -359,11 +392,13 @@ $groupid = $group_jid;
                   authentication: 'prebind',
                   prebind_url: "{{url('/ajax/getxmppuser')}}",
                   send_initial_presence:true,
+                  visible_toolbar_buttons: {'toggle_occupants':false,'clear':false,'emoticons':false,'call': false},
 				  ping_interval: 0,
 				  message_carbons: true,
 				  forward_messages: true,
 				  allow_logout: false,
 				  debug: false,
+				  auto_subscribe: true,
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
               
@@ -404,6 +439,18 @@ $groupid = $group_jid;
 
       });
 
+	$( document ).on( 'keydown', '.emoji-wysiwyg-editor' , function(e) {
+		if(e.which == 13) {
+			var obj = $(this);
+			var t = $.Event("keypress");
+			t.which = 13; //choose the one you want
+			obj.parent().find('textarea').focus();
+			obj.parent().find('textarea').trigger(t);
+			obj.html( "" );
+			setTimeout(function() { obj.focus(); }, 200);
+			
+		}
+	});
 
         $(document).on('click','.invite',function(){
           var current = $(this);
@@ -476,7 +523,24 @@ $groupid = $group_jid;
             is_first=false; 
          }
      }
-
+	/** 
+	*	append emoji in chatbox
+	**/
+	function renderEmoji( chatbox ){
+		setTimeout( function(){
+				// Initializes and creates emoji set from sprite sheet
+				window.emojiPicker = new EmojiPicker({
+					emojiable_selector: chatbox.$el.find('[data-emojiable=true]'),
+					assetsPath: '/lib/img/',
+					popupButtonClasses: 'fa fa-smile-o'
+				});
+				// Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+				// You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+				// It can be called as many times as necessary; previously converted input fields will not be converted again
+				window.emojiPicker.discover();
+		}  , 2000 );
+					
+	}
 
 /*
 function openChatbox( xmpusername,username ){
@@ -505,7 +569,31 @@ function openChatbox( xmpusername,username ){
 
 }
 */
+
+/** 
+* Bootstrap custom collapsed 
+**/
+function bootstrapCustomCollapse( collapsedtarget ){
+	$('.panel').each( function(){
+		var HeadingID = $(this).find('.panel-heading').attr('id');
+		if( HeadingID == collapsedtarget ){
+			$( this ).find('.panel-heading a').removeClass( 'collapsed' );
+			$( this ).find('.panel-heading a').attr('aria-expanded', 'true' );
+			$( this ).find( '.panel-collapse' ).addClass( 'in' );
+			$( this ).find('.panel-collapse').attr('aria-expanded', 'true' );
+			$( this ).find('.panel-collapse').attr('style', '' );
+		} else {
+			$( this ).find('.panel-heading a').addClass( 'collapsed' );
+			$( this ).find('.panel-heading a').attr('aria-expanded', 'false' );
+			$( this ).find( '.panel-collapse' ).removeClass( 'in' );
+			$( this ).find('.panel-collapse').attr('aria-expanded', 'false' );
+			$( this ).find('.panel-collapse').attr('style', 'height: 0px;' );
+		}
+	});
+}
+
 $(document).ready(function() {
+	$("#gccollapseThree").click();
 	$( document ).on( 'click' , '.restore-chat.chatgroup' , function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		hideOpendBox( jid , 2 );
@@ -522,11 +610,11 @@ function hideOpendBox( grpname , actiontype ){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getChat = conObj.chats.get(jid);
 		if( jid == grpname ){
-			if( actiontype == 1 ){
+			if( actiontype == 1 && $(this).css('display') == 'none'){
 				getChat.maximize();
 			}
 			resultreturn = false;
-		} else {
+		} else if($(this).css('display') == 'block'){
 			getChat.minimize();
 		}
 	});
@@ -535,11 +623,11 @@ function hideOpendBox( grpname , actiontype ){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
 		if( jid == grpname ){
-			if( actiontype == 1 ){
+			if( actiontype == 1 && $(this).css('display') == 'none' ){
 				getRooms.maximize();
 			}
 			resultreturn = false;
-		} else {
+		} else if( $(this).css('display') == 'block' ){
 			getRooms.minimize();
 		}
 	});
@@ -553,27 +641,85 @@ function openChatGroup( grpjid,grpname ){
 }
 function openFirstChat( grpjid ){
 	
-	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
+	if( hideOpendBox( grpjid+conferencechatserver, 1 ) ){
 		conObj.rooms.open( grpjid+conferencechatserver, '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
 		$( '.chatnotification' ).remove();
-		$.ajax({
-			'url' : "/ajax/getchatgroup",
-			'type' : 'post',
-			'async' : false,
-			'dataType' : 'json',
-			'data' : { group_jid: grpjid },
-			'success' : function(data){
-				var ChatHtml = '';
-				$.each( data.data , function( i, v){
-					ChatHtml += '<li><div style="position:relative;" class="pvt-room-list">';
-						ChatHtml += '<a href="http://lfriendsquare.com/private-group-detail/'+v.id+'">';
-						ChatHtml += '<span style="background: url('+ ((v.picture != '' ) ? v.picture : "/images/post-img-big.jpg")+');" class="chat-thumb"></span>';
-						ChatHtml += '<span class="title">'+v.title+'</span></a>';
-						ChatHtml += '<button class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\');">Chat</button></div></li>';
-				});
-				$('#gccollapseThree').find( '.chat-user-list' ).html( '<ul>'+ChatHtml+'</ul>' );
+		groupChatRefresh( grpjid+conferencechatserver );
+	}
+}
+function groupChatRefresh( jid ){
+	var grpjid = jid.replace( conferencechatserver , '' );
+	$.ajax({
+		'url' : "/ajax/getchatgroup",
+		'type' : 'post',
+		'async' : false,
+		'dataType' : 'json',
+		'data' : { group_jid: grpjid },
+		'success' : function(data){
+			var ChatHtml = '';
+			$.each( data.data , function( i, v){
+				ChatHtml += '<li><div style="position:relative;" class="pvt-room-list">';
+					ChatHtml += '<a href="http://lfriendsquare.com/private-group-detail/'+v.id+'">';
+					ChatHtml += '<span style="background: url('+ ((v.picture != '' ) ? v.picture : "/images/post-img-big.jpg")+');" class="chat-thumb"></span>';
+					ChatHtml += '<span class="title">'+v.title+'</span></a>';
+					ChatHtml += '<button class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\');">Chat</button></div></li>';
+			});
+			$('#gccollapseThree').find( '.chat-user-list' ).html( '<ul>'+ChatHtml+'</ul>' );
+		}
+	});
+}
+/**
+** use for remove opened chat group imidiate
+**/
+function removeChatroom( jid ){
+	var privateChat = conObj.rooms.get( jid );
+	privateChat.close();
+}
+/**
+** use for remove opened chat group with time limit
+**/
+function removeGroup( chatbox ){
+	chatbox.$el.find('.chat-content').hide();
+	chatbox.$el.find('.sendXMPPMessage').hide();
+	chatbox.$el.find('.chat-area').append( '<div class="chat-notification" >You are removed from group</div>' );
+	setTimeout( function(){
+		chatbox.close();
+		var firstChat = $( '.minimized-chats-flyout .chat-head:first .restore-chat' ).data( 'bid' );
+		hideOpendBox( Base64.decode(firstChat) , 1 );
+	}  , 5000 );
+}
+
+/** 
+* show only one public group
+**/
+function closePublic( grpname ){
+	var openChat = 1;
+	$( '.privatechat' ).each( function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var getChat = conObj.chats.get(jid);
+		if( $(this).css('display') == 'block' ){
+			getChat.minimize();
+		}
+	});
+	
+	$( '.chatroom' ).each( function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var getRooms = conObj.rooms.get(jid);
+		var xmpp = jid.replace( conferencechatserver , '' );
+		if( xmpp == grpname ){
+			getRooms.maximize();
+			openChat = 0;
+		} else {
+			var grouptype = xmpp.substr(xmpp.length - 3);
+			if( grouptype == 'pub' ){
+				getRooms.close();
+			} else if( $(this).css('display') == 'block' ){
+				getRooms.minimize();
 			}
-		});
+		}
+	});
+	if( openChat == 1 ){
+		conObj.rooms.open( grpname+conferencechatserver, '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
 	}
 }
 $('.status-r-btn').on('click',function(){
@@ -593,4 +739,4 @@ $('.dropdown.keep-open').on({
 
 
 </script>
-
+@endsection

@@ -1,4 +1,5 @@
 @extends('layouts.dashboard')
+@section('title', 'User Profile - ')
 <?php
 
 	$gender = isset($user->gender) ? $user->gender : '';
@@ -11,16 +12,16 @@
 
 	if(!empty($user->country)){
 
-		$countryid = DB::table('country')->where('country_name', '=', $user->country)->value('country_id'); 
-		$all_states = DB::table('state')->where('country_id', '=', $countryid)->pluck('state_name','state_id'); 
+		$countryid = \App\Country::where('country_name', '=', $user->country)->value('country_id'); 
+		$all_states = \App\State::where('country_id', '=', $countryid)->pluck('state_name','state_id'); 
 
-		$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
-	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 	
+		$stateid 	= \App\City::where('city_name', '=', $user->city)->value('state_id'); 
+	 	$all_cities = \App\City::where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 	
 	
 	}
 
-	$categoryid = DB::table('job_area')->where('job_area',$user->job_area)->value('job_area_id');
-	$all_job_cat = DB::table('job_category')->where('job_area_id',$categoryid)->pluck('job_category');
+	$categoryid = \App\JobArea::where('job_area',$user->job_area)->value('job_area_id');
+	$all_job_cat = \App\JobCategory::where('job_area_id',$categoryid)->pluck('job_category');
 
 	if($user->city == null)	
 	$cls="btnview";
@@ -56,8 +57,8 @@
 
 										@if( $userId != $user->id )
 										<?php
-											$status1=DB::table('friends')->where('user_id',$user->id)->where('friend_id',$userId)->value('status');
-											$status2=DB::table('friends')->where('user_id',$userId)->where('friend_id',$user->id)->value('status');							 ?>
+											$status1=\App\Friend::where('user_id',$user->id)->where('friend_id',$userId)->value('status');
+											$status2=\App\Friend::where('user_id',$userId)->where('friend_id',$user->id)->value('status');							 ?>
 										<div class="get_id acs-btns" data-userid="{{$user->id}}" data-friendid="	{{$userId}}">
 
 											@if($status1=="Accepted" || $status2=="Accepted")

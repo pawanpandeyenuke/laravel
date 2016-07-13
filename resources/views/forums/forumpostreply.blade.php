@@ -1,10 +1,5 @@
 @extends('layouts.dashboard')
-
-<?php
-// $userobj = $posts->user;
-// print_r($post->id);die;
- ?>
-
+@section('title', 'Forums - ')
 <style type="text/css">
 	.boxsize{width:200px;}
 </style>
@@ -33,6 +28,8 @@
 							<div class="fs-breadcrumb">{{$post->forum_category_breadcrum}}</div>
 
 							<div class="forum-master-post">
+								<div id="sticky-anchor"></div>
+								<div class="fix-header">
 								<div class="fp-master-header">
 									<div class="row">
 										<div class="col-md-6">
@@ -75,19 +72,16 @@
 										</div>
 									</div>
 								</div>
-								<p> {{$post->title}} </p>
+								<p class="forum_post" > <?php echo forumPostContents($post->title,'#'); ?></p>
 								<div class="text-right">
 								@if(Auth::check())
 								  <!-- <button type="button" class="btn btn-primary mpost-rply-btn" title="Write a reply">Reply</button> -->
 								@else
 								  <button type="button" data-toggle="modal" data-target="#LoginPop" class="btn btn-primary" title="Write a reply">Reply</button>
 								@endif
-								</div>
 							</div>
 
-							<div class="forum-post-replies">
-							
-								<div class="forum-post-cont">
+							<div class="forum-post-cont">
 									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class="forumreplycount"> {{$replycount}}</span> Replies</div>
 								</div><!--/forum post cont-->
 							@if(Auth::check())
@@ -96,6 +90,14 @@
 									<button type="button" class="btn btn-primary forumpostreply" data-forumpostid = "{{$post->id}}" title="Click to post a Reply">Submit</button>
 								</div>
 							@endif
+
+
+								</div>
+							</div>
+
+							<div class="forum-post-replies">
+							
+								
 								<div class="modal fade edit-forumpost-popup" id="forumreply-edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost"></div>
 
 						<div class="f-post-list-outer clearfix forumreplylist">
@@ -164,7 +166,7 @@
 											@endif
 											@endif
 										</div>
-										<p class="more"><?php echo nl2br($forumreply->reply); ?></p>
+										<p class="more"><?php echo nl2br(forumPostContents($forumreply->reply,'#')); ?></p>
 									</div><!--/single post-->								
 								@endforeach
 							</div>
@@ -185,11 +187,7 @@
             </div>
         </div>
     </div><!--/pagedata-->
-@endsection
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/fileinput.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/fancybox/jquery.fancybox.js')}}"></script>
-<script src="{{url('/js/select2.min.js')}}"></script>
+
 <script type="text/javascript">
 $(".multiple-slt").select2();
 
@@ -200,24 +198,37 @@ $(".multiple-slt").select2();
     minImageHeight: 30,
     showCaption: false,
 	});
-	//$('.popup').fancybox();
-
-	
 
 	window.onload = function() {
-
-			window.emojiPicker = new EmojiPicker({
-			emojiable_selector: '[data-emojiable=true]',
-			assetsPath: '/lib/img/',
-			popupButtonClasses: 'fa fa-smile-o'
-      	});
-      window.emojiPicker.discover();
-       loadOrgionalImogi();
-
       var w = $('#sticky-anchor').width();
 		$('.fix-header').css('width',w+60);
+		$(".forum_post .morelink").click();
+		$(".forum_post .morelink").addClass('unique_post');
 	}
-	//$('.pop-comment-side .post-comment-cont').niceScroll();
+
+		 var i = 1;
+		function sticky_relocate() {
+		    var window_top = $(window).scrollTop();
+		    var div_top = $('#sticky-anchor').offset().top;
+		    if (window_top > div_top) {
+		      $('.fix-header').addClass('stick');
+		      $('.forum-post-replies').addClass('stick-margin');
+		      if(i == 1){
+		      	$(".forum_post .morelink").click();
+		      	i++;
+		      }
+		    }else{
+		      $('.fix-header').removeClass('stick');
+		      $('.forum-post-replies').removeClass('stick-margin');
+		    }
+		}
+
+	 $(function () {
+	    $(window).scroll(sticky_relocate);
+	    sticky_relocate();
+	});
+
+
 
 	$(document).on('click','.mpost-rply-btn',function(){
 		$('.f-post-reply-form').slideToggle();
@@ -227,25 +238,12 @@ $(".multiple-slt").select2();
 	// More Less Text
 
 	$(document).ready(function() {
-	  var showChar = 300;
-	  var ellipsestext = "...";
-	  var moretext = "more";
-	  var lesstext = "less";
-	  $('.more').each(function() {
-	      var content = $(this).html();
-
-	      if(content.length > showChar) {
-
-	          var c = content.substr(0, showChar);
-	          var h = content.substr(showChar-1, content.length - showChar);
-
-	          var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
-
-	          $(this).html(html);
-	      }
-
-	  });
+	  var moretext = "More";
+	  var lesstext = "Less";
 		$(document).on('click','.morelink',function(){
+			if($(this).hasClass('unique_post')){
+				i=1;
+			}
 	      if($(this).hasClass("less")) {
 	          $(this).removeClass("less");
 	          $(this).html(moretext);
@@ -262,5 +260,5 @@ $(".multiple-slt").select2();
 
 
 </script>
-</body>
-</html>
+
+@endsection

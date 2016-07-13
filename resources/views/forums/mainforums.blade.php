@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-<?php //print_r($forums);die; ?>
+@section('title', 'Forums - ')
 @section('content')
 	<div class="page-data dashboard-body">
 	        <div class="container">
@@ -21,15 +21,8 @@
 
 							        <?php
 
-							            $fieldsData = DB::table('forums')->where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); 
-
-							   /*$count1 = DB::table('forums_post')->where('category_id',$data->id)->count();
-							   $ids1 = DB::table('forums')->where('parent_id',$data->id)->pluck('id');
-							   $count2 = DB::table('forums_post')->whereIn('category_id',$ids1)->count();
-							   $ids2 = DB::table('forums')->whereIn('parent_id',$ids1)->pluck('id');
-							   $count3 = DB::table('forums_post')->whereIn('category_id',$ids2)->count();
-							   $count = $count1 + $count2 + $count3;*/
-							   $image = url("forums-data/forum_icons/".$data['img_url']);
+							            $fieldsData = \App\Forums::where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); 
+							   			$image = url("forums-data/forum_icons/".$data['img_url']);
 							            ?>
 
 		                    @if($fieldsData)

@@ -1,7 +1,5 @@
 @extends('layouts.dashboard')
-<?php
-	
- ?>
+@section('title', 'Broadcast - ')
 @section('content')
 
 @include('panels.left')

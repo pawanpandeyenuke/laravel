@@ -4,20 +4,32 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Friendz Square</title>
+<title>@yield('title')Friendz Square</title>
 <link href="{{url('/css/bootstrap.css')}}" rel="stylesheet">
 <link href="{{url('/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/fancybox/jquery.fancybox.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/fileinput.min.css')}}" rel="stylesheet" media="all">
-
 <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet" media="all">
-<!-- <link href="/converse/converse.min.css" rel="stylesheet" type="text/css" media="screen" > -->
-
 <link href="{{url('/lib/css/nanoscroller.css')}}" rel="stylesheet">
 <link href="{{url('/lib/css/emoji.css')}}" rel="stylesheet">
 <link href="{{url('/css/style.css')}}" rel="stylesheet">
 <link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
+<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
+
+<!-- Emoji Inclues -->
+<script src="{{url('/c-lib/lib/js/emojione.js')}}"></script>
+<script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>
+<script src="{{url('/lib/js/tether.min.js')}}"></script>
+<script src="{{url('/lib/js/config.js')}}"></script>
+<script src="{{url('/lib/js/util.js')}}"></script>
+<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
+<script src="{{url('/lib/js/emoji-picker.js')}}"></script>
+<script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
+<!-- Emoji Inclues Ends-->
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -70,7 +82,7 @@
 							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
 							{{Auth::User()->first_name}}</a>
 						</li>
-						<li><div class="logout"><a href="{{ url('/logout') }}" title="">Logout</a></div></li>
+						<li><div class="logout"><a class = "logout-link" href="{{ url('/logout') }}" title="">Logout</a></div></li>
 					</ul>
 				</div>
 			</div>

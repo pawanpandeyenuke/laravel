@@ -6,7 +6,8 @@ use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments,App\ForumsDoctor;
-use Validator, Input, Redirect, Request, Session, Hash, DB;
+use Validator, Redirect, Request, Session, Hash, DB;
+use Illuminate\Support\Facades\Input;
 use \Exception;
 
 class ApiController extends Controller
@@ -67,8 +68,10 @@ class ApiController extends Controller
 			}else{
 				
 				$input['password'] = Hash::make($input['password']);
+				$confirmation_code = str_random(30);
+				$input['confirmation_code'] = $confirmation_code;
 				$userdata = $user->create($input);
-
+				$full_name = $userdata->first_name.' '.$userdata->last_name;
 				//Saving xmpp-username and xmpp-pasword into database.
 		        $xmpp_username = $userdata->first_name.$userdata->id;
 		        $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
@@ -80,6 +83,7 @@ class ApiController extends Controller
 
 		        $converse = new Converse;
 		        $response = $converse->register($xmpp_username, $xmpp_password);
+				$name = $converse->setNameVcard($user->xmpp_username, 'FN', $full_name);
 
 				$this->status = 'success';
 				$this->message = 'User registered successfully';				
@@ -528,7 +532,14 @@ class ApiController extends Controller
 	            if( isset($arguments['picture']) && $file != null ){
 	                $image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 	                $arguments['picture'] = '/uploads/user_img/'.$image_name;
+
 	                $file->move(public_path('uploads/user_img'), $image_name);
+
+                 	$path = public_path('uploads/user_img').'/'.$image_name;
+				 	$ImageData = file_get_contents($path);
+				 	$ImageType = pathinfo($path, PATHINFO_EXTENSION);
+					$ImageData = base64_encode($ImageData);
+				 	$image_name = Converse::setVcard($userfind->xmpp_username, $ImageData, $ImageType);
 	            }
  
 				User::where([ 'id' => $arguments['id'] ])->update([ 'picture' => $arguments['picture'] ]);
@@ -584,7 +595,12 @@ class ApiController extends Controller
 
 				if(isset($arguments['password']))
 					throw new Exception("Password cannot be changed.");
- 
+				
+				$userdata = User::find($arguments['id']);
+				$full_name = $userdata->first_name.' '.$userdata->last_name;
+
+ 				Converse::setNameVcard($userdata->xmpp_username, 'FN', $full_name);
+
 				foreach ($arguments as $key => $value) {
 
 					User::where([ 'id' => $arguments['id'] ])
@@ -1958,7 +1974,7 @@ class ApiController extends Controller
 			}
 			
 			if($breadcrumb){
-				$posts = $posts->where('forum_category_breadcrum', 'like', $breadcrumb.'%');
+				$posts = $posts->where('forum_category_breadcrum', 'like', $breadcrumb."%");
 			}
 
 			$posts = $posts->orderBy('updated_at','DESC')->get(); //->toArray();
@@ -2205,8 +2221,7 @@ class ApiController extends Controller
 	 */
 	protected function output()
 	{
-		// $this->data = empty($this->data) ? null : $this->data;
-
+		$this->data = empty($this->data) ? null : $this->data;
 		return json_encode(array(
 			'status' => $this->status, 
 			'message' => $this->message,
@@ -2527,4 +2542,74 @@ class ApiController extends Controller
 		return view('forums-api.confirmbox')
 			   		->with('data',$data);
 	}
+
+	public function emailVerification()
+	{
+
+		try{
+			$email = Request::get('email');
+			$user = User::where('email',$email)->first();
+			if(empty($user))
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				if($user->is_email_verified == "N"){
+
+					$emaildata = array('confirmation_code' => $user->confirmation_code);
+					$username = $user->first_name." ".$user->last_name;
+					$useremail = $user->email;
+					
+					Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
+						$message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
+						$message->to($useremail,$username)->subject('Verify your email address');
+
+					$this->status = "Success";
+					$this->message = "Verification link has been sent to your registered email address. Please check your inbox and verify your email address.";
+					});
+				}else{
+					throw new Exception("This email id is already verified.", 1);					
+				}
+			}
+					  
+			}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+
+	}
+
+	public function changePassword()
+	{
+		try{
+			$input = Request::all();
+			$user = User::where('id',$input['user_id'])->first();
+			if(empty($user))
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				if(Hash::check($input['old_password'], $user->password)){
+					if(Hash::check($input['old_password'], bcrypt($input['new_password']))) {
+                        throw new Exception("New password can't be same as old password.", 1);
+                    }else{
+                    	if(strlen($input['new_password']) < 8){
+                    		throw new Exception("New password should be atleast 8 characters long.", 1);
+                    	}else{
+		                    $user->password = bcrypt($input['new_password']);
+		                    $user->save();
+		                    $this->status = "Success";
+		                    $this->message = "Password changed successfully";
+		                    $this->data = $user;
+		                }
+                    }
+				}else{
+					throw new Exception("Password doesn't match our records.", 1);	
+				}
+			}		  
+			}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+	}
+
+
 }

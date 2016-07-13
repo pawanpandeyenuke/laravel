@@ -1,4 +1,6 @@
 <!-- Login Popup -->
+        <div class="page-loading" style="display:none"><img src="{{url('/images/full-loading.gif')}}" alt=""></div>
+
 <div class="modal fade" id="LoginPop" tabindex="-1" role="dialog" aria-labelledby="LoginPopLabel" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
@@ -62,74 +64,3 @@
     </div>
   </div>
 </div>
-
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script>
-<script type="text/javascript">
-
-    if(window.location.pathname == "/" || window.location.pathname == "/register"){
-        $('.login-footer').hide();
-    }else{
-        $('.login-footer').show();
-    }
-    
-    $("#loginform").ajaxForm(function(response) { 
-         
-    if(response){
-            $('.password').next('.help-block').find('.verifymsg').hide();
-        
-        if(response === "These credentials do not match our records.")
-        {
-            var current = $('.password');
-            current.next('.help-block').find('.verifymsg').hide();
-            current.css('border-color','#a94442');
-            current.next('.help-block').find('.errormsg').text(response).css('color','#a94442');
-            $('.emailid').css('border-color','#a94442');
-            $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
-
-
-        }
-
-        if(response === "verification")
-            window.location = 'send-verification-link';
-
-        else if(response == "success"){
-            var url_c = window.location.pathname;
-           if(url_c == "/newpassword")
-		window.location = "/";
-	  else
-		window.location = url_c;
-        }else{
-            var obj = jQuery.parseJSON( response );
-            if( obj.email != null ){
-
-                var current = $('.emailid');
-                current.next('.help-block').find('.verifymsg').hide();
-                current.css('border-color','#a94442');
-                current.next('.help-block').find('.errormsg').text(obj.email).css('color','#a94442');
-
-                if( obj.password == null ){
-                    $('.password').next('.help-block').find('.errormsg').text("").css('color','#333333');
-                    current.next('.help-block').find('.verifymsg').hide();
-                    $('.password').css('border-color','#333333');
-                }
-            }
-            if( obj.password != null ){     
-                var current = $('.password');
-                current.next('.help-block').find('.verifymsg').hide();              
-                current.css('border-color','#a94442');
-                current.next('.help-block').find('.errormsg').text(obj.password).css('color','#a94442');
-
-                if( obj.email == null ){
-                    $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
-                    current.next('.help-block').find('.verifymsg').hide();
-                    $('.emailid').css('border-color','#333333');
-                }
-            }
-        }
-    
-    }
-
-});
-
-</script>

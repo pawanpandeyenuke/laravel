@@ -6,7 +6,7 @@
 	else
 		$key = "";
 
-$check_val = "";
+$check_val = "direct";
 
 ?>				
 				{!! Form::open(array('url' => 'search-forum','id' => 'search-forum-layout', 'method' => 'post')) !!}
@@ -26,13 +26,10 @@ $check_val = "";
 									@endforeach
 									</select>
 								</div>
-								<!-- <div class="subs" style="display: none;"> -->
 								<div class="col-md-4">
 								<div class="search-subforums">
 										<?php 
 											if(isset($old['search-subforums']) && $old['search-subforums'] != ""){
-											 	//$sub_id = $old['search-subforums'];
-											 	//$sub_title = \App\Forums::where('id',$old['search-subforums'])->value('title');
 												$check_val = "sub";
 												$options = \App\Forums::where('parent_id',$old['mainforum'])->get();
 											}else{
@@ -209,12 +206,15 @@ $check_val = "";
 									</div>
 								</div>
 							</div>
+							<?php
+								if(isset($old['mainforum']) && isset($old['search-subforums']) && $old['search-subforums'] == "sub-opt" && $old['mainforum'] == "Forum"){
+									$check_val = "direct";
+								}
+							?>
 							<input type="hidden" name="check" class="search-check" value="{{ $check_val }}" />
 						{!! Form::close() !!}
 						</div><!--/forum filter-->
 
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script> -->
 <script type="text/javascript">
 
 	window.onload = function(){
@@ -264,7 +264,6 @@ $check_val = "";
       var parent = $('.getsubcategory').val();
       
       if(searchkey == "" && parent == "Forum"){
-        // $('.getsubcategory').attr('placeholder', 'Enter Keyword').focus();
         $('#forum-keyword-layout').focus();
         event.preventDefault();
    		}
@@ -291,10 +290,6 @@ $check_val = "";
 
       }
    	 });
-
-      	// $('#search-subforums').click(function(){
-      		
-      	// });
 	
 		$('.getsubcategory').change(function(){
 					$('.search-country1').hide();

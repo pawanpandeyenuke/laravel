@@ -4,9 +4,9 @@ $user = $feeddata->user;
 $comments = $feeddata->comments;
 $likes = $feeddata->likes;
 
-$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $feeddata->id])->get(); 
-$likecountdata = App\Like::where(['feed_id' => $feeddata->id])->get()->count(); 
-$commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->count(); 
+$likedata = \App\Like::where(['user_id' => Auth::User()->id, 'feed_id' => $feeddata->id])->get(); 
+$likecountdata = \App\Like::where(['feed_id' => $feeddata->id])->get()->count(); 
+$commentscountdata = \App\Comment::where(['feed_id' => $feeddata->id])->get()->count(); 
 
 
 ?>					
@@ -125,16 +125,6 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 			<button type="button" class="btn-icon btn-cmnt comment"><i class="flaticon-letter"></i></button>
 		</div>
 	</div>
-
-<script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
-<script src="/lib/js/nanoscroller.min.js"></script>
-<script src="/lib/js/tether.min.js"></script>
-<script src="/lib/js/config.js"></script>
-<script src="/lib/js/util.js"></script>
-<script src="/lib/js/jquery.emojiarea.js"></script>
-<script src="/lib/js/emoji-picker.js"></script>
-<script src="/js/jquery.nicescroll.min.js"></script>
-<script src="c-lib/lib/js/emojione.js"></script>
 
 <script>
 

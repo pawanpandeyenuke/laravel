@@ -96,16 +96,31 @@ class Converse
 		//echo $result2;exit;
 	}
 
+	// @ (Broadcast) Send message in chatroom.
+	public static function broadcastchatroom($groupfrom,$userfrom,$userto,$msg){
+		
+		$node = Config::get('constants.xmpp_host_Url');
+		$subject = "";
+		$result2 = @exec( "sudo ejabberdctl send_message groupchat '".$groupfrom."@conference.".$node."/".$userfrom."' ".$userto."@".$node." '".$subject."' '".$msg."'");
+		//echo $result2;exit;
+	}
 
 	// @ Set users vCard.
-	public static function setVcard($username, $fieldValue){
+	public static function setVcard($username, $fieldValue, $ImageType){
 
 		$node = Config::get('constants.xmpp_host_Url');
 		$fieldName = 'BINVAL';
-		$fieldValue = base64_encode( $fieldValue );
+		$fieldType = 'TYPE';
+		@exec('sudo ejabberdctl set-vcard '.$username.' '.$node.' '.$fieldName.' "'.$fieldValue.'" 2>&1', $output, $status);
+		@exec('sudo ejabberdctl set-vcard '.$username.' '.$node.' '.$fieldType.' "'.$ImageType.'" 2>&1', $output, $status);
 
+	}
+
+	// @ Set users vCard.
+	public static function setNameVcard($username, $fieldName, $fieldValue){
+		$node = Config::get('constants.xmppHost');
 		return @exec('sudo ejabberdctl set-vcard '.$username.' '.$node.' '.$fieldName.' "'.$fieldValue.'" 2>&1', $output, $status);
-
+		
 	}
 
 

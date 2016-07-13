@@ -2,9 +2,9 @@
 $user = $feeddata->user;
 $comments = $feeddata->comments;
 $likes = $feeddata->likes; 
-$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $feeddata->id])->get(); 
-$likecountdata = App\Like::where(['feed_id' => $feeddata->id])->get()->count(); 
-$commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->count(); 
+$likedata = \App\Like::where(['user_id' => Auth::User()->id, 'feed_id' => $feeddata->id])->get(); 
+$likecountdata = \App\Like::where(['feed_id' => $feeddata->id])->get()->count(); 
+$commentscountdata = \App\Comment::where(['feed_id' => $feeddata->id])->get()->count(); 
 ?>
 <div id="AllComment" class="post-list popup_list_with_img" data-value="{{ $feeddata->id }}" id="post_{{ $feeddata->id }}">
 	<div class="container">
@@ -137,7 +137,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 </div>
 
 
-<script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
+<!-- <script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
 <script src="/lib/js/nanoscroller.min.js"></script>
 <script src="/lib/js/tether.min.js"></script>
 <script src="/lib/js/config.js"></script>
@@ -145,7 +145,7 @@ $commentscountdata = App\Comment::where(['feed_id' => $feeddata->id])->get()->co
 <script src="/lib/js/jquery.emojiarea.js"></script>
 <script src="/lib/js/emoji-picker.js"></script>
 <script src="/js/jquery.nicescroll.min.js"></script>
-<script src="c-lib/lib/js/emojione.js"></script>
+<script src="c-lib/lib/js/emojione.js"></script> -->
 <script>
 
 	$(document).ready(function(){

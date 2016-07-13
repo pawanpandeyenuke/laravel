@@ -29,8 +29,8 @@ $count=0;
 	<?php 
 		$count++;
 		if(Auth::check()){
-		$status1=DB::table('friends')->where('user_id',$data['id'])->where('friend_id',Auth::User()->id)->value('status');
-		$status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',Auth::User()->id)->value('status');
+		$status1=\App\Friend::where('user_id',$data['id'])->where('friend_id',Auth::User()->id)->value('status');
+		$status2=\App\Friend::where('friend_id',$data['id'])->where('user_id',Auth::User()->id)->value('status');
 		}
 		else{
 			$status1 = null;
@@ -76,7 +76,7 @@ $count=0;
 					<button class="btn btn-primary btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
 				</div>
 
-					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null)){
+					<?php }elseif($status1=='Rejected'||($status1==null)&&($status2==null) && $data['id']!=Auth::User()->id){
 
 					?>	
 					<div class="text-right">
