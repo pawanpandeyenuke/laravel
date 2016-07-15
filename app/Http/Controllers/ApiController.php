@@ -79,6 +79,8 @@ class ApiController extends Controller
 		        $user = User::find($userdata->id);
 		        $user->xmpp_username = strtolower($xmpp_username);
 		        $user->xmpp_password = $xmpp_password;
+		        $user->confirmation_code = $confirmation_code;
+		        $user->is_email_verified = 'N';
 		        $user->save();
 
 		        $useremail = $userdata->email;
