@@ -185,6 +185,7 @@ class Converse
  	// @ Send notifications across devices
  	static function notifyMe( $userId, $friendId, $type )
  	{
+ 		$message = array();
 		$user = User::find($userId);
 		$friend = User::find($friendId);
  		$subjectName = $user->first_name.' '.$user->last_name;
