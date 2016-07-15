@@ -132,7 +132,7 @@
                               <div class="contentEditableContainer contentTextEditable">
                                 <div class="contentEditable">
 
-                                  <p style='text-align:center;margin:0;font-family:Georgia,Time,sans-serif;font-size:26px;color:#2e6da4;'>ForumzHub</p>
+                                  <p style='text-align:center;margin:0;font-family:Georgia,Time,sans-serif;font-size:26px;color:#2e6da4;'>FriendzSquare</p>
 
                                 </div>
                               </div>
