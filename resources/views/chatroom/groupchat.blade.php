@@ -393,12 +393,14 @@ $groupid = $group_jid;
                   prebind_url: "{{url('/ajax/getxmppuser')}}",
                   send_initial_presence:true,
                   visible_toolbar_buttons: {'toggle_occupants':false,'clear':false,'emoticons':false,'call': false},
-				  ping_interval: 0,
-				  message_carbons: true,
-				  forward_messages: true,
-				  allow_logout: false,
-				  debug: false,
-				  auto_subscribe: true,
+        				  ping_interval: 0,
+        				  message_carbons: true,
+        				  forward_messages: true,
+        				  allow_logout: false,
+        				  debug: false,
+        				  auto_subscribe: true,
+                  auto_join_on_invite:true,
+                  allow_chat_pending_contacts: true,
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
               
