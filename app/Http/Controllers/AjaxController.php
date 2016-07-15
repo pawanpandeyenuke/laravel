@@ -341,31 +341,38 @@ comments;
 
 	public function getxmppuser(){
 
-		$status=0;
-		$authuser = Auth::User();
-
-		if ( !empty($authuser->xmpp_username) && !empty($authuser->xmpp_password) ) 
-		{
-			$response = Converse::ejabberdConnect( $authuser );
-			if(!is_array($response)){				
-                $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
+		try{
+			$status=0;
+			$authuser = Auth::User();
+			// echo '<pre>';print_r($authuser);die;
+			if ( !empty($authuser->xmpp_username) && !empty($authuser->xmpp_password) ) 
+			{
+				$response = Converse::ejabberdConnect( $authuser );				
+	               
+			}else{
+				$xmppUserDetails = Converse::createUserXmppDetails($authuser);
+	            $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
 				$response = Converse::ejabberdConnect( $xmppUserDetails );
 			}
-		}else{
-			$xmppUserDetails = Converse::createUserXmppDetails($authuser);
-            $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
-			$response = Converse::ejabberdConnect( $xmppUserDetails );
+
+			
+		}catch(Exception $e){
+			 $responseConverse = Converse::register($authuser->xmpp_username, $authuser->xmpp_password);
+					$response = Converse::ejabberdConnect( $authuser );
+
 		}
 
 		if(is_array($response) && count($response) > 0)
-		{
-			$status = 1;
-		}
+			{
+				$status = 1;
+			}
 
-		$response['status']=$status;	  
-		// echo json_encode($sessionInfo); 
-		// exit;
-		return $response;
+			$response['status']=$status;	  
+			// echo json_encode($sessionInfo); 
+			// exit;
+			return $response;
+
+
  	}
 
 
