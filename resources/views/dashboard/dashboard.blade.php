@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Dashboard - ')
 <style type="text/css"> 
 	.dashboard-load {
 	    background: none repeat scroll 0 0 #fbfbfb;
@@ -110,11 +110,6 @@
 											</div>
 										</div>
 										</div>
-									<!-- <div class="status-img-up">
-										<div class="form-group">
-											<input type="file" class="filestyle" data-input="false" data-iconName="glyphicon glyphicon-camera"  data-buttonName="btn-primary" multiple="multiple">
-										</div>
-									</div> -->
 								</div>
 								
 							</div>
@@ -124,7 +119,6 @@
 
 					<div class="post-list" id="postlist">
 						@foreach($feeds as $data)		
-							<?php //echo '<pre>';print_r($data->updated_at->format('l jS'));die;  ?>					
 							<div class="single-post" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
 
 								<div class="post-header" data-value="{{ $data['id'] }}" id="post_{{ $data['id'] }}">
@@ -170,10 +164,10 @@
 											<li>
 												<div class="like-cont">
 												<?php 
-													$likedata = DB::table('likes')->where(['user_id' => Auth::User()->id, 'feed_id' => $data['id']])->get(); 
+													$likedata = \App\Like::where(['user_id' => Auth::User()->id, 'feed_id' => $data['id']])->get(); 
 
-													$likecountdata = App\Like::where(['feed_id' => $data->id])->get()->count();
-													$commentscountdata = App\Comment::where(['feed_id' => $data->id])->get()->count();  
+													$likecountdata = \App\Like::where(['feed_id' => $data->id])->get()->count();
+													$commentscountdata = \App\Comment::where(['feed_id' => $data->id])->get()->count();  
 												?>
 													<input type="checkbox" name="" id="checkbox{{$data['id']}}" class="css-checkbox like" {{ isset($likedata[0])?'checked':'' }}/>
 													<label for="checkbox{{$data['id']}}" class="css-label">
@@ -234,16 +228,14 @@
 													<?php 
 														$counter = 1;
 														$offset = count($data['comments']) - 3;
-														// echo $offset;die;
 													foreach($data['comments'] as $commentsData){
 													
-														$username = DB::table('users')->where('id', $commentsData['commented_by'])->get(['first_name', 'last_name', 'picture']);
+														$username = \App\User::where('id', $commentsData['commented_by'])->get(['first_name', 'last_name', 'picture']);
 
 														$profileimage = !empty($username[0]->picture) ? $username[0]->picture : '/images/user-thumb.jpg';
 
-														$userId = DB::table('users')->where('id', $commentsData['commented_by'])->get(['id']);
+														$userId = \App\User::where('id', $commentsData['commented_by'])->get(['id']);
 
-														// print_r($username);die;
 														if(!empty($username)){
 
 															$name = $username[0]->first_name.' '.$username[0]->last_name; 
@@ -270,7 +262,7 @@
 																					<span><div class="comment-time text-right">{{ $commentsData->updated_at->format('D jS') }}</div></span>
 																				</div>
 																			</div>
-																			<?php //echo $commentsData->updated_at->diffForHumans();// die;?>	
+				
 																		</div>
 																	</div>
 																</div>
@@ -317,7 +309,6 @@
 		</div>
 	</div><!--/pagedata-->
 
-<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script> -->
 <script type="text/javascript">
 		$(document).on("click",".btn-post",function(){
 					    // Opera 8.0+

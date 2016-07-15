@@ -29,8 +29,8 @@ $count=0;
 	<?php 
 		$count++;
 		if(Auth::check()){
-		$status1=DB::table('friends')->where('user_id',$data['id'])->where('friend_id',Auth::User()->id)->value('status');
-		$status2=DB::table('friends')->where('friend_id',$data['id'])->where('user_id',Auth::User()->id)->value('status');
+		$status1=\App\Friend::where('user_id',$data['id'])->where('friend_id',Auth::User()->id)->value('status');
+		$status2=\App\Friend::where('friend_id',$data['id'])->where('user_id',Auth::User()->id)->value('status');
 		}
 		else{
 			$status1 = null;

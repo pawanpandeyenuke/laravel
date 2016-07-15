@@ -61,7 +61,30 @@
     .bgItem{
       background: #ffffff;
     }
-
+    .contentEditable .btn.btn-primary.btn-lg.icon-btn{  
+      -moz-user-select: none;
+      background-image: none;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 14px;
+      font-weight: normal;
+      line-height: 1.42857;
+      margin-bottom: 0;
+      padding: 6px 12px;
+      text-align: center;
+      vertical-align: middle;
+      white-space: nowrap;
+      font-size: 15px;
+      height: 40px;
+      line-height: 40px;
+      margin-top: 15px;
+      padding: 0 30px;
+      background: #3ab29f none repeat scroll 0 0;
+      color: #fff;
+      text-decoration: none;
+    }
     </style>
 <script type="colorScheme" class="swatch active">
 {
@@ -77,7 +100,6 @@
   <body paddingwidth="0" paddingheight="0"   style="padding-top: 0; padding-bottom: 0; padding-top: 0; padding-bottom: 0; background-repeat: repeat; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; -webkit-font-smoothing: antialiased;" offset="0" toppadding="0" leftpadding="0">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableContent bgBody" align="center"  style='font-family:Helvetica, Arial,serif;'>
 
-      
       <tr><td height='35'></td></tr>
 
       <tr>
@@ -90,7 +112,13 @@
 
 <!-- =============================== Header ====================================== -->           
 
-                  <tr><td height='75' style="padding-bottom: 10px; border-bottom: 3px solid #A0F0E8;"><a href="#" title=""><img src="{{url('/images/logo.jpg')}}" alt=""></a></td></tr>
+                  <tr>
+                    <td height='75' style="padding-bottom: 10px; border-bottom: 3px solid #A0F0E8;">
+                      <a href="#" title="">
+                        <img src="{{url('/images/logo.png')}}" alt="">
+                      </a>
+                    </td>
+                  </tr>
 
 <!-- =============================== Body ====================================== -->
 
@@ -104,7 +132,7 @@
                               <div class="contentEditableContainer contentTextEditable">
                                 <div class="contentEditable">
 
-                                  <p style='text-align:center;margin:0;font-family:Georgia,Time,sans-serif;font-size:26px;color:#222222;'>Welcome to <a href="{{url('/')}}" style="text-decoration:none"><span style='color:#A0F0E6;'>Friendz Square</span></a></p>
+                                  <p style='text-align:center;margin:0;font-family:Georgia,Time,sans-serif;font-size:26px;color:#2e6da4;'>FriendzSquare</p>
 
                                 </div>
                               </div>
@@ -130,60 +158,42 @@
                           <tr>
                             <td align='left'>
                               <div class="contentEditableContainer contentTextEditable">
-                                <div class="contentEditable" align='center'>
+                                <div class="contentEditable" align='left'>
 
-                                  <h2> Connect to your friends and stay updated about their lives!</h2>
+                                  <p style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>Hi,</p>
 
                                 </div>
                               </div>
                             </td>
                           </tr>
-
-                          <tr><td height='15'> </td></tr>
-
+                          <tr><td height='25'></td></tr>
                           <tr>
                             <td align='left'>
                               <div class="contentEditableContainer contentTextEditable">
                                 <div class="contentEditable" align='center'>
-                                  <p  style='text-align:left;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>
-
-Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and meet new people. Connect to your friend by<a target='_blank' class='link1' href="{{url('profile/'.$id)}}"> clicking here</a>
-
-                                    <br>
-                                    Have questions? Get in touch with us via Facebook or Twitter, or email our support team at <?php echo Config::get('constants.feedback_email'); ?>.
-                                    <br>
-                                    <br>
-                                    Cheers,
-                                    <br>
-
-                                    <span style='color:#222222;'>{{$username}}</span>
-
+                                  <p style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
+                                    {{ $current_data }}
                                   </p>
+                                  <br>
+                                  <br>
+                                  <p style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
+                                    {{ $type }} {{ $post_message }}
+                                  </p>
+                                  <br>
+                                  <p  style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
+                                      <a class="btn btn-primary btn-lg icon-btn" title="" href="{{ $post_url }}" style="text-decoration: none;-moz-user-select: none; background-image: none; border: 1px solid transparent; border-radius: 4px; cursor: pointer; display: inline-block; font-size: 14px; font-weight: normal; line-height: 1.42857; margin-bottom: 0; padding: 6px 12px; text-align: center; vertical-align: middle; white-space: nowrap; background: #a0f0e6 none repeat scroll 0 0; color: #000; font-size: 15px;"><i class="flaticon-draw"></i>Go To Post/Reply</a>
+                                    <br>
+                                  </p>
+
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                  
                                 </div>
                               </div>
                             </td>
                           </tr>
-
-                          <tr><td height='55'></td></tr>
-
-                          <tr>
-                            <td align='center'>
-                              <table>
-                                <tr>
-                                  <td align='center' bgcolor='#A0F0E6' style='background:#A0F0E6; padding:15px 18px;-webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;'>
-                                    <div class="contentEditableContainer contentTextEditable">
-                                      <div class="contentEditable" align='center'>
-
-                                        <a target='_blank' href="{{url('profile/'.$id)}}" class='link2' style='color:#ffffff;'>Get Started</a>
-
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                          <tr><td height='20'></td></tr>
                         </table>
                       </div>
 
@@ -196,17 +206,13 @@ Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and m
 
                           <tr>
                             <td>
-                              <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
+                              <table width="520" border="0" cellspacing="0" cellpadding="0" align="center" >
                                 <tr>
                                   <td valign='top' align='left' width='370'>
                                     <div class="contentEditableContainer contentTextEditable">
                                       <div class="contentEditable" align='center'>
-                                        <p  style='text-align:left;color:#CCCCCC;font-size:12px;font-weight:normal;line-height:20px;'>
+                                        <p style='text-align:left;color:#CCCCCC;font-size:12px;font-weight:normal;line-height:20px;display:none'>
                                           
-                                          <a target='_blank' href="[FORWARD]">Forward to a friend</a><br>
-                                          <a target='_blank' href="[UNSUBSCRIBE]" class='link1' class='color:#382F2E;'>Unsubscribe</a>
-                                          <br>
-                                          <a target='_blank' class='link1' class='color:#382F2E;' href="[SHOWEMAIL]">Show this email in your browser</a>
                                         </p>
                                       </div>
                                     </div>
@@ -214,15 +220,6 @@ Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and m
 
                                   <td width='30'></td>
 
-                                  <td valign='top' width='52'>
-                                    <div class="contentEditableContainer contentFacebookEditable">
-                                      <div class="contentEditable">
-
-                                        <a href="#" title=""><img src="{{url('images/logo.jpg')}}" alt="" style="width: 100px;"></a>
-
-                                      </div>
-                                    </div>
-                                  </td>
                                 </tr>
                               </table>
                             </td>
@@ -253,4 +250,4 @@ Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and m
     </table>
       </body>
       </html>
- 
+

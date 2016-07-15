@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast
+use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast, App\JobArea, App\JobCategory
 ,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments;
 
 // use Illuminate\Http\Request;
@@ -25,7 +25,6 @@ class AjaxController extends Controller
 		$arguments = Input::all();
 		$email = Input::get('email');
 		$password = Input::get('password');
-		//print_r($arguments);die;
 		if(isset($arguments['log']))
 			$log = true;
 		else
@@ -282,37 +281,13 @@ $variable['comment'] = <<<comments
 </li>
 comments;
 
-		$count = DB::table('comments')->where(['feed_id' => $arguments['feed_id']])->get();	
+		$count = Comment::where(['feed_id' => $arguments['feed_id']])->get();	
 		$variable['count'] = count($count);
 		$data = json_encode($variable);
 		echo $data;
 
 		exit;
 	}
-	/**
-	public function getxmppuser(){
-
-		$status=0;
-		$user_id = Auth::User()->id;
-		$node = Config::get('constants.xmpp_host_Url');
-
-		$user = User::find($user_id);
-		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
-		{
-			// print_r('$xmppPrebind');die;
-			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', 'FS', false, false);
-			//print_r($xmppPrebind);die;
-			$username = $user->xmpp_username;
-			$password = $user->xmpp_password;
-			$xmppPrebind->connect($username, $password);
-			$xmppPrebind->auth();
-			$sessionInfo = $xmppPrebind->getSessionInfo();
-			$status = 1;
-		}
-
-		return $sessionInfo;
- 	}
-	**/
 
 	
 	public function getGroupDetail(){
@@ -342,20 +317,25 @@ comments;
 
 	public function getxmppuser(){
 
-		$status=0;
-		$authuser = Auth::User();
-
-		if ( !empty($authuser->xmpp_username) && !empty($authuser->xmpp_password) ) 
-		{
-			$response = Converse::ejabberdConnect( $authuser );
-			if(!is_array($response)){				
-                $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
+		try{
+			$status=0;
+			$authuser = Auth::User();
+			// echo '<pre>';print_r($authuser);die;
+			if ( !empty($authuser->xmpp_username) && !empty($authuser->xmpp_password) ) 
+			{
+				$response = Converse::ejabberdConnect( $authuser );				
+	               
+			}else{
+				$xmppUserDetails = Converse::createUserXmppDetails($authuser);
+	            $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
 				$response = Converse::ejabberdConnect( $xmppUserDetails );
 			}
-		}else{
-			$xmppUserDetails = Converse::createUserXmppDetails($authuser);
-            $responseConverse = Converse::register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
-			$response = Converse::ejabberdConnect( $xmppUserDetails );
+
+			
+		}catch(Exception $e){
+			 $responseConverse = Converse::register($authuser->xmpp_username, $authuser->xmpp_password);
+					$response = Converse::ejabberdConnect( $authuser );
+
 		}
 
 		if(is_array($response) && count($response) > 0)
@@ -367,10 +347,8 @@ comments;
 		// echo json_encode($sessionInfo); 
 		// exit;
 		return $response;
+
  	}
-
-
-
 
 
 	public function searchfriend(){
@@ -552,7 +530,6 @@ comments;
 	*	Ajaxcontroller@queryBuilder
 	*/
 	public function queryBuilder( &$query, $input ){
-		//$user_id1 = DB::table('users')->pluck('id');
 		$user_id=Auth::User()->id;
 		if($input == 'sent'){
             $query->where('user_id', '=', $user_id);
@@ -659,11 +636,11 @@ comments;
 						// echo '<pre>';print_r($response);exit;
 					}
 				}
-				$count = DB::table('likes')->where(['feed_id' => $arguments['feed_id']])->get();
+				$count = Like::where(['feed_id' => $arguments['feed_id']])->get();
 				// print_r();die;
 				// $likes[] = count($count);
 // 
-				$likecheck = DB::table('likes')->where('feed_id',$arguments['feed_id'])->where('user_id',Auth::User()->id)->value('id');
+				$likecheck = Like::where('feed_id',$arguments['feed_id'])->where('user_id',Auth::User()->id)->value('id');
 
 				$likes['count'] = count($count);
 				$likes['likecheck'] = $likecheck;
@@ -822,8 +799,8 @@ comments;
  		$input=Input::all();
  		$id=Auth::User()->id;
      //print_r($input);die;
- 		$input['state']=DB::table('state')->where('state_id',$input['state'])->value('state_name');
- 		$input['city']=DB::table('city')->where('city_id',$input['city'])->value('city_name');
+ 		$input['state']=State::where('state_id',$input['state'])->value('state_name');
+ 		$input['city']=City::where('city_id',$input['city'])->value('city_name');
  			
  			$profile = User::find($id);
 			$profile->fill($input);
@@ -837,8 +814,7 @@ comments;
        		}
        else
        		{
-       			DB::table('education_details')
-       			->insert([
+       			EducationDetails::insert([
        			 'id' => $id,
        			 'education_level'=>$input['education_level'],
        			 'specialization'=>$input['specialization'],
@@ -860,8 +836,8 @@ comments;
  		$input=Input::all();
  		// print_r($input);die;
 
- 		$categoryid = DB::table('job_area')->where('job_area',$input['jobarea'])->value('job_area_id');
- 		$data = DB::table('job_category')->where('job_area_id',$categoryid)->pluck('job_category');
+ 		$categoryid = JobArea::where('job_area',$input['jobarea'])->value('job_area_id');
+ 		$data = JobCategory::where('job_area_id',$categoryid)->pluck('job_category');
 
 		$jcategory = array('<option value="">Category</option>');
 		foreach($data as $query){			
@@ -931,15 +907,15 @@ comments;
 		$id = Auth::User()->id;
 		$friend = $input['user_id'];
 	
-		$status1 = DB::table('friends')->where('user_id',$id)->where('friend_id',$friend)->value('status');
-		$status2 = DB::table('friends')->where('user_id',$friend)->where('friend_id',$id)->value('status');
+		$status1 = Friend::where('user_id',$id)->where('friend_id',$friend)->value('status');
+		$status2 = Friend::where('user_id',$friend)->where('friend_id',$id)->value('status');
 		
 		if($status1==null && $status2==null){
-			DB::table('friends')->insert(['user_id'=>$id,'friend_id'=>$friend,'status'=>'Pending']);
+			Friend::insert(['user_id'=>$id,'friend_id'=>$friend,'status'=>'Pending']);
 		}elseif($status1==null){
-			DB::table('friends')->where('user_id',$friend)->where('friend_id',$id)->update(['status'=>'Pending','user_id'=>$id,'friend_id'=>$friend]);
+			Friend::where('user_id',$friend)->where('friend_id',$id)->update(['status'=>'Pending','user_id'=>$id,'friend_id'=>$friend]);
 		}elseif($status2==null){
-			DB::table('friends')->where('user_id',$id)->where('friend_id',$friend)->update(['status'=>'Pending','user_id'=>$friend,'friend_id'=>$id]);	
+			Friend::where('user_id',$id)->where('friend_id',$friend)->update(['status'=>'Pending','user_id'=>$friend,'friend_id'=>$id]);	
 		}
 
         // @ Send push notification on send request action
@@ -1365,7 +1341,7 @@ comments;
 			$img = $input['groupimage'];
 		}
 
-		DB::table('groups')->where('id',$input['groupid'])->update(['picture' => $img]);
+		Group::where('id',$input['groupid'])->update(['picture' => $img]);
 	}
 
 	public function viewMoreForAll()
@@ -1619,6 +1595,9 @@ comments;
         $name = $user->first_name." ".$user->last_name;
         $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 
+        // @ Send notification mail.
+        $parameters = array('user_id' => $user->id, 'current_data' => $input['reply'], 'object_id' => $input['forumpostid'], 'type' => 'reply');
+        $notify = Converse::notifyOnReplyComment( $parameters );
         
         return view('ajax.forumpostreply')
         		->with('forumreply',$forumpostreply)
@@ -1736,6 +1715,10 @@ comments;
 
 		$name = $user->first_name." ".$user->last_name;
         $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+
+        // @ Send notification mail.
+        $parameters = array('user_id' => $user->id, 'object_id' => $replyid, 'current_data' => $comment->reply_comment, 'type' => 'comment');
+        $notify = Converse::notifyOnReplyComment( $parameters );
 
 		return view('ajax.forumreplycomment')
 				->with('comment',$comment)
@@ -1949,13 +1932,13 @@ comments;
 
 		$privategroupid = Input::get('pid');
 		$userXamp 		= Auth::User()->xmpp_username;
-		$GroupDetails 	= DB::table( 'groups' )->where('id',$privategroupid)->select('title','group_jid')->first();
+		$GroupDetails 	= Group::where('id',$privategroupid)->select('title','group_jid')->first();
 		$GroupName  	= $GroupDetails->group_jid;
 		$GroupTitle 	= $GroupDetails->title;
 		$converse		= new Converse;
 		
-		$xmp			= DB::table('users')->where('id',Auth::User()->id)->value('xmpp_username');            
-		$Message 		= json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => webEncode( Auth::User()->first_name.' '.Auth::User()->last_name.' left the group '.$GroupTitle) ) );
+		$xmp			= User::where('id',Auth::User()->id)->value('xmpp_username');            
+		$Message 		= json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode( Auth::User()->first_name.' '.Auth::User()->last_name.' left the group '.$GroupTitle) ) );
 		$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$privategroupid)->pluck('xmpp_username');		
 		foreach ($xmp as $key => $value) {
 			$converse->broadcastchatroom($GroupName,Auth::User()->first_name.' '.Auth::User()->last_name,$value,$Message);

@@ -1,8 +1,7 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Forums - ')
 <?php
 unset($countries[0]);
-// print_r($mainforum);die;
 if($mainforum->title == "Doctor")
 	$diseases = \App\ForumsDoctor::pluck('title')->toArray();
 
@@ -45,7 +44,6 @@ if($mainforum->title == "Doctor")
 										 	$count = \App\ForumPost::where('category_id',$data->id)->get()->count();
 											$fieldsdata = \App\Forums::where('parent_id',$data->id)->value('id');
 											$forumid = $data->id;
-											// print_r($data->updated_at->format('Y-m-d H:i:s') );die;
 											if($data->updated_at->format('Y-m-d H:i:s') == "-0001-11-30 00:00:00")
 													$date = "No Posts";
 											else
@@ -215,7 +213,6 @@ if($mainforum->title == "Doctor")
             </div>
         </div>
     </div><!--/pagedata-->
-<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script> -->
 
  <script type="text/javascript">
 

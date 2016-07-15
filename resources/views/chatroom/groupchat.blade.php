@@ -1,6 +1,8 @@
 @extends('layouts.chat')
-@section('content')
 
+@section('title', 'Chat - ')
+
+@section('content')
 <style>
 .flyout.box-flyout {
   width: 100% !important;
@@ -129,8 +131,8 @@ $groupid = $group_jid;
                                                   
                                                   @if($data['user']['id'] != Auth::User()->id)
                                                     <?php 
-                                                      $status = DB::table('friends')->where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
-                                                      $status1 = DB::table('friends')->where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
+                                                      $status = \App\Friend::where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
+                                                      $status1 = \App\Friend::where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
                                                       // echo '<pre>';print_r($status1);die;
                                                       ?>
                                                     @if($status != null || $status1 != null)
@@ -213,7 +215,7 @@ $groupid = $group_jid;
                                     $name[]="You";
                                     $count++;
                                 } else {
-									$name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+									$name[]=\App\User::where('id',$mem['member_id'])->value('first_name');
                                 }
                             }
 
@@ -391,12 +393,14 @@ $groupid = $group_jid;
                   prebind_url: "{{url('/ajax/getxmppuser')}}",
                   send_initial_presence:true,
                   visible_toolbar_buttons: {'toggle_occupants':false,'clear':false,'emoticons':false,'call': false},
-				  ping_interval: 0,
-				  message_carbons: true,
-				  forward_messages: true,
-				  allow_logout: false,
-				  debug: false,
-				  auto_subscribe: true,
+        				  ping_interval: 0,
+        				  message_carbons: true,
+        				  forward_messages: true,
+        				  allow_logout: false,
+        				  debug: false,
+        				  auto_subscribe: true,
+                  auto_join_on_invite:true,
+                  allow_chat_pending_contacts: true,
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
                 });
               

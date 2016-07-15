@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Invite - ')
 @section('content')
 <div class="page-data dashboard-body">
 	<div class="container">

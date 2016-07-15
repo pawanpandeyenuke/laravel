@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-<?php //print_r($parent_category);die; ?>
+@section('title', 'Group Chat - ')
 @section('content')
 	<div class="page-data dashboard-body">
 	        <div class="container">

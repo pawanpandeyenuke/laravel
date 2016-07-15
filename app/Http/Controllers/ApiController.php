@@ -68,6 +68,8 @@ class ApiController extends Controller
 			}else{
 				
 				$input['password'] = Hash::make($input['password']);
+				$confirmation_code = str_random(30);
+				$input['confirmation_code'] = $confirmation_code;
 				$userdata = $user->create($input);
 				$full_name = $userdata->first_name.' '.$userdata->last_name;
 				//Saving xmpp-username and xmpp-pasword into database.
@@ -77,7 +79,19 @@ class ApiController extends Controller
 		        $user = User::find($userdata->id);
 		        $user->xmpp_username = strtolower($xmpp_username);
 		        $user->xmpp_password = $xmpp_password;
+		        $user->confirmation_code = $confirmation_code;
+		        $user->is_email_verified = 'N';
 		        $user->save();
+
+		        $useremail = $userdata->email;
+		        $emaildata = array(
+		            'confirmation_code' => $confirmation_code,
+		        );
+
+		        Mail::send('emails.verify',$emaildata, function($message) use($useremail, $full_name){
+			        $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
+			        $message->to($useremail,$full_name)->subject('Verify your email address');
+		        });
 
 		        $converse = new Converse;
 		        $response = $converse->register($xmpp_username, $xmpp_password);
@@ -530,12 +544,13 @@ class ApiController extends Controller
 	            if( isset($arguments['picture']) && $file != null ){
 	                $image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 	                $arguments['picture'] = '/uploads/user_img/'.$image_name;
+
 	                $file->move(public_path('uploads/user_img'), $image_name);
 
                  	$path = public_path('uploads/user_img').'/'.$image_name;
 				 	$ImageData = file_get_contents($path);
 				 	$ImageType = pathinfo($path, PATHINFO_EXTENSION);
-					$ImageData = base64_encodebase64_encode($ImageData);
+					$ImageData = base64_encode($ImageData);
 				 	$image_name = Converse::setVcard($userfind->xmpp_username, $ImageData, $ImageType);
 	            }
  
@@ -2379,12 +2394,17 @@ class ApiController extends Controller
                         'post_id'=>$args['post_id'],
                         'created_at'=>date('Y-m-d H:i:s',time()),
                         'updated_at'=>date('Y-m-d H:i:s',time())];
-		               
-        		$forumreply = new ForumReply;
-        		$this->message = 'Your reply has been saved successfully.';
-        		$this->status = 'success';
-        		$reply  = $forumreply->create($data);
-			$this->data = ForumReply::with('user')
+
+			        // @ Send notification mail.
+			        $parameters = array('user_id' => $args['user_id'], 'current_data' => $args['reply'], 'object_id' => $args['post_id'], 'type' => 'reply');
+			        $notify = Converse::notifyOnReplyComment( $parameters );
+
+	        		$forumreply = new ForumReply;
+	        		$this->message = 'Your reply has been saved successfully.';
+	        		$this->status = 'success';
+	        		$reply  = $forumreply->create($data);
+
+					$this->data = ForumReply::with('user')
 				                   ->with('replyLikesCount')
                 				   ->with('replyCommentsCount')
 				                    ->where('id',$reply->id)
@@ -2455,14 +2475,18 @@ class ApiController extends Controller
 					$arr = ['reply_comment'=>$args['comment'],
 							'owner_id'=>$args['user_id'],
 							'reply_id'=>$args['reply_id']];
-		               
-        		$forumcomment = new ForumReplyComments;
-        		$this->message = 'Your comment has been saved successfully.';
-        		$this->status = 'success';
-        		$comment = $forumcomment->create($arr);
-				$this->data = ForumReplyComments::with('user')
-								->where('id', $comment->id)
-								->get();
+
+			        // @ Send notification mail.
+			        $parameters = array('user_id' => $args['user_id'], 'current_data' => $args['comment'], 'object_id' => $args['reply_id'], 'type' => 'comment');
+			        $notify = Converse::notifyOnReplyComment( $parameters );
+
+	        		$forumcomment = new ForumReplyComments;
+	        		$this->message = 'Your comment has been saved successfully.';
+	        		$this->status = 'success';
+	        		$comment = $forumcomment->create($arr);
+					$this->data = ForumReplyComments::with('user')
+									->where('id', $comment->id)
+									->get();
 				}
 					  
 			}
@@ -2475,42 +2499,44 @@ class ApiController extends Controller
 		return $this->output();			
 	}
 
-	public function uploadChatImage(){
-		
-	try{
-                        $status="Failed";
-                $message="";
-                $url1="";
-                        $input = Request::all();
-                        if( $input )
-                        {
-                                if( Request::hasFile('chatsendimage') )
-                                {
-                                                                                // Upload file
-                                        $fileToBeUploaded = Request::file('chatsendimage');
-                                        $url = time().'--'.implode('_',explode(' ',$fileToBeUploaded->getClientOriginalName()));
-                                        $fileToBeUploaded->move('uploads/media/chat_images/', $url);
-                                        $url1=url('uploads/media/chat_images/'.$url);
-                                        // Add entry
+	public function uploadChatImage()
+	{		
+		try{
+	        $status="Failed";
+	        $message="";
+	        $url1="";
+	            $input = Request::all();
+	            if( $input )
+	            {
+	                if( Request::hasFile('chatsendimage') )
+	                {
+	                                                                // Upload file
+	                    $fileToBeUploaded = Request::file('chatsendimage');
+	                    $url = time().'--'.implode('_',explode(' ',$fileToBeUploaded->getClientOriginalName()));
+	                    $fileToBeUploaded->move('uploads/media/chat_images/', $url);
+	                    $url1=url('uploads/media/chat_images/'.$url);
+	                    // Add entry
 
-                                        $status = 'success';
-                                        $message = 'Image uploaded successfuly.';
-                                }
-                        }
+	                    $status = 'success';
+	                    $message = 'Image uploaded successfuly.';
+	                }
+	            }
 
-                }catch(Exception $e)
-                {
-                        $message = $e->getMessage();//'Image not uploaded.';//
-                        $status='Failed';
-                }
+	        }catch(Exception $e)
+	        {
+	                $message = $e->getMessage();//'Image not uploaded.';//
+	                $status='Failed';
+	        }
 
           return  json_encode(array('status'=>$status,'message'=>$message,'url'=>$url1,'name'=>$url,'type'=>'image'));
     }
+
 
 	public function chatImagePage()
 	{
 		return view('chat_image');die;
 	}
+
 
 	public function confirmBox()
 	{
@@ -2537,4 +2563,74 @@ class ApiController extends Controller
 		return view('forums-api.confirmbox')
 			   		->with('data',$data);
 	}
+
+	public function emailVerification()
+	{
+
+		try{
+			$email = Request::get('email');
+			$user = User::where('email',$email)->first();
+			if(empty($user))
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				if($user->is_email_verified == "N"){
+
+					$emaildata = array('confirmation_code' => $user->confirmation_code);
+					$username = $user->first_name." ".$user->last_name;
+					$useremail = $user->email;
+					
+					Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
+						$message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
+						$message->to($useremail,$username)->subject('Verify your email address');
+
+					$this->status = "Success";
+					$this->message = "Verification link has been sent to your registered email address. Please check your inbox and verify your email address.";
+					});
+				}else{
+					throw new Exception("This email id is already verified.", 1);					
+				}
+			}
+					  
+			}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+
+	}
+
+	public function changePassword()
+	{
+		try{
+			$input = Request::all();
+			$user = User::where('id',$input['user_id'])->first();
+			if(empty($user))
+				throw new Exception("No matching record for the user.", 1);
+			else{
+				if(Hash::check($input['old_password'], $user->password)){
+					if(Hash::check($input['old_password'], bcrypt($input['new_password']))) {
+                        throw new Exception("New password can't be same as old password.", 1);
+                    }else{
+                    	if(strlen($input['new_password']) < 8){
+                    		throw new Exception("New password should be atleast 8 characters long.", 1);
+                    	}else{
+		                    $user->password = bcrypt($input['new_password']);
+		                    $user->save();
+		                    $this->status = "Success";
+		                    $this->message = "Password changed successfully";
+		                    $this->data = $user;
+		                }
+                    }
+				}else{
+					throw new Exception("Password doesn't match our records.", 1);	
+				}
+			}		  
+			}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+	}
+
+
 }

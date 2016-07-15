@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-<?php //print_r($broadcast);die; ?>
+@section('title', 'Broadcast - ')
 @section('content')
 
 <div class="page-data dashboard-body">
@@ -18,7 +18,7 @@
 							$namestr='';
 							$name=array();
 							foreach ($data['members'] as $mem) {
-								$name[]=DB::table('users')->where('id',$mem['member_id'])->value('first_name');
+								$name[]=\App\User::where('id',$mem['member_id'])->value('first_name');
 							}
 								$namestr=implode(",",$name);
 

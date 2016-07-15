@@ -1,4 +1,5 @@
 @extends('layouts.dashboard')
+@section('title', 'Private Group - ')
 <?php 
 
 //print_r($groupdetail);die;

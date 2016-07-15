@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Forums - ')
 <?php
 unset($countries[0]);
  ?>
@@ -71,19 +71,6 @@ unset($countries[0]);
     </div><!--/pagedata-->
  
  <script type="text/javascript">
- 	
- $(document).on('click', '.group-radio', function(){
-
- 	if($(this).is(':checked')){
-
- 		// alert('asdfsa');
-		$(this).closest('.radio-cont').next().find('.subs').hide();
-		$(this).closest('.radio-cont').find('.subs').show();
-		$(this).closest('.radio-cont').prev().find('.subs').hide();
-
- 	}
-
- });
 
 	$('#subcountry').change(function(){
 		var countryId = $(this).val();

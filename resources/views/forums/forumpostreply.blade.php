@@ -1,10 +1,5 @@
 @extends('layouts.dashboard')
-
-<?php
-// $userobj = $posts->user;
-// print_r($post->id);die;
- ?>
-
+@section('title', 'Forums - ')
 <style type="text/css">
 	.boxsize{width:200px;}
 </style>
@@ -77,7 +72,7 @@
 										</div>
 									</div>
 								</div>
-								<p id="forum_post" > <?php echo forumPostContents($post->title,'#'); ?></p>
+								<p class="forum_post" > <?php echo nl2br(forumPostContents($post->title,'#')); ?></p>
 								<div class="text-right">
 								@if(Auth::check())
 								  <!-- <button type="button" class="btn btn-primary mpost-rply-btn" title="Write a reply">Reply</button> -->
@@ -207,27 +202,26 @@ $(".multiple-slt").select2();
 	window.onload = function() {
       var w = $('#sticky-anchor').width();
 		$('.fix-header').css('width',w+60);
-		$("#forum_post .morelink").click();
+		// $(".forum_post .morelink").click();
+		// $(".forum_post .morelink").addClass('unique_post');
 	}
 
 		 var i = 1;
 		function sticky_relocate() {
-    var window_top = $(window).scrollTop();
-    var div_top = $('#sticky-anchor').offset().top;
-    if (window_top > div_top) {
-      $('.fix-header').addClass('stick');
-      $('.forum-post-replies').addClass('stick-margin');
-      if(i == 1){
-      	$("#forum_post .morelink").click();
-      	i++;
-      }
-    } else {
-      $('.fix-header').removeClass('stick');
-      $('.forum-post-replies').removeClass('stick-margin');
-      //$("#forum_post .morelink").click();
-      //i = 1;
-    }
-	}
+		    var window_top = $(window).scrollTop();
+		    var div_top = $('#sticky-anchor').offset().top;
+		    if (window_top > div_top) {
+		      $('.fix-header').addClass('stick');
+		      $('.forum-post-replies').addClass('stick-margin');
+		      if(i == 1){
+		      	$(".forum_post .morelink").click();
+		      	i++;
+		      }
+		    }else{
+		      $('.fix-header').removeClass('stick');
+		      $('.forum-post-replies').removeClass('stick-margin');
+		    }
+		}
 
 	 $(function () {
 	    $(window).scroll(sticky_relocate);
@@ -247,7 +241,9 @@ $(".multiple-slt").select2();
 	  var moretext = "More";
 	  var lesstext = "Less";
 		$(document).on('click','.morelink',function(){
-			i=1;
+			if($(this).hasClass('unique_post')){
+				i=1;
+			}
 	      if($(this).hasClass("less")) {
 	          $(this).removeClass("less");
 	          $(this).html(moretext);
@@ -259,6 +255,7 @@ $(".multiple-slt").select2();
 	      $(this).prev().toggle();
 	      return false;
 	  });
+
 	});
 
 

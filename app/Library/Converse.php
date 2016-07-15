@@ -1,7 +1,8 @@
 <?php namespace App\Library;
 
 use Validator, Input, Redirect, Request, Session, Hash, DB, Config;
-use App\Feed, App\Comment, App\Like, App\User, XmppPrebind;
+use App\Feed, App\Comment, App\Like, App\User, XmppPrebind, Mail;
+use App\ForumReply, App\ForumPost;
 
 class Converse
 {
@@ -187,20 +188,25 @@ class Converse
 		$user = User::find($userId);
 		$friend = User::find($friendId);
  		$subjectName = $user->first_name.' '.$user->last_name;
+ 		$data_array = array();
 
- 		if($type == 'accept')
- 			$message = "$subjectName has accepted your friend request";
- 		elseif($type == 'request')
- 			$message = "$subjectName wants to be your friend";
+ 		if($type == 'accept'){
+ 			$data_array['message'] = "$subjectName has accepted your friend request";
+ 			$data_array['notification_type'] = "accept";
+ 		}
+ 		elseif($type == 'request'){
+  			$data_array['message'] = "$subjectName wants to be your friend";
+ 			$data_array['notification_type'] = "request";
+		}
 
  		// $response = 'Message was not delivered';
  		if( $friend->device_type == 'IPHONE' ){
  			// @ Call IOS function for push notification
- 			self::pushNotificationIphone( $message, $friend->push_token );
+ 			self::pushNotificationIphone( $data_array, $friend->push_token );
 
  		}elseif( $friend->device_type == 'ANDROID' ){
  			// @ Call Android function for push notification
- 			self::pushNotificationAndroid( $message, $friend->push_token );
+ 			self::pushNotificationAndroid( $data_array, $friend->push_token );
 
  		}
  		//return $response;
@@ -209,16 +215,20 @@ class Converse
 
 
     // @ Return Response For Push Notification In IOS
-    static function pushNotificationIphone( $message, $token )
+    static function pushNotificationIphone( $data_array, $token )
     {
         $response = 'Message not delivered';
 
-        $data = array(
-            'message' => $message,
-            'token' => $token //'cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262'
-        );
 
-	iphonePushNotification($data);
+
+        $data = array(
+            'message' => $data_array['message'],
+            'notification_type' => $data_array['notification_type'],
+            'token' => $token
+        );
+        //previous token  -- cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262
+        //current token [iphone 6 white]  -- 432dd3aa54c9b387ab53fe809069fc9c22b8fdf5a8e45a2fd15cd58124a9acfa
+		iphonePushNotification($data);
 /*        if(iphonePushNotification($data))
             $response = 'Message successfully delivered';  
 
@@ -246,6 +256,76 @@ class Converse
         return $msg;
     }
 
+
+    // @ Notify user via mail when someone replies on their post or comments on their replies.
+ 	static function notifyOnReplyComment( $parameters )
+ 	{
+ 		try
+ 		{
+ 			if(!empty($parameters['object_id']) && !empty($parameters['user_id']) && !empty($parameters['type']) && !empty($parameters['current_data'])){
+
+ 				$data = array();
+ 				$subject = User::find($parameters['user_id']);
+ 				$result = self::viewLessMore($parameters['current_data']);
+ 				$name = $subject->first_name.' '.$subject->last_name;
+
+	 			if( $parameters['type'] === 'reply' ){
+
+	 				$object = ForumPost::find($parameters['object_id']);
+
+	 				$data['current_data'] = $name.' replied on your post "'.$result.'".';
+	 				$data['post_message'] = $object->title;
+	 				$data['type'] = 'Post: ';
+	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
+
+	 			}elseif ( $parameters['type'] === 'comment' ) {
+
+	 				$object = ForumReply::find($parameters['object_id']);
+
+	 				$data['current_data'] = $name.' commented on your reply "'.$result.'".';
+	 				$data['post_message'] = $object->reply;
+	 				$data['type'] = 'Reply: ';
+	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
+
+	 			}
+
+	 			if( $parameters['user_id'] != $object->owner_id ){
+
+	 				$userObj = User::find($object->owner_id);
+		 			// echo '<pre>';print_r($data);die;
+	 				$data['user_name'] = $userObj->name;
+	 				$data['post_type'] = $parameters['type'];
+	 				$user_email = $userObj->email;
+	 				$user_name = $userObj->first_name.' '.$userObj->last_name;
+
+					Mail::send('panels.email-template', $data, function( $message ) use( $user_email, $user_name ){
+						$message->from('no-reply@friendzsquare.com', 'FriendzSquare Notification');
+						$message->to( $user_email, $user_name )->subject('FriendzSquare');
+					});	 	 				
+	 			}
+
+ 			}
+
+ 		}catch(Exception $e){
+ 			return $e->getMessage();
+ 		}
+
+ 	}
+
+
+	public static function viewLessMore( $parameter ){
+	    
+	    $length = strlen($parameter);
+
+		if($length < 30){
+		    $result = $parameter;
+		}else{
+		    $result = substr($parameter, 0, 30);
+		    $result = $result.'...';
+		}
+
+		return $result;
+	}
 
 }
 

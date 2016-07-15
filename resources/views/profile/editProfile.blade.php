@@ -1,17 +1,16 @@
 @extends('layouts.dashboard')
-
+@section('title', 'User Profile - ')
 @section('content')
 
 <?php
-	// print_r($user);die;
 
 	if(!empty($user->country)){
 
-		$countryid = DB::table('country')->where('country_name', '=', $user->country)->value('country_id'); 
-		$all_states = DB::table('state')->where('country_id', '=', $countryid)->pluck('state_name','state_id'); 
+		$countryid = \App\Country::where('country_name', '=', $user->country)->value('country_id'); 
+		$all_states = \App\State::where('country_id', '=', $countryid)->pluck('state_name','state_id'); 
 
-		$stateid = DB::table('city')->where('city_name', '=', $user->city)->value('state_id'); 
-	 	$all_cities = DB::table('city')->where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 	
+		$stateid = \App\City::where('city_name', '=', $user->city)->value('state_id'); 
+	 	$all_cities = \App\City::where('state_id', '=', $stateid)->pluck('city_name', 'city_id'); 	
 
 	}
 
@@ -20,15 +19,8 @@
 	$maritalstatus = isset($user->marital_status) ? $user->marital_status : ''; 
 	$currentlystudying = isset($user->currently_studying) ? $user->currently_studying : ''; 
 
-	// if(!empty($user->job_category)){
-
- 		$categoryid = DB::table('job_area')->where('job_area',$user->job_area)->value('job_area_id');
- 		$all_job_cat = DB::table('job_category')->where('job_area_id',$categoryid)->pluck('job_category');
- 		// echo '<pre>';print_r($data);die;
- 		// $all_job_cat = DB::table('job_category')->where('job_area_id', '=', $education->job_area)->pluck('job_category', 'job_category_id'); 
-
- 	// }
-
+ 		$categoryid = \App\JobArea::where('job_area',$user->job_area)->value('job_area_id');
+ 		$all_job_cat = \App\JobCategory::where('job_area_id',$categoryid)->pluck('job_category');
 ?>
 
 <div class="page-data dashboard-body">
@@ -38,7 +30,7 @@
 			@include('panels.left')
 
 			<div class="col-sm-6">
-				{!! Form::open(array('files' => true)) !!}
+				{!! Form::open(array('files' => true,'id'=>'edit_profile')) !!}
 				<div class="shadow-box page-center-data no-margin-top">
 					@if (Session::has('success'))
 						<div class="alert alert-success">{!! Session::get('success') !!}</div>
@@ -232,11 +224,11 @@
 												@foreach($education as $data)
 												
 													<?php 
-															$countryidestab = DB::table('country')->where('country_name', '=', $data->country_of_establishment)->value('country_id'); 
-															$all_states_estab = DB::table('state')->where('country_id', '=', $countryidestab)->pluck('state_name','state_id'); 
+															$countryidestab = \App\Country::where('country_name', '=', $data->country_of_establishment)->value('country_id'); 
+															$all_states_estab = \App\State::where('country_id', '=', $countryidestab)->pluck('state_name','state_id'); 
 
-															$stateidestab = DB::table('city')->where('city_name', '=', $data->city_of_establishment)->value('state_id'); 
-														 	$all_cities_estab = DB::table('city')->where('state_id', '=', $stateidestab)->pluck('city_name', 'city_id'); 	
+															$stateidestab = \App\City::where('city_name', '=', $data->city_of_establishment)->value('state_id'); 
+														 	$all_cities_estab = \App\City::where('state_id', '=', $stateidestab)->pluck('city_name', 'city_id'); 	
 													?>
 													<div class="pe-row" data-id="<?php echo $data->id; ?>">
 														@if($customcount > 1)
@@ -479,6 +471,27 @@
 
 <script type="text/javascript">
 
+
+	$("#edit_profile").validate({ 
+        errorElement: 'span',
+        errorClass: 'help-inline',
+        rules: {
+            first_name: { required: true },
+           	last_name: {required: true},
+            country: {required: true}
+        },
+        messages:{
+            first_name:{
+                required: "First name can't be empty."
+            },
+            last_name:{
+                required: "Last name can't be empty."
+            },
+            country:{
+            		required: "Country is required"
+            }
+        }
+    });
 	$(document).ready(function(){
 		$(document).on('change', '.country', function(){
 			var current = $(this);

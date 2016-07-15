@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-
+@section('title', 'Forums - ')
 <style type="text/css">
 	.boxsize{width:200px;}
 </style>
@@ -44,7 +44,6 @@
 									<div class="text-right">
 									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Create Post</button>
 									</div>
-									<!-- <div class="alert alert-info" role="alert">Please <a data-toggle="modal" data-target="#LoginPop" href="#" title="">click here</a> for login, to create a post.</div> -->
 									@endif
 								
 								
@@ -117,7 +116,7 @@
 									@endif
 									@endif
 									</div>
-									<p ><?php echo nl2br(forumPostContents($data->title,url('forum-post-reply/'.$data->id))); ?></p>
+									<p ><?php echo nl2br(forumPostContents($data->title, '#')); ?></p>
 									<div class="fp-btns text-right">
 										<span class="reply-count">Replies ({{$replyCount}})</span>
 										<a href="{{url("forum-post-reply/$data->id")}}" title="Jump to Reply Section" class="btn btn-primary"><span class="glyphicon glyphicon-share-alt"></span>Reply</a>
@@ -125,7 +124,6 @@
 								</div><!--/single post-->
 							@endforeach
 							</div>
-							 <!-- <div class="pagination">  </div> -->
 							 @if($postscount > 10)
 							<div class="load-more-btn-cont text-center">
 								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumpost" data-breadcrum = "{{$breadcrum}}">View More</button>
@@ -164,6 +162,27 @@
 	    sticky_relocate();
 	});
 
+
+	$(document).ready(function() {
+	  var moretext = "More";
+	  var lesstext = "Less";
+		$(document).on('click','.morelink',function(){
+			if($(this).hasClass('unique_post')){
+				i=1;
+			}
+	      if($(this).hasClass("less")) {
+	          $(this).removeClass("less");
+	          $(this).html(moretext);
+	      } else {
+	          $(this).addClass("less");
+	          $(this).html(lesstext);
+	      } 
+	      $(this).parent().prev().toggle();
+	      $(this).prev().toggle();
+	      return false;
+	  });
+
+	});
 
 </script>
 @endsection
