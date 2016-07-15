@@ -290,7 +290,6 @@
         $body['aps'] = array(
             'alert' => $data['message'],
             'sound' => 'default',
-            'notification_type' => $data['notification_type'],
            // 'msgId' =>$data['msgId'],
             //'chatType' => $chatType,
             //'sname' => $senderName
