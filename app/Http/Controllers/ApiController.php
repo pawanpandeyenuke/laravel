@@ -81,6 +81,16 @@ class ApiController extends Controller
 		        $user->xmpp_password = $xmpp_password;
 		        $user->save();
 
+		        $useremail = $userdata->email;
+		        $emaildata = array(
+		            'confirmation_code' => $confirmation_code,
+		        );
+
+		        Mail::send('emails.verify',$emaildata, function($message) use($useremail, $full_name){
+			        $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
+			        $message->to($useremail,$full_name)->subject('Verify your email address');
+		        });
+
 		        $converse = new Converse;
 		        $response = $converse->register($xmpp_username, $xmpp_password);
 				$name = $converse->setNameVcard($user->xmpp_username, 'FN', $full_name);

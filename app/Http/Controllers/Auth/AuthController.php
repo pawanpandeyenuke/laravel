@@ -80,7 +80,6 @@ class AuthController extends Controller
 
         if($data['country_code'] != 0 && $data['phone_no'] != null)
         {
-            // echo 'asdad';die;
             $min = countryMobileLength($data['country_code']);
             $len = strlen($data['phone_no']);
             if($len > $min[$data['country_code']]['max'] || $len < $min[$data['country_code']]['min'])
@@ -88,7 +87,6 @@ class AuthController extends Controller
                 $data['phone_no'] = "";
                 $data['country_code'] = "";
             }
-
         }
 
         if(!(isset($data['gender'])))

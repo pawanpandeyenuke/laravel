@@ -321,48 +321,57 @@
     }
 
     function forumPostContents( $description, $ReadMoreUrl, $descriptionlength = 142){
-    $data=0;
-    if( !empty($description) ){
-        if(strlen($description) < $descriptionlength){
-            return $description;
+        $data=0;
+        if( !empty($description) ){
+            if(strlen($description) < $descriptionlength){
+                return $description;
+            }
+            $Description1 = substr( $description, 0 ,$descriptionlength );
+            $Description2=substr( $description, strlen($Description1)-1 ,strlen($description) );
+            preg_match('/[a-z]+/i', $Description2, $matches, PREG_OFFSET_CAPTURE);
+            $offset=(strlen($Description1)-1)+(isset($matches[0][1])?$matches[0][1]:strlen($Description2));     
+            $Description =substr( $description, 0 ,$offset); 
+            if( strlen( $description ) > strlen( $Description ) ){
+                $Description .= '<span class="moreellipses">...</span>';
+                $data=1;
+            }
+        } else {
+            $Description = 'NA';
         }
-        $Description1 = substr( $description, 0 ,$descriptionlength );
-        $Description2=substr( $description, strlen($Description1)-1 ,strlen($description) );
-        preg_match('/[a-z]+/i', $Description2, $matches, PREG_OFFSET_CAPTURE);
-        $offset=(strlen($Description1)-1)+(isset($matches[0][1])?$matches[0][1]:strlen($Description2));     
-        $Description =substr( $description, 0 ,$offset); 
-        if( strlen( $description ) > strlen( $Description ) ){
-            $Description .= '<span class="moreellipses">...</span>';
-            $data=1;
-        }
-    } else {
-        $Description = 'NA';
-    }
-  /*  if($ReadMoreUrl!='')
-        {
-          $Description .= ' <a href="'.$ReadMoreUrl.'" class="readmore-link pull-right">Read More</a>';
-        }
-        else
-        {
-            $Description .= '<span class="morecontent"><span></span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>'
-        }*/
-        if($data){
-            if($ReadMoreUrl == "#"){
-                $btn_text = "More";
-               $ReadMoreUrl="javascript:void(0);";
-           }
+      /*  if($ReadMoreUrl!='')
+            {
+              $Description .= ' <a href="'.$ReadMoreUrl.'" class="readmore-link pull-right">Read More</a>';
+            }
             else
-                $btn_text = "Read More";
-            $hidden_text = substr($description,$descriptionlength-1,strlen($description)-1 );
-            $Description .=  '<span class="morecontent"><span>'.$hidden_text.'</span>&nbsp;&nbsp;<a href="'.$ReadMoreUrl.'" class="morelink">'.$btn_text.'</a></span>';
-        }
+            {
+                $Description .= '<span class="morecontent"><span></span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>'
+            }*/
+            if($data){
+                if($ReadMoreUrl == "#"){
+                    $btn_text = "More";
+                   $ReadMoreUrl="javascript:void(0);";
+               }
+                else
+                    $btn_text = "Read More";
+                $hidden_text = substr($description,$descriptionlength-1,strlen($description)-1 );
+                $Description .=  '<span class="morecontent"><span>'.$hidden_text.'</span>&nbsp;&nbsp;<a href="'.$ReadMoreUrl.'" class="morelink">'.$btn_text.'</a></span>';
+            }
 
-    return $Description;
-}
+        return $Description;
+    }
 
-function webEncode( $String ){
-	//return base64_encode( $String );
-	return $String;
-}
+
+    function webEncode( $String ){
+    	//return base64_encode( $String );
+    	return $String;
+    }
+
+
+/*    function verificationEmail( $email, $token ){
+        return Mail::send('emails.verify', ['email' => $email, 'confirmation_code' => $token], function ($m) use($email)   {
+                $m->from('contact@friendzsquare.com', 'Email varification');
+                $m->to($email)->subject('Biz Bricks');            
+            });
+    }*/
 
 ?>
