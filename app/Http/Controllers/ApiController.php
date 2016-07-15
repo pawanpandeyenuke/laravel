@@ -2382,12 +2382,17 @@ class ApiController extends Controller
                         'post_id'=>$args['post_id'],
                         'created_at'=>date('Y-m-d H:i:s',time()),
                         'updated_at'=>date('Y-m-d H:i:s',time())];
-		               
-        		$forumreply = new ForumReply;
-        		$this->message = 'Your reply has been saved successfully.';
-        		$this->status = 'success';
-        		$reply  = $forumreply->create($data);
-			$this->data = ForumReply::with('user')
+
+			        // @ Send notification mail.
+			        $parameters = array('user_id' => $args['user_id'], 'current_data' => $args['reply'], 'object_id' => $args['post_id'], 'type' => 'reply');
+			        $notify = Converse::notifyOnReplyComment( $parameters );
+
+	        		$forumreply = new ForumReply;
+	        		$this->message = 'Your reply has been saved successfully.';
+	        		$this->status = 'success';
+	        		$reply  = $forumreply->create($data);
+
+					$this->data = ForumReply::with('user')
 				                   ->with('replyLikesCount')
                 				   ->with('replyCommentsCount')
 				                    ->where('id',$reply->id)
@@ -2458,14 +2463,18 @@ class ApiController extends Controller
 					$arr = ['reply_comment'=>$args['comment'],
 							'owner_id'=>$args['user_id'],
 							'reply_id'=>$args['reply_id']];
-		               
-        		$forumcomment = new ForumReplyComments;
-        		$this->message = 'Your comment has been saved successfully.';
-        		$this->status = 'success';
-        		$comment = $forumcomment->create($arr);
-				$this->data = ForumReplyComments::with('user')
-								->where('id', $comment->id)
-								->get();
+
+			        // @ Send notification mail.
+			        $parameters = array('user_id' => $args['user_id'], 'current_data' => $args['comment'], 'object_id' => $args['reply_id'], 'type' => 'comment');
+			        $notify = Converse::notifyOnReplyComment( $parameters );
+
+	        		$forumcomment = new ForumReplyComments;
+	        		$this->message = 'Your comment has been saved successfully.';
+	        		$this->status = 'success';
+	        		$comment = $forumcomment->create($arr);
+					$this->data = ForumReplyComments::with('user')
+									->where('id', $comment->id)
+									->get();
 				}
 					  
 			}
