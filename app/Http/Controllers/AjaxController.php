@@ -351,9 +351,6 @@ comments;
  	}
 
 
-
-
-
 	public function searchfriend(){
 
 		$xmppusername = Input::get('xmpp_username');
@@ -1715,12 +1712,12 @@ comments;
 
 		$replycomment = new ForumReplyComments;
 		$comment = $replycomment->create($arr);
-
+		echo '<pre>';print_r($replycomment);die;
 		$name = $user->first_name." ".$user->last_name;
         $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 
         // @ Send notification mail.
-        $parameters = array('user_id' => $user->id, 'object_id' => $replyid, 'current_data' => $replycomment, 'type' => 'comment');
+        $parameters = array('user_id' => $user->id, 'object_id' => $replyid, 'current_data' => $comment->reply_comment, 'type' => 'comment');
         $notify = Converse::notifyOnReplyComment( $parameters );
 
 		return view('ajax.forumreplycomment')
