@@ -181,7 +181,7 @@
                                   </p>
                                   <br>
                                   <p  style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
-                                      <a class="btn btn-primary btn-lg icon-btn" title="" href="{{ $post_url }}" style="-moz-user-select: none; background-image: none; border: 1px solid transparent; border-radius: 4px; cursor: pointer; display: inline-block; font-size: 14px; font-weight: normal; line-height: 1.42857; margin-bottom: 0; padding: 6px 12px; text-align: center; vertical-align: middle; white-space: nowrap; background: #a0f0e6 none repeat scroll 0 0; color: #000; font-size: 15px;"><i class="flaticon-draw"></i>Go To Post/Reply</a>
+                                      <a class="btn btn-primary btn-lg icon-btn" title="" href="{{ $post_url }}" style="text-decoration: none;-moz-user-select: none; background-image: none; border: 1px solid transparent; border-radius: 4px; cursor: pointer; display: inline-block; font-size: 14px; font-weight: normal; line-height: 1.42857; margin-bottom: 0; padding: 6px 12px; text-align: center; vertical-align: middle; white-space: nowrap; background: #a0f0e6 none repeat scroll 0 0; color: #000; font-size: 15px;"><i class="flaticon-draw"></i>Go To Post/Reply</a>
                                     <br>
                                   </p>
 
