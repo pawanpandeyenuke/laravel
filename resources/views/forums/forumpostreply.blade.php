@@ -72,7 +72,7 @@
 										</div>
 									</div>
 								</div>
-								<p class="forum_post" > <?php echo forumPostContents($post->title,'#'); ?></p>
+								<p class="forum_post" > <?php echo nl2br(forumPostContents($post->title,'#')); ?></p>
 								<div class="text-right">
 								@if(Auth::check())
 								  <!-- <button type="button" class="btn btn-primary mpost-rply-btn" title="Write a reply">Reply</button> -->
@@ -202,8 +202,8 @@ $(".multiple-slt").select2();
 	window.onload = function() {
       var w = $('#sticky-anchor').width();
 		$('.fix-header').css('width',w+60);
-		$(".forum_post .morelink").click();
-		$(".forum_post .morelink").addClass('unique_post');
+		// $(".forum_post .morelink").click();
+		// $(".forum_post .morelink").addClass('unique_post');
 	}
 
 		 var i = 1;
