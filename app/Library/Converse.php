@@ -185,19 +185,14 @@ class Converse
  	// @ Send notifications across devices
  	static function notifyMe( $userId, $friendId, $type )
  	{
- 		$message = array();
 		$user = User::find($userId);
 		$friend = User::find($friendId);
  		$subjectName = $user->first_name.' '.$user->last_name;
 
- 		if($type == 'accept'){
- 			$message['message'] = "$subjectName has accepted your friend request";
- 			$message['notification_type'] = 'accept';
- 		}
- 		elseif($type == 'request'){
- 			$message['message'] = "$subjectName wants to be your friend";
- 			$message['notification_type'] = 'request';
- 		}
+ 		if($type == 'accept')
+ 			$message = "$subjectName has accepted your friend request";
+ 		elseif($type == 'request')
+ 			$message = "$subjectName wants to be your friend";
 
  		// $response = 'Message was not delivered';
  		if( $friend->device_type == 'IPHONE' ){
@@ -220,8 +215,7 @@ class Converse
         $response = 'Message not delivered';
 
         $data = array(
-            'message' => $message['message'],
-            'notification_type' => $message['notification_type'],
+            'message' => $message,
             'token' => $token //'cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262'
         );
 
