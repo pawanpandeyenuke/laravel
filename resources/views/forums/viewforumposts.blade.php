@@ -116,7 +116,7 @@
 									@endif
 									@endif
 									</div>
-									<p ><?php echo nl2br(forumPostContents($data->title,url('forum-post-reply/'.$data->id))); ?></p>
+									<p ><?php echo nl2br(forumPostContents($data->title, '#')); ?></p>
 									<div class="fp-btns text-right">
 										<span class="reply-count">Replies ({{$replyCount}})</span>
 										<a href="{{url("forum-post-reply/$data->id")}}" title="Jump to Reply Section" class="btn btn-primary"><span class="glyphicon glyphicon-share-alt"></span>Reply</a>
@@ -162,6 +162,27 @@
 	    sticky_relocate();
 	});
 
+
+	$(document).ready(function() {
+	  var moretext = "More";
+	  var lesstext = "Less";
+		$(document).on('click','.morelink',function(){
+			if($(this).hasClass('unique_post')){
+				i=1;
+			}
+	      if($(this).hasClass("less")) {
+	          $(this).removeClass("less");
+	          $(this).html(moretext);
+	      } else {
+	          $(this).addClass("less");
+	          $(this).html(lesstext);
+	      } 
+	      $(this).parent().prev().toggle();
+	      $(this).prev().toggle();
+	      return false;
+	  });
+
+	});
 
 </script>
 @endsection
