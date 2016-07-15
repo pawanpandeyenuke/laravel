@@ -258,13 +258,12 @@ class Converse
  				$data = array();
  				$subject = User::find($parameters['user_id']);
  				$result = self::viewLessMore($parameters['current_data']);
- 				$name = $subject->first_name.' '.$subject->last_name;
 
 	 			if( $parameters['type'] === 'reply' ){
 
 	 				$object = ForumPost::find($parameters['object_id']);
 
-	 				$data['current_data'] = $name.' replied on your post "'.$result.'".';
+	 				$data['current_data'] = $subject->name.' replied on your post "'.$result.'".';
 	 				$data['post_message'] = $object->title;
 	 				$data['type'] = 'Post: ';
 	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
@@ -273,7 +272,7 @@ class Converse
 
 	 				$object = ForumReply::find($parameters['object_id']);
 
-	 				$data['current_data'] = $name.' commented on your reply "'.$result.'".';
+	 				$data['current_data'] = $subject->name.' commented on your reply "'.$result.'".';
 	 				$data['post_message'] = $object->reply;
 	 				$data['type'] = 'Reply: ';
 	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
@@ -287,7 +286,7 @@ class Converse
 	 				$data['user_name'] = $userObj->name;
 	 				$data['post_type'] = $parameters['type'];
 	 				$user_email = $userObj->email;
-	 				$user_name = $userObj->first_name.' '.$userObj->last_name;
+	 				$user_name = $userObj->name;
 
 					Mail::send('panels.email-template', $data, function( $message ) use( $user_email, $user_name ){
 						$message->from('no-reply@friendzsquare.com', 'FriendzSquare Notification');
