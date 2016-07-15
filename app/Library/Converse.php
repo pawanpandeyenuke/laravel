@@ -188,20 +188,25 @@ class Converse
 		$user = User::find($userId);
 		$friend = User::find($friendId);
  		$subjectName = $user->first_name.' '.$user->last_name;
+ 		$data_array = array();
 
- 		if($type == 'accept')
- 			$message = "$subjectName has accepted your friend request";
- 		elseif($type == 'request')
- 			$message = "$subjectName wants to be your friend";
+ 		if($type == 'accept'){
+ 			$data_array['message'] = "$subjectName has accepted your friend request";
+ 			$data_array['notification_type'] = "accept";
+ 		}
+ 		elseif($type == 'request'){
+  			$data_array['message'] = "$subjectName wants to be your friend";
+ 			$data_array['notification_type'] = "request";
+		}
 
  		// $response = 'Message was not delivered';
  		if( $friend->device_type == 'IPHONE' ){
  			// @ Call IOS function for push notification
- 			self::pushNotificationIphone( $message, $friend->push_token );
+ 			self::pushNotificationIphone( $data_array, $friend->push_token );
 
  		}elseif( $friend->device_type == 'ANDROID' ){
  			// @ Call Android function for push notification
- 			self::pushNotificationAndroid( $message, $friend->push_token );
+ 			self::pushNotificationAndroid( $data_array, $friend->push_token );
 
  		}
  		//return $response;
@@ -210,16 +215,20 @@ class Converse
 
 
     // @ Return Response For Push Notification In IOS
-    static function pushNotificationIphone( $message, $token )
+    static function pushNotificationIphone( $data_array, $token )
     {
         $response = 'Message not delivered';
 
-        $data = array(
-            'message' => $message,
-            'token' => $token //'cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262'
-        );
 
-	iphonePushNotification($data);
+
+        $data = array(
+            'message' => $data_array['message'],
+            'notification_type' => $data_array['notification_type'],
+            'token' => $token
+        );
+        //previous token  -- cd967ddac1c1acd00c3fa5d3700afda1dab7d449b8aacdf67c34e64edd6e2262
+        //current token [iphone 6 white]  -- 432dd3aa54c9b387ab53fe809069fc9c22b8fdf5a8e45a2fd15cd58124a9acfa
+		iphonePushNotification($data);
 /*        if(iphonePushNotification($data))
             $response = 'Message successfully delivered';  
 

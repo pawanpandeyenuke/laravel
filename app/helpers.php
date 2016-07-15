@@ -295,6 +295,9 @@
             //'sname' => $senderName
         );
     // $body['aps']['sname']=$senderName;
+        $body['Message_received'] = array(
+            'notification_type' => $data['notification_type'],
+        );
 
         // Encode the payload as JSON
         $payload = json_encode($body);
