@@ -1712,7 +1712,7 @@ comments;
 
 		$replycomment = new ForumReplyComments;
 		$comment = $replycomment->create($arr);
-		echo '<pre>';print_r($replycomment);die;
+
 		$name = $user->first_name." ".$user->last_name;
         $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 
