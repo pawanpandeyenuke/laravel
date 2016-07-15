@@ -288,30 +288,6 @@ comments;
 
 		exit;
 	}
-	/**
-	public function getxmppuser(){
-
-		$status=0;
-		$user_id = Auth::User()->id;
-		$node = Config::get('constants.xmpp_host_Url');
-
-		$user = User::find($user_id);
-		if ( !empty($user['xmpp_username']) && !empty($user['xmpp_username']) ) 
-		{
-			// print_r('$xmppPrebind');die;
-			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', 'FS', false, false);
-			//print_r($xmppPrebind);die;
-			$username = $user->xmpp_username;
-			$password = $user->xmpp_password;
-			$xmppPrebind->connect($username, $password);
-			$xmppPrebind->auth();
-			$sessionInfo = $xmppPrebind->getSessionInfo();
-			$status = 1;
-		}
-
-		return $sessionInfo;
- 	}
-	**/
 
 	
 	public function getGroupDetail(){
@@ -363,15 +339,14 @@ comments;
 		}
 
 		if(is_array($response) && count($response) > 0)
-			{
-				$status = 1;
-			}
+		{
+			$status = 1;
+		}
 
-			$response['status']=$status;	  
-			// echo json_encode($sessionInfo); 
-			// exit;
-			return $response;
-
+		$response['status']=$status;	  
+		// echo json_encode($sessionInfo); 
+		// exit;
+		return $response;
 
  	}
 
@@ -1623,6 +1598,9 @@ comments;
         $name = $user->first_name." ".$user->last_name;
         $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 
+        // @ Send notification mail.
+        $parameters = array('user_id' => $user->id, 'current_data' => $input['reply'], 'object_id' => $input['forumpostid'], 'type' => 'reply');
+        $notify = Converse::notifyOnReplyComment( $parameters );
         
         return view('ajax.forumpostreply')
         		->with('forumreply',$forumpostreply)
@@ -1740,6 +1718,10 @@ comments;
 
 		$name = $user->first_name." ".$user->last_name;
         $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+
+        // @ Send notification mail.
+        $parameters = array('user_id' => $user->id, 'object_id' => $replyid, 'current_data' => $replycomment, 'type' => 'comment');
+        $notify = Converse::notifyOnReplyComment( $parameters );
 
 		return view('ajax.forumreplycomment')
 				->with('comment',$comment)

@@ -1,7 +1,8 @@
 <?php namespace App\Library;
 
 use Validator, Input, Redirect, Request, Session, Hash, DB, Config;
-use App\Feed, App\Comment, App\Like, App\User, XmppPrebind;
+use App\Feed, App\Comment, App\Like, App\User, XmppPrebind, Mail;
+use App\ForumReply, App\ForumPost;
 
 class Converse
 {
@@ -246,6 +247,75 @@ class Converse
         return $msg;
     }
 
+
+    // @ Notify user via mail when someone replies on their post or comments on their replies.
+ 	static function notifyOnReplyComment( $parameters )
+ 	{
+ 		try
+ 		{
+ 			if(!empty($parameters['object_id']) && !empty($parameters['user_id']) && !empty($parameters['type']) && !empty($parameters['current_data'])){
+
+ 				$data = array();
+ 				$subject = User::find($parameters['user_id']);
+ 				$result = self::viewLessMore($parameters['current_data']);
+
+	 			if( $parameters['type'] === 'reply' ){
+
+	 				$object = ForumPost::find($parameters['object_id']);
+
+	 				$data['current_data'] = $subject->name.' replied on your post "'.$result.'".';
+	 				$data['post_message'] = $object->title;
+	 				$data['type'] = 'Post: ';
+	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
+
+	 			}elseif ( $parameters['type'] === 'comment' ) {
+
+	 				$object = ForumReply::find($parameters['object_id']);
+
+	 				$data['current_data'] = $subject->name.' commented on your reply "'.$result.'".';
+	 				$data['post_message'] = $object->reply;
+	 				$data['type'] = 'Reply: ';
+	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
+
+	 			}
+
+	 			if( $parameters['user_id'] != $object->owner_id ){
+
+	 				$userObj = User::find($object->owner_id);
+		 			// echo '<pre>';print_r($data);die;
+	 				$data['user_name'] = $userObj->name;
+	 				$data['post_type'] = $parameters['type'];
+	 				$user_email = $userObj->email;
+	 				$user_name = $userObj->name;
+
+					Mail::send('panels.email-template', $data, function( $message ) use( $user_email, $user_name ){
+						$message->from('no-reply@friendzsquare.com', 'FriendzSquare Notification');
+						$message->to( $user_email, $user_name )->subject('FriendzSquare');
+					});	 	 				
+	 			}
+
+ 			}
+
+ 		}catch(Exception $e){
+ 			return $e->getMessage();
+ 		}
+
+ 	}
+
+
+	public static function viewLessMore( $parameter ){
+	    
+	    $length = strlen($parameter);
+
+		if($length < 30){
+		    $result = $parameter;
+		}else{
+		    $result = substr($parameter, 0, 30);
+		    $result = $result.'...';
+		}
+
+		return $result;
+	}
 
 }
 
