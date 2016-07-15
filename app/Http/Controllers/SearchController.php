@@ -58,7 +58,7 @@ class SearchController extends Controller
             
             $auth = ($authUserId != '') ? 1 : 0;
 
-        return view('dashboard.allusers')
+            return view('dashboard.allusers')
                 ->with('model1',$model1)
                 ->with('count',$count)
                 ->with('keyword',$input['searchfriends'])
