@@ -23,7 +23,7 @@ class SocialController extends Controller
 
 		if( !empty( $providerUser ) )
 		{
-			if( isset( $providerUser['email']) )
+			if( isset( $providerUser['email']) && $providerUser['email'])
 			{
 				$userDbObj = User::whereEmail($providerUser['email'])->first();
 				if(!$userDbObj)
@@ -75,7 +75,7 @@ class SocialController extends Controller
 					'nickname' => $providerUser->getNickname(),
 					'first_name' =>$nameRaw[0],// $providerUser->user['first_name'],
 					'last_name' =>$nameRaw[1],// $providerUser->user['last_name'],
-					'email' => '', //$providerUser->getEmail(),
+					'email' => $providerUser->getEmail(),
 					'avatar' => $providerUser->getAvatar()
 				);
 				break;
