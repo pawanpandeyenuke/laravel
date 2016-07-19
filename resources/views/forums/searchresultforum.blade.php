@@ -38,6 +38,7 @@
 								<div class="forum-post-cont">		
 									<div class="posts-count search-forum-count"><i class="flaticon-two-post-it"></i>
 										<span class = "count"> {{$postscount}}</span> Posts found for "{{$show}}"
+										<a class='backbutton pull-right' href="{{$lastURL}}" title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back"></a>
 									</div>
 								</div><!--/forum post cont-->
 

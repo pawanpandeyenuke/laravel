@@ -68,6 +68,9 @@
 											</div>
 												<span class="p-date pull-left"><i class="flaticon-days"></i> {{$post->updated_at->format('d M Y')}}</span>
 												<span class="p-time pull-left"><i class="flaticon-time"></i>  {{$post->updated_at->format('h:i A')}}</span>
+												<div class='text-right'>
+													<a class='backbutton' href="{{$lastURL}}" title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back"></a>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -214,7 +217,7 @@ $(".multiple-slt").select2();
 		      $('.fix-header').addClass('stick');
 		      $('.forum-post-replies').addClass('stick-margin');
 		      if(i == 1){
-		      	$(".forum_post .morelink").click();
+		      	//$(".forum_post .morelink").click();
 		      	i++;
 		      }
 		    }else{
