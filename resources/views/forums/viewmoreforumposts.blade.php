@@ -53,7 +53,7 @@
 									@endif
 									</div>
 
-									<p> <?php echo nl2br(forumPostContents($data->title,url('forum-post-reply/'.$data->id))); ?> </p>
+									<p> <?php echo nl2br(forumPostContents($data->title, '#')); ?> </p>
 									
 									<div class="fp-btns text-right">
 										<span class="reply-count">Replies ({{$replyCount}})</span>

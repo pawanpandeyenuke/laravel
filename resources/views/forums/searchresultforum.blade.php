@@ -101,7 +101,7 @@
 									</div>
 
 									<p> <b>{{$data->forum_category_breadcrum}}</b><br>
-										<?php echo nl2br($data->title) ?> </p>
+										<?php echo nl2br(forumPostContents($data->title, '#')) ?> </p>
 
 									<div class="fp-btns text-right">
 										<span class="reply-count">Replies ({{$replyCount}})</span>
@@ -159,7 +159,26 @@
 	    sticky_relocate();
 	});
 
+	$(document).ready(function() {
+	  var moretext = "More";
+	  var lesstext = "Less";
+		$(document).on('click','.morelink',function(){
+			if($(this).hasClass('unique_post')){
+				i=1;
+			}
+	      if($(this).hasClass("less")) {
+	          $(this).removeClass("less");
+	          $(this).html(moretext);
+	      } else {
+	          $(this).addClass("less");
+	          $(this).html(lesstext);
+	      } 
+	      $(this).parent().prev().toggle();
+	      $(this).prev().toggle();
+	      return false;
+	  });
 
+	});
 </script>
 @endsection
 {!! Session::forget('error') !!}

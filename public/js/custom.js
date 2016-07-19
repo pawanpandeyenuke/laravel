@@ -26,37 +26,48 @@ $(document).ready(function(){
 	 
 	     //Get count of selected files
 	     var countFiles = $(this)[0].files.length;
-	 
+	 	
 	     var imgPath = $(this)[0].value;
-	     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-	     var image_holder = $("#image-holder");
-	     image_holder.empty();
-	 
-	     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
-	         if (typeof (FileReader) != "undefined") {
-	 
-	             //loop for each file selected for uploaded.
-	             for (var i = 0; i < countFiles; i++) {
-	 
-	                 var reader = new FileReader();
-	                 reader.onload = function (e) {
+	     // console.log(this.files[0].size);	     
+	     if(this.files[0].size < 4194304){
 
-	                     $("<img />", {
-	                         "src": e.target.result,
-	                             "class": "thumb-image"
-	                     }).appendTo(image_holder);
-	                 }
-	 
-	                 image_holder.show();
-	                 reader.readAsDataURL($(this)[0].files[i]);
-	             }
-	 
-	         } else {
-	             alert("This browser does not support FileReader.");
-	         }
+		     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+		     var image_holder = $("#image-holder");
+		     image_holder.empty();
+		 
+		     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+		         if (typeof (FileReader) != "undefined") {
+		 
+		             //loop for each file selected for uploaded.
+		             for (var i = 0; i < countFiles; i++) {
+		 
+		                 var reader = new FileReader();
+		                 reader.onload = function (e) {
+
+		                     $("<img />", {
+		                         "src": e.target.result,
+		                             "class": "thumb-image"
+		                     }).appendTo(image_holder);
+		                 }
+		 
+		                 image_holder.show();
+		                 reader.readAsDataURL($(this)[0].files[i]);
+		             }
+		 
+		         } else {
+		             alert("This browser does not support FileReader.");
+		         }
+		     } else {
+		         alert("Please select only images");
+		     }
+
 	     } else {
-	         alert("Please select only images");
+	     	$("#fileUpload").val('');
+	     	alert("Max upload file size is 4 MB.");
+	     	return false;
 	     }
+
+
 	});
 
 
@@ -68,32 +79,39 @@ $(document).ready(function(){
 	     var countFiles = $(this)[0].files.length;
 	 	 
 	     var imgPath = $(this)[0].value;
-	     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
-	     var image_holder = $("#profile-pic-holder");
-	 
-	     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
-	         if (typeof (FileReader) != "undefined") {
-	 
-	             //loop for each file selected for uploaded.
-	             for (var i = 0; i < countFiles; i++) {
-	 
-	                 var reader = new FileReader();
-	                 reader.onload = function (e) {
-	                 	
-	                 	$('.edit-pr-img').find(".badge").remove();
-	                 	$('.profile-img').css("background",	"url("+e.target.result+") no-repeat");
 
-	                 }
-	 
-	                 image_holder.show();
-	                 reader.readAsDataURL($(this)[0].files[i]);
-	             }
-	 
-	         } else {
-	             alert("This browser does not support FileReader.");
-	         }
+	     if(this.files[0].size < 4194304){
+		     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+		     var image_holder = $("#profile-pic-holder");
+		 
+		     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+		         if (typeof (FileReader) != "undefined") {
+		 
+		             //loop for each file selected for uploaded.
+		             for (var i = 0; i < countFiles; i++) {
+		 
+		                 var reader = new FileReader();
+		                 reader.onload = function (e) {
+		                 	
+		                 	$('.edit-pr-img').find(".badge").remove();
+		                 	$('.profile-img').css("background",	"url("+e.target.result+") no-repeat");
+
+		                 }
+		 
+		                 image_holder.show();
+		                 reader.readAsDataURL($(this)[0].files[i]);
+		             }
+		 
+		         } else {
+		             alert("This browser does not support FileReader.");
+		         }
+		     } else {
+		         alert("Please select only images");
+		     }
 	     } else {
-	         alert("Please select only images");
+	     	$('#profilepicture').val('');
+	     	alert("Max upload file size is 4 MB.");
+	     	return false;
 	     }
 	});
 

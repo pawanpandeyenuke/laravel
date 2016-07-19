@@ -242,6 +242,26 @@
 												  	@endif
 													</td>
 												</tr>
+												<tr>
+													<td><div class="p-data-title"><i class="flaticon-vintage"></i>Job Title</div></td>
+													<td>
+													@if(!empty($user->job_title))
+														<span style="font-weight:500">{{$user->job_title}}</span>
+												  	@else
+												  		<span style="font-weight:500">NA</span>
+												  	@endif
+													</td>
+												</tr>
+												<tr>
+													<td><div class="p-data-title"><i class="flaticon-vintage"></i>Company</div></td>
+													<td>
+													@if(!empty($user->company))
+														<span style="font-weight:500">{{$user->company}}</span>
+												  	@else
+												  		<span style="font-weight:500">NA</span>
+												  	@endif
+													</td>
+												</tr>
 											</table> 
 										</div>
 									</div>
