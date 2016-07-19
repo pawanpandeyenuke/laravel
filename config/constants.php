@@ -35,6 +35,8 @@ return [
 	'private_group_limit' => 5,
 
 	'private_members' => 10,
+
+	'max_upload_filesize' => 4194304,
 ]
 
 ?>

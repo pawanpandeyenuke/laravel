@@ -10,7 +10,7 @@ use App\Http\Requests;
 use App\DefaultGroup;
 use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
-use App\Feed, Auth, Mail;
+use App\Feed, Auth, Mail, File;
 
 use \Exception,Route;
 use App\Library\Converse, Config;
@@ -101,7 +101,8 @@ class AjaxController extends Controller
 		try
 		{
 			$arguments = Input::all();
-			// print_r($arguments);exit;
+			// $maxFileSize = Config::get('constants.max_upload_filesize');
+			// print_r($maxFileSize);exit;
 			$user = Auth::User();
 			$model = new Feed;
 
@@ -115,13 +116,21 @@ class AjaxController extends Controller
 					throw new Exception('Post something to update.');
 
 				$file = Input::file('image');
+				$bytes = File::size($file);
+				$maxFileSize = 4194304;
+				/*echo $maxFileSize.'<br/>';
+				echo $bytes;
+				die;*/
+				if($bytes < $maxFileSize){
+					if( isset($arguments['image']) && $file != null){
 
-				if( isset($arguments['image']) && $file != null ){
+						$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+						$arguments['image'] = $image_name;
+						$file->move(public_path('uploads'), $image_name);
 
-					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
-					$arguments['image'] = $image_name;
-					$file->move(public_path('uploads'), $image_name);
-
+					}
+				}else{
+					throw new Exception("Max upload size is 4 MB.", 1);
 				}
 				// $arguments['message'] = nl2br($arguments['message']);
 

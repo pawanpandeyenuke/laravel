@@ -3,7 +3,7 @@
 @section('content')
 
 <?php
-
+	// echo '<pre>';print_r($user);die;
 	if(!empty($user->country)){
 
 		$countryid = \App\Country::where('country_name', '=', $user->country)->value('country_id'); 
@@ -449,7 +449,28 @@
 											</div>
 										</div>
 									</div>
-								
+
+									<div class="pe-row">
+										<div class="row">
+											<div class="col-sm-6">
+												<div class="p-data-title"><i class="flaticon-vintage"></i>Job Title</div>
+											</div>
+											<div class="col-sm-6">
+												<input type="text" class="" name="job_title" value="{{$user->job_title}}" placeholder="">
+											</div>
+										</div>
+									</div>
+									<div class="pe-row">
+										<div class="row">
+											<div class="col-sm-6">
+												<div class="p-data-title"><i class="flaticon-vintage"></i>Company</div>
+											</div>
+											<div class="col-sm-6">
+												<input type="text" class="" name="company" value="{{$user->company}}" placeholder="">
+											</div>
+										</div>
+									</div>
+
 								</div><!--/profile-data-table-->
 							</div>
 						</div>
