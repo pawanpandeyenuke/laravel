@@ -76,11 +76,15 @@ class ApiController extends Controller
 		        $xmpp_username = $userdata->first_name.$userdata->id;
 		        $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
 
+		        $raw_token = $userdata->first_name.date('Y-m-d H:i:s',time()).$userdata->last_name.$userdata->email;
+	        	$access_token = Hash::make($raw_token);
+
 		        $user = User::find($userdata->id);
 		        $user->xmpp_username = strtolower($xmpp_username);
 		        $user->xmpp_password = $xmpp_password;
 		        $user->confirmation_code = $confirmation_code;
 		        $user->is_email_verified = 'N';
+		        $user->access_token = $access_token;
 		        $user->save();
 
 		        $useremail = $userdata->email;
