@@ -29,7 +29,9 @@
 								 <div class="fs-breadcrumb">Home > {{$breadcrum}}</div>
 
 								<div class="forum-post-cont forum-post-count">
-									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{$postscount}}</span> Posts</div>
+									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{$postscount}}</span> Posts
+									<a class='backbutton pull-right' href="{{$lastURL}}" title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back"></a>
+									</div>
 								</div><!--/forum post cont-->
 
 								

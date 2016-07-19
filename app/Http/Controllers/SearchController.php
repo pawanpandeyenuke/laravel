@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 // use Illuminate\Http\Request;
 
 use App\Http\Requests,Config;
-use Request, Session, Validator, Input, Cookie;
+use Request, Session, Validator, Input, Cookie, URL;
 use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend,App\ForumLikes,App\ForumReply,App\ForumsDoctor;
 class SearchController extends Controller
 {
@@ -252,9 +252,15 @@ class SearchController extends Controller
 
         $postscount = $posts->count();
         $posts = $posts->take(10);
+
+        $lastURL = URL::previous();
+        $currentURL = URL::current();
+        $lastURL = $lastURL==$currentURL ? url('/forums') : $lastURL;
+        
         return view('forums.viewforumposts')
                 ->with('posts',$posts)
                 ->with('postscount',$postscount)
+                ->with('lastURL', $lastURL)
                 ->with('breadcrum',$forum_category_breadcrum);
     }
 
@@ -279,8 +285,13 @@ class SearchController extends Controller
         $reply = $reply->take(10);
         $checkarr = array();
 
+        $lastURL = URL::previous();
+        $currentURL = URL::current();
+        $lastURL = $lastURL==$currentURL ? url('/forums') : $lastURL;
+
         return view('forums.forumpostreply')
                     ->with('post',$checkpost)
+                    ->with('lastURL', $lastURL)
                     ->with('replycount',$replycount)
                     ->with('reply',$reply);
     }
@@ -375,8 +386,14 @@ class SearchController extends Controller
 
             $count = $results->count();
             $results = $results->take(10); 
-                    return view('forums.searchresultforum')
+        
+        $lastURL = URL::previous();
+        $currentURL = URL::current();
+        $lastURL = $lastURL==$currentURL ? url('/forums') : $lastURL;
+
+        return view('forums.searchresultforum')
                 ->with('postscount',$count)
+                ->with('lastURL',$lastURL)
                 ->with('keyword',$keyword)
                 ->with('breadcrum',$breadcrum)
                 ->with('posts',$results)
@@ -390,19 +407,23 @@ class SearchController extends Controller
 
     public function searchForumGet()
     {
-            $count = 0;
-            $keyword = '';
-            $breadcrum = '';
-            $results = [];
-            $input=[];
+        $count = 0;
+        $keyword = '';
+        $breadcrum = '';
+        $results = [];
+        $input=[];
 
-                return view('forums.searchresultforum')
-                ->with('postscount',$count)
-                ->with('keyword',$keyword)
-                ->with('breadcrum',$breadcrum)
-                ->with('posts',$results)
-                ->with('old',$input);
-            
+        $lastURL = URL::previous();
+        $currentURL = URL::current();
+        $lastURL = $lastURL==$currentURL ? url('/forums') : $lastURL;
+
+        return view('forums.searchresultforum')
+            ->with('postscount',$count)
+            ->with('keyword',$keyword)
+            ->with('breadcrum',$breadcrum)
+            ->with('posts',$results)
+            ->with('lastURL',$lastURL)
+            ->with('old',$input);
     }
 
     public function demo()
