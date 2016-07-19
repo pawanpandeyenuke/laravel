@@ -738,7 +738,9 @@ $('.dropdown.keep-open').on({
 	"hide.bs.dropdown":  function() { return this.closable; }
 });
 
-
+$( document ).on('keyup', '.emoji-wysiwyg-editor' ,function(event) {
+	$(this).change();
+});
 
 </script>
 @endsection
