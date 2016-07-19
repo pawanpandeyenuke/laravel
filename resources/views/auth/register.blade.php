@@ -22,6 +22,10 @@
     $prev_url = URL::previous();
  ?>
 
+<?php 
+$userdata = session('userdata'); 
+?>
+
 @if (Session::has('success'))
  <div class="alert alert-success">{!! Session::get('success') !!}</div>
  @endif
@@ -93,7 +97,7 @@
                         <div class="col-sm-12">
 
                             <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
-                                <input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control icon-field" placeholder="First Name">
+                                <input type="text" name="first_name" value="{{ session('first_name') }}" class="form-control icon-field" placeholder="First Name">
                                     
                                     @if ($errors->has('first_name'))
                                         <span class="help-block">
@@ -105,7 +109,7 @@
                                 </div>
 
                             <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
-                                    <input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control icon-field" placeholder="Last Name">
+                                    <input type="text" name="last_name" value="{{ session('last_name') }}" class="form-control icon-field" placeholder="Last Name">
                                     
                                     @if ($errors->has('last_name'))
                                         <span class="help-block">
@@ -394,3 +398,4 @@ $(document).ready(function () {
     $('#sendMsg2').modal('show');
 </script>
 @endsection
+{{ Session::forget('userdata') }}

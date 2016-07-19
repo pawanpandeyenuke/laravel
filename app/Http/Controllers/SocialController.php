@@ -9,6 +9,7 @@ use App\User;
 use Socialite;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Support\Facades\Redirect;
 
 class SocialController extends Controller
 {
@@ -16,20 +17,23 @@ class SocialController extends Controller
 	 *  @Commom Social Login Function
 	 */
 	public function socialLogin( $providerUser )
-	{		
-		
-		//~ echo '<pre>';print_r($providerUser);die;
-		
-		if( !empty( $providerUser ) ){			
-			if( isset( $providerUser['email']) ){
+	{
+
+//		echo '<pre>';print_r($providerUser);die;
+
+		if( !empty( $providerUser ) )
+		{
+			if( isset( $providerUser['email']) )
+			{
 				$userDbObj = User::whereEmail($providerUser['email'])->first();
-				if(!$userDbObj){	
+				if(!$userDbObj)
+				{	
 					//register user
 					$user = new User;
 					$tempEmail = explode('@', $providerUser['email']);
 					$providerUser['password'] = Hash::make($tempEmail[0]);
 					$raw_token = $providerUser['first_name'].date('Y-m-d H:i:s',time()).$providerUser['last_name'].$providerUser['email'];
-        			$access_token = Hash::make($raw_token);
+	        		$access_token = Hash::make($raw_token);
 					$providerUser['access_token'] = $access_token;
 					$userDbObj = $user->create($providerUser);
 				}
@@ -39,6 +43,7 @@ class SocialController extends Controller
 					Session::put($key, $val);
 				}
 			}
+
 		}
 		return false;
 	}
@@ -70,7 +75,7 @@ class SocialController extends Controller
 					'nickname' => $providerUser->getNickname(),
 					'first_name' =>$nameRaw[0],// $providerUser->user['first_name'],
 					'last_name' =>$nameRaw[1],// $providerUser->user['last_name'],
-					'email' => $providerUser->getEmail(),
+					'email' => '', //$providerUser->getEmail(),
 					'avatar' => $providerUser->getAvatar()
 				);
 				break;

@@ -10,7 +10,6 @@
 				$user = $post['user'];
 				$likesCount = isset($post->forumPostLikesCount[0]) ? $post->forumPostLikesCount[0]['forumlikescount'] : 0;
 				$repliesCount = isset($post->replyCount[0]) ? $post->replyCount[0]['replyCount'] : 0;
-
 				$rawCountry = [$user->city, $user->state, $user->country];
 				foreach ($rawCountry as $key => $value) {
 					if($value == ''){
@@ -18,11 +17,9 @@
 					}
 				}
 				$location = implode(', ', $rawCountry);
-
 				$postTitle = !empty($post->title) ? $post->title : '';
 
 				$breadcrumb = !empty($post->forum_category_breadcrum) ? $post->forum_category_breadcrum : '';
-				
 				$pic = !empty($user->picture) ? $user->picture : 'images/user-thumb.jpg';
 				$likedata = \App\ForumLikes::where(['owner_id' => $user_id, 'post_id' => $post->id])->get(); 
 			?>
