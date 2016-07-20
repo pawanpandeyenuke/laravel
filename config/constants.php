@@ -23,7 +23,7 @@ return [
 	// 'development_certificate' => 'ios-pem/FriendzSquareDevPush.pem',
 
 	// Android Push Notification Variables
-	'API_ACCESS_KEY'=>'AIzaSyBV19WPze6Icm3RITDLEbPieXalcoM7wEw',
+	'API_ACCESS_KEY'=>'AIzaSyBiy-S0EDkTlFPpuGjtluSjfvCSp4KPcqU',
 
 	// Xmpp-prebind
 	'xmpp_host_Url'=>'friendzsquare.com',

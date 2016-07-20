@@ -233,8 +233,8 @@
 	* @Push Notification Android
 	*/
 	function androidPushNotification($data) {
-       
-        $headers = array("Content-Type:" . "application/json", "Authorization:" . "key=" . Config::get('constants.API_ACCESS_KEY'));
+
+        $headers = array("Content-Type:" . "application/json", "Authorization:" . "key=AIzaSyBiy-S0EDkTlFPpuGjtluSjfvCSp4KPcqU");
           
 		//$data=json_encode($data);
 		$data=json_encode($data,true);
@@ -252,10 +252,12 @@
         $response = curl_exec($ch);
         curl_close($ch);
         $pos = strpos($response, '"success":1');
+
         if ($pos == true)
             return $response;
         else
             error_log($response);
+
         return $response;
     }
 
