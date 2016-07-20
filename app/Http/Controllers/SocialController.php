@@ -26,8 +26,7 @@ class SocialController extends Controller
 			if( $userDbObj ) 
 			{
 				if($userDbObj->is_email_verified == 'N'){
-					Session::put('success', 'Verification link has been sent to your registered email. Please check your inbox and verify email.<a href="#" title="" data-toggle="modal" data-target="#LoginPop">  Login</a>');
-					return redirect('send-verification-link');
+					return 'verification';
 				}
 				return $userDbObj;
 			}
@@ -147,6 +146,9 @@ class SocialController extends Controller
     	{
     		Auth::login($user);
     		return redirect('home');
+    	} elseif($user == 'verification'){
+    		Session::put('success', 'Verification link has been sent to your registered email. Please check your inbox and verify email.<a href="#" title="Login" data-toggle="modal" data-target="#LoginPop">  Login</a>');
+			return redirect('send-verification-link');
     	}
     	
     	return redirect('register?first_name='.$userData['first_name'].'&last_name='.$userData['last_name'].'&src='.$userData['src']);
