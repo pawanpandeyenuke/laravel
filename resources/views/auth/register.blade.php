@@ -234,7 +234,7 @@ $userdata = session('userdata');
                     <input type="hidden" name="url" value="{{$prev_url}}"/>
                     
                     <?php if(Request::get('src')){ ?>
-                        <input type="text" name="{{ Request::get('src') }}_id" value="<?php echo session(Request::get('src').'_id');?>"/>
+                        <input type="hidden" name="{{ Request::get('src') }}_id" value="<?php echo session(Request::get('src').'_id');?>"/>
                     <?php } ?>
 
                         </div>

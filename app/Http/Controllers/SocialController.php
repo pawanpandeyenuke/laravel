@@ -18,9 +18,6 @@ class SocialController extends Controller
 	 */
 	public function socialLogin( $providerUser )
 	{
-
-//		echo '<pre>';print_r($providerUser);die;
-
 		if( !empty( $providerUser ) )
 		{
 			if( isset( $providerUser['email']) && $providerUser['email'])
@@ -125,13 +122,13 @@ class SocialController extends Controller
 				break;			
 		}
 		
-        $user = self::socialLogin( $userData );
-        if( is_object($user) )
-        {
+        if( isset( $userData['email']) && $userData['email'])
+		{
+        	$user = self::socialLogin( $userData );
         	Auth::login($user);
         	return redirect('home');
     	}
     	
-    	return redirect('home?first_name='.$userData['first_name'].'&last_name='.$userData['last_name'].'&src='.$userData['src']);
+    	return redirect('register?first_name='.$userData['first_name'].'&last_name='.$userData['last_name'].'&src='.$userData['src']);
     }
 }
