@@ -23,7 +23,12 @@ class SocialController extends Controller
 			$social_id = $providerUser['src'].'_id';
 			$social_id_value = $providerUser[$providerUser['src'].'_id'];
 			$userDbObj = User::where([$social_id => $social_id_value])->first();
-			if( $userDbObj ) {
+			if( $userDbObj ) 
+			{
+				if($userDbObj->is_email_verified == 'N'){
+					Session::put('success', 'Verification link has been sent to your registered email. Please check your inbox and verify email.<a href="#" title="" data-toggle="modal" data-target="#LoginPop">  Login</a>');
+					return redirect('send-verification-link');
+				}
 				return $userDbObj;
 			}
 			elseif( isset( $providerUser['email']) && $providerUser['email'])
@@ -38,6 +43,7 @@ class SocialController extends Controller
 					$raw_token = $providerUser['first_name'].date('Y-m-d H:i:s',time()).$providerUser['last_name'].$providerUser['email'];
 	        		$access_token = Hash::make($raw_token);
 					$providerUser['access_token'] = $access_token;
+					$providerUser['is_email_verified'] = 'Y';
 					$userDbObj = $user->create($providerUser);
 					return $userDbObj;
 				}

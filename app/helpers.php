@@ -365,7 +365,12 @@
     	//return base64_encode( $String );
     	return $String;
     }
-
+    
+    function is_localhost()
+    {
+        $whitelist = array('127.0.0.1', '::1');
+        return in_array($_SERVER['REMOTE_ADDR'], $whitelist) ? true : false;
+    }
 
 /*    function verificationEmail( $email, $token ){
         return Mail::send('emails.verify', ['email' => $email, 'confirmation_code' => $token], function ($m) use($email)   {
