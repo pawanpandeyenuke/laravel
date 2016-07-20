@@ -136,13 +136,13 @@ class SocialController extends Controller
 				break;			
 		}
 		
-        if( isset( $userData['email']) && $userData['email'])
-		{
-        	$user = self::socialLogin( $userData );
-        	Auth::login($user);
-        	return redirect('home');
+    	$user = self::socialLogin( $userData );
+    	if( is_object($user) ) 
+    	{
+    		Auth::login($user);
+    		return redirect('home');
     	}
-
+    	
     	return redirect('register?first_name='.$userData['first_name'].'&last_name='.$userData['last_name'].'&src='.$userData['src']);
     }
 }
