@@ -20,12 +20,18 @@ class SocialController extends Controller
 	{
 		if( !empty( $providerUser ) )
 		{
-			if( isset( $providerUser['email']) && $providerUser['email'])
+			$social_id = $providerUser['src'].'_id';
+			$social_id_value = $providerUser[$providerUser['src'].'_id'];
+			$userDbObj = User::where([$social_id => $social_id_value])->first();
+			if( $userDbObj ) {
+				return $userDbObj;
+			}
+			elseif( isset( $providerUser['email']) && $providerUser['email'])
 			{
 				$userDbObj = User::whereEmail($providerUser['email'])->first();
 				if(!$userDbObj)
-				{	
-					//register user
+				{
+					// Register user
 					$user = new User;
 					$tempEmail = explode('@', $providerUser['email']);
 					$providerUser['password'] = Hash::make($tempEmail[0]);
@@ -33,15 +39,23 @@ class SocialController extends Controller
 	        		$access_token = Hash::make($raw_token);
 					$providerUser['access_token'] = $access_token;
 					$userDbObj = $user->create($providerUser);
+					return $userDbObj;
 				}
-				return $userDbObj;
+				else 
+				{
+					if(!$userDbObj->$social_id)
+					{
+						$userDbObj->$social_id = $social_id_value;
+						$userDbObj->save();
+					}
+					return $userDbObj;
+				}
 			} else {
 				Session::put($providerUser['src'].'_id', $providerUser[$providerUser['src'].'_id']);
 			}
 		}
 		return false;
 	}
-
 
 	/**
 	 *  @Redirect Function for different providers.
@@ -128,7 +142,7 @@ class SocialController extends Controller
         	Auth::login($user);
         	return redirect('home');
     	}
-    	
+
     	return redirect('register?first_name='.$userData['first_name'].'&last_name='.$userData['last_name'].'&src='.$userData['src']);
     }
 }
