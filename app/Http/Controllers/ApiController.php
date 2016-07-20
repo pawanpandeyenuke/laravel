@@ -171,28 +171,26 @@ class ApiController extends Controller
 					$arguments['linked_id'] = $arguments['id'];
 
 				$controller = app()->make('App\Http\Controllers\SocialController')->socialLogin($arguments);
+				if( $controller && is_object($controller) )
+				{
+	                // Saving xmpp-username and xmpp-pasword into database.
+	                if( !$controller->xmpp_username )
+	                {
+		                $controller->xmpp_username = strtolower($controller->first_name.$controller->id);
+		                $controller->xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
+		                $controller->save();
 
+				        $converse = new Converse;
+				        $response = $converse->register($controller->xmpp_username, $controller->xmpp_password);
+				    }
 
-                                //Saving xmpp-username and xmpp-pasword into database.
-                                $xmpp_username = $controller->first_name.$controller->id;
-                                $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
-
-                                $user = User::find($controller->id);
-                                $user->xmpp_username = strtolower($xmpp_username);
-                                $user->xmpp_password = $xmpp_password;
-                                $user->save();
-
-			        $converse = new Converse;
-			        $response = $converse->register($xmpp_username, $xmpp_password);
-
-				if( $controller ){
 					$this->message = 'Successfully logged in';
 					$this->status = 'success';
 					$this->data = $controller;
+				} elseif($controller && $controller=='verification') {
+					$this->message = 'Verification link has been sent to your registered email. Please check your inbox and verify email.';
 				}
-
 			}
-
 		}catch( Exception $e ){
 
 			$this->message = $e->getMessage();
