@@ -39,11 +39,8 @@ class SocialController extends Controller
 				}
 				return $userDbObj;
 			} else {
-				foreach($providerUser as $key => $val){
-					Session::put($key, $val);
-				}
+				Session::put($providerUser['src'].'_id', $providerUser[$providerUser['src'].'_id']);
 			}
-
 		}
 		return false;
 	}
@@ -76,7 +73,8 @@ class SocialController extends Controller
 					'first_name' =>$nameRaw[0],// $providerUser->user['first_name'],
 					'last_name' =>$nameRaw[1],// $providerUser->user['last_name'],
 					'email' => $providerUser->getEmail(),
-					'avatar' => $providerUser->getAvatar()
+					'avatar' => $providerUser->getAvatar(),
+					'src' => 'fb'
 				);
 				break;
 			
@@ -91,7 +89,8 @@ class SocialController extends Controller
 					'first_name' => $nameRaw[0],
 					'last_name' => $nameRaw[1],
 					'email' => $providerUser->getEmail(),
-					'avatar' => $providerUser->getAvatar()
+					'avatar' => $providerUser->getAvatar(),
+					'src' => 'twitter'
 				);
 				break;
 				
@@ -102,7 +101,8 @@ class SocialController extends Controller
 					'first_name' => $providerUser->user['name']['givenName'],
 					'last_name' => $providerUser->user['name']['familyName'],
 					'email' => $providerUser->getEmail(),
-					'avatar' => $providerUser->getAvatar()
+					'avatar' => $providerUser->getAvatar(),
+					'src' => 'google'
 				);
 				break;
 				
@@ -114,7 +114,8 @@ class SocialController extends Controller
 					'first_name' => $providerUser->user['firstName'],
 					'last_name' => $providerUser->user['lastName'],
 					'email' => $providerUser->getEmail(),
-					'avatar' => $providerUser->getAvatar()
+					'avatar' => $providerUser->getAvatar(),
+					'src' => 'linked'
 				);
 				break;
 			
@@ -125,10 +126,12 @@ class SocialController extends Controller
 		}
 		
         $user = self::socialLogin( $userData );
-        if( is_object($user) ){
+        if( is_object($user) )
+        {
         	Auth::login($user);
+        	return redirect('home');
     	}
     	
-        return redirect('home');
+    	return redirect('home?first_name='.$userData['first_name'].'&last_name='.$userData['last_name'].'&src='.$userData['src']);
     }
 }

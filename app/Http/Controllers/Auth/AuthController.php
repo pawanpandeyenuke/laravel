@@ -104,7 +104,11 @@ class AuthController extends Controller
             'confirmation_code' => $confirmation_code,
             'is_email_verified' => 'N',
             'access_token' => $access_token,
-            'picture' => '/images/user-thumb.jpg'
+            'picture' => '/images/user-thumb.jpg',
+            'fb_id' => isset($data['fb_id']) ? $data['fb_id'] : null,
+            'twitter_id' => isset($data['twitter_id']) ? $data['twitter_id'] : null,
+            'google_id' => isset($data['google_id']) ? $data['google_id'] : null,
+            'linked_id' => isset($data['linked_id']) ? $data['linked_id'] : null
         ]);
         
         $user = User::find($userdata->id);

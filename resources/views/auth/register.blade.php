@@ -19,8 +19,8 @@
     }
 </style>
 <?php
-    $prev_url = URL::previous();
- ?>
+$prev_url = URL::previous();
+?>
 
 <?php 
 $userdata = session('userdata'); 
@@ -97,7 +97,7 @@ $userdata = session('userdata');
                         <div class="col-sm-12">
 
                             <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
-                                <input type="text" name="first_name" value="{{ session('first_name') }}" class="form-control icon-field" placeholder="First Name">
+                                <input type="text" name="first_name" value="{{ Request::get('first_name') }}" class="form-control icon-field" placeholder="First Name">
                                     
                                     @if ($errors->has('first_name'))
                                         <span class="help-block">
@@ -109,7 +109,7 @@ $userdata = session('userdata');
                                 </div>
 
                             <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
-                                    <input type="text" name="last_name" value="{{ session('last_name') }}" class="form-control icon-field" placeholder="Last Name">
+                                    <input type="text" name="last_name" value="{{ Request::get('last_name') }}" class="form-control icon-field" placeholder="Last Name">
                                     
                                     @if ($errors->has('last_name'))
                                         <span class="help-block">
@@ -231,7 +231,12 @@ $userdata = session('userdata');
                         <label for="terms" class="css-label" style="color: #0c0c0c" >I agree to the following<a href="{{url('terms-conditions')}}" style="color:#3ab29f "> Terms and Conditions</a>.</label>
                         </div>
                      </div>
-                     <input type="hidden" name="url" value = "{{$prev_url}}"/>
+                    <input type="hidden" name="url" value="{{$prev_url}}"/>
+                    
+                    <?php if(Request::get('src')){ ?>
+                        <input type="text" name="{{ Request::get('src') }}_id" value="<?php echo session(Request::get('src').'_id');?>"/>
+                    <?php } ?>
+
                         </div>
                                 <div class="form-groups">
                                     <div class="btn-cont text-center">
