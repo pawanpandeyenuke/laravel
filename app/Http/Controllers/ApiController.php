@@ -161,15 +161,23 @@ class ApiController extends Controller
 				$this->message = $this->getError($validator);				
 			}else{
 
-				if( isset( $arguments['id'] ) &&  $arguments['type'] == 'facebook' )
+				if( isset( $arguments['id'] ) &&  $arguments['type'] == 'facebook' ){
 					$arguments['fb_id'] = $arguments['id'];
-				elseif( isset( $arguments['id'] ) &&  $arguments['type'] == 'twitter' )
+					$arguments['src'] = 'fb';
+				}
+				elseif( isset( $arguments['id'] ) &&  $arguments['type'] == 'twitter' ){
 					$arguments['twitter_id'] = $arguments['id'];
-				elseif( isset( $data['id'] ) &&  $data['type'] == 'google' )
+					$arguments['src'] = 'twitter';
+				}
+				elseif( isset( $data['id'] ) &&  $data['type'] == 'google' ){
 					$arguments['google_id'] = $arguments['id'];
-				elseif( isset( $arguments['id'] ) &&  $arguments['type'] == 'linkedin' )
+					$arguments['src'] = 'google';
+				}
+				elseif( isset( $arguments['id'] ) &&  $arguments['type'] == 'linkedin' ){
 					$arguments['linked_id'] = $arguments['id'];
-
+					$arguments['src'] = 'linked';
+				}
+				
 				$controller = app()->make('App\Http\Controllers\SocialController')->socialLogin($arguments);
 				if( $controller && is_object($controller) )
 				{
