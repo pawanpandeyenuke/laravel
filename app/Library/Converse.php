@@ -237,14 +237,14 @@ class Converse
     }
 	
 	// @ Return Response For Push Notification In Android
-    static function pushNotificationAndroid( $message, $token )
+    static function pushNotificationAndroid( $data_array, $token )
     {   
-        $data=array('registration_ids'=>array( 'APA91bGsmuvwZ8N0Fhc8JflH_t3agUK_MNQn6mZEvgkBw2hb2_P9yrnLOSAjgtk_vUgj50In5xAvPD5NH4J-gm_MrGYf9JpPJ7qPKo6e9cUa7tdHXEseSaw' ),
+        $data=array('registration_ids'=>array( $token ),
             'data'=>array(
-                            'message'   => 'Here is a message from Mayank123',
+                            'message'   => $data_array['message'],
                             'title'     => 'From: Mayank123',
                             'subtitle'  => 'My-subtitle',
-                            'tickerText'    => 'My tickerText',
+                            'tickerText'=> 'My tickerText',
                             'vibrate'   => 1,
                             'sound'     => 1,
                             'largeIcon' => 'large_icon',
