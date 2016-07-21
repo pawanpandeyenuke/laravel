@@ -169,7 +169,7 @@ class ApiController extends Controller
 					$arguments['twitter_id'] = $arguments['id'];
 					$arguments['src'] = 'twitter';
 				}
-				elseif( isset( $data['id'] ) &&  $data['type'] == 'google' ){
+				elseif( isset( $arguments['id'] ) &&  $arguments['type'] == 'google' ){
 					$arguments['google_id'] = $arguments['id'];
 					$arguments['src'] = 'google';
 				}
