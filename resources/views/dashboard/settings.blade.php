@@ -2,8 +2,8 @@
 <?php  
 if($setting==null)
 {
-$setting['contact-request']="Friends of friends";
-$setting['friend-request'] ="Friends of friends";
+$setting['contact-request']="friends-of-friends";
+$setting['friend-request'] ="friends-of-friends";
 }
 ?>
 @section('title', 'Settings - ')
@@ -35,27 +35,18 @@ $setting['friend-request'] ="Friends of friends";
 								<div class="row">
 									<div class="col-sm-8 col-sm-offset-3">
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="contact-request" id="radio1" class="css-checkbox" value="Friends of friends" <?php echo $setting['contact-request'] == 'Friends of friends'? 'checked':''; ?>/>
-											<!-- {!! Form::radio('contact-request', 'Friends of friends', true,[
-												'class'=>'css-checkbox',
-												'id'=>'radio1',
-											]) !!} -->
+											<input type="radio" name="contact-request" id="radio1" class="css-checkbox" value="friends-of-friends" <?php echo $setting['contact-request'] == 'friends-of-friends'? 'checked':''; ?>/>
+
 											<label for="radio1" class="css-label radGroup1">Friends of friends</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="contact-request" id="radio2" class="css-checkbox" value="Nearby app user" <?php echo $setting['contact-request'] == 'Nearby app user'? 'checked':''; ?>/>
-<!-- 											{!! Form::radio('contact-request', 'Nearby app user', false,[
-												'class'=>'css-checkbox',
-												'id'=>'radio2', 
-											]) !!} -->
+											<input type="radio" name="contact-request" id="radio2" class="css-checkbox" value="nearby-app-user" <?php echo $setting['contact-request'] == 'nearby-app-user'? 'checked':''; ?>/>
+
 											<label for="radio2" class="css-label radGroup1">Nearby app user</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="contact-request" id="radio3" class="css-checkbox" value="All" <?php echo $setting['contact-request'] == 'All'? 'checked':''; ?>/>
-										<!-- 	{!! Form::radio('contact-request', 'All', false,[
-												'class'=>'css-checkbox',
-												'id'=>'radio3',
-											]) !!} -->
+											<input type="radio" name="contact-request" id="radio3" class="css-checkbox" value="all" <?php echo $setting['contact-request'] == 'all'? 'checked':''; ?>/>
+
 											<label for="radio3" class="css-label radGroup1">All</label>
 										</div>
 									</div>
@@ -67,27 +58,18 @@ $setting['friend-request'] ="Friends of friends";
 								<div class="row">
 									<div class="col-sm-8 col-sm-offset-3">
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="friend-request" id="radior1" class="css-checkbox" value="Friends of friends" <?php echo $setting['friend-request'] == 'Friends of friends'? 'checked':'' ?>/>
-											<!-- {!! Form::radio('friend-request', 'Friends of friends', true, [
-												'class' => 'css-checkbox',
-												'id' => 'radior1',
-											])!!} -->
+											<input type="radio" name="friend-request" id="radior1" class="css-checkbox" value="friends-of-friends" <?php echo $setting['friend-request'] == 'friends-of-friends'? 'checked':'' ?>/>
+
 											<label for="radior1" class="css-label radGroup1">Friends of friends</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="friend-request" id="radior2" class="css-checkbox" value="Nearby app user" <?php echo $setting['friend-request'] == 'Nearby app user'? 'checked':'' ?>/>
-											<!-- {!! Form::radio('friend-request', 'Nearby app user', false, [
-												'class' => 'css-checkbox',
-												'id' => 'radior2',
-											])!!} -->
+											<input type="radio" name="friend-request" id="radior2" class="css-checkbox" value="nearby-app-user" <?php echo $setting['friend-request'] == 'nearby-app-user'? 'checked':'' ?>/>
+
 											<label for="radior2" class="css-label radGroup1">Nearby app user</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="friend-request" id="radior3" class="css-checkbox" value="All" <?php echo $setting['friend-request'] == 'All'? 'checked':'' ?>/>
-											<!-- {!! Form::radio('friend-request', 'All', false, [
-												'class' => 'css-checkbox',
-												'id' => 'radior3',
-											])!!} -->
+											<input type="radio" name="friend-request" id="radior3" class="css-checkbox" value="all" <?php echo $setting['friend-request'] == 'all'? 'checked':'' ?>/>
+
 											<label for="radior3" class="css-label radGroup1">All</label>
 										</div>
 									</div>

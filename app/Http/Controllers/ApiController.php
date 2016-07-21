@@ -5,7 +5,7 @@ use Mail;
 use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
 use App\Http\Controllers\Controller;
-use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments,App\ForumsDoctor;
+use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments,App\ForumsDoctor, App\Setting;
 use Validator, Redirect, Request, Session, Hash, DB;
 use Illuminate\Support\Facades\Input;
 use \Exception;
@@ -683,7 +683,7 @@ class ApiController extends Controller
 
 				}
 				else{
-					$arguments['image'] = "";
+					unset($arguments['image']);
 				}
 
 				$newsFeed->fill($arguments);
@@ -2636,6 +2636,76 @@ class ApiController extends Controller
 				}
 			}		  
 			}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+	}
+
+
+	public function getPrivacySettings()
+	{
+		try
+		{
+			$user_id = Request::get('user_id');
+
+			if(empty($user_id) || !is_numeric($user_id))
+				throw new Exception("User id is required.", 1);
+
+			$user = User::find($user_id);
+
+			if(empty($user))
+				throw new Exception("User does not exist.", 1);
+			
+	        $setting = Setting::where('user_id', $user_id)->get()->toArray();
+			// echo '<pre>';print_r($setting);die;
+            $this->status = "Success";
+            $this->message = "Your privacy settings.";
+            $this->data = $setting;
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+	}
+
+
+	public function setPrivacySettings()
+	{
+		try
+		{
+			$user_id = Request::get('user_id');
+			$arguments = Request::all();
+			unset($arguments['user_id']);
+
+			if(empty($user_id) || !is_numeric($user_id))
+				throw new Exception("User id is required.", 1);
+
+			$user = User::find($user_id);
+
+			if(empty($user))
+				throw new Exception("User does not exist.", 1);
+
+            foreach($arguments as $key => $data)
+            {
+                $affectedRows = Setting::where(['setting_title' =>  $key, 'user_id' =>  $user_id])->update(['setting_value' => $data]);
+                if( !$affectedRows )
+                {
+                    $setting = new Setting;
+                    $setting->setting_title = $key;
+                    $setting->setting_value = $data;
+                    $setting->user_id = $user_id; 
+                    $setting->save();
+                }
+
+            }
+
+            $this->status = "Success";
+            $this->message = "Your privacy settings.";
+            // $this->data = $setting;
+
+		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
 
