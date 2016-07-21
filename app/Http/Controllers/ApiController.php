@@ -2703,7 +2703,6 @@ class ApiController extends Controller
 
             $this->status = "Success";
             $this->message = "Your privacy settings.";
-            // $this->data = $setting;
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
