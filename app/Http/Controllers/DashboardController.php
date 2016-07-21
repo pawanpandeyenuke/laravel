@@ -70,30 +70,20 @@ class DashboardController extends Controller
         unset($arguments['_token']);
         if(Request::isMethod('post')){
 
-            foreach($arguments as $key => $data){
-
-                $userSetting = Setting::where([
-                                    'setting_title' => $key,
-                                    'user_id' => Auth::User()->id,
-                                ])->get()->toArray();
-
-                if(!empty($userSetting)){
-
-                    $affectedRows = Setting::where('setting_title', '=', $key)->update(['setting_value' => $data]);
-                    Session::put('success', 'Settings updated successfully.');   
-
-                }else{
-
+            foreach($arguments as $key => $data)
+            {
+                $affectedRows = Setting::where(['setting_title' =>  $key, 'user_id' =>  Auth::User()->id])->update(['setting_value' => $data]);
+                if( !$affectedRows )
+                {
                     $setting = new Setting;
                     $setting->setting_title = $key;
                     $setting->setting_value = $data;
                     $setting->user_id = Auth::User()->id; 
                     $setting->save();
-
-                    Session::put('success', 'Settings saved successfully.');   
                 }
 
             }
+            Session::put('success', 'Settings saved successfully.');
             return redirect()->back();
         }
         
