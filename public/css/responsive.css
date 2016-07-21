@@ -1,6 +1,32 @@
-@media (max-width:1150px){
-
+.study-data-outer select, .study-data-outer input{width: 100%;}
+@media (min-width: 1367px){
+.dashboard-body .container {
+    max-width: 1366px;
+    width: 100%;
 }
+}
+@media (max-width: 1299px){
+  .cat-btn-outer .cat-btn{
+    height: 133px;
+  }
+}
+
+@media (max-width:1199px){
+ .social-login li a{
+      width: 47px;
+    margin: 0 4px;
+    height:47px;
+}
+.user-info-top .user-thumb {
+    height: 36px;
+    width: 36px;
+}
+.dashboard-header-menu .user-info-top{
+  padding-left: 40px;
+  padding-right: 6px;
+}
+}
+
 @media only screen and (max-width:995px){
 .social-login li a {
   height: 40px;
@@ -92,6 +118,33 @@
 .login-form {
   padding: 15px 0 5px;
 }
+/*  =======================   new Edit css on 18-07  ===========================   */
+.dashboard-body .sidebar-menu-col+.col-sm-6{
+      width: 98% !important;
+    margin: 0 auto !important;
+    float: none;
+    clear: both;
+}
+.shadow-box.bottom-ad img{
+  width: 100%;
+}
+.cat-btn-outer .cat-btn {
+    height: 110px;
+    }
+}
+@media (max-width: 991px){
+  .dashboard-header-menu .user-info-top{
+    border-right:0;
+  }
+  .mid-db-body .shadow-box.bottom-ad img {
+    width: 100%;
+}
+.shadow-box.page-center-data.no-margin-top > form {
+    padding: 0 10px;
+}
+.profile-data-table {
+    padding-left: 15px;
+}
 }
 @media only screen and (max-width:767px){
 .dashboard-header-menu {
@@ -181,6 +234,14 @@
   padding: 10px 0;
   text-align: center;
 }
+.dashboard-header-menu .user-info-top{
+    border-right:1px solid;
+  }
+  .user-info-top .user-thumb {
+    height: 40px;
+    width: 40px;
+}
+
 }
 @media only screen and (max-width: 479px){
 .logo {
