@@ -323,12 +323,11 @@ $groupid = $group_jid;
 					var xmpp = chatbox.model.get('jid');
 					if(waitProfile == 1 ){
 						setTimeout( function(){
-							hideOpendBox( jidStr, 2 );
+							hideOpendBox( xmpp, 2 );
 						}  , 2000 );
 					}
-					
 					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
-					
+
 					if( jidStr ==  groupid ){
 						GroupName[jidStr] = '<?php echo $groupname; ?>';
 						chatbox.$el.find( '.chat-title' ).html( '<?php echo $groupname; ?>' );
