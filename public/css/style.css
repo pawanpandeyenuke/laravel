@@ -3439,3 +3439,7 @@ header{
 .backbutton{
 	margin-top:-5px;
 }
+.forum-srch-list .forum-master-post p.forum_post{
+	height: 150px;
+	overflow-y: auto;
+}
