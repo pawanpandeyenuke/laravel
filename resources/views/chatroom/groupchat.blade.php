@@ -256,7 +256,7 @@ $groupid = $group_jid;
 	var encoderoomid = '';
     var userImage="{{$userpic}}";
  
-    var defaultImage="{{url('/images/user-thumb.jpg')}}";
+    var defaultUserImage = "{{url('/images/user-thumb.jpg')}}";
 
     var image_upload_url="ajax/sendimage";
     var chatserver='@<?= Config::get('constants.xmpp_host_Url') ?>';
@@ -275,7 +275,7 @@ $groupid = $group_jid;
 	var is_first = true;  
 	
 	var waitProfile = 0;
-	var defaultImage = '/images/post-img-big.jpg' ;
+	var defaultImage = "{{url('/images/post-img-big.jpg')}}";
 	var baseUrl = '<?= url('/') ?>';
 	var checkActiveGroupUrl = '<?= url('/ajax/isactivemember') ?>';
 	setTimeout( function(){
