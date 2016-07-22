@@ -490,14 +490,13 @@ $groupid = $group_jid;
 
      function openChatbox(xmpusername,username)
      {
-         conObj =converse;
          var ss=conObj.contacts.get(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
          if( ss==null ){  
              conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
          }
          if( hideOpendBox( xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>' , 1 ) ){
 			conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
-		}
+		 }
      }
 
 
@@ -655,7 +654,7 @@ function groupChatRefresh( grpjid ){
 					ChatHtml += '<a href="/private-group-detail/'+v.id+'">';
 					ChatHtml += '<span style="background: url(\''+GroupImage+'\');" class="chat-thumb"></span>';
 					ChatHtml += '<span class="title">'+v.title+'</span></a>';
-					ChatHtml += '<button data-groupimage="'+GroupImage+'" class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\', \''+GroupImage+'\' );">Chat</button></div></li>';
+					ChatHtml += '<button id="'+v.group_jid+'" data-groupimage="'+GroupImage+'" class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\', \''+GroupImage+'\' );">Chat</button></div></li>';
 			});
 			$('#gccollapseThree').find( '.chat-user-list' ).html( '<ul>'+ChatHtml+'</ul>' );
 		}
