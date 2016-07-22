@@ -330,8 +330,13 @@ class SearchController extends Controller
         $postscount = $posts->count();
         $posts = $posts->take(10);
 
+        $lastURL = URL::previous();
+        $currentURL = URL::current();
+        $lastURL = $lastURL==$currentURL ? url('/forums') : $lastURL;
+
         return view('forums.viewforumposts')
                 ->with('posts',$posts)
+                ->with('lastURL',$lastURL)
                 ->with('postscount',$postscount)
                 ->with('breadcrum',$breadcrum);
     }
