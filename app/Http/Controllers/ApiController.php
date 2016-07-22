@@ -2678,7 +2678,7 @@ class ApiController extends Controller
 			$user_id = Request::get('user_id');
 			$arguments = Request::all();
 			unset($arguments['user_id']);
-
+			
 			if(empty($user_id) || !is_numeric($user_id))
 				throw new Exception("User id is required.", 1);
 
