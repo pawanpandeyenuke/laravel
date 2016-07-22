@@ -98,7 +98,7 @@ class Converse
 	}
 
 	// @ (Broadcast) Send message in chatroom.
-	public static function broadcastchatroom($groupfrom,$userfrom,$userto,$msg){
+	public static function broadcastchatroom($groupfrom,$userfrom,$userto,$userjid,$msg){
 		
 		$node = Config::get('constants.xmpp_host_Url');
 		$subject = "";

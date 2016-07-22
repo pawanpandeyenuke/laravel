@@ -3413,11 +3413,13 @@ header{
 .stick-margin{
 	margin-top: 220px;
 }
+/**
 #conversejs [data-emojiable="converted"] {
     display: block !important;
     height: 0 !important;
     padding: 0 !important;
 }
+**/
 #conversejs .emoji-picker-icon{
 	 color: #8ba5a2;
     position: absolute;

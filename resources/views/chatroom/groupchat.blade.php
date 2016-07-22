@@ -36,6 +36,7 @@
   left: 3%;
 }
 </style>
+
 <?php 
 $groupid = $group_jid;
 ?>
@@ -196,46 +197,25 @@ $groupid = $group_jid;
                                     <div id="gccollapseThree" class="{{$pridivid}}" role="tabpanel" aria-labelledby="gcheadingThree">
                                       <div class="panel-body">
                                         <div class="chat-user-list StyleScroll">
-
+											<!-- private group List -->
                                           <ul>
-                    @foreach($privategroup as $data)
-                    <?php  
-						/**
-						$privategroupname = preg_replace('/[^A-Za-z0-9\-]/', '_',$data['title']);
-                        $privategroupname = strtolower($privategroupname);
-                        $privategroupid   = $privategroupname.'_'.$data['id'];
-                        **/ 
-                        $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
-			
-                            $namestr='';
-                            $name=array();
-                            $count=0;
-							foreach ($data['members'] as $mem) {
-                                if( $mem['member_id']==Auth::User()->id ){
-                                    $name[]="You";
-                                    $count++;
-                                } else {
-									$name[]=\App\User::where('id',$mem['member_id'])->value('first_name');
-                                }
-                            }
-
-                            $namestr=implode(",",$name);
-							if(!($count==0) || $data['owner_id']==Auth::User()->id) { 
-								$pri_id = $data['id'];
-                             ?>
-                                          <li>
-                        								    <div	class="pvt-room-list" style="position:relative;" >
-                            										<a href="{{url("private-group-detail/$pri_id")}}" >
-                            											<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
-                            											<span class="title">{{$data['title']}}</span>
-                            										</a>
-                            										<button onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>');" class="time">Chat</button>
-                                             </div>
-                                          </li>
-							           <?php } ?>
-                                    @endforeach
-					                             </ul>
-                                     </div><!--/chat user list-->
+											  <?php $groups=array(); ?>
+										@foreach($privategroup as $data) 
+										<?php  $group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg'; ?>	
+											  <li>
+												 <?php $groups[$data['group_jid']]=$data['title'];  ?> 												  
+												 
+												<div class="pvt-room-list" style="position:relative;" >
+													<a href="{{url("private-group-detail/<?= $data['id'] ?>")}}" >
+														<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
+														<span class="title">{{$data['title']}}</span>
+													</a>
+													<button id="<?= $data['group_jid'] ?>" data-groupimage="<?= $group_picture ?>" onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>','<?= $group_picture ?>');" class="time">Chat</button>
+												 </div>
+											 </li>
+										@endforeach
+					                       </ul>
+										</div><!--/chat user list-->
                                       </div>
                                     </div>
                                   </div>
@@ -272,7 +252,7 @@ $groupid = $group_jid;
  
 <script type="text/javascript">
 	jQuery.noConflict();
-	
+	var GroupName = <?php echo json_encode($groups); ?>;
 	var encoderoomid = '';
     var userImage="{{$userpic}}";
  
@@ -293,8 +273,11 @@ $groupid = $group_jid;
     var groupid = "{{$groupid}}";
     var exception = "{{$exception}}";
 	var is_first = true;  
-	var chatName = {};
+	
 	var waitProfile = 0;
+	var defaultImage = '/images/post-img-big.jpg' ;
+	var baseUrl = '<?= url('/') ?>';
+	var checkActiveGroupUrl = '<?= url('/ajax/isactivemember') ?>';
 	setTimeout( function(){
 		waitProfile = 1;
 	}  , 4000 );
@@ -332,50 +315,55 @@ $groupid = $group_jid;
 					renderEmoji( chatbox );
 				});
 				
-				conObj.listen.on('renderMessage', function (event, message) { 
-					//console.log( message );
-				});
+
 				
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) {
 					chatbox.$el.attr( 'data-bid', Base64.encode(chatbox.model.get('jid')) );
-					
-					
-					
-					var jidStr = chatbox.model.get('jid');
+
+					var xmpp = chatbox.model.get('jid');
 					if(waitProfile == 1 ){
 						setTimeout( function(){
 							hideOpendBox( jidStr, 2 );
 						}  , 2000 );
 					}
-					var xmpp = jidStr.replace( '@conference.<?= Config::get('constants.xmpp_host_Url') ?>' , '' );
-					if( xmpp ==  groupid ){
-						chatName[jidStr] = '<?php echo $groupname; ?>';
+					
+					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
+					
+					if( jidStr ==  groupid ){
+						GroupName[jidStr] = '<?php echo $groupname; ?>';
 						chatbox.$el.find( '.chat-title' ).html( '<?php echo $groupname; ?>' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
 						<?php } else { ?>
-							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/images/post-img-big.jpg');" );
+							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
 						<?php	} ?>
 					} else {
-						$.ajax({
-							'url' : "/ajax/getgroupdeatils",
-							'type' : 'post',
-							'async' : false,
-							'dataType' : 'json',
-							'data' : { group_jid: xmpp },
-							'success' : function(data){
-								if( data.status == 1 ){
-									if( data.title !== undefined ){
-										chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
-										chatbox.$el.find( '.chat-title' ).html( data.title );
-										chatName[jidStr] = data.title;
-									}	
-								} else {
-									chatbox.close();
-									groupChatRefresh( '' );
+						
+						if( typeof GroupName[jidStr] != 'undefined' ){
+							var groupimage = $('#'+jidStr).data('groupimage');
+							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
+							chatbox.$el.find( '.chat-title' ).html( GroupName[jidStr] );
+						} else {
+							$.ajax({
+								'url' : "/ajax/getgroupdeatils",
+								'type' : 'post',
+								'async' : false,
+								'dataType' : 'json',
+								'data' : { group_jid: xmpp },
+								'success' : function(data){
+									if( data.status == 1 ){
+										if( data.title !== undefined ){
+											chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
+											chatbox.$el.find( '.chat-title' ).html( data.title );
+											GroupName[jidStr] = data.title;
+										}	
+									} else {
+										chatbox.close();
+										groupChatRefresh( '' );
+									}
 								}
-							}
-						});
+							});
+						}
 					}
 					renderEmoji( chatbox );	
 				});
@@ -393,12 +381,12 @@ $groupid = $group_jid;
                   prebind_url: "{{url('/ajax/getxmppuser')}}",
                   send_initial_presence:true,
                   visible_toolbar_buttons: {'toggle_occupants':false,'clear':false,'emoticons':false,'call': false},
-        				  ping_interval: 0,
-        				  message_carbons: true,
-        				  forward_messages: true,
-        				  allow_logout: false,
-        				  debug: false,
-        				  auto_subscribe: true,
+				  ping_interval: 0,
+				  message_carbons: true,
+				  forward_messages: true,
+				  allow_logout: false,
+				  debug: false,
+				  auto_subscribe: true,
                   auto_join_on_invite:true,
                   allow_chat_pending_contacts: true,
                   // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
@@ -544,6 +532,9 @@ $groupid = $group_jid;
 					
 	}
 
+
+	
+
 /*
 function openChatbox( xmpusername,username ){
    //var chatbox=conObj.chats.get(xmpusername+chatserver);
@@ -636,21 +627,19 @@ function hideOpendBox( grpname , actiontype ){
 	return resultreturn;
 }
 
-function openChatGroup( grpjid,grpname ){
+function openChatGroup( grpjid,grpname,groupimage ){
 	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver, '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
+		conObj.rooms.open( grpjid+conferencechatserver );
 	}
 }
 function openFirstChat( grpjid ){
-	
+	groupChatRefresh( grpjid );
 	if( hideOpendBox( grpjid+conferencechatserver, 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver, '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
+		conObj.rooms.open( grpjid+conferencechatserver );
 		$( '.chatnotification' ).remove();
-		groupChatRefresh( grpjid+conferencechatserver );
 	}
 }
-function groupChatRefresh( jid ){
-	var grpjid = jid.replace( conferencechatserver , '' );
+function groupChatRefresh( grpjid ){
 	$.ajax({
 		'url' : "/ajax/getchatgroup",
 		'type' : 'post',
@@ -660,23 +649,19 @@ function groupChatRefresh( jid ){
 		'success' : function(data){
 			var ChatHtml = '';
 			$.each( data.data , function( i, v){
+				GroupName[v.group_jid] = v.title;
+				var GroupImage = ((v.picture != '' ) ? v.picture : defaultImage);
 				ChatHtml += '<li><div style="position:relative;" class="pvt-room-list">';
-					ChatHtml += '<a href="http://lfriendsquare.com/private-group-detail/'+v.id+'">';
-					ChatHtml += '<span style="background: url('+ ((v.picture != '' ) ? v.picture : "/images/post-img-big.jpg")+');" class="chat-thumb"></span>';
+					ChatHtml += '<a href="/private-group-detail/'+v.id+'">';
+					ChatHtml += '<span style="background: url(\''+GroupImage+'\');" class="chat-thumb"></span>';
 					ChatHtml += '<span class="title">'+v.title+'</span></a>';
-					ChatHtml += '<button class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\');">Chat</button></div></li>';
+					ChatHtml += '<button data-groupimage="'+GroupImage+'" class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\', \''+GroupImage+'\' );">Chat</button></div></li>';
 			});
 			$('#gccollapseThree').find( '.chat-user-list' ).html( '<ul>'+ChatHtml+'</ul>' );
 		}
 	});
 }
-/**
-** use for remove opened chat group imidiate
-**/
-function removeChatroom( jid ){
-	var privateChat = conObj.rooms.get( jid );
-	privateChat.close();
-}
+
 /**
 ** use for remove opened chat group with time limit
 **/
@@ -687,7 +672,9 @@ function removeGroup( chatbox ){
 	setTimeout( function(){
 		chatbox.close();
 		var firstChat = $( '.minimized-chats-flyout .chat-head:first .restore-chat' ).data( 'bid' );
-		hideOpendBox( Base64.decode(firstChat) , 1 );
+		if( typeof firstChat !== undefined ){
+			hideOpendBox( Base64.decode(firstChat) , 1 );
+		}
 	}  , 5000 );
 }
 
@@ -707,7 +694,7 @@ function closePublic( grpname ){
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
-		var xmpp = jid.replace( conferencechatserver , '' );
+		var xmpp = jid.substring(0, jid.indexOf('@')); //jid.replace( conferencechatserver , '' );
 		if( xmpp == grpname ){
 			getRooms.maximize();
 			openChat = 0;
