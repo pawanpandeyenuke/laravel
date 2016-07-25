@@ -300,6 +300,22 @@ class SearchController extends Controller
     {
         $input = Request::all();
 
+        // Restore from session
+        if( !isset($input['mainforum']) || !$input['mainforum'] )
+        {
+            $session = Session::get('forum_post_request');
+            if( isset($session['mainforum']) )
+            {
+                foreach($session as $key => $val){
+                    $input[$key] = $val;
+                }
+            }
+        }
+
+        if( ! $input['mainforum'] ) {
+            return redirect('');
+        }
+
         $breadcrum = $input['mainforum']." > ";
         if($input['mainforum'] == "Doctor"){
          
@@ -333,6 +349,8 @@ class SearchController extends Controller
         $lastURL = URL::previous();
         $currentURL = URL::current();
         $lastURL = $lastURL==$currentURL ? url('/forums') : $lastURL;
+
+        Session::put('forum_post_request', $input);
 
         return view('forums.viewforumposts')
                 ->with('posts',$posts)

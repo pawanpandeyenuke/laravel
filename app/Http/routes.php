@@ -296,10 +296,10 @@ Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
 	Route::get('sub-cat-forums/{id}','SearchController@subCatForums');
 
 	Route::get('view-forum-posts/{id}','SearchController@viewForumPosts');
-	Route::post('view-forum-posts','SearchController@viewForumPostsOpt');
-	Route::get('view-forum-posts', function(){
-		return redirect('forums');
-	});
+	Route::match(['post', 'get'], 'view-forum-posts','SearchController@viewForumPostsOpt');
+	// Route::get('view-forum-posts', function(){
+		// return redirect('forums');
+	// });
 
 	Route::get('demo', 'SearchController@demo');
     Route::get('forum-post-reply/{forumpostid}', 'SearchController@forumPostReply');
