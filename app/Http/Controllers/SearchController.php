@@ -165,18 +165,18 @@ class SearchController extends Controller
     public function subForums($parentid='')
     {
         if($parentid){
-
-        $r1 = Forums::where('id',$parentid)->where('parent_id',0)->first();
-        if($r1 == "")
-            return redirect('forums');
-    
-           $mainforum=Forums::where('id',$parentid)->first();
-           $subforums = Forums::where('parent_id',$parentid)->get();
-           if($subforums->isEmpty())
-                    return redirect()->back();
+            // echo '<pre>';print_r($parentid);die;
+            $r1 = Forums::where('id',$parentid)->where('parent_id',0)->first();
+            if($r1 == "")
+                return redirect('forums');
+        
+               $mainforum = Forums::where('id',$parentid)->first();
+               $subforums = Forums::where('parent_id',$parentid)->get();
+               if($subforums->isEmpty())
+                        return redirect()->back();
+        }else{
+            return redirect('forums');   
         }
-        else
-             return redirect('forums');   
 
 
         $flag = 0;

@@ -3438,6 +3438,10 @@ header{
 	margin-top:-5px;
 }
 .forum-srch-list .forum-master-post p.forum_post{
-	height: 150px;
+	max-height: 150px;
 	overflow-y: auto;
+}
+.forum-srch-list .fs-breadcrumb{
+	 border-bottom: 1px solid #dcdddd;
+	  margin-bottom: 0;
 }

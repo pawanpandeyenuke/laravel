@@ -18,33 +18,30 @@
 					<div class="category-outer forum-list-cont">
 						<div class="row">
 							@foreach($forums as $data)
-
-							        <?php
-
-							            $fieldsData = \App\Forums::where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); 
-							   			$image = url("forums-data/forum_icons/".$data['img_url']);
-							            ?>
-
-		                    @if($fieldsData)
-							<div class="col-sm-4">
-								<div class="cat-btn-outer">
-									<a href="{{url("sub-forums/$data->id")}}" class="cat-btn" title="">
-										<img src="{{$image}}" alt=""><br>
-										<span>{{ $data->title }}</span>
-									</a>
-								</div>
-							</div>
-							@else
-							<div class="col-sm-4">
-								<div class="cat-btn-outer">
-									<a href="{{url("view-forum-posts/$data->id")}}" class="cat-btn" title="">
-										<img src="{{$image}}" alt=""><br>
-										<span>{{ $data->title }}</span>
-									</a>
-								</div>
-							</div>
-							@endif
-						@endforeach
+					        	<?php
+						            $fieldsData = \App\Forums::where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); 
+					   				$image = url("forums-data/forum_icons/".$data['img_url']);
+					            ?>
+			                    @if(!$fieldsData->isEmpty())
+									<div class="col-sm-4">
+										<div class="cat-btn-outer">
+											<a href="{{url("sub-forums/$data->id")}}" class="cat-btn" title="">
+												<img src="{{$image}}" alt=""><br>
+												<span>{{ $data->title }}</span>
+											</a>
+										</div>
+									</div>
+								@else
+									<div class="col-sm-4">
+										<div class="cat-btn-outer">
+											<a href="{{url("view-forum-posts/$data->id")}}" class="cat-btn" title="">
+												<img src="{{$image}}" alt=""><br>
+												<span>{{ $data->title }}</span>
+											</a>
+										</div>
+									</div>
+								@endif
+							@endforeach
 						</div>
 					</div>
 				</div><!--/page center data-->
