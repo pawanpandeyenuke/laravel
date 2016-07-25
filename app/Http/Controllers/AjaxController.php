@@ -1189,20 +1189,25 @@ comments;
 		$userXamp = Auth::User()->xmpp_username;
 		try{
 			$GroupDetails  	= Group::where('id',$input)->select('title','group_jid')->first();
-			$GroupName  	= $GroupDetails->group_jid;
+			$GroupJid	  	= $GroupDetails->group_jid;
 			$GroupTitle  	= $GroupDetails->title;
-			$Message 		= json_encode( array( 'type' => 'privatechatdelete', 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => webEncode($GroupTitle.' has been removed.') ) );
+			
+			
 			$converse = new Converse;
-			$xmp = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$input)->pluck('xmpp_username');		
+			$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
+			$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name
+			$message 		= json_encode( array( 'type' => 'hint', 'action'=>'group_delete', 'sender_jid' => $userJid, 'groupname'=>$GroupTitle, 'groupjid' => $GroupJid, 'message' => webEncode($GroupTitle.' has been removed.') ) ); // hint message to send every group member
+			$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$input)->pluck('xmpp_username');		
 			foreach ($xmp as $key => $value) {
-				$converse->broadcastchatroom($GroupName,Auth::User()->first_name.' '.Auth::User()->last_name,$value,$Message);
+				$converse->broadcastchatroom( $GroupJid, $name, $value, $userJid, $message ); // message broadcast per group member
 			}
-
-			$converse->deleteGroup($GroupName);
+			$converse->deleteGroup($GroupJid); // Delete group from chat server
+			
 			Group::where('id',$input)->where('owner_id',Auth::User()->id)->delete();
 			GroupMembers::where('group_id',$input)->delete();
 		} catch( Exception $e) {
-          $e->getMessage();
+         echo $e->getMessage();
+         exit();
         }
 
 	}
@@ -1214,23 +1219,29 @@ comments;
 	public function delUser()
 	{
 		$input=Input::all();
-		$userXamp  = Auth::User()->xmpp_username;
-		$GroupDetail 	= Group::where('id',$input['gid'])->select('title','group_jid')->first();
-		$GroupName  	= $GroupDetail->group_jid;
-		$GroupTitle  	= $GroupDetail->title;
-		
-		$converse	= new Converse;
-		$xmp		= User::where('id',$input['uid'])->value('xmpp_username','');
-
-		$MemberDetails = User::find($input['uid']);
-		
-        $Message = json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => webEncode( $MemberDetails->first_name.' '.$MemberDetails->last_name.' remove from group chat') ) );
-		$xmp = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$input['gid'])->pluck('xmpp_username');		
-		foreach ($xmp as $key => $value) {
-			$converse->broadcastchatroom($GroupName,Auth::User()->first_name.' '.Auth::User()->last_name,$value,$Message);
-		}
-		$converse->removeUserGroup($GroupName,$xmp);
-		GroupMembers::where('group_id',$input['gid'])->where( 'member_id', $input['uid'] )->delete();
+		$memberDetails = User::find($input['uid']); // delete member details
+		try{
+			/** 
+			 * sending hint chat message all group member
+			 **/
+			$converse	= new Converse;
+			$GroupDetail 	= Group::where('id',$input['gid'])->select('title','group_jid')->first(); // group details for message
+			$GroupJID  		= $GroupDetail->group_jid;
+			$GroupTitle  	= $GroupDetail->title;
+			$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
+			$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name
+			$message = json_encode( array( 'type' => 'hint', 'action'=>'delete', 'sender_jid' => $userJid, 'xmpp_userid' => $memberDetails->xmpp_username, 'user_id'=> $memberDetails->id , 'message' => webEncode( $memberDetails->first_name.' '.$memberDetails->last_name.' remove from group chat') ) );
+			
+			$xmp = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$input['gid'])->pluck('xmpp_username');	// list of all members in group
+			foreach ($xmp as $key => $value) {
+				$converse->broadcastchatroom( $GroupJID, $name,$value, $userJid,$message );
+			}
+			$converse->removeUserGroup( $GroupJID,$memberDetails->xmpp_username ); // chat server, delete member from group 
+			// member delete query execute
+			GroupMembers::where('group_id',$input['gid'])->where( 'member_id', $input['uid'] )->delete(); 
+		} catch( Exception $e) {
+          $e->getMessage();
+        }
 	}
 /**
 	for chat member status
@@ -1280,8 +1291,23 @@ comments;
 **/
 	public function editGroupName()
 	{
-		$input=Input::all();
-		Group::where('id',$input['gid'])->update(['title'=>$input['gname']]);
+		$input		=	Input::all();
+		$GroupId 	=	$input['gid'];
+		$GroupName 	=	$input['gname'];
+		$GroupDetail = 	Group::where('id',$GroupId)->select( 'group_jid' )->first();
+		
+		Group::where('id',$GroupId)->update(['title'=>$input['gname']]);
+		
+		/** 
+		 * sending hint chat message all group member
+		 * */
+		$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
+		$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name
+		$message 		= array( 'type' => 'hint',  'action'=>'group_info_change','sender_jid' => $userJid, 'groupname' => $GroupName, 'message' => webEncode($name.' changed group name'), 'changeBy' => $name, 'group_jid'=>$GroupDetail->group_jid);
+		$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$GroupId)->pluck('xmpp_username');		
+		foreach ($xmp as $key => $value) {
+			Converse::broadcastchatroom( $GroupDetail->group_jid, $name, $value, $userJid, $message ); // message broadcast per group member
+		}
 	}
 
 
@@ -1337,20 +1363,35 @@ comments;
 		}	
 	}
 
+	/** 
+	 * 	goup image update or add 
+	 * */
 	public function groupImage()
 	{
-		$input = Input::all();
-
-		$file = Input::file('groupimage');
+		$input 		= Input::all();
+		$file 		= Input::file('groupimage');
+		$groupId 	= $input['groupid'];
+		
 		if( isset($input['groupimage']) && $file != null ){
-
 			$image_name = time()."_GI_".strtoupper($file->getClientOriginalName());
 			$input['groupimage'] = $image_name;
 			$file->move(public_path('uploads'), $image_name);
 			$img = $input['groupimage'];
 		}
-
-		Group::where('id',$input['groupid'])->update(['picture' => $img]);
+		if( isset($img) && !empty( $img ) ){
+			Group::where('id',$groupId)->update(['picture' => $img]); // updating group image base on group id
+			/** 
+			 * sending hint chat message all group member
+			 * */
+			$groupDetail = 	Group::where('id',$groupId)->select( 'group_jid' )->first(); // group details 
+			$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
+			$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name
+			$message 		= array( 'type' => 'hint',  'action'=>'group_info_change','sender_jid' => $userJid, 'group_image' => $img, 'message' => webEncode( $name.' changed group image' ), 'changeBy' => $name, 'group_jid'=>$groupDetail->group_jid);
+			$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$groupId)->pluck('xmpp_username');		
+			foreach ($xmp as $key => $value) {
+				Converse::broadcastchatroom( $groupDetail->group_jid, $name, $value, $userJid, $message ); // message broadcast per group member
+			}
+		}
 	}
 
 	public function viewMoreForAll()
@@ -1939,21 +1980,25 @@ comments;
 	
 	public function leavePrivateGroup(){
 
-		$privategroupid = Input::get('pid');
-		$userXamp 		= Auth::User()->xmpp_username;
-		$GroupDetails 	= Group::where('id',$privategroupid)->select('title','group_jid')->first();
-		$GroupName  	= $GroupDetails->group_jid;
-		$GroupTitle 	= $GroupDetails->title;
+		$groupId = Input::get('pid');
 		$converse		= new Converse;
+		/** 
+		 * sending hint chat message all group member
+		 * */
+		$groupDetails 	= Group::where('id',$groupId)->select('title','group_jid')->first();
+		$groupJid	  	= $groupDetails->group_jid;
+		$groupTitle 	= $groupDetails->title;
 		
-		$xmp			= User::where('id',Auth::User()->id)->value('xmpp_username');            
-		$Message 		= json_encode( array( 'type' => 'privatechatremove', 'removejid' => $xmp.'@'.Config::get('constants.xmpp_host_Url'), 'chatgroup' => $GroupName.'@conference.'.Config::get('constants.xmpp_host_Url'), 'message' => base64_encode( Auth::User()->first_name.' '.Auth::User()->last_name.' left the group '.$GroupTitle) ) );
-		$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$privategroupid)->pluck('xmpp_username');		
+		$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
+		$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name          
+		$message 		= json_encode( array( 'type' => 'hint', 'action'=>'leave', 'sender_jid' => $userJid, 'xmpp_userid' => $userJid, 'user_id'=>Auth::User()->id, 'message' => webEncode( $name.' left the group '.$groupTitle) ) );
+		
+		$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$groupId)->pluck('xmpp_username');	// list of all group member 
 		foreach ($xmp as $key => $value) {
-			$converse->broadcastchatroom($GroupName,Auth::User()->first_name.' '.Auth::User()->last_name,$value,$Message);
+			$converse->broadcastchatroom($groupJid, $name, $value, $userJid, $message); // sending chat message to group memebr
 		}
-		$converse->removeUserGroup($GroupName,$xmp);
-		GroupMembers::where('group_id',$privategroupid)->where('member_id',Auth::User()->id)->delete();
+		$converse->removeUserGroup($groupJid,$userJid); // remove member from group
+		GroupMembers::where('group_id',$groupId)->where('member_id',Auth::User()->id)->delete();
 
     }
 	
@@ -2014,6 +2059,21 @@ comments;
 		return view('forums.deleteconfirmbox')
 			   		->with('data',$data);
 	}
+	
+	public function isMemberActive() 
+    {
+        $post = $input = Input::all();
+        $GroupJid = $post['user_jid'];
+        $UserId = $post['group_jid'];
+        
+        $group = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['groups.group_jid' => $GroupJid, 'members.member_id' => $UserId, 'groups.status' => 'Active' ] )->select( 'members.status' )->first();
+		$TotalCount = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['members.member_id' => $UserId,'members.status' => 'Joined'] )->count();
+		
+		$Status = isset($group->status)?$group->status:'Left';
+		
+		$CanAdd = $TotalCount < 15 ? 1 : 0;
+        return json_encode(array('limit' => $CanAdd, 'status' => $Status));
+    }
 	
 }
 	

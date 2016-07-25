@@ -714,10 +714,11 @@ class DashboardController extends Controller
 		$userid = Auth::User()->id;
         if( Request::isMethod('post') ){
 				$userXamp = Auth::User()->xmpp_username;
+				$name 	= Auth::User()->first_name.' '.Auth::User()->last_name;
 				$input = Request::all();
 	 
 				if( isset($input['groupmembers']) && $input['groupname'] != null ){
-					array_push($input['groupmembers'],$userid);
+					
 					$members=implode(",",$input['groupmembers']);
 					$data = array(
 								'title'=>$input['groupname'],
@@ -729,14 +730,19 @@ class DashboardController extends Controller
 					$groupid   = strtolower($groupid);
 					$converse  = new Converse;
 					$groupdata = Group::create($data);
-					$groupname = $groupid."_".$groupdata->id.'_pvt';
+					$GroupJid = $groupid."_".$groupdata->id.'_pvt';
 					
 					$PrivateGroup = Group::find($groupdata->id);
-					$PrivateGroup->group_jid = $groupname;
+					$PrivateGroup->group_jid = $GroupJid;
 					$PrivateGroup->update();
 					
-					$converse->createGroup($groupid,$groupname);
-					
+					$converse->createGroup($groupid,$GroupJid);
+					$SelfInsertMember = array(
+								'group_id'	=> $groupdata->id,
+								'member_id'	=> $userid,
+								'status'	=> 'Joined'
+							);
+					GroupMembers::insert($SelfInsertMember); 
 					foreach ($input['groupmembers'] as $data) {
 						$data1 = array(
 									'group_id'=>$groupdata->id,
@@ -745,11 +751,12 @@ class DashboardController extends Controller
 								);
 						 GroupMembers::insert($data1);  
 					}
-					$xmp = User::whereIn('id',$input['groupmembers'])->pluck('xmpp_username');
-					$Message = json_encode( array( 'type' => 'privatechat' , 'chatgroup' => $groupname, 'message' => webEncode('You are invited for '.$GroupTitle) ) );
+					array_push($input['groupmembers'],$userid);
+					$xmp = User::whereIn('id',$input['groupmembers'])->select('xmpp_username as xmpp_userid','id as user_id')->get();
+					$Message = json_encode( array( 'type' => 'room', 'groupname' => $GroupTitle, 'sender_jid' => $userXamp, 'groupjid'=>$GroupJid, 'group_image' => '', 'created_by'=>$name,'message' => webEncode('This invitation is for joining the '.$GroupTitle.' group.'), 'users' => $xmp) );
 					foreach ($xmp as $key => $value) {
-						$converse->addUserGroup( $groupname,$value );
-						$converse->broadcast($userXamp,$value,$Message);
+						$converse->addUserGroup( $GroupJid,$value->xmpp_userid );
+						$converse->broadcast($userXamp,$value->xmpp_userid,$Message);
 					}
 				return redirect(url('private-group-list'));       
 			}  else {
