@@ -30,13 +30,13 @@ return [
 
 	'feedback_email' => 'contact@friendzsquare.com',
 
-	'broadcast_limit' => 10,
+	'broadcast_limit' => '10',
 
-	'private_group_limit' => 5,
+	'private_group_limit' => '5',
 
-	'private_members' => 10,
+	'private_members' => '10',
 
-	'max_upload_filesize' => 4194304,
+	'max_upload_filesize' => '4194304',
 ]
 
 ?>

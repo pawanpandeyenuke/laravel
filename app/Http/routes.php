@@ -209,6 +209,8 @@ Route::post('api/delete-broadcast','ApiController@deleteBroadcast');
 Route::post('api/private-group-add','ApiController@privateGroupAdd');
 Route::post('api/get-group-list','ApiController@getGroupList');
 Route::post('api/delete-private-group','ApiController@deletePrivateGroup');
+Route::post('api/private-group-image-upload','ApiController@privateGroupImageUpload');
+
 
 Route::post('api/get-groups','ApiController@publicGroupGetIds');
 

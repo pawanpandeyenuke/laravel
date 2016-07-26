@@ -21,7 +21,6 @@ class ContactImporter extends Controller
  
     public function inviteFriends()
     {
-        
         // somethingOrOther();
 
         $client = new Google_Client();

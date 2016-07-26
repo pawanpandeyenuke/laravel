@@ -1,6 +1,12 @@
 @extends('layouts.dashboard')
 @section('title', 'Private Group - ')
 @section('content')
+
+<?php 
+ 	$private_group_limit = Config::get('constants.private_group_limit'); 
+?>
+
+
 <div class="page-data dashboard-body">
 	<div class="container">
 		<div class="row">
@@ -29,7 +35,8 @@
 								}
 							}
 
-							$group_picture = !empty($data['picture']) ? $data['picture'] : '/images/post-img-big.jpg';
+							$group_picture = !empty($data['picture']) ? url('uploads/'.$data['picture']) : url('/images/post-img-big.jpg');
+							// echo '<pre>';print_r($group_picture);die;
 							$namestr=implode(",",$name);
 
 							if(!($count==0) || $data['owner_id']==Auth::User()->id)
@@ -68,7 +75,7 @@
 							@if (Session::has('success'))
 								<div class="alert alert-success">{!! Session::get('success') !!}</div>
 							@endif
-							<div class="alert alert-danger" id="ajaxmsg" style="display:none;"><?php echo "Sorry, you can only create upto ".Config::get('constants.private_group_limit')." private groups."; ?></div>
+							<div class="alert alert-danger" id="ajaxmsg" style="display:none;"><?php echo "Sorry, you can only create upto {{$private_group_limit}} private groups."; ?></div>
 							<div class="add-blist text-center">
 								<a href="#create-group" title="" class="add-blist-btn add-pglist-btn"><i class="fa fa-plus"></i></a>
 							</div>
@@ -86,7 +93,7 @@
 	
 	$(document).on('click','.add-pglist-btn',function(){
 			var len = $(".bcast-list > div").length;
-			if(len >= <?php echo Config::get('constants.private_group_limit'); ?>)
+			if(len >= <?= $private_group_limit ?>)
 				$('#ajaxmsg').show();
 			else
 				window.location = "private-group-add";

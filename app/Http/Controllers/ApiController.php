@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use Mail;
+use Mail, Config;
 use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
 use App\Http\Controllers\Controller;
@@ -1618,6 +1618,11 @@ class ApiController extends Controller
 	            		throw new Exception("No user found");					
 	            	else {
 
+	            		$groupsDataCount = Group::where('owner_id', $input['owner_id'])->get();
+	            		// echo Config::get('constants.private_group_limit');die;
+	            		if($groupsDataCount->count() >= Config::get('constants.private_group_limit'))
+	            			throw new Exception("You have reached the limit of creating private groups.", 1);
+
 	            		$error=0;
 	            		// $members=explode(',',$input['broadcast_members']);
 
@@ -1636,13 +1641,14 @@ class ApiController extends Controller
 
 	            		}
 
-	            		if($error!=0)
+	            		if($error!=0){
 	            			throw new Exception($error." is not a friend and can't be added to group");	
-	            		else {
+	            		}else {
 	            			array_push($input['member_id'],$input['owner_id']);
 	            			$data = array(
 				                        'title'=>$input['title'],
 				                        'owner_id'=>$input['owner_id'],
+				                        'group_jid' =>$input['group_jid'],
 	                       			);
 	                              
 			                $bid = Group::create($data);
@@ -1656,6 +1662,14 @@ class ApiController extends Controller
 		                    	GroupMembers::create($data1);
 	               			}
 
+							$groupid   = preg_replace('/[^A-Za-z0-9\-]/', '_', $input['title']);
+							$groupid   = strtolower($groupid);
+							$GroupJid = $groupid."_".$bid->id.'_pvt';
+							// echo '<pre>';print_r($GroupJid);die;
+							$newGroup = Group::find($bid->id);
+							$newGroup->group_jid = $GroupJid;
+							$newGroup->save();
+
 			                $this->status="success";
 			                $this->message="Group created.";
 			                $this->data=Group::where('id',$bid['id'])->get()->toArray();
@@ -1668,6 +1682,35 @@ class ApiController extends Controller
 	    	}
 		}
 		catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
+
+	/*
+	 * Upload private groups picture.
+	 */
+	public function privateGroupImageUpload()
+	{
+		try{
+			
+			if(Request::hasFile('picture')){
+				$file = Request::file('picture');
+				$image_name = time()."_pvt_grp_".strtoupper($file->getClientOriginalName());
+				$status = $file->move('uploads', $image_name);
+
+				$this->message = 'Image uploaded successfully.';
+				$this->data = json_encode( array( 'image_name' => $image_name ) );
+				$this->status = 'success';
+				
+			}else{
+				throw new Exception("Image is required.", 1);				
+			}
+
+		}catch(Exception $e){
 			$this->message = $e->getMessage();
 		}
 

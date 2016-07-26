@@ -754,13 +754,16 @@ class DashboardController extends Controller
 					array_push($input['groupmembers'],$userid);
 					$xmp = User::whereIn('id',$input['groupmembers'])->select('xmpp_username as xmpp_userid','id as user_id')->get();
 					$Message = json_encode( array( 'type' => 'room', 'groupname' => $GroupTitle, 'sender_jid' => $userXamp, 'groupjid'=>$GroupJid, 'group_image' => '', 'created_by'=>$name,'message' => webEncode('This invitation is for joining the '.$GroupTitle.' group.'), 'users' => $xmp) );
+
 					foreach ($xmp as $key => $value) {
 						$converse->addUserGroup( $GroupJid,$value->xmpp_userid );
 						$converse->broadcast($userXamp,$value->xmpp_userid,$Message);
 					}
-				return redirect(url('private-group-list'));       
+
+				return redirect(url('private-group-list'));
+
 			}  else {
-			  return redirect()->back();
+			     return redirect()->back();
 			}
 		}
 
