@@ -229,25 +229,24 @@
 														$counter = 1;
 														$offset = count($data['comments']) - 3;
 													foreach($data['comments'] as $commentsData){
-													
-														$username = \App\User::where('id', $commentsData['commented_by'])->get(['first_name', 'last_name', 'picture']);
 
-														$profileimage = !empty($username[0]->picture) ? $username[0]->picture : '/images/user-thumb.jpg';
+														$username = \App\User::where('id', $commentsData['commented_by'])->get(['first_name', 'last_name', 'picture'])->first();
+
+														$profileimage = !empty($username->picture) ? $username->picture : '/images/user-thumb.jpg';
 
 														$userId = \App\User::where('id', $commentsData['commented_by'])->get(['id']);
 
 														if(!empty($username)){
-
-															$name = $username[0]->first_name.' '.$username[0]->last_name; 
+															// echo '<pre>';print_r($username);die;
+															$name = $username->first_name.' '.$username->last_name; 
 
 															if($counter > $offset){ ?>
 																<li data-value="{{ $commentsData['id'] }}" id="post_{{ $commentsData['id'] }}">
-									<?php if($commentsData['commented_by']==Auth::User()->id){ ?>
-																<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>	
+																<?php if($commentsData['commented_by']==Auth::User()->id){ ?>
+																	<button type="button" class="p-edit-btn edit-comment" data-toggle="modal" title="Edit" data-target=".edit-comment-popup"><i class="fa fa-pencil"></i></button>	
 
-																<button type="button" class="p-del-btn comment-delete" ><span class="glyphicon glyphicon-remove"></span></button>
-
-													<?php } ?>
+																	<button type="button" class="p-del-btn comment-delete" ><span class="glyphicon glyphicon-remove"></span></button>
+																<?php } ?>
 															
 																<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 																<div class="comment-title-cont">
@@ -274,7 +273,6 @@
 														}
 													}
 													?>
-													
 												@endif
 											</ul>
 
@@ -283,7 +281,7 @@
 								</div><!--/post-footer-->
 							</div><!--/single post-->
 						@endforeach
-
+<?php //die('kill'); ?>
 						<!-- Delete comment confirmation box -->
 						<div class="modal fade comment-del-confrm" id="modal" tabindex="-1" role="dialog" aria-labelledby="DeletePost"></div>
 						<!-- Delete comment confirmation box -->
