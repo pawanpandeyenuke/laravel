@@ -2,10 +2,10 @@
 @section('title', 'Private Group - ')
 <?php 
 
-//print_r($groupdetail);die;
-$title1=strtolower($groupdetail[0]['title']);
-$title1=str_replace(" ","-",$title1);
-
+// echo '<pre>';print_r($groupdetail);die;
+$title1 = strtolower($groupdetail[0]['title']);
+$title1 = str_replace(" ","-",$title1);
+$group_picture = isset($groupdetail[0]) ? url('/uploads/'.$groupdetail[0]['picture']) : url('/images/post-img-big.jpg');
 
  ?>
 @section('content')
@@ -20,10 +20,6 @@ $title1=str_replace(" ","-",$title1);
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title no-left-padding">Detail</div>
 
-<?php
-			$group_picture = !empty($groupdetail[0]['picture']) ? $groupdetail[0]['picture'] : '/images/post-img-big.jpg';
-	
- ?>
  		{{Form::open(array('url'=>'/private-group-detail/ajax/groupimage','id'=>'uploadgroupimage','files'=>true))}}
 					<div class="group-img" id="groupimageholder">
 						<img src="{{$group_picture}}" class="g-img">

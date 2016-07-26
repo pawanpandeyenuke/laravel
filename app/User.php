@@ -89,4 +89,9 @@ class User extends Authenticatable
         return $this->belongsTo('App\Friend','friend_id','id')->select(['id','first_name', 'last_name', 'picture','xmpp_username']);
 	}
 
+/*	public function settingtype()
+	{
+        return $this->belongsTo('App\Setting','user_id','id');
+	}
+*/
 }

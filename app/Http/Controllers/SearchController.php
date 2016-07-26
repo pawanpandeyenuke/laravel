@@ -7,12 +7,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests,Config;
 use Request, Session, Validator, Input, Cookie, URL;
 use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend,App\ForumLikes,App\ForumReply,App\ForumsDoctor;
+use App\Setting;
+
 class SearchController extends Controller
 {
     
-     public function searchFromUsers()
+    public function searchFromUsers()
     {
-        if(Request::isMethod('post')){
+        if(Request::isMethod('post'))
+        {
 
             $input = Request::all();
             $keyword = $input['searchfriends'];
@@ -38,9 +41,6 @@ class SearchController extends Controller
             }
 
             if( $authUserId != '' ){
-                
-                // User cannot search himself.
-               // $model = $model->where('id', '!=', $authUserId);
 
                 // Search for user's who are not friends with me.
                 $model = $model->whereNotIn('id', Friend::where('user_id', '=', $authUserId)
@@ -48,7 +48,34 @@ class SearchController extends Controller
                                 ->pluck('friend_id')
                                 ->toArray() );
 
+
+                $reqByMe = Setting::where(['user_id' => $authUserId, 'setting_title' => 'friend-request'])->value('setting_value');
+                
+                if(!empty($reqByMe))
+                {
+                    if($reqByMe == 'friends-of-friends'){
+
+                        $myfriends = Friend::where('user_id', $authUserId)->where('status', 'Accepted')->pluck('friend_id')->toArray();
+                        
+                        $myfriendsFriends = Friend::whereIn('user_id', $myfriends)->where('friend_id', '!=', $authUserId)->where('status', 'Accepted')->pluck('friend_id')->toArray();
+
+                        $model = $model->whereIn('id', $myfriendsFriends);
+
+                        // echo '<pre>';print_r($model->get()->toArray());die;
+
+                        // return $model;
+
+                    }elseif($reqByMe == 'nearby-app-user'){
+
+                    }elseif($reqByMe == 'all'){
+
+                    }
+                }
+
+
             }
+
+            // $model = self::settingSearch($model);
 
             // Gather all the results from the queries and paginate it.
             $count = $model->get()->count();
@@ -67,6 +94,39 @@ class SearchController extends Controller
         }
         
     }
+
+
+/*    public function settingSearch($model)
+    {
+        $authUserId = Auth::User()->id;
+
+        if( !empty( $authUserId ) ){
+            $reqByMe = Setting::where(['user_id' => $authUserId, 'setting_title' => 'friend-request'])->value('setting_value');
+
+            if(!empty($reqByMe))
+            {
+                if($reqByMe == 'friends-of-friends'){
+
+                    $myfriends = Friend::where('user_id', $authUserId)->where('status', 'Accepted')->pluck('friend_id')->toArray();
+                    
+                    $myfriendsFriends = Friend::whereIn('user_id', $myfriends)->where('friend_id', '!=', $authUserId)->where('status', 'Accepted')->pluck('friend_id')->toArray();
+
+                    // echo '<pre>';print_r($myfriendsFriends);die;
+                    $model = $model->whereIn('id', $myfriendsFriends);
+
+                    // echo '<pre>';print_r($model->get()->toArray());die;
+
+                    return $model;
+
+                }elseif($reqByMe == 'nearby-app-user'){
+
+                }elseif($reqByMe == 'all'){
+
+                }
+            }
+        }
+
+    }*/
 
 
     public function contactUs()
