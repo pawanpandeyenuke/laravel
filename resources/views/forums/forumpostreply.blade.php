@@ -205,7 +205,7 @@ $(".multiple-slt").select2();
 	window.onload = function() {
       var w = $('#sticky-anchor').width();
 		$('.fix-header').css('width',w+60);
-		// $(".forum_post .morelink").click();
+		$(".forum_post .morelink").click();
 		// $(".forum_post .morelink").addClass('unique_post');
 	}
 
