@@ -237,7 +237,7 @@
 														$userId = \App\User::where('id', $commentsData['commented_by'])->get(['id']);
 
 														if(!empty($username)){
-															// echo '<pre>';print_r($username);die;
+
 															$name = $username->first_name.' '.$username->last_name; 
 
 															if($counter > $offset){ ?>
@@ -281,7 +281,7 @@
 								</div><!--/post-footer-->
 							</div><!--/single post-->
 						@endforeach
-<?php //die('kill'); ?>
+
 						<!-- Delete comment confirmation box -->
 						<div class="modal fade comment-del-confrm" id="modal" tabindex="-1" role="dialog" aria-labelledby="DeletePost"></div>
 						<!-- Delete comment confirmation box -->
