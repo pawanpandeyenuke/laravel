@@ -206,7 +206,7 @@ $groupid = $group_jid;
 												 <?php $groups[$data['group_jid']]=$data['title'];  ?> 												  
 												 
 												<div class="pvt-room-list" style="position:relative;" >
-													<a href="{{url("private-group-detail/<?= $data['id'] ?>")}}" >
+													<a href="<?php echo url("private-group-detail/".$data['id']); ?>" >
 														<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
 														<span class="title">{{$data['title']}}</span>
 													</a>
