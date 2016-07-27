@@ -42,7 +42,7 @@
 			</div>
 
 			<div class="post-data">
-				<p>{{ $reply_data }}</p>
+				<p><?php echo nl2br($reply_data) ?></p>
 			</div>
 			<div class="post-action clearfix">
 				<div class="row-cont clearfix">
@@ -87,7 +87,7 @@
 					</div>
 
 					<div class="post-data no-bottom-padding">
-						<p>{{ $replyComment }}</p>
+						<p><?php echo nl2br($replyComment) ?></p>
 					</div>
 					<div class="post-action clearfix">
 						<div class="time-comment-bottom text-right">
