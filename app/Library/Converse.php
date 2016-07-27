@@ -282,7 +282,7 @@ class Converse
 	 			}elseif ( $parameters['type'] === 'comment' ) {
 
 	 				$object = ForumReply::find($parameters['object_id']);
-	 				$result = self::viewLessMore($object->title);
+	 				$result = self::viewLessMore($object->reply);
 
 	 				$data['current_data'] = $name.' commented on your reply "'.$result.'".';
 	 				$data['post_message'] = $parameters['current_data'];
