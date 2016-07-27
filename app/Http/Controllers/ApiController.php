@@ -1703,7 +1703,7 @@ class ApiController extends Controller
 				$status = $file->move('uploads', $image_name);
 
 				$this->message = 'Image uploaded successfully.';
-				$this->data = json_encode( array( 'image_name' => $image_name ) );
+				$this->data = $image_name;
 				$this->status = 'success';
 				
 			}else{
