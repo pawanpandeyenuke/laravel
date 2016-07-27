@@ -3447,3 +3447,6 @@ header{
 	 border-bottom: 1px solid #dcdddd;
 	  margin-bottom: 0;
 }
+.morecontent span{
+	font-size: 13px;
+}

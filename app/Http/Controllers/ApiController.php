@@ -2035,7 +2035,8 @@ class ApiController extends Controller
 			$posts = ForumPost::with('user')->with('forumPostLikesCount')->with('replyCount');
 
 			if($keyword){
-				$posts = $posts->whereRaw( 'LOWER(`title`) like ?', array("%".$keyword."%"));
+				$posts = $posts->whereRaw( 'title like ?', array("%".$keyword."%"));
+				// $posts = $posts->whereRaw( 'LOWER(`title`) like ?', array("%".$keyword."%"));
 			}
 			
 			if($breadcrumb){
