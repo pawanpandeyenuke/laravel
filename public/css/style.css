@@ -3442,11 +3442,9 @@ header{
 .forum-srch-list .forum-master-post p.forum_post{
 	max-height: 125px;
 	overflow-y: auto;
+	font-size: 13px;
 }
 .forum-srch-list .fs-breadcrumb{
 	 border-bottom: 1px solid #dcdddd;
 	  margin-bottom: 0;
-}
-.morecontent span{
-	font-size: 13px;
 }
