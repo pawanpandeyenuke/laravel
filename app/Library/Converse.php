@@ -266,24 +266,25 @@ class Converse
 
  				$data = array();
  				$subject = User::find($parameters['user_id']);
- 				$result = self::viewLessMore($parameters['current_data']);
  				$name = $subject->first_name.' '.$subject->last_name;
 
 	 			if( $parameters['type'] === 'reply' ){
 
 	 				$object = ForumPost::find($parameters['object_id']);
+	 				$result = self::viewLessMore($object->title);
 
 	 				$data['current_data'] = $name.' replied on your post "'.$result.'".';
-	 				$data['post_message'] = $object->title;
+	 				$data['post_message'] = $parameters['current_data'];
 	 				$data['type'] = 'Post: ';
 	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
 
 	 			}elseif ( $parameters['type'] === 'comment' ) {
 
 	 				$object = ForumReply::find($parameters['object_id']);
-
+	 				$result = self::viewLessMore($object->title);
+	 				
 	 				$data['current_data'] = $name.' commented on your reply "'.$result.'".';
-	 				$data['post_message'] = $object->reply;
+	 				$data['post_message'] = $parameters['current_data'];
 	 				$data['type'] = 'Reply: ';
 	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
 
