@@ -611,6 +611,7 @@ function hideOpendBox( grpname , actiontype ){
 			resultreturn = false;
 		} else if($(this).css('display') == 'block'){
 			getChat.minimize();
+			$(this).css('display', 'none');
 		}
 	});
 	
