@@ -46,7 +46,7 @@
 									<div class="row">
 										<div class="col-sm-9">
 											<div class="bclist-detail bclist1">
-												<div class="bc-img" style="background: url(<?= $group_picture ?>);"></div>
+												<div class="bc-img" style="background: url('<?= $group_picture ?>');"></div>
 												<div class="list-name">
 
 													<a href="{{url("private-group-detail/".$data['id'])}}" class="bc-name"  title="">{{$data['title']}}</a>
