@@ -116,9 +116,11 @@ $groupid = $group_jid;
                                       <div class="panel-body">
                                         <div class="chat-header-small">
                                           <?php 
-                                                $icon_url = url('category_images/'.$group_image); 
-                                          ?>
-                                          <img src="{{$icon_url}}" alt="" class="img-icon"><b><?php echo ($exception == "private")?"":$groupname; ?></b>
+                                             $icon_url = url('category_images/'.$group_image); 
+                                          if( isset($group_image) && !empty($group_image) ) { ?>
+                                           <img src="{{$icon_url}}" alt="" class="img-icon">
+                                          <?php } ?>
+                                         <b><?php echo ($exception == "private")?"":$groupname; ?></b>
                                         </div>
                                         <div class="chat-user-list StyleScroll">
                                           <ul>
