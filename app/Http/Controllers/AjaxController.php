@@ -368,7 +368,7 @@ comments;
 				if( isset($UserDetails->picture) && !empty($UserDetails->picture) ){
 					$Image = $UserDetails->picture;
 				} else {
-					$Image = 'user-thumb.jpg';
+					$Image = '/images/user-thumb.jpg';
 				}
 				if( isset($UserDetails->first_name) && !empty($UserDetails->first_name) ){
 					$Name = $UserDetails->first_name.' '.$UserDetails->last_name;
@@ -376,7 +376,7 @@ comments;
 					$Name = $input['user_jid'];
 				}
 			} else {
-				$Image = 'user-thumb.jpg';
+				$Image = '/images/user-thumb.jpg';
 				$Name = $input['user_jid'];
 			}
 			echo json_encode(array( 'image'=>$Image, 'name' => $Name ));
