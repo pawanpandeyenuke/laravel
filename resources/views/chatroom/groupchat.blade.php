@@ -282,9 +282,7 @@ $groupid = $group_jid;
 	var checkActiveGroupUrl = '<?= url('/ajax/isactivemember') ?>';
 	var GetProfileUrl = '<?= url('/ajax/profilenameimage') ?>';
 	var profiletitles = {};
-	setTimeout( function(){
-		waitProfile = 1;
-	}  , 4000 );
+	
 	
 	function webEncode( str ){
 		//return Base64.encode( str );
@@ -302,10 +300,13 @@ $groupid = $group_jid;
 				   if( groupname != '' || groupid != '' ) {
 						setTimeout( function(){
 							closePublic( groupid );
-						}  , 2000 );
+						}  , 1000 );
 					}
 					jQuery("#loader").addClass('hide');
 					jQuery("#afterload").removeClass('hide');
+					setTimeout( function(){
+						waitProfile = 1;
+					}  , 3000 );
 				});
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
