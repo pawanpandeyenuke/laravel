@@ -24,7 +24,7 @@
 			</div>
 
 			<div class="post-data no-bottom-padding">
-				<p>{{ $replyComment }}</p>
+				<p><?php echo nl2br(forumPostContents($replyComment, '#', 135)); ?></p>
 			</div>
 			<div class="post-action clearfix">
 				<div class="time-comment-bottom text-right">

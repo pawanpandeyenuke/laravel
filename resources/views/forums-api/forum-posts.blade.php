@@ -41,7 +41,7 @@
 					  	@endif
 				  	@endif
 					<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
-					<span class="title">{{ $user->first_name }}</span>
+					<span class="title">{{ $user->first_name.' '.$user->last_name }}</span>
 					<div class="post-time">
 						<span class="date"><img src="{{url('/forums-data/images/date-icon.png')}}" alt="">{{ $post->updated_at->format('D jS') }}</span>
 						<span class="time"><img src="{{url('/forums-data/images/time-icon.png')}}" alt="">{{ $post->updated_at->format('h:i A') }}</span>
@@ -55,7 +55,7 @@
 				</div>
 
 				<div class="post-data">
-					<p><?php echo nl2br(forumPostContents($postTitle, '#')); ?></p>
+					<p><?php echo nl2br(forumPostContents($postTitle, '#', 135)); ?></p>
 				</div>
 				<div class="post-action clearfix">
 					<div class="row-cont clearfix">
@@ -85,7 +85,7 @@
 	</div>
 		@if($posts->count() >= 5)
 			<div class="load-more-btn-cont text-center">
-				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumpost loading-btn" data-breadcrum = "{{$breadcrumb}}">View More</button>
+				<button type="button" class="load-more-forumpost loading-btn" data-breadcrum = "{{$breadcrumb}}">View More</button>
 			</div>
 		@endif
 <div class="userid" data-id="{{$user_id}}"></div>

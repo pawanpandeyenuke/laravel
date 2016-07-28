@@ -32,7 +32,7 @@
 								<ul>
 
 									<li><span class="icon flaticon-time">{{$reply->updated_at->format('h:i A')}}</span></li>
-									<li><span class="icon flaticon-days">{{$reply->updated_at->format('d D')}}</span></li>
+									<li><span class="icon flaticon-days">{{$reply->updated_at->format('M d, Y')}}</span></li>
 								</ul>
 							</div>
 						</div>
@@ -91,7 +91,7 @@
 
 									</div>
 									<div class="col-sm-6">
-										<div class="comment-time text-right">{{$data->created_at->format('h:i A,d M')}}</div>
+										<div class="comment-time text-right">{{$data->created_at->format('h:i A, M d, Y')}}</div>
 									</div>
 								</div>
 							</div>

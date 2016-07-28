@@ -18,7 +18,7 @@ class SearchController extends Controller
         {
 
             $input = Request::all();
-            $keyword = $input['searchfriends'];
+            $keyword = trim($input['searchfriends']);
 
             if($keyword == "")
                 return redirect('/');
@@ -449,7 +449,7 @@ class SearchController extends Controller
         if($mainforum == "Doctor" && $input['check']!='direct')
             $breadcrum = $breadcrum." > ".$input['search-diseases'];
         
-        $keyword = strtolower($input['forum-keyword']);
+        $keyword = strtolower(trim($input['forum-keyword']));
 
         $replyresult = ForumReply::whereRaw( 'LOWER(`reply`) like ?', array("%".$keyword."%"))
                             ->pluck('post_id')

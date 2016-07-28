@@ -309,6 +309,7 @@
 
 <script type="text/javascript">
 		$(document).on("click",".btn-post",function(){
+			alert('hi');
 					    // Opera 8.0+
 			// var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
 			//     // Firefox 1.0+

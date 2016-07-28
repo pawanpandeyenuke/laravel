@@ -41,7 +41,7 @@
 			</div>
 
 			<div class="post-data">
-				<p id="forum_post"><?php echo nl2br(forumPostContents($postTitle,'#')); ?></p>
+				<p id="forum_post"><?php echo nl2br(forumPostContents($postTitle, '#', 135)); ?></p>
 			</div>
 			<div class="post-action clearfix">
 				<div class="row-cont clearfix">
@@ -104,7 +104,7 @@
 						</span>
 					</div>
 					<div class="post-data">
-						<p><?php echo nl2br(forumPostContents($reply_data,'#')); ?></p>
+						<p><?php echo nl2br(forumPostContents($reply_data, '#', 135)); ?></p>
 					</div>
 					<div class="post-action clearfix">
 						<div class="row-cont clearfix">
@@ -133,7 +133,7 @@
 		</div>
 		@if($replies->count() >= 5)
 			<div class="load-more-btn-cont text-center">
-				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumreply loading-btn" data-forumpostid = "{{$checkpost->id}}">View More</button>
+				<button type="button" class="load-more-forumreply loading-btn" data-forumpostid = "{{$checkpost->id}}">View More</button>
 			</div>
 		@endif
 

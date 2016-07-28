@@ -42,7 +42,7 @@
 			</div>
 
 			<div class="post-data">
-				<p><?php echo nl2br($reply_data) ?></p>
+				<p><?php echo nl2br(forumPostContents($reply_data, '#', 135)) ?></p>
 			</div>
 			<div class="post-action clearfix">
 				<div class="row-cont clearfix">
@@ -87,7 +87,7 @@
 					</div>
 
 					<div class="post-data no-bottom-padding">
-						<p><?php echo nl2br($replyComment) ?></p>
+						<p><?php echo nl2br(forumPostContents($replyComment, '#', 135)) ?></p>
 					</div>
 					<div class="post-action clearfix">
 						<div class="time-comment-bottom text-right">
@@ -102,11 +102,13 @@
 			</div> -->
 		</div>
 
+
+<?php /*
 		@if($replyComments->count() >= 5)
 			<div class="load-more-btn-cont text-center">
 				<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumcommets loading-btn" data-forumreplyid = "{{$reply->id}}">View More</button>
 			</div>
 		@endif
-
+*/ ?>
 	</div>
 @endsection

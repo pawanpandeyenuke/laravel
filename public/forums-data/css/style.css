@@ -315,3 +315,20 @@ span.loc img{
 .morelink {
   color: #4EBDAF !important;
 }
+.single-post .post-data {
+    padding: 10px 15px 5px;
+}
+.single-post .post-action{
+      padding: 0px 15px 10px;
+}
+.load-more-btn-cont.text-center{
+  background:#fff;
+}
+.load-more-btn-cont.text-center .load-more-forumpost, .load-more-btn-cont.text-center .load-more-forumreply{
+  border: 0;
+  background: none;
+  color: #333;
+  font-size: 16px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+}

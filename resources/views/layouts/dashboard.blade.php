@@ -100,6 +100,9 @@
             <a href="#" title="" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Login</a>
             @endif
 				</div>
+        <div class="innr_hdr">
+          <div id="google_translate_element" name="Select Language"></div>
+        </div>
 			</div>
 		</div>
 	</div>
@@ -149,7 +152,7 @@
 <?php } ?>
 </body>
 </html>
-
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
 	
    $("#loginform").submit(function(event){
@@ -266,6 +269,10 @@
       $('.message_text').val('');
       $('.useremail').val('');
     });
+
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+    }
 
 </script>
 

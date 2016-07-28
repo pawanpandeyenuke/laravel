@@ -37,7 +37,7 @@
 			<div class="col-sm-2">
 				<a href="{{url('/')}}" title="" class="logo"><img src="/images/logo.png" alt="Friendz Square"></a>
 			</div>
-			<div class="col-sm-7">
+			<div class="col-sm-6">
 				<div class="top-search-cont">
 					<div class="row">
 						<div class="col-sm-6">
@@ -61,9 +61,14 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-3">
-				<div class="header-right-menu text-right">
+			<div class="col-sm-4">
+				<div class="header-right-menu">
+
+				<div class="suggestn_blk">
 					<a href="#" title="" class="btn btn-primary btn-header-right" data-toggle="modal" data-target="#myModal">Suggestions</a>
+				</div>
+					<div class="log_out"><div id="google_translate_element" name="Select Language"></div></div>
+
 							  <form id="suggestionform" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" >
                             <div class="modal fade send-msg-popup" id="myModal" tabindex="-1" role="dialog" aria-labelledby="sendMsgLabel">
                            
@@ -104,9 +109,10 @@
 		@yield('content')
 
 		{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript" >
 
-	   $("#loginform").submit(function(event){
+	$("#loginform").submit(function(event){
               $('.login').text('Please Wait..');
               $('.login').prop('disabled',true);
     });
@@ -119,8 +125,11 @@
     
     $("#loginform").ajaxForm(function(response) { 
          
-    if(response){
-            $('.password').next('.help-block').find('.verifymsg').hide();
+    if(response)
+    {
+    	response = $.trim(response);
+    	// console.log(response.length);return;
+        $('.password').next('.help-block').find('.verifymsg').hide();
         
         if(response === "These credentials do not match our records.")
         {
@@ -135,12 +144,13 @@
 
         }
 
-        if(response === "verification")
+        if(response === "verification"){
             window.location = 'send-verification-link';
-
-        else if(response == "success"){
-            var url_c = window.location.pathname;
-           if(url_c == "/newpassword"){
+        }
+        else if(response == "success")
+        {
+           	var url_c = window.location.pathname;
+           	if(url_c == "/newpassword"){
 				window.location = "/";
 			}
 			else if(url_c.indexOf("email-verified") > -1 || url_c == "/send-verification-link"){
@@ -150,9 +160,9 @@
 				window.location = url_c;
 			}
         }else{
-            var obj = jQuery.parseJSON( response );
+        	console.log('c');
+            var obj = $.parseJSON( response );
             if( obj.email != null ){
-
                 var current = $('.emailid');
                 current.next('.help-block').find('.verifymsg').hide();
                 current.css('border-color','#a94442');
@@ -273,6 +283,11 @@
 					}			
 				});	
 			});
+
+
+		    function googleTranslateElementInit() {
+		      new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+		    }
 			
 		</script>
 	</body>

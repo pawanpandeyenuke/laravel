@@ -1461,6 +1461,76 @@ class ApiController extends Controller
 
 
 	/*
+	 * update braodcasts.
+	 */
+    public function broadcastUpdate()
+    {
+ 	 	try
+ 	 	{
+ 	 		$id = Request::get('id');
+ 	 		$user_id = Request::get('user_id');
+ 	 		$broadcast_name = Request::get('broadcast_name');
+ 	 		$broadcast_members = Request::get('broadcast_members');
+
+ 	 		if( empty( $id ) )
+ 	 			throw new Exception("Broadcast id is required.", 1);
+ 	 			
+			if( empty( $user_id ) )
+				throw new Exception("User id is required.", 1);
+
+			$user = User::find($user_id)->toArray();
+
+ 	 		if( empty( $user ) )
+ 	 			throw new Exception("User does not exist.", 1);
+
+ 	 		$broadcast = Broadcast::where(['id' => $id, 'user_id' => $user_id])->get()->toArray();
+
+ 	 		if( empty( $broadcast ) )
+ 	 			throw new Exception("Broadcast does not exist.", 1);
+
+ 	 		if( !empty( $broadcast_name ) ){
+ 	 			Broadcast::where('id', $id)->update(['title' => $broadcast_name]);      	
+ 	 			// echo '<pre>';print_r($broadcast_name);die;
+ 	 		}
+
+ 	 		if( !empty( $broadcast_members ) ){
+
+ 	 			BroadcastMembers::where('broadcast_id', $id)->delete();
+
+ 	 			$invalid_users = array();
+ 	 			foreach ($broadcast_members as $key => $value) {
+ 	 				if(!User::find($value)){
+ 	 					$invalid_users[] = $value;
+ 	 				}else{
+	 	 				$bMemberObj = new BroadcastMembers;
+	 	 				$bMemberObj->broadcast_id = $id;
+	 	 				$bMemberObj->member_id = $value;
+	 	 				$bMemberObj->save(); 	 					
+ 	 				}
+ 	 			}
+ 	 			// echo '<pre>';print_r($saved);die;
+ 	 		}
+
+ 			if($invalid_users){
+ 				$users = implode(',', $invalid_users);
+ 				$message = '{'.$users.'} are invalid user ids.';
+ 			}else{
+ 				$message = "Broadcast updated.";
+ 			}
+
+            $this->status = "success";
+            $this->message = $message;
+            $this->data = Broadcast::find($id)->toArray();
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
+	/*
 	 * Get broadcast list on request.
 	 */
 	public function getBroadcastList()
@@ -1619,7 +1689,7 @@ class ApiController extends Controller
 	            	else {
 
 	            		$groupsDataCount = Group::where('owner_id', $input['owner_id'])->get();
-	            		// echo Config::get('constants.private_group_limit');die;
+
 	            		if($groupsDataCount->count() >= Config::get('constants.private_group_limit'))
 	            			throw new Exception("You have reached the limit of creating private groups.", 1);
 
@@ -1662,13 +1732,13 @@ class ApiController extends Controller
 		                    	GroupMembers::create($data1);
 	               			}
 
-							$groupid   = preg_replace('/[^A-Za-z0-9\-]/', '_', $input['title']);
-							$groupid   = strtolower($groupid);
-							$GroupJid = $groupid."_".$bid->id.'_pvt';
+							// $groupid   = preg_replace('/[^A-Za-z0-9\-]/', '_', $input['title']);
+							// $groupid   = strtolower($groupid);
+							// $GroupJid = $groupid."_".$bid->id.'_pvt';
 							// echo '<pre>';print_r($GroupJid);die;
-							$newGroup = Group::find($bid->id);
-							$newGroup->group_jid = $GroupJid;
-							$newGroup->save();
+							// $newGroup = Group::find($bid->id);
+							// $newGroup->group_jid = $GroupJid;
+							// $newGroup->save();
 
 			                $this->status="success";
 			                $this->message="Group created.";
@@ -2162,10 +2232,10 @@ class ApiController extends Controller
 
 		    $replyComments = ForumReplyComments::with('user')->where('reply_id', $reply_id)->get();
  
-			//echo '<pre>';print_r($replyComments);die;
+			// echo '<pre>';print_r($replyComments);die;
 			return view('forums-api.forum-post-reply-comments')
 					->with('reply', $reply)
-					->with('replyComments', $replyComments->take(5))
+					->with('replyComments', $replyComments)
 					->with('user_id',$user_id)
 					->render();
 

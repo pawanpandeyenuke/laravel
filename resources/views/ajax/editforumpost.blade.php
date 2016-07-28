@@ -5,7 +5,8 @@
 		        <div class="" id="">
 		        	@if(!empty($forumpost->title))
 			        	<div class="edit-post-textarea" data-feed="{{$forumpost->id}}">
-							{!! Form::textarea('forumtitle', $forumpost->title, array(
+			        		<?php $titledata = nl2br($forumpost->title); ?>
+							{!! Form::textarea('forumtitle', $titledata, array(
 								'id' => 'forumpost', 
 								'class' => 'form-control',
 								'data-emojiable' => true,

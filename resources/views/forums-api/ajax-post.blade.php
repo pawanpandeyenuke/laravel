@@ -43,7 +43,7 @@
 			  	@endif
 		  	@endif
 			<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
-			<span class="title">{{ $user->first_name }}</span>
+			<span class="title">{{ $user->first_name.' '.$user->first_name }}</span>
 			<div class="post-time">
 				<span class="date"><img src="{{url('/forums-data/images/date-icon.png')}}" alt="">{{ $posts->updated_at->format('D jS') }}</span>
 				<span class="time"><img src="{{url('/forums-data/images/time-icon.png')}}" alt="">{{ $posts->updated_at->format('h:i A') }}</span>
@@ -57,7 +57,7 @@
 		</div>
 
 		<div class="post-data">
-			<p><?php echo nl2br(forumPostContents($postTitle,url('api/get-forum-post-reply?post_id='.$posts->id))); ?></p>
+			<p><?php echo nl2br(forumPostContents($postTitle, '#', 135)); ?></p>
 		</div>
 		<div class="post-action clearfix">
 			<div class="row-cont clearfix">

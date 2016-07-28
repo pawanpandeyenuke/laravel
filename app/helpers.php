@@ -322,7 +322,7 @@
 
     }
 
-    function forumPostContents( $description, $ReadMoreUrl, $descriptionlength = 142){
+    function forumPostContents( $description, $ReadMoreUrl, $descriptionlength = 200){
         $data=0;
         if( !empty($description) ){
             if(strlen($description) < $descriptionlength){
@@ -381,4 +381,23 @@
             });
     }*/
 
+
+    // Convert number into K, M and B format
+    function format_number($num, $precision = 2)
+    {
+        if ($num >= 1000 && $num < 1000000) {
+            $n_format = number_format($num/1000,$precision).'K';
+        } else if ($num >= 1000000 && $num < 1000000000) {
+            $n_format = number_format($num/1000000,$precision).'M';
+        } else if ($num >= 1000000000) {
+            $n_format=number_format($num/1000000000,$precision).'B';
+        } else {
+            $n_format = $num;
+        }
+        
+        return $n_format;
+    }
+
 ?>
+
+

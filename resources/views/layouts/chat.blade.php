@@ -85,6 +85,7 @@
 						<li><div class="logout"><a class = "logout-link" href="{{ url('/logout') }}" title="">Logout</a></div></li>
 					</ul>
 				</div>
+        <div class="innr_hdr chat_hdr"> <div id="google_translate_element" name="Select Language"></div></div>
 			</div>
 		</div>
 	</div>
@@ -130,7 +131,7 @@
 	@yield('content')
 
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
-
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
 	$( "#searchform" ).submit(function( event ) {
 		var searchkey = $('#searchfriends').val();
@@ -171,7 +172,11 @@
       $('.message_text').val('');
       $('.useremail').val('');
     });
-	
+
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+    }
+
 </script>
   
 

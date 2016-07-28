@@ -108,14 +108,14 @@ $(document).ready(function(){
 
 			if(response != 'Post something to update.'){
 				var data = jQuery.parseJSON(response);
-				var message = data[0].message;
-				var image = data[0].image;
-				var postid = data[0].id;
+				var message = data.message;
+				var image = data.image;
+				var postid = data.id;
 				// console.log(data[0].message);
 
 				if(message)
 				{
-					jQuery('#postlist').find('#post_'+postid).find('.post-data p').text(message);
+					jQuery('#postlist').find('#post_'+postid).find('.post-data p').html(message);
 
 						 var original =$('#post_'+postid+' .post-data').first('p').html();		
 						 var converted = emojione.toImage(original);

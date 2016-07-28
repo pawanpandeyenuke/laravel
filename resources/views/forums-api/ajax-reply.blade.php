@@ -38,14 +38,14 @@
 			  	@endif
 
 				<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
-				<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name}}</span>
+				<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name }}</span>
 				<span class="loc">
 					<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($replyLocation)?$replyLocation:'N/A' }}
 				</span>
 			</div>
 
 			<div class="post-data">
-				<p><?php echo forumPostContents($reply_data,'#'); ?></p>
+				<p><?php echo nl2br(forumPostContents($reply_data, '#', 135)); ?></p>
 			</div>
 			<div class="post-action clearfix">
 				<div class="row-cont clearfix">

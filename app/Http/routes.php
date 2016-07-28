@@ -205,6 +205,7 @@ Route::post('api/exit-group','ApiController@exitGroup');
 Route::post('api/broadcast-add','ApiController@broadcastAdd');
 Route::post('api/get-broacast-list','ApiController@getBroadcastList');
 Route::post('api/delete-broadcast','ApiController@deleteBroadcast');
+Route::post('api/update-broadcast','ApiController@broadcastUpdate');
 
 Route::post('api/private-group-add','ApiController@privateGroupAdd');
 Route::post('api/get-group-list','ApiController@getGroupList');
@@ -253,6 +254,8 @@ Route::post('/api/change-password','ApiController@changePassword');
 
 Route::post('/api/get-privacy-setting','ApiController@getPrivacySettings');
 Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
+
+
 
 
 

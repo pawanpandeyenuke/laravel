@@ -102,7 +102,7 @@ class AjaxController extends Controller
 		{
 			$arguments = Input::all();
 			// $maxFileSize = Config::get('constants.max_upload_filesize');
-			// print_r($maxFileSize);exit;
+			// print_r($arguments);exit;
 			$user = Auth::User();
 			$model = new Feed;
 
@@ -112,15 +112,13 @@ class AjaxController extends Controller
 				$userid = $user->id;
 				$arguments['user_by'] = $user->id;
 	
-				if( empty($arguments['message']) && empty($arguments['image']))
+				if( empty(trim($arguments['message'])) && empty($arguments['image']))
 					throw new Exception('Post something to update.');
 
 				$file = Input::file('image');
 				$bytes = File::size($file);
 				$maxFileSize = 4194304;
-				/*echo $maxFileSize.'<br/>';
-				echo $bytes;
-				die;*/
+
 				if($bytes < $maxFileSize){
 					if( isset($arguments['image']) && $file != null){
 
@@ -170,18 +168,11 @@ class AjaxController extends Controller
 		$file = Input::file('image');
 
 
-		if(!(isset($arguments['imagecheck'])) && $file==null && $arguments['message']=='')
-
-
-		{
+		if(!(isset($arguments['imagecheck'])) && $file==null && $arguments['message']==''){
 			exit;
 		}
 		if( isset($arguments['image']) && $file != null ){
 
-       /* $file = Request::file('file');
-        $image_name = time()."-".$file->getClientOriginalName();
-        $file->move('uploads', $image_name);
-        $image = Image::make(sprintf('uploads/%s', $image_name))->resize(200, 200)->save();*/
 			$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 			$arguments['image'] = $image_name;
 			$file->move('uploads', $image_name);
@@ -190,13 +181,16 @@ class AjaxController extends Controller
 			unset($arguments['image']);
 		}
 		
+		$arguments['message'] = trim($arguments['message']);
+
 		$newsFeed = Feed::find($arguments['id']);
 		$newsFeed->fill($arguments);
 		$saved = $newsFeed->push();
 
-		$postdata = Feed::where('id', $arguments['id'])->select('image', 'message', 'id')->get();
+		$postdata = Feed::where('id', $arguments['id'])->select('image', 'message', 'id')->get()->first()->toArray();
+		$postdata['message'] = nl2br($postdata['message']);
 
-		echo $postdata;
+		echo json_encode($postdata);
 
 		exit;
 		
@@ -208,15 +202,19 @@ class AjaxController extends Controller
 		$user = Auth::User();
 		if($arguments['comments']!='')
 		{
-		$comments = Comment::find($arguments['id']);
-		$comments->fill($arguments);
-		$saved = $comments->push();
 
-		$commentdata = Comment::where('id', $arguments['id'])->get();
+			$arguments['comments'] = trim($arguments['comments']);
 
-		echo $commentdata;
+			$comments = Comment::find($arguments['id']);
+			$comments->fill($arguments);
+			$saved = $comments->push();
 
-		exit;
+			$commentdata = Comment::where('id', $arguments['id'])->get()->first()->toArray();
+			$commentdata['comments'] = nl2br($commentdata['comments']);
+
+			echo json_encode($commentdata);
+
+			exit;
 		}
 	}
 

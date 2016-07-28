@@ -261,7 +261,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		
 		var _token = $('#postform input[name=_token]').val();
 		var feedId = $(this).closest('.post-comment').data('value');
-		var commentData = current.closest('.post-comment').find('textarea').val();
+		var commentData = current.closest('.post-comment').find('textarea').val().trim();
 		var commented_by = $('#user_id').val();
 		var popup = current.closest('.pop-post-comment').data('value');
 
@@ -1331,10 +1331,10 @@ $(document).on('click','.savegroupname',function()
 		}	
 		var current = $(this);
 		var breadcrum = $(this).val();
-		var post = $('.forumpost').val();
+		var post = $('.forumpost').val().trim();
 		var postcount = parseInt($('.posts-count').find('.count').html());
 		var newpostcount = postcount + 1;
-		  if($('.forumpost').val()!="")
+		  if(post)
 		  {
 		  	$('.addforumpost').prop('disabled',true);
 			$.ajax({
@@ -1454,11 +1454,11 @@ $(document).on('click','.savegroupname',function()
 			window.scrollTo(0,100);
 		}	
 		var forumPostID = $(this).data('forumpostid');
-		var reply = $('.forumreply').val();
+		var reply = $('.forumreply').val().trim();
 		var current = $(this);	
 		var postcount = parseInt($('.posts-count').find('.forumreplycount').html());
 		var newpostcount = postcount + 1;
-		if($('.forumreply').val()!=""){	
+		if(reply){	
 			$('.forumpostreply').prop('disabled',true);	
 			$.ajax({			
 				'url' : '/ajax/addnewforumreply',
@@ -1485,7 +1485,7 @@ $(document).on('click','.savegroupname',function()
 
 	$(document).on('click', '.replycomment', function(){
 		var replyid = $(this).val();
-		var comment = $('.reply-comment-text').val();	
+		var comment = $('.reply-comment-text').val().trim();	
 		var commentcount = parseInt($('#forumreplycomment_'+replyid).html());
 		var newcount = commentcount + 1;
 

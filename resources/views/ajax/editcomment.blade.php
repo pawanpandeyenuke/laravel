@@ -53,8 +53,8 @@ $(document).ready(function(){
 			if(response != 'Post something to update.'){
 
 			var data = jQuery.parseJSON(response);
-			var comment = data[0].comments;
-			var commentid=data[0].id;
+			var comment = data.comments;
+			var commentid=data.id;
 
 			if(comment!='')
 			{
