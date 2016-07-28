@@ -203,7 +203,7 @@ $groupid = $group_jid;
                                           <ul>
 											  <?php $groups=array(); ?>
 										@foreach($privategroup as $data) 
-										<?php  $group_picture = !empty($data['picture']) ?'/upload/'.$data['picture'] : '/images/post-img-big.jpg'; ?>	
+										<?php  $group_picture = !empty($data['picture']) ?'/uploads/'.$data['picture'] : '/images/post-img-big.jpg'; ?>	
 											  <li>
 												 <?php $groups[$data['group_jid']]=$data['title'];  ?> 												  
 												 
