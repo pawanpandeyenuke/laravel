@@ -358,8 +358,30 @@ comments;
 		return $response;
 
  	}
-
-
+	/** get user profile image and name by user jid **/
+	public function profileNameImage(){
+		$input = Input::all();
+		if( isset($input['user_jid']) && !empty($input['user_jid']) ){
+			$UserJid = $input['user_jid'];
+			$UserDetails = User::where('xmpp_username',$UserJid)->select('picture','first_name', 'last_name')->first();
+			if( $UserDetails ){
+				if( isset($UserDetails->picture) && !empty($UserDetails->picture) ){
+					$Image = $UserDetails->picture;
+				} else {
+					$Image = 'user-thumb.jpg';
+				}
+				if( isset($UserDetails->first_name) && !empty($UserDetails->first_name) ){
+					$Name = $UserDetails->first_name.' '.$UserDetails->last_name;
+				} else {
+					$Name = $input['user_jid'];
+				}
+			} else {
+				$Image = 'user-thumb.jpg';
+				$Name = $input['user_jid'];
+			}
+			echo json_encode(array( 'image'=>$Image, 'name' => $Name ));
+		}
+	}
 	public function searchfriend(){
 
 		$xmppusername = Input::get('xmpp_username');
