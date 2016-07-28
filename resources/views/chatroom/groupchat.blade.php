@@ -47,8 +47,10 @@ $groupid = $group_jid;
             @include('panels.left')
 
             <div class="col-sm-6">
-
-                <div class="shadow-box page-center-data no-margin-top no-bottom-padding">
+				<div id="loader" >
+					LOADING...
+				</div>
+                <div id="afterload" class="shadow-box hide page-center-data no-margin-top no-bottom-padding">
                     <div class="row">
                         <div class="col-sm-4 padding-right-none chat-list-outer">
                 <!-- <div class="chat-list-search">
@@ -294,13 +296,14 @@ $groupid = $group_jid;
     jQuery(document).ready(function(){
       require(['converse'], function (converse) {
                conObj = converse;
-               conObj.listen.on('initialized', function (event) {
-				   
-					if( groupname != '' || groupid != '' ) {
+               conObj.listen.on('connected', function (event) {
+				   if( groupname != '' || groupid != '' ) {
 						setTimeout( function(){
 							closePublic( groupid );
-						}  , 3000 );
+						}  , 2000 );
 					}
+					jQuery("#loader").addClass('hide');
+					jQuery("#afterload").removeClass('hide');
 				});
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
@@ -368,7 +371,7 @@ $groupid = $group_jid;
 				});
 				
 				conObj.listen.on('disconnected', function (event) { 
-					console.log( 'disconnected' );
+					location.reload();
 				});
                 conObj.initialize({                           
                   prebind: true,
