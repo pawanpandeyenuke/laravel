@@ -759,8 +759,7 @@ class DashboardController extends Controller
 						$converse->addUserGroup( $GroupJid,$value->xmpp_userid );
 						$converse->broadcast($userXamp,$value->xmpp_userid,$Message);
 					}
-
-				return redirect(url('private-group-list'));
+				return redirect(url('groupchat/pg/'.$groupdata->id));
 
 			}  else {
 			     return redirect()->back();

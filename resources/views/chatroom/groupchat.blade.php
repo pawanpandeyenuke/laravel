@@ -47,8 +47,10 @@ $groupid = $group_jid;
             @include('panels.left')
 
             <div class="col-sm-6">
-
-                <div class="shadow-box page-center-data no-margin-top no-bottom-padding">
+				<div id="loader" >
+					LOADING...
+				</div>
+                <div id="afterload" class="shadow-box hide page-center-data no-margin-top no-bottom-padding">
                     <div class="row">
                         <div class="col-sm-4 padding-right-none chat-list-outer">
                 <!-- <div class="chat-list-search">
@@ -114,9 +116,11 @@ $groupid = $group_jid;
                                       <div class="panel-body">
                                         <div class="chat-header-small">
                                           <?php 
-                                                $icon_url = url('category_images/'.$group_image); 
-                                          ?>
-                                          <img src="{{$icon_url}}" alt="" class="img-icon"><b><?php echo ($exception == "private")?"":$groupname; ?></b>
+                                             $icon_url = url('category_images/'.$group_image); 
+                                          if( isset($group_image) && !empty($group_image) ) { ?>
+                                           <img src="{{$icon_url}}" alt="" class="img-icon">
+                                          <?php } ?>
+                                         <b><?php echo ($exception == "private")?"":$groupname; ?></b>
                                         </div>
                                         <div class="chat-user-list StyleScroll">
                                           <ul>
@@ -201,13 +205,13 @@ $groupid = $group_jid;
                                           <ul>
 											  <?php $groups=array(); ?>
 										@foreach($privategroup as $data) 
-										<?php  $group_picture = !empty($data['picture']) ?'/images/'.$data['picture'] : '/images/post-img-big.jpg'; ?>	
+										<?php  $group_picture = !empty($data['picture']) ?'/uploads/'.$data['picture'] : '/images/post-img-big.jpg'; ?>	
 											  <li>
 												 <?php $groups[$data['group_jid']]=$data['title'];  ?> 												  
 												 
 												<div class="pvt-room-list" style="position:relative;" >
-													<a href="{{url("private-group-detail/<?= $data['id'] ?>")}}" >
-														<span class="chat-thumb" style="background: url(<?= $group_picture ?>);"></span>
+													<a href="<?php echo url("private-group-detail/".$data['id']); ?>" >
+														<span class="chat-thumb" style="background: url('<?= $group_picture ?>');"></span>
 														<span class="title">{{$data['title']}}</span>
 													</a>
 													<button id="<?= $data['group_jid'] ?>" data-groupimage="<?= $group_picture ?>" onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>','<?= $group_picture ?>');" class="time">Chat</button>
@@ -273,14 +277,14 @@ $groupid = $group_jid;
     var groupid = "{{$groupid}}";
     var exception = "{{$exception}}";
 	var is_first = true;  
-	
+	var userImagesUrl = "{{url('')}}";
 	var waitProfile = 0;
 	var defaultImage = "{{url('/images/post-img-big.jpg')}}";
 	var baseUrl = '<?= url('/') ?>';
 	var checkActiveGroupUrl = '<?= url('/ajax/isactivemember') ?>';
-	setTimeout( function(){
-		waitProfile = 1;
-	}  , 4000 );
+	var GetProfileUrl = '<?= url('/ajax/profilenameimage') ?>';
+	var profiletitles = {};
+	
 	
 	function webEncode( str ){
 		//return Base64.encode( str );
@@ -294,13 +298,17 @@ $groupid = $group_jid;
     jQuery(document).ready(function(){
       require(['converse'], function (converse) {
                conObj = converse;
-               conObj.listen.on('initialized', function (event) {
-				   
-					if( groupname != '' || groupid != '' ) {
+               conObj.listen.on('connected', function (event) {
+				   if( groupname != '' || groupid != '' ) {
 						setTimeout( function(){
 							closePublic( groupid );
-						}  , 3000 );
+						}  , 1000 );
 					}
+					jQuery("#loader").addClass('hide');
+					jQuery("#afterload").removeClass('hide');
+					setTimeout( function(){
+						waitProfile = 1;
+					}  , 3000 );
 				});
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
@@ -310,12 +318,10 @@ $groupid = $group_jid;
 					if(waitProfile == 1 ){
 						setTimeout( function(){
 							hideOpendBox( jidStr, 2 );
-						}  , 2000 );
+						}  , 1000 );
 					}
 					renderEmoji( chatbox );
 				});
-				
-
 				
 				conObj.listen.on('chatRoomOpened', function (event, chatbox) {
 					chatbox.$el.attr( 'data-bid', Base64.encode(chatbox.model.get('jid')) );
@@ -324,7 +330,7 @@ $groupid = $group_jid;
 					if(waitProfile == 1 ){
 						setTimeout( function(){
 							hideOpendBox( xmpp, 2 );
-						}  , 2000 );
+						}  , 1000 );
 					}
 					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
 
@@ -368,7 +374,7 @@ $groupid = $group_jid;
 				});
 				
 				conObj.listen.on('disconnected', function (event) { 
-					console.log( 'disconnected' );
+					location.reload();
 				});
                 conObj.initialize({                           
                   prebind: true,
@@ -607,6 +613,7 @@ function hideOpendBox( grpname , actiontype ){
 			resultreturn = false;
 		} else if($(this).css('display') == 'block'){
 			getChat.minimize();
+			$(this).css('display', 'none');
 		}
 	});
 	
