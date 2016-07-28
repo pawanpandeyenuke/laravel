@@ -313,7 +313,7 @@ $groupid = $group_jid;
 					if(waitProfile == 1 ){
 						setTimeout( function(){
 							hideOpendBox( jidStr, 2 );
-						}  , 2000 );
+						}  , 1000 );
 					}
 					renderEmoji( chatbox );
 				});
@@ -327,7 +327,7 @@ $groupid = $group_jid;
 					if(waitProfile == 1 ){
 						setTimeout( function(){
 							hideOpendBox( xmpp, 2 );
-						}  , 2000 );
+						}  , 1000 );
 					}
 					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
 
