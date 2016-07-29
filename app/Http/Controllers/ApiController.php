@@ -1959,7 +1959,7 @@ class ApiController extends Controller
 
 			$group = Group::where(['id' => $group_id, 'owner_id' => $owner_id])->first();
 
-			if( $group->count() <= 0)
+			if( $group )
 				throw new Exception("Group does not exist.", 1);
 
 			if( $group->owner_id == $member_id)
