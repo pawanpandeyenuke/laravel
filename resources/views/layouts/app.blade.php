@@ -112,89 +112,12 @@
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript" >
 
-	$("#loginform").submit(function(event){
-              $('.login').text('Please Wait..');
-              $('.login').prop('disabled',true);
-    });
-
-    if(window.location.pathname == "/" || window.location.pathname == "/register"){
+	if(window.location.pathname == "/" || window.location.pathname == "/register"){
         $('.login-footer').hide();
     }else{
         $('.login-footer').show();
     }
     
-    $("#loginform").ajaxForm(function(response) { 
-         
-    if(response)
-    {
-    	response = $.trim(response);
-    	// console.log(response.length);return;
-        $('.password').next('.help-block').find('.verifymsg').hide();
-        
-        if(response === "These credentials do not match our records.")
-        {
-            var current = $('.password');
-            current.next('.help-block').find('.verifymsg').hide();
-            current.css('border-color','#a94442');
-            current.next('.help-block').find('.errormsg').text(response).css('color','#a94442');
-            $('.emailid').css('border-color','#a94442');
-            $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
-            $('.login').text('Login');
-            $('.login').prop('disabled',false);
-
-        }
-
-        if(response === "verification"){
-            window.location = 'send-verification-link';
-        }
-        else if(response == "success")
-        {
-           	var url_c = window.location.pathname;
-           	if(url_c == "/newpassword"){
-				window.location = "/";
-			}
-			else if(url_c.indexOf("email-verified") > -1 || url_c == "/send-verification-link"){
-				window.location = "/invite-friends";
-			}
-	  		else{
-				window.location = url_c;
-			}
-        }else{
-        	console.log('c');
-            var obj = $.parseJSON( response );
-            if( obj.email != null ){
-                var current = $('.emailid');
-                current.next('.help-block').find('.verifymsg').hide();
-                current.css('border-color','#a94442');
-                current.next('.help-block').find('.errormsg').text(obj.email).css('color','#a94442');
-
-                if( obj.password == null ){
-                    $('.password').next('.help-block').find('.errormsg').text("").css('color','#333333');
-                    current.next('.help-block').find('.verifymsg').hide();
-                    $('.password').css('border-color','#333333');
-                }
-            }
-            if( obj.password != null ){     
-                var current = $('.password');
-                current.next('.help-block').find('.verifymsg').hide();              
-                current.css('border-color','#a94442');
-                current.next('.help-block').find('.errormsg').text(obj.password).css('color','#a94442');
-
-                if( obj.email == null ){
-                    $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
-                    current.next('.help-block').find('.verifymsg').hide();
-                    $('.emailid').css('border-color','#333333');
-                }
-            }
-                 $('.login').text('Login');
-                 $('.login').prop('disabled',false);
-        }
-    
-    }
-    
-});
-
- 
 		$( "#searchform" ).submit(function( event ) {
 			var searchkey = $('#searchfriends').val();
 			if(searchkey == ''){

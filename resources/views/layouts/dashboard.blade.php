@@ -155,80 +155,13 @@
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
 	
-   $("#loginform").submit(function(event){
-              $('.login').text('Please Wait..');
-              $('.login').prop('disabled',true);
-    });
-
     if(window.location.pathname == "/" || window.location.pathname == "/register"){
         $('.login-footer').hide();
     }else{
         $('.login-footer').show();
     }
-    
-    $("#loginform").ajaxForm(function(response) { 
-         
-    if(response){
-            $('.password').next('.help-block').find('.verifymsg').hide();
-        
-        if(response === "These credentials do not match our records.")
-        {
-            var current = $('.password');
-            current.next('.help-block').find('.verifymsg').hide();
-            current.css('border-color','#a94442');
-            current.next('.help-block').find('.errormsg').text(response).css('color','#a94442');
-            $('.emailid').css('border-color','#a94442');
-            $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
-            $('.login').text('Login');
-            $('.login').prop('disabled',false);
 
-        }
-
-        if(response === "verification")
-            window.location = 'send-verification-link';
-
-        else if(response == "success"){
-            var url_c = window.location.pathname;
-           if(url_c == "/newpassword")
-    window.location = "/";
-    else
-    window.location = url_c;
-        }else{
-            var obj = jQuery.parseJSON( response );
-            if( obj.email != null ){
-
-                var current = $('.emailid');
-                current.next('.help-block').find('.verifymsg').hide();
-                current.css('border-color','#a94442');
-                current.next('.help-block').find('.errormsg').text(obj.email).css('color','#a94442');
-
-                if( obj.password == null ){
-                    $('.password').next('.help-block').find('.errormsg').text("").css('color','#333333');
-                    current.next('.help-block').find('.verifymsg').hide();
-                    $('.password').css('border-color','#333333');
-                }
-            }
-            if( obj.password != null ){     
-                var current = $('.password');
-                current.next('.help-block').find('.verifymsg').hide();              
-                current.css('border-color','#a94442');
-                current.next('.help-block').find('.errormsg').text(obj.password).css('color','#a94442');
-
-                if( obj.email == null ){
-                    $('.emailid').next('.help-block').find('.errormsg').text("").css('color','#333333');
-                    current.next('.help-block').find('.verifymsg').hide();
-                    $('.emailid').css('border-color','#333333');
-                }
-            }
-                 $('.login').text('Login');
-                 $('.login').prop('disabled',false);
-        }
-    
-    }
-    
-});
-
-      $( "#search-forum-dashboard" ).submit(function( event ) {
+    $( "#search-forum-dashboard" ).submit(function( event ) {
       var searchkey = $('.forum-keyword-app').val();
       if(searchkey == ''){
         $('.forum-keyword-app').attr('placeholder', 'Enter Keyword').focus();
@@ -236,7 +169,7 @@
       }
     });
 
-  $("#suggestionform1").validate({ 
+    $("#suggestionform1").validate({ 
         errorElement: 'span',
         errorClass: 'help-inline',
         rules: {
