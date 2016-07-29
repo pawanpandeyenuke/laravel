@@ -1966,8 +1966,8 @@ class ApiController extends Controller
 				throw new Exception("You can't leave the group.", 1);
 				
 			
-			$group_members = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])->count();
-			if( $group_members > 0 )
+			$group_members = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])->first();
+			if( $group_members )
 			{
 				$data = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])
 												->update(['status' => 'Left']);
