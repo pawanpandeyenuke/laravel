@@ -1959,15 +1959,15 @@ class ApiController extends Controller
 
 			$group = Group::where(['id' => $group_id, 'owner_id' => $owner_id])->first();
 
-			if( $group )
+			if( $group->count() <= 0)
 				throw new Exception("Group does not exist.", 1);
 
 			if( $group->owner_id == $member_id)
 				throw new Exception("You can't leave the group.", 1);
 				
 			
-			$group_members = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])->first();
-			if( $group_members )
+			$group_members = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])->count();
+			if( $group_members > 0 )
 			{
 				$data = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])
 												->update(['status' => 'Left']);
