@@ -91,7 +91,7 @@ class AjaxController extends Controller
 			}
 
 		}
-
+		exit;
 	}
 
 
