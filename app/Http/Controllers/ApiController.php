@@ -1942,6 +1942,67 @@ class ApiController extends Controller
 
 
 	/*
+	 * Add members private groups.
+	 */
+	public function addMembersPrivateGroup()
+	{
+		try{
+			$group_id = Request::get('group_id');
+			$members = Request::get('members');
+			$owner_id = Request::get('owner_id');
+
+			$group = Group::find($group_id);
+			if( !$group )
+				throw new Exception("Group does not exist.", 1);
+
+			if( empty( $members ) )
+				throw new Exception("No members found.", 1);
+
+			$invalid_users = array();
+			$alreadyMemberArray = array();
+			foreach ($members as $key => $value) {
+	 			
+	 			$alreadyMember = GroupMembers::where(['group_id' => $group_id, 'member_id' => $value])->get()->toArray();
+
+	 			if( empty($alreadyMember) ){
+	 				$existingUser = User::find($value);
+
+	 				$notAFriend = Friend::where('user_id', $owner_id)
+	 										->where('friend_id', $value)
+	 										->where('status','Accepted')
+	 										->get()->toArray();
+
+	 				if( !empty($existingUser) ){
+
+	 					if(!$notAFriend){
+
+		 	 				$privateGroupMemberObj = new GroupMembers;
+		 	 				$privateGroupMemberObj->group_id = $group_id;
+		 	 				$privateGroupMemberObj->member_id = $value;
+		 	 				$privateGroupMemberObj->status = 'Pending';
+		 	 				$privateGroupMemberObj->save();
+	 					}
+
+	 				}
+
+	 			}
+	 			
+			}
+
+            $this->status = "success";
+            $this->message = "Members updated successfully.";
+            $this->data = GroupMembers::where('group_id', $group_id)->get()->toArray();
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
+
+	/*
 	 * Leave/Delete Private Group API.
 	 */
 	public function leavePrivateGroup()
