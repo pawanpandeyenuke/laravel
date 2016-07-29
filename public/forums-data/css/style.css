@@ -332,3 +332,9 @@ span.loc img{
   padding-bottom: 8px;
   padding-top: 8px;
 }
+.post-time {
+  position: relative;
+  right: 0;
+  top: 0;
+  width: 100%;
+}

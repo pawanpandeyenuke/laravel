@@ -30,7 +30,7 @@
 				<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
 				<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name }}</span>
 				<div class="post-time">
-					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">{{ $reply->updated_at->format('D jS') }}</span>
+					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">{{ $reply->updated_at->format('d M Y') }}</span>
 					<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="">{{ $reply->updated_at->format('h:i A') }}</span>
 				</div>
 				<span class="loc">
@@ -91,7 +91,7 @@
 					</div>
 					<div class="post-action clearfix">
 						<div class="time-comment-bottom text-right">
-							<?php echo $comment->updated_at->format('D jS').' '.$comment->updated_at->format('h:i A') ?>
+							<?php echo $comment->updated_at->format('d M Y').' '.$comment->updated_at->format('h:i A') ?>
 						</div>
 					</div>
 				</div>

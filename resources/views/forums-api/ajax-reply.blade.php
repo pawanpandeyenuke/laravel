@@ -64,7 +64,7 @@
 						</div>
 					</div>
 					<div class="post-time time-bottom">
-						<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">{{ $reply->updated_at->format('D jS') }}</span>
+						<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">{{ $reply->updated_at->format('d M Y') }}</span>
 						<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="">{{ $reply->updated_at->format('h:i A') }}</span>
 					</div>
 				</div>

@@ -25,16 +25,13 @@ class AjaxController extends Controller
 		$arguments = Input::all();
 		$email = Input::get('email');
 		$password = Input::get('password');
+		$user = new User();
+		$data = '';
 		if(isset($arguments['log']))
 			$log = true;
 		else
 			$log = false;
 
-		$user = new User();
-		if(isset($arguments['log']))
-			$log = true;
-		else
-			$log = false;
 		$validator = Validator::make($arguments, 
 							['email' => 'required|email',
 							'password' => 'required'],
@@ -71,27 +68,26 @@ class AjaxController extends Controller
 
 			}
 
-			echo json_encode($err);
+			$data = json_encode($err);
 
 		}else{
 
 			if(Auth::attempt(['email' => $email, 'password'=>$password , 'is_email_verified'=>
-				'Y'], $log)){
-				//$current_url = Request::path();
-				//print_r($current_url);die;
-				echo 'success';
-			}
-				
-			else{
+				'Y'], $log)) {
+				$data = json_encode( array('status' => 'success') );
+			}	
+			else
+			{
 				$verified = User::where('email',$email)->value('is_email_verified');
-				if($verified == 'N')
-					echo 'verification';
-				else
-					echo 'These credentials do not match our records.';
+				if($verified == 'N') {
+					$data = json_encode( array('status' => 'verification') );
+				} else {
+					$data = json_encode( array('status' => 'invalid') );
+				}
 			}
 
 		}
-		exit;
+		return $data;
 	}
 
 
