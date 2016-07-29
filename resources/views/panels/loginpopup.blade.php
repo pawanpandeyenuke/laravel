@@ -74,6 +74,7 @@ jQuery(function($){
     $("#loginform").ajaxForm(function(response){     
         if(response)
         {
+            console.log(response);
             response = $.trim(response);
             $('.password').next('.help-block').find('.verifymsg').hide();
             
@@ -97,13 +98,13 @@ jQuery(function($){
             {
                 var url_c = window.location.pathname;
                 if(url_c == "/newpassword"){
-                    window.location = "/";
+                    //window.location = "/";
                 }
                 else if(url_c.indexOf("email-verified") > -1 || url_c == "/send-verification-link"){
-                    window.location = "/invite-friends";
+                    //window.location = "/invite-friends";
                 }
                 else{
-                    window.location = url_c;
+                    //window.location = url_c;
                 }
             } else {
                 var obj = $.parseJSON( response );
