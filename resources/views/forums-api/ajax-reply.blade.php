@@ -30,7 +30,8 @@
 								<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-								<li><a href="{{ url("api/get-forum-reply-details?reply_id=$reply->id&user_id=$replyUser->id&reply_data=$reply_data") }}">Edit</a></li>
+								<?php $title = base64_encode(nl2br($reply_data)); ?>
+								<li><a href="{{ url("api/get-forum-reply-details?reply_id=$reply->id&user_id=$replyUser->id&reply_data=$title") }}">Edit</a></li>
 								<li><a href="#" class="del-confirm-api" data-type="reply" data-forumpostid="{{$forumpostid}}" data-forumreplyid = "{{$reply->id}}">Delete</a></li>
 							</ul>
 						</div>
