@@ -39,6 +39,7 @@
 
 <?php 
 $groupid = $group_jid;
+$GroupsJidList = array();
 ?>
 <div class="page-data dashboard-body">
         <div class="container">
@@ -207,7 +208,8 @@ $groupid = $group_jid;
 										@foreach($privategroup as $data) 
 										<?php  $group_picture = !empty($data['picture']) ?'/uploads/'.$data['picture'] : '/images/post-img-big.jpg'; ?>	
 											  <li>
-												 <?php $groups[$data['group_jid']]=$data['title'];  ?> 												  
+												 <?php $groups[$data['group_jid']]=$data['title'];  ?> 	
+                         <?php $GroupsJidList[]= $data['group_jid'].'@conference.'.Config::get('constants.xmpp_host_Url'); //array( 'jid' => $data['group_jid'].'@conference.'.Config::get('constants.xmpp_host_Url'), 'nick' => Auth::User()->xmpp_username.'_'.Auth::User()->first_name);  ?> 							  
 												 
 												<div class="pvt-room-list" style="position:relative;" >
 													<a href="<?php echo url("private-group-detail/".$data['id']); ?>" >
@@ -257,6 +259,7 @@ $groupid = $group_jid;
 <script type="text/javascript">
 	jQuery.noConflict();
 	var GroupName = <?php echo json_encode($groups); ?>;
+  var GroupAuto = <?php echo json_encode($GroupsJidList); ?>;
 	var encoderoomid = '';
     var userImage="{{$userpic}}";
  
@@ -395,7 +398,8 @@ $groupid = $group_jid;
                   message_archiving: 'always',
                   auto_join_on_invite:true,
                   allow_chat_pending_contacts: true,
-                  // auto_join_rooms: [{'jid': groupid+'@<?= Config::get('constants.xmpp_host_Url') ?>', 'nick': groupname }]
+                  notify_all_room_messages: GroupAuto,
+                  //auto_join_rooms: GroupAuto
                 });
               
 				
