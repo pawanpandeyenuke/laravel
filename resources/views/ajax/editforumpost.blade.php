@@ -58,7 +58,7 @@ $(document).ready(function(){
 
 			if(comment!='')
 			{
-			jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').text(comment);
+			jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html(comment);
 			var original =jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html();
 			var converted = emojione.toImage(original);
 			jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html(converted);

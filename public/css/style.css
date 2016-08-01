@@ -2135,8 +2135,6 @@ textarea{
 .grp-mem-list .bclist-detail .list-name {
   margin: 10px 0 5px;
 }
-/*=======*/
- 
 .load-btn span.loading-text {
     display: inline-block !important;
 }
@@ -2164,8 +2162,6 @@ textarea{
   overflow-y: scroll;
   border: 1px solid #ddd;
 }
-/*>>>>>>> 0a01c0ee86f18038c0735de20732a54fb9c88ea0*/
-
 .group-chat-cont{
 
 }
@@ -3535,20 +3531,40 @@ header{
 	height: 55px;
 	margin: 0;
 }
-#google_translate_element {
-    max-width: 108px;
-    width: 100%;
-    overflow: hidden;
-}
+
 .skiptranslate.goog-te-gadget {
     padding-top: 12px !important;
     padding-bottom: 0px !important;
 }
-.goog-te-gadget-simple span {
-    background: #fafafa none repeat scroll 0 0;
+.innr_hdr  .goog-te-gadget-simple span {
+    background: #a0f0e6 none repeat scroll 0 0;
     padding: 6px 0;
 }
 .innr_hdr #google_translate_element {
     max-width: 105px;
     width: 100%;
+}
+footer {
+    background: #d7d7d7;
+    padding: 15px 0;
+    z-index: 999;
+    position: relative;
+}
+footer .f-links {
+    margin: 0px;
+    position: relative;
+    z-index: 1;
+}
+.f-links li {
+    font-size: 18px;
+    border-right: 1px solid #1f1f1f;
+    padding: 0 15px;
+    line-height: 16px;
+}
+.f-links li:last-child {
+	border-right:none;
+}
+footer .f-links li a, footer .f-links li {
+    font-size: 18px;
+    color: #1f1f1f;
 }
