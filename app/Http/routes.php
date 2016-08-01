@@ -216,7 +216,7 @@ Route::post('api/private-group-image-upload','ApiController@privateGroupImageUpl
 Route::post('api/join-private-group','ApiController@joinPrivateGroup');
 Route::post('api/leave-private-group','ApiController@leavePrivateGroup');
 Route::post('api/add-members-private-group','ApiController@addMembersPrivateGroup');
-
+Route::post('api/update-private-group','ApiController@updatePrivateGroup');
 
 Route::post('api/get-groups','ApiController@publicGroupGetIds');
 

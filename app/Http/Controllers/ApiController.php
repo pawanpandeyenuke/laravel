@@ -1848,11 +1848,11 @@ class ApiController extends Controller
 	{
 		try{
 			
-			$group_id = Request::get('group_id');
+			$group_jid = Request::get('group_jid');
 			$user_id = Request::get('user_id');
 
-			if(empty($group_id))
-				throw new Exception("Group id is required.", 1);
+			if(empty($group_jid))
+				throw new Exception("Group jid is required.", 1);
 
 			if(empty($user_id) || !is_numeric($user_id))
 				throw new Exception("User id is required.", 1);
@@ -1862,7 +1862,7 @@ class ApiController extends Controller
 			if(empty($authuser))
 				throw new Exception("User does not exist.", 1);
 				
-			$findgroup = Group::find($group_id);
+			$findgroup = Group::where('group_jid', $group_jid)->first();
 
 			if(empty($findgroup))
 				throw new Exception("Group does not exist.", 1);
@@ -1872,14 +1872,14 @@ class ApiController extends Controller
 				$userJid 		= $authuser->xmpp_username; // current user jid for chat message
 				$name 			= $authuser->first_name.' '.$authuser->last_name; // current user full name
 				$message 		= json_encode( array( 'type' => 'hint', 'action'=>'group_delete', 'sender_jid' => $userJid, 'groupname'=> $findgroup->title, 'groupjid' => $findgroup->group_jid, 'message' => webEncode($findgroup->title.' has been removed.') ) ); // hint message to send every group member
-				$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id', $group_id)->pluck('xmpp_username');		
+				$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id', $findgroup->id)->pluck('xmpp_username');		
 				foreach ($xmp as $key => $value) {
 					$converse->broadcastchatroom( $findgroup->group_jid, $name, $value, $userJid, $message ); // message broadcast per group member
 				}
 				$converse->deleteGroup($findgroup->group_jid); // Delete group from chat server
 			// Send hint on remove group.			
 
-			$findgroup = Group::find($group_id)->delete();
+			$findgroup = Group::find($findgroup->id)->delete();
 
 			$this->data = $findgroup;
 			$this->message = 'Group successfully deleted.' ;
@@ -1899,13 +1899,15 @@ class ApiController extends Controller
 	 */
 	public function joinPrivateGroup()
 	{
-		try{
-
-			$status = Request::get('status');
-			$group_id = Request::get('group_id');
+		try
+		{
+			$group_jid = Request::get('group_jid');
 			$member_id = Request::get('member_id');
 
-			$group = Group::find($group_id);
+			if( empty( $group_jid ) )
+				throw new Exception("Group jid is required.", 1);				
+
+			$group = Group::where('group_jid', $group_jid)->first();
 
 			if( !$group )
 				throw new Exception("Group does not exist.", 1);
@@ -1915,15 +1917,15 @@ class ApiController extends Controller
 			if( !$user )
 				throw new Exception("User does not exist.", 1);
 
-			$group_members = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])->count();
+			$group_members = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->count();
 
 			if( $group_members > 0 ){
 
-				$status = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])
+				$status = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])
 												->update(['status' => 'Joined']);
 
 				// Broadcast message
-                $members = GroupMembers::where(['group_id' => $group_id])->get();
+                $members = GroupMembers::where(['group_id' => $group->id])->get();
                 $name = $user->first_name.' '.$user->last_name;
                 $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username, 'user_name'=>$name, 'message' => $name.' joined the group') );
                 foreach($members as $key => $val) {
@@ -1952,14 +1954,18 @@ class ApiController extends Controller
 	public function addMembersPrivateGroup()
 	{
 		try{
-			$group_id = Request::get('group_id');
+			$group_jid = Request::get('group_jid');
 			$members = Request::get('members');
 			$owner_id = Request::get('owner_id');
 
-			$group = Group::find($group_id);
+			if( empty( $group_jid ) )
+				throw new Exception("Group jid is required.", 1);	
+
+			$group = Group::where('group_jid', $group_jid)->first();
 			if( !$group )
 				throw new Exception("Group does not exist.", 1);
 
+			// echo '<pre>';print_r($group);die;
 			if( empty( $members ) )
 				throw new Exception("No members found.", 1);
 
@@ -1967,7 +1973,7 @@ class ApiController extends Controller
 			$alreadyMemberArray = array();
 			foreach ($members as $key => $value) {
 	 			
-	 			$alreadyMember = GroupMembers::where(['group_id' => $group_id, 'member_id' => $value])->get()->toArray();
+	 			$alreadyMember = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])->get()->toArray();
 
 	 			if( empty($alreadyMember) ){
 	 				$existingUser = User::find($value);
@@ -1982,7 +1988,7 @@ class ApiController extends Controller
 	 					if(!$notAFriend){
 
 		 	 				$privateGroupMemberObj = new GroupMembers;
-		 	 				$privateGroupMemberObj->group_id = $group_id;
+		 	 				$privateGroupMemberObj->group_id = $group->id;
 		 	 				$privateGroupMemberObj->member_id = $value;
 		 	 				$privateGroupMemberObj->status = 'Pending';
 		 	 				$privateGroupMemberObj->save();
@@ -1996,7 +2002,7 @@ class ApiController extends Controller
 
             $this->status = "success";
             $this->message = "Members updated successfully.";
-            $this->data = GroupMembers::where('group_id', $group_id)->get()->toArray();
+            $this->data = GroupMembers::where('group_id', $group->id)->get()->toArray();
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
@@ -2014,7 +2020,7 @@ class ApiController extends Controller
 	{
 		try
 		{
-			$group_id = Request::get('group_id');
+			$group_jid = Request::get('group_jid');
 			$owner_id = Request::get('owner_id');
 			$member_id = Request::get('member_id');
 
@@ -2023,7 +2029,7 @@ class ApiController extends Controller
 			if( !$owner )
 				throw new Exception("User does not exist.", 1);				
 
-			$group = Group::where(['id' => $group_id, 'owner_id' => $owner_id])->first();
+			$group = Group::where(['group_jid' => $group_jid, 'owner_id' => $owner_id])->first();
 
 			if( $group->count() <= 0)
 				throw new Exception("Group does not exist.", 1);
@@ -2032,17 +2038,17 @@ class ApiController extends Controller
 				throw new Exception("You can't leave the group.", 1);
 				
 			
-			$group_members = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])->count();
+			$group_members = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->count();
 			if( $group_members > 0 )
 			{
-				$data = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])
+				$data = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])
 												->update(['status' => 'Left']);
 
 				// Broadcast message
 				$action = ($owner_id == $member_id) ? 'leave' : 'delete';
 				$name = $owner->first_name.' '.$owner->last_name;
 				$msg = ($owner_id == $member_id) ? $name.' left the group' : $name.' removed from the group';
-				$members = GroupMembers::where('group_id', $group_id)->get();
+				$members = GroupMembers::where('group_id', $group->id)->get();
 
 				$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner->xmpp_username,'action'=>$action, 'xmpp_userid' => $owner->xmpp_username, 'user_name'=>$name, 'message' => $msg) );
                 foreach($members as $key => $val) {
@@ -2055,6 +2061,95 @@ class ApiController extends Controller
 			$this->data = $data;
 			$this->status = 'success';
 			
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
+
+
+	/*
+	 * Update Private Group API.
+	 */
+	public function updatePrivateGroup()
+	{
+		try
+		{
+			$group_jid = Request::get('group_jid');
+			$title = Request::get('title');
+			$picture = Request::get('picture');
+			$user_id = Request::get('user_id');
+
+			if( empty( $group_jid ) )
+				throw new Exception("Group jid is required.", 1);
+
+			if( empty( $user_id ) )
+				throw new Exception("User id is required.", 1);
+
+			$group = Group::where(['group_jid' => $group_jid, 'owner_id' => $user_id])->first();
+
+			if( !$group )
+				throw new Exception("Group does not exist.", 1);
+				
+			$user = User::find($user_id);
+
+			if( !$user )
+				throw new Exception("User does not exist.", 1);
+
+			$arguments = array('title' => $title, 'picture' => $picture);
+
+			foreach ($arguments as $key => $value) {
+				if( empty( $value ) )
+					unset( $arguments[$key] );
+			}
+
+			$group->fill($arguments);
+			$saved = $group->push();
+
+			// Send hint message
+			/*	$changed = array();
+
+				// Check if group nam has changed or not
+			    if($title != $group->title){
+			        $nameChanged = true;
+			        $changed[] = 'group name';
+			    }
+
+			    // Check if group image has changed or not
+			    if($picture != $group->picture){
+			        $imageChanged = true;
+			        $changed[] = 'group icon';
+			    }
+
+			    // Broadcast message
+			    if($changed)
+			    {
+			        $members = GroupMembers::where(['group_jid' => $group_jid])->pluck('user_jid');
+			        $ChatUser = ChatUsers::find()->where(['users_id' => $param['update_by']])->select(['xmpp_username'])->one();
+			        
+			        $name = $user->first_name.' '.$user->last_name;
+			        
+			        foreach($members as $key => $val) 
+			        {
+			            $message = array( 'type' => 'hint', 'sender_jid' => $ChatUser->xmpp_username, 'action'=>'group_info_change','message' => $name.' changed '.implode(' and ', $changed), 'changeBy' => $name, 'group_jid'=>$groupdata->group_jid);
+			            if($imageChanged){
+			                $message['group_image'] = $param['group_imageurl'];
+			            }
+			            if($nameChanged){
+			                $message['groupname'] = $param['group_name'];
+			            }
+			            Ejabberd::broadcastchatroom($groupdata->group_jid, $name, $val['user_jid'], $ChatUser->xmpp_username, json_encode($message));
+			        }
+			    }*/
+			// Send hint message
+
+			$this->data = $saved;
+			$this->status = 'success';
+			$this->message = 'Updated group successfully';
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();

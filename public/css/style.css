@@ -3519,12 +3519,12 @@ header{
     padding: 4px 0px !important;
 }
 
-.header-row-full > .col-sm-7 {
+/*.header-row-full > .col-sm-7 {
     width: 58%;
 }
 .header-row-full > .col-sm-3 {
     width: 23%;
-}
+}*/
 .dashboard-header-menu {
     margin: 18px 0 30px;
 }
@@ -3536,4 +3536,8 @@ header{
 }
 .innr_hdr.chat_hdr{
 	margin-top: -16px;
+}
+.cat-btn-outer .cat-btn img {
+	height: 55px;
+	margin: 0;
 }
