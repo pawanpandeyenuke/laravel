@@ -398,7 +398,7 @@ $GroupsJidList = array();
                   message_archiving: 'always',
                   auto_join_on_invite:true,
                   allow_chat_pending_contacts: true,
-                  notify_all_room_messages: GroupAuto,
+                  notify_all_room_messages: true,
                   //auto_join_rooms: GroupAuto
                 });
               
