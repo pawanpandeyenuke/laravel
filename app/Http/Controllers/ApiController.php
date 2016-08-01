@@ -1956,7 +1956,7 @@ class ApiController extends Controller
 		try{
 			$group_jid = Request::get('group_jid');
 			$members = Request::get('members');
-			$owner_id = Request::get('owner_id');
+			$owner_id = Request::get('user_id');
 
 			if( empty( $group_jid ) )
 				throw new Exception("Group jid is required.", 1);	
@@ -1965,12 +1965,14 @@ class ApiController extends Controller
 			if( !$group )
 				throw new Exception("Group does not exist.", 1);
 
-			// echo '<pre>';print_r($group);die;
 			if( empty( $members ) )
 				throw new Exception("No members found.", 1);
 
+			$old_member = User::whereIn('id', GroupMembers::where('group_id', $group->id)->pluck('member_id')->toArray())->get()->toArray();
+
 			$invalid_users = array();
 			$alreadyMemberArray = array();
+			$new_members = array();
 			foreach ($members as $key => $value) {
 	 			
 	 			$alreadyMember = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])->get()->toArray();
@@ -1987,6 +1989,8 @@ class ApiController extends Controller
 
 	 					if(!$notAFriend){
 
+	 						$new_members[] = $existingUser;
+
 		 	 				$privateGroupMemberObj = new GroupMembers;
 		 	 				$privateGroupMemberObj->group_id = $group->id;
 		 	 				$privateGroupMemberObj->member_id = $value;
@@ -1999,6 +2003,29 @@ class ApiController extends Controller
 	 			}
 	 			
 			}
+
+			// Send Message
+				$owner_data = User::find($owner_id);
+				$name = $owner_data->first_name.' '.$owner_data->last_name;
+				$members = User::whereIn('id', GroupMembers::where('group_id', $group->id)->pluck('member_id')->toArray())->select('id as user_id', DB::raw('CONCAT(first_name, " ", last_name) AS username'), 'xmpp_username as xmpp_userid')->get()->toArray();
+
+				$message = json_encode( array( 'type' => 'room', 'groupname' => $group->title, 'sender_jid' => $owner_data->xmpp_username, 'groupjid'=>$group_jid, 'group_image' => $group->picture, 'created_by'=>$name,'message' => 'This invitation is for joining the '.$group->title.' group.', 'users' => $members) );
+                
+                foreach($new_members as $val)
+                    Converse::broadcast($owner_data->xmpp_username, $val->xmpp_username, $message);
+
+
+	            foreach($new_members as $key1 => $val1) 
+	            {
+	            	// echo '<pre>';print_r($val1);die;
+	            	$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner_data->xmpp_username, 'action'=>'add','message' => $val1->first_name.' '.$val1->last_name.' has invited for joining the group', 'xmpp_userid' => $val1->xmpp_username, 'user_name' => $val1->first_name.' '.$val1->last_name, 'user_id' => $val1->id) );
+
+	            	foreach($old_member as $key => $val) 
+	                {	                    
+	                    Converse::broadcastchatroom($group->group_jid, $name, $val['xmpp_username'], $owner_data->xmpp_username, $message);
+	                }
+	            }
+			// Send Message
 
             $this->status = "success";
             $this->message = "Members updated successfully.";
@@ -2111,7 +2138,7 @@ class ApiController extends Controller
 			$saved = $group->push();
 
 			// Send hint message
-			/*	$changed = array();
+				$changed = array();
 
 				// Check if group nam has changed or not
 			    if($title != $group->title){
@@ -2128,23 +2155,23 @@ class ApiController extends Controller
 			    // Broadcast message
 			    if($changed)
 			    {
+			    	// echo '<pre>';print_r($group->title);die;
 			        $members = GroupMembers::where(['group_jid' => $group_jid])->pluck('user_jid');
-			        $ChatUser = ChatUsers::find()->where(['users_id' => $param['update_by']])->select(['xmpp_username'])->one();
-			        
+			        $ChatUser = $user->xmpp_username;
 			        $name = $user->first_name.' '.$user->last_name;
 			        
 			        foreach($members as $key => $val) 
 			        {
-			            $message = array( 'type' => 'hint', 'sender_jid' => $ChatUser->xmpp_username, 'action'=>'group_info_change','message' => $name.' changed '.implode(' and ', $changed), 'changeBy' => $name, 'group_jid'=>$groupdata->group_jid);
+			            $message = array( 'type' => 'hint', 'sender_jid' => $ChatUser, 'action'=>'group_info_change','message' => $name.' changed '.implode(' and ', $changed), 'changeBy' => $name, 'group_jid'=>$group_jid);
 			            if($imageChanged){
-			                $message['group_image'] = $param['group_imageurl'];
+			                $message['group_image'] = $picture;
 			            }
 			            if($nameChanged){
-			                $message['groupname'] = $param['group_name'];
+			                $message['groupname'] = $title;
 			            }
-			            Ejabberd::broadcastchatroom($groupdata->group_jid, $name, $val['user_jid'], $ChatUser->xmpp_username, json_encode($message));
+			            Converse::broadcastchatroom($group_jid, $name, $val['user_jid'], $ChatUser, json_encode($message));
 			        }
-			    }*/
+			    }
 			// Send hint message
 
 			$this->data = $saved;
