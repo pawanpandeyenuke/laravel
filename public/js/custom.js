@@ -1028,29 +1028,27 @@ $('.btn-upload-icon').find(".badge").remove();
 		});
 	});
 
-	$(document).on('click','.load-more-forumreply',function(){
-		$('.load-more-forumreply').prop('disabled',true);
-		$('.load-more-forumreply').text('Loading...');
+	$(document).on('click', '.load-more-forumreply',function(){
 		var current = $(this);
-		var forumpostid = $(this).data('forumpostid');
+		var forumpostid = current.data('forumpostid');
+		current.text('Loading...').prop('disabled', true);
 		$.ajax({
 			'url' : '/ajax/view-more-forum-reply',
 			'type' : 'post',
+			'dataType' : 'json',
 			'data' : { 'pageid': pageid ,'forumpostid' : forumpostid, 'call_type': 'web' },
 			'success' : function(data){
-				$('.load-more-forumreply').text('View More');
-				if(data != 'No More Results'){		
-					pageid = pageid + 1;
-					current.parents('.forum-srch-list').find('.forumreplylist').append(data);
-				}else{
-					current.parents('.load-more-btn-cont').html("<button title='View More Replies' class='btn btn-primary btn-smbtn-sm' type='button'>No more results</button>");
+				current.text('View More').prop('disabled', false);
+				if(data.existmore == 0) {
+					current.parent().remove();
 				}
-				$('.load-more-forumreply').prop('disabled',false);
-			}	
+				pageid = pageid + 1;
+				$('.forumreplylist').append(data.html);
+			}
 		});
 	});
 
-		$(document).on('click','.load-more-search-forum',function(){
+	$(document).on('click','.load-more-search-forum',function(){
 		$('.load-more-search-forum').prop('disabled',true);
 		var current = $(this);
 		current.text('Loading...');

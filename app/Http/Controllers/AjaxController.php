@@ -1802,7 +1802,7 @@ comments;
 		$count = ForumReplyComments::where('reply_id',$forumReplyId)->get()->count();
 		echo $count;
 	}
-
+	
 	public function viewMoreForumReply()
 	{
 		$per_page = 10;
@@ -1811,7 +1811,16 @@ comments;
 		$forumpostid = Input::get('forumpostid');
 		$offset = ($page - 1) * $per_page;
 
-	     $reply = ForumReply::with('user')
+		// Get total pages
+		$totalRecords = ForumReply::with('user')
+            ->with('replyLikesCount')
+            ->with('replyCommentsCount')
+            ->where('post_id',$forumpostid)
+            ->count();
+        $pages = ceil($totalRecords / $per_page);
+        $existmore = $page == $pages ? 0 : 1;
+
+	    $reply = ForumReply::with('user')
             ->with('replyLikesCount')
             ->with('replyCommentsCount')
             ->where('post_id',$forumpostid)
@@ -1819,20 +1828,21 @@ comments;
 	        ->take($per_page)
             ->orderBy('updated_at','DESC')
             ->get();
-
+            
 		$str  = "No More Results";
-
-		if($call_type === 'web'){
-			if(!($reply->isEmpty())){
-				return view('forums.viewmoreforumreply')
-						->with('reply',$reply)
-						->with('forumpostid',$forumpostid);       
-			}
-			else{
+		
+		if($call_type === 'web')
+		{
+			if(!($reply->isEmpty()))
+			{
+				$html = view('forums.viewmoreforumreply')->with('reply',$reply)->with('forumpostid',$forumpostid)->render();
+				return response()->json(['html' => $html, 'existmore'=>$existmore]);
+			} else {
 				echo $str;
 			}
-		}elseif($call_type === 'api'){
-			$per_page = 5;
+		}
+		elseif($call_type === 'api')
+		{
 			if(!($reply->isEmpty())){
 				return view('forums-api.ajax-reply')
 						->with('replies', $reply)

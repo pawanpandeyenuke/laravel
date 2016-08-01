@@ -3541,3 +3541,27 @@ header{
 	height: 55px;
 	margin: 0;
 }
+footer {
+    background: #d7d7d7;
+    padding: 15px 0;
+    z-index: 999;
+    position: relative;
+}
+footer .f-links {
+    margin: 0px;
+    position: relative;
+    z-index: 1;
+}
+.f-links li {
+    font-size: 18px;
+    border-right: 1px solid #1f1f1f;
+    padding: 0 15px;
+    line-height: 16px;
+}
+.f-links li:last-child {
+	border-right:none;
+}
+footer .f-links li a, footer .f-links li {
+    font-size: 18px;
+    color: #1f1f1f;
+}

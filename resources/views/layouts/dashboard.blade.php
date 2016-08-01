@@ -145,7 +145,10 @@
                            <!-- Suggestion POPUP END-->
 </header><!--/header-->
 	
-	@yield('content')
+@yield('content')
+
+@include('panels.footer')
+
 <?php if(Auth::Check())
 { ?>
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
@@ -208,7 +211,6 @@
     }
 
 </script>
-
 
 {!! Session::forget('error') !!}
 {!! Session::forget('success') !!}
