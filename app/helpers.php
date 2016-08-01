@@ -322,7 +322,7 @@
 
     }
 
-    function forumPostContents( $description, $ReadMoreUrl, $descriptionlength = 200){
+    function forumPostContents( $description, $ReadMoreUrl = '#', $descriptionlength = 200){
         $data=0;
         if( !empty($description) ){
             if(strlen($description) < $descriptionlength){

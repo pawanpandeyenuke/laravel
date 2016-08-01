@@ -59,7 +59,7 @@ $(document).ready(function(){
 			if(comment!='')
 			{
 
-			jQuery('#postlist').find('#post_'+commentid).find('.comment-text').text(comment);
+			jQuery('#postlist').find('#post_'+commentid).find('.comment-text').html(comment);
 			var original =jQuery('#postlist').find('#post_'+commentid).find('.comment-text').html();
 			var converted = emojione.toImage(original);
 			jQuery('#postlist').find('#post_'+commentid).find('.comment-text').html(converted);
