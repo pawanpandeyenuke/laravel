@@ -10,7 +10,7 @@ class Group extends Model
 
 	protected $primaryKey = 'id';
 
-	public $fillable = ['title', 'status', 'owner_id', 'group_jid'];
+	public $fillable = ['title', 'status', 'owner_id', 'group_jid', 'picture'];
 
 	public $timestamps = true;
 
