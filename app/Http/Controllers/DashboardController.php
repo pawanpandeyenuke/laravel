@@ -12,6 +12,7 @@ use Request, Session, Validator, Input, Cookie, Hash;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\MessageBag, Config;
+use Intervention\Image\Facades\Image;
 // use Illuminate\Support\Facades\Input;
 
 class DashboardController extends Controller
@@ -523,16 +524,23 @@ class DashboardController extends Controller
 
                 //Check for image upload.
                 $file = Request::file('picture');
-                if( isset($arguments['picture']) && $file != null ){
+                if( isset($arguments['picture']) && $file != null )
+                {
                     $image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
                     $arguments['picture'] = '/uploads/user_img/'.$image_name;
-                    $file->move(public_path('uploads/user_img'), $image_name);
+
+                    // Resize pic
+                    $path = public_path('uploads/user_img/'.$image_name);
+                    Image::make($file->getRealPath())->resize(100, 100)->save($path);
+
+                    // upload real pic
+                    $file->move(public_path('uploads/user_img'), 'original_'.$image_name);
                     
-                     $path 			= public_path('uploads/user_img').'/'.$image_name;
-					 $ImageData 	= file_get_contents($path);
-					 $ImageType 	= pathinfo($path, PATHINFO_EXTENSION);
-					 $ImageData 	= base64_encode($ImageData);
-					 $image_name 	= Converse::setVcard(Auth::User()->xmpp_username, $ImageData, $ImageType);
+                    // $path = public_path('uploads/user_img').'/'.$image_name;
+					$ImageData 	= file_get_contents($path);
+					$ImageType 	= pathinfo($path, PATHINFO_EXTENSION);
+					$ImageData 	= base64_encode($ImageData);
+					// $image_name 	= Converse::setVcard(Auth::User()->xmpp_username, $ImageData, $ImageType);
                     
                 }
                 

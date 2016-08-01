@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments,App\ForumsDoctor, App\Setting;
 use Validator, Redirect, Request, Session, Hash, DB;
 use Illuminate\Support\Facades\Input;
+use Intervention\Image\Facades\Image;
 use \Exception;
 
 class ApiController extends Controller
@@ -538,7 +539,6 @@ class ApiController extends Controller
 
 			$arguments = Request::all();
 			$user = new User();
-
 			if(!empty($arguments)){
 
 				$userfind = $user->find($arguments['id']);
@@ -551,17 +551,22 @@ class ApiController extends Controller
 
 	            $file = Request::file('picture');
  				
-	            if( isset($arguments['picture']) && $file != null ){
+	            if( isset($arguments['picture']) && $file != null )
+	            {
 	                $image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 	                $arguments['picture'] = '/uploads/user_img/'.$image_name;
 
-	                $file->move(public_path('uploads/user_img'), $image_name);
+	                // Resize pic
+                    $path = public_path('uploads/user_img/'.$image_name);
+                    Image::make($file->getRealPath())->resize(100, 100)->save($path);
 
-                 	$path = public_path('uploads/user_img').'/'.$image_name;
+                    // upload real pic
+	                $file->move(public_path('uploads/user_img'), 'original_'.$image_name);
+
 				 	$ImageData = file_get_contents($path);
 				 	$ImageType = pathinfo($path, PATHINFO_EXTENSION);
 					$ImageData = base64_encode($ImageData);
-				 	$image_name = Converse::setVcard($userfind->xmpp_username, $ImageData, $ImageType);
+				 	// $image_name = Converse::setVcard($userfind->xmpp_username, $ImageData, $ImageType);
 	            }
  
 				User::where([ 'id' => $arguments['id'] ])->update([ 'picture' => $arguments['picture'] ]);
