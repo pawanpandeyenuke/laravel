@@ -1424,7 +1424,6 @@ class ApiController extends Controller
 		            		 	$error=$value;
 		            	    	break;
 		            		}
-
 	            		}
 
 	            		if($error!=0)
@@ -1504,21 +1503,33 @@ class ApiController extends Controller
 
  	 			$invalid_users = array();
  	 			foreach ($broadcast_members as $key => $value) {
- 	 				if(!User::find($value)){
+
+ 	 				$existingUser = User::find($value);
+ 	 				$notAFriend = Friend::where('user_id', $user_id)
+ 	 										->where('friend_id', $value)
+ 	 										->where('status','Accepted')
+ 	 										->get();
+
+ 	 				if( !$existingUser ){
  	 					$invalid_users[] = $value;
  	 				}else{
-	 	 				$bMemberObj = new BroadcastMembers;
-	 	 				$bMemberObj->broadcast_id = $id;
-	 	 				$bMemberObj->member_id = $value;
-	 	 				$bMemberObj->save(); 	 					
+ 	 					if(!$notAFriend->isEmpty()){
+		 	 				$bMemberObj = new BroadcastMembers;
+		 	 				$bMemberObj->broadcast_id = $id;
+		 	 				$bMemberObj->member_id = $value;
+		 	 				$bMemberObj->save();
+ 	 					}else{
+ 	 						$invalid_users[] = $value;
+ 	 					}
  	 				}
+
  	 			}
  	 			// echo '<pre>';print_r($saved);die;
  	 		}
 
  			if($invalid_users){
  				$users = implode(',', $invalid_users);
- 				$message = '{'.$users.'} are invalid user ids.';
+ 				$message = '{'.$users.'} are invalid user ids or might not be friend with you.';
  			}else{
  				$message = "Broadcast updated.";
  			}
@@ -1737,14 +1748,6 @@ class ApiController extends Controller
 		                    	GroupMembers::create($data1);
 	               			}
 
-							// $groupid   = preg_replace('/[^A-Za-z0-9\-]/', '_', $input['title']);
-							// $groupid   = strtolower($groupid);
-							// $GroupJid = $groupid."_".$bid->id.'_pvt';
-							// echo '<pre>';print_r($GroupJid);die;
-							// $newGroup = Group::find($bid->id);
-							// $newGroup->group_jid = $GroupJid;
-							// $newGroup->save();
-
 			                $this->status="success";
 			                $this->message="Group created.";
 			                $this->data=Group::where('id',$bid['id'])->get()->toArray();
@@ -1846,15 +1849,36 @@ class ApiController extends Controller
 		try{
 			
 			$group_id = Request::get('group_id');
+			$user_id = Request::get('user_id');
 
 			if(empty($group_id))
 				throw new Exception("Group id is required.", 1);
+
+			if(empty($user_id) || !is_numeric($user_id))
+				throw new Exception("User id is required.", 1);
+
+			$authuser = User::find($user_id);
+
+			if(empty($authuser))
+				throw new Exception("User does not exist.", 1);
 				
 			$findgroup = Group::find($group_id);
 
 			if(empty($findgroup))
 				throw new Exception("Group does not exist.", 1);
-				
+
+			// Send hint on remove group.
+				$converse 		= new Converse;
+				$userJid 		= $authuser->xmpp_username; // current user jid for chat message
+				$name 			= $authuser->first_name.' '.$authuser->last_name; // current user full name
+				$message 		= json_encode( array( 'type' => 'hint', 'action'=>'group_delete', 'sender_jid' => $userJid, 'groupname'=> $findgroup->title, 'groupjid' => $findgroup->group_jid, 'message' => webEncode($findgroup->title.' has been removed.') ) ); // hint message to send every group member
+				$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id', $group_id)->pluck('xmpp_username');		
+				foreach ($xmp as $key => $value) {
+					$converse->broadcastchatroom( $findgroup->group_jid, $name, $value, $userJid, $message ); // message broadcast per group member
+				}
+				$converse->deleteGroup($findgroup->group_jid); // Delete group from chat server
+			// Send hint on remove group.			
+
 			$findgroup = Group::find($group_id)->delete();
 
 			$this->data = $findgroup;
@@ -1869,6 +1893,177 @@ class ApiController extends Controller
 
 	}
  
+
+	/*
+	 * Join Private Group API.
+	 */
+	public function joinPrivateGroup()
+	{
+		try{
+
+			$status = Request::get('status');
+			$group_id = Request::get('group_id');
+			$member_id = Request::get('member_id');
+
+			$group = Group::find($group_id);
+
+			if( !$group )
+				throw new Exception("Group does not exist.", 1);
+
+			$user = User::find($member_id);
+
+			if( !$user )
+				throw new Exception("User does not exist.", 1);
+
+			$group_members = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])->count();
+
+			if( $group_members > 0 ){
+
+				$status = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])
+												->update(['status' => 'Joined']);
+
+				// Broadcast message
+                $members = GroupMembers::where(['group_id' => $group_id])->get();
+                $name = $user->first_name.' '.$user->last_name;
+                $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username, 'user_name'=>$name, 'message' => $name.' joined the group') );
+                foreach($members as $key => $val) {
+                    Converse::broadcastchatroom($group->group_jid, $name, $val->xmpp_username, $user->xmpp_username, $message);
+                };
+
+				if( $status ){
+					$this->data = $status;
+					$this->message = 'Joined private group successfully.' ;
+					$this->status = 'success';
+				}
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
+
+	/*
+	 * Add members private groups.
+	 */
+	public function addMembersPrivateGroup()
+	{
+		try{
+			$group_id = Request::get('group_id');
+			$members = Request::get('members');
+			$owner_id = Request::get('owner_id');
+
+			$group = Group::find($group_id);
+			if( !$group )
+				throw new Exception("Group does not exist.", 1);
+
+			if( empty( $members ) )
+				throw new Exception("No members found.", 1);
+
+			$invalid_users = array();
+			$alreadyMemberArray = array();
+			foreach ($members as $key => $value) {
+	 			
+	 			$alreadyMember = GroupMembers::where(['group_id' => $group_id, 'member_id' => $value])->get()->toArray();
+
+	 			if( empty($alreadyMember) ){
+	 				$existingUser = User::find($value);
+
+	 				$notAFriend = Friend::where('user_id', $owner_id)
+	 										->where('friend_id', $value)
+	 										->where('status','Accepted')
+	 										->get()->toArray();
+
+	 				if( !empty($existingUser) ){
+
+	 					if(!$notAFriend){
+
+		 	 				$privateGroupMemberObj = new GroupMembers;
+		 	 				$privateGroupMemberObj->group_id = $group_id;
+		 	 				$privateGroupMemberObj->member_id = $value;
+		 	 				$privateGroupMemberObj->status = 'Pending';
+		 	 				$privateGroupMemberObj->save();
+	 					}
+
+	 				}
+
+	 			}
+	 			
+			}
+
+            $this->status = "success";
+            $this->message = "Members updated successfully.";
+            $this->data = GroupMembers::where('group_id', $group_id)->get()->toArray();
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
+
+	/*
+	 * Leave/Delete Private Group API.
+	 */
+	public function leavePrivateGroup()
+	{
+		try
+		{
+			$group_id = Request::get('group_id');
+			$owner_id = Request::get('owner_id');
+			$member_id = Request::get('member_id');
+
+			$owner = User::find($owner_id);
+
+			if( !$owner )
+				throw new Exception("User does not exist.", 1);				
+
+			$group = Group::where(['id' => $group_id, 'owner_id' => $owner_id])->first();
+
+			if( $group->count() <= 0)
+				throw new Exception("Group does not exist.", 1);
+
+			if( $group->owner_id == $member_id)
+				throw new Exception("You can't leave the group.", 1);
+				
+			
+			$group_members = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])->count();
+			if( $group_members > 0 )
+			{
+				$data = GroupMembers::where(['group_id' => $group_id, 'member_id' => $member_id])
+												->update(['status' => 'Left']);
+
+				// Broadcast message
+				$action = ($owner_id == $member_id) ? 'leave' : 'delete';
+				$name = $owner->first_name.' '.$owner->last_name;
+				$msg = ($owner_id == $member_id) ? $name.' left the group' : $name.' removed from the group';
+				$members = GroupMembers::where('group_id', $group_id)->get();
+
+				$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner->xmpp_username,'action'=>$action, 'xmpp_userid' => $owner->xmpp_username, 'user_name'=>$name, 'message' => $msg) );
+                foreach($members as $key => $val) {
+                    Converse::broadcastchatroom($group->group_jid, $name, $val->xmpp_username, $owner->xmpp_username, $message);
+                }
+
+				$this->message = 'Successfully left the group.';
+			}
+
+			$this->data = $data;
+			$this->status = 'success';
+			
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();
+
+	}
+
 
 	/*
 	 * Delete public chatroom entry api on request.
@@ -2466,6 +2661,7 @@ class ApiController extends Controller
 
 		return $this->output();		
 	}
+
 
 	public function editForumPost()
 	{

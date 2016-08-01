@@ -33,7 +33,8 @@
 								</button>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 								@if($repliesCount == 0)
-									<li><a href="{{ url("api/get-forum-post-details?post_id=$post->id&user_id=$user->id&post_data=$postTitle") }}">Edit</a></li>
+									<?php $title = base64_encode(nl2br($postTitle)); ?>
+									<li><a href="{{ url("api/get-forum-post-details?post_id=$post->id&user_id=$user->id&post_data=$title") }}">Edit</a></li>
 								@endif
 									<li><a href="#" class="del-confirm-api" data-type="post" data-postid="{{$post->id}}" data-breadcrum = "{{$post->forum_category_breadcrum}}">Delete</a></li>
 								</ul>
