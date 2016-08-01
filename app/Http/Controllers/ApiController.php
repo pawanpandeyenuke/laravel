@@ -1973,11 +1973,13 @@ class ApiController extends Controller
 			$invalid_users = array();
 			$alreadyMemberArray = array();
 			$new_members = array();
+
 			foreach ($members as $key => $value) {
 	 			
 	 			$alreadyMember = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])->get()->toArray();
 
 	 			if( empty($alreadyMember) ){
+	 				
 	 				$existingUser = User::find($value);
 
 	 				$notAFriend = Friend::where('user_id', $owner_id)
@@ -1987,11 +1989,10 @@ class ApiController extends Controller
 
 	 				if( !empty($existingUser) ){
 
-	 					if(!$notAFriend){
+	 					if($notAFriend){
+	 						$new_members[count($new_members)] = $existingUser;
 
-	 						$new_members[] = $existingUser;
-
-		 	 				$privateGroupMemberObj = new GroupMembers;
+	 	 				$privateGroupMemberObj = new GroupMembers;
 		 	 				$privateGroupMemberObj->group_id = $group->id;
 		 	 				$privateGroupMemberObj->member_id = $value;
 		 	 				$privateGroupMemberObj->status = 'Pending';
@@ -2004,6 +2005,7 @@ class ApiController extends Controller
 	 			
 			}
 
+
 			// Send Message
 				$owner_data = User::find($owner_id);
 				$name = $owner_data->first_name.' '.$owner_data->last_name;
@@ -2011,17 +2013,18 @@ class ApiController extends Controller
 
 				$message = json_encode( array( 'type' => 'room', 'groupname' => $group->title, 'sender_jid' => $owner_data->xmpp_username, 'groupjid'=>$group_jid, 'group_image' => $group->picture, 'created_by'=>$name,'message' => 'This invitation is for joining the '.$group->title.' group.', 'users' => $members) );
                 
-                foreach($new_members as $val)
+                foreach($new_members as $val){
                     Converse::broadcast($owner_data->xmpp_username, $val->xmpp_username, $message);
+                }
 
 
 	            foreach($new_members as $key1 => $val1) 
 	            {
-	            	// echo '<pre>';print_r($val1);die;
+	            	// die('kill');
 	            	$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner_data->xmpp_username, 'action'=>'add','message' => $val1->first_name.' '.$val1->last_name.' has invited for joining the group', 'xmpp_userid' => $val1->xmpp_username, 'user_name' => $val1->first_name.' '.$val1->last_name, 'user_id' => $val1->id) );
 
 	            	foreach($old_member as $key => $val) 
-	                {	                    
+	                {
 	                    Converse::broadcastchatroom($group->group_jid, $name, $val['xmpp_username'], $owner_data->xmpp_username, $message);
 	                }
 	            }
@@ -2029,7 +2032,7 @@ class ApiController extends Controller
 
             $this->status = "success";
             $this->message = "Members updated successfully.";
-            $this->data = GroupMembers::where('group_id', $group->id)->get()->toArray();
+            $this->data = '';//GroupMembers::where('group_id', $group->id)->get()->toArray();
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();

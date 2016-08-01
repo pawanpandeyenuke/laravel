@@ -99,7 +99,6 @@ class Converse
 
 	// @ (Broadcast) Send message in chatroom.
 	public static function broadcastchatroom($groupfrom,$userfrom,$userto,$userjid,$msg){
-		
 		$node = Config::get('constants.xmpp_host_Url');
 		$subject = "";
 		$result2 = @exec( "sudo ejabberdctl send_message groupchat '".$groupfrom."@conference.".$node."/".$userfrom."' ".$userto."@".$node." '".$subject."' '".$msg."'");
