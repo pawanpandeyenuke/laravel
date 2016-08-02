@@ -314,14 +314,14 @@ $GroupsJidList = array();
 		return str;
 	}
 	
-    $('#loader').modal('show');
+
     $(document).ready(function(){
       require(['converse'], function (converse) {
         conObj = converse;
 
         conObj.listen.on('connected', function (event) {
-          $('#loader').remove();
-          $('.modal-backdrop').remove();
+          $('.loader_blk').remove();
+
           if( groupname != '' || groupid != '' ) {
 						setTimeout( function(){
 							closePublic( groupid );
@@ -526,6 +526,10 @@ $GroupsJidList = array();
             var getRooms = conObj.rooms.get( groupid+conferencechatserver );
             getRooms.close();
             $('#leaveModal').modal('hide');
+            var firstChat = $( '.minimized-chats-flyout .chat-head:first .restore-chat' ).data( 'bid' );
+            if( typeof firstChat !== undefined ){
+              hideOpendBox( Base64.decode(firstChat) , 1 );
+            }
           });
         });
       
