@@ -400,10 +400,12 @@ function format_number($num, $precision = 2)
 }
 
 // Upload audio, video and images 
-function fileUpload($file)
+function fileUpload($file, $source = 'feed')
 {
+    $data = array('status' => 'error', 'message' => '');
     try
     {
+        //print_r($file);exit;
         $uploadedfile = $file['image']['tmp_name'];
         $name = $file['image']['name'];
         $size = $file['image']['size'];
@@ -413,13 +415,13 @@ function fileUpload($file)
         if( ! $name ) {
             throw new Exception('Please select a file to upload.', 1);
         }
-        
+
         // Get extension
         $nameArr= explode(".", $name);
         $ext = $nameArr[count($nameArr)-1];
 
         // check for file format
-        $valid_formats = array("jpg", "jpeg", "png", "gif", "mp4","mp3","flv","3gpp");
+        $valid_formats = array("jpg", "jpeg", "png", "gif", "mp4","mp3","3gpp");
         if ( !in_array(strtolower($ext), $valid_formats)) {
             throw new Exception('Invalid file format.', 1);
         }
@@ -435,32 +437,32 @@ function fileUpload($file)
         {
             $transpose_string="avconv -i ".$uploadedfile." -c:v libx264 -c:a copy -vf ".$transpose[$str_angle[0]]." ";
         }
-        
+
         // Upload file
         if($imageType=='image')
         {
             $actual_image_name = $name;
-            $path = $rootFolder.'/images/original/'.$actual_image_name;
+            $path = $rootFolder.'/uploads/original/'.$actual_image_name;
             $isuploaded = move_uploaded_file($uploadedfile, $path);
 
             // Resize pic
-            $thumbPath = public_path('images/thumbs/'.$actual_image_name);
+            $thumbPath = public_path('uploads/thumbs/'.$actual_image_name);
             Image::make($path)->resize(100, 100)->save($thumbPath);
         }
         elseif(strtolower($ext)=='3gpp' && strtolower($imageType)=='audio')
         {
             $actual_image_name = str_replace('.3gpp', '.mp3', strtolower($name));
-            $path = $rootFolder.'/media/'.$actual_image_name;
+            $path = $rootFolder.'/uploads/media/'.$actual_image_name;
             shell_exec("avconv -i ".$tmp." -c:a libmp3lame -b:a 320k ".$path);
         }
         elseif(strtolower($ext)=='3gpp' && strtolower($imageType)=='video')
         {
             $actual_image_name=str_replace('.3gpp','.mp4',strtolower($name));
-            $path = $rootFolder.'/media/'.$actual_image_name;
+            $path = $rootFolder.'/uploads/media/'.$actual_image_name;
             shell_exec($transpose_string.$path);
             
             // Get video preview thumb
-            $preViewImage = $path.'.png';
+            $preViewImage = $rootFolder.'/uploads/previews/'.$actual_image_name.'.png';
             shell_exec("avconv -i ".$path." -vsync 1 -r 1 -an -y ".$preViewImage);
             
             // Resize and overwrite large size preview image
@@ -469,25 +471,49 @@ function fileUpload($file)
         elseif(strtolower($ext)=='mp4')
         {
             $actual_image_name = $name;
-            $path = $rootFolder.'/media/'.$actual_image_name;
+            $path = $rootFolder.'/uploads/media/'.$actual_image_name;
             shell_exec($transpose_string.$path);
             
             // Get video preview thumb
-            $preViewImage = $path.'.png';
+            $preViewImage = $rootFolder.'/uploads/previews/'.$actual_image_name.'.png';
             shell_exec("avconv -i ".$path." -vsync 1 -r 1 -an -y ".$preViewImage);
             
             // Resize and overwrite large size preview image
             Image::make($preViewImage)->resize(140, 100)->save($preViewImage);
+        } else {
+            $actual_image_name = $name;
+            $path = $rootFolder.'/uploads/media/'.$actual_image_name;
+            $isuploaded = move_uploaded_file($uploadedfile, $path);
         }
 
+        $data['status'] = 'success';
         $data['filename']= $actual_image_name;
         $data['type']= $imageType;
-    } 
+    }
     catch (RuntimeException $e) 
     {
-        return $e->getMessage();
+        $data['message'] = $e->getMessage();
     }
 
-    return true;
+    return $data;
+}
+
+// Get file type based on file extension
+function getFileType($filename)
+{
+    if( !$filename ) {
+        return null;
+    }
+
+    $nameArr= explode(".", $filename);
+    $ext = $nameArr[count($nameArr)-1];
+
+    if($ext == 'mp4') {
+        return 'video';
+    } elseif($ext == 'mp3') {
+        return 'audio';
+    } else {
+        return 'image';
+    }
 }
 ?>

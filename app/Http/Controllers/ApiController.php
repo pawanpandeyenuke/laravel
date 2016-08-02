@@ -230,36 +230,35 @@ class ApiController extends Controller
 					throw new Exception('Invalid user id.');
 				}
 
-				if( ( $arguments['message'] == null ) && ( $arguments['image'] == null ) )
+				if( ( $arguments['message'] == null ) && ( $arguments['image'] == null ) ){
 					throw new Exception('Please provide a message or image.');
+				}
 
 				if(Request::hasFile('image'))
 				{
-					/*$response = fileUpload($_FILES);
-					if( !is_bool($response) ) {
-						throw new Exception($response, 1);
+					$response = fileUpload($_FILES);
+					if( $response['status'] == 'error' ) {
+						throw new Exception($response['message'], 1);
 					} else {
+						$arguments['image'] = $response['filename'];
 						$this->message = 'Your post has been saved successfully.';
-					}*/
+					}
 
-					$file = Request::file('image');
+					/*$file = Request::file('image');
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 					$arguments['image'] = $image_name;
-					$file->move('uploads', $image_name);
+					$file->move('uploads', $image_name);*/
 				}
 			}
-
+			
 			$success = $feeds->create( $arguments );
 			$this->status = 'success';
 			$this->data = $success;
 		}catch( Exception $e ){
-
 			$this->message = $e->getMessage();
-
 		}
 		return $this->output();
 	}
-
 
 	/*
 	 * Fetch posts on api request.

@@ -151,10 +151,17 @@
 									<p><?= $argumentsMessage ?></p>
 
 									@if($data['image'])
+										<?php $filetype = getFileType($data['image']); ?>
 										<div class="post-img-cont">
-											<a href="{{ url('uploads/'.$data['image']) }}" class="popup">
-											<img src="{{ url('uploads/'.$data['image']) }}" class="post-img">
+											@if($filetype == 'image')
+											<a href="{{ url('uploads/original/'.$data['image']) }}" class="popup">
+												<img src="{{ url('uploads/thumbs/'.$data['image']) }}" class="post-img">
 											</a>
+											@elseif($filetype == 'audio')
+												<audio source="{{ url('uploads/media/'.$data['image']) }}" autoplay='no'></audio>
+											@elseif($filetype == 'video')
+												<video source="{{ url('uploads/media/'.$data['image']) }}" autoplay='no'></video>
+											@endif
 										</div>
 									@endif
 								</div><!--/post data-->
