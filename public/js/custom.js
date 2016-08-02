@@ -1103,21 +1103,20 @@ $('.btn-upload-icon').find(".badge").remove();
 		$.ajax({
 			'url' : '/ajax/viewmoreposts',
 			'type' : 'post',
+			'dataType' : 'json',
 			'data' : { 'pageid': pageid },
 			'success' : function(data){
-				if(data){
-
+				if(data.html){
 					$('.glyphicon-download').show();
 					$('.loading-img').hide();
-
 					pageid = pageid + 1;
-					$('#postlist').last('.single-post').append(data);
+					$('#postlist').last('.single-post').append(data.html);
 					loadImg();
 					loadOrgionalImogi();
-				}else{
+				}
+
+				if(data.existmore == 0){
 					current.remove();
-					/*current.find('span').remove();
-					current.append('<span>No more posts</span>');*/
 				}
 			}	
 		});
