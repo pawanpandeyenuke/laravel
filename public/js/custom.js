@@ -1117,6 +1117,8 @@ $('.btn-upload-icon').find(".badge").remove();
 
 				if(data.existmore == 0){
 					current.remove();
+				}else if(data.existmore == 1 && data.html == ""){
+					current.remove();
 				}
 			}	
 		});
