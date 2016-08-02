@@ -48,83 +48,75 @@
 	}
 
 		$(document).on('click', '.del-confirm-api', function(){//forumpostdelete
-		var current = $(this);
-		var breadcrum = current.data('breadcrum');
-		var postid = current.data('postid');
-		var type = current.data('type');
-		var forumpostid = current.data('forumpostid');
-		var forumreplyid = current.data('forumreplyid');
-		$.ajax({
-			'url' : '/api/api-del-confirm',
-			'data' : {'type':type, 'postid' : postid, 'breadcrum' : breadcrum, 'forumpostid' : forumpostid, 'forumreplyid' : forumreplyid},
-			'type' : 'post',
-			'success' : function(response){
-				if(response){
-					$("#forum-confirm-modal").append(response);
-					$("#forum-confirm-modal").modal();
+			var current = $(this);
+			var breadcrum = current.data('breadcrum');
+			var postid = current.data('postid');
+			var type = current.data('type');
+			var forumpostid = current.data('forumpostid');
+			var forumreplyid = current.data('forumreplyid');
+			$.ajax({
+				'url' : '/api/api-del-confirm',
+				'data' : {'type':type, 'postid' : postid, 'breadcrum' : breadcrum, 'forumpostid' : forumpostid, 'forumreplyid' : forumreplyid},
+				'type' : 'post',
+				'success' : function(response){
+					if(response){
+						$("#forum-confirm-modal").append(response);
+						$("#forum-confirm-modal").modal();
+					}
 				}
-			}
+			});
+			$("#forum-confirm-modal").html('');
 		});
-		$("#forum-confirm-modal").html('');
-		});
-	
-
+		
 		var pageid = 2;
-		$(document).on('click','.load-more-forumpost',function(){			
-			$('.load-more-forumpost').prop('disabled',true);
-			$('.load-more-forumpost').text('Loading...');
+		$(document).on('click','.load-more-forumpost',function(){
 			var current = $(this);
 			var breadcrum = $(this).data('breadcrum');
 			var user_id = $('.userid').data('id');
+			current.prop('disabled',true).text('Loading...');
 			var abc = current.closest('.friends-list').find('ul.counting').children('li').length;
 			$.ajax({
 				'url' : '/ajax/view-more-forum-post',
 				'type' : 'post',
+				'dataType' : 'json',
 				'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, 'call_type': 'api', 'user_id': user_id },
 				'success' : function(data){
-					$('.load-more-forumpost').prop('disabled',false);
-					if(data != 'No More Results'){
-						pageid = pageid + 1;
-						$('.forum-post-list').append(data);
-						$('.load-more-forumpost').text('View More');
-					}else{
-						current.hide();
+					current.text('View More').prop('disabled', false);
+					if(data.existmore == 0) {
+						current.parent().remove();
 					}
-				}	
+					pageid = pageid + 1;
+					$('.forum-post-list').append(data.html);
+				}
 			});
 		});
 
 		$(document).on('click','.load-more-forumreply',function(){
-			$('.load-more-forumreply').prop('disabled',true);
-			$('.load-more-forumreply').text('Loading...');
 			var current = $(this);
 			var forumpostid = $(this).data('forumpostid');
 			var user_id = $('.userid').data('id');
+			current.prop('disabled',true).text('Loading...');
 			$.ajax({
 				'url' : '/ajax/view-more-forum-reply',
 				'type' : 'post',
+				'dataType' : 'json',
 				'data' : { 'pageid': pageid , 'forumpostid' : forumpostid, 'call_type': 'api', 'user_id': user_id },
 				'success' : function(data){
-					$('.load-more-forumreply').prop('disabled',false);
-					if(data != 'No More Results'){		
-						pageid = pageid + 1;
-						$('.loading-text').show();
-						$('.loading-img').hide();
-						$('.reply-post-cont').append(data);
-						$('.load-more-forumreply').text('View More');
-					}else{
-						current.hide();
+					current.text('View More').prop('disabled', false);
+					if(data.existmore == 0) {
+						current.parent().remove();
 					}
+					pageid = pageid + 1;
+					$('.reply-post-cont').append(data.html);
 				}	
 			});
 		});
 
 		$(document).on('click','.load-more-forumcommets',function(){
-			$('.load-more-forumcommets').prop('disabled',true);
-			$('.load-more-forumcommets').text('Loading...');
 			var current = $(this);
 			var forumReplyId = $(this).data('forumreplyid');
 			var user_id = $('.userid').data('id');
+			current.prop('disabled',true).text('Loading...')
 			$.ajax({
 				'url' : '/ajax/view-more-forum-comment',
 				'type' : 'post',
@@ -143,7 +135,7 @@
 				}	
 			});
 		});
-
+		
 		$(document).on('click', '.api-likeforumpost', function(){		
 			//var _token = $('#postform input[name=_token]').val();
 			var forumPostID = $(this).data('forumpostid');

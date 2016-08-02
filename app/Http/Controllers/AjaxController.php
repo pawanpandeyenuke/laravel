@@ -1416,32 +1416,39 @@ comments;
 		$page = Input::get('pageid');
 		$keyword = Input::get('keyword');
 		$offset = ($page - 1) * $per_page;
-		if(Auth::check())
+		if(Auth::check()){
 			$user_id = Auth::User()->id;
-		else
+		} else { 
 			$user_id="";
-	           $model = User:://where('id','!=',$user_id)
-                             where('first_name','LIKE','%'. $keyword.'%')
-                            ->orWhere('last_name','LIKE','%'. $keyword.'%')
-                            ->skip($offset)
-                            ->take($per_page)
-                            ->orderBy('id','desc')
-                            ->get()
-                            ->toArray();
-		
-			$modelcount = count($model);
+		}
 
-			$auth = ($user_id != '') ? 1 : 0;
-			
-			if($model){
-			return view('dashboard.getsearchresult')
-					->with('model',$model)
-					->with('modelcount',$modelcount)
-					->with('auth',$auth);          
-			}
-			else{
-				echo "No more results";
-			}
+		// Get total pages
+		$totalRecords = User::where('first_name','LIKE','%'. $keyword.'%')
+                    ->orWhere('last_name','LIKE','%'. $keyword.'%')
+            		->count();
+        $pages = ceil($totalRecords / $per_page);
+        $existmore = $page == $pages ? 0 : 1;
+
+       	$model = User::where('first_name','LIKE','%'. $keyword.'%')
+                    ->orWhere('last_name','LIKE','%'. $keyword.'%')
+                    ->skip($offset)
+                    ->take($per_page)
+                    ->orderBy('id','desc')
+                    ->get()
+                    ->toArray();
+		
+		$modelcount = count($model);
+		$auth = ($user_id != '') ? 1 : 0;
+		if($model)
+		{
+			$html = view('dashboard.getsearchresult')
+				->with('model',$model)
+				->with('modelcount',$modelcount)
+				->with('auth',$auth)->render();
+			return response()->json(['html' => $html, 'existmore' => $existmore]);          
+		} else {
+			echo "No more results";
+		}
 	}
 
 	public function delForumPost()
@@ -1606,39 +1613,49 @@ comments;
 		$breadcrum = Input::get('breadcrum');
 		$offset = ($page - 1) * $per_page;
 
-		     $posts = ForumPost::with('user')->with('forumPostLikesCount')
-		     	->with('replyCount')
-		        ->where('forum_category_breadcrum',$breadcrum)
-		        ->skip($offset)
-		        ->take($per_page)
-		        ->orderBy('updated_at','DESC')
-		        ->get();   
+		// Get total pages
+		$totalRecords = ForumPost::with('user')->with('forumPostLikesCount')
+	     	->with('replyCount')
+	        ->where('forum_category_breadcrum',$breadcrum)
+            ->count();
+        $pages = ceil($totalRecords / $per_page);
+        $existmore = $page == $pages ? 0 : 1;
+
+	    $posts = ForumPost::with('user')->with('forumPostLikesCount')
+	     	->with('replyCount')
+	        ->where('forum_category_breadcrum',$breadcrum)
+	        ->skip($offset)
+	        ->take($per_page)
+	        ->orderBy('updated_at','DESC')
+	        ->get();
 
 		$str  = "No More Results";
 
-		if($call_type == 'web'){
-			if(!($posts->isEmpty())){
-				return view('forums.viewmoreforumposts')
-							->with('posts',$posts)
-							->with('breadcrum',$breadcrum);       
-			}
-			else{
+		if($call_type == 'web')
+		{
+			if(!($posts->isEmpty()))
+			{
+				$html = view('forums.viewmoreforumposts')->with('posts',$posts)->with('breadcrum',$breadcrum)->render();
+				return response()->json(['html' => $html, 'existmore'=>$existmore]);
+			} else {
 				echo $str;
 			}
-		}elseif($call_type == 'api'){
-			if(!($posts->isEmpty())){
-				$per_page = 5;
-				return view('forums-api.ajax-post')
+		}
+		elseif($call_type == 'api')
+		{
+			if(!($posts->isEmpty()))
+			{
+				$html = view('forums-api.ajax-post')
 							->with('forumPosts',$posts)
 							->with('breadcrum',$breadcrum)
 							->with('user_id', Input::get('user_id'))
 							->render();
+				return response()->json(['html' => $html, 'existmore'=>$existmore]);
 			}
 			else{
 				echo $str;
 			}
 		}
-
 	}
 
 	public function addNewForumReply()
@@ -1843,11 +1860,13 @@ comments;
 		}
 		elseif($call_type === 'api')
 		{
-			if(!($reply->isEmpty())){
-				return view('forums-api.ajax-reply')
+			if(!($reply->isEmpty()))
+			{
+				$html = view('forums-api.ajax-reply')
 						->with('replies', $reply)
 						->with('user_id', Input::get('user_id'))
-						->with('forumpostid', $forumpostid);       
+						->with('forumpostid', $forumpostid)->render();
+				return response()->json(['html' => $html, 'existmore'=>$existmore]);
 			}
 			else{
 				echo $str;
@@ -1979,27 +1998,35 @@ comments;
 		$keyword = Input::get('keyword');
 		$offset = ($page - 1) * $per_page;
 
-		       $posts = ForumPost::with('user')
-                        ->with('forumPostLikesCount')
-                        ->with('replyCount')
-                        ->where('forum_category_breadcrum', 'LIKE', $breadcrum.'%')
-                        ->whereRaw( 'LOWER(`title`) like ?', array("%".$keyword."%"))
-                        ->skip($offset)
-		        		->take($per_page)
-                        ->orderBy('updated_at','DESC')
-                        ->get();  
+		// Get total pages
+		$totalRecords = ForumPost::with('user')
+                ->with('forumPostLikesCount')
+                ->with('replyCount')
+                ->where('forum_category_breadcrum', 'LIKE', $breadcrum.'%')
+                ->whereRaw( 'LOWER(`title`) like ?', array("%".$keyword."%"))
+            	->count();
+        $pages = ceil($totalRecords / $per_page);
+        $existmore = $page == $pages ? 0 : 1;
 
-			$str  = "No More Results";
+       	$posts = ForumPost::with('user')
+                ->with('forumPostLikesCount')
+                ->with('replyCount')
+                ->where('forum_category_breadcrum', 'LIKE', $breadcrum.'%')
+                ->whereRaw( 'LOWER(`title`) like ?', array("%".$keyword."%"))
+                ->skip($offset)
+        		->take($per_page)
+                ->orderBy('updated_at','DESC')
+                ->get();
 
-		if(!($posts->isEmpty())){
-			return view('forums.viewmoresearchforum')
-						->with('posts',$posts)
-						->with('breadcrum',$breadcrum)
-						->with('keyword',$keyword);       
-			}
-			else{
-				echo $str;
-			}	
+		$str  = "No More Results";
+
+		if(!($posts->isEmpty()))
+		{
+			$html = view('forums.viewmoresearchforum')->with('posts',$posts)->with('breadcrum',$breadcrum)->with('keyword',$keyword)->render();
+			return response()->json(['html' => $html, 'existmore'=>$existmore]);    
+		} else {
+			echo $str;
+		}
 	}
 	
 	public function leavePrivateGroup(){
