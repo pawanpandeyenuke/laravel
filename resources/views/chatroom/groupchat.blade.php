@@ -526,6 +526,10 @@ $GroupsJidList = array();
             var getRooms = conObj.rooms.get( groupid+conferencechatserver );
             getRooms.close();
             $('#leaveModal').modal('hide');
+            var firstChat = $( '.minimized-chats-flyout .chat-head:first .restore-chat' ).data( 'bid' );
+            if( typeof firstChat !== undefined ){
+              hideOpendBox( Base64.decode(firstChat) , 1 );
+            }
           });
         });
       
