@@ -1264,7 +1264,7 @@ $(document).on('click','.savegroupname',function()
 	/***** Forum Delete Confirmation Box****/
 
 	$(document).on('click', '.del-confirm-forum', function(){
-	showLoading();
+	// showLoading();
 	var type = $(this).data('forumtype'); 
 	var type_id = $(this).val();
 	var breadcrum = $(this).data('breadcrum');
@@ -1278,7 +1278,7 @@ $(document).on('click','.savegroupname',function()
 			if(response){
 				$("#forum-confirm-modal").append(response);
 				$("#forum-confirm-modal").modal();
-				hideLoading();
+				// hideLoading();
 			}
 		}
 	});
