@@ -1095,13 +1095,21 @@ $('.btn-upload-icon').find(".badge").remove();
 	*/
 	var pageid = 2;
 	$(document).on('click','.dashboard-load',function(){
+
+		$('.glyphicon-download').hide();
+		$('.loading-img').show();
 		var current = $(this);
+
 		$.ajax({
 			'url' : '/ajax/viewmoreposts',
 			'type' : 'post',
 			'data' : { 'pageid': pageid },
 			'success' : function(data){
 				if(data){
+
+					$('.glyphicon-download').show();
+					$('.loading-img').hide();
+
 					pageid = pageid + 1;
 					$('#postlist').last('.single-post').append(data);
 					loadImg();
