@@ -34,7 +34,7 @@
 							</div>
 							<div class="btn-cont text-center">
 								<ul class="list-inline">
-									<li><input type="submit" title="" class="btn btn-primary" value="Save"/></li>
+									<li><input type="submit" title="" class="btn btn-primary privategroupaddform" value="Save"/></li>
 									<li><a href="{{url('private-group-list')}}" title="" class="btn btn-primary">Cancel</a></li>
 								</ul>
 							</div>
@@ -56,6 +56,7 @@
 $(document).ready(function () {
 
 	$( "#privategroupform" ).submit(function( event ) {
+		$('.privategroupaddform').prop('disabled', true);
 		var stack = $('.b-valid');
 		$.each(stack, function(i,v){
 			if($(this).is('input')){
