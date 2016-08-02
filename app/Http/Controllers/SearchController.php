@@ -49,7 +49,7 @@ class SearchController extends Controller
                                 ->toArray() );
 
 
-                $reqByMe = Setting::where(['user_id' => $authUserId, 'setting_title' => 'friend-request'])->value('setting_value');
+                /*$reqByMe = Setting::where(['user_id' => $authUserId, 'setting_title' => 'friend-request'])->value('setting_value');
                 
                 if(!empty($reqByMe))
                 {
@@ -70,8 +70,7 @@ class SearchController extends Controller
                     }elseif($reqByMe == 'all'){
 
                     }
-                }
-
+                }*/
 
             }
 
