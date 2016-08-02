@@ -49,7 +49,7 @@ Route::get('ajax/getxmppuser', 'AjaxController@getxmppuser');
 Route::post('ajax/search-friend', 'AjaxController@searchfriend');
 
 Route::post('ajax/webgetlikes', 'AjaxController@webgetlikes');
-
+Route::post('/ajax/leave-group', 'AjaxController@leaveGroup');
 Route::post('/web/ajax/getposts', 'AjaxController@getAjaxPost');
 
 Route::post('ajax/accept','AjaxController@accept');

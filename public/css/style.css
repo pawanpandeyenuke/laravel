@@ -3567,3 +3567,12 @@ footer .f-links li a, footer .f-links li {
     font-size: 18px;
     color: #1f1f1f;
 }
+.chat-head #leave {
+	color: #000 !important;
+    margin-top: -23px !important;
+    margin-right: 10px !important;
+}
+#leaveModal .modal-dialog{
+  max-width: 480px;
+  margin: 10% auto 0;
+}

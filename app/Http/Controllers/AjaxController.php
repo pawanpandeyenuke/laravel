@@ -2099,5 +2099,19 @@ comments;
         return json_encode(array('limit' => $CanAdd, 'status' => $Status));
     }
 	
+	// Leave group 
+	public function leaveGroup()
+	{
+		if( Auth::check() ){
+			echo 0; 
+		} 
+		else 
+		{
+			$input = Request::all();
+			DefaultGroups::where(['user_id' => Auth::user()->id, 'group_jid' => $input['group_jid']])->delete();
+			echo 1;
+		}
+		
+		exit;
+	}
 }
-	
