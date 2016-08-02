@@ -153,7 +153,7 @@
 									@if($data['image'])
 										<div class="post-img-cont">
 											<a href="{{ url('uploads/'.$data['image']) }}" class="popup">
-											<img src="{{ url('uploads/'.$data['image']) }}" class="post-img">
+												<img src="{{ url('uploads/'.$data['image']) }}" class="post-img">
 											</a>
 										</div>
 									@endif
