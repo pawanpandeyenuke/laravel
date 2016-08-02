@@ -88,12 +88,7 @@
               <td width='520'>
                 <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
 
-<!-- =============================== Header ====================================== -->           
-
                   <tr><td height='75' style="padding-bottom: 10px; border-bottom: 3px solid #A0F0E8;"><a href="#" title=""><img src="{{url('/images/logo.jpg')}}" alt=""></a></td></tr>
-
-<!-- =============================== Body ====================================== -->
-
                   <tr>
                     <td class='movableContentContainer' valign='top' style="padding-top: 20px;">
 
@@ -126,7 +121,7 @@
 
                       <div class='movableContent'>
                         <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
-                          <tr><td height='55'></td></tr>
+                          <tr><td height='30'></td></tr>
                           <tr>
                             <td align='left'>
                               <div class="contentEditableContainer contentTextEditable">
@@ -146,17 +141,9 @@
                               <div class="contentEditableContainer contentTextEditable">
                                 <div class="contentEditable" align='center'>
                                   <p  style='text-align:left;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>
+                                    Hi, </br> </br> {{ $username }} has joined Friendzsquare. On FriendzSqaure you can make new friends by joining chat rooms, participate in forums, post comments on newsfeed and much more. </br> </br> Explore and grow your social network.<!--  <a target='_blank' class='link1' href="{{url('profile/'.$id)}}"> clicking here</a> -->
 
-Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and meet new people. Connect to your friend by<a target='_blank' class='link1' href="{{url('profile/'.$id)}}"> clicking here</a>
-
-                                    <br>
-                                    Have questions? Get in touch with us via Facebook or Twitter, or email our support team at <?php echo Config::get('constants.feedback_email'); ?>.
-                                    <br>
-                                    <br>
-                                    Cheers,
-                                    <br>
-
-                                    <span style='color:#222222;'>{{$username}}</span>
+                                    <!-- <span style='color:#222222;'>{{$username}}</span> -->
 
                                   </p>
                                 </div>
@@ -174,7 +161,7 @@ Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and m
                                     <div class="contentEditableContainer contentTextEditable">
                                       <div class="contentEditable" align='center'>
 
-                                        <a target='_blank' href="{{url('profile/'.$id)}}" class='link2' style='color:#ffffff;'>Get Started</a>
+                                        <a target='_blank' href="{{url('profile/'.$id)}}" class='link2' style='color:#ffffff;'>Accept Invite</a>
 
                                       </div>
                                     </div>
@@ -189,7 +176,7 @@ Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and m
 
                       <div lass='movableContent'>
                         <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
-                          <tr><td height='65'></td></tr>
+                          <tr><td height='35'></td></tr>
                           <tr><td  style='border-bottom:1px solid #DDDDDD;'></td></tr>
 
                           <tr><td height='25'></td></tr>
@@ -201,25 +188,11 @@ Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and m
                                   <td valign='top' align='left' width='370'>
                                     <div class="contentEditableContainer contentTextEditable">
                                       <div class="contentEditable" align='center'>
-                                        <p  style='text-align:left;color:#CCCCCC;font-size:12px;font-weight:normal;line-height:20px;'>
-                                          
-                                          <a target='_blank' href="[FORWARD]">Forward to a friend</a><br>
-                                          <a target='_blank' href="[UNSUBSCRIBE]" class='link1' class='color:#382F2E;'>Unsubscribe</a>
-                                          <br>
-                                          <a target='_blank' class='link1' class='color:#382F2E;' href="[SHOWEMAIL]">Show this email in your browser</a>
+                                        <p  style='text-align:left;color:#CCCCCC;font-size:12px;font-weight:normal;line-height:20px;'>                                        
+                                          <a target='_blank' style="margin-left:40px;" href="#">Forward to a friend</a>
+                                          <a target='_blank' style="margin-left:50px;" href="#" class='link1' class='color:#382F2E;'>Unsubscribe</a>
+                                          <a target='_blank' style="margin-left:50px;" class='link1' class='color:#382F2E;' href="#">Show this email in your browser</a>
                                         </p>
-                                      </div>
-                                    </div>
-                                  </td>
-
-                                  <td width='30'></td>
-
-                                  <td valign='top' width='52'>
-                                    <div class="contentEditableContainer contentFacebookEditable">
-                                      <div class="contentEditable">
-
-                                        <a href="#" title=""><img src="{{url('images/logo.jpg')}}" alt="" style="width: 100px;"></a>
-
                                       </div>
                                     </div>
                                   </td>
@@ -232,13 +205,6 @@ Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and m
 
                     </td>
                   </tr>
-
-                  
-
-<!-- =============================== footer ====================================== -->
-                  
-
-
                 </table>
               </td>
               <td width='40'></td>
@@ -246,10 +212,7 @@ Hi! Join FriendzSqaure and chat with friends,create groups,join new groups and m
           </table>
         </td>
       </tr>
-
       <tr><td height='88'></td></tr>
-
-
     </table>
       </body>
       </html>

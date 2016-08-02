@@ -209,50 +209,27 @@ class ContactImporter extends Controller
                 ->with('contacts', $google_contacts);
 
     }
-/*
-    public function mail($email = '', $message, $subject, $type) {
-        if($email != ''){
-<<<<<<< HEAD
-  			    Mail::raw($message,function ($m)  use($email, $subject, $type){
-                	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
-                    $m->to($email,$type)->subject($subject);
-                });
-			//print_r($mailsent);die;
-=======
-		$mailsent = //Mail::send('emails.invite', ['email'=> 'pawanpandey392@gmail.com','message_text'=> 'checkout this new site. Friendz Square!'], 
-                Mail::raw('emails.invite',function ($m)  use($email, $subject, $type){
-            	$m->from('no-reply@fs.yiipro.com', 'FriendzSquare!');
-                $m->to($email,$type)->subject($subject);
-            });
->>>>>>> dd12761116c2b123e6f88acebd682a7598bf20e4
-        }
-    }
-*/
+
 
     public function mail($email = '', $message, $subject, $type) {
   
-	$username = Auth::User()->first_name.' '.Auth::User()->last_name;
+    	$username = Auth::User()->first_name.' '.Auth::User()->last_name;
 
-	$data = array(
-			'message' => $message,
-			'subject' => $subject,
-			'id' => Auth::User()->id,
-			'type' => $type,
-			'username' => $username,
-		);
+    	$data = array(
+    			'message' => $message,
+    			'subject' => $subject,
+    			'id' => Auth::User()->id,
+    			'type' => $type,
+    			'username' => $username,
+    		);
 
         if($email != ''){
-		Mail::send('emails.invite', $data, function($message) use($email, $subject) {
-		$message->from('no-reply@friendzsquare.com', 'Friend Square');
-		$message->to($email)->subject($subject);
-	});
-/*
-            Mail::send($type, ['email'=>$email,'message_text'=> $message], function ($m)  {
-                $m->from('no-reply@friendzsquare.com', 'FriendzSquare!');
-                $m->to($email)->subject($subject);
-            });
-*/
+    		Mail::send('emails.invite', $data, function($message) use($email, $subject) {
+        		$message->from('no-reply@friendzsquare.com', 'Friend Square');
+        		$message->to($email)->subject($subject);
+    	    });
         }
+        
     }
 
     public function curl($url, $post = "") {
