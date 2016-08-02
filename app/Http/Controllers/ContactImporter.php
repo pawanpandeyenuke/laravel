@@ -43,15 +43,14 @@ class ContactImporter extends Controller
             
                 foreach ($emailsarray as $key => $value) {
 
-                        $validator=null;
+                    $validator=null;
                     $validator = Validator::make($emailsarray, [
                         $key => 'required|email'
                     ]); 
                    $validator->each($key, ['required', 'email']);
                    
                    if($validator->fails()) {
-                           return redirect()->back()->withInput()->with('error', 'Please check email addresses entered and try again.');   
-                 
+                        return redirect()->back()->withInput()->with('error', 'Please check email addresses entered and try again.');                 
                     }
                 }
                     

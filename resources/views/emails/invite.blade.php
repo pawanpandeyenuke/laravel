@@ -141,7 +141,7 @@
                               <div class="contentEditableContainer contentTextEditable">
                                 <div class="contentEditable" align='center'>
                                   <p  style='text-align:left;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>
-                                    Hi, </br> </br> {{ $username }} has joined Friendzsquare. On FriendzSqaure you can make new friends by joining chat rooms, participate in forums, post comments on newsfeed and much more. </br> </br> Explore and grow your social network.<!--  <a target='_blank' class='link1' href="{{url('profile/'.$id)}}"> clicking here</a> -->
+                                    Hi, <br/> <br/> {{ $username }} has joined Friendzsquare. On FriendzSqaure you can make new friends by joining chat rooms, participate in forums, post comments on newsfeed and much more. </br> </br> Explore and grow your social network.<!--  <a target='_blank' class='link1' href="{{url('profile/'.$id)}}"> clicking here</a> -->
 
                                     <!-- <span style='color:#222222;'>{{$username}}</span> -->
 
