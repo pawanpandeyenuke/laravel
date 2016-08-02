@@ -983,11 +983,11 @@ $('.btn-upload-icon').find(".badge").remove();
 			'data' : { 'pageid': pageid , 'keyword' : keyword },
 			'success' : function(data){
 				current.text('View More').prop('disabled', false);
+				pageid = pageid + 1;
+				current.closest('.friends-list').find('.active').find('ul').append(data.html);
 				if(data.existmore == 0) {
 					current.remove();
 				}
-				pageid = pageid + 1;
-				current.closest('.friends-list').find('.active').find('ul').append(data.html);
 			}	
 		});
 	});
@@ -1005,15 +1005,15 @@ $('.btn-upload-icon').find(".badge").remove();
 			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, 'call_type': 'web' },
 			'success' : function(data){
 				current.text('View More').prop('disabled', false);
+				pageid = pageid + 1;
+				$('.forumpostlist').append(data.html);
 				if(data.existmore == 0) {
 					current.parent().remove();
 				}
-				pageid = pageid + 1;
-				$('.forumpostlist').append(data.html);
 			}	
 		});
 	});
-	
+
 	// load more forum post replies
 	$(document).on('click', '.load-more-forumreply',function(){
 		var current = $(this);
@@ -1026,11 +1026,11 @@ $('.btn-upload-icon').find(".badge").remove();
 			'data' : { 'pageid': pageid ,'forumpostid' : forumpostid, 'call_type': 'web' },
 			'success' : function(data){
 				current.text('View More').prop('disabled', false);
+				pageid = pageid + 1;
+				$('.forumreplylist').append(data.html);
 				if(data.existmore == 0) {
 					current.parent().remove();
 				}
-				pageid = pageid + 1;
-				$('.forumreplylist').append(data.html);
 			}
 		});
 	});
@@ -1048,11 +1048,11 @@ $('.btn-upload-icon').find(".badge").remove();
 			'data' : { 'pageid': pageid,'breadcrum': breadcrum ,'keyword' : keyword },
 			'success' : function(data){
 				current.text('View More').prop('disabled', false);
+				pageid = pageid + 1;
+				$('.forumpostlist').append(data.html);
 				if(data.existmore == 0) {
 					current.parent().remove();
 				}
-				pageid = pageid + 1;
-				$('.forumpostlist').append(data.html);
 			}	
 		});
 	});
