@@ -236,18 +236,25 @@ class ApiController extends Controller
 
 				if(Request::hasFile('image'))
 				{
-					$response = fileUpload($_FILES);
+					/*$response = fileUpload($_FILES);
 					if( $response['status'] == 'error' ) {
 						throw new Exception($response['message'], 1);
 					} else {
 						$arguments['image'] = $response['filename'];
 						$this->message = 'Your post has been saved successfully.';
-					}
-
-					/*$file = Request::file('image');
+					}*/
+					
+					$file = Request::file('image');
+					list($angle, $name) = explode('_', $file->getClientOriginalName(), 2);
+					
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 					$arguments['image'] = $image_name;
-					$file->move('uploads', $image_name);*/
+					$file->move('uploads', $image_name);
+					
+					// Rotate image
+					if(in_array($angle, array(90, 180, 270))){
+						Image::make(public_path('uploads/'.$image_name))->rotate($angle);
+					}
 				}
 			}
 			

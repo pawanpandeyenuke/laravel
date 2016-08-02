@@ -405,7 +405,6 @@ function fileUpload($file, $source = 'feed')
     $data = array('status' => 'error', 'message' => '');
     try
     {
-        //print_r($file);exit;
         $uploadedfile = $file['image']['tmp_name'];
         $name = $file['image']['name'];
         $size = $file['image']['size'];
@@ -442,9 +441,9 @@ function fileUpload($file, $source = 'feed')
         if($imageType=='image')
         {
             $actual_image_name = $name;
-            $path = $rootFolder.'/uploads/original/'.$actual_image_name;
+            $path = $rootFolder.'/uploads/'.$actual_image_name;
             $isuploaded = move_uploaded_file($uploadedfile, $path);
-
+            
             // Resize pic
             $thumbPath = public_path('uploads/thumbs/'.$actual_image_name);
             Image::make($path)->resize(100, 100)->save($thumbPath);
