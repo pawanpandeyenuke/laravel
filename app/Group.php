@@ -16,7 +16,7 @@ class Group extends Model
 
 	public function members()
 	{
-		return $this->hasMany('App\GroupMembers','group_id','id')->select(['group_id','member_id']);
+		return $this->hasMany('App\GroupMembers','group_id','id')->where('status', '!=', 'Left')->select(['group_id','member_id']);
 	}
 
    	public function groupMembers()

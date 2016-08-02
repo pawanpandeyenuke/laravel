@@ -456,7 +456,18 @@ comments;
         $per_page = 5;
         $page = Input::get('pageid');
         $offset = ($page - 1) * $per_page;
-		// echo $page;
+		
+		// Get total pages
+		$totalRecords = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
+            ->whereIn('user_by', Friend::where('user_id', '=', Auth::User()->id)
+                    ->where('status', '=', 'Accepted')
+                    ->pluck('friend_id')
+                    ->toArray())
+            ->orWhere('user_by', '=', Auth::User()->id)
+            ->count();
+        $pages = ceil($totalRecords / $per_page);
+        $existmore = ($page == $pages) ? 0 : 1;
+
         $feeds = Feed::with('likesCount')->with('commentsCount')->with('user')->with('likes')->with('comments')
             ->whereIn('user_by', Friend::where('user_id', '=', Auth::User()->id)
                     ->where('status', '=', 'Accepted')
@@ -468,7 +479,8 @@ comments;
             ->take($per_page)
             ->get();
 
-		return view('dashboard.newsfeed')->with('feeds', $feeds);
+		$html = view('dashboard.newsfeed')->with('feeds', $feeds)->render();
+		return response()->json(['existmore' => $existmore, 'html' => $html]);
 
     }
 

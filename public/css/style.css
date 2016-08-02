@@ -2567,7 +2567,7 @@ textarea{
 .post-list .single-post .post-img-cont {
     margin: 0 -20px;
     height: 320px;
-    background: #000;
+ /*   background: #000;*/
     padding: 0px;
     text-align: center;
     line-height: 320px;
@@ -3576,3 +3576,12 @@ footer .f-links li a, footer .f-links li {
   max-width: 480px;
   margin: 10% auto 0;
 }
+
+/*newsfeed loadmore*/
+.loading-img > img {
+    height: 20px;
+    width: 20px;
+    vertical-align: top;
+}
+
+/*newsfeed loadmore*/

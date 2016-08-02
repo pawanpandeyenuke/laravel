@@ -302,7 +302,7 @@
 					@if($feeds->count() > 1)
 			    	<div class="dashboard-load">
 				    	<span class="glyphicon glyphicon-download"></span>
-				    	<!-- <span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span> -->
+				    	<span class="loading-img" style="display: none"><img src="/images/fs-loading.gif" alt=""></span>
 				    </div>
 				    @endif
 					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
@@ -316,7 +316,7 @@
 
 <script type="text/javascript">
 		$(document).on("click",".btn-post",function(){
-			alert('hi');
+			// alert('hi');
 					    // Opera 8.0+
 			// var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
 			//     // Firefox 1.0+
