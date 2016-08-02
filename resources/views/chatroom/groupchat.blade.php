@@ -48,18 +48,11 @@ $GroupsJidList = array();
             @include('panels.left')
 
             <div class="col-sm-6">
-
-              <div id="loader" class="modal fade" role="dialog">
-                <div class="modal-dialog">
-                  <!-- Modal content-->
-                  <div class="modal-content">
-                    <div class="modal-body">
-                      <p class="text-center" ><img src="images/loading.gif" /></p>
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>
+               <div class="loader_blk">
+                 <div class="loadr_img">
+                   <img src="http://development.laravel.com/images/loading.gif">
+                 </div>
+               </div>
                 <div id="afterload" class="shadow-box page-center-data no-margin-top no-bottom-padding">
                     <div class="row">
                         <div class="col-sm-4 padding-right-none chat-list-outer">

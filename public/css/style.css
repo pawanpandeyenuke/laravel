@@ -2656,7 +2656,7 @@ textarea{
   height: 100%;
   left: 0px;
   top: 0px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(76, 76, 76, 0.61);
   z-index: 999999;
 }
 .page-loading img {
@@ -3585,3 +3585,26 @@ footer .f-links li a, footer .f-links li {
 }
 
 /*newsfeed loadmore*/
+
+.loader_blk {
+	position: fixed;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom:0px;
+	z-index: 9999;
+	background: rgba(76, 76, 76, 0.61);
+}
+.loader_blk .loadr_img{
+	 max-width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 38%;
+}
+
+.loader_blk .loadr_img img{
+	max-width: 100%;
+}
