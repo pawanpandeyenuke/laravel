@@ -246,14 +246,14 @@ class ApiController extends Controller
 					
 					$file = Request::file('image');
 					list($angle, $name) = explode('_', $file->getClientOriginalName(), 2);
-					
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 					$arguments['image'] = $image_name;
-					$file->move('uploads', $image_name);
 					
-					// Rotate image
+					// Rotate image if needed
 					if(in_array($angle, array(90, 180, 270))){
-						Image::make(public_path('uploads/'.$image_name))->rotate($angle);
+						Image::make($file->getRealPath())->rotate($angle)->save(public_path('uploads/'.$image_name));
+					} else {
+						$file->move('uploads', $image_name);
 					}
 				}
 			}
