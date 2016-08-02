@@ -116,10 +116,9 @@
                                    <p style='font-family:Georgia,Time,sans-serif;font-size:16px;color:#0d0d0d;margin-bottom:10px;margin-top:10px;'> We recently received a password change request from you.</p>
                                    <br>
                                 
-                                   <p style='margin:0;font-family:Georgia,Time,sans-serif;font-size:16px;margin-bottom:10px;margin-top:10px;color:#0d0d0d;'> We recently To change your FriendzSquare password click below:</p>
+                                   <p style='margin:0;font-family:Georgia,Time,sans-serif;font-size:16px;margin-bottom:10px;margin-top:10px;color:#0d0d0d;'> To change your FriendzSquare password click below:</p>
                                    <br>
-                                 
-                                  
+                                   
                                    <p style='margin-top:20px;font-family:Georgia,Time,sans-serif;font-size:14px;margin-bottom:10px;color:#0d0d0d;'><a href="{{ $link = url('password/reset', $token).'?email='.urlencode($user->getEmailForPasswordReset()) }}"   target="_blank" style="background: #008BD0;color: #fff;height:32px;padding:10px 12px;text-decoration: none;border-radius: 5px;">Change Password</a></p>
                                    <br>
                                   </div>
