@@ -235,17 +235,17 @@ class ApiController extends Controller
 
 				if(Request::hasFile('image'))
 				{
-					$response = fileUpload($_FILES);
+					/*$response = fileUpload($_FILES);
 					if( !is_bool($response) ) {
 						throw new Exception($response, 1);
 					} else {
 						$this->message = 'Your post has been saved successfully.';
-					}
+					}*/
 
-					/*$file = Request::file('image');
+					$file = Request::file('image');
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 					$arguments['image'] = $image_name;
-					$file->move('uploads', $image_name);*/
+					$file->move('uploads', $image_name);
 				}
 			}
 
