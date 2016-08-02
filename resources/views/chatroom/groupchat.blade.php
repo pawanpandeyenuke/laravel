@@ -48,10 +48,19 @@ $GroupsJidList = array();
             @include('panels.left')
 
             <div class="col-sm-6">
-				<div id="loader" >
-					LOADING...
-				</div>
-                <div id="afterload" class="shadow-box hide page-center-data no-margin-top no-bottom-padding">
+
+              <div id="loader" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-body">
+                      <p class="text-center" ><img src="images/loading.gif" /></p>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+                <div id="afterload" class="shadow-box page-center-data no-margin-top no-bottom-padding">
                     <div class="row">
                         <div class="col-sm-4 padding-right-none chat-list-outer">
                 <!-- <div class="chat-list-search">
@@ -253,7 +262,7 @@ $GroupsJidList = array();
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" id='leave-group'>Leave</button>
+        <button type="button" class="btn btn-danger" data-jid="<?php echo $groupid;?>" id='leave-group'>Leave</button>
       </div>
     </div>
   </div>
@@ -312,17 +321,20 @@ $GroupsJidList = array();
 		return str;
 	}
 	
-    jQuery(document).ready(function(){
+    $('#loader').modal('show');
+    $(document).ready(function(){
       require(['converse'], function (converse) {
-               conObj = converse;
-               conObj.listen.on('connected', function (event) {
-				   if( groupname != '' || groupid != '' ) {
+        conObj = converse;
+
+        conObj.listen.on('connected', function (event) {
+          $('#loader').remove();
+          $('.modal-backdrop').remove();
+          if( groupname != '' || groupid != '' ) {
 						setTimeout( function(){
 							closePublic( groupid );
 						}  , 1000 );
 					}
-					jQuery("#loader").addClass('hide');
-					jQuery("#afterload").removeClass('hide');
+         
 					setTimeout( function(){
 						waitProfile = 1;
 					}  , 3000 );
@@ -354,6 +366,8 @@ $GroupsJidList = array();
 					if( jidStr ==  groupid ){
 						GroupName[jidStr] = '<?php echo $groupname; ?>';
 						chatbox.$el.find( '.chat-title' ).html( '<?php echo $groupname; ?>' );
+            chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-group pull-right" id="leave">Leave</a>' );
+            chatbox.$el.addClass( 'pubroom' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
 						<?php } else { ?>
@@ -507,10 +521,22 @@ $GroupsJidList = array();
                     }       
                 });
             }
-        });   
+        }); 
 
+        $(document).on('click', '#leave', function(){
+          $('#leaveModal').modal('show');
+        });
 
-    });
+        $(document).on('click', '#leave-group', function(e){
+          $(this).attr('disabled', true);
+          $.post('/ajax/leave-group', {group_jid: groupid}, function(response){
+            var getRooms = conObj.rooms.get( groupid+conferencechatserver );
+            getRooms.close();
+            $('#leaveModal').modal('hide');
+          });
+        });
+      
+      });
 
      function openChatbox(xmpusername,username)
      {
@@ -753,25 +779,6 @@ $( document ).on('keyup', '.emoji-wysiwyg-editor' ,function(event) {
 	$(this).change();
 });
 
-jQuery(function($){
-  // Leave group
-  $(document).on('click', '#leave', function(e){
-    e.preventDefault();
-    $('#leave-group').attr('disabled', false);
-    $('#leaveModal').modal({
-      show: true,
-      keyboard: false,
-      backdrop: 'static'
-    });
-  });
-
-  $(document).on('click', '#leave-group', function(e){
-    $(this).attr('disabled', true);
-    $.post('/ajax/leave-group', {group_jid: groupid}, function(response){
-      // window.location.href = response ? '/chat-category' : '/';
-    });
-  });
-})
 
 </script>
 @endsection
