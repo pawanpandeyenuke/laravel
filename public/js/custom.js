@@ -1115,8 +1115,9 @@ $('.btn-upload-icon').find(".badge").remove();
 					loadImg();
 					loadOrgionalImogi();
 				}else{
-					current.find('span').remove();
-					current.append('<span>No more posts</span>');
+					current.remove();
+					/*current.find('span').remove();
+					current.append('<span>No more posts</span>');*/
 				}
 			}	
 		});
