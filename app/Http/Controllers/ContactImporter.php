@@ -90,6 +90,7 @@ class ContactImporter extends Controller
                 }
 
                 Session::put('success', 'Invitation sent successfully.'); 
+                return redirect()->back();
             }else{
                 return redirect()->back()->with('error', 'Please enter an email address.');  
             }
@@ -229,7 +230,7 @@ class ContactImporter extends Controller
         		$message->to($email)->subject($subject);
     	    });
         }
-        
+
     }
 
     public function curl($url, $post = "") {
