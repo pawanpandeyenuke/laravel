@@ -220,37 +220,38 @@ class ApiController extends Controller
 		{
 			$arguments = Request::all();
 			$feeds = new Feed;
-
-			if( $arguments ){
-
-				if( !$arguments['user_by'] )
+			if( $arguments )
+			{
+				if( !$arguments['user_by'] ) {
 					throw new Exception('User id is required.');
+				}
 
-				if( !is_numeric($arguments['user_by']) )
+				if( !is_numeric($arguments['user_by']) ) {
 					throw new Exception('Invalid user id.');
+				}
 
 				if( ( $arguments['message'] == null ) && ( $arguments['image'] == null ) )
 					throw new Exception('Please provide a message or image.');
 
-				if(Request::hasFile('image')){
+				if(Request::hasFile('image'))
+				{
+					$response = fileUpload($_FILES);
+					if( !is_bool($response) ) {
+						throw new Exception($response, 1);
+					} else {
+						$this->message = 'Your post has been saved successfully.';
+					}
 
-					$file = Request::file('image');
+					/*$file = Request::file('image');
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 					$arguments['image'] = $image_name;
-					$file->move('uploads', $image_name);
-
+					$file->move('uploads', $image_name);*/
 				}
 			}
 
-				$success = $feeds->create( $arguments );
-
-				if( $success ){
-					$this->message = 'Your post has been saved successfully.';
-					$this->status = 'success';
-					$this->data = $success;
-				}
-
-
+			$success = $feeds->create( $arguments );
+			$this->status = 'success';
+			$this->data = $success;
 		}catch( Exception $e ){
 
 			$this->message = $e->getMessage();
@@ -3155,95 +3156,5 @@ class ApiController extends Controller
 		}
 
 		return $this->output();	
-	}
-	
-	// Upload audio, video and images 
-	public function fileUpload()
-	{
-	    try
-	    {
-	      	$uploadedfile = $_FILES['file']['tmp_name'];
-	      	$name = $_FILES['file']['name'];
-	      	$size = $_FILES['file']['size'];
-	      	$rootFolder = public_path();
-	    	
-	    	// Check if file is present
-	    	if( ! $name ) {
-	    		throw new Exception('Please select a file to upload.', 1);
-	    	}
-
-	    	// Get extension
-	    	$nameArr= explode(".", $name);
-	       	$ext = $nameArr[count($nameArr)-1];
-
-	    	// check for file format
-	    	$valid_formats = array("jpg", "jpeg", "png", "gif", "mp4","mp3","flv","3gpp");
-		    if ( !in_array(strtolower($ext), $valid_formats)) {
-		    	throw new Exception('Invalid file format.', 1);
-		    }
-
-		    // Get image type
-	       	list($imageType, $b) = explode('/', $_FILES["file"]["type"]);
-	        
-	        // Check if file is rotated
-	    	$transpose=array("90"=>"'transpose=1'","180"=>"'transpose=1','transpose=1'","270"=>"'transpose=0'");
-	    	$str_angle=explode("_", $name);
-	    	$transpose_string="avconv -i ".$uploadedfile." -c:v copy  -ac 2 ";
-	       	if(isset($transpose[$str_angle[0]]))
-		    {
-		   		$transpose_string="avconv -i ".$uploadedfile." -c:v libx264 -c:a copy -vf ".$transpose[$str_angle[0]]." ";
-		    }
-
-		    // Upload file
-		    if($imageType=='image')
-		    {
-		    	$actual_image_name = $name;
-	    		$path = $rootFolder.'/images/original/'.$actual_image_name;
-	    		$isuploaded = move_uploaded_file($uploadedfile, $path);
-
-	    		// Resize pic
-                $thumbPath = public_path('images/thumbs/'.$actual_image_name);
-                Image::make($path)->resize(100, 100)->save($thumbPath);
-		    }
-		    elseif(strtolower($ext)=='3gpp' && strtolower($imageType)=='audio')
-			{
-			  	$actual_image_name = str_replace('.3gpp', '.mp3', strtolower($name));
-			    $path = $rootFolder.'/media/'.$actual_image_name;
-			   	shell_exec("avconv -i ".$tmp." -c:a libmp3lame -b:a 320k ".$path);
-			}
-			elseif(strtolower($ext)=='3gpp' && strtolower($imageType)=='video')
-			{
-			   	$actual_image_name=str_replace('.3gpp','.mp4',strtolower($name));
-			    $path = $rootFolder.'/media/'.$actual_image_name;
-			   	shell_exec($transpose_string.$path);
-			   	
-			   	// Get video preview thumb
-			    $preViewImage = $path.'.png';
-			    shell_exec("avconv -i ".$path." -vsync 1 -r 1 -an -y ".$preViewImage);
-			    
-			    // Resize and overwrite large size preview image
-			    Image::make($preViewImage)->resize(140, 100)->save($preViewImage);
-			}
-			elseif(strtolower($ext)=='mp4')
-			{
-				$actual_image_name = $name;
-				$path = $rootFolder.'/media/'.$actual_image_name;
-			   	shell_exec($transpose_string.$path);
-			   	
-			   	// Get video preview thumb
-			    $preViewImage = $path.'.png';
-			    shell_exec("avconv -i ".$path." -vsync 1 -r 1 -an -y ".$preViewImage);
-			    
-			    // Resize and overwrite large size preview image
-			    Image::make($preViewImage)->resize(140, 100)->save($preViewImage);
-			}
-
-		   	$data['filename']= $actual_image_name;
-		   	$data['type']= $imageType;
-	    } 
-	   	catch (RuntimeException $e) 
-	   	{
-	  		$message = $e->getMessage();
-	   	}
 	}
 }
