@@ -242,8 +242,22 @@ $GroupsJidList = array();
         </div>
     </div><!--/pagedata-->
   
- 
-
+<div id="leaveModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Leave Group</h4>
+      </div>
+      <div class="modal-body">
+        <p class='text-center'>Are you sure you want to leave?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" id='leave-group'>Leave</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <link href="{{url('/converse/converse.min.css')}}" rel="stylesheet" type="text/css" media="screen" >
 <script type="text/javascript" src="{{url('/converselib/demo_converse.nojquery.min.js')}}"></script>
@@ -738,6 +752,26 @@ $('.dropdown.keep-open').on({
 $( document ).on('keyup', '.emoji-wysiwyg-editor' ,function(event) {
 	$(this).change();
 });
+
+jQuery(function($){
+  // Leave group
+  $(document).on('click', '#leave', function(e){
+    e.preventDefault();
+    $('#leave-group').attr('disabled', false);
+    $('#leaveModal').modal({
+      show: true,
+      keyboard: false,
+      backdrop: 'static'
+    });
+  });
+
+  $(document).on('click', '#leave-group', function(e){
+    $(this).attr('disabled', true);
+    $.post('/ajax/leave-group', {group_jid: groupid}, function(response){
+      // window.location.href = response ? '/chat-category' : '/';
+    });
+  });
+})
 
 </script>
 @endsection
