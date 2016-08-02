@@ -75,49 +75,54 @@
 </script>
   </head>
   <body paddingwidth="0" paddingheight="0"   style="padding-top: 0; padding-bottom: 0; padding-top: 0; padding-bottom: 0; background-repeat: repeat; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; -webkit-font-smoothing: antialiased;" offset="0" toppadding="0" leftpadding="0">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableContent bgBody" align="center"  style='font-family:Helvetica, Arial,serif;'>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableContent bgBody"  style='font-family:Helvetica, Arial,serif;'>
 
       
       <tr><td height='35'></td></tr>
 
       <tr>
         <td>
-          <table width="600" border="0" cellspacing="0" cellpadding="0" align="center" class='bgItem'>
+          <table width="600" border="0" cellspacing="0" cellpadding="0" class='bgItem'>
             <tr>
               <td width='40'></td>
               <td width='520'>
-                <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
+                <table width="520" border="0" cellspacing="0" cellpadding="0">
 
 <!-- =============================== Header ====================================== -->           
-
-                  <tr><td height='75' style="padding-bottom: 10px; border-bottom: 3px solid #A0F0E8;"><a href="#" title=""><img src="{{url('/images/logo.jpg')}}" alt=""></a></td></tr>
+                  <tr><td><h3>Subject: Request for password change on FriendzSquare</h3></td></tr>
+                  <tr>
+                    <td height='75' style="padding-bottom: 10px; border-bottom: 3px solid #A0F0E8;">
+                      <a href="{{url('/')}}" title="FriendzSquare" target="_blank">
+                        <img src="{{url('/images/logo.png')}}" alt="FriendzSquare">
+                      </a>
+                    </td>
+                  </tr>
 
 <!-- =============================== Body ====================================== -->
 
                   <tr>
                     <td class='movableContentContainer' valign='top' style="padding-top: 20px;">
 
-                      <div lass='movableContent'>
-                        <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
+                      <div class='movableContent'>
+                        <table width="520" border="0" cellspacing="0" cellpadding="0" align="left">
                           <tr>
-                            <td valign='top' align='center'>
+                            <td valign='top'>
                               <div class="contentEditableContainer contentTextEditable">
                                 <div class="contentEditable">
 
-                                  <p style='text-align:center;margin:0;font-family:Georgia,Time,sans-serif;font-size:26px;color:##2e6da4;'>FriendzSquare</p>
-
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                        </table>
-                      </div>
-
-                      <div lass='movableContent'>
-                        <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
-                          <tr>
-                            <td valign='top' align='center'>
-                              <div class="contentEditableContainer contentImageEditable">
+                                  <p style='font-family:Georgia,Time,sans-serif;font-size:20px;color:#0d0d0d;line-height: 24px;'>Hi {{ $user->first_name.' '.$user->last_name }},</p>
+                                  <br>
+                                 
+                                   <p style='font-family:Georgia,Time,sans-serif;font-size:16px;color:#0d0d0d;margin-bottom:10px;margin-top:10px;'> We recently received a password change request from you.</p>
+                                   <br>
+                                
+                                   <p style='margin:0;font-family:Georgia,Time,sans-serif;font-size:16px;margin-bottom:10px;margin-top:10px;color:#0d0d0d;'> We recently To change your FriendzSquare password click below:</p>
+                                   <br>
+                                 
+                                  
+                                   <p style='margin-top:20px;font-family:Georgia,Time,sans-serif;font-size:14px;margin-bottom:10px;color:#0d0d0d;'><a href="{{ $link = url('password/reset', $token).'?email='.urlencode($user->getEmailForPasswordReset()) }}"   target="_blank" style="background: #008BD0;color: #fff;height:32px;padding:10px 12px;text-decoration: none;border-radius: 5px;">Change Password</a></p>
+                                   <br>
+                                  </div>
                               </div>
                             </td>
                           </tr>
@@ -125,112 +130,52 @@
                       </div>
 
                       <div class='movableContent'>
-                        <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
-                          <tr><td height='55'></td></tr>
+                        <table width="520" border="0" cellspacing="0" cellpadding="0" align="left">
+                          <tr>
+                            <td valign='top'>
+                              <div class="contentEditableContainer contentImageEditable">
+                                <p style='margin:0;font-family:Georgia,Time,sans-serif;font-size:17px;color:#0d0d0d;margin-bottom:8px;margin-top:8px;line-height:28px;'> Or you can paste the following link into your browser: <a href="{{ $link }}" target="_blank"> {{ $link }} </a> </p>
+                                <br>
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+
+                      <div class='movableContent'>
+                        <table width="520" border="0" cellspacing="0" cellpadding="0" align="left">
+                        
                           <tr>
                             <td align='left'>
                               <div class="contentEditableContainer contentTextEditable">
-                                <div class="contentEditable" align='center'>
-
-                                  <h2>  Reset your FriendzSquare password. </h2>
-
+                                <div class="contentEditable" align='left'>
+                                    <p style='margin:0;font-family:Georgia,Time,sans-serif;font-size:16px;color:#0d0d0d;margin-bottom:8px;margin-top:8px;'> The link will expire in 24 hours.</p>
+                                    <br>
+                                     <p style='margin:0;font-family:Georgia,Time,sans-serif;font-size:16px;color:#0d0d0d;margin-bottom:8px;margin-top:8px;line-height:22px;'> If you did not request the password change, please immediately email to <a href="mailto:contact@friendzsquare.com" style="font-weight:700">contact@friendzsquare.com</a> </p>
+                                     <br>
                                 </div>
                               </div>
                             </td>
                           </tr>
 
-                          <tr><td height='15'> </td></tr>
-
                           <tr>
                             <td align='left'>
                               <div class="contentEditableContainer contentTextEditable">
-                                <div class="contentEditable" align='center'>
-                                  <p  style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
-                                    Reset your FriendzSquare password easily.
-
-                                    Please follow the link below to reset your account's password <a href="{{ $link = url('password/reset', $token).'?email='.urlencode($user->getEmailForPasswordReset()) }}">
-                                    {{ $link }}</a>.
-                                    <br><br>
-                                    <div style="text-align:center; width:100%">OR</div>
-                                    <br>
+                                <div class="contentEditable" align='left'>
+                                  <p style='margin:0;font-family:Georgia,Time,sans-serif;font-size:16px;color:#0d0d0d;margin-bottom:8px;margin-top:8px;'>  To keep your account secure, please don’t forward this email or link to anyone. </p>
+                                  <br>
+                                  <p style='margin:0;font-family:Georgia,Time,sans-serif;font-size:16px;color:#0d0d0d;margin-bottom:8px;margin-top:8px;'>     Thank you for using FriendzSquare! </p>
+                            
+                                  <p style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:700;line-height:19px;'>FriendzSquare Team <br>
                                   </p>
                                 </div>
                               </div>
                             </td>
                           </tr>
-                            <tr>
-                            <td align='center'>
-                              <table>
-                                <tr>
-                                  <td align='center' bgcolor='#A0F0E6' style='background:#A0F0E6; padding:15px 18px;-webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;'>
-                                    <div class="contentEditableContainer contentTextEditable">
-                                      <div class="contentEditable" align='center'>
-
-                                        <a target='_blank' href="{{ $link = url('password/reset', $token).'?email='.urlencode($user->getEmailForPasswordReset()) }}" class='link2' style='color:#ffffff;'>Just click here</a>
-
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                          <tr><td height='20'></td></tr>
                         </table>
                       </div>
-
-                      <div lass='movableContent'>
-                        <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
-                          <tr><td height='65'></td></tr>
-                          <tr><td  style='border-bottom:1px solid #DDDDDD;'></td></tr>
-
-                          <tr><td height='25'></td></tr>
-
-                          <tr>
-                            <td>
-                              <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
-                                <tr>
-                                  <td valign='top' align='left' width='370'>
-                                    <div class="contentEditableContainer contentTextEditable">
-                                      <div class="contentEditable" align='center'>
-                                        <p  style='text-align:left;color:#CCCCCC;font-size:12px;font-weight:normal;line-height:20px;'>
-                                          
-                                          <a target='_blank' href="[FORWARD]">Forward to a friend</a><br>
-                                          <a target='_blank' href="[UNSUBSCRIBE]" class='link1' class='color:#382F2E;'>Unsubscribe</a>
-                                          <br>
-                                          <a target='_blank' class='link1' class='color:#382F2E;' href="[SHOWEMAIL]">Show this email in your browser</a>
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </td>
-
-                                  <td width='30'></td>
-
-                                  <td valign='top' width='52'>
-                                    <div class="contentEditableContainer contentFacebookEditable">
-                                      <div class="contentEditable">
-
-                                        <a href="#" title=""><img src="{{url('images/logo.jpg')}}" alt="" style="width: 100px;"></a>
-
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                        </table>
-                      </div>
-
                     </td>
                   </tr>
-
-                  
-
-<!-- =============================== footer ====================================== -->
-                  
-
-
                 </table>
               </td>
               <td width='40'></td>
@@ -238,11 +183,6 @@
           </table>
         </td>
       </tr>
-
-      <tr><td height='88'></td></tr>
-
-
     </table>
-      </body>
-      </html>
-
+  </body>
+</html>
