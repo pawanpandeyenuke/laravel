@@ -1989,10 +1989,10 @@ class ApiController extends Controller
 
 	 				if( !empty($existingUser) ){
 
-	 					if(!$notAFriend){
-	 						$new_members[count($new_members)] = $existingUser;
+	 					if($notAFriend){
+	 						$new_members[] = $existingUser;
 
-	 	 				$privateGroupMemberObj = new GroupMembers;
+	 	 					$privateGroupMemberObj = new GroupMembers;
 		 	 				$privateGroupMemberObj->group_id = $group->id;
 		 	 				$privateGroupMemberObj->member_id = $value;
 		 	 				$privateGroupMemberObj->status = 'Pending';
