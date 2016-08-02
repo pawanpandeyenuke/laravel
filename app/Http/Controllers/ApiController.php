@@ -2059,14 +2059,20 @@ class ApiController extends Controller
 			if( !$owner )
 				throw new Exception("User does not exist.", 1);				
 
-			$group = Group::where(['group_jid' => $group_jid, 'owner_id' => $owner_id])->first();
+			$member = User::find($member_id);
 
-			if( $group->count() <= 0)
+			if( !$member )
+				throw new Exception("Member does not exist.", 1);		
+
+			$group = Group::where(['group_jid' => $group_jid])->first();
+
+			if( !$group )
 				throw new Exception("Group does not exist.", 1);
 
 			if( $group->owner_id == $member_id)
 				throw new Exception("You can't leave the group.", 1);
 				
+			$member_name = $member->first_name.' '.$member->last_name;
 			
 			$group_members = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->count();
 			if( $group_members > 0 )
@@ -2080,7 +2086,7 @@ class ApiController extends Controller
 				$msg = ($owner_id == $member_id) ? $name.' left the group' : $name.' removed from the group';
 				$members = GroupMembers::where('group_id', $group->id)->get();
 
-				$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner->xmpp_username,'action'=>$action, 'xmpp_userid' => $owner->xmpp_username, 'user_name'=>$name, 'message' => $msg) );
+				$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner->xmpp_username,'action'=>$action, 'xmpp_userid' => $member->xmpp_username, 'user_name'=>$member_name, 'message' => $msg) );
                 foreach($members as $key => $val) {
                     Converse::broadcastchatroom($group->group_jid, $name, $val->xmpp_username, $owner->xmpp_username, $message);
                 }
