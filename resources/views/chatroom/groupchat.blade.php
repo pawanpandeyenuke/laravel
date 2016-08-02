@@ -314,14 +314,14 @@ $GroupsJidList = array();
 		return str;
 	}
 	
-    $('#loader').modal('show');
+
     $(document).ready(function(){
       require(['converse'], function (converse) {
         conObj = converse;
 
         conObj.listen.on('connected', function (event) {
-          $('#loader').remove();
-          $('.modal-backdrop').remove();
+          $('.loader_blk').remove();
+
           if( groupname != '' || groupid != '' ) {
 						setTimeout( function(){
 							closePublic( groupid );
