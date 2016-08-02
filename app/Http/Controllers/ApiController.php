@@ -2088,15 +2088,15 @@ class ApiController extends Controller
 				$action = ($owner_id == $member_id) ? 'leave' : 'delete';
 				$name = $owner->first_name.' '.$owner->last_name;
 				$msg = ($owner_id == $member_id) ? $name.' left the group' : $name.' removed from the group';
-				$members = GroupMembers::where('group_id', $group->id)->where('status', '!=', 'Left')->get();
 				
+				$members = User::whereIn('id', GroupMembers::where('group_id', $group->id)->where('status', '!=', 'Left')->pluck('member_id')->toArray())->get()->toArray();
+
 				$data = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])
 												->update(['status' => 'Left']);
 
 				$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner->xmpp_username,'action'=>$action, 'xmpp_userid' => $member->xmpp_username, 'user_name'=>$member_name, 'message' => $msg) );
                 foreach($members as $key => $val) {
-                	print_r( array( $group->group_jid, $name, $val->xmpp_username, $owner->xmpp_username, $message ) );
-                	exit();
+                	
                     Converse::broadcastchatroom($group->group_jid, $name, $val->xmpp_username, $owner->xmpp_username, $message);
                 }
 
