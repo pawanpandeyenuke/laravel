@@ -75,8 +75,8 @@
 												<input type="checkbox" name="" id="checkbox{{$data->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$data->id}}" {{ isset($likedata[0])?'checked':'' }}/>	
 												<label for="checkbox{{$data->id}}" class="css-label"></label>
 											@else
-											<input type="checkbox" name="" id="guest" class="css-checkbox"/>
-											  <label for="guest" class="css-label"></label>
+											<input type="checkbox" disabled name="" id="guest" class="css-checkbox"/>
+											<label for="guest" class="css-label" data-toggle="modal" data-target="#LoginPop"></label>
 											@endif
 											</div>
 											<span class="plike-count">{{$likeCount}}</span>

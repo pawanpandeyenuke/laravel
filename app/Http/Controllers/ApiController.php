@@ -251,7 +251,7 @@ class ApiController extends Controller
 					
 					// Rotate image if needed
 					if(in_array($angle, array(90, 180, 270))){
-						Image::make($file->getRealPath())->rotate($angle)->save(public_path('uploads/'.$image_name));
+						Image::make($file->getRealPath())->rotate(-$angle)->save(public_path('uploads/'.$image_name));
 					} else {
 						$file->move('uploads', $image_name);
 					}
