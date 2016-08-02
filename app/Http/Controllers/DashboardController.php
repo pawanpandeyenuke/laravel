@@ -710,7 +710,7 @@ class DashboardController extends Controller
     
     public function privateGroupList($privategroupid='')
     {
-        $privategroup=Group::with('members')->orderBy('id','DESC')->get()->toArray();
+        $privategroup = Group::with('members')->orderBy('id','DESC')->get()->toArray();
 
         return view('privategroup.list')->with('privategroup',$privategroup);
     }
@@ -789,28 +789,28 @@ class DashboardController extends Controller
      return view( 'privategroup.add' )->with( 'friends' ,$friends );
   }
 
-  public function privateGroupDetail( $privategroupid = '' ){
-    if( $privategroupid ){
-        $groupdetail = Group::where('id',$privategroupid)->get()->toArray();
-        $ownerid=Group::where('id',$privategroupid)->value('owner_id');
-        $members=GroupMembers::where('group_id',$privategroupid)->pluck('member_id');
-        $name=User::whereIn('id',$members)->orWhere('id',$ownerid)->get()->toArray();
+    public function privateGroupDetail( $privategroupid = '' ){
+        if( $privategroupid ){
+            $groupdetail = Group::where('id',$privategroupid)->get()->toArray();
+            $ownerid = Group::where('id',$privategroupid)->value('owner_id');
+            $members = GroupMembers::where('group_id',$privategroupid)->where('status', '!=', 'Left')->pluck('member_id');
+            $name=User::whereIn('id',$members)->orWhere('id',$ownerid)->get()->toArray();
 
-        $friends=Friend::with('user')
-                    ->with('user')
-                    ->where('friend_id', '=', Auth::User()->id)
-                    ->where('status', '=', 'Accepted')
-                    ->get()
-                    ->toArray();
+            $friends=Friend::with('user')
+                        ->with('user')
+                        ->where('friend_id', '=', Auth::User()->id)
+                        ->where('status', '=', 'Accepted')
+                        ->get()
+                        ->toArray();
 
-        return view('privategroup.detail')
-               ->with('groupdetail',$groupdetail)
-               ->with('name',$name)
-               ->with('groupid',$privategroupid)
-               ->with('ownerid',$ownerid)
-               ->with('friends',$friends);   
+            return view('privategroup.detail')
+                   ->with('groupdetail',$groupdetail)
+                   ->with('name',$name)
+                   ->with('groupid',$privategroupid)
+                   ->with('ownerid',$ownerid)
+                   ->with('friends',$friends);   
+        }
     }
-  }
 
     public function changePassword()
     {
