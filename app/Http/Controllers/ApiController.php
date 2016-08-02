@@ -2089,6 +2089,8 @@ class ApiController extends Controller
 
 				$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner->xmpp_username,'action'=>$action, 'xmpp_userid' => $member->xmpp_username, 'user_name'=>$member_name, 'message' => $msg) );
                 foreach($members as $key => $val) {
+                	print_r( array( $group->group_jid, $name, $val->xmpp_username, $owner->xmpp_username, $message ) );
+                	exit();
                     Converse::broadcastchatroom($group->group_jid, $name, $val->xmpp_username, $owner->xmpp_username, $message);
                 }
 
