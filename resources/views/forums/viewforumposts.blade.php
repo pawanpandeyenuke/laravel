@@ -142,14 +142,13 @@
     </div><!--/pagedata-->
     
 <script type="text/javascript">
-	
-	window.onload = function() {
-      var w = $('#sticky-anchor').width();
-		$('.fix-header').css('width',w+60);
-	}
+window.onload = function() {
+  var w = $('#sticky-anchor').width();
+	$('.fix-header').css('width',w+60);
+}
 
-	//Fix on Scroll
-	function sticky_relocate() {
+//Fix on Scroll
+function sticky_relocate() {
     var window_top = $(window).scrollTop();
     var div_top = $('#sticky-anchor').offset().top;
     if (window_top > div_top) {
@@ -157,35 +156,12 @@
     } else {
       $('.fix-header').removeClass('stick');
     }
-	}
+}
 
-	 $(function () {
-	    $(window).scroll(sticky_relocate);
-	    sticky_relocate();
-	});
-
-
-	$(document).ready(function() {
-	  var moretext = "More";
-	  var lesstext = "Less";
-		$(document).on('click','.morelink',function(){
-			if($(this).hasClass('unique_post')){
-				i=1;
-			}
-	      if($(this).hasClass("less")) {
-	          $(this).removeClass("less");
-	          $(this).html(moretext);
-	      } else {
-	          $(this).addClass("less");
-	          $(this).html(lesstext);
-	      } 
-	      $(this).parent().prev().toggle();
-	      $(this).prev().toggle();
-	      return false;
-	  });
-
-	});
-
+$(function () {
+    $(window).scroll(sticky_relocate);
+    sticky_relocate();
+});
 </script>
 @endsection
 {!! Session::forget('error') !!}

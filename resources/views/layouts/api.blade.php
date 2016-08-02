@@ -82,11 +82,11 @@
 				'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, 'call_type': 'api', 'user_id': user_id },
 				'success' : function(data){
 					current.text('View More').prop('disabled', false);
+					pageid = pageid + 1;
+					$('.forum-post-list').append(data.html);
 					if(data.existmore == 0) {
 						current.parent().remove();
 					}
-					pageid = pageid + 1;
-					$('.forum-post-list').append(data.html);
 				}
 			});
 		});
@@ -103,11 +103,11 @@
 				'data' : { 'pageid': pageid , 'forumpostid' : forumpostid, 'call_type': 'api', 'user_id': user_id },
 				'success' : function(data){
 					current.text('View More').prop('disabled', false);
+					pageid = pageid + 1;
+					$('.reply-post-cont').append(data.html);
 					if(data.existmore == 0) {
 						current.parent().remove();
 					}
-					pageid = pageid + 1;
-					$('.reply-post-cont').append(data.html);
 				}	
 			});
 		});
@@ -135,7 +135,7 @@
 				}	
 			});
 		});
-		
+
 		$(document).on('click', '.api-likeforumpost', function(){		
 			//var _token = $('#postform input[name=_token]').val();
 			var forumPostID = $(this).data('forumpostid');

@@ -195,11 +195,11 @@
 $(".multiple-slt").select2();
 
 	$("#up_imgs").fileinput({
-    uploadUrl: "/file-upload-batch/2",
-    allowedFileExtensions: ["jpg", "png", "gif"],
-    minImageWidth: 30,
-    minImageHeight: 30,
-    showCaption: false,
+	    uploadUrl: "/file-upload-batch/2",
+	    allowedFileExtensions: ["jpg", "png", "gif"],
+	    minImageWidth: 30,
+	    minImageHeight: 30,
+	    showCaption: false
 	});
 
 	window.onload = function() {
@@ -209,59 +209,30 @@ $(".multiple-slt").select2();
 		// $(".forum_post .morelink").addClass('unique_post');
 	}
 
-		 var i = 1;
-		function sticky_relocate() {
-		    var window_top = $(window).scrollTop();
-		    var div_top = $('#sticky-anchor').offset().top;
-		    if (window_top > div_top) {
-		      $('.fix-header').addClass('stick');
-		      $('.forum-post-replies').addClass('stick-margin');
-		      if(i == 1){
-		      	//$(".forum_post .morelink").click();
-		      	i++;
-		      }
-		    }else{
-		      $('.fix-header').removeClass('stick');
-		      $('.forum-post-replies').removeClass('stick-margin');
-		    }
-		}
+	var i = 1;
+	function sticky_relocate() {
+	    var window_top = $(window).scrollTop();
+	    var div_top = $('#sticky-anchor').offset().top;
+	    if (window_top > div_top) {
+	      $('.fix-header').addClass('stick');
+	      $('.forum-post-replies').addClass('stick-margin');
+	      if(i == 1){
+	      	//$(".forum_post .morelink").click();
+	      	i++;
+	      }
+	    }else{
+	      $('.fix-header').removeClass('stick');
+	      $('.forum-post-replies').removeClass('stick-margin');
+	    }
+	}
 
-	 $(function () {
+	$(function () {
 	    $(window).scroll(sticky_relocate);
 	    sticky_relocate();
 	});
 
-
-
 	$(document).on('click','.mpost-rply-btn',function(){
 		$('.f-post-reply-form').slideToggle();
 	});
-
-
-	// More Less Text
-
-	$(document).ready(function() {
-	  var moretext = "More";
-	  var lesstext = "Less";
-		$(document).on('click','.morelink',function(){
-			if($(this).hasClass('unique_post')){
-				i=1;
-			}
-	      if($(this).hasClass("less")) {
-	          $(this).removeClass("less");
-	          $(this).html(moretext);
-	      } else {
-	          $(this).addClass("less");
-	          $(this).html(lesstext);
-	      } 
-	      $(this).parent().prev().toggle();
-	      $(this).prev().toggle();
-	      return false;
-	  });
-
-	});
-
-
 </script>
-
 @endsection

@@ -1657,7 +1657,7 @@ comments;
 			}
 		}
 	}
-
+	
 	public function addNewForumReply()
 	{
 	    $user = Auth::User();

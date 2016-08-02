@@ -146,39 +146,18 @@
 
 	//Fix on Scroll
 	function sticky_relocate() {
-    var window_top = $(window).scrollTop();
-    var div_top = $('#sticky-anchor').offset().top;
-    if (window_top > div_top) {
-      $('.fix-header').addClass('stick');
-    } else {
-      $('.fix-header').removeClass('stick');
-    }
+	    var window_top = $(window).scrollTop();
+	    var div_top = $('#sticky-anchor').offset().top;
+	    if (window_top > div_top) {
+	      $('.fix-header').addClass('stick');
+	    } else {
+	      $('.fix-header').removeClass('stick');
+	    }
 	}
-
-	 $(function () {
+	
+	$(function () {
 	    $(window).scroll(sticky_relocate);
 	    sticky_relocate();
-	});
-
-	$(document).ready(function() {
-	  var moretext = "More";
-	  var lesstext = "Less";
-		$(document).on('click','.morelink',function(){
-			if($(this).hasClass('unique_post')){
-				i=1;
-			}
-	      if($(this).hasClass("less")) {
-	          $(this).removeClass("less");
-	          $(this).html(moretext);
-	      } else {
-	          $(this).addClass("less");
-	          $(this).html(lesstext);
-	      } 
-	      $(this).parent().prev().toggle();
-	      $(this).prev().toggle();
-	      return false;
-	  });
-
 	});
 </script>
 @endsection

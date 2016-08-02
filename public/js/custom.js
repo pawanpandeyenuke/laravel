@@ -6,6 +6,24 @@ $(document).ready(function(){
 		window.localStorage.setItem('logged_in', false);
 	});
 
+	var moretext = "More";
+	var lesstext = "Less";
+	$(document).on('click','.morelink',function(){
+		if($(this).hasClass('unique_post')){
+			i=1;
+		}
+      	if($(this).hasClass("less")) {
+          $(this).removeClass("less");
+          $(this).html(moretext);
+      	} else {
+          $(this).addClass("less");
+          $(this).html(lesstext);
+      	} 
+      	$(this).parent().prev().toggle();
+      	$(this).prev().toggle();
+      	return false;
+	});
+
     $(document).on('click','.mob-menu-btn',function(){
     	$('.dashboard-sidemenu').slideToggle();
     });
@@ -1069,7 +1087,7 @@ $('.btn-upload-icon').find(".badge").remove();
  Scrollbar
 
 */
-		$('.bcast-message-list').niceScroll();
+	$('.bcast-message-list').niceScroll();
 
 	/**
 	*	View more posts ajax call handling.
@@ -1088,8 +1106,6 @@ $('.btn-upload-icon').find(".badge").remove();
 					$('#postlist').last('.single-post').append(data);
 					loadImg();
 					loadOrgionalImogi();
-
-
 				}else{
 					current.find('span').remove();
 					current.append('<span>No more posts</span>');
@@ -1097,10 +1113,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			}	
 		});
 	});
-
-
-
-}); 	// Document ready closed..
+});
 
 /*
  Broadcast delete
@@ -1307,7 +1320,7 @@ $(document).on('click','.savegroupname',function()
 	});
 
 	/***** Add new Forum Post ****/
-		$(document).on('click','.addforumpost',function(){
+	$(document).on('click','.addforumpost',function(){
 		if($('.fix-header').hasClass("stick")){
 			window.scrollTo(0,100);
 		}	
@@ -1316,9 +1329,9 @@ $(document).on('click','.savegroupname',function()
 		var post = $('.forumpost').val().trim();
 		var postcount = parseInt($('.posts-count').find('.count').html());
 		var newpostcount = postcount + 1;
-		  if(post)
-		  {
-		  	$('.addforumpost').prop('disabled',true);
+		if(post)
+		{
+		  	current.prop('disabled',true);
 			$.ajax({
 			'url' : '/ajax/addnewforumpost',
 			'type' : 'post',
@@ -1335,7 +1348,6 @@ $(document).on('click','.savegroupname',function()
 			}
 		});
 		}
-
 	});
 
 	/***** Forum Post Edit ****/
@@ -1431,7 +1443,7 @@ $(document).on('click','.savegroupname',function()
 		});	
 	});
 
-		$(document).on('click', '.forumpostreply', function(){
+	$(document).on('click', '.forumpostreply', function(){
 		if($('.fix-header').hasClass("stick")){
 			window.scrollTo(0,100);
 		}	
@@ -1441,7 +1453,7 @@ $(document).on('click','.savegroupname',function()
 		var postcount = parseInt($('.posts-count').find('.forumreplycount').html());
 		var newpostcount = postcount + 1;
 		if(reply){	
-			$('.forumpostreply').prop('disabled',true);	
+			current.prop('disabled',true);	
 			$.ajax({			
 				'url' : '/ajax/addnewforumreply',
 				'data' : { 'forumpostid':forumPostID ,'reply' : reply},

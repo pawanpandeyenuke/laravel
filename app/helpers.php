@@ -322,7 +322,8 @@
 
     }
 
-    function forumPostContents( $description, $ReadMoreUrl = '#', $descriptionlength = 200){
+    function forumPostContents( $description, $ReadMoreUrl = '#', $descriptionlength = 200)
+    {
         $data=0;
         if( !empty($description) ){
             if(strlen($description) < $descriptionlength){
@@ -363,16 +364,16 @@
     }
 
 
-    function webEncode( $String ){
-    	//return base64_encode( $String );
-    	return $String;
-    }
-    
-    function is_localhost()
-    {
-        $whitelist = array('127.0.0.1', '::1');
-        return in_array($_SERVER['REMOTE_ADDR'], $whitelist) ? true : false;
-    }
+function webEncode( $String ){
+	//return base64_encode( $String );
+	return $String;
+}
+
+function is_localhost()
+{
+    $whitelist = array('127.0.0.1', '::1');
+    return in_array($_SERVER['REMOTE_ADDR'], $whitelist) ? true : false;
+}
 
 /*    function verificationEmail( $email, $token ){
         return Mail::send('emails.verify', ['email' => $email, 'confirmation_code' => $token], function ($m) use($email)   {
@@ -382,22 +383,19 @@
     }*/
 
 
-    // Convert number into K, M and B format
-    function format_number($num, $precision = 2)
-    {
-        if ($num >= 1000 && $num < 1000000) {
-            $n_format = number_format($num/1000,$precision).'K';
-        } else if ($num >= 1000000 && $num < 1000000000) {
-            $n_format = number_format($num/1000000,$precision).'M';
-        } else if ($num >= 1000000000) {
-            $n_format=number_format($num/1000000000,$precision).'B';
-        } else {
-            $n_format = $num;
-        }
-        
-        return $n_format;
+// Convert number into K, M and B format
+function format_number($num, $precision = 2)
+{
+    if ($num >= 1000 && $num < 1000000) {
+        $n_format = number_format($num/1000,$precision).'K';
+    } else if ($num >= 1000000 && $num < 1000000000) {
+        $n_format = number_format($num/1000000,$precision).'M';
+    } else if ($num >= 1000000000) {
+        $n_format=number_format($num/1000000000,$precision).'B';
+    } else {
+        $n_format = $num;
     }
-
+    
+    return $n_format;
+}
 ?>
-
-
