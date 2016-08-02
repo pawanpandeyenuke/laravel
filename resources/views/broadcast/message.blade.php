@@ -2,7 +2,10 @@
 @section('title', 'Broadcast - ')
 @section('content')
 
-@include('panels.left')
+<div class="page-data dashboard-body">
+	<div class="container">
+		<div class="row">
+			@include('panels.left')
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title no-left-padding">

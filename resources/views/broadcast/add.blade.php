@@ -13,35 +13,35 @@
 					<div class="page-title no-left-padding">Create New Broadcast List</div>
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
-						{!! Form::open(array('id' => 'broadcastAdd')) !!}
-							<div class="b-cast-name">
-								<h5>Broadcast Name</h5>
+							{!! Form::open(array('id' => 'broadcastAdd')) !!}
+								<div class="b-cast-name">
+									<h5>Broadcast Name</h5>
 
-								<input type="text" name="broadcastname" value="" class="form-control bcast-field b-valid">
-							</div>
-			
-							<div class="bcast-list">
-								<h5>Add Friends</h5>
-
-								<select class="multiple-slt form-control b-valid" id="select-multiuser-broadcast" name="broadcastuser[]" multiple="multiple">
-									@foreach($friends as $data)
-										<?php 
-											$name=$data['user']['first_name']." ".$data['user']['last_name'];
-											$id=$data['user']['id'];
-										?>
-										<option value="{{$id}}">{{$name}}</option>
-									@endforeach
-								</select>
-							</div>
-
+									<input type="text" name="broadcastname" value="" class="form-control bcast-field b-valid">
+								</div>
 				
-							<div class="btn-cont text-center">
-								<ul class="list-inline">
-									<li><input type="submit" title="" class="btn btn-primary" value="Save"/></li>
-									<li><a href="{{url('broadcast-list')}}" title="" class="btn btn-primary">Cancel</a></li>
-								</ul>
-							</div>
-			{!! Form::close() !!}
+								<div class="bcast-list">
+									<h5>Add Friends</h5>
+
+									<select class="multiple-slt form-control b-valid" id="select-multiuser-broadcast" name="broadcastuser[]" multiple="multiple">
+										@foreach($friends as $data)
+											<?php 
+												$name=$data['user']['first_name']." ".$data['user']['last_name'];
+												$id=$data['user']['id'];
+											?>
+											<option value="{{$id}}">{{$name}}</option>
+										@endforeach
+									</select>
+								</div>
+
+					
+								<div class="btn-cont text-center">
+									<ul class="list-inline">
+										<li><input type="submit" title="" class="btn btn-primary broadcastadd-btn" value="Save"/></li>
+										<li><a href="{{url('broadcast-list')}}" title="" class="btn btn-primary">Cancel</a></li>
+									</ul>
+								</div>
+							{!! Form::close() !!}
 						</div>
 					</div>
 
@@ -78,6 +78,7 @@ $(document).ready(function () {
 
 
 	$( "#broadcastAdd" ).submit(function( event ) {
+		$('.broadcastadd-btn').prop('disabled', true);
 		var stack = $('.b-valid');
 		$.each(stack, function(i,v){
 			if($(this).is('input')){
