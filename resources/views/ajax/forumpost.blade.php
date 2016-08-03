@@ -22,7 +22,7 @@
 			<button class='del-confirm-forum' value='{{$forumpostid->id}}' data-forumtype = "post" data-breadcrum = "{{$breadcrum}}" title="Delete Post"><i class='flaticon-garbage'></i></button>
 		</div>
 	</div>
-	<p><?php echo forumPostContents(nl2br($forumpostid->title)); ?></p>
+	<p class='readmore'><?php echo forumPostContents(nl2br($forumpostid->title)); ?></p>
 	<?php $forumpostid = $forumpostid->id; ?>
 	<div class='fp-btns text-right'>
 		<span class='reply-count'>Replies(0)</span>

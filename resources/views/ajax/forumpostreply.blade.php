@@ -30,5 +30,5 @@
 				<button class='del-confirm-forum' data-forumtype = "reply" title="Delete Reply" value='{{$forumreply->id}}' data-forumpostid = "{{$forumpostid}}" ><i class='flaticon-garbage'></i></button>
 			</div>
 	</div>
-		<p class="more"><?php echo forumPostContents(nl2br($forumreply->reply)); ?></p>
+		<p class="more readmore"><?php echo forumPostContents(nl2br($forumreply->reply)); ?></p>
 </div><!--/single post-->

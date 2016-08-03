@@ -118,7 +118,7 @@
 									@endif
 									@endif
 									</div>
-									<p ><?php echo nl2br(forumPostContents($data->title, '#')); ?></p>
+									<p class='readmore'><?php echo nl2br($data->title); ?></p>
 									<div class="fp-btns text-right">
 										<span class="reply-count">Replies ({{$replyCount}})</span>
 										<a href="{{url("forum-post-reply/$data->id")}}" title="Jump to Reply Section" class="btn btn-primary"><span class="glyphicon glyphicon-share-alt"></span>Reply</a>

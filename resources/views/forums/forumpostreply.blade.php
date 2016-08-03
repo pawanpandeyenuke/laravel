@@ -75,7 +75,7 @@
 										</div>
 									</div>
 								</div>
-								<p class="forum_post" > <?php echo nl2br(forumPostContents($post->title,'#')); ?></p>
+								<p class="forum_post readmore"> <?php echo nl2br(forumPostContents($post->title,'#')); ?></p>
 								<div class="text-right">
 								@if(Auth::check())
 								  <!-- <button type="button" class="btn btn-primary mpost-rply-btn" title="Write a reply">Reply</button> -->
@@ -169,7 +169,7 @@
 											@endif
 											@endif
 										</div>
-										<p class="more"><?php echo nl2br(forumPostContents($forumreply->reply,'#')); ?></p>
+										<p class="more readmore"><?php echo nl2br(forumPostContents($forumreply->reply,'#')); ?></p>
 									</div><!--/single post-->								
 								@endforeach
 							</div>

@@ -48,8 +48,8 @@
 			@endif
 			</div>
 
-			<p>  <b>{{$data->forum_category_breadcrum}}</b><br>
-				{{$data->title}} </p>
+			<p> <b>{{$data->forum_category_breadcrum}}</b></p>
+			<p class='readmore'><?php echo forumPostContents(nl2br($data->title)) ?> </p>
 
 			<div class="fp-btns text-right">
 				<span class="reply-count">Replies ({{$replyCount}})</span>
@@ -60,7 +60,6 @@
 	@endforeach
 <script type="text/javascript">
 	$(document).ready(function() {
-		 loadOrgionalImogi();
+		loadOrgionalImogi();
 	});
-
 </script>
