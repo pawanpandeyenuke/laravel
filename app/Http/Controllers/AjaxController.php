@@ -696,19 +696,22 @@ comments;
 	**/
 	public function accept()
 	{
-		$input=Input::all();
-//echo 'xxxxxxxx';die;
+		$input = Input::all();
+
      	$data = array(
 			'friend_id'=>$input['user_id'],
 			'user_id'=>$input['friend_id'],
 			'status'=>'Accepted'
         );	
 	
+     	$fsearch = Friend::where(['friend_id' => $input['user_id'], 'user_id' => $input['friend_id'], 'status' => 'Accepted'])->first();
+
+		if( !$fsearch )
+			Friend::insert($data);
+
         Friend::where(['friend_id'=>$input['friend_id']])
         			->where(['user_id'=>$input['user_id']])
         			->update(['status'=>'Accepted']);
-
-		Friend::insert($data);
 
    		$udetail = User::whereIn('id',$input)->get()->toArray();
    		// echo '<pre>';print_r($udetail);die;
@@ -722,6 +725,8 @@ comments;
 		$response = Converse::notifyMe( $input['user_id'], $input['friend_id'], 'accept' );
 
 	}
+
+
 	/*
 	* Reject request from another user.
 	*

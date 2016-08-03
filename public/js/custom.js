@@ -715,6 +715,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	$(document).on('click','.accept',function()
 	{
 		var current = $(this);
+		current.attr('disabled', true);
 		var user_id=current.closest('.get_id').data('userid');
 		var friend_id=current.closest('.get_id').data('friendid');
 		
