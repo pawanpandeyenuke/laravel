@@ -1,4 +1,3 @@
-
 @foreach($forumPosts as $posts)
 	<?php 
 		// echo '<pre>';print_r($posts->count());die;
@@ -82,26 +81,8 @@
 			</div>
 		</div>
 	</div>
-
 @endforeach
 
 <script type="text/javascript">
-
-	$(document).ready(function(){
-		loadOrgionalImogi();
-	
-
-	function loadOrgionalImogi()
-	{
-	
-		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p, .f-single-post .more .morecontent span").each(function() {
-		var original = $(this).html();
-		// use .shortnameToImage if only converting shortnames (for slightly better performance)
-		var converted = emojione.toImage(original);
-		$(this).html(converted);
-	});
-	}
-	
-});
+loadOrgionalImogi();
 </script>
- 

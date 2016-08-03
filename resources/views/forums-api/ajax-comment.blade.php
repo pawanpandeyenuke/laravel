@@ -1,53 +1,39 @@
-	@foreach($replyComments as $comment)
-		<?php
-			// echo '<pre>';print_r($replyComments);die;
-			$commentUser = $comment->user;
+@foreach($replyComments as $comment)
+	<?php
+		// echo '<pre>';print_r($replyComments);die;
+		$commentUser = $comment->user;
 
-			$rawCommentCountry = [$commentUser->city, $commentUser->state, $commentUser->country];
-			foreach ($rawCommentCountry as $key => $value) {
-				if($value == ''){
-					unset($rawCommentCountry[$key]);
-				}
+		$rawCommentCountry = [$commentUser->city, $commentUser->state, $commentUser->country];
+		foreach ($rawCommentCountry as $key => $value) {
+			if($value == ''){
+				unset($rawCommentCountry[$key]);
 			}
-			$commentLocation = implode(', ', $rawCommentCountry);
-			$pic = !empty($commentUser->picture) ? $commentUser->picture : url('images/user-thumb.jpg');
-			$replyComment = !empty($comment->reply_comment) ? $comment->reply_comment : '';
-		?>
-		<div class="single-post">
-			<div class="post-header">
+		}
+		$commentLocation = implode(', ', $rawCommentCountry);
+		$pic = !empty($commentUser->picture) ? $commentUser->picture : url('images/user-thumb.jpg');
+		$replyComment = !empty($comment->reply_comment) ? $comment->reply_comment : '';
+	?>
+	<div class="single-post">
+		<div class="post-header">
 
-				<span class="u-img" style="background: url('<?= url($pic)?>');"></span>
-				<span class="title">{{ $commentUser->first_name.' '.$commentUser->last_name }}</span>
-				<span class="loc">
-					<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($commentLocation)?$commentLocation:'N/A' }}
-				</span>
-			</div>
+			<span class="u-img" style="background: url('<?= url($pic)?>');"></span>
+			<span class="title">{{ $commentUser->first_name.' '.$commentUser->last_name }}</span>
+			<span class="loc">
+				<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($commentLocation)?$commentLocation:'N/A' }}
+			</span>
+		</div>
 
-			<div class="post-data no-bottom-padding">
-				<p><?php echo nl2br(forumPostContents($replyComment, '#', 135)); ?></p>
-			</div>
-			<div class="post-action clearfix">
-				<div class="time-comment-bottom text-right">
-					<?php echo $comment->updated_at->format('d M Y').' '.$comment->updated_at->format('h:i A') ?>
-				</div>
+		<div class="post-data no-bottom-padding">
+			<p><?php echo nl2br(forumPostContents($replyComment, '#', 135)); ?></p>
+		</div>
+		<div class="post-action clearfix">
+			<div class="time-comment-bottom text-right">
+				<?php echo $comment->updated_at->format('d M Y').' '.$comment->updated_at->format('h:i A') ?>
 			</div>
 		</div>
-	@endforeach
+	</div>
+@endforeach
+
 <script type="text/javascript">
-
-	$(document).ready(function(){
-		loadOrgionalImogi();
-	
-
-	function loadOrgionalImogi()
-	{
-		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p, .f-single-post .more .morecontent span").each(function() {
-		var original = $(this).html();
-		// use .shortnameToImage if only converting shortnames (for slightly better performance)
-		var converted = emojione.toImage(original);
-		$(this).html(converted);
-		});
-	}
-	
-});
+loadOrgionalImogi();
 </script>
