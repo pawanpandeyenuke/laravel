@@ -43,7 +43,7 @@ $(document).ready(function(){
 
 	$('.readmore').readmore({
 	  	speed: 300,
-	  	collapsedHeight: 100,
+	  	collapsedHeight: 80,
 	  	heightMargin: 0,
 	  	moreLink: '<a href="#" class="moreLink">More</a>',
         lessLink: '<a href="#" class="moreLink">Less</a>',
@@ -267,7 +267,7 @@ function activateReadmore(obj)
 	obj = obj ? obj : $('.readmore');
 	obj.readmore({
 	  	speed: 300,
-	  	collapsedHeight: 100,
+	  	collapsedHeight: 80,
 	  	heightMargin: 0,
 	  	moreLink: '<a href="#" class="moreLink">More</a>',
         lessLink: '<a href="#" class="moreLink">Less</a>',
