@@ -1516,7 +1516,8 @@ $('.btn-upload-icon').find(".badge").remove();
 					$('#forumreplycomment_popup_'+replyid).html(newcount);
 					var original =jQuery('.forumreplycommentlist li:last-child').find('.replycomment').html();
 				   	var converted = emojione.toImage(original);
-					jQuery('.forumreplycommentlist li:last-child').find('.replycomment').html(converted);					
+					jQuery('.forumreplycommentlist li:last-child').find('.replycomment').html(converted);
+					$('.comments-list').scrollTop($('.comments-list')[0].scrollHeight);
 					hideLoading();
 				}			
 			});
