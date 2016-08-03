@@ -50,7 +50,7 @@ $GroupsJidList = array();
             <div class="col-sm-6">
                <div class="loader_blk">
                  <div class="loadr_img">
-                   <img src="http://development.laravel.com/images/loading.gif">
+                   <img src="{{url('images/loading.gif')}}">
                  </div>
                </div>
                 <div id="afterload" class="shadow-box page-center-data no-margin-top no-bottom-padding">
