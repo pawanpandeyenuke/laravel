@@ -11,7 +11,7 @@ $(document).ready(function(){
 
 	$('.readmore').readmore({
 	  	speed: 300,
-	  	collapsedHeight: 80,
+	  	collapsedHeight: 85,
 	  	heightMargin: 0,
 	  	moreLink: '<a href="#" class="moreLink">More</a>',
         lessLink: '<a href="#" class="moreLink">Less</a>',
