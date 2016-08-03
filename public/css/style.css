@@ -3604,7 +3604,9 @@ footer .f-links li a, footer .f-links li {
     right: 0;
     top: 38%;
 }
-
 .loader_blk .loadr_img img{
 	max-width: 100%;
+}
+p.readmore {
+	//margin-bottom:0px;
 }

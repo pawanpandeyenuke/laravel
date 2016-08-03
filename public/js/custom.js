@@ -1,10 +1,21 @@
 $(document).ready(function(){
 
-	//menu dd button
+	$('.popup').fancybox();
 
+	loadImg();
+	   
+	//menu dd button
 	$('.logout-link').click(function(){
 		window.localStorage.setItem('logged_in', false);
 	});
+
+	$('.readmore').readmore({
+	  	speed: 300,
+	  	collapsedHeight: 70,
+	  	heightMargin: 0,
+	  	moreLink: '<a href="#" class="moreLink">More</a>',
+        lessLink: '<a href="#" class="moreLink">Less</a>',
+    });
 
 	var moretext = "More";
 	var lesstext = "Less";
@@ -1028,6 +1039,7 @@ $('.btn-upload-icon').find(".badge").remove();
 				if(data.existmore == 0) {
 					current.parent().remove();
 				}
+				activateReadmore();
 			}	
 		});
 	});
@@ -1049,6 +1061,7 @@ $('.btn-upload-icon').find(".badge").remove();
 				if(data.existmore == 0) {
 					current.parent().remove();
 				}
+				activateReadmore();
 			}
 		});
 	});
@@ -1071,6 +1084,7 @@ $('.btn-upload-icon').find(".badge").remove();
 				if(data.existmore == 0) {
 					current.parent().remove();
 				}
+				activateReadmore();
 			}	
 		});
 	});
@@ -1123,12 +1137,11 @@ $('.btn-upload-icon').find(".badge").remove();
 			}	
 		});
 	});
-});
 
-/*
- Broadcast delete
+	/*
+	 Broadcast delete
 
-*/
+	*/
 	$(document).on('click','.broadcastdel',function()
 	{
 		var current = $(this);
@@ -1145,38 +1158,35 @@ $('.btn-upload-icon').find(".badge").remove();
 		});
 	});
 
-		/*
-		 Broadcast Message Button.
-		*/
-	$(document).on('click','.broadcastbtn',function()
-	{
+	/*
+	 Broadcast Message Button.
+	*/
+	$(document).on('click','.broadcastbtn',function(){
 		var current = $(this);
 		$('.broadcastbtn').prop('disabled',true);
 		var bid=current.val();
 		var msg=$('.broadcastmsg').val();
 		if(msg!=""){
-		$.ajax({
-			'url' : '/ajax/sendbroadcast',
-			'type' : 'post',
-			'data' : {'msg':msg,'bid':bid},
-			'success' : function(data){
-				$("#bmsg").append(data);
-				$('.broadcastmsg').val('');
-				$('.broadcastbtn').prop('disabled',false);
-			}
-		});
-	}else{
-		$('.broadcastmsg').focus();
-		$('.broadcastbtn').prop('disabled',false);
-	}
+			$.ajax({
+				'url' : '/ajax/sendbroadcast',
+				'type' : 'post',
+				'data' : {'msg':msg,'bid':bid},
+				'success' : function(data){
+					$("#bmsg").append(data);
+					$('.broadcastmsg').val('');
+					$('.broadcastbtn').prop('disabled',false);
+				}
+			});
+		}else{
+			$('.broadcastmsg').focus();
+			$('.broadcastbtn').prop('disabled',false);
+		}
 	});
 
+	/*
+	 Private Group delete & Delete user from private group
 
-
-/*
- Private Group delete & Delete user from private group
-
-*/
+	*/
 	$(document).on('click','.delprivategroup',function()
 	{
 		var current = $(this);
@@ -1237,8 +1247,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		$('.subbtn').show();
 	});
 
-$(document).on('click','.savegroupname',function()
-	{
+	$(document).on('click','.savegroupname',function(){
 		var current = $(this);
 		var id=current.val();
 		var gname=$('.pr-gname').val();
@@ -1264,30 +1273,29 @@ $(document).on('click','.savegroupname',function()
 	/***** Forum Delete Confirmation Box****/
 
 	$(document).on('click', '.del-confirm-forum', function(){
-	// showLoading();
-	var type = $(this).data('forumtype'); 
-	var type_id = $(this).val();
-	var breadcrum = $(this).data('breadcrum');
-	var reply_post_id = $(this).data('forumpostid');
-	var gid = $(this).data('gid');
-	$.ajax({
-		'url' : '/ajax/forum-del-confirm',
-		'data' : {'type':type, 'type_id' : type_id, 'breadcrum' : breadcrum, 'reply_post_id' : reply_post_id, 'gid' : gid},
-		'type' : 'post',
-		'success' : function(response){
-			if(response){
-				$("#forum-confirm-modal").append(response);
-				$("#forum-confirm-modal").modal();
-				// hideLoading();
+		// showLoading();
+		var type = $(this).data('forumtype'); 
+		var type_id = $(this).val();
+		var breadcrum = $(this).data('breadcrum');
+		var reply_post_id = $(this).data('forumpostid');
+		var gid = $(this).data('gid');
+		$.ajax({
+			'url' : '/ajax/forum-del-confirm',
+			'data' : {'type':type, 'type_id' : type_id, 'breadcrum' : breadcrum, 'reply_post_id' : reply_post_id, 'gid' : gid},
+			'type' : 'post',
+			'success' : function(response){
+				if(response){
+					$("#forum-confirm-modal").append(response);
+					$("#forum-confirm-modal").modal();
+					// hideLoading();
+				}
 			}
-		}
-	});
-	$("#forum-confirm-modal").html('');
+		});
+		$("#forum-confirm-modal").html('');
 	});
 	
 	
 	/***** Forum Post Delete ****/
-
 	$(document).on('click','.forumpostdelete',function(){
 		var current = $(this);
 		var forumpostid = $(this).val();
@@ -1343,20 +1351,21 @@ $(document).on('click','.savegroupname',function()
 		{
 		  	current.prop('disabled',true);
 			$.ajax({
-			'url' : '/ajax/addnewforumpost',
-			'type' : 'post',
-			'data' : {'breadcrum' : breadcrum,'topic' : post},
-			'success' : function(response){	
-				$('.posts-count').find('.count').html(' '+newpostcount);
-		  		$('.forumpost').val('');
-		  		$('.emoji-wysiwyg-editor').text('');
-				$('.forumpostlist').prepend(response);
-				var original =jQuery('.f-single-post').first().find('p').html();
-			   	var converted = emojione.toImage(original);
-				jQuery('.f-single-post').first().find('p').html(converted);
-				$('.addforumpost').prop('disabled',false);
-			}
-		});
+				'url' : '/ajax/addnewforumpost',
+				'type' : 'post',
+				'data' : {'breadcrum' : breadcrum,'topic' : post},
+				'success' : function(response){	
+					$('.posts-count').find('.count').html(' '+newpostcount);
+			  		$('.forumpost').val('');
+			  		$('.emoji-wysiwyg-editor').text('');
+					$('.forumpostlist').prepend(response);
+					var original =jQuery('.f-single-post').first().find('p').html();
+				   	var converted = emojione.toImage(original);
+					jQuery('.f-single-post').first().find('p').html(converted);
+					$('.addforumpost').prop('disabled',false);
+					activateReadmore($('.forumpostlist .readmore:first'));
+				}
+			});
 		}
 	});
 
@@ -1381,9 +1390,8 @@ $(document).on('click','.savegroupname',function()
 
 	});
 
-		/***** Forum Post Edit ****/
-
-		$(document).on('click','.editforumreply',function(){
+	/***** Forum Post Edit ****/
+	$(document).on('click','.editforumreply',function(){
 		var forumreplyid = $(this).val(); 
 		showLoading();
 
@@ -1433,7 +1441,7 @@ $(document).on('click','.savegroupname',function()
 		});	
 	});
 
-		$(document).on('click', '.likeforumreply', function(){		
+	$(document).on('click', '.likeforumreply', function(){		
 		var forumreplyid = $(this).data('forumreplyid');
 		var current = $(this);
 
@@ -1472,14 +1480,15 @@ $(document).on('click','.savegroupname',function()
 					if(response == "no"){
 					$('#forum-post-reply_'+forumPostID).html("<div class ='alert alert-danger'>You can't reply to the post as it doesn't exist anymore.</div>");	
 					}else{
-					$('.posts-count').find('.forumreplycount').html(' '+newpostcount);
-					$('.forumreplylist').prepend(response);
-					$('.forumreply').val('');
-				    $('.emoji-wysiwyg-editor').text('');
-					var original =jQuery('.f-single-post').first().find('p').html();
-				   	var converted = emojione.toImage(original);
-					jQuery('.f-single-post').first().find('p').html(converted);
-				}
+						$('.posts-count').find('.forumreplycount').html(' '+newpostcount);
+						$('.forumreplylist').prepend(response);
+						$('.forumreply').val('');
+					    $('.emoji-wysiwyg-editor').text('');
+						var original =jQuery('.f-single-post').first().find('p').html();
+					   	var converted = emojione.toImage(original);
+						jQuery('.f-single-post').first().find('p').html(converted);
+						activateReadmore($('.forumreplylist .readmore:first'));
+					}
 					$('.forumpostreply').prop('disabled',false);
 				}			
 			});	
@@ -1513,49 +1522,55 @@ $(document).on('click','.savegroupname',function()
 			});
 		}	
 	});
+});
 
+function loadImg()
+{
+	window.emojiPicker = new EmojiPicker({
+		emojiable_selector: '[data-emojiable=true]',
+		assetsPath: '/lib/img/',
+		popupButtonClasses: 'fa fa-smile-o'
+  	});
+  window.emojiPicker.discover();
+}
 
+/*********** To display emoji onload of a page******************/
+function loadOrgionalImogi()
+{
+	$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p, .f-single-post .more .morecontent span").each(function() {
+	var original = $(this).html();
+	// use .shortnameToImage if only converting shortnames (for slightly better performance)
+	var converted = emojione.toImage(original);
+	$(this).html(converted);
+});
+}
 
+function showLoading(){
+	$('.page-loading').show();
+}
 
-	$('.popup').fancybox();
+function hideLoading(){
+	$('.page-loading').hide();
+}
 
-	$(function() {
-		loadImg();
+function storageChange(event) {
+	if(event.key == 'logged_in' && event.newValue == 'false') {
+		setInterval(function(){ location.reload(true); }, 2000); 
+	}
+}
+
+window.addEventListener('storage', storageChange, false);
+window.localStorage.setItem('logged_in', true);
+
+// Activate read more feature
+function activateReadmore(obj)
+{
+	obj = obj ? obj : $('.readmore');
+	obj.readmore({
+	  	speed: 300,
+	  	collapsedHeight: 70,
+	  	heightMargin: 0,
+	  	moreLink: '<a href="#" class="moreLink">More</a>',
+        lessLink: '<a href="#" class="moreLink">Less</a>',
     });
-	
-	function loadImg()
-	{
-		window.emojiPicker = new EmojiPicker({
-			emojiable_selector: '[data-emojiable=true]',
-			assetsPath: '/lib/img/',
-			popupButtonClasses: 'fa fa-smile-o'
-      	});
-      window.emojiPicker.discover();
-	}
-
-  /*********** To display emoji onload of a page******************/
-	function loadOrgionalImogi()
-	{
-		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p, .f-single-post .more .morecontent span").each(function() {
-		var original = $(this).html();
-		// use .shortnameToImage if only converting shortnames (for slightly better performance)
-		var converted = emojione.toImage(original);
-		$(this).html(converted);
-	});
-	}
-
-	function showLoading(){
-		$('.page-loading').show();
-	}
-
-	function hideLoading(){
-		$('.page-loading').hide();
-	}
-
-	function storageChange(event) {
-    	if(event.key == 'logged_in' && event.newValue == 'false') {
-			setInterval(function(){ location.reload(true); }, 2000); 
-    	}
-	}
-		window.addEventListener('storage', storageChange, false);
-		window.localStorage.setItem('logged_in', true);
+}
