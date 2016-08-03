@@ -50,6 +50,9 @@
 </script>
 </head>
 @include('panels.loginpopup')
+@include('panels.deletebox')
+@include('forums.deleteconfirmbox')
+
 <body class="dashboard">
 <div class="page-loading" style="display:none"><img src="{{url('/images/full-loading.gif')}}" alt=""></div>
  <header>
@@ -105,8 +108,7 @@
 		</div>
 	</div>
 
-<div class="modal fade" id="forum-confirm-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-</div>
+
 	<!--- Suggestion Popup -->
 
 		  <form id="suggestionform1" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" data-backdrop="static" data-keyboard="false">

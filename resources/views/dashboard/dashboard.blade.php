@@ -282,10 +282,6 @@
 							</div><!--/single post-->
 						@endforeach
 
-						<!-- Delete comment confirmation box -->
-						<div class="modal fade comment-del-confrm" id="modal" tabindex="-1" role="dialog" aria-labelledby="DeletePost"></div>
-						<!-- Delete comment confirmation box -->
-
 						<div class="modal fade edit-post-popup" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="EditPost">	</div>
 
 					<div id="commentajax" style="display: none;">	</div>

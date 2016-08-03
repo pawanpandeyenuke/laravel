@@ -469,10 +469,20 @@ $('.btn-upload-icon').find(".badge").remove();
 	*/
 
 	$(document).on('click', '.post-delete', function(){
-		showLoading();
 		var commentId = $(this).closest('li').data('value'); 
 		var feedId = $(this).closest('.single-post').data('value');
-		$.ajax({
+
+		// $('#modal').bind('show',function(){
+			// alert(feedId);
+			// $("#delete-confirm").data('value', commentId);
+			$("#delete-confirm").attr('data-feedid', feedId);
+			// $("#delete-confirm").attr('data-value', commentId);
+			$("#del-box").addClass('postdelete');
+			// $("#delete-confirm").data('forumreplycommentid', commentId);
+		// });
+
+		$("#modal").modal();
+/*		$.ajax({
 			'url' : '/ajax/deletebox',
 			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'postdelete'},
 			'type' : 'post',
@@ -484,18 +494,19 @@ $('.btn-upload-icon').find(".badge").remove();
 				}
 			}
 		});
-		$("#modal").html('');
+		$("#modal").html('');*/
 	});
 	
 	$(document).on('click', '.postdelete', function(){
-		var current = $('.postdelete');
-		var feedId = current.closest('.modal-content').data('feedid');
+		var current = $(this);
+		var feedId = current.closest('.modal-content').attr('data-feedid');
+
 		$.ajax({
 			'url' : 'ajax/deletepost',
 			'data' : { 'postId' : feedId },
 			'type' : 'post',
 			'success' : function(response){
-				jQuery("#post_"+feedId).hide(200);
+				jQuery("#post_"+feedId).remove();
 			}
 		});
 	});
@@ -506,10 +517,16 @@ $('.btn-upload-icon').find(".badge").remove();
 	*	Ajaxcontroller@deletecomments
 	*/	
 	$(document).on('click', '.comment-delete', function(){
-		showLoading();
+
 		var commentId = $(this).closest('li').data('value'); 
 		var feedId = $('.single-post').data('value');
-		$.ajax({
+
+		$("#delete-confirm").attr('data-feedid', feedId);
+		$("#delete-confirm").attr('data-value', commentId);
+		$("#del-box").addClass('deletecomment');
+		$("#modal").modal();
+
+/*		$.ajax({
 			'url' : '/ajax/deletebox',
 			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'deletecomment'},
 			'type' : 'post',
@@ -521,7 +538,7 @@ $('.btn-upload-icon').find(".badge").remove();
 				}
 			}
 		});
-		$("#modal").html('');
+		$("#modal").html('');*/
 	});
 
 		/**
@@ -569,8 +586,8 @@ $('.btn-upload-icon').find(".badge").remove();
 
 	$(document).on('click', '.deletecomment', function(){		
 		var current = $('.deletecomment');
-		var commentId = current.closest('.modal-content').data('value');
-		var feedId = current.closest('.modal-content').data('feedid');
+		var commentId = current.closest('.modal-content').attr('data-value');
+		var feedId = current.closest('.modal-content').attr('data-feedid');
 		$.ajax({
 			'url' : 'ajax/deletecomments',
 			'data' : { 'commentId' : commentId, 'feedId' : feedId },
@@ -1279,7 +1296,44 @@ $('.btn-upload-icon').find(".badge").remove();
 		var breadcrum = $(this).data('breadcrum');
 		var reply_post_id = $(this).data('forumpostid');
 		var gid = $(this).data('gid');
-		$.ajax({
+
+		var delBtn = $('#delete-common-btn');
+
+		delBtn.text('Delete');
+
+		if( type == 'post' ){
+			delBtn.addClass('forumpostdelete');
+			delBtn.attr('data-breadcrum', breadcrum);
+			delBtn.val(type_id);
+			$('.modal-message').text("All the replies and comments related to this post will be deleted. Are you sure you want to delete this post?");
+		}else if( type == 'reply' ){
+			delBtn.attr('data-forumpostid', reply_post_id);
+			// delBtn.attr('data-gid', gid);
+			delBtn.val(type_id);
+			delBtn.addClass('forumreplydelete');
+			$('.modal-message').text("All the comments related to this reply will be deleted. Are you sure you want to delete this reply?");
+		}else if( type == 'broadcast' ){
+			delBtn.addClass('broadcastdel');
+			$('.modal-message').text("Are you sure you want to delete this broadcast?");
+			delBtn.val(type_id);
+		}else if( type == 'private' ){
+			delBtn.addClass('delprivategroup');
+			$('.modal-message').text("Are you sure you want to delete this group?");
+			delBtn.val(type_id);
+		}else if( type == 'private-leave' ){
+			delBtn.addClass('userleave');
+			$('.modal-message').text("Are you sure you want to leave this group?");
+			delBtn.val(type_id);
+			delBtn.text('Leave');
+		}else if( type == 'del-private-member' ){
+			delBtn.addClass('deluser');
+			$('.modal-message').text("Are you sure you want to delete this user from  the group?");
+			delBtn.val(type_id);
+		}
+ 
+		$("#forum-confirm-modal").modal();
+
+/*		$.ajax({
 			'url' : '/ajax/forum-del-confirm',
 			'data' : {'type':type, 'type_id' : type_id, 'breadcrum' : breadcrum, 'reply_post_id' : reply_post_id, 'gid' : gid},
 			'type' : 'post',
@@ -1291,7 +1345,7 @@ $('.btn-upload-icon').find(".badge").remove();
 				}
 			}
 		});
-		$("#forum-confirm-modal").html('');
+		$("#forum-confirm-modal").html('');*/
 	});
 	
 	

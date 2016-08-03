@@ -1983,33 +1983,28 @@ class ApiController extends Controller
 
 			foreach ($members as $key => $value) {
 	 			
-	 			$alreadyMember = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])->get()->toArray();
-
-	 			if( empty($alreadyMember) ){
-	 				
-	 				$existingUser = User::find($value);
-
-	 				$notAFriend = Friend::where('user_id', $owner_id)
+	 			$existingUser = User::find($value);
+	 			$AFriend = Friend::where('user_id', $owner_id)
 	 										->where('friend_id', $value)
 	 										->where('status','Accepted')
 	 										->get()->toArray();
 
-	 				if( !empty($existingUser) ){
-
-	 					if($notAFriend){
+	 			if( !empty($existingUser) && $AFriend ){
+		 			$alreadyMember = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])->get()->toArray();
+		 			if( empty($alreadyMember) ){
 	 						$new_members[] = $existingUser;
-
 	 	 					$privateGroupMemberObj = new GroupMembers;
 		 	 				$privateGroupMemberObj->group_id = $group->id;
 		 	 				$privateGroupMemberObj->member_id = $value;
 		 	 				$privateGroupMemberObj->status = 'Pending';
 		 	 				$privateGroupMemberObj->save();
-	 					}
 
+	 				} else if( isset($alreadyMember['status']) && $alreadyMember['status'] == 'Left' ){
+	 					$new_members[] = $existingUser;
+	 					$data = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])
+												->update(['status' => 'Pending']);
 	 				}
-
-	 			}
-	 			
+				}
 			}
 
 
