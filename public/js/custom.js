@@ -1296,7 +1296,6 @@ $('.btn-upload-icon').find(".badge").remove();
 		var breadcrum = $(this).data('breadcrum');
 		var reply_post_id = $(this).data('forumpostid');
 		var gid = $(this).data('gid');
-<<<<<<< HEAD
 
 		var delBtn = $('#delete-common-btn');
 
