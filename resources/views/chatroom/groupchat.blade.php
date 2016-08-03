@@ -50,7 +50,7 @@ $GroupsJidList = array();
             <div class="col-sm-6">
                <div class="loader_blk">
                  <div class="loadr_img">
-                   <img src="{{url('/images/loading.gif')}}">
+                   <img src="{{url('images/loading.gif')}}">
                  </div>
                </div>
                 <div id="afterload" class="shadow-box page-center-data no-margin-top no-bottom-padding">
@@ -261,6 +261,23 @@ $GroupsJidList = array();
   </div>
 </div>
 
+<div id="leavePvtModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Leave Group</h4>
+      </div>
+      <div class="modal-body">
+        <p class='text-center'>Are you sure you want to leave?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" data-jid="" id='leave-pvt-group'>Leave</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <link href="{{url('/converse/converse.min.css')}}" rel="stylesheet" type="text/css" media="screen" >
 <script type="text/javascript" src="{{url('/converselib/demo_converse.nojquery.min.js')}}"></script>
 
@@ -367,7 +384,7 @@ $GroupsJidList = array();
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
 						<?php	} ?>
 					} else {
-						
+						chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Leave</a>' );
 						if( typeof GroupName[jidStr] != 'undefined' ){
 							var groupimage = $('#'+jidStr).data('groupimage');
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
@@ -532,7 +549,26 @@ $GroupsJidList = array();
             }
           });
         });
-      
+        
+
+
+        $(document).on('click', '.leave-pvt-group', function(e){
+            var PvtJid = $(this).data( 'jid' );
+            $('#leave-pvt-group').attr('data-jid' , PvtJid);
+            $('#leavePvtModal').modal('show');
+        });
+
+        $(document).on('click', '#leave-pvt-group', function(e){
+            var PvtJid = $(this).attr( 'data-jid' );
+            var getRooms = conObj.rooms.get( PvtJid+conferencechatserver );
+            getRooms.close();
+            $('#leavePvtModal').modal('hide');
+            var firstChat = $( '.minimized-chats-flyout .chat-head:first .restore-chat' ).data( 'bid' );
+            if( typeof firstChat !== undefined ){
+              hideOpendBox( Base64.decode(firstChat) , 1 );
+            }
+        });
+
       });
 
      function openChatbox(xmpusername,username)
