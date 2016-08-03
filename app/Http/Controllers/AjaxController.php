@@ -1219,8 +1219,7 @@ comments;
 			$GroupDetails  	= Group::where('id',$input)->select('title','group_jid')->first();
 			$GroupJid	  	= $GroupDetails->group_jid;
 			$GroupTitle  	= $GroupDetails->title;
-			
-			
+
 			$converse = new Converse;
 			$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
 			$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name
@@ -1234,16 +1233,15 @@ comments;
 			Group::where('id',$input)->where('owner_id',Auth::User()->id)->delete();
 			GroupMembers::where('group_id',$input)->delete();
 		} catch( Exception $e) {
-         echo $e->getMessage();
-         exit();
+	         echo $e->getMessage();
+	         exit();
         }
 
 	}
 
-/**
-	 DELETE USER FROM PRIVATE GROUP 
-**/
-
+	/**
+		 DELETE USER FROM PRIVATE GROUP 
+	**/
 	public function delUser()
 	{
 		$input=Input::all();
@@ -2065,7 +2063,7 @@ comments;
 
     }
 	
-	public function forumDelConfirm()
+/*	public function forumDelConfirm()
 	{
 		$input = Input::all();
 
@@ -2121,7 +2119,7 @@ comments;
 
 		return view('forums.deleteconfirmbox')
 			   		->with('data',$data);
-	}
+	}*/
 	
 	public function isMemberActive() 
     {
