@@ -11,7 +11,7 @@ $(document).ready(function(){
 
 	$('.readmore').readmore({
 	  	speed: 300,
-	  	collapsedHeight: 70,
+	  	collapsedHeight: 75,
 	  	heightMargin: 0,
 	  	moreLink: '<a href="#" class="moreLink">More</a>',
         lessLink: '<a href="#" class="moreLink">Less</a>',
@@ -19,7 +19,7 @@ $(document).ready(function(){
 
 	var moretext = "More";
 	var lesstext = "Less";
-	$(document).on('click','.morelink',function(){
+	$(document).on('click','.morelinkk',function(){
 		if($(this).hasClass('unique_post')){
 			i=1;
 		}

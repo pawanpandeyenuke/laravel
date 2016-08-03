@@ -36,10 +36,18 @@
 <script type="text/javascript" src="{{ url('forums-data/js/jquery-1.11.3.min.js') }}"></script>
 <script type="text/javascript" src="{{ url('forums-data/js/bootstrap.min.js') }}"></script>
 <script src="{{url('forums-data/js/emojione.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/readmore.min.js')}}"></script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
-	$(document).ready(function(){
+$(document).ready(function(){
 
+	$('.readmore').readmore({
+	  	speed: 300,
+	  	collapsedHeight: 75,
+	  	heightMargin: 0,
+	  	moreLink: '<a href="#" class="moreLink">More</a>',
+        lessLink: '<a href="#" class="moreLink">Less</a>',
+    });
 
 	window.onload = function() {
 			loadOrgionalImogi();
@@ -87,6 +95,7 @@
 					if(data.existmore == 0) {
 						current.parent().remove();
 					}
+					activateReadmore();
 				}
 			});
 		});
@@ -108,7 +117,8 @@
 					if(data.existmore == 0) {
 						current.parent().remove();
 					}
-				}	
+					activateReadmore();
+				}
 			});
 		});
 
@@ -129,6 +139,7 @@
 						$('.loading-img').hide();
 						$('.reply-post-cont').append(data);
 						$('.load-more-forumcommets').text('View More');
+						activateReadmore();
 					}else{
 						current.hide();
 					}
@@ -183,7 +194,7 @@
 			});	
 		});
 
-			$(document).on('click', '.forumpostdelete', function(){
+		$(document).on('click', '.forumpostdelete', function(){
 			var current = $(this);
 			var forumpostid = $(this).data('postid');
 			var breadcrum = $(this).data('breadcrum');	
@@ -200,26 +211,25 @@
 		});
 
 		$(document).on('click','.forumreplydelete',function(){
-		var current = $(this);
-		var forumreplyid = $(this).data('forumreplyid');
-		var forumpostid = $(this).data('forumpostid');
+			var current = $(this);
+			var forumreplyid = $(this).data('forumreplyid');
+			var forumpostid = $(this).data('forumpostid');
 			$.ajax({
-			'url' : '/ajax/delforumreply',
-			'type' : 'post',
-			'data' : {'forumreplyid' : forumreplyid , 'forumpostid' : forumpostid},
-			'success' : function(response){		 
-				current.closest('.single-post').hide();
-				$('#forumreply_'+forumreplyid).remove();
-				$('#forum-confirm-modal').modal('hide');
-			}
+				'url' : '/ajax/delforumreply',
+				'type' : 'post',
+				'data' : {'forumreplyid' : forumreplyid , 'forumpostid' : forumpostid},
+				'success' : function(response){		 
+					current.closest('.single-post').hide();
+					$('#forumreply_'+forumreplyid).remove();
+					$('#forum-confirm-modal').modal('hide');
+				}
+			});
 		});
-
-	});
-
+		
 	$(document).ready(function() {
-	  var moretext = "More";
-	  var lesstext = "Less";
-		$(document).on('click','.morelink',function(){
+	  	var moretext = "More";
+	  	var lesstext = "Less";
+		$(document).on('click','.morelinkk',function(){
 		if($('.morelink').attr('href') == "javascript:void(0);"){
 	      if($(this).hasClass("less")) {
 	          $(this).removeClass("less");
@@ -237,25 +247,35 @@
 		}
 	  });
 	});
+
 	function loadOrgionalImogi()
 	{
 	
 		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p, .f-single-post .more .morecontent span").each(function() {
-		var original = $(this).html();
-		// use .shortnameToImage if only converting shortnames (for slightly better performance)
-		var converted = emojione.toImage(original);
-		$(this).html(converted);
-	});
+			var original = $(this).html();
+			// use .shortnameToImage if only converting shortnames (for slightly better performance)
+			var converted = emojione.toImage(original);
+			$(this).html(converted);
+		});
 	}
 	
-   function googleTranslateElementInit() {
-   new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+   	function googleTranslateElementInit() {
+  	 new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
 	}
+});
 
-  
-
-
-	});
+// Activate read more feature
+function activateReadmore(obj)
+{
+	obj = obj ? obj : $('.readmore');
+	obj.readmore({
+	  	speed: 300,
+	  	collapsedHeight: 70,
+	  	heightMargin: 0,
+	  	moreLink: '<a href="#" class="moreLink">More</a>',
+        lessLink: '<a href="#" class="moreLink">Less</a>',
+    });
+}
 </script>
-	</body>
+</body>
 </html>

@@ -41,7 +41,7 @@
 			</div>
 
 			<div class="post-data">
-				<p id="forum_post"><?php echo nl2br(forumPostContents($postTitle, '#', 135)); ?></p>
+				<p id="forum_post" class='readmore'><?php echo nl2br(forumPostContents($postTitle, '#', 135)); ?></p>
 			</div>
 			<div class="post-action clearfix">
 				<div class="row-cont clearfix">
@@ -105,7 +105,7 @@
 						</span>
 					</div>
 					<div class="post-data">
-						<p><?php echo nl2br(forumPostContents($reply_data, '#', 135)); ?></p>
+						<p class='readmore'><?php echo nl2br(forumPostContents($reply_data, '#', 135)); ?></p>
 					</div>
 					<div class="post-action clearfix">
 						<div class="row-cont clearfix">
