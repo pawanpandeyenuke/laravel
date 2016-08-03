@@ -192,11 +192,11 @@ class Converse
 
  		if($type == 'accept'){
  			$data_array['message'] = "$subjectName has accepted your friend request";
- 			$data_array['notification_type'] = "accept";
+ 			$data_array['notification_type'] = "Friend Request Accepted";
  		}
  		elseif($type == 'request'){
   			$data_array['message'] = "$subjectName wants to be your friend";
- 			$data_array['notification_type'] = "request";
+ 			$data_array['notification_type'] = "Friend Request Received";
 		}
 
  		// $response = 'Message was not delivered';

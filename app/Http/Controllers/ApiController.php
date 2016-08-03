@@ -2570,7 +2570,7 @@ class ApiController extends Controller
 			}
 
 
-		    $replyComments = ForumReplyComments::with('user')->where('reply_id', $reply_id)->get();
+		    $replyComments = ForumReplyComments::with('user')->where('reply_id', $reply_id)->orderBy('updated_at','DESC')->get();
  
 			// echo '<pre>';print_r($replyComments);die;
 			return view('forums-api.forum-post-reply-comments')
