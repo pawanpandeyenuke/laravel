@@ -2152,7 +2152,7 @@ class ApiController extends Controller
 
 			// Send hint message
 				$changed = array();
-
+				$nameChanged = $imageChanged = false;
 				// Check if group nam has changed or not
 			    if($title != $group->title){
 			        $nameChanged = true;
