@@ -2169,7 +2169,9 @@ class ApiController extends Controller
 			    if($changed)
 			    {
 			    	// echo '<pre>';print_r($group->title);die;
-			        $members = GroupMembers::where(['group_jid' => $group_jid])->pluck('user_jid');
+			        // $members = GroupMembers::where(['group_jid' => $group_jid])->pluck('user_jid');
+			        $members = User::whereIn('id', GroupMembers::where('group_id', $group->id)->pluck('member_id')->toArray())->get()->toArray();
+
 			        $ChatUser = $user->xmpp_username;
 			        $name = $user->first_name.' '.$user->last_name;
 			        
@@ -2182,7 +2184,7 @@ class ApiController extends Controller
 			            if($nameChanged){
 			                $message['groupname'] = $title;
 			            }
-			            Converse::broadcastchatroom($group_jid, $name, $val['user_jid'], $ChatUser, json_encode($message));
+			            Converse::broadcastchatroom($group_jid, $name, $val['xmpp_username'], $ChatUser, json_encode($message));
 			        }
 			    }
 			// Send hint message
