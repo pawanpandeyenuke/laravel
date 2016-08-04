@@ -1426,7 +1426,7 @@ $('.btn-upload-icon').find(".badge").remove();
 
 	/***** Forum Post Edit ****/
 
-		$(document).on('click','.editforumpost',function(){
+	$(document).on('click','.editforumpost',function(){
 		var forumpostid = $(this).val(); 
 		showLoading();
 

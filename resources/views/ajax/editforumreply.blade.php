@@ -57,13 +57,13 @@ $(document).ready(function(){
 
 			if(comment!='')
 			{
-			jQuery('.forumreplylist').find('#forumreply_'+commentid).find('p').html(comment);
-			var original =jQuery('.forumreplylist').find('#forumreply_'+commentid).find('p').html();
-			var converted = emojione.toImage(original);
-			jQuery('.forumreplylist').find('#forumreply_'+commentid).find('p').html(converted);
-			activateReadmore(jQuery('.forumreplylist').find('#forumreply_'+commentid).find('p'));
+				var obj = jQuery('.forumreplylist').find('#forumreply_'+commentid);
+				obj.find('p').html(comment);
+				obj.find('p').html( emojione.toImage(obj.find('p').html()) );
+				activateReadmore(obj.find('p'));
+				obj.find('.p-date').html('<i class="flaticon-days"></i> '+data.date);
+				obj.find('.p-time').html('<i class="flaticon-time"></i> '+data.time);
 			}
-
 			else
 			{
 				alert("Comment not updated.Comment field can't eb empty");
