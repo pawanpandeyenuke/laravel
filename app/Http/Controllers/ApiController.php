@@ -2130,7 +2130,7 @@ class ApiController extends Controller
 			if( empty( $user_id ) )
 				throw new Exception("User id is required.", 1);
 
-			$group = Group::where(['group_jid' => $group_jid, 'owner_id' => $user_id])->first();
+			$group = Group::where(['group_jid' => $group_jid])->first();
 
 			if( !$group )
 				throw new Exception("Group does not exist.", 1);

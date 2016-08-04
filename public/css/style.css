@@ -3610,3 +3610,13 @@ footer .f-links li a, footer .f-links li {
 p.readmore {
 	//margin-bottom:0px;
 }
+	
+.p-likes.custm_p_likes{
+    right: 65px;
+    position: absolute;
+    margin-top: 0;
+    top: -3px;
+}
+.p-likes.custm_p_likes.right{
+	right: 0px;
+}

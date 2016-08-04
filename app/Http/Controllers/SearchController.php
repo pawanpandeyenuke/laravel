@@ -488,10 +488,6 @@ class SearchController extends Controller
                 ->with('posts',$results)
                 ->with('old',$input);
 
-     
-        
-
-    
     }
 
     public function searchForumGet()
@@ -515,10 +511,12 @@ class SearchController extends Controller
             ->with('old',$input);
     }
 
+
     public function demo()
     {
     	return view('demo');
     }
+
 
     public function confirm($confirmation_code)
     {
