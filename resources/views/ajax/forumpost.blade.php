@@ -4,7 +4,7 @@
 		<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
 		</a>
 		<span class='p-date'><i class='flaticon-days'></i> {{$forumpostid->updated_at->format('d M Y')}}</span>
-		<span class='p-time'><i class='flaticon-time'></i> {{$forumpostid->updated_at->format('h:i A')}}</span>
+		<span class='p-time'><i class='flaticon-time'></i> {{$forumpostid->updated_at->format('h:i A').' (UTC)'}}</span>
 		
 		<div class="p-likes">
 			<div class="like-cont">

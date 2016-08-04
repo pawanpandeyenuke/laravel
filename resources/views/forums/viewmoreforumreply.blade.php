@@ -52,7 +52,7 @@
 			<a href = "{{url("profile/$userid")}}" title = "User Profile">{{$name}}</a>
 			<div class="fp-meta">
 				<span class="p-date"><i class="flaticon-days"></i> {{$forumreply->updated_at->format('d M Y')}}</span>
-				<span class="p-time"><i class="flaticon-time"></i> {{$forumreply->updated_at->format('h:i A')}}</span>
+				<span class="p-time"><i class="flaticon-time"></i> {{$forumreply->updated_at->format('h:i A').' (UTC)'}}</span>
 			</div>
 			@if(Auth::check())
 			@if($userid == Auth::User()->id)

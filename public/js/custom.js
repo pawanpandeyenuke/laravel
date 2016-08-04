@@ -392,7 +392,7 @@ $('.btn-upload-icon').find(".badge").remove();
 
 	});
 
-		$(document).on('click', '.popupforumreply', function(){    
+	$(document).on('click', '.popupforumreply', function(){    
 		showLoading();
 		var replyid = $(this).data('replyid');
 		$.ajax({
