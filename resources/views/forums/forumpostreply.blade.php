@@ -67,7 +67,7 @@
 											  <span class="plike-count" title="Likes">{{$likeCount}}</span>
 											</div>
 												<span class="p-date pull-left"><i class="flaticon-days"></i> {{$post->updated_at->format('d M Y')}}</span>
-												<span class="p-time pull-left"><i class="flaticon-time"></i>  {{$post->updated_at->format('h:i A')}}</span>
+												<span class="p-time pull-left"><i class="flaticon-time"></i>  {{$post->updated_at->format('h:i A').' (UTC)'}}</span>
 												<div class='text-right'>
 													<a class='backbutton' href="{{$lastURL}}" title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back"></a>
 												</div>
@@ -158,7 +158,7 @@
 											<a href = "{{url("profile/$userid")}}" title = "User Profile">{{$name}}</a>
 											<div class="fp-meta">
 												<span class="p-date"><i class="flaticon-days"></i> {{$forumreply->updated_at->format('d M Y')}}</span>
-												<span class="p-time"><i class="flaticon-time"></i> {{$forumreply->updated_at->format('h:i A')}}</span>
+												<span class="p-time"><i class="flaticon-time"></i> {{$forumreply->updated_at->format('h:i A').' (UTC)'}}</span>
 											</div>
 											@if(Auth::check())
 											@if($userid == Auth::User()->id)

@@ -23,12 +23,12 @@
 		<a href = "{{url("profile/$userid")}}" title = "User Profile">{{$name}}</a>
 			<div class="fp-meta">
 				<span class="p-date"><i class="flaticon-days"></i> {{$forumreply->updated_at->format('d M Y')}}</span>
-				<span class="p-time"><i class="flaticon-time"></i> {{$forumreply->updated_at->format('h:i A')}}</span>
+				<span class="p-time"><i class="flaticon-time"></i> {{$forumreply->updated_at->format('h:i A').' (UTC)'}}</span>
 			</div>
 			<div class="fp-action">
 				<button class='editforumreply' value='{{$forumreply->id}}' data-forumpostid = "{{$forumpostid}}" title="Edit Reply"><i class='flaticon-pencil'></i></button>
 				<button class='del-confirm-forum' data-forumtype = "reply" title="Delete Reply" value='{{$forumreply->id}}' data-forumpostid = "{{$forumpostid}}" ><i class='flaticon-garbage'></i></button>
 			</div>
 	</div>
-		<p class="more readmore"><?php echo forumPostContents(nl2br($forumreply->reply)); ?></p>
+	<p class="more readmore"><?php echo forumPostContents(nl2br($forumreply->reply)); ?></p>
 </div><!--/single post-->

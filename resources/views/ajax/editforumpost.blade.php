@@ -62,6 +62,7 @@ $(document).ready(function(){
 			var original =jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html();
 			var converted = emojione.toImage(original);
 			jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html(converted);
+			activateReadmore(jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p'));
 			}
 
 			else
@@ -99,6 +100,4 @@ $(document).ready(function(){
       // It can be called as many times as necessary; previously converted input fields will not be converted again
       window.emojiPicker.discover();
     });
-
-
 </script>

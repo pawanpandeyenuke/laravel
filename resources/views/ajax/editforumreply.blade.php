@@ -1,29 +1,29 @@
-  <div class="modal-dialog modal-md">
-	    <div class="modal-content" data-value="{{$forumreply->id}}">
-		    {!! Form::open(array('url' => '/ajax/editnewforumreply', 'id' => 'postform3', 'files' => true)) !!}
-		    	<div class="modal-body text-center">
-		        <div class="" id="">
-		        	@if(!empty($forumreply->reply))
-			        	<div class="edit-post-textarea" data-feed="{{$forumreply->id}}">
-							{!! Form::textarea('forumreply', $forumreply->reply, array(
-								'id' => 'forumreply', 
-								'class' => 'form-control',
-								'data-emojiable' => true,
-								'placeholder' => 'Type here..',
-								'data-emojiable' => 'true',
-							)) !!}
-			        	</div>
-		        	@endif
-		        </div>
-		      </div>
-		      <input type="hidden" value="{{$forumreply->id}}" name="id"></input>
-		      <div class="modal-footer">
-				{!! Form::button('Cancel', array('id' => 'submit-btn', 'class' => 'btn btn-default', 'data-dismiss' => 'modal')) !!}
-				{!! Form::submit('Submit', array('id' => 'submit-btn', 'class' => 'subcomment btn btn-primary')) !!}
-		      </div>
-	      	{!! Form::close() !!}
-	    </div>
-	  </div>
+<div class="modal-dialog modal-md">
+    <div class="modal-content" data-value="{{$forumreply->id}}">
+	    {!! Form::open(array('url' => '/ajax/editnewforumreply', 'id' => 'postform3', 'files' => true)) !!}
+	    	<div class="modal-body text-center">
+	        <div class="" id="">
+	        	@if(!empty($forumreply->reply))
+		        	<div class="edit-post-textarea" data-feed="{{$forumreply->id}}">
+						{!! Form::textarea('forumreply', $forumreply->reply, array(
+							'id' => 'forumreply', 
+							'class' => 'form-control',
+							'data-emojiable' => true,
+							'placeholder' => 'Type here..',
+							'data-emojiable' => 'true',
+						)) !!}
+		        	</div>
+	        	@endif
+	        </div>
+	      </div>
+	      <input type="hidden" value="{{$forumreply->id}}" name="id"></input>
+	      <div class="modal-footer">
+			{!! Form::button('Cancel', array('id' => 'submit-btn', 'class' => 'btn btn-default', 'data-dismiss' => 'modal')) !!}
+			{!! Form::submit('Submit', array('id' => 'submit-btn', 'class' => 'subcomment btn btn-primary')) !!}
+	      </div>
+      	{!! Form::close() !!}
+    </div>
+</div>
 
 <!-- <script type="text/javascript" src="/js/bootstrap-filestyle.min.js"></script>
 <script src="/lib/js/nanoscroller.min.js"></script>
@@ -61,6 +61,7 @@ $(document).ready(function(){
 			var original =jQuery('.forumreplylist').find('#forumreply_'+commentid).find('p').html();
 			var converted = emojione.toImage(original);
 			jQuery('.forumreplylist').find('#forumreply_'+commentid).find('p').html(converted);
+			activateReadmore(jQuery('.forumreplylist').find('#forumreply_'+commentid).find('p'));
 			}
 
 			else
