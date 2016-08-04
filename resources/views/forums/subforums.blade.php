@@ -223,7 +223,7 @@ if($mainforum->title == "Doctor")
             subcategory: { required: true },
             country: { required: true },
             state: { required: true },
-            city: {required: true},
+            // city: {required: true},
             cscdiseases: {required: true}
         },
         messages:{
@@ -285,30 +285,42 @@ if($mainforum->title == "Doctor")
 
 	$('#subcountry-forum').change(function(){
 		var countryId = $(this).val();
-		var _token = $('#searchform input[name=_token]').val();
-		$.ajax({			
-			'url' : '/ajax/getstates',
-			'data' : { 'countryId' : countryId, '_token' : _token },
-			'type' : 'post',
-			'success' : function(response){				
-				$('#substate-forum').html(response);
-			}			
-		});	
+		if( countryId )
+		{
+			var _token = $('#searchform input[name=_token]').val();
+			$.ajax({			
+				'url' : '/ajax/getstates',
+				'data' : { 'countryId' : countryId, '_token' : _token },
+				'type' : 'post',
+				'success' : function(response){				
+					$('#substate-forum').html(response);
+					$('#subcity-forum').html('<option value="">Select City</option>');
+				}			
+			});
+		} else {
+			$('#substate-forum').html('<option value="">Select State</option>');
+			$('#subcity-forum').html('<option value="">Select City</option>');
+		}
 	});
 
 	$('#substate-forum').change(function(){
 		var stateId = $(this).val();
-		var _token = $('#searchform input[name=_token]').val();
-		$.ajax({			
-			'url' : '/ajax/getcities',
-			'data' : { 'stateId' : stateId, '_token' : _token },
-			'type' : 'post',
-			'success' : function(response){
-				$('#subcity-forum').html(response);
-			}			
-		});	
+		if( stateId )
+		{
+			var _token = $('#searchform input[name=_token]').val();
+			$.ajax({			
+				'url' : '/ajax/getcities',
+				'data' : { 'stateId' : stateId, '_token' : _token },
+				'type' : 'post',
+				'success' : function(response){
+					$('#subcity-forum').html(response);
+				}			
+			});
+		} else {
+			$('#subcity-forum').html('<option value="">Select City</option>');
+		}
 	});
- </script>
+</script>
 
 @endsection
 {!! Session::forget('error') !!}

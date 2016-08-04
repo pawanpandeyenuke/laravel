@@ -378,12 +378,17 @@ class SearchController extends Controller
         $breadcrum = $input['mainforum']." > ";
         if($input['mainforum'] == "Doctor"){
          
-         if($input['subcategory'] == "international")
+            if($input['subcategory'] == "international")
                 $breadcrum = $breadcrum."International > ".$input['idiseases'];
-         else if($input['subcategory'] == "country")
+            else if($input['subcategory'] == "country")
                 $breadcrum = $breadcrum.$input['country1']." > ".$input['cdiseases'];
-          else if($input['subcategory'] == 'country,state,city')
-                $breadcrum = $breadcrum.$input['country']." > ".$input['state']." > ".$input['city']." > ".$input['cscdiseases'];  
+            else if($input['subcategory'] == 'country,state,city') {
+                $breadcrum = $breadcrum.$input['country']." > ".$input['state'];
+                if( $input['city'] ) {
+                    $breadcrum .= " > ".$input['city'];
+                }
+                $breadcrum .= " > ".$input['cscdiseases'];
+            }
          
          }else{
 
@@ -391,8 +396,12 @@ class SearchController extends Controller
                 $breadcrum = $breadcrum."International";
             else if($input['subcategory'] == "country")
                 $breadcrum = $breadcrum.$input['country1'];
-            else if($input['subcategory'] == 'country,state,city')
-                $breadcrum = $breadcrum.$input['country']." > ".$input['state']." > ".$input['city'];   
+            else if($input['subcategory'] == 'country,state,city'){
+                $breadcrum = $breadcrum.$input['country']." > ".$input['state'];
+                if( $input['city'] ) {
+                    $breadcrum .= " > ".$input['city'];
+                }
+            }
          }
 
          $posts = ForumPost::with('user')
@@ -408,9 +417,9 @@ class SearchController extends Controller
         $lastURL = URL::previous();
         $currentURL = URL::current();
         $lastURL = $lastURL==$currentURL ? url('/forums') : $lastURL;
-
+        
         Session::put('forum_post_request', $input);
-
+        
         return view('forums.viewforumposts')
                 ->with('posts',$posts)
                 ->with('lastURL',$lastURL)
@@ -420,8 +429,6 @@ class SearchController extends Controller
 
     public function searchForum()
     {
-  
-
         $input = Request::all();
         //print_r($input);die;
         $mainforum = Forums::where('id',$input['mainforum'])->value('title');
