@@ -1173,7 +1173,7 @@ comments;
 	public function sendBroadcast()
 	{
 		$input = Input::all();
-		$msg = $input['msg'];
+		$msg = nl2br($input['msg']);
 		$uid = Auth::User()->id;
 		$members = BroadcastMembers::where('broadcast_id',$input['bid'])->pluck('member_id');
 
@@ -1194,7 +1194,7 @@ comments;
                             );  
                 
                 BroadcastMessages::insert($data);
-				$model=new BroadcastMessages;
+				$model = new BroadcastMessages;
 
 						$data1 = '<div class="single-message">
 										<div class="clearfix">

@@ -29,7 +29,7 @@
 				 					<div class="single-message">
 										<div class="clearfix">
 											<div class="bcast-msg">
-												{{$data->broadcast_message}}
+												<?= nl2br($data->broadcast_message) ?>
 											</div>
 										</div>
 										<div class="bcast-msg-time">
