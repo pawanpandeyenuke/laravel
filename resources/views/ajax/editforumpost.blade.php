@@ -58,19 +58,18 @@ $(document).ready(function(){
 
 			if(comment!='')
 			{
-			jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html(comment);
-			var original =jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html();
-			var converted = emojione.toImage(original);
-			jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p').html(converted);
-			activateReadmore(jQuery('.forumpostlist').find('#forumpost_'+commentid).find('p'));
+				var obj = jQuery('.forumpostlist').find('#forumpost_'+commentid);
+				obj.find('p').html(comment);
+				obj.find('p').html( emojione.toImage(obj.find('p').html()) );
+				activateReadmore(obj.find('p'));
+				obj.find('.p-date').html('<i class="flaticon-days"></i> '+data.date);
+				obj.find('.p-time').html('<i class="flaticon-time"></i> '+data.time);
 			}
-
 			else
 			{
 				alert("Forum Post not updated.Post field can't eb empty");
 			}
 			 $('#forumpost-edit-modal').modal('hide');
-
 			}
 			 else if(response == "rep"){ 
 			 	$('#forumpost-edit-modal').find('.modal-footer .subcomment').hide();

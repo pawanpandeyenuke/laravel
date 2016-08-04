@@ -1500,8 +1500,12 @@ comments;
 					if($check == 0){
 					
 					ForumPost::where('id',$arguments['id'])->update(['title'=>$arguments['forumtitle']]);
-					$data = ['id'=>$arguments['id'],
-							 'title'=>forumPostContents(nl2br($arguments['forumtitle']))];
+					$data = [
+						'id'=>$arguments['id'],
+						'title'=>forumPostContents(nl2br($arguments['forumtitle'])),
+						'date' => date('d M Y'),
+						'time' => date('h:i A').' (UTC)'
+					];
 
 					echo json_encode($data);
 				   }
@@ -1732,7 +1736,12 @@ comments;
 		if($arguments['forumreply'] != "")
 		{
 			ForumReply::where('id',$arguments['id'])->update(['reply'=>$arguments['forumreply']]);
-			$data = ['id'=>$arguments['id'], 'reply'=>forumPostContents(nl2br($arguments['forumreply']))];
+			$data = [
+				'id' => $arguments['id'],
+				'reply'=> forumPostContents(nl2br($arguments['forumreply'])),
+				'date' => date('d M Y'),
+				'time' => date('h:i A').' (UTC)'
+			];
 			echo json_encode($data);
 		}
 		else
