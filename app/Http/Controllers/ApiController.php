@@ -1824,15 +1824,16 @@ class ApiController extends Controller
 					
 				$groupowner = Group::where('owner_id', $arguments['owner_id'])->get()->toArray();
 
-				if(empty($groupowner))
-					throw new Exception("No records found.", 1);
+				if(empty($groupowner)){
+					$this->status = 'success';
+					throw new Exception("No private groups found.", 1);
+				}
 
 				$groupIdsData = Group::with('groupMembers')
 									->where('owner_id', $arguments['owner_id'])
 									->get()
 									->toArray();
 
-				
 				$this->data = $groupIdsData;
 				$this->message = count($groupIdsData).' results found.';
 				$this->status = 'success';
