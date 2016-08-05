@@ -150,6 +150,7 @@ Route::post('/ajax/getchatgroup','AjaxController@getChatGroupList');
 Route::post('/ajax/isactivemember','AjaxController@isMemberActive');
 Route::post('/ajax/profilenameimage','AjaxController@profileNameImage');
 
+Route::post('/ajax/joingroup','AjaxController@joinPrivateGroup');
 /**
  * @Api Routes..
  *

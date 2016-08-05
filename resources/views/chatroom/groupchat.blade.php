@@ -133,7 +133,7 @@ $GroupsJidList = array();
                                               <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; ?>
 
                                               <li>
-                                                  <a title="" href="#" class='info' data-id="{{$data['user']['id']}}" >
+                                                  <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif class='info' data-id="{{$data['user']['id']}}" >
                                                       <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
                                                       <span class="title">{{ $data['user']['first_name'] }}</span>
                                                   
@@ -206,7 +206,7 @@ $GroupsJidList = array();
                                         <div class="chat-user-list StyleScroll">
 											<!-- private group List -->
                                           <ul>
-											  <?php $groups=array(); ?>
+											  <?php  $groups=array(); ?>
 										@foreach($privategroup as $data) 
 										<?php  $group_picture = !empty($data['picture']) ?'/uploads/'.$data['picture'] : '/images/post-img-big.jpg'; ?>	
 											  <li>
@@ -342,7 +342,7 @@ $GroupsJidList = array();
           if( groupname != '' || groupid != '' ) {
 						setTimeout( function(){
 							closePublic( groupid );
-						}  , 1000 );
+						}  , 2000 );
 					}
          
 					setTimeout( function(){
@@ -431,7 +431,7 @@ $GroupsJidList = array();
         				  message_carbons: true,
         				  forward_messages: true,
         				  allow_logout: false,
-        				  debug: true,
+        				  debug: false,
         				  auto_subscribe: true,
                   message_archiving: 'always',
                   auto_join_on_invite:true,
@@ -778,22 +778,25 @@ function closePublic( grpname ){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
 		var xmpp = jid.substring(0, jid.indexOf('@')); //jid.replace( conferencechatserver , '' );
-		if( xmpp == grpname ){
+    if( xmpp == grpname ){
 			getRooms.maximize();
 			openChat = 0;
 		} else {
 			var grouptype = xmpp.substr(xmpp.length - 3);
 			if( grouptype == 'pub' ){
 				getRooms.close();
+        $('[data-bid="'+jid+'"]').parent('.chat-head').remove();
 			} else if( $(this).css('display') == 'block' ){
 				getRooms.minimize();
 			}
 		}
 	});
+
 	if( openChat == 1 ){
 		conObj.rooms.open( grpname+conferencechatserver, '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
 	}
 }
+
 $('.status-r-btn').on('click',function(){
 	if ( $('#status_img_up').is(':checked') ) {
 		$('.status-img-up').show();

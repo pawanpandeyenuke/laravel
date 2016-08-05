@@ -1578,6 +1578,21 @@ $('.btn-upload-icon').find(".badge").remove();
 			});
 		}	
 	});
+
+	$(document).on('click', '.join-group', function(){    
+		var thisObj = $(this);
+		var GroupId = thisObj.data('value');
+		$.ajax({
+			'url' : 'ajax/joingroup',
+			'data' : { 'group_id' : GroupId },
+			'type' : 'post',
+			'success' : function(response){
+		        thisObj.parent().html( '<button data-forumtype="private-leave" class="btn btn-primary del-confirm-forum" value="'+GroupId+'">Leave Group</button>' );
+			}
+		});
+
+	});
+
 });
 
 function loadImg()

@@ -3620,3 +3620,6 @@ p.readmore {
 .p-likes.custm_p_likes.right{
 	right: 0px;
 }
+#conversejs .minimized-chats-flyout.flyout {
+    top: 35px;
+}

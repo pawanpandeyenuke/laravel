@@ -29,6 +29,7 @@
 								{
 									$name[]="You";
 									$count++;
+									$MyStatus = $mem['status'];
 								}
 								else{
 								$name[]=\App\User::where('id',$mem['member_id'])->value('first_name');
@@ -59,7 +60,9 @@
 											<div class="bl-del text-right">
 											<?php if($data['owner_id']==Auth::User()->id){ ?>
 												<button type="button" value="{{$data['id']}}" class="bl-del-btn del-confirm-forum" data-forumtype = "private"><i class="fa fa-trash"></i></button>
-												<?php } else{ ?>
+												<?php } else if( $MyStatus == 'Pending' ){ ?>
+													<button data-value="{{$data['id']}}" title=""  class="btn btn-primary join-group" >Join Group</button>
+												<?php } else { ?>
 												<button value="{{$data['id']}}" title=""  class="btn btn-primary del-confirm-forum" data-forumtype = "private-leave">Leave Group</button>
 												<?php }?>
 											</div>
