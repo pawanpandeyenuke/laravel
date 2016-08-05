@@ -81,7 +81,7 @@
 										{{$data->user->first_name." ".$data->user->last_name}}
 									</a>
 									<?php $rightClass = 'right'; ?>
-									@if(Auth::User()->id == $userid)
+									@if(Auth::Check() && Auth::User()->id == $userid)
 										<?php $rightClass = ''; ?>
 									@endif
 									<div class="p-likes custm_p_likes <?= $rightClass ?>">
