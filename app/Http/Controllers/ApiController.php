@@ -119,31 +119,33 @@ class ApiController extends Controller
 	 */
 	public function forgetPassword()
 	{
-		
-		try{			
-			$input = Request::all();			
-			if( $input['email'] ){
+		try
+		{
+			$input = Request::all();
+			$validator = Validator::make($input, ['email' => 'required|email']);
+			if($validator->fails()) {
+				throw new Exception( $this->getError($validator) );
+			} 
+			else 
+			{
 				$userEmailCheck = User::whereEmail($input['email'])->first();
-				
-				if( !$userEmailCheck )
+				if( !$userEmailCheck ) {
 					throw new Exception('No profile was found with this Email.');
+				}
 				
-				$this->data = $input;
-				
-				//~ $mail = Mail::send('auth.emails.password', $input, function($message) use ($input)
-				//~ {
-					//~ $message->from('no-reply@friendsquare.com', "Friend Square");
-					//~ $message->subject("Reset Password.");
-					//~ $message->to($input['email']);
-				//~ });
-				
+				$response = app()->make('App\Http\Controllers\Auth\PasswordController')->sendResetPasswordLink( Request::only('email') );
+				if( !is_bool( $response ) ) {
+					throw new Exception( $response );
+				}
+
+				$this->status = 'success';
+				$this->message = 'Reset password link sent successfully.';
 			}
-		}catch( Exception $e ){			
+		}catch( Exception $e ){
 			$this->message = $e->getMessage();		
 		}
-		
+			
 		return $this->output();
-		
 	}
 		
 		

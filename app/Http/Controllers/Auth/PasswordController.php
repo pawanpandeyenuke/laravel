@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Passwords\PasswordBroker;
 
 class PasswordController extends Controller
 {
@@ -25,11 +28,28 @@ class PasswordController extends Controller
      *
      * @return void
      */
-
-     protected $redirectTo = 'newpassword';
-     
-    public function __construct()
+    protected $redirectTo = 'newpassword';
+    public function __construct(Guard $auth, PasswordBroker $passwords)
     {
+        $this->auth = $auth;
+        $this->passwords = $passwords;
         $this->middleware('guest');
+    }
+    
+    // Send reset password link
+    public function sendResetPasswordLink($email)
+    {
+        $response = $this->passwords->sendResetLink($email, function($message) {
+            $message->subject('Password Reminder');
+        });
+
+        switch ($response)
+        {
+            case PasswordBroker::RESET_LINK_SENT:
+                return true;
+            
+            case PasswordBroker::INVALID_USER:
+                return trans($response);
+        }
     }
 }
