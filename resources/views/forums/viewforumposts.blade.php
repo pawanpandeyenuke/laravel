@@ -96,7 +96,7 @@
 									</a>
 
 									<?php $rightClass = 'right'; ?>
-									@if(Auth::User()->id == $userid)
+									@if(Auth::Check() && Auth::User()->id == $userid)
 										<?php $rightClass = ''; ?>
 									@endif
 
