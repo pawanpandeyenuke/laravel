@@ -575,7 +575,7 @@ class ApiController extends Controller
 				 	$ImageData = file_get_contents($path);
 				 	$ImageType = pathinfo($path, PATHINFO_EXTENSION);
 					$ImageData = base64_encode($ImageData);
-				 	// $image_name = Converse::setVcard($userfind->xmpp_username, $ImageData, $ImageType);
+				 	$image_name = Converse::setVcard($userfind->xmpp_username, $ImageData, $ImageType);
 	            }
  
 				User::where([ 'id' => $arguments['id'] ])->update([ 'picture' => $arguments['picture'] ]);
