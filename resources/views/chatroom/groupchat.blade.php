@@ -39,7 +39,7 @@
 
 <?php 
 $groupid = $group_jid;
-$GroupsJidList = array();
+$GroupsJidList = $SingleChatList = array();
 ?>
 <div class="page-data dashboard-body">
         <div class="container">
@@ -135,9 +135,12 @@ $GroupsJidList = array();
                                               <li>
                                                   <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif class='info' data-id="{{$data['user']['id']}}" >
                                                       <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
-                                                      <span class="title">{{ $data['user']['first_name'] }}</span>
-                                                  
-                                                  @if($data['user']['id'] != Auth::User()->id)
+                                                      <span class="title">{{ $data['user']['first_name'] }}</span>           
+                                                  <?php $SingleChatList[$data['user']['xmpp_username']]['title'] = $data['user']['first_name'];
+                                                  		$SingleChatList[$data['user']['xmpp_username']]['image'] = $user_picture;
+                                                  ?>
+                                                  </a>
+                                                   @if($data['user']['id'] != Auth::User()->id)
                                                     <?php 
                                                       $status = \App\Friend::where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
                                                       $status1 = \App\Friend::where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
@@ -160,8 +163,6 @@ $GroupsJidList = array();
 
                                                     @endif
                                                   @endif
-                                                                 
-                                                  </a>
                                               </li>
                                             @endforeach
                                             @endif
@@ -205,24 +206,30 @@ $GroupsJidList = array();
                                       <div class="panel-body">
                                         <div class="chat-user-list StyleScroll">
 											<!-- private group List -->
-                                          <ul>
+                                         
 											  <?php  $groups=array(); ?>
-										@foreach($privategroup as $data) 
-										<?php  $group_picture = !empty($data['picture']) ?'/uploads/'.$data['picture'] : '/images/post-img-big.jpg'; ?>	
-											  <li>
-												 <?php $groups[$data['group_jid']]=$data['title'];  ?> 	
-                         <?php $GroupsJidList[]= $data['group_jid'].'@conference.'.Config::get('constants.xmpp_host_Url'); //array( 'jid' => $data['group_jid'].'@conference.'.Config::get('constants.xmpp_host_Url'), 'nick' => Auth::User()->xmpp_username.'_'.Auth::User()->first_name);  ?> 							  
-												 
-												<div class="pvt-room-list" style="position:relative;" >
-													<a href="<?php echo url("private-group-detail/".$data['id']); ?>" >
-														<span class="chat-thumb" style="background: url('<?= $group_picture ?>');"></span>
-														<span class="title">{{$data['title']}}</span>
-													</a>
-													<button id="<?= $data['group_jid'] ?>" data-groupimage="<?= $group_picture ?>" onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>','<?= $group_picture ?>');" class="time">Chat</button>
-												 </div>
-											 </li>
-										@endforeach
-					                       </ul>
+										@if(!empty($privategroup))
+											 <ul>
+											@foreach($privategroup as $data) 
+											<?php  $group_picture = !empty($data['picture']) ?'/uploads/'.$data['picture'] : '/images/post-img-big.jpg'; ?>	
+												  <li>
+													 <?php $groups[$data['group_jid']]=$data['title'];  ?> 	
+	                         <?php $GroupsJidList[]= $data['group_jid'].'@conference.'.Config::get('constants.xmpp_host_Url'); //array( 'jid' => $data['group_jid'].'@conference.'.Config::get('constants.xmpp_host_Url'), 'nick' => Auth::User()->xmpp_username.'_'.Auth::User()->first_name);  ?> 							  
+													 
+													<div class="pvt-room-list" style="position:relative;" >
+														<a href="<?php echo url("private-group-detail/".$data['id']); ?>" >
+															<span class="chat-thumb" style="background: url('<?= $group_picture ?>');"></span>
+															<span class="title">{{$data['title']}}</span>
+														</a>
+														<button id="<?= $data['group_jid'] ?>" data-groupimage="<?= $group_picture ?>" onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>','<?= $group_picture ?>');" class="time">Chat</button>
+													 </div>
+												 </li>
+											@endforeach
+											 </ul>
+										@else 
+											<div class="text-center" ><br/><a class="add-blist-btn title="" href="{{url('private-group-add')}}"><i class="fa fa-plus"></i></a></div>
+										@endif
+					                      
 										</div><!--/chat user list-->
                                       </div>
                                     </div>
@@ -292,7 +299,9 @@ $GroupsJidList = array();
 <script type="text/javascript">
 	jQuery.noConflict();
 	var GroupName = <?php echo json_encode($groups); ?>;
-  var GroupAuto = <?php echo json_encode($GroupsJidList); ?>;
+    var GroupAuto = <?php echo json_encode($GroupsJidList); ?>;
+  	var SingleChatName = <?php echo json_encode($SingleChatList); ?>;
+
 	var encoderoomid = '';
     var userImage="{{$userpic}}";
  
@@ -320,7 +329,7 @@ $GroupsJidList = array();
 	var checkActiveGroupUrl = '<?= url('/ajax/isactivemember') ?>';
 	var GetProfileUrl = '<?= url('/ajax/profilenameimage') ?>';
 	var profiletitles = {};
-	
+	var myFullname = '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>';
 	
 	function webEncode( str ){
 		//return Base64.encode( str );
@@ -352,11 +361,18 @@ $GroupsJidList = array();
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
 					chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
+					var xmpp = chatbox.model.get('jid');
+					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
+					if( typeof SingleChatName[jidStr] != 'undefined' ){
+						var groupimage = SingleChatName[jidStr]['image'];
+						var grouptitle = SingleChatName[jidStr]['title'];
+						chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
+						chatbox.$el.find( '.chat-title' ).html( grouptitle );
+					}
 					//Emoji Picker
-					var jidStr = chatbox.model.get('jid');
 					if(waitProfile == 1 ){
 						setTimeout( function(){
-							hideOpendBox( jidStr, 2 );
+							hideOpendBox( xmpp, 2 );
 						}  , 1000 );
 					}
 					renderEmoji( chatbox );
@@ -614,9 +630,6 @@ $GroupsJidList = array();
 					
 	}
 
-
-	
-
 /*
 function openChatbox( xmpusername,username ){
    //var chatbox=conObj.chats.get(xmpusername+chatserver);
@@ -712,13 +725,13 @@ function hideOpendBox( grpname , actiontype ){
 
 function openChatGroup( grpjid,grpname,groupimage ){
 	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver );
+		conObj.rooms.open( grpjid+conferencechatserver , '<?= Auth::User()->xmpp_username ?>_<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
 	}
 }
 function openFirstChat( grpjid ){
 	groupChatRefresh( grpjid );
 	if( hideOpendBox( grpjid+conferencechatserver, 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver );
+		conObj.rooms.open( grpjid+conferencechatserver , '<?= Auth::User()->xmpp_username ?>_<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
 		$( '.chatnotification' ).remove();
 	}
 }
@@ -793,7 +806,7 @@ function closePublic( grpname ){
 	});
 
 	if( openChat == 1 ){
-		conObj.rooms.open( grpname+conferencechatserver, '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
+		conObj.rooms.open( grpname+conferencechatserver, '<?= Auth::User()->xmpp_username ?>_<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
 	}
 }
 
