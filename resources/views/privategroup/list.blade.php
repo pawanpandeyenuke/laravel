@@ -38,7 +38,7 @@
 
 							$group_picture = !empty($data['picture']) ? url('uploads/'.$data['picture']) : url('/images/post-img-big.jpg');
 							// echo '<pre>';print_r($group_picture);die;
-							$namestr=implode(",",$name);
+							$namestr=implode(", ",$name);
 
 							if(!($count==0) || $data['owner_id']==Auth::User()->id)
 							{          

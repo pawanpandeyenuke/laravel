@@ -575,7 +575,7 @@ class ApiController extends Controller
 				 	$ImageData = file_get_contents($path);
 				 	$ImageType = pathinfo($path, PATHINFO_EXTENSION);
 					$ImageData = base64_encode($ImageData);
-				 	// $image_name = Converse::setVcard($userfind->xmpp_username, $ImageData, $ImageType);
+				 	$image_name = Converse::setVcard($userfind->xmpp_username, $ImageData, $ImageType);
 	            }
  
 				User::where([ 'id' => $arguments['id'] ])->update([ 'picture' => $arguments['picture'] ]);
@@ -2150,24 +2150,29 @@ class ApiController extends Controller
 					unset( $arguments[$key] );
 			}
 
+
+			$changed = array();
+			$nameChanged = $imageChanged = false;
+			// Check if group nam has changed or not
+		    if($title != $group->title){
+		        $nameChanged = true;
+		        $changed[] = 'group name';
+		    }
+
+		    // Check if group image has changed or not
+		    if($picture != $group->picture){
+		        $imageChanged = true;
+		        $changed[] = 'group icon';
+		    }
+
 			$group->fill($arguments);
 			$saved = $group->push();
 
 			// Send hint message
-				$changed = array();
-				$nameChanged = $imageChanged = false;
-				// Check if group nam has changed or not
-			    if($title != $group->title){
-			        $nameChanged = true;
-			        $changed[] = 'group name';
-			    }
+				
 
-			    // Check if group image has changed or not
-			    if($picture != $group->picture){
-			        $imageChanged = true;
-			        $changed[] = 'group icon';
-			    }
-
+			 
+			    
 			    // Broadcast message
 			    if($changed)
 			    {
@@ -2177,7 +2182,6 @@ class ApiController extends Controller
 
 			        $ChatUser = $user->xmpp_username;
 			        $name = $user->first_name.' '.$user->last_name;
-			        
 			        foreach($members as $key => $val) 
 			        {
 			            $message = array( 'type' => 'hint', 'sender_jid' => $ChatUser, 'action'=>'group_info_change','message' => $name.' changed '.implode(' and ', $changed), 'changeBy' => $name, 'group_jid'=>$group_jid);
