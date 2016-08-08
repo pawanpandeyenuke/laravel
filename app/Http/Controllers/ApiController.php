@@ -1935,11 +1935,13 @@ class ApiController extends Controller
 												->update(['status' => 'Joined']);
 
 				// Broadcast message
-                $members = GroupMembers::where(['group_id' => $group->id])->get();
+                //$members = GroupMembers::where(['group_id' => $group->id])->get();
+                $members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id', $group->id)->pluck('xmpp_username');
+               	
                 $name = $user->first_name.' '.$user->last_name;
                 $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username, 'user_name'=>$name, 'message' => $name.' joined the group') );
-                foreach($members as $key => $val) {
-                    Converse::broadcastchatroom($group->group_jid, $name, $val->xmpp_username, $user->xmpp_username, $message);
+                foreach($members as $memberxmpp) {
+                    Converse::broadcastchatroom($group->group_jid, $name, $memberxmpp, $user->xmpp_username, $message);
                 };
 
 				if( $status ){
@@ -2169,9 +2171,7 @@ class ApiController extends Controller
 			$saved = $group->push();
 
 			// Send hint message
-				
 
-			 
 			    
 			    // Broadcast message
 			    if($changed)
