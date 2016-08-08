@@ -14,9 +14,9 @@ unset($countries[0]);
 	            <div class="row">
 
 	            @include('panels.left')
-<?php 
-			$icon_url = url('category_images/'.$p_group->img_url);
-?>
+				<?php 
+					$icon_url = url('category_images/'.$p_group->img_url);
+				?>
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title">
@@ -147,7 +147,7 @@ unset($countries[0]);
             subcategory: { required: true },
             country: { required: true },
             state: { required: true },
-            city: {required: true}
+            // city: {required: true}
         },
         messages:{
             subcategory:{
@@ -159,9 +159,9 @@ unset($countries[0]);
             state:{
                 required: "State is required."
             },
-            city:{
-                required: "City is required."
-            }
+            // city:{
+                // required: "City is required."
+            // }
         }
     });
 
@@ -182,32 +182,39 @@ unset($countries[0]);
 
 	$('#subcountry').change(function(){
 		var countryId = $(this).val();
-		var _token = $('#searchform input[name=_token]').val();
-		$.ajax({			
-			'url' : '/ajax/getstates',
-			'data' : { 'countryId' : countryId, '_token' : _token },
-			'type' : 'post',
-			'success' : function(response){				
-				$('#substate').html(response);
-			}			
-		});	
+		if(countryId){
+			var _token = $('#searchform input[name=_token]').val();
+			$.ajax({			
+				'url' : '/ajax/getstates',
+				'data' : { 'countryId' : countryId, '_token' : _token },
+				'type' : 'post',
+				'success' : function(response){				
+					$('#substate').html(response);
+					$('#subcity').html('<option value="">Select City</option>');
+				}			
+			});	
+		}else{
+			$('#substate').html('<option value="">Select State</option>');
+			$('#subcity').html('<option value="">Select City</option>');
+		}
 	});
 
 	$('#substate').change(function(){
 		var stateId = $(this).val();
-		var _token = $('#searchform input[name=_token]').val();
-		$.ajax({			
-			'url' : '/ajax/getcities',
-			'data' : { 'stateId' : stateId, '_token' : _token },
-			'type' : 'post',
-			'success' : function(response){
-				$('#subcity').html(response);
-			}			
-		});	
+		if(stateId){
+			var _token = $('#searchform input[name=_token]').val();
+			$.ajax({			
+				'url' : '/ajax/getcities',
+				'data' : { 'stateId' : stateId, '_token' : _token },
+				'type' : 'post',
+				'success' : function(response){
+					$('#subcity').html(response);
+				}			
+			});	
+		}else{
+			$('#subcity').html('<option value="">Select City</option>');
+		}
 	});
  </script>
-
-
-@endsection
-
 {!! Session::forget('error') !!}
+@endsection
