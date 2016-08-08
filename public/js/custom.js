@@ -1328,6 +1328,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			delBtn.text('Leave');
 		}else if( type == 'del-private-member' ){
 			delBtn.addClass('deluser');
+			delBtn.attr('data-gid',gid);
 			$('.modal-message').text("Are you sure you want to delete this user from  the group?");
 			delBtn.val(type_id);
 		}
