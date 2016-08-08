@@ -325,10 +325,13 @@ class DashboardController extends Controller
 
                  elseif($input['subcategory']=='Country, State, City'){
 
-                    $check_name = $input['parentname'].' > '.$input['country'].', '.$input['state'].', '.$input['city'];
+                    $check_name = $input['parentname'].' > '.$input['country'].', '.$input['state'];
                     $input['subcategory'] = preg_replace('/[^A-Za-z0-9\-]/', '_',$input['subcategory']);
 
                     $sub_name = 'csc'.'_'.$input['country'].'_'.$input['state'].'_'.$input['city'];
+                    if( $input['city'] ) {
+                        $check_name .= ', '.$input['city'];
+                    }
                  }
                     
 
