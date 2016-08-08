@@ -132,36 +132,38 @@ $GroupsJidList = $SingleChatList = array();
 
                                               <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; ?>
 
-                                              <li>
-                                                  <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif class='info' data-id="{{$data['user']['id']}}" >
-                                                      <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
-                                                      <span class="title">{{ $data['user']['first_name'] }}</span>           
-                                                  <?php $SingleChatList[$data['user']['xmpp_username']]['title'] = $data['user']['first_name'];
-                                                  		$SingleChatList[$data['user']['xmpp_username']]['image'] = $user_picture;
-                                                  ?>
-                                                  </a>
-                                                   @if($data['user']['id'] != Auth::User()->id)
-                                                    <?php 
-                                                      $status = \App\Friend::where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
-                                                      $status1 = \App\Friend::where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
-                                                      // echo '<pre>';print_r($status1);die;
-                                                      ?>
-                                                    @if($status != null || $status1 != null)
+                                              <li >
+                                                  <div class="get_id" data-userid="{{$data['user']['id']}}" style="position:relative;" >
+                                                    <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif class='info' data-id="{{$data['user']['id']}}" >
+                                                        <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
+                                                        <span class="title">{{ $data['user']['first_name'] }}</span>           
+                                                    <?php $SingleChatList[$data['user']['xmpp_username']]['title'] = $data['user']['first_name'];
+                                                    		$SingleChatList[$data['user']['xmpp_username']]['image'] = $user_picture;
+                                                    ?>
+                                                    </a>
+                                                     @if($data['user']['id'] != Auth::User()->id)
+                                                      <?php 
+                                                        $status = \App\Friend::where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
+                                                        $status1 = \App\Friend::where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
+                                                        // echo '<pre>';print_r($status1);die;
+                                                        ?>
+                                                      @if($status != null || $status1 != null)
 
-                                                        @if($status == 'Accepted')
-                                                          <button class='time' onclick="openChatbox(<?php echo "'".$data['user']['xmpp_username']."', '".$data['user']['first_name']."'"?>);">Chat</button>
-                                                        @elseif($status=='Pending')
-                                                          <span class='time'>Sent</span>                                            
-                                                        @elseif($status1=='Pending')                                                  
-                                                          <span class='time'></span>
-                                                        @endif
+                                                          @if($status == 'Accepted')
+                                                            <button class='time' onclick="openChatbox(<?php echo "'".$data['user']['xmpp_username']."', '".$data['user']['first_name']."'"?>);">Chat</button>
+                                                          @elseif($status=='Pending')
+                                                            <span class='time'>Sent</span>                                            
+                                                          @elseif($status1=='Pending')                                                  
+                                                            <span class='time'></span>
+                                                          @endif
 
-                                                    @else 
+                                                      @else 
 
-                                                        <button type="button" class="time btn btn-sm btn-chat btn-primary invite">Invite</button>
-                                                        <span class='time sentinvite' style="display: none;">Sent</span>
+                                                          <button type="button" class="time btn btn-sm btn-chat btn-primary invite">Invite</button>
+                                                          <span class='time sentinvite' style="display: none;">Sent</span>
 
-                                                    @endif
+                                                      @endif
+                                                      </div>
                                                   @endif
                                               </li>
                                             @endforeach
