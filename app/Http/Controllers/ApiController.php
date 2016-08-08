@@ -1834,7 +1834,9 @@ class ApiController extends Controller
 									->get()
 									->toArray();
 
-				$this->data = $groupIdsData;
+				$JoinedGroupsCount = Group::where('owner_id',$arguments['owner_id'])->get()->count();
+	            $MaxGroupLimit = Config::get('constants.private_group_limit');
+				$this->data = array( 'max_group_limit' =>$MaxGroupLimit,'joined_groups_count'=>$JoinedGroupsCount,'data' => $groupIdsData );
 				$this->message = count($groupIdsData).' results found.';
 				$this->status = 'success';
  
@@ -2018,7 +2020,7 @@ class ApiController extends Controller
 				$name = $owner_data->first_name.' '.$owner_data->last_name;
 				$members = User::whereIn('id', GroupMembers::where('group_id', $group->id)->pluck('member_id')->toArray())->select('id as user_id', DB::raw('CONCAT(first_name, " ", last_name) AS username'), 'xmpp_username as xmpp_userid')->get()->toArray();
 
-				$message = json_encode( array( 'type' => 'room', 'groupname' => $group->title, 'sender_jid' => $owner_data->xmpp_username, 'groupjid'=>$group_jid, 'group_image' => $group->picture, 'created_by'=>$name,'message' => 'This invitation is for joining the '.$group->title.' group.', 'users' => $members) );
+				$message = json_encode( array( 'user_id' => $owner_data->id, 'user_image'=> $owner_data->picture ,'type' => 'room', 'groupname' => $group->title, 'sender_jid' => $owner_data->xmpp_username, 'groupjid'=>$group_jid, 'group_image' => $group->picture, 'created_by'=>$name,'message' => 'This invitation is for joining the '.$group->title.' group.', 'users' => $members) );
                 
                 foreach($new_members as $val){
                     Converse::broadcast($owner_data->xmpp_username, $val->xmpp_username, $message);
