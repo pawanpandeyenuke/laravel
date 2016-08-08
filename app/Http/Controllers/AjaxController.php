@@ -1334,7 +1334,7 @@ comments;
 		 * */
 		$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
 		$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name
-		$message 		= array( 'type' => 'hint',  'action'=>'group_info_change','sender_jid' => $userJid, 'groupname' => $GroupName, 'message' => webEncode($name.' changed group name'), 'changeBy' => $name, 'group_jid'=>$GroupDetail->group_jid);
+		$message 		= json_encode(array( 'type' => 'hint',  'action'=>'group_info_change','sender_jid' => $userJid, 'groupname' => $GroupName, 'message' => webEncode($name.' changed group name'), 'changeBy' => $name, 'group_jid'=>$GroupDetail->group_jid) );
 		$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$GroupId)->pluck('xmpp_username');		
 		foreach ($xmp as $key => $value) {
 			Converse::broadcastchatroom( $GroupDetail->group_jid, $name, $value, $userJid, $message ); // message broadcast per group member
@@ -1417,7 +1417,7 @@ comments;
 			$groupDetail = 	Group::where('id',$groupId)->select( 'group_jid' )->first(); // group details 
 			$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
 			$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name
-			$message 		= array( 'type' => 'hint',  'action'=>'group_info_change','sender_jid' => $userJid, 'group_image' => $img, 'message' => webEncode( $name.' changed group image' ), 'changeBy' => $name, 'group_jid'=>$groupDetail->group_jid);
+			$message 		= json_encode(array( 'type' => 'hint',  'action'=>'group_info_change','sender_jid' => $userJid, 'group_image' => $img, 'message' => webEncode( $name.' changed group image' ), 'changeBy' => $name, 'group_jid'=>$groupDetail->group_jid));
 			$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$groupId)->pluck('xmpp_username');		
 			foreach ($xmp as $key => $value) {
 				Converse::broadcastchatroom( $groupDetail->group_jid, $name, $value, $userJid, $message ); // message broadcast per group member
