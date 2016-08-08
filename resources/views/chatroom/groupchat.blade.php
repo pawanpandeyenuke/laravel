@@ -133,8 +133,8 @@ $GroupsJidList = $SingleChatList = array();
                                               <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; ?>
 
                                               <li >
-                                                  <div class="get_id" data-userid="{{$data['user']['id']}}" style="position:relative;" >
-                                                    <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif class='info' data-id="{{$data['user']['id']}}" >
+                                                  <div class='info' data-id="{{$data['user']['id']}}" style="position:relative;" >
+                                                    <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif  data-id="{{$data['user']['id']}}" >
                                                         <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
                                                         <span class="title">{{ $data['user']['first_name'] }}</span>           
                                                     <?php $SingleChatList[$data['user']['xmpp_username']]['title'] = $data['user']['first_name'];
