@@ -449,7 +449,7 @@ $GroupsJidList = $SingleChatList = array();
                   send_initial_presence:true,
                   visible_toolbar_buttons: {'toggle_occupants':false,'clear':false,'emoticons':false,'call': false},
                   auto_reconnect: true,
-        				  ping_interval: 0,
+        				  ping_interval: 5,
         				  message_carbons: true,
         				  forward_messages: true,
         				  allow_logout: false,
