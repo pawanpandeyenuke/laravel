@@ -239,6 +239,8 @@
 		//$data=json_encode($data);
 		$data=json_encode($data,true);
 
+        // echo $data;die;
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_URL, "https://android.googleapis.com/gcm/send");
