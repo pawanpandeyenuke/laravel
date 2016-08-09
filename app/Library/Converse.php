@@ -246,16 +246,16 @@ class Converse
         $data = array(
         			'registration_ids' => array( $token ),
             		'data'=>array(
-                            'message'   => $data_array['message'],
-                            'title'     => 'From: Mayank123',
-                            'subtitle'  => 'My-subtitle',
-                            'tickerText'=> 'My tickerText',
-                            'vibrate'   => 1,
-                            'sound'     => 1,
-                            'largeIcon' => 'large_icon',
-                            'smallIcon' => 'small_icon'
-                    ),
-                    'notification_type' => $data_array['notification_type'],
+                        'message'   => $data_array['message'],
+                        'title'     => 'From: Mayank123',
+                        'subtitle'  => 'My-subtitle',
+                        'tickerText'=> 'My tickerText',
+                        'vibrate'   => 1,
+                        'sound'     => 1,
+                        'largeIcon' => 'large_icon',
+                        'notification_type' => $data_array['notification_type'],
+                        'smallIcon' => 'small_icon'
+                    )                    
             	);
 
         $msg = 'Message not delivered';   
