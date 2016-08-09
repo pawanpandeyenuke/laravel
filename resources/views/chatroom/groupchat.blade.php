@@ -365,12 +365,15 @@ $GroupsJidList = $SingleChatList = array();
 					chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
 					var xmpp = chatbox.model.get('jid');
 					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
-					if( typeof SingleChatName[jidStr] != 'undefined' ){
-						var groupimage = SingleChatName[jidStr]['image'];
-						var grouptitle = SingleChatName[jidStr]['title'];
-						chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
-						chatbox.$el.find( '.chat-title' ).html( grouptitle );
-					}
+					setTimeout( function(){
+            if( typeof SingleChatName[jidStr] != 'undefined' ){
+  						var groupimage = SingleChatName[jidStr]['image'];
+  						var grouptitle = SingleChatName[jidStr]['title'];
+              chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
+  						chatbox.$el.find( '.chat-title' ).html( grouptitle );
+  					
+            }
+          }  , 1000 );
 					//Emoji Picker
 					if(waitProfile == 1 ){
 						setTimeout( function(){
@@ -526,28 +529,54 @@ $GroupsJidList = $SingleChatList = array();
 
         $(document).on('click','#search',function() {
             var name=$('.searchtxt').val();
-               $.ajax({
-                'url' : "{{url('/ajax/searchfriend')}}",
-                'type' : 'post',
-                'data' : {'name':name},
-                'success' : function(data){
-                    $("#userslist").html(data);
-                }       
+            $.ajax({
+              'url' : "{{url('/ajax/searchfriend')}}",
+              'type' : 'post',
+              'dataType' : 'json',
+              'async' : false,
+              'data' : {'name':name,'format':'json'},
+              'success' : function(data){
+                  var friendList = '';
+                  if( data.status == 0 ){
+                   friendList = data.data;
+                  } else {
+                    $.each( data.data , function( k, v ){
+                      SingleChatName[v.xmpp] = JSON.stringify({image:v.image,title:v.name});
+
+                      friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\''+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
+
+                    });
+                  }
+                   $("#userslist").html(friendList);
+              }       
             });
         });
 
         $(document).on('keypress', '.searchtxt', function(e){
             var key = e.which;
-            if(key == 13){
+            if( key == 13 ){
                 var name=$('.searchtxt').val();
-                   $.ajax({
+                  $.ajax({
                     'url' : "{{url('/ajax/searchfriend')}}",
                     'type' : 'post',
-                    'data' : {'name':name},
+                    'dataType' : 'json',
+                    'async' : false,
+                    'data' : {'name':name,'format':'json'},
                     'success' : function(data){
-                        $("#userslist").html(data);
+                        var friendList = '';
+                        if( data.status == 0 ){
+                         friendList = data.data;
+                        } else {
+                          $.each( data.data , function( k, v ){
+                            SingleChatName[v.xmpp] = JSON.stringify({image:v.image,title:v.name});
+
+                            friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\''+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
+
+                          });
+                        }
+                         $("#userslist").html(friendList);
                     }       
-                });
+                  });
             }
         }); 
 

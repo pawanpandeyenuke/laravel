@@ -1834,7 +1834,9 @@ class ApiController extends Controller
 									->get()
 									->toArray();
 
-				$this->data = $groupIdsData;
+				$JoinedGroupsCount = Group::where('owner_id',$arguments['owner_id'])->get()->count();
+	            $MaxGroupLimit = Config::get('constants.private_group_limit');
+				$this->data = array( 'max_group_limit' =>$MaxGroupLimit,'joined_groups_count'=>$JoinedGroupsCount,'data' => $groupIdsData );
 				$this->message = count($groupIdsData).' results found.';
 				$this->status = 'success';
  
@@ -1935,11 +1937,13 @@ class ApiController extends Controller
 												->update(['status' => 'Joined']);
 
 				// Broadcast message
-                $members = GroupMembers::where(['group_id' => $group->id])->get();
+                //$members = GroupMembers::where(['group_id' => $group->id])->get();
+                $members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id', $group->id)->pluck('xmpp_username');
+               	
                 $name = $user->first_name.' '.$user->last_name;
                 $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username, 'user_name'=>$name, 'message' => $name.' joined the group') );
-                foreach($members as $key => $val) {
-                    Converse::broadcastchatroom($group->group_jid, $name, $val->xmpp_username, $user->xmpp_username, $message);
+                foreach($members as $memberxmpp) {
+                    Converse::broadcastchatroom($group->group_jid, $name, $memberxmpp, $user->xmpp_username, $message);
                 };
 
 				if( $status ){
@@ -2016,7 +2020,7 @@ class ApiController extends Controller
 				$name = $owner_data->first_name.' '.$owner_data->last_name;
 				$members = User::whereIn('id', GroupMembers::where('group_id', $group->id)->pluck('member_id')->toArray())->select('id as user_id', DB::raw('CONCAT(first_name, " ", last_name) AS username'), 'xmpp_username as xmpp_userid')->get()->toArray();
 
-				$message = json_encode( array( 'type' => 'room', 'groupname' => $group->title, 'sender_jid' => $owner_data->xmpp_username, 'groupjid'=>$group_jid, 'group_image' => $group->picture, 'created_by'=>$name,'message' => 'This invitation is for joining the '.$group->title.' group.', 'users' => $members) );
+				$message = json_encode( array( 'user_id' => $owner_data->id, 'user_image'=> $owner_data->picture ,'type' => 'room', 'groupname' => $group->title, 'sender_jid' => $owner_data->xmpp_username, 'groupjid'=>$group_jid, 'group_image' => $group->picture, 'created_by'=>$name,'message' => 'This invitation is for joining the '.$group->title.' group.', 'users' => $members) );
                 
                 foreach($new_members as $val){
                     Converse::broadcast($owner_data->xmpp_username, $val->xmpp_username, $message);
@@ -2169,9 +2173,7 @@ class ApiController extends Controller
 			$saved = $group->push();
 
 			// Send hint message
-				
 
-			 
 			    
 			    // Broadcast message
 			    if($changed)
