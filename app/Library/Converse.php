@@ -254,7 +254,7 @@ class Converse
                             'sound'     => 1,
                             'largeIcon' => 'large_icon',
                             'smallIcon' => 'small_icon'
-                    )
+                    ),
                     'notification_type' => $data_array['notification_type'],
             	);
 
