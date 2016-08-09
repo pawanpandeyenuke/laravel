@@ -365,12 +365,15 @@ $GroupsJidList = $SingleChatList = array();
 					chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
 					var xmpp = chatbox.model.get('jid');
 					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
-					if( typeof SingleChatName[jidStr] != 'undefined' ){
-						var groupimage = SingleChatName[jidStr]['image'];
-						var grouptitle = SingleChatName[jidStr]['title'];
-						chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
-						chatbox.$el.find( '.chat-title' ).html( grouptitle );
-					}
+					setTimeout( function(){
+            if( typeof SingleChatName[jidStr] != 'undefined' ){
+  						var groupimage = SingleChatName[jidStr]['image'];
+  						var grouptitle = SingleChatName[jidStr]['title'];
+              chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
+  						chatbox.$el.find( '.chat-title' ).html( grouptitle );
+  					
+            }
+          }  , 1000 );
 					//Emoji Picker
 					if(waitProfile == 1 ){
 						setTimeout( function(){
