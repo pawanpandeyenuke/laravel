@@ -136,9 +136,10 @@ unset($countries[0]);
 
             </div>
         </div>
-    </div><!--/pagedata-->
-<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script> -->
- <script type="text/javascript">
+    </div>
+<script type="text/javascript">
+jQuery(function($){
+	$('select').val('');
 
     $("#chatsubgroupsvalidate").validate({ 
         errorElement: 'span',
@@ -146,8 +147,7 @@ unset($countries[0]);
         rules: {
             subcategory: { required: true },
             country: { required: true },
-            state: { required: true },
-            // city: {required: true}
+            state: { required: true }
         },
         messages:{
             subcategory:{
@@ -158,15 +158,11 @@ unset($countries[0]);
             },
             state:{
                 required: "State is required."
-            },
-            // city:{
-                // required: "City is required."
-            // }
+            }
         }
     });
-
     
-        $("#countryform").validate({ 
+    $("#countryform").validate({ 
         errorElement: 'span',
         errorClass: 'help-inline',
         rules: {
@@ -178,8 +174,7 @@ unset($countries[0]);
             }
         }
     });
-
-
+    
 	$('#subcountry').change(function(){
 		var countryId = $(this).val();
 		if(countryId){
@@ -215,6 +210,7 @@ unset($countries[0]);
 			$('#subcity').html('<option value="">Select City</option>');
 		}
 	});
- </script>
+});
+</script>
 {!! Session::forget('error') !!}
 @endsection
