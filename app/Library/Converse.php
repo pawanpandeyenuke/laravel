@@ -243,8 +243,9 @@ class Converse
 	// @ Return Response For Push Notification In Android
     static function pushNotificationAndroid( $data_array, $token )
     {   
-        $data=array('registration_ids'=>array( $token ),
-            'data'=>array(
+        $data = array(
+        			'registration_ids' => array( $token ),
+            		'data'=>array(
                             'message'   => $data_array['message'],
                             'title'     => 'From: Mayank123',
                             'subtitle'  => 'My-subtitle',
@@ -253,8 +254,11 @@ class Converse
                             'sound'     => 1,
                             'largeIcon' => 'large_icon',
                             'smallIcon' => 'small_icon'
-                        ));
-        $msg='Message not delivered';   
+                    )
+                    'notification_type' => $data_array['notification_type'],
+            	);
+
+        $msg = 'Message not delivered';   
         
         if(androidPushNotification($data)) $msg='Message successfully delivered';
         return $msg;
