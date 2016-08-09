@@ -22,7 +22,7 @@ class Broadcast extends Model
 
    	public function broadcastMembers()
 	{
-		return $this->hasMany('App\BroadcastMembers', 'broadcast_id', 'id')->join('users', 'users.id', '=', 'broadcast_members.member_id')->select('broadcast_members.broadcast_id', 'broadcast_members.member_id', 'users.first_name','users.last_name','users.xmpp_username');
+		return $this->hasMany('App\BroadcastMembers', 'broadcast_id', 'id')->join('users', 'users.id', '=', 'broadcast_members.member_id')->select('broadcast_members.broadcast_id', 'broadcast_members.member_id', 'users.first_name','users.last_name','users.xmpp_username', 'users.picture');
 	}
 
 }
