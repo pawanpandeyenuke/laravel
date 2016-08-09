@@ -21,7 +21,7 @@
 		$breadcrumb = !empty($rawBreadcrumbData) ? $rawBreadcrumbData : '';
 
 		$replyLikesCount = isset($reply->replyLikesCount[0]) ? $reply->replyLikesCount[0]['replyLikesCount'] : 0;
-		$pic = !empty($replyUser->picture) ? $replyUser->picture : url('images/user-thumb.jpg');
+		$pic = !empty($replyUser->picture) ? $replyUser->picture : 'images/user-thumb.jpg';
 		$likedata = \App\ForumReplyLikes::where(['owner_id' => $user_id, 'reply_id' => $reply->id])->get();
 	?>
 	<div class="forum-post-list">
@@ -74,7 +74,7 @@
 					$commentLocation = implode(', ', $rawCommentCountry);
 
 					$replyComment = !empty($comment->reply_comment) ? $comment->reply_comment : '';
-					$commentUserPic = !empty($commentUser->picture) ? $commentUser->picture : url('images/user-thumb.jpg');
+					$commentUserPic = !empty($commentUser->picture) ? $commentUser->picture : 'images/user-thumb.jpg';
 				?>
 				<div class="single-post">
 					<div class="post-header">
