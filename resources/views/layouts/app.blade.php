@@ -108,8 +108,6 @@
 		
 	@yield('content')
 
-	@include('panels.footer')
-
 {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript" >
