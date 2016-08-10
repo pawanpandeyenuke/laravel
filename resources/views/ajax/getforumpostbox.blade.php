@@ -38,7 +38,10 @@
 			</div>
 		</div><!--/post header-->
 		<div class="pop-post-text clearfix">
-			<p class='readmore'><?php echo nl2br(forumPostContents($reply->reply,'#')); ?></p>
+			<p class='readmore'>
+				<?php // echo nl2br(forumPostContents($reply->reply,'#')); ?>
+				<?php echo nl2br($reply->reply); ?>		
+			</p>
 		</div>
 	</div>
 	<div class="post-footer pop-post-footer">
