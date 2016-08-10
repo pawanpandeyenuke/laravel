@@ -21,21 +21,33 @@
 			</a>
 				<span class="p-date"><i class="flaticon-days"></i> {{$data->updated_at->format('d M Y')}}</span>
 				<span class="p-time"><i class="flaticon-time"></i> {{$data->updated_at->format('h:i A').' (UTC)'}}</span>
-
-				<div class="p-likes">
-					<div class="like-cont">
-						<input type="checkbox" name="" id="checkbox{{$data->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$data->id}}" {{ isset($likedata[0])?'checked':'' }}/>	
-						<label for="checkbox{{$data->id}}" class="css-label"></label>
-					</div>
-					<span class="plike-count">{{$likeCount}}</span>
-				</div>
-
 			</div>
 
 			<div class="f-post-title">
 			<a href="{{url("profile/$userid")}}" title="User Profile">
 				{{$data->user->first_name." ".$data->user->last_name}}
 			</a>
+
+			<?php $rightClass = 'right'; ?>
+			@if(Auth::Check() && Auth::User()->id == $userid)
+				<?php $rightClass = ''; ?>
+			@endif
+
+			<div class="p-likes custm_p_likes <?= $rightClass ?>">
+				<div class="like-cont">
+					<!-- <input type="checkbox" name="" id="checkbox{{$data->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$data->id}}" {{ isset($likedata[0])?'checked':'' }}/>	
+					<label for="checkbox{{$data->id}}" class="css-label"></label> -->
+					@if(Auth::check())
+						<input type="checkbox" name="" title="Like Post" id="checkbox_forumpost_{{$data->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$data->id}}" {{ isset($likedata[0])?'checked':'' }}/>	
+						<label for="checkbox_forumpost_{{$data->id}}" title="Like Post" class="css-label"></label>
+					@else
+					<input type="checkbox" disabled="disabled" name="" id="guest" class="css-checkbox"/>
+					  <label for="guest" data-toggle="modal" data-target="#LoginPop" class="css-label"></label>
+					@endif
+				</div>
+				<span class="plike-count">{{$likeCount}}</span>
+			</div>
+
 			@if(Auth::check())
 			@if($data->user->id == Auth::user()->id)
 				<div class="fp-action">
