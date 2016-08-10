@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Friendz Square</title>
 <link href="{{url('/css/bootstrap.css')}}" rel="stylesheet">
 <link href="{{url('/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
@@ -106,9 +106,11 @@
 	</div>
 </header><!--/header-->
 		
-		@yield('content')
+	@yield('content')
 
-		{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+	@include('panels.footer')
+
+{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript" >
 
