@@ -392,8 +392,8 @@ Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
 	Route::get('newpassword','SearchController@newPassword');
 	Route::post('newpassword','SearchController@newPassword');
 
-	Route::get('terms-conditions','SearchController@termsConditions');
-	Route::post('terms-conditions','SearchController@termsConditions');
+	Route::get('terms','SearchController@terms');
+	Route::get('privacy-policy','SearchController@privacyPolicy');
 
 	Route::get('send-verification-link','SearchController@verify');
 	Route::post('send-verification-link','SearchController@verify');

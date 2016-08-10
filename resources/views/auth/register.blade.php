@@ -264,21 +264,17 @@ $userdata = session('userdata');
     <div class="page-footer">
         <div class="text-center">
             <ul>
-                <li><a href="{{url('terms-conditions')}}" title="">Terms Privacy</a></li>
-                <li><a href="#" title="">&copy; 2015 friendzsquare</a></li>
+                <li><a href="{{url('terms')}}" title="Terms of Use">Terms of Use</a></li>
+                <li><a href="{{url('privacy-policy')}}" title="Privacy Policy">Privacy Policy</a></li>
+                <li><a href="#" title="">&copy; 2016 friendzsquare</a></li>
             </ul>
         </div>
     </div>
 </div><!--/pagedata-->
 
-<!-- <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script> -->
-<script type="text/javascript" >
-
-function getValidationArray(mobCode){
-
-    // console.log(mobCode);
-    // alert(mobCode);
+<script type="text/javascript">
+function getValidationArray(mobCode)
+{
     var countryMobValidLengthArray = <?php print_r(json_encode(countryMobileLength(),1));?>;
     var countryMobValidLength = countryMobValidLengthArray[mobCode];
     if(countryMobValidLength == undefined){
@@ -289,53 +285,39 @@ function getValidationArray(mobCode){
 }
 
 $(document).ready(function () {
+    $(document).on('change', '#mob-country', function(){
+        $('#mobileContact').val('');
+        var countryId = $(this).val();
+        $.ajax({
+            'url': 'ajax/mob-country-code',
+            'data': { 'countryId': countryId },
+            'type': 'post',
+            'success': function(response){
 
-        // $('.country-code-field').val('+000');
+                var mobCode = response[0].phonecode;
 
-        $(document).on('change', '#mob-country', function(){
-                $('#mobileContact').val('');
-                var countryId = $(this).val();
-                $.ajax({
-                    'url': 'ajax/mob-country-code',
-                    'data': { 'countryId': countryId },
-                    'type': 'post',
-                    'success': function(response){
-
-                        var mobCode = response[0].phonecode;
-
-                        $('.country-code-field').val(mobCode);
-                        $('.country-code-field-span').html(mobCode);
-                        $('.country-code-field').attr('data-value', mobCode);
-                        //var validArray = getValidationArray(mobCode);
-                    }
-                })
-
-        });
-
-
-        $(document).on('focus', '#mobileContact', function(){
-            var array = $('.country-code-field').val();
-            var validArray = getValidationArray(array);
-            $('#mobileContact').prop('minlength', validArray.min);
-            $('#mobileContact').prop('maxlength', validArray.max);
-
-            $('#mobileContact').parent().find('#groupname-error').remove();
-            //alert(validArray.min);
-
-            var mobileContact = $('#mobileContact').val();
-            if(mobileContact.length < validArray.min){
-                // alert('invalid value');
-                $('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
+                $('.country-code-field').val(mobCode);
+                $('.country-code-field-span').html(mobCode);
+                $('.country-code-field').attr('data-value', mobCode);
+                //var validArray = getValidationArray(mobCode);
             }
         });
+    });
 
+    $(document).on('focus', '#mobileContact', function(){
+        var array = $('.country-code-field').val();
+        var validArray = getValidationArray(array);
+        $('#mobileContact').prop('minlength', validArray.min);
+        $('#mobileContact').prop('maxlength', validArray.max);
 
-/*        $(document).on('blur', '#mobileContact', function(){
+        $('#mobileContact').parent().find('#groupname-error').remove();
+        
+        var mobileContact = $('#mobileContact').val();
+        if(mobileContact.length < validArray.min){
+            $('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
+        }
+    });
 
-    
-        });*/
-
- 
     $("#registerForm").validate({ 
         errorElement: 'span',
         errorClass: 'help-inline',
@@ -375,11 +357,6 @@ $(document).ready(function () {
         }
     });
 
-
-});
-
-
-
     //disabling texts for mobile fields
     $(document).on('keypress','.numeric,input[type="number"]', function(evt){
         evt = (evt) ? evt : window.event;
@@ -398,9 +375,9 @@ $(document).ready(function () {
         e.preventDefault();
     });
 
-
     // Opens popup for app download links
     $('#sendMsg2').modal('show');
+});
 </script>
-@endsection
 {{ Session::forget('userdata') }}
+@endsection
