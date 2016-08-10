@@ -3632,3 +3632,6 @@ p.readmore {
 .mt-20{
 	margin-top:20px;
 }
+.terms, .privacy {
+	font-size:15px;
+}

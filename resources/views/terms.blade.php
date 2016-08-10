@@ -4,7 +4,7 @@
 @section('content')
 <div class="container">
 	<div class="row">
-	    <div class="col-md-12 mt-10">
+	    <div class="col-md-12 mt-10 terms">
 	    	<h3 class='text-center'><b>Terms of Use</b></h3>
 	        Friendz Square application on any internet enabled device is collectively referred here in this Terms of Use as "Friendz Square" ("We"). <br> <br>
 

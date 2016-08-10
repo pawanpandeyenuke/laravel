@@ -4,7 +4,7 @@
 @section('content')
 <div class="container">
 	<div class="row">
-	    <div class="col-md-12 mt-10">
+	    <div class="col-md-12 mt-10 privacy">
 	    	<h3 class='text-center'><b>Privacy Policy</b></h3>
 	        Friendz square application on any internet enabled device is collectively referred here in this Privacy Policy as "Friendz square" ("We"). <br> <br>
 
