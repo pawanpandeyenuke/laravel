@@ -206,10 +206,14 @@ class SearchController extends Controller
         }
     }
 
-
-    public function termsConditions()
+    public function terms()
     {
-        return view('terms-conditions');
+        return view('terms');
+    }
+
+    public function privacyPolicy()
+    {
+        return view('privacy-policy');
     }
 
     /******* FORUMS ********/
