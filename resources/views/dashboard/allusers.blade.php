@@ -35,10 +35,10 @@
 						<i class="flaticon-people"></i> {{$count}} results found for "{{$keyword}}"
 					</div>
 	
-						<div class="tab-style-no-border">
-@if (Session::has('success'))
-		<div class="alert alert-success">{!! Session::get('success') !!}</div>
-	@endif
+					<div class="tab-style-no-border">
+						@if (Session::has('success'))
+								<div class="alert alert-success">{!! Session::get('success') !!}</div>
+						@endif
 
 					  <!-- Nav tabs -->
 						  <!-- <ul role="tablist" class="nav nav-tabs"> -->
@@ -67,7 +67,7 @@
 						<ul class="counting">
 														
 @foreach($model1 as $data) 
-	<?php 
+	<?php $data = (array) $data;
 	$user_picture = !empty($data['picture']) ? $data['picture'] : 'images/user-thumb.jpg';
 	$id1=Auth::User()->id;
 			$name = $data['first_name'].' '.$data['last_name'];
@@ -150,7 +150,7 @@
 					<ul class="counting">
 														
 				@foreach($model1 as $data) 
-	<?php
+	<?php $data = (array) $data;
 			$user_picture = !empty($data['picture']) ? $data['picture'] : 'images/user-thumb.jpg';
 			$name = $data['first_name'].' '.$data['last_name'];
 	?>

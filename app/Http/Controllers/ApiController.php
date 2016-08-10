@@ -88,6 +88,10 @@ class ApiController extends Controller
 		        $user->access_token = $access_token;
 		        $user->save();
 
+		        // Save default settings
+		        DB::table('settings')->insert(['setting_title'=>'contact-request','setting_value'=>'all','user_id'=>$user->id]);
+        		DB::table('settings')->insert(['setting_title'=>'friend-request','setting_value'=>'all','user_id'=>$user->id]);
+        		
 		        $useremail = $userdata->email;
 		        $emaildata = array(
 		            'confirmation_code' => $confirmation_code,
