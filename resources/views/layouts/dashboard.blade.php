@@ -61,7 +61,7 @@
 			<div class="col-sm-2">
 				<a href="/dashboard" title="" class="logo"><img src="{{url('/images/logo.png')}}" alt="Friendz Square"></a>
 			</div>
-			<div class="col-sm-7">
+			<div class="col-sm-7 bPadding">
 				<div class="top-search-cont">
 					<div class="row">
 						<div class="col-sm-6">
@@ -207,7 +207,7 @@
     });
 
     function googleTranslateElementInit() {
-      new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+      new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
     }
 
 </script>

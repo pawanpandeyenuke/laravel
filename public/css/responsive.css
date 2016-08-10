@@ -188,6 +188,25 @@
   .emoji-menu{left:-70px !important;}
 }
 
+/**** Custom esponsive Css 9 Aug 2016 ****/
+@media only screen and (min-device-width : 240px) and (max-device-width : 767px)
+{
+  .innr_hdr #google_translate_element 
+  {
+    float: left;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    width: 100%;
+  }
+  
+  .goog-te-menu2
+  {
+    width:320px !important;
+    overflow:scroll !important;
+  }
+}
+
+/**** Custom esponsive Css 9 Aug 2016 ****/
 
 
 

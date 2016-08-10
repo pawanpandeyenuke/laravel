@@ -339,3 +339,31 @@ span.loc img{
   top: 0;
   width: 100%;
 }
+
+
+
+
+
+.goog-te-gadget .goog-te-combo {
+  
+  color: #000;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 10px 0 7px !important;
+  padding: 8px;
+  background-color:#fff;
+  border:1px solid #ddd;
+  border-radius:5px;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+}
+
+.skiptranslate.goog-te-gadget {
+  font-size: 0;
+}
+
+.goog-logo-link
+  {
+    display: none !important;
+
+  }
