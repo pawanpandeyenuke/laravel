@@ -129,20 +129,16 @@ class AuthController extends Controller
         $message->to($useremail,$username)->subject('Verify your email address');
         });
        
-        DB::table('settings')->insert(['setting_title'=>'contact-request','setting_value'=>'All','user_id'=>$userdata->id]);
+        DB::table('settings')->insert(['setting_title'=>'contact-request','setting_value'=>'all','user_id'=>$userdata->id]);
 
-
-        DB::table('settings')->insert(['setting_title'=>'friend-request','setting_value'=>'All','user_id'=>$userdata->id]);
+        DB::table('settings')->insert(['setting_title'=>'friend-request','setting_value'=>'all','user_id'=>$userdata->id]);
 
         $converse = new Converse;
         $response = $converse->register($xmppUserDetails->xmpp_username, $xmppUserDetails->xmpp_password);
         
         Session::put('success', 'Verification link has been sent to your registered email. Please check your inbox and verify email.<a href="#" title="" data-toggle="modal" data-target="#LoginPop">  Login</a>');
-    
-        $this->redirectTo = 'send-verification-link';
-        return $userdata;
-
         
+        $this->redirectTo = 'send-verification-link';
+        return $userdata;   
     }
-
 }

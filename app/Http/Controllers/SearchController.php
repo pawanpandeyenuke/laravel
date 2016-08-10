@@ -11,89 +11,190 @@ use App\Setting;
 
 class SearchController extends Controller
 {
-    
     public function searchFromUsers()
     {
         if(Request::isMethod('post'))
         {
-
             $input = Request::all();
             $keyword = trim($input['searchfriends']);
-
-            if($keyword == "")
+            if($keyword == "") {
                 return redirect('/');
-
-            $authUserId = isset(Auth::User()->id) ? Auth::User()->id : '';
-
-            $model = new User;
-
-            // Search for the following people.
-            if(trim($keyword) != ''){
-
-                $model = $model->where( function( $query ) use ( $input, $keyword ) {
-                    $expVal = explode(' ', $keyword);
-                    foreach( $expVal as $key => $value ) {                          
-                        $query->orWhere( 'last_name', 'LIKE', '%'. $value.'%' )
-                            ->orWhere( 'first_name', 'LIKE', '%'. $value.'%' );  
-                    }
-                });
-
             }
 
-            if( $authUserId != '' ){
+            $authUserId = Auth::check() ? Auth::User()->id : 0;
+            //$authUserId = 65;
 
-                // Search for user's who are not friends with me.
-                $model = $model->whereNotIn('id', Friend::where('user_id', '=', $authUserId)
-                                ->where('status', '=', 'Accepted')
-                                ->pluck('friend_id')
-                                ->toArray() );
+            // Search users
+            if( !$authUserId )
+            {
+                $model = DB::table('users')
+                    ->select('users.*')
+                    ->join('settings as s', 'users.id', '=', 's.user_id')
+                    ->where('s.setting_title', 'friend-request')
+                    ->where('s.setting_value', 'all')
+                    ->where( function( $query ) use ( $input, $keyword ) {
+                        $expVal = explode(' ', $keyword);
+                        foreach( $expVal as $key => $value ) {                          
+                            $query->orWhere( 'users.last_name', 'LIKE', '%'. $value.'%' )
+                                ->orWhere( 'users.first_name', 'LIKE', '%'. $value.'%' );  
+                        }
+                    });
+            }
+            else
+            {
+                $user = Auth::user();
+                $mySetting = Setting::where(['user_id' => $authUserId, 'setting_title' => 'contact-request'])->value('setting_value');
 
+                // Get friends of friends
+                $arr = $myFriends = Friend::where('user_id',$authUserId)->where('status', 'Accepted')->pluck('friend_id')->toArray();
+                $arr[] = $authUserId;
+                $fof = Friend::whereIn('user_id', $myFriends)->whereNotIn('friend_id', $arr)->where('status', 'Accepted')->pluck('friend_id')->toArray();
 
-                /*$reqByMe = Setting::where(['user_id' => $authUserId, 'setting_title' => 'friend-request'])->value('setting_value');
-                
-                if(!empty($reqByMe))
+                if( $mySetting == 'friends-of-friends' )
                 {
-                    if($reqByMe == 'friends-of-friends'){
+                    $union1 = DB::table('users')
+                        ->select('users.*')
+                        ->join('settings as s', 'users.id', '=', 's.user_id')
+                        ->where('s.setting_title', 'friend-request')
+                        ->where(function($query){
+                            $query->where('s.setting_value', 'friends-of-friends')
+                                ->orWhere('s.setting_value', 'all');
+                        })
+                        ->whereIn('users.id', $fof)
+                        ->where( function( $query ) use ( $input, $keyword ) {
+                            $expVal = explode(' ', $keyword);
+                            foreach( $expVal as $key => $value ) {                          
+                                $query->orWhere( 'users.last_name', 'LIKE', '%'. $value.'%' )
+                                    ->orWhere( 'users.first_name', 'LIKE', '%'. $value.'%' );
+                            }
+                        });
 
-                        $myfriends = Friend::where('user_id', $authUserId)->where('status', 'Accepted')->pluck('friend_id')->toArray();
-                        
-                        $myfriendsFriends = Friend::whereIn('user_id', $myfriends)->where('friend_id', '!=', $authUserId)->where('status', 'Accepted')->pluck('friend_id')->toArray();
+                    $union2 = DB::table('users')
+                        ->select('users.*')
+                        ->join('settings as s', 'users.id', '=', 's.user_id')
+                        ->where('s.setting_title', 'friend-request')
+                        ->where('s.setting_value', 'nearby-app-user')
+                        ->whereIn('users.id', $fof)
+                        ->where('users.country', $user->country)
+                        ->where('users.state', $user->state)
+                        ->where('users.city', $user->city)
+                        ->where( function( $query ) use ( $input, $keyword ) {
+                            $expVal = explode(' ', $keyword);
+                            foreach( $expVal as $key => $value ) {                          
+                                $query->orWhere( 'users.last_name', 'LIKE', '%'. $value.'%' )
+                                    ->orWhere( 'users.first_name', 'LIKE', '%'. $value.'%' );
+                            }
+                        });
 
-                        $model = $model->whereIn('id', $myfriendsFriends);
+                    $model = $union1->union($union2);
+                }
+                elseif( $mySetting == 'nearby-app-user' )
+                {
+                    $union1 = DB::table('users')
+                        ->select('users.*')
+                        ->join('settings as s', 'users.id', '=', 's.user_id')
+                        ->where('s.setting_title', 'friend-request')
+                        ->where(function($query){
+                            $query->where('s.setting_value', 'nearby-app-user')
+                                ->orWhere('s.setting_value', 'all');
+                        })
+                        ->where('users.country', $user->country)
+                        ->where('users.state', $user->state)
+                        ->where('users.city', $user->city)
+                        ->where( function( $query ) use ( $input, $keyword ) {
+                            $expVal = explode(' ', $keyword);
+                            foreach( $expVal as $key => $value ) {                          
+                                $query->orWhere( 'users.last_name', 'LIKE', '%'. $value.'%' )
+                                    ->orWhere( 'users.first_name', 'LIKE', '%'. $value.'%' );
+                            }
+                        });
 
-                        // echo '<pre>';print_r($model->get()->toArray());die;
+                    $union2 = DB::table('users')
+                        ->select('users.*')                        
+                        ->join('settings as s', 'users.id', '=', 's.user_id')
+                        ->where('s.setting_title', 'friend-request')
+                        ->where('s.setting_value', 'friends-of-friends')
+                        ->where('users.country', $user->country)
+                        ->where('users.state', $user->state)
+                        ->where('users.city', $user->city)
+                        ->whereIn('users.id', $fof)
+                        ->where( function( $query ) use ( $input, $keyword ) {
+                            $expVal = explode(' ', $keyword);
+                            foreach( $expVal as $key => $value ) {                          
+                                $query->orWhere( 'users.last_name', 'LIKE', '%'. $value.'%' )
+                                    ->orWhere( 'users.first_name', 'LIKE', '%'. $value.'%' );
+                            }
+                        });
+                    $model = $union1->union($union2);
+                }
+                else
+                {
+                    // Users with fof settings 
+                    $union1 = DB::table('users')
+                        ->select('users.*')
+                        ->join('settings as s', 'users.id', '=', 's.user_id')
+                        ->where('s.setting_title', 'friend-request')
+                        ->where('s.setting_value', 'friends-of-friends')
+                        ->whereIn('users.id', $fof)
+                        ->where( function( $query ) use ( $input, $keyword ) {
+                            $expVal = explode(' ', $keyword);
+                            foreach( $expVal as $key => $value ) {                          
+                                $query->orWhere( 'users.last_name', 'LIKE', '%'. $value.'%' )
+                                    ->orWhere( 'users.first_name', 'LIKE', '%'. $value.'%' );
+                            }
+                        });
 
-                        // return $model;
+                    // Users with nearby settings
+                    $union2 = DB::table('users')
+                        ->select('users.*')
+                        ->where('users.country', $user->country)
+                        ->where('users.state', $user->state)
+                        ->where('users.city', $user->city)
+                        ->join('settings as s', 'users.id', '=', 's.user_id')
+                        ->where('s.setting_title', 'friend-request')
+                        ->where('s.setting_value', 'nearby-app-user')
+                        ->where( function( $query ) use ( $input, $keyword ) {
+                            $expVal = explode(' ', $keyword);
+                            foreach( $expVal as $key => $value ) {                          
+                                $query->orWhere( 'users.last_name', 'LIKE', '%'. $value.'%' )
+                                    ->orWhere( 'users.first_name', 'LIKE', '%'. $value.'%' );
+                            }
+                        });
 
-                    }elseif($reqByMe == 'nearby-app-user'){
+                    // Users with all settings
+                    $union3 = DB::table('users')
+                        ->select('users.*')
+                        ->join('settings as s', 'users.id', '=', 's.user_id')
+                        ->where('s.setting_title', 'friend-request')
+                        ->where('s.setting_value', 'all')
+                        ->where( function( $query ) use ( $input, $keyword ) {
+                            $expVal = explode(' ', $keyword);
+                            foreach( $expVal as $key => $value ) {                          
+                                $query->orWhere( 'users.last_name', 'LIKE', '%'. $value.'%' )
+                                    ->orWhere( 'users.first_name', 'LIKE', '%'. $value.'%' );
+                            }
+                        });
 
-                    }elseif($reqByMe == 'all'){
-
-                    }
-                }*/
-
+                    $model = $union1->union($union2)->union($union3);
+                }
             }
 
+            $count = DB::select(DB::raw("select count(*) as total from (".$model->toSql().") as f"));
+            $count = 0;
+            
             // $model = self::settingSearch($model);
 
             // Gather all the results from the queries and paginate it.
-            $count = $model->get()->count();
-            $result = $model->orderBy('id','desc')->take(10)->get();   
-
-            $model1 = $result->toArray(); 
+            $result = $model->take(10)->get();
             
             $auth = ($authUserId != '') ? 1 : 0;
-
             return view('dashboard.allusers')
-                ->with('model1',$model1)
+                ->with('model1',$result)
                 ->with('count',$count)
                 ->with('keyword',$input['searchfriends'])
-                ->with('auth',$auth);    
-        
+                ->with('auth',$auth);
         }
-        
     }
-
 
 /*    public function settingSearch($model)
     {
