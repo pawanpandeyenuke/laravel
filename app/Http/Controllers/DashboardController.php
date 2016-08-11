@@ -764,7 +764,7 @@ class DashboardController extends Controller
 						 GroupMembers::insert($data1);  
 					}
 					array_push($input['groupmembers'],$userid);
-					$xmp = User::whereIn('id',$input['groupmembers'])->select('xmpp_username as xmpp_userid','id as user_id')->get();
+					$xmp = User::whereIn('id',$input['groupmembers'])->select('xmpp_username as xmpp_userid','id as user_id','first_name as username','picture as user_image')->get();
 					$Message = json_encode( array( 'type' => 'room', 'groupname' => $GroupTitle, 'sender_jid' => $userXamp, 'groupjid'=>$GroupJid, 'group_image' => '', 'created_by'=>$name,'message' => webEncode('This invitation is for joining the '.$GroupTitle.' group.'), 'users' => $xmp) );
 
 					foreach ($xmp as $key => $value) {
