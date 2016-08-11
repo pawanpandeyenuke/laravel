@@ -324,7 +324,7 @@ $GroupsJidList = $SingleChatList = array();
     var groupid = "{{$groupid}}";
     var exception = "{{$exception}}";
 	var is_first = true;  
-	var userImagesUrl = "{{url('/images')}}/";
+	var userImagesUrl = "{{url('/uploads/user_img')}}/";
 	var waitProfile = 0;
 	var defaultImage = "{{url('/images/post-img-big.jpg')}}";
 	var baseUrl = '<?= url('/') ?>';
