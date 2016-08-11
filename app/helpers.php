@@ -511,4 +511,18 @@ function getFileType($filename)
         return 'image';
     }
 }
+
+
+    function userImage( $object )
+    {
+        // if($object->picture){
+
+            $userpic = !empty($object->picture) ? url('/uploads/user_img/'.$object->picture) : url('/images/user-thumb.jpg');
+
+            return $userpic;
+        // }
+
+    }
+
+
 ?>

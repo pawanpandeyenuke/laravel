@@ -40,23 +40,22 @@
 					@endif
 
 					
-					<div class="p-header-outer">
-						<div class="profile-header">
+			<div class="p-header-outer">
+				<div class="profile-header">
 
-							<?php $userpic = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg'; ?>
-							<div id="profile-pic-holder" class="profile-img" style="background: url('{{ $userpic }}');">
-								<input type="file" id="profilepicture" name="picture" class="filestyle" data-input="false" data-iconName="glyphicon glyphicon-camera" data-buttonText="" data-buttonName="edit-pr-img">
-							</div><!--Profile-img-->
-							<div class="pr-field">
-								<input type="text" class="pr-edit pr-name" value="{{ $user->first_name }}" name="first_name">
-								<input type="text" class="pr-edit pr-name" value="{{ $user->last_name }}" name="last_name">
-							</div>
-							<div class="pr-field">
-								<span>{{$user->city}}</span>
-								
-							</div>
-						</div><!--/profile header-->
+					<div id="profile-pic-holder" class="profile-img" style="background: url('<?php echo userImage($user) ?>');">
+						<input type="file" id="profilepicture" name="picture" class="filestyle" data-input="false" data-iconName="glyphicon glyphicon-camera" data-buttonText="" data-buttonName="edit-pr-img">
+					</div><!--Profile-img-->
+					<div class="pr-field">
+						<input type="text" class="pr-edit pr-name" value="{{ $user->first_name }}" name="first_name">
+						<input type="text" class="pr-edit pr-name" value="{{ $user->last_name }}" name="last_name">
 					</div>
+					<div class="pr-field">
+						<span>{{$user->city}}</span>
+						
+					</div>
+				</div><!--/profile header-->
+			</div>
 
 					<div class="profile-detail">
 						<div class="row">

@@ -21,13 +21,13 @@
 		$breadcrumb = !empty($rawBreadcrumbData) ? $rawBreadcrumbData : '';
 
 		$replyLikesCount = isset($reply->replyLikesCount[0]) ? $reply->replyLikesCount[0]['replyLikesCount'] : 0;
-		$pic = !empty($replyUser->picture) ? $replyUser->picture : 'images/user-thumb.jpg';
+		// $pic = !empty($replyUser->picture) ? $replyUser->picture : 'images/user-thumb.jpg';
 		$likedata = \App\ForumReplyLikes::where(['owner_id' => $user_id, 'reply_id' => $reply->id])->get();
 	?>
 	<div class="forum-post-list">
 		<div class="single-post">
 			<div class="post-header">
-				<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
+				<span class="u-img" style="background: url('<?php echo userImage($replyUser) ?>');"></span>
 				<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name }}</span>
 				<div class="post-time">
 					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">{{ $reply->updated_at->format('d M Y') }}</span>
@@ -74,12 +74,12 @@
 					$commentLocation = implode(', ', $rawCommentCountry);
 
 					$replyComment = !empty($comment->reply_comment) ? $comment->reply_comment : '';
-					$commentUserPic = !empty($commentUser->picture) ? $commentUser->picture : 'images/user-thumb.jpg';
+					// $commentUserPic = !empty($commentUser->picture) ? $commentUser->picture : 'images/user-thumb.jpg';
 				?>
 				<div class="single-post">
 					<div class="post-header">
 
-						<span class="u-img" style="background: url('<?= url($commentUserPic)?>');"></span>
+						<span class="u-img" style="background: url('<?php echo userImage($commentUser) ?>');"></span>
 						<span class="title">{{ $commentUser->first_name.' '.$commentUser->last_name }}</span>
 						<span class="loc">
 							<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($commentLocation)?$commentLocation:'N/A' }}

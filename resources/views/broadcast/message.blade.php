@@ -10,7 +10,7 @@
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title no-left-padding">
 						<div class="bclist-detail bcast-title">
-							<div class="bc-img" style="background: url('/images/user-thumb.jpg');"></div>
+							<div class="bc-img" style="background: url('/images/post-img-big.jpg');"></div>
 							<div class="list-name">
 								<a href="#" class="bc-name" title="">{{$title}}</a>
 							</div>

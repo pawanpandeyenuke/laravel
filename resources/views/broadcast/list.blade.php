@@ -27,7 +27,7 @@
 										<div class="row">
 											<div class="col-sm-9">
 												<div class="bclist-detail bclist1">
-													<div class="bc-img" style="background: url('images/user-thumb.jpg');"></div>
+													<div class="bc-img" style="background: url('images/post-img-big.jpg');"></div>
 													<div class="list-name">
 														<a href="broadcast-msg/{{$data['id']}}" class="bc-name"  title="">{{$data['title']}}</a>
 													</div>

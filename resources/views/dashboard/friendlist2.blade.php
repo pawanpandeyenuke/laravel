@@ -16,7 +16,7 @@
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="user-cont">
-				<?php $profileimage = !empty($data['picture']) ? $data['picture'] : '/images/user-thumb.jpg'; ?>
+				<?php $profileimage = !empty($data['picture']) ? url('/uploads/user_img/'.$data['picture']) : url('/images/user-thumb.jpg'); ?>
 					<a title="" href="profile/{{$data['id']}}">
 						<span style="background: url('{{$profileimage}}');" class="user-thumb"></span>
 					{{ $name }}
@@ -108,7 +108,7 @@ $status2=\App\Friend::where('friend_id',$data['id'])->where('user_id',Auth::User
 		}
 		else{
 			$name = $data['friends']['first_name'].' '.$data['friends']['last_name'];
-			$profileimage = !empty($data['friends']['picture']) ? $data['friends']['picture'] : '/images/user-thumb.jpg';
+			$profileimage = !empty($data['friends']['picture']) ? url('/uploads/user_img/'.$data['friends']['picture']) : url('/images/user-thumb.jpg');
 			$viewid=$data['friends']['id'];
 
 		}

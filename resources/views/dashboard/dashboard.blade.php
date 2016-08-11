@@ -131,8 +131,10 @@
 									<div class="row">
 										<div class="col-md-7">
 											<a href="profile/{{$data->user->id}}" title="" class="user-thumb-link">
-												<?php $profileimage = !empty($data->user->picture) ? $data->user->picture : '/images/user-thumb.jpg' ?>
-												<span class="small-thumb" style="background: url('{{ $profileimage }}');"></span>
+												
+												<?php $user = $data->user; ?>
+
+												<span class="small-thumb" style="background: url('<?php echo userImage($user) ?>');"></span>
 												{{ $data->user->first_name.' '.$data->user->last_name }}
 											</a>
 										</div>
@@ -232,8 +234,6 @@
 
 														$username = \App\User::where('id', $commentsData['commented_by'])->get(['first_name', 'last_name', 'picture'])->first();
 
-														$profileimage = !empty($username->picture) ? $username->picture : '/images/user-thumb.jpg';
-
 														$userId = \App\User::where('id', $commentsData['commented_by'])->get(['id']);
 
 														if(!empty($username)){
@@ -248,7 +248,7 @@
 																	<button type="button" class="p-del-btn comment-delete" ><span class="glyphicon glyphicon-remove"></span></button>
 																<?php } ?>
 															
-																<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
+																<span class="user-thumb" style="background: url('<?php echo userImage($username) ?>');"></span>
 																<div class="comment-title-cont">
 																	<div class="row">
 																		<div class="col-sm-6">

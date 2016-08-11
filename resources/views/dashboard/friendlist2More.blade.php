@@ -8,7 +8,7 @@
 		}
 		else{
 			$name = $data['friends']['first_name'].' '.$data['friends']['last_name'];
-			$profileimage = !empty($data['friends']['picture']) ? $data['friends']['picture'] : '/images/user-thumb.jpg';
+			$profileimage = !empty($data['friends']['picture']) ? url('/uploads/user_img/'.$data['friends']['picture']) : url('/images/user-thumb.jpg');
 			$viewid=$data['friends']['id'];
 
 		}

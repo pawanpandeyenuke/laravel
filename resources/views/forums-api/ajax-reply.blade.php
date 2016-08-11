@@ -17,7 +17,7 @@
 
 		$replyCommentsCount = isset($reply->replyCommentsCount[0]) ? $reply->replyCommentsCount[0]['replyCommentsCount'] : 0;
 
-		$pic = !empty($replyUser->picture) ? $replyUser->picture : url('images/user-thumb.jpg');
+		// $pic = !empty($replyUser->picture) ? $replyUser->picture : url('images/user-thumb.jpg');
 
 		$likedata = \App\ForumReplyLikes::where(['owner_id' => $user_id, 'reply_id' => $reply->id])->get();
 	?>
@@ -38,7 +38,7 @@
 			  	@endif
 		  	@endif
 
-			<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
+			<span class="u-img" style="background: url('<?php echo userImage($replyUser) ?>');"></span>
 			<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name }}</span>
 			<span class="loc">
 				<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($replyLocation)?$replyLocation:'N/A' }}

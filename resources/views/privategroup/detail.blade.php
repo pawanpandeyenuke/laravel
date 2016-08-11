@@ -53,7 +53,7 @@ $group_picture = isset($groupdetail[0]) ? url('/uploads/'.$groupdetail[0]['pictu
 											}else{
 											$fname=$data['first_name']." ".$data['last_name'];
 											}
-											$user_picture = !empty($data['picture']) ? $data['picture'] : '/images/user-thumb.jpg';
+											$user_picture = !empty($data['picture']) ? url('/uploads/user_img/'.$data['picture']) : url('/images/user-thumb.jpg');
 											 ?>
 											<div class="single-list private-member-{{$data['id']}}">
 												<div class="row" data-gid="{{$groupid}}">

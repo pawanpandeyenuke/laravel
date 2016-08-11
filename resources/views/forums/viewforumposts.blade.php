@@ -69,7 +69,8 @@
 											else
 												$replyCount = 0;
 									$userid = $user->id;
-									$profileimage = !empty($data->user->picture) ? $user->picture : '/images/user-thumb.jpg';
+									// $profileimage = !empty($data->user->picture) ? $user->picture : '/images/user-thumb.jpg';
+									$userdata = $data->user;
 									if(Auth::check()){
 									$likedata = \App\ForumLikes::where(['owner_id' => Auth::User()->id, 'post_id' => $data->id])->get(); 
 									
@@ -83,7 +84,7 @@
 									}
 									?>
 										<a href="{{url("profile/$userid")}}" title="User Profile">
-											<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
+											<span class="user-thumb" style="background: url('<?php echo userImage($userdata) ?>');"></span>
 										</a>
 										<span class="p-date"><i class="flaticon-days"></i> {{$data->updated_at->format('d M Y')}}</span>
 										<span class="p-time"><i class="flaticon-time"></i> {{$data->updated_at->format('h:i A').' (UTC)'}}</span>

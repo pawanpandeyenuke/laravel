@@ -4,15 +4,15 @@
 <?php //echo '<pre>';print_r($data['friends']);die; ?>
 
 	<?php
- 		$profileimage = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; 
+ 		$profileimage = !empty($data['user']['picture']) ? url('/uploads/user_img/'.$data['user']['picture']) : url('/images/user-thumb.jpg'); 
 
 		if($data['friend_id'] == Auth::User()->id){
 			$name = $data['user']['first_name'].' '.$data['user']['last_name'];
-			$profileimage = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; 
+			$profileimage = !empty($data['user']['picture']) ? url('/uploads/user_img/'.$data['user']['picture']) : url('/images/user-thumb.jpg'); 
 			$userid = $data['user']['id'];
 		}else{
 			$name = $data['friends']['first_name'].' '.$data['friends']['last_name'];
-			$profileimage = !empty($data['friends']['picture']) ? $data['friends']['picture'] : '/images/user-thumb.jpg'; 
+			$profileimage = !empty($data['friends']['picture']) ? url('/uploads/user_img/'.$data['friends']['picture']) : url('/images/user-thumb.jpg'); 
 		$userid = $data['friends']['id'];
 		}
 

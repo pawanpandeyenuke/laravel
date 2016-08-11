@@ -13,9 +13,9 @@
 
 				<div class="row">
 					<div class="col-md-7">
-				<?php $user_picture = !empty($data->user->picture) ? $data->user->picture : 'images/user-thumb.jpg'; ?>
+						<?php $user = $data->user; ?>
 						<a href="profile/{{$data->user->id}}" title="" class="user-thumb-link">
-							<span class="small-thumb" style="background: url('{{$user_picture}}');"></span>
+							<span class="small-thumb" style="background: url('<?php echo userImage($user) ?>');"></span>
 							{{ $data->user->first_name.' '.$data->user->last_name }}
 						</a>
 					</div>
@@ -129,7 +129,7 @@
 											<button type="button" class="p-del-btn comment-delete" data-toggle="modal" data-target=".comment-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 
 								<?php } ?>
-											<span class="user-thumb" style="background: url('{{$user_picture}}');"></span>
+											<span class="user-thumb" style="background: url('<?php echo userImage($username[0]) ?>');"></span>
 											<div class="comment-title-cont">
 												<div class="row">
 													<div class="col-sm-6">

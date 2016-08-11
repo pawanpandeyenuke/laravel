@@ -18,7 +18,7 @@
 		$location = implode(', ', $rawCountry);
 		$postTitle = !empty($checkpost->title) ? $checkpost->title : '';
 		$breadcrumb = !empty($checkpost->forum_category_breadcrum) ? $checkpost->forum_category_breadcrum : '';
-		$pic = !empty($user->picture) ? $user->picture : 'images/user-thumb.jpg';
+		// $pic = !empty($user->picture) ? $user->picture : 'images/user-thumb.jpg';
 
 		$likedata = \App\ForumLikes::where(['owner_id' => $user_id, 'post_id' => $checkpost->id])->get(); 
 
@@ -26,7 +26,7 @@
 	<div class="forum-post-list">
 		<div class="single-post">
 			<div class="post-header">
-				<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
+				<span class="u-img" style="background: url('<?php echo userImage($user) ?>');"></span>
 				<span class="title">{{ $user->first_name.' '.$user->last_name }}</span>
 				<div class="post-time">
 					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">{{ $checkpost->updated_at->format('d M Y') }}</span>
@@ -78,7 +78,7 @@
 					$replyLikessCount = isset($reply->replyLikesCount[0]) ? $reply->replyLikesCount[0]['replyLikesCount'] : 0;
 
 					$replyCommentsCount = isset($reply->replyCommentsCount[0]) ? $reply->replyCommentsCount[0]['replyCommentsCount'] : 0;
-					$replyUserPic = !empty($replyUser->picture) ? $replyUser->picture : 'images/user-thumb.jpg';
+					// $replyUserPic = !empty($replyUser->picture) ? $replyUser->picture : 'images/user-thumb.jpg';
 
 					$likedata = \App\ForumReplyLikes::where(['owner_id' => $user_id, 'reply_id' => $reply->id])->get();
 				?>
@@ -98,7 +98,7 @@
 								</div>
 						  	@endif
 					  	@endif
-						<span class="u-img" style="background: url('<?= url($replyUserPic) ?>');"></span>
+						<span class="u-img" style="background: url('<?php echo userImage($replyUser) ?>');"></span>
 						<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name}}</span>
 						<span class="loc">
 							<img src="{{url('/forums-data/images/location.png')}}" alt="">{{ !empty($replyLocation)?$replyLocation:'N/A' }}

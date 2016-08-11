@@ -43,8 +43,8 @@
 								<a href="/editprofile/{{$userId}}" class="edit-profile"><i class="fa fa-pencil"></i></a>
 							@endif
 							<div class="profile-header">
-								<?php $userpic = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg'; ?>
-								<div class="profile-img" style="background: url('{{ $userpic }}');">
+
+								<div class="profile-img" style="background: url('<?php echo userImage($user) ?>');">
 								</div><!--Profile-img-->
 								<div class="pr-field">
 									<span style="font-size: xx-large;">

@@ -68,7 +68,7 @@
 														
 @foreach($model1 as $data) 
 	<?php $data = (array) $data;
-	$user_picture = !empty($data['picture']) ? $data['picture'] : 'images/user-thumb.jpg';
+	$user_picture = !empty($data['picture']) ? url('/uploads/user_img/'.$data['picture']) : url('images/user-thumb.jpg');
 	$id1=Auth::User()->id;
 			$name = $data['first_name'].' '.$data['last_name'];
 		
@@ -151,7 +151,7 @@
 														
 				@foreach($model1 as $data) 
 	<?php $data = (array) $data;
-			$user_picture = !empty($data['picture']) ? $data['picture'] : 'images/user-thumb.jpg';
+			$user_picture = !empty($data['picture']) ? url('/uploads/user_img/'.$data['picture']) : url('images/user-thumb.jpg');
 			$name = $data['first_name'].' '.$data['last_name'];
 	?>
 				<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="">

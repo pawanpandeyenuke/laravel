@@ -567,7 +567,7 @@ class ApiController extends Controller
 	            if( isset($arguments['picture']) && $file != null )
 	            {
 	                $image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
-	                $arguments['picture'] = '/uploads/user_img/'.$image_name;
+	                $arguments['picture'] = $image_name;
 
 	                // Resize pic
                     $path = public_path('uploads/user_img/'.$image_name);

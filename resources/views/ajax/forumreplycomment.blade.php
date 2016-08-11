@@ -1,5 +1,5 @@
 <li id="forum-li-comment-{{$comment->id}}">
-	<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
+	<span class="user-thumb" style="background: url('<?php echo userImage($profileimage) ?>');"></span>
 	<div class="comment-title-cont">
 		<div class="row">
 			<div class="col-sm-6">

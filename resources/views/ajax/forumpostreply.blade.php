@@ -2,7 +2,7 @@
 <div class="f-single-post" id="forumreply_{{$forumreply->id}}">
 	<div class="p-user">
 		<a href = "{{url("profile/$userid")}}" title = "User Profile">
-			<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
+			<span class="user-thumb" style="background: url('<?php echo userImage($profileimage) ?>');"></span>
 		</a>
 		<div class="p-likes ml">
 			<div class="like-cont">

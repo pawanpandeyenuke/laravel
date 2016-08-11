@@ -65,7 +65,7 @@
 							<?php
 								$name = $data['user']['first_name'].' '.$data['user']['last_name'];
 
-								$user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : 'images/user-thumb.jpg';
+								$user_picture = !empty($data['user']['picture']) ? url('/uploads/user_img/'.$data['user']['picture']) : url('images/user-thumb.jpg');
 							 $id1=Auth::User()->id; 
 							 ?>
 							 {{--*/ $LastID = $data['id'] /*--}}

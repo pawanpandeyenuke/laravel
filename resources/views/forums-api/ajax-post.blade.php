@@ -20,7 +20,7 @@
 		$postTitle = !empty($posts->title) ? $posts->title : '';
 
 		$breadcrumb = !empty($posts->forum_category_breadcrum) ? $posts->forum_category_breadcrum : '';
-		$pic = !empty($user->picture) ? $user->picture : url('images/user-thumb.jpg');
+		// $pic = !empty($user->picture) ? $user->picture : url('images/user-thumb.jpg');
 		$likedata = \App\ForumLikes::where(['owner_id' => $user_id, 'post_id' => $posts->id])->get(); 
 	?>
 
@@ -42,7 +42,7 @@
 					</div>
 			  	@endif
 		  	@endif
-			<span class="u-img" style="background: url('<?= url($pic) ?>');"></span>
+			<span class="u-img" style="background: url('<?php echo userImage($user) ?>');"></span>
 			<span class="title">{{ $user->first_name.' '.$user->first_name }}</span>
 			<div class="post-time">
 				<span class="date"><img src="{{url('/forums-data/images/date-icon.png')}}" alt="">{{ $posts->updated_at->format('d M Y') }}</span>

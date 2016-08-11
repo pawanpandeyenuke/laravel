@@ -248,7 +248,7 @@ class AjaxController extends Controller
 		$model = $comments->create($arguments);
 
 		$userid = Auth::User()->id;
-		$user_picture = !empty(Auth::User()->picture) ? Auth::User()->picture : 'images/user-thumb.jpg';
+		$user_picture = userImage(Auth::User());
 		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
 		$comment = nl2br($model->comments);
 		$time = $model->updated_at->format('h:i A');
@@ -1047,7 +1047,7 @@ comments;
 					$name=$value['friends']['first_name']." ".$value['friends']['last_name'];
 					$xmpp_username="'".$value['friends']['xmpp_username']."'";
 					$first_name="'".$value['friends']['first_name']."'";
-					$user_picture = !empty($value['friends']['picture']) ? $value['friends']['picture'] : '/images/user-thumb.jpg';
+					$user_picture = !empty($value['friends']['picture']) ? url('uploads/user_img/'.$value['friends']['picture']) : url('/images/user-thumb.jpg');
 					$msg="No friend found!";
 
 					if (stripos($name, $input) !== false) {
@@ -1555,12 +1555,11 @@ comments;
 		         
 		        $forumpost = new Forumpost;
 		        $forumpostid = $forumpost->create($data);
-		        $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
-
+		        // $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 		        
 		        return view('ajax.forumpost')
 		        		->with('forumpostid',$forumpostid)
-		        		->with('profileimage',$profileimage)
+		        		->with('profileimage',$user)
 		        		->with('breadcrum',$forum_category_breadcrum)
 		        		->with('user',$user)
 		        		->with('name',$name);
@@ -1702,7 +1701,7 @@ comments;
         $forumpostreply = $forumreply->create($data);
 
         $name = $user->first_name." ".$user->last_name;
-        $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+        // $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 
         // @ Send notification mail.
         $parameters = array('user_id' => $user->id, 'current_data' => $input['reply'], 'object_id' => $input['forumpostid'], 'type' => 'reply');
@@ -1710,7 +1709,7 @@ comments;
         
         return view('ajax.forumpostreply')
         		->with('forumreply',$forumpostreply)
-        		->with('profileimage',$profileimage)
+        		->with('profileimage',$user)
         		->with('forumpostid',$input['forumpostid'])
         		->with('user',$user)
         		->with('name',$name);
@@ -1826,7 +1825,7 @@ comments;
 		$comment = $replycomment->create($arr);
 
 		$name = $user->first_name." ".$user->last_name;
-        $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+        // $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 
         // @ Send notification mail.
         $parameters = array('user_id' => $user->id, 'object_id' => $replyid, 'current_data' => $comment->reply_comment, 'type' => 'comment');
@@ -1837,7 +1836,7 @@ comments;
 				->with('name',$name)
 				->with('userid',$user->id)
 				->with('replyid',$replyid)
-				->with('profileimage',$profileimage);
+				->with('profileimage',$user);
 		
 
 	}

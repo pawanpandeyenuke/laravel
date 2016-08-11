@@ -18,7 +18,7 @@ $count=0;
 			<div class="col-sm-6" value="hello">
 				<div class="user-cont">
 					<a title="" href="profile/{{$data['id']}}">
-						<?php $profileimage = !empty($data['picture']) ? $data['picture'] : '/images/user-thumb.jpg'; ?>
+						<?php $profileimage = !empty($data['picture']) ? url('/uploads/user_img/'.$data['picture']) : url('/images/user-thumb.jpg'); ?>
 						<span class="hello user-thumb" value="hello" style="background: url('{{$profileimage}}');" class="user-thumb"></span>
 					{{ $name }}
 					</a>

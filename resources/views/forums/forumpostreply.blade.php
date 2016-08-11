@@ -40,13 +40,13 @@
 										else
 										$likeCount = 0;
 										$userid = $user->id;
-										$profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+										// $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 										if(Auth::check())
 										$likedata = \App\ForumLikes::where(['owner_id' => Auth::User()->id, 'post_id' => $post->id])->get(); 
 									?>
 											<div class="ut-name">
 												<a href = "{{url("profile/$user->id")}}" title = "User Profile">
-												<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
+												<span class="user-thumb" style="background: url('<?php echo userImage($user) ?>');"></span>
 												{{$user->first_name." ".$user->last_name}}
 												</a>
 											</div>
@@ -118,7 +118,7 @@
 											else
 												$commentCount = 0;
 										 	$userid = $user->id;
-											$profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+											// $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 											$name = $user->first_name." ".$user->last_name;
 											if(Auth::check()){
 											$likedata = \App\ForumReplyLikes::where(['owner_id' => Auth::User()->id, 'reply_id' => $forumreply->id])->get();
@@ -131,7 +131,7 @@
 											else { $temp_class = "without-action-btn"; }
 										?>
 											<a href = "{{url("profile/$userid")}}" title = "User Profile">
-											<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
+											<span class="user-thumb" style="background: url('<?php echo userImage($user) ?>');"></span>
 											</a>
 											<div class="p-likes ml">
 											<div class="like-cont">

@@ -15,7 +15,7 @@
 					else
 						$commentCount = 0;
 					$user = $reply->user;
-					$profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
+					// $profileimage = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg';
 					$name = $user->first_name." ".$user->last_name;
 					$userid = $user->id;
 
@@ -23,7 +23,7 @@
 					$likedata = \App\ForumReplyLikes::where(['owner_id' => Auth::User()->id, 'reply_id' => $replyid])->get();								
 				 ?>
 					<a href="{{url("profile/$userid")}}" title="" class="user-thumb-link">
-						<span class="small-thumb" style="background: url('{{$profileimage}}');"></span>
+						<span class="small-thumb" style="background: url('<?php echo userImage($user) ?>');"></span>
 						{{$name}}
 					</a>
 				</div>
@@ -72,7 +72,7 @@
 				<?php 
 					$commentuser = $data->user;
 					$commentuserid = $commentuser->id;
-					$profileimage = !empty($commentuser->picture) ? $commentuser->picture : '/images/user-thumb.jpg';
+					// $profileimage = !empty($commentuser->picture) ? $commentuser->picture : '/images/user-thumb.jpg';
 					$name = $commentuser->first_name." ".$commentuser->last_name;
 				?>
 				<li id="forum-li-comment-{{$data->id}}">
@@ -84,7 +84,7 @@
 						@endif*/ 
 				?>
 
-					<span class="user-thumb" style="background: url('{{$profileimage}}');"></span>
+					<span class="user-thumb" style="background: url('<?php echo userImage($commentuser) ?>');"></span>
 					<div class="comment-title-cont">
 						<div class="row">
 							<div class="col-sm-6">

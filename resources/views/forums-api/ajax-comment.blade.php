@@ -10,13 +10,13 @@
 			}
 		}
 		$commentLocation = implode(', ', $rawCommentCountry);
-		$pic = !empty($commentUser->picture) ? $commentUser->picture : url('images/user-thumb.jpg');
+		// $pic = !empty($commentUser->picture) ? $commentUser->picture : url('images/user-thumb.jpg');
 		$replyComment = !empty($comment->reply_comment) ? $comment->reply_comment : '';
 	?>
 	<div class="single-post">
 		<div class="post-header">
 
-			<span class="u-img" style="background: url('<?= url($pic)?>');"></span>
+			<span class="u-img" style="background: url('<?php echo userImage($commentUser) ?>');"></span>
 			<span class="title">{{ $commentUser->first_name.' '.$commentUser->last_name }}</span>
 			<span class="loc">
 				<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($commentLocation)?$commentLocation:'N/A' }}

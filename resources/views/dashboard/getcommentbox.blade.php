@@ -16,8 +16,8 @@ $commentscountdata = \App\Comment::where(['feed_id' => $feeddata->id])->get()->c
 							<div class="row">
 								<div class="col-md-7">
 									<a href="profile/{{$user->id}}" title="" class="user-thumb-link">
-									<?php $userpic = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg' ?>
-										<span class="small-thumb" style="background: url('{{$userpic}}');"></span>
+									<?php // $userpic = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg' ?>
+										<span class="small-thumb" style="background: url('<?php echo userImage($user) ?>');"></span>
 										{{ $user->first_name.' '.$user->last_name }}
 									</a>
 								</div>
@@ -83,7 +83,7 @@ $commentscountdata = \App\Comment::where(['feed_id' => $feeddata->id])->get()->c
 								@foreach($comments as $data)
 									<?php $username = App\User::where('id', '=', $data->commented_by)->get()->first(); ?>
 
-									<?php $userpicture = !empty($username->picture) ? $username->picture : '/images/user-thumb.jpg'; ?>
+									<?php // $userpicture = !empty($username->picture) ? $username->picture : '/images/user-thumb.jpg'; ?>
 
 									<li data-value="{{ $data->id }}" id="post_{{ $data->id }}">
 						<?php if($data->commented_by==Auth::User()->id)
@@ -97,7 +97,7 @@ $commentscountdata = \App\Comment::where(['feed_id' => $feeddata->id])->get()->c
 						$divadd="";
 						} ?>
 
-										<span class="user-thumb" style="background: url('{{$userpicture}}');"></span>
+										<span class="user-thumb" style="background: url('<?php echo userImage($username) ?>');"></span>
 										<div class="{{$divadd}}">
 										<div class="comment-title-cont">
 											<div class="row">
