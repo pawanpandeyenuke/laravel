@@ -350,7 +350,8 @@ class DashboardController extends Controller
                 
                 $GroupImage = Category::where('title',$input['parentname'])->value( 'img_url' );
         }
-		$group_jid = $group_jid.'_pub';
+		$group_jid = strtolower($group_jid.'_pub');
+        $group_jid =  preg_replace('/[^a-z0-9]/', '_' ,$group_jid);
 		$model = new DefaultGroup;
 		$updatecheck = $model->where('group_name', $group_jid)
 							->where('group_by', Auth::User()->id)
