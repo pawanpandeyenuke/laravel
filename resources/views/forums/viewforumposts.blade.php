@@ -100,7 +100,16 @@
 										<?php $rightClass = ''; ?>
 									@endif
 
-									<div class="p-likes custm_p_likes <?= $rightClass ?>">
+									<?php $editClass = !empty($replyCount) ? 'editclass' : ''; ?>
+
+									@if(Auth::Check() && Auth::User()->id != $userid)
+										<?php 
+											$rightClass = 'right'; 
+											$editClass = '';
+										?>
+									@endif
+
+									<div class="p-likes custm_p_likes <?= $rightClass ?> <?= $editClass ?>">
 										<div class="like-cont">
 										@if(Auth::check())
 											<input type="checkbox" name="" title="Like Post" id="checkbox_forumpost_{{$data->id}}" class="css-checkbox likeforumpost" data-forumpostid="{{$data->id}}" {{ isset($likedata[0])?'checked':'' }}/>	
@@ -116,6 +125,7 @@
 									@if(Auth::check())
 									@if($data->user->id == Auth::user()->id)
 										<div class="fp-action">
+
 										@if($replyCount == 0)
 											<button class="editforumpost" value="{{$data->id}}" title="Edit Post" ><i class="flaticon-pencil" ></i></button>
 										@endif	

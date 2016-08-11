@@ -202,12 +202,15 @@ $(".multiple-slt").select2();
 	    showCaption: false
 	});
 
-	window.onload = function() {
-      var w = $('#sticky-anchor').width();
+	// window.onload = function() {
+	$(document).ready(function(){
+		var w = $('#sticky-anchor').width();
 		$('.fix-header').css('width',w+60);
 		$(".forum_post .morelink").click();
+	});
+      	
 		// $(".forum_post .morelink").addClass('unique_post');
-	}
+	// }
 
 	var i = 1;
 	function sticky_relocate() {

@@ -3408,7 +3408,7 @@ header{
 	display: none;
 }
 .stick-margin{
-	margin-top: 375px;
+	margin-top: 248px;
 }
 /**
 #conversejs [data-emojiable="converted"] {
@@ -3726,4 +3726,10 @@ body
 }
 
 
+}
+
+
+.editclass 
+{
+    right: 30px !important;
 }
