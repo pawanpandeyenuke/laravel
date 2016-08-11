@@ -395,8 +395,8 @@ $GroupsJidList = $SingleChatList = array();
 					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
 
 					if( jidStr ==  groupid ){
-						GroupName[jidStr] = '<?php echo $groupname; ?>';
-						chatbox.$el.find( '.chat-title' ).html( '<?php echo $groupname; ?>' );
+						GroupName[jidStr] = "<?php echo $groupname; ?>";
+						chatbox.$el.find( '.chat-title' ).html( "<?php echo $groupname; ?>" );
             chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-group pull-right" id="leave">Leave</a>' );
             chatbox.$el.addClass( 'pubroom' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
