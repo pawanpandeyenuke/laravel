@@ -293,7 +293,7 @@ $GroupsJidList = $SingleChatList = array();
 <?php 
  
   $img = Auth::User()->picture; 
-  $userpic = !empty($img)? url($img) : url('/images/user-thumb.jpg');
+  $userpic = !empty($img)? $img : 'user-thumb.jpg';
   
   
 ?>
@@ -324,7 +324,7 @@ $GroupsJidList = $SingleChatList = array();
     var groupid = "{{$groupid}}";
     var exception = "{{$exception}}";
 	var is_first = true;  
-	var userImagesUrl = "{{url('')}}";
+	var userImagesUrl = "{{url('/images')}}/";
 	var waitProfile = 0;
 	var defaultImage = "{{url('/images/post-img-big.jpg')}}";
 	var baseUrl = '<?= url('/') ?>';
