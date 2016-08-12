@@ -6,7 +6,7 @@ use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments,App\ForumsDoctor, App\Setting;
-use Validator, Redirect, Request, Session, Hash, DB;
+use Validator, Redirect, Request, Session, Hash, DB, File;
 use Illuminate\Support\Facades\Input;
 use Intervention\Image\Facades\Image;
 use \Exception;
@@ -243,14 +243,24 @@ class ApiController extends Controller
 
 				if(Request::hasFile('image'))
 				{
+					
+					$maxsize = Config::get('constants.max_upload_filesize');
+
 					$file = Request::file('image');
-					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
-					$arguments['image'] = $image_name;
-					$file->move('uploads', $image_name);
-					$this->message = 'Image uploaded successfully.';
+					$bytes = File::size($file);
+
+					if($bytes >= $maxsize){
+						$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+						$arguments['image'] = $image_name;
+						$file->move('uploads', $image_name);
+
+						$this->message = 'Too large image.';
+					}else{
+						$this->message = 'Post updated successfully.';
+					}
 				
 				}
-
+				
 			}
 			 
 			$success = $feeds->create( $arguments );
