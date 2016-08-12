@@ -243,7 +243,7 @@ class ApiController extends Controller
 
 				if(Request::hasFile('image'))
 				{
-					
+					ini_set('upload_max_filesize', '8M');
 					$maxsize = Config::get('constants.max_upload_filesize');
 
 					$file = Request::file('image');
