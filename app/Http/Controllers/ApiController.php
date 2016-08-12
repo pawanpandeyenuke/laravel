@@ -240,29 +240,17 @@ class ApiController extends Controller
 					throw new Exception('Please provide a message or image.');
 				}
 
+
 				if(Request::hasFile('image'))
 				{
-					/*$response = fileUpload($_FILES);
-					if( $response['status'] == 'error' ) {
-						throw new Exception($response['message'], 1);
-					} else {
-						$arguments['image'] = $response['filename'];
-						$this->message = 'Your post has been saved successfully.';
-					}*/
-					
 					$file = Request::file('image');
-					list($angle, $name) = explode('_', $file->getClientOriginalName(), 2);
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 					$arguments['image'] = $image_name;
-					
-					// Rotate image if needed
-					if(in_array($angle, array(90, 180, 270))){
-						Image::make($file->getRealPath())->rotate(-$angle)->save(public_path('uploads/'.$image_name));
-					} else {
-						$file->move('uploads', $image_name);
-					}
+					$file->move('uploads', $image_name);
 					$this->message = 'Image uploaded successfully.';
+				
 				}
+
 			}
 			 
 			$success = $feeds->create( $arguments );

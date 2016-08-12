@@ -22,7 +22,7 @@ class SearchController extends Controller
             }
 
             $authUserId = Auth::check() ? Auth::User()->id : 0;
-            //$authUserId = 65;
+            $authUserId = 65;
 
             // Search users
             if( !$authUserId )
@@ -179,11 +179,10 @@ class SearchController extends Controller
                 }
             }
 
+            // echo DB::raw("select count(*) as total from (".$model->toSql().") as f");
             $count = DB::select(DB::raw("select count(*) as total from (".$model->toSql().") as f"));
             $count = 0;
             
-            // $model = self::settingSearch($model);
-
             // Gather all the results from the queries and paginate it.
             $result = $model->take(10)->get();
             
@@ -195,39 +194,6 @@ class SearchController extends Controller
                 ->with('auth',$auth);
         }
     }
-
-/*    public function settingSearch($model)
-    {
-        $authUserId = Auth::User()->id;
-
-        if( !empty( $authUserId ) ){
-            $reqByMe = Setting::where(['user_id' => $authUserId, 'setting_title' => 'friend-request'])->value('setting_value');
-
-            if(!empty($reqByMe))
-            {
-                if($reqByMe == 'friends-of-friends'){
-
-                    $myfriends = Friend::where('user_id', $authUserId)->where('status', 'Accepted')->pluck('friend_id')->toArray();
-                    
-                    $myfriendsFriends = Friend::whereIn('user_id', $myfriends)->where('friend_id', '!=', $authUserId)->where('status', 'Accepted')->pluck('friend_id')->toArray();
-
-                    // echo '<pre>';print_r($myfriendsFriends);die;
-                    $model = $model->whereIn('id', $myfriendsFriends);
-
-                    // echo '<pre>';print_r($model->get()->toArray());die;
-
-                    return $model;
-
-                }elseif($reqByMe == 'nearby-app-user'){
-
-                }elseif($reqByMe == 'all'){
-
-                }
-            }
-        }
-
-    }*/
-
 
     public function contactUs()
     {
