@@ -22,7 +22,6 @@ class SearchController extends Controller
             }
 
             $authUserId = Auth::check() ? Auth::User()->id : 0;
-            $authUserId = 65;
 
             // Search users
             if( !$authUserId )
