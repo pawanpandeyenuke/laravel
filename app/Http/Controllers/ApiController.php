@@ -1277,6 +1277,8 @@ class ApiController extends Controller
 			list($txt, $ext) = explode(".", $name);
 			if (in_array($ext, $valid_formats)) {
 				$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
+				
+				$this->resizeImage( Request::file('chatsendimage'), '150' , $path , $actual_image_name );
 				$tmp = $uploadedfile;
 
 				if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
@@ -1302,7 +1304,30 @@ class ApiController extends Controller
 
 	}
 
-
+	private function resizeImage($image, $size , $path, $imagename = '')
+    {
+    	try 
+    	{
+    		$extension 		= 	$image->getClientOriginalExtension();
+    		$imageRealPath 	= 	$image->getRealPath();
+    		if( empty($imagename) && $imagename == '' ){
+    			$thumbName 		= 	$image->getClientOriginalName();
+	    	} else {
+	    		$thumbName = $imagename;
+	    	}
+	    
+	    	$img = Image::make($imageRealPath); // use this if you want facade style code
+	    	$img->resize(intval($size), null, function($constraint) {
+	    		 $constraint->aspectRatio();
+	    	});
+	    	
+	    	return $img->save($path.'thumb/'. $thumbName);
+    	}
+    	catch(Exception $e)
+    	{
+    		return false;
+    	}
+    }
 	/*
 	 * update push notification details on user table on request.
 	 */
