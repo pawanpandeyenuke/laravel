@@ -2,10 +2,15 @@
 @section('title', 'Private Group - ')
 <?php 
 
-// echo '<pre>';print_r($groupdetail);die;
 $title1 = strtolower($groupdetail[0]['title']);
 $title1 = str_replace(" ","-",$title1);
-$group_picture = isset($groupdetail[0]) ? url('/uploads/'.$groupdetail[0]['picture']) : url('/images/post-img-big.jpg');
+$group_picture = url('/images/post-img-big.jpg');
+if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
+	$group_picture = url('/uploads/'.$groupdetail[0]['picture']);
+}
+
+// echo '<pre>';print_r($group_picture);die;
+// $group_picture = !empty($groupdetail[0]) ? url('/uploads/'.$groupdetail[0]['picture']) : url('/images/post-img-big.jpg');
 
  ?>
 @section('content')

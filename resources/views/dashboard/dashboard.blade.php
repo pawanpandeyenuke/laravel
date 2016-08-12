@@ -141,8 +141,8 @@
 										<div class="col-md-5">
 											<div class="post-time text-right">
 												<ul>
-													<li><span class="icon flaticon-time">{{ $data->updated_at->format('h:i A') }}</span></li>
-													<li><span class="icon flaticon-days">{{ $data->updated_at->format('D jS') }}</span></li>
+													<li><span class="icon flaticon-days">{{ $data->updated_at->format('d M Y') }}</span></li>
+													<li><span class="icon flaticon-time">{{ $data->updated_at->format('h:i A').' (UTC)' }}</span></li>
 												</ul>
 											</div>
 										</div>
@@ -257,8 +257,8 @@
 																		<div class="col-sm-6">
 																			<div class="text-right">
 																				<div class="date-time-list">
-																					<span><div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A') }}</div></span>
-																					<span><div class="comment-time text-right">{{ $commentsData->updated_at->format('D jS') }}</div></span>
+																					<span><div class="comment-time text-right">{{ $commentsData->updated_at->format('d M Y') }}</div></span>
+																					<span><div class="comment-time text-right">{{ $commentsData->updated_at->format('h:i A').' (UTC)' }}</div></span>
 																				</div>
 																			</div>
 				

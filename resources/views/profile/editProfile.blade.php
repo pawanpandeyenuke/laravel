@@ -63,10 +63,10 @@
 								<div class="profile-data-table">
 									<div class="pe-row">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-web-1"></i>Country</div>
 											</div>
-											<div class="col-sm-6">
+											<div class="col-sm-7 col-xs-12">
 												<select name="country" class="pr-edit" id="profile_country" >	
 													<?php 
 														foreach ($countries as $key => $value) { 
@@ -88,10 +88,10 @@
 									</div>
 									<div class="pe-row">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-gps"></i>State</div>
 											</div>
-											<div class="col-sm-6">
+											<div class="col-sm-7 col-xs-12">
 												<select name="state"  class="pr-edit" id="profile_state">
 													<option value="">State</option>	
 													<?php 
@@ -110,10 +110,10 @@
 									</div>
 									<div class="pe-row">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-city"></i>City</div>
 											</div>
-											<div class="col-sm-6">
+											<div class="col-sm-7 col-xs-12">
 												<select name="city"  class="pr-edit" id="profile_city" >
 													<option value="">City</option>	
 													<?php 
@@ -132,10 +132,10 @@
 									</div>
 									<div class="pe-row">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-technology"></i>Contact</div>
 											</div>
-											<div class="col-sm-6 ph-field">
+											<div class="col-sm-7 col-xs-126 ph-field">
 												<!-- <input type="text" name="phone_no" class="pr-edit numeric" maxlength="15" value="{{ $user->phone_no }}"> -->
 
 											    <span name="country_code" class="country-code-field-span country-code-field numeric" value="{{ $user->country_code }}" placeholder="000" >{{ $user->country_code }}</span>
@@ -146,20 +146,20 @@
 									</div>
 									<div class="pe-row">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-calendar"></i>Date of Birth</div>
 											</div>
-											<div class="col-sm-6">
+											<div class="col-sm-7 col-xs-12">
 												<input type="text" name="birthday" class="pr-edit datepicker" value="{{ $user->birthday }}">
 											</div>
 										</div>
 									</div>
 									<div class="pe-row">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-black"></i>I am</div>
 											</div>
-											<div class="col-sm-6">
+											<div class="col-sm-7 col-xs-12">
 												<div class="clearfix">
 													<div class="radio-cont pull-left center-label">
 														<input type="radio" name="gender" id="radio1" value="Male" class="css-checkbox" <?php echo ($gender == 'Male')?'Checked':'' ?> >
@@ -175,10 +175,10 @@
 									</div>
 									<div class="pe-row">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-circle"></i>Status</div>
 											</div>
-											<div class="col-sm-6">
+											<div class="col-sm-7 col-xs-12">
 												<div class="clearfix">
 													<div class="radio-cont pull-left center-label">
 														<input type="radio" value="Single" name="marital_status" id="radio3" class="css-checkbox" <?php echo ($maritalstatus == 'Single')?'Checked':'' ?> >
@@ -194,10 +194,10 @@
 									</div>
 									<div class="pe-row">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-graduation"></i>Currently Studing or Not</div>
 											</div>
-											<div class="col-sm-6">
+											<div class="col-sm-7 col-xs-12">
 												<div class="clearfix">
 													<div class="radio-cont pull-left center-label">
 														<input type="radio" name="currently_studying" id="radios1" value="Yes" class="css-checkbox" <?php echo ($currentlystudying == 'Yes')?'Checked':'' ?> >
@@ -234,7 +234,7 @@
 															<button type="button" class="btn add-study-btn removeme"><span class="glyphicon glyphicon-trash"></span></button>
 														@endif
 															<div class="row">
-																<div class="col-sm-4">
+																<div class="col-sm-6 lPadding">
 																	<div class="p-data-title"><i class="flaticon-graduation"></i>Education level</div>
 																		<select id="educationlevel" name="education_level[]" style="max-width: 180px;" >
 																			<option value="">Education level</option>
@@ -250,7 +250,7 @@
 																			<?php } ?>
 																		</select>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-6">
 																	<div class="p-data-title"><i class="flaticon-graduation"></i>Specialization</div>
 																		<select name="specialization[]" id="specialization" style="max-width: 180px;" >
 																			<option value="">Specialization</option>
@@ -266,9 +266,14 @@
 																			<?php } ?>
 																		</select>
 																</div>
-																<div class="col-sm-4">
+
+															</div>
+															<div class="row">
+
+																<div class="col-sm-6 lPadding">
 																	<div class="p-data-title"><i class="flaticon-graduation"></i>Year</div>
-																	<select id="graduationyears" name="graduation_year[]">
+																	<input type="text" class="numeric year-input" name="graduation_year[]" value="{{$data->graduation_year}}" placeholder="" maxlength="4">
+																	<!-- <select id="graduationyears" name="graduation_year[]">
 																		<option value="">Year</option>
 																		@foreach($gradYear as $valuedata)
 																			<?php
@@ -279,16 +284,19 @@
 																			?>
 																			<option value="{{$valuedata}}" {{$selected}}>{{ $valuedata }}</option>
 																		@endforeach
-																	</select>
+																	</select> -->
 																</div>
-															</div>
-															<div class="row">
-																<div class="col-sm-4">
+															
+																<div class="col-sm-6">
 																	<div class="p-data-title"><i class="flaticon-graduation"></i>Name of Establishment</div>
 																	
-																	<input type="text" class="" name="education_establishment[]" value="{{$data->education_establishment}}" placeholder="">
+																	<input type="text" class="year-input" name="education_establishment[]" value="{{$data->education_establishment}}" placeholder="">
 																</div>
-																<div class="col-sm-4">
+
+															</div>
+															<div class="row">
+
+																<div class="col-sm-4 lPadding rPadding">
 																	<div class="p-data-title"><i class="flaticon-web-1"></i>Country of Establishment</div>
 																	
 																	<select name="country_of_establishment[]" class="country" id="edu_country" data-put="#state">
@@ -301,7 +309,7 @@
 																		@endforeach
 																	</select>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-4 lPadding rPadding">
 																	<div class="p-data-title"><i class="flaticon-gps"></i>State of Establishment</div>
 																	<select name="state_of_establishment[]" class="state" data-put="#city">
 																		<option value="">State</option>
@@ -314,7 +322,7 @@
 																		@endforeach
 																	</select>
 																</div>
-																<div class="col-sm-4">
+																<div class="col-sm-4 lPadding">
 																	<div class="p-data-title"><i class="flaticon-city"></i>City of Establishment</div>
 																	<select name="city_of_establishment[]" class="city" >
 																		<option value="">City</option>
@@ -368,20 +376,21 @@
 																<?php } ?>
 															</select>
 													</div>
-													<div class="col-sm-4">
+													<div class="col-sm-4 lPadding">
 														<div class="p-data-title"><i class="flaticon-graduation"></i>Year</div>
-														<select class="" id="graduationyears" name="graduation_year[]">
+														<input type="text" class="numeric year-input" name="graduation_year[]" value="" placeholder="" maxlength="4">
+														<!-- <select class="" id="graduationyears" name="graduation_year[]">
 															<option>Year</option>
 															@foreach($gradYear as $valuedata)
 																<option value="{{$valuedata}}">{{ $valuedata }}</option>
 															@endforeach
-														</select>
+														</select> -->
 													</div>
 												</div>
 												<div class="row">
 													<div class="col-sm-4">
 														<div class="p-data-title"><i class="flaticon-graduation"></i>Name of Establishment</div>
-														<input type="text" name="education_establishment[]" value="" placeholder="">
+														<input type="text" class="year-input" name="education_establishment[]" value="" placeholder="">
 													</div>
 													<div class="col-sm-4">
 														<div class="p-data-title"><i class="flaticon-web-1"></i>Country of Establishment</div>
@@ -412,10 +421,10 @@
 									
 									<div class="pe-row">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-vintage"></i>Current profession Industry</div>
 											</div>
-											<div class="col-sm-6">
+											<div class="col-sm-7 col-xs-12">
 												<div class="slt-cont">
 													<select name="job_area" class="pr-edit" id="jobarea" >
 														<option value="">Current Job Area</option>
@@ -451,21 +460,21 @@
 
 									<div class="pe-row">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-vintage"></i>Job Title</div>
 											</div>
-											<div class="col-sm-6">
-												<input type="text" class="" name="job_title" value="{{$user->job_title}}" placeholder="">
+											<div class="col-sm-7 col-xs-12">
+												<input type="text" class="job-title-input" name="job_title" value="{{$user->job_title}}" placeholder="">
 											</div>
 										</div>
 									</div>
 									<div class="pe-row">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-vintage"></i>Company</div>
 											</div>
-											<div class="col-sm-6">
-												<input type="text" class="" name="company" value="{{$user->company}}" placeholder="">
+											<div class="col-sm-7 col-xs-12">
+												<input type="text" class="job-title-input" name="company" value="{{$user->company}}" placeholder="">
 											</div>
 										</div>
 									</div>
@@ -683,7 +692,7 @@
 	var graduationyears = $('#graduationyears').html();
 	var country = $('#edu_country').html();
 	// console.log(country);
-	var founderRow = '<div class="study-detail" id="rowCount'+rowCount+'"><div class=pe-row><button type="button" class="btn add-study-btn removeme" onclick="removeRow('+rowCount+');"><span class="glyphicon glyphicon-trash"></span></button><div class=row><div class=col-sm-4><div class=p-data-title><i class=flaticon-graduation></i>Education level</div><select class="" name="education_level[]">'+educationlevel+'</select></div><div class=col-sm-4><div class=p-data-title><i class=flaticon-graduation></i>Specialization</div><select class="" name="specialization[]">'+specialization+'</select></div><div class=col-sm-4><div class=p-data-title><i class=flaticon-graduation></i>Year</div><select class="" name="graduation_year[]">'+graduationyears+'</select></div></div><div class=row><div class=col-sm-4><div class=p-data-title><i class=flaticon-graduation></i>Name of Establishment</div><input class=pr-edit name="education_establishment[]" placeholder=""></div><div class=col-sm-4><div class=p-data-title><i class=flaticon-web-1></i>Country of Establishment</div><select class="country" data-put="#state" name="country_of_establishment[]">'+country+'</select></div><div class=col-sm-4><div class=p-data-title><i class=flaticon-gps></i>State of Establishment</div><select class="state" data-put="#city" name="state_of_establishment[]"><option>Option</option></select></div><div class=col-sm-4><div class=p-data-title><i class=flaticon-city></i>City of Establishment</div><select name="city_of_establishment[]" class="city"><option>Option</option></select></div></div></div></div>';
+	var founderRow = '<div class="study-detail" id="rowCount'+rowCount+'"><div class=pe-row><button type="button" class="btn add-study-btn removeme" onclick="removeRow('+rowCount+');"><span class="glyphicon glyphicon-trash"></span></button><div class=row><div class="col-sm-6 lPadding"><div class=p-data-title><i class=flaticon-graduation></i>Education level</div><select class="" name="education_level[]">'+educationlevel+'</select></div><div class="col-sm-6 rPadding"><div class=p-data-title><i class=flaticon-graduation></i>Specialization</div><select class="" name="specialization[]">'+specialization+'</select></div></div><div class=row><div class="col-sm-6 lPadding"><div class=p-data-title><i class=flaticon-graduation></i>Year</div><input type="text" class="numeric" name="graduation_year[]" value="" placeholder="" maxlength="4"></div><div class="col-sm-6 rPadding"><div class=p-data-title><i class=flaticon-graduation></i>Name of Establishment</div><input class=pr-edit name="education_establishment[]" placeholder=""></div></div><div class=row><div class="col-sm-4 lPadding"><div class=p-data-title><i class=flaticon-web-1></i>Country of Establishment</div><select class="country" data-put="#state" name="country_of_establishment[]">'+country+'</select></div><div class=col-sm-4><div class=p-data-title><i class=flaticon-gps></i>State of Establishment</div><select class="state" data-put="#city" name="state_of_establishment[]"><option>Option</option></select></div><div class=col-sm-4><div class=p-data-title><i class=flaticon-city></i>City of Establishment</div><select name="city_of_establishment[]" class="city"><option>Option</option></select></div></div></div></div>';
 
 	/*var founderRow = '<div class="row row-outer" id="rowCount'+rowCount+'"><div class="col-sm-6"><div class="row"><div class="col-sm-6"><div class="form-group"><input type="text" class="form-control icon-field" placeholder="Name"><span class="icon user-icon"></span></div></div><div class="col-sm-6"><div class="form-group"><textarea name="" class="form-control icon-field"  placeholder="Description"></textarea><span class="icon desc-icon"></span></div></div></div></div><div class="col-sm-6"><div class="row"><div class="col-md-10"><div class="form-group"><select><option>Country drop</option><option>Option 1</option><option>Option 2</option><option>Option 3</option></select><span class="icon globe-icon"></span></div></div><div class="col-md-2"><button type="button" title="Delete row" onclick="removeRow('+rowCount+');" class="btn-icon-round center-btn del-btn"><i class="fa fa-minus"></i></button></div></div></div></div>';*/
 

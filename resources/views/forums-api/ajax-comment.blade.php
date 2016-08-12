@@ -28,7 +28,7 @@
 		</div>
 		<div class="post-action clearfix">
 			<div class="time-comment-bottom text-right">
-				<?php echo $comment->updated_at->format('d M Y').' '.$comment->updated_at->format('h:i A') ?>
+				<?php echo $comment->updated_at->format('d M Y').' '.$comment->updated_at->format('h:i A').' (UTC)' ?>
 			</div>
 		</div>
 	</div>

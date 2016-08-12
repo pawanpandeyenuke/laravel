@@ -604,18 +604,19 @@ a:hover{
 	padding:15px 20px;
 }
 .post-list .single-post .post-time .icon:before{
-	font-size:17px;
-	margin-right:10px;
+	font-size:13px;
+	margin-right:5px;
 }
 .post-list .single-post .post-header li{
-	margin-left: 15px;
+	margin-left: 10px;
+	font-size: 13px;
 }
 .post-list .single-post .post-img-cont{
 	margin:0 -20px;
 }
 .post-list .single-post p{
 	color: #333333;
-  font-size: 13px;
+  font-size: 15px;
   margin: 0 0 15px;
   word-wrap: break-word;
 }
@@ -685,6 +686,7 @@ a:hover{
 }
 .comments-list .user-link{
   font-weight: 500;
+  font-size: 15px;
   color: #000;
 }
 .comments-list .comment-text{
@@ -692,6 +694,11 @@ a:hover{
   margin: 3px 0 0;
   padding: 2px 0 0;
   word-wrap: break-word;
+}
+
+.comment-text
+{
+	font-size:15px;
 }
 .post-comment-cont {
   margin: 0px -20px -15px -20px;
@@ -1430,9 +1437,10 @@ width:495px;
 .p-data-title {
   position: relative;
   padding-left: 30px;
+  padding-top: 10px;
 }
 .p-data-title i{
-  top: -3px;
+  top: 4px;
   position: absolute;
   left: 0px;
 }
@@ -2237,7 +2245,7 @@ textarea{
 }
 .study-heading {
 	position: relative;
-  text-align: center;
+  text-align: left;
   font-weight: 700;
   font-size: 18px;
   height: 43px;
@@ -2869,7 +2877,7 @@ textarea{
 }
 .f-single-post p{
   color: #555;
-    font-size: 13px;
+    font-size: 15px;
     line-height: 20px;
 }
 .f-single-post .p-user:after{
@@ -3152,7 +3160,7 @@ margin-left: -15px;
     left: 22px;
     padding-left: 11px;
     position: absolute;
-    top: 1px;
+    top: 6px;
     width: 50px;
 }
 .pe-row .ph-field::after {
@@ -3160,7 +3168,7 @@ margin-left: -15px;
     font-size: 15px;
     left: 20px;
     position: absolute;
-    top: 1px;
+    top: 3px;
     z-index: 1;
 }
 .pe-row .ph-field .ph-input{
@@ -3170,7 +3178,7 @@ margin-left: -15px;
     content: "-" !important;
     left: 70px;
     position: absolute;
-    top: 1px;
+    top: 6px;
     z-index: 1;
 }
 /****** For Fixing body shifting to right ******/
@@ -3439,7 +3447,7 @@ header{
 .forum-srch-list .forum-master-post p.forum_post{
 	max-height: 125px;
 	overflow-y: auto;
-	font-size: 13px;
+	font-size: 15px;
 }
 .forum-srch-list .fs-breadcrumb{
 	 border-bottom: 1px solid #dcdddd;
@@ -3732,4 +3740,57 @@ body
 .editclass 
 {
     right: 30px !important;
+}
+
+/******* Custom Css ************/
+
+
+.pe-row select, .ph-field input, .pe-row input
+{
+	width:84% !important;
+	padding:6px !important;
+	border-radius:3px !important;
+	border:1px solid #ddd !important;
+}
+
+.ph-field input {
+    padding: 6px 65px !important;
+}
+
+
+.slt-cont select {
+    width: 42% !important;
+}
+
+.pr-field input
+{
+	border:1px solid #ddd !important;
+	padding:4px !important;
+	font-size:15px;
+}
+
+select#educationlevel, select#specialization 
+{
+  max-width: 100% !important;
+  width:90% !important;
+}
+
+input.year-input
+{
+	width:90% !important;
+}
+
+.lPadding
+{
+	padding-left: 0;
+}
+
+.rPadding
+{
+	padding-right:0;
+}
+
+input.job-title-input
+{
+	width:87% !important;
 }

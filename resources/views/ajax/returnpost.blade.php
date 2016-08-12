@@ -13,13 +13,13 @@
 				<div class="post-time text-right">
 					<ul>
 						<li>
-							<span class="icon flaticon-time">
-								{{ $postdata->updated_at->format('h:i A') }}
+							<span class="icon flaticon-days">
+								{{ $postdata->updated_at->format('d M Y') }}
 							</span>
 						</li>
 						<li>
-							<span class="icon flaticon-days">
-								{{ $postdata->updated_at->format('D jS') }}
+							<span class="icon flaticon-time">
+								{{ $postdata->updated_at->format('h:i A').' (UTC)' }}
 							</span>
 						</li>
 					</ul>

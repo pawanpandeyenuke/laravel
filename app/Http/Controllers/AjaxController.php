@@ -251,8 +251,8 @@ class AjaxController extends Controller
 		$user_picture = userImage(Auth::User());
 		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
 		$comment = nl2br($model->comments);
-		$time = $model->updated_at->format('h:i A');
-		$date = $model->updated_at->format('D jS');
+		$time = $model->updated_at->format('h:i A').' (UTC)';
+		$date = $model->updated_at->format('d M Y');
 		$id = $model->id;
 
 $variable = array();				
