@@ -236,7 +236,7 @@ class ApiController extends Controller
 					throw new Exception('Invalid user id.');
 				}
 
-				if( ( $arguments['message'] == null ) && ( $arguments['image'] == null ) ){
+				if( ( isset($arguments['message']) && $arguments['message'] == null ) && ( $arguments['image'] == null ) ){
 					throw new Exception('Please provide a message or image.');
 				}
 
@@ -251,20 +251,16 @@ class ApiController extends Controller
 					}*/
 					
 					$file = Request::file('image');
-					list($angle, $name) = explode('_', $file->getClientOriginalName(), 2);
 					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 					$arguments['image'] = $image_name;
+					$file->move('uploads', $image_name);
 					
-					// Rotate image if needed
-					if(in_array($angle, array(90, 180, 270))){
-						Image::make($file->getRealPath())->rotate(-$angle)->save(public_path('uploads/'.$image_name));
-					} else {
-						$file->move('uploads', $image_name);
-					}
+					$this->message = 'Image uploaded successfully.';
 				}
 			}
-			
+			 
 			$success = $feeds->create( $arguments );
+
 			$this->status = 'success';
 			$this->data = $success;
 		}catch( Exception $e ){
@@ -299,7 +295,10 @@ class ApiController extends Controller
 					$page = $arguments['page'];
 					$offset = ($page - 1) * $per_page;
 
-					$posts = Feed::orderBy('updated_at', 'desc')
+
+// *********** *********** Previous query before [12-aug-2016] *********** *********** //
+
+					/*  $posts = Feed::orderBy('updated_at', 'desc')
 								// ->where('user_by', '=', $arguments['user_by'])
 				                ->whereIn('user_by', Friend::where('user_id', '=', $arguments['user_by'])
 				                        ->where('status', '=', 'Accepted')
@@ -312,6 +311,28 @@ class ApiController extends Controller
 								->with('commentsCount')
 								->with('user')
 								->with('likedornot')
+								->get()
+								->toArray();*/
+								
+// *********** *********** Previous query before [12-aug-2016] *********** *********** //
+
+					$userBy = $arguments['user_by'];
+
+					$posts = Feed::orderBy('updated_at', 'desc')
+								// ->where('user_by', '=', $arguments['user_by'])
+				                ->whereIn('user_by', Friend::where('user_id', '=', $arguments['user_by'])
+				                        ->where('status', '=', 'Accepted')
+				                        ->pluck('friend_id')
+				                        ->toArray())
+				                ->orWhere('user_by', '=', $arguments['user_by'])
+								->skip($offset)
+								->take($per_page)
+								->with('likesCount')
+								->with('commentsCount')
+								->with('user')
+								->with(['likedornot' => function ($query) use($userBy){
+										    $query->where('user_id', $userBy);
+										}])
 								->get()
 								->toArray();
 
