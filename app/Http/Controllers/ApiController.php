@@ -249,24 +249,22 @@ class ApiController extends Controller
 					$file = Request::file('image');
 					$bytes = File::size($file);
 
-					if($bytes >= $maxsize){
+					if($bytes < $maxsize){
 						$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 						$arguments['image'] = $image_name;
 						$file->move('uploads', $image_name);
-
-						$this->message = 'Too large image.';
 					}else{
-						$this->message = 'Post updated successfully.';
+						throw new Exception("Too large image.", 1);						
 					}
-				
 				}
-				
 			}
 			 
 			$success = $feeds->create( $arguments );
 
+			$this->message = 'Post updated successfully.';
 			$this->status = 'success';
 			$this->data = $success;
+
 		}catch( Exception $e ){
 			$this->message = $e->getMessage();
 		}
