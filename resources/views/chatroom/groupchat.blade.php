@@ -150,10 +150,9 @@ $GroupsJidList = $SingleChatList = array();
                                             @if(!empty($userdata))
                                             @foreach($userdata as $data)
 
-                                              <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; 
-                                                $user_picture = url('uploads/user_img/'.$user_picture);
+                                              <?php $user_picture = !empty($data['user']['picture']) ? url('uploads/user_img/'.$data['user']['picture']) : '/images/user-thumb.jpg';
                                               ?>
-                                              
+
                                               <li >
                                                   <div class='info' data-id="{{$data['user']['id']}}" style="position:relative;" >
                                                     <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif  data-id="{{$data['user']['id']}}" >
