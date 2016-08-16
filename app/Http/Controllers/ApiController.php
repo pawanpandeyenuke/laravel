@@ -6,7 +6,7 @@ use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments,App\ForumsDoctor, App\Setting;
-use Validator, Redirect, Request, Session, Hash, DB;
+use Validator, Redirect, Request, Session, Hash, DB, File;
 use Illuminate\Support\Facades\Input;
 use Intervention\Image\Facades\Image;
 use \Exception;
@@ -243,20 +243,28 @@ class ApiController extends Controller
 
 				if(Request::hasFile('image'))
 				{
-					$file = Request::file('image');
-					$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
-					$arguments['image'] = $image_name;
-					$file->move('uploads', $image_name);
-					$this->message = 'Image uploaded successfully.';
-				
-				}
+					ini_set('upload_max_filesize', '8M');
+					$maxsize = Config::get('constants.max_upload_filesize');
 
+					$file = Request::file('image');
+					$bytes = File::size($file);
+
+					if($bytes < $maxsize){
+						$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+						$arguments['image'] = $image_name;
+						$file->move('uploads', $image_name);
+					}else{
+						throw new Exception("Too large image.", 1);						
+					}
+				}
 			}
 			 
 			$success = $feeds->create( $arguments );
 
+			$this->message = 'Post updated successfully.';
 			$this->status = 'success';
 			$this->data = $success;
+
 		}catch( Exception $e ){
 			$this->message = $e->getMessage();
 		}
@@ -1269,6 +1277,8 @@ class ApiController extends Controller
 			list($txt, $ext) = explode(".", $name);
 			if (in_array($ext, $valid_formats)) {
 				$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
+				
+				$this->resizeImage( Request::file('chatsendimage'), '150' , $path , $actual_image_name );
 				$tmp = $uploadedfile;
 
 				if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
@@ -1294,7 +1304,30 @@ class ApiController extends Controller
 
 	}
 
-
+	private function resizeImage($image, $size , $path, $imagename = '')
+    {
+    	try 
+    	{
+    		$extension 		= 	$image->getClientOriginalExtension();
+    		$imageRealPath 	= 	$image->getRealPath();
+    		if( empty($imagename) && $imagename == '' ){
+    			$thumbName 		= 	$image->getClientOriginalName();
+	    	} else {
+	    		$thumbName = $imagename;
+	    	}
+	    
+	    	$img = Image::make($imageRealPath); // use this if you want facade style code
+	    	$img->resize(intval($size), null, function($constraint) {
+	    		 $constraint->aspectRatio();
+	    	});
+	    	
+	    	return $img->save($path.'thumb/'. $thumbName);
+    	}
+    	catch(Exception $e)
+    	{
+    		return false;
+    	}
+    }
 	/*
 	 * update push notification details on user table on request.
 	 */

@@ -941,8 +941,8 @@ a:hover{
 }
 .center-label.radio-cont input[type=radio].css-checkbox + label.css-label{
 	background-position: top center;
-	padding-right:0px;
-	padding-top: 21px;
+	padding-right: 0px;
+	padding-left: 70px;
 }
 .center-label.radio-cont input[type=radio].css-checkbox:checked + label.css-label{
   background-position: center -21px;
@@ -3168,7 +3168,7 @@ margin-left: -15px;
     font-size: 15px;
     left: 20px;
     position: absolute;
-    top: 3px;
+    top: 5px;
     z-index: 1;
 }
 .pe-row .ph-field .ph-input{

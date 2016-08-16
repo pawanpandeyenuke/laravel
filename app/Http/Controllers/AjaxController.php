@@ -14,7 +14,7 @@ use App\Feed, Auth, Mail, File;
 
 use \Exception,Route;
 use App\Library\Converse, Config;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Request, Intervention\Image\Facades\Image;
 
 class AjaxController extends Controller
 {
@@ -978,8 +978,7 @@ comments;
 	}
 
  
-
-	public function sendImage(){
+public function sendImage(Request $request){
      $status=0;
      $message="";
 
@@ -996,27 +995,47 @@ comments;
 				if (in_array($ext, $valid_formats)) {
 			$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
 			$tmp = $uploadedfile;
-				if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
-           
-            $data='/uploads/media/chat_images/'.$actual_image_name;
-           
+			$this->resizeImage( Request::file('chatsendimage'), '150' , $path , $actual_image_name );
 
-            $chatType=isset($_POST["chatType"])?$_POST["chatType"]:'';
-            if ($chatType == "group"){}//chat type check
-            else{           
-             $message=$_SERVER['HTTP_HOST'].$data;
-   			 $status=1;
-            }                              
-        } else
-         $message= "Failed to send try again.";    
+			if (move_uploaded_file($tmp, $path . $actual_image_name)) {
+		        $data='/uploads/media/chat_images/'.$actual_image_name;
+	            $message = $actual_image_name;
+	   			$status=1;                
+	        } else
+	        	$message= "Failed to send try again.";    
        } else
         $message= "Invalid file format.";
       }else {
        $message="Please select an image to send.";
        }
-    echo json_encode(array('status'=>$status,'message'=>$message,'type'=>'image'));
-       die(); 
+    	echo json_encode(array('status'=>$status,'message'=>$message,'type'=>'image'));
+      	die(); 
        }
+
+	private function resizeImage($image, $size , $path, $imagename = '')
+    {
+    	try 
+    	{
+    		$extension 		= 	$image->getClientOriginalExtension();
+    		$imageRealPath 	= 	$image->getRealPath();
+    		if( empty($imagename) && $imagename == '' ){
+    			$thumbName 		= 	$image->getClientOriginalName();
+	    	} else {
+	    		$thumbName = $imagename;
+	    	}
+	    
+	    	$img = Image::make($imageRealPath); // use this if you want facade style code
+	    	$img->resize(intval($size), null, function($constraint) {
+	    		 $constraint->aspectRatio();
+	    	});
+	    	
+	    	return $img->save($path.'thumb/'. $thumbName);
+    	}
+    	catch(Exception $e)
+    	{
+    		return false;
+    	}
+    }
 
 
        public function searchfriendlist()
