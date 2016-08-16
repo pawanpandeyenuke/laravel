@@ -54,6 +54,7 @@ class HomeController extends Controller
             }
             
             if( !empty($errors->getMessages()) ) {
+                unset($data['_token']);
                 return redirect('/')->withErrors($errors)->with($data);
             }
             
