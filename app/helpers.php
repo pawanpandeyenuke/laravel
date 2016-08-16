@@ -267,7 +267,7 @@
 	/*
 	* @Push Notification I-phone
 	*/
- 	function iphonePushNotification($data) {
+ 	function iphonePushNotification($data, $bodyParams = array()) {
 
         $deviceToken = $data['token'];
         // Put your private key's passphrase here:
@@ -298,10 +298,10 @@
             //'chatType' => $chatType,
             //'sname' => $senderName
         );
-    // $body['aps']['sname']=$senderName;
-        $body['Message_received'] = array(
+        // $body['aps']['sname']=$senderName;
+        $body['Message_received'] = array_merge(array(
             'notification_type' => $data['notification_type'],
-        );
+        ), $bodyParams);
 
         // Encode the payload as JSON
         $payload = json_encode($body);

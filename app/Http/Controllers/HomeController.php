@@ -64,4 +64,31 @@ class HomeController extends Controller
 
         return view('auth.register');
     }
+
+    // Send notification to iphone device
+    public function sendpushtoios()
+    {
+        $data = Request::all();
+        if( isset($data['access_token']) && $data['access_token']=='rinku@xmpp' )
+        {
+            $user = User::where(['xmpp_username'=> $data['to']])->first();
+            if( $user && $user->device_type == 'IPHONE')
+            {
+                $sender = User::where(['xmpp_username'=> $data['from']])->first();
+                iphonePushNotification(array(
+                    'notification_type' => 'text',
+                    'message' => $sender->first_name.' '.$sender->last_name.' has sent a message',
+                    'token' => $user->push_token
+                ), array(
+                    "isMediaMessage" => "0",
+                    "type" => "text",
+                    "text" => $data['body'],
+                    "media" => null,
+                    "senderid" => $sender->xmpp_username,
+                    "first_name" => $sender->first_name,
+                    "last_name" => $sender->last_name
+                ));
+            }
+        }
+    }
 }

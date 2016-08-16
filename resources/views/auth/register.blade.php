@@ -24,9 +24,6 @@ $prev_url = URL::previous();
 
 <?php 
 $userdata = session('userdata');
-if(!empty($errors)) {
-    //print_r($errors);exit;
-}
 ?>
 
 @if (Session::has('success'))
@@ -237,7 +234,7 @@ if(!empty($errors)) {
                                     $terms = "";
                         ?>
                         <input type="checkbox" name="terms" id="terms" {{$terms}} class="css-checkbox">
-                        <label for="terms" class="css-label" style="color: #0c0c0c" >I agree to the following<a href="{{url('terms-conditions')}}" style="color:#3ab29f "> Terms and Conditions</a>.</label>
+                        <label for="terms" class="css-label" style="color: #0c0c0c" >I agree to the following<a href="{{url('terms')}}" style="color:#3ab29f "> Terms and Conditions</a>.</label>
                         </div>
                      </div>
                     <input type="hidden" name="url" value="{{$prev_url}}"/>
@@ -383,7 +380,7 @@ $(document).ready(function () {
     $('.numeric,input[type="number"]').bind('paste drop',function(e){
         e.preventDefault();
     });
-
+    
     // Opens popup for app download links
     $('#sendMsg2').modal('show');
 });
