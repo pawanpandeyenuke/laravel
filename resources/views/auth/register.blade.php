@@ -2,27 +2,15 @@
 
 @section('content')
 <style>
-    .small-text{
-        color: #717272;
-  font-size: 12px;
-  text-align: center;
-  padding: 5px 0;
-    }
-</style>
-
-<style>
-    .small-text{
-        color: #717272;
-  font-size: 12px;
-  text-align: center;
-  padding: 5px 0;
-    }
+.small-text{
+    color: #717272;
+    font-size: 12px;
+    text-align: center;
+    padding: 5px 0;
+}
 </style>
 <?php
 $prev_url = URL::previous();
-?>
-
-<?php 
 $userdata = session('userdata');
 ?>
 
@@ -123,7 +111,7 @@ $userdata = session('userdata');
 
 
                                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                    <input type="email" name="email" value="{{ old('email') }}" class="form-control icon-field" placeholder="Email ID" >
+                                    <input type="email" name="email" value="{{ session('email') }}" class="form-control icon-field" placeholder="Email ID" >
                                     
                                     @if ($errors->has('email'))
                                         <span class="help-block">
@@ -158,7 +146,7 @@ $userdata = session('userdata');
                                     <option value="">Country</option>
                                     @foreach($countries as $key => $country)
                                     <?php
-                                        if(old('country')!="" && old('country')==$key)
+                                        if(session('country')!="" && session('country')==$key)
                                             $selected = "selected";
                                         else
                                             $selected = "";
@@ -176,14 +164,14 @@ $userdata = session('userdata');
 
                             <div class="form-group ph-field {{ $errors->has('mobile_unique') ? ' has-error' : '' }}">
                                 <?php 
-                                        if(old('country_code') != "")
-                                            $font = "";
-                                        else
-                                            $font = "#999";
+                                    if(session('country_code') != "")
+                                        $font = "";
+                                    else
+                                        $font = "#999";
                                 ?>
-                                <span  class="country-code-field country-code-field-span numeric"><font color={{$font}}><?php echo (old('country_code') != "")?old('country_code'):"00"; ?></font></span> 
-                                <input type="hidden" name="country_code" class="country-code-field numeric register-country-code" value="{{ old('country_code') }}" placeholder="000" >
-                                <input type="text" class="form-control icon-field numeric register-mobile" name = "phone_no" value="{{ old('phone_no') }}" placeholder="Mobile" id="mobileContact">
+                                <span  class="country-code-field country-code-field-span numeric"><font color={{$font}}><?php echo (session('country_code') != "")?session('country_code'):"00"; ?></font></span> 
+                                <input type="hidden" name="country_code" class="country-code-field numeric register-country-code" value="{{ session('country_code') }}" placeholder="000" >
+                                <input type="text" class="form-control icon-field numeric register-mobile" name = "phone_no" value="{{ session('phone_no') }}" placeholder="Mobile" id="mobileContact">
                                 <span class="field-icon flaticon-smartphone-with-blank-screen"></span>
                                 @if ($errors->has('mobile_unique'))
                                     <span class="help-block">
@@ -196,8 +184,8 @@ $userdata = session('userdata');
                                     <ul>
                                         <li>I am</li>
                                         <?php
-                                            if(old('gender') != ""){
-                                                if(old('gender') == "Male"){
+                                            if(session('gender') != ""){
+                                                if(session('gender') == "Male"){
                                                     $male = "checked";
                                                     $female = "";
                                                 }else{
@@ -228,7 +216,7 @@ $userdata = session('userdata');
                         <div class="form-group">
                         <div class = "checkbox-cont">
                         <?php 
-                                if(old('terms')!="")
+                                if(session('terms')!="")
                                     $terms = "checked";
                                 else
                                     $terms = "";
@@ -244,11 +232,11 @@ $userdata = session('userdata');
                     <?php } ?>
 
                         </div>
-                                <div class="form-groups">
-                                    <div class="btn-cont text-center">
-                                        <input type="submit" class="btn btn-primary register" value="Get Started">
-                                    </div>
+                            <div class="form-groups">
+                                <div class="btn-cont text-center">
+                                    <input type="submit" class="btn btn-primary register" value="Get Started">
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -287,10 +275,9 @@ function getValidationArray(mobCode)
         return {min: "0", max: "15"};
     }
     return {min: countryMobValidLength.min, max: countryMobValidLength.max};
-    
 }
 
-$(document).ready(function () {
+jQuery(function($) {
     $(document).on('change', '#mob-country', function(){
         $('#mobileContact').val('');
         var countryId = $(this).val();

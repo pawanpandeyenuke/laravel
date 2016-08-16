@@ -52,11 +52,11 @@ class HomeController extends Controller
                     $errors->add('mobile_unique', 'This mobile number has already been taken.');
                 }
             }
-
+            
             if( !empty($errors->getMessages()) ) {
-                return redirect('/')->withErrors($errors);
+                return redirect('/')->withErrors($errors)->with($data);
             }
-
+            
             // Register user
             $userData = app()->make('App\Http\Controllers\Auth\AuthController')->create($data);
             return redirect('send-verification-link');
