@@ -86,7 +86,7 @@ $userdata = session('userdata');
                         <div class="col-sm-12">
 
                             <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
-                                <input type="text" name="first_name" value="{{ Request::get('first_name') }}" class="form-control icon-field" placeholder="First Name">
+                                <input type="text" name="first_name" value="{{ Request::get('first_name') ? Request::get('first_name') : session('first_name') }}" class="form-control icon-field" placeholder="First Name">
                                     
                                     @if ($errors->has('first_name'))
                                         <span class="help-block">
@@ -98,7 +98,7 @@ $userdata = session('userdata');
                                 </div>
 
                             <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
-                                    <input type="text" name="last_name" value="{{ Request::get('last_name') }}" class="form-control icon-field" placeholder="Last Name">
+                                    <input type="text" name="last_name" value="{{ Request::get('last_name') ? Request::get('last_name') : session('last_name') }}" class="form-control icon-field" placeholder="Last Name">
                                     
                                     @if ($errors->has('last_name'))
                                         <span class="help-block">
