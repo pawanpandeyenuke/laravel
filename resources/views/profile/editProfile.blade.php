@@ -273,7 +273,7 @@
 
 																<div class="col-sm-6 lPadding">
 																	<div class="p-data-title"><i class="flaticon-graduation"></i>Year</div>
-																	<input type="text" class="numeric year-input" name="graduation_year[]" value="{{$data->graduation_year}}" placeholder="" maxlength="4">
+																	<input type="text" class="numeric year-input" name="graduation_year[]" value="{{$data->graduation_year ? $data->graduation_year : ''}}" placeholder="" maxlength="4">
 																	<!-- <select id="graduationyears" name="graduation_year[]">
 																		<option value="">Year</option>
 																		@foreach($gradYear as $valuedata)
