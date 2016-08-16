@@ -32,8 +32,28 @@
 }
 
 #conversejs #minimized-chats{
-  top: 515px !important;
+  top: 463px !important;
   left: 3%;
+}
+#conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom {
+  font-size: 12px;
+  height: 27px !important;
+  padding: 0 4px !important;
+  width: 90px !important;
+}
+#conversejs a.close-chatbox-button, #conversejs a.configure-chatroom-button, #conversejs a.toggle-chatbox-button
+{
+  font-size:7px !important;
+  line-height: 8px !important;
+}
+
+#conversejs .minimized-chats-flyout.flyout {
+    float: left;
+    height: 40px !important;
+    overflow-y: auto !important;
+    position: relative;
+    top: 8px;
+    width: 97%;
 }
 </style>
 
