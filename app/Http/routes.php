@@ -405,6 +405,8 @@ Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
 			return view('auth.register');
 	});
 
+	Route::post('/', 'HomeController@postRegister');
+
 	/*Route::get('mail',function(){
 		return view('emails.invite')->with('username','Aditya')->with('id',"42");
 	});*/

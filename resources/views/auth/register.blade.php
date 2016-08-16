@@ -23,15 +23,19 @@ $prev_url = URL::previous();
 ?>
 
 <?php 
-$userdata = session('userdata'); 
+$userdata = session('userdata');
+if(!empty($errors)) {
+    //print_r($errors);exit;
+}
 ?>
 
 @if (Session::has('success'))
- <div class="alert alert-success">{!! Session::get('success') !!}</div>
- @endif
- @if (Session::has('error'))
- <div class="alert alert-danger">{!! Session::get('error') !!}</div>
- @endif
+    <div class="alert alert-success">{!! Session::get('success') !!}</div>
+@endif
+
+@if (Session::has('error'))
+    <div class="alert alert-danger">{!! Session::get('error') !!}</div>
+@endif
 
 @include('panels.download-app')
 
@@ -90,7 +94,7 @@ $userdata = session('userdata');
                     <div class="already-member">Already have Account? <a href="#" title="" data-toggle="modal" data-target="#LoginPop">Login</a></div>
                     <h3 class="text-center">Registration</h3>
 
-                      <form class="form-horizontal" id="registerForm" role="form" method="POST" action="{{ url('/register') }}">
+                      <form class="form-horizontal" id="registerForm" role="form" method="POST" action="{{ url('/') }}">
                         {!! csrf_field() !!}
 
                     <div class="row field-row">
@@ -165,7 +169,7 @@ $userdata = session('userdata');
                                         <option value="{{ $key }}" {{$selected}}>{{ $country }}</option>
                                     @endforeach
                                 </select>
-                                       @if ($errors->has('country'))
+                                    @if ($errors->has('country'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('country') }}</strong>
                                         </span>
@@ -173,7 +177,7 @@ $userdata = session('userdata');
                                 <span class="field-icon flaticon-web-1"></span>                                 
                             </div>
 
-                            <div class="form-group ph-field">
+                            <div class="form-group ph-field {{ $errors->has('mobile_unique') ? ' has-error' : '' }}">
                                 <?php 
                                         if(old('country_code') != "")
                                             $font = "";
@@ -181,9 +185,14 @@ $userdata = session('userdata');
                                             $font = "#999";
                                 ?>
                                 <span  class="country-code-field country-code-field-span numeric"><font color={{$font}}><?php echo (old('country_code') != "")?old('country_code'):"00"; ?></font></span> 
-                                <input type="hidden" name="country_code" class="country-code-field numeric" value="{{ old('country_code') }}" placeholder="000" >
-                                <input type="text" class="form-control icon-field numeric" name = "phone_no" value="{{ old('phone_no') }}" placeholder="Mobile" id="mobileContact">
+                                <input type="hidden" name="country_code" class="country-code-field numeric register-country-code" value="{{ old('country_code') }}" placeholder="000" >
+                                <input type="text" class="form-control icon-field numeric register-mobile" name = "phone_no" value="{{ old('phone_no') }}" placeholder="Mobile" id="mobileContact">
                                 <span class="field-icon flaticon-smartphone-with-blank-screen"></span>
+                                @if ($errors->has('mobile_unique'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('mobile_unique') }}</strong>
+                                    </span>
+                                @endif
                             </div>
 
                             <div class="form-group sex-option">
@@ -304,7 +313,7 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('focus', '#mobileContact', function(){
+    $(document).on('blur', '#mobileContact', function(){
         var array = $('.country-code-field').val();
         var validArray = getValidationArray(array);
         $('#mobileContact').prop('minlength', validArray.min);
@@ -313,11 +322,11 @@ $(document).ready(function () {
         $('#mobileContact').parent().find('#groupname-error').remove();
         
         var mobileContact = $('#mobileContact').val();
-        if(mobileContact.length < validArray.min){
+        if(mobileContact.length > 0 && mobileContact.length < validArray.min){
             $('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
         }
     });
-
+    
     $("#registerForm").validate({ 
         errorElement: 'span',
         errorClass: 'help-inline',

@@ -3794,3 +3794,8 @@ input.job-title-input
 {
 	width:87% !important;
 }
+
+input.register-mobile {
+    width: 100% !important;
+    padding: 6px 100px !important;
+}
