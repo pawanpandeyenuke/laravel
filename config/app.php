@@ -158,8 +158,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class,
-        App\Providers\Validation\ValidationServiceProvider::class 
+        Intervention\Image\ImageServiceProvider::class 
     ],
 
     /*

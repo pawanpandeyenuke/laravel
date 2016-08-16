@@ -67,7 +67,8 @@
 												<div class="p-data-title"><i class="flaticon-web-1"></i>Country</div>
 											</div>
 											<div class="col-sm-7 col-xs-12">
-												<select name="country" class="pr-edit" id="profile_country" >	
+												<select name="country" class="pr-edit" id="profile_country" >
+													<option value="">Select Country</option>
 													<?php 
 														foreach ($countries as $key => $value) { 
 															if($user->country == $value)
@@ -93,7 +94,7 @@
 											</div>
 											<div class="col-sm-7 col-xs-12">
 												<select name="state"  class="pr-edit" id="profile_state">
-													<option value="">State</option>	
+													<option value="">Select State</option>	
 													<?php 
 													if(!empty($all_states)){
 														foreach ($all_states as $key => $value) { 
@@ -115,7 +116,7 @@
 											</div>
 											<div class="col-sm-7 col-xs-12">
 												<select name="city"  class="pr-edit" id="profile_city" >
-													<option value="">City</option>	
+													<option value="">Select City</option>	
 													<?php 
 													if(isset($all_cities) && isset($user->city)){
 														foreach ($all_cities as $key => $value) { 
@@ -300,6 +301,7 @@
 																	<div class="p-data-title"><i class="flaticon-web-1"></i>Country of Establishment</div>
 																	
 																	<select name="country_of_establishment[]" class="country" id="edu_country" data-put="#state">
+																		<option value="">Select Country</option>
 																		@foreach($countries as $countrydata)
 																			<?php if($data->country_of_establishment == $countrydata)
 																					$selected = 'Selected'; 
@@ -312,7 +314,7 @@
 																<div class="col-sm-4 lPadding rPadding">
 																	<div class="p-data-title"><i class="flaticon-gps"></i>State of Establishment</div>
 																	<select name="state_of_establishment[]" class="state" data-put="#city">
-																		<option value="">State</option>
+																		<option value="">Select State</option>
 																		@foreach($all_states_estab as $value)
 																		<?php if($data->state_of_establishment == $value)
 																				$selected = 'Selected'; 
@@ -325,7 +327,7 @@
 																<div class="col-sm-4 lPadding">
 																	<div class="p-data-title"><i class="flaticon-city"></i>City of Establishment</div>
 																	<select name="city_of_establishment[]" class="city" >
-																		<option value="">City</option>
+																		<option value="">Select City</option>
 																		@foreach($all_cities_estab as $value)
 																		<?php if($data->city_of_establishment == $value)
 																				$selected = 'Selected'; 
@@ -499,202 +501,209 @@
 
 
 <script type="text/javascript">
-
-
+jQuery(function($){
 	$("#edit_profile").validate({ 
-        errorElement: 'span',
-        errorClass: 'help-inline',
-        rules: {
-            first_name: { required: true },
-           	last_name: {required: true},
-            country: {required: true}
-        },
-        messages:{
-            first_name:{
-                required: "First name can't be empty."
-            },
-            last_name:{
-                required: "Last name can't be empty."
-            },
-            country:{
-            		required: "Country is required"
-            }
-        }
-    });
-	$(document).ready(function(){
-		$(document).on('change', '.country', function(){
-			var current = $(this);
-			var countryId = current.val();
+    errorElement: 'span',
+    errorClass: 'help-inline',
+    rules: {
+      first_name: { required: true },
+     	last_name: {required: true},
+      country: {required: true}
+    },
+    messages:{
+      first_name:{
+        required: "First name can't be empty."
+      },
+      last_name:{
+        required: "Last name can't be empty."
+      },
+      country:{
+      	required: "Country is required"
+      }
+    }
+  });
+
+	$(document).on('change', '.country', function(){
+		var current = $(this);
+		var countryId = current.val();
+		if( countryId )
+		{
 			$.ajax({			
 				'url' : '/ajax/getstates',
 				'data' : { 'countryId' : countryId },
 				'type' : 'post',
 				'success' : function(response){	
 					current.closest('.row').find('.state').html(response);
-					// $('.state').html(response);
+					$('#profile_city').html('<option value="">Select City</option>');
 				}			
-			});	
-		});
-		$(document).on('change', '.state', function(){
-			var current = $(this);
-			var stateId = current.val();
+			});
+		} else {
+			$('#profile_state').html('<option value="">Select State</option>');
+			$('#profile_city').html('<option value="">Select City</option>');
+		}	
+	});
+
+	$(document).on('change', '.state', function(){
+		var current = $(this);
+		var stateId = current.val();
+		if( stateId )
+		{
 			$.ajax({			
 				'url' : '/ajax/getcities',
 				'data' : { 'stateId' : stateId },
 				'type' : 'post',
 				'success' : function(response){	
-					current.closest('.row').find('.city').html(response);			
-					// $('.city').html(response);
+					current.closest('.row').find('.city').html(response);
 				}			
-			});	
-		});
+			});
+		} else {
+			$('#profile_city').html('<option value="">Select City</option>');
+		}
+	});
 
-		/*  -------------------------  country state city  -------------------------  */ 
+	/*  -------------------------  country state city  -------------------------  */ 
 
-		$(document).on('change', '#profile_country', function(){
-			var countryId = $(this).val();
-
-			$('#profile_state').html('<option>State</option>');
-			$('#profile_city').html('<option>City</option>');
-			
-			var _token = $('#searchform input[name=_token]').val();
-			$('#mobileContact').val('');
-			if(countryId != ''){
-				// alert(countryId);
-				$.ajax({			
-					'url' : '/ajax/getstates',
-					'data' : { 'countryId' : countryId, '_token' : _token },
-					'type' : 'post',
-					'success' : function(response){
-						// alert(countryId);
-						$('#profile_state').html(response);
-						$.ajax({			
-							'url' : '/ajax/mob-country-code',
-							'data' : { 'countryId' : countryId, '_token' : _token },
-							'type' : 'post',
-							'success' : function(response){
-								
+	$(document).on('change', '#profile_country', function(){
+		var countryId = $(this).val();
+		var _token = $('#searchform input[name=_token]').val();
+		if(countryId != ''){
+			$.ajax({			
+				'url' : '/ajax/getstates',
+				'data' : { 'countryId' : countryId, '_token' : _token },
+				'type' : 'post',
+				'success' : function(response)
+				{
+					$('#profile_state').html(response);
+					$.ajax({			
+						'url' : '/ajax/mob-country-code',
+						'data' : { 'countryId' : countryId, '_token' : _token },
+						'type' : 'post',
+						'success' : function(response){
+							var mobile = $('#mobileContact').val();
+							if( !mobile )
+							{
 								var mobCode = response[0].phonecode;
-								// alert(mobCode);
 								$('.country-code-field').val(mobCode);
 								$('.country-code-field-span').html(mobCode);
 								$('.country-code-field').attr('data-value', mobCode);
-                        		var validArray = getValidationArray(mobCode);
-							}			
-						});	
-					}			
-				});	
-			}else{
-				$('#profile_state').html('<option>State</option>');
-				$('#profile_city').html('<option>City</option>');
-			}
-		});
-
-		/* @Mobile code change on country change */
-			function getValidationArray(mobCode){
-			    // console.log(mobCode);
-			    // alert(mobCode);
-			    var countryMobValidLengthArray = <?php print_r(json_encode(countryMobileLength(),1));?>;
-			    var countryMobValidLength = countryMobValidLengthArray[mobCode];
-			    if(countryMobValidLength == undefined){
-			        return {min: 0, max: 15};
-			    }
-			    console.log(countryMobValidLength);
-			    return {min: countryMobValidLength.min, max: countryMobValidLength.max};
-			}
-
-	        $(document).on('focus', '#mobileContact', function(){
-	            var array = $('.country-code-field').data('value');
-	            var validArray = getValidationArray(array);
-	            $('#mobileContact').prop('minlength', validArray.min);
-	            $('#mobileContact').prop('maxlength', validArray.max);
-	        });
-
-	        $(document).on('blur', '#mobileContact', function(){
-	            $('#mobileContact').parent().find('#groupname-error').remove();
-	            var array = $('.country-code-field').data('value');
-	            var validArray = getValidationArray(array);
-	            var mobileContact = $('#mobileContact').val();
-	            if(mobileContact.length < validArray.min){
-	                // alert('invalid value');
-	                $('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
+	              var validArray = getValidationArray(mobCode);
 	            }
-	        });
-        /* @Mobile code change on country change */
-
-
-
-		$(document).on('change', '#profile_state', function(){
-			var stateId = $(this).val();
-			var _token = $('#searchform input[name=_token]').val();
-
-			if(stateId != ''){
-				$.ajax({			
-					'url' : '/ajax/getcities',
-					'data' : { 'stateId' : stateId, '_token' : _token },
-					'type' : 'post',
-					'success' : function(response){
-						$('#profile_city').html(response);
-					}			
-				});	
-			}else{
-				$('#profile_city').html('<option>City</option>');
-			}
-		});
-
-		var today = new Date();
-
-		$('.datepicker').datepicker({
-            'format': 'yyyy/mm/dd',
-            'startDate': '01/01/1960',
-            'endDate': today
-		});
-	
+              $('#profile_city').html('<option value="">Select City</option>');
+						}			
+					});	
+				}			
+			});
+		}else{
+			$('#profile_state').html('<option value="">Select State</option>');
+			$('#profile_city').html('<option value="">Select City</option>');
+		}
 	});
 
+	/* @Mobile code change on country change */
+	function getValidationArray(mobCode)
+	{
+	    var countryMobValidLengthArray = <?php print_r(json_encode(countryMobileLength(),1));?>;
+	    var countryMobValidLength = countryMobValidLengthArray[mobCode];
+	    if(countryMobValidLength == undefined){
+	        return {min: 0, max: 15};
+	    }
+	    console.log(countryMobValidLength);
+	    return {min: countryMobValidLength.min, max: countryMobValidLength.max};
+	}
 
- 	$(function () {
-		$('.datepicker').datepicker({
+  $(document).on('focus', '#mobileContact', function(){
+      var array = $('.country-code-field').data('value');
+      var validArray = getValidationArray(array);
+      $('#mobileContact').prop('minlength', validArray.min);
+      $('#mobileContact').prop('maxlength', validArray.max);
+  });
 
-		});
+  $(document).on('blur', '#mobileContact', function(){
+      $('#mobileContact').parent().find('#groupname-error').remove();
+      var array = $('.country-code-field').data('value');
+      var validArray = getValidationArray(array);
+      var mobileContact = $('#mobileContact').val();
+      if(mobileContact.length < validArray.min){
+          // alert('invalid value');
+          $('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
+      }
+  });
+  /* @Mobile code change on country change */
+
+	$(document).on('change', '#profile_state', function(){
+		var stateId = $(this).val();
+		var _token = $('#searchform input[name=_token]').val();
+
+		if(stateId != ''){
+			$.ajax({			
+				'url' : '/ajax/getcities',
+				'data' : { 'stateId' : stateId, '_token' : _token },
+				'type' : 'post',
+				'success' : function(response){
+					$('#profile_city').html(response);
+				}			
+			});	
+		}else{
+			$('#profile_city').html('<option value="">Select City</option>');
+		}
 	});
 
+	var today = new Date();
+	$('.datepicker').datepicker({
+    'format': 'yyyy-mm-dd',
+    'startDate': '1960-01-01',
+    'endDate': today
+	});
 
 	$(document).on('click', '.removeme', function(){
-
 		var current = $(this); 
 		var id = current.closest('.pe-row').data('id');
-
-		if(id){
+		if(id)
+		{
 			$.ajax({			
 				'url' : '/ajax/remove-education',
 				'data' : { 'educationid' : id },
 				'type' : 'post',
 				'success' : function(response){
-					// alert(id);
 					current.closest('.pe-row').remove();
 				}			
 			});	
 		}else{
 			current.closest('.pe-row').remove();
 		}
-		// alert(id);
 	});
 
+	// Form validation
+	$('#edit_profile').submit(function(){
+		var found = 0;
+		$(document).find('.year-input').each(function(){
+			$(this).next('p.red').remove();
+			if( $(this).val() && $(this).val().length<4 ){
+				found++;
+				$(this).after("<p class='red'>Year must be of 4 digits.</p>");
+			}
+		});
 
-  var rowCount = 0;
-	function addMoreRows(frm) {
+		if( found > 0 ){
+			return false;
+		}
 
+		return true;
+	});
+});
+
+var rowCount = 0;
+function addMoreRows(frm) 
+{
 	rowCount ++;
 
 	var educationlevel = $('#educationlevel').html();
 	var specialization = $('#specialization').html();
 	var graduationyears = $('#graduationyears').html();
 	var country = $('#edu_country').html();
-	// console.log(country);
-	var founderRow = '<div class="study-detail" id="rowCount'+rowCount+'"><div class=pe-row><button type="button" class="btn add-study-btn removeme" onclick="removeRow('+rowCount+');"><span class="glyphicon glyphicon-trash"></span></button><div class=row><div class="col-sm-6 lPadding"><div class=p-data-title><i class=flaticon-graduation></i>Education level</div><select class="" name="education_level[]">'+educationlevel+'</select></div><div class="col-sm-6 rPadding"><div class=p-data-title><i class=flaticon-graduation></i>Specialization</div><select class="" name="specialization[]">'+specialization+'</select></div></div><div class=row><div class="col-sm-6 lPadding"><div class=p-data-title><i class=flaticon-graduation></i>Year</div><input type="text" class="numeric" name="graduation_year[]" value="" placeholder="" maxlength="4"></div><div class="col-sm-6 rPadding"><div class=p-data-title><i class=flaticon-graduation></i>Name of Establishment</div><input class=pr-edit name="education_establishment[]" placeholder=""></div></div><div class=row><div class="col-sm-4 lPadding"><div class=p-data-title><i class=flaticon-web-1></i>Country of Establishment</div><select class="country" data-put="#state" name="country_of_establishment[]">'+country+'</select></div><div class=col-sm-4><div class=p-data-title><i class=flaticon-gps></i>State of Establishment</div><select class="state" data-put="#city" name="state_of_establishment[]"><option>Option</option></select></div><div class=col-sm-4><div class=p-data-title><i class=flaticon-city></i>City of Establishment</div><select name="city_of_establishment[]" class="city"><option>Option</option></select></div></div></div></div>';
+	var founderRow = '<div class="study-detail" id="rowCount'+rowCount+'"><div class=pe-row><button type="button" class="btn add-study-btn removeme" onclick="removeRow('+rowCount+');"><span class="glyphicon glyphicon-trash"></span></button><div class=row><div class="col-sm-6 lPadding"><div class=p-data-title><i class=flaticon-graduation></i>Education level</div><select class="" name="education_level[]">'+educationlevel+'</select></div><div class="col-sm-6 rPadding"><div class=p-data-title><i class=flaticon-graduation></i>Specialization</div><select class="" name="specialization[]">'+specialization+'</select></div></div><div class=row><div class="col-sm-6 lPadding"><div class=p-data-title><i class=flaticon-graduation></i>Year</div><input type="text" class="numeric year-input" name="graduation_year[]" value="" placeholder="" maxlength="4"></div><div class="col-sm-6 rPadding"><div class=p-data-title><i class=flaticon-graduation></i>Name of Establishment</div><input class=pr-edit name="education_establishment[]" placeholder=""></div></div><div class=row><div class="col-sm-4 lPadding"><div class=p-data-title><i class=flaticon-web-1></i>Country of Establishment</div><select class="country" data-put="#state" name="country_of_establishment[]">'+country+'</select></div><div class=col-sm-4><div class=p-data-title><i class=flaticon-gps></i>State of Establishment</div><select class="state" data-put="#city" name="state_of_establishment[]"><option value="">Select State</option></select></div><div class=col-sm-4><div class=p-data-title><i class=flaticon-city></i>City of Establishment</div><select name="city_of_establishment[]" class="city"><option value="">Select City</option></select></div></div></div></div>';
 
-	/*var founderRow = '<div class="row row-outer" id="rowCount'+rowCount+'"><div class="col-sm-6"><div class="row"><div class="col-sm-6"><div class="form-group"><input type="text" class="form-control icon-field" placeholder="Name"><span class="icon user-icon"></span></div></div><div class="col-sm-6"><div class="form-group"><textarea name="" class="form-control icon-field"  placeholder="Description"></textarea><span class="icon desc-icon"></span></div></div></div></div><div class="col-sm-6"><div class="row"><div class="col-md-10"><div class="form-group"><select><option>Country drop</option><option>Option 1</option><option>Option 2</option><option>Option 3</option></select><span class="icon globe-icon"></span></div></div><div class="col-md-2"><button type="button" title="Delete row" onclick="removeRow('+rowCount+');" class="btn-icon-round center-btn del-btn"><i class="fa fa-minus"></i></button></div></div></div></div>';*/
+		/*var founderRow = '<div class="row row-outer" id="rowCount'+rowCount+'"><div class="col-sm-6"><div class="row"><div class="col-sm-6"><div class="form-group"><input type="text" class="form-control icon-field" placeholder="Name"><span class="icon user-icon"></span></div></div><div class="col-sm-6"><div class="form-group"><textarea name="" class="form-control icon-field"  placeholder="Description"></textarea><span class="icon desc-icon"></span></div></div></div></div><div class="col-sm-6"><div class="row"><div class="col-md-10"><div class="form-group"><select><option>Country drop</option><option>Option 1</option><option>Option 2</option><option>Option 3</option></select><span class="icon globe-icon"></span></div></div><div class="col-md-2"><button type="button" title="Delete row" onclick="removeRow('+rowCount+');" class="btn-icon-round center-btn del-btn"><i class="fa fa-minus"></i></button></div></div></div></div>';*/
 
 	$('#addedRows').each(
 	  function() {
@@ -704,13 +713,13 @@
 	    }
 	    else{
 	    	jQuery('#addedRows').append(founderRow);
+	    	jQuery('#addedRows select').val('');
 	    }
 	  }
 	);
-	}
-	function removeRow(removeNum) {
+}
+function removeRow(removeNum) {
 	jQuery('#rowCount'+removeNum).remove();
-	}
+}
 </script>
 @endsection
-
