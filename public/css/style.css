@@ -2627,7 +2627,7 @@ textarea{
     padding: 8px 10px;
     border-radius: 5px;
     display: block;
-    background: rgba(58,172,178,0.8);
+    background: #92e7dc;
 	position: relative;
 }
 #chat-system .chat-msg-me .chat-msg-content:after{
@@ -2637,7 +2637,7 @@ textarea{
     height: 0;
     border-top: 0px solid transparent;
     border-bottom: 10px solid transparent;
-    border-left: 10px solid #BAFAF2;
+    border-left: 10px solid #92e7dc;
     left: 100%;
     top: 5px;
 }
@@ -2648,7 +2648,7 @@ textarea{
 	height: 0; 
 	border-top: 0px solid transparent;
 	border-bottom: 10px solid transparent; 
-	border-right:10px solid #BAFAF2;
+	border-right:10px solid #92e7dc;
     right: 100%;
     top: 5px;
 }
