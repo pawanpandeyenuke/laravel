@@ -20,9 +20,9 @@ class SearchController extends Controller
             if($keyword == "") {
                 return redirect('/');
             }
-            
+
             $authUserId = Auth::check() ? Auth::User()->id : 0;
-            //$authUserId = 65;
+            $authUserId = 65;
 
             // Search users
             if( !$authUserId )
@@ -40,7 +40,7 @@ class SearchController extends Controller
                         }
                     });
 
-                //$count = $model->count();
+                $count = $model->count();
             }
             else
             {
@@ -183,11 +183,10 @@ class SearchController extends Controller
                 /*echo $query = DB::raw("select count(*) as total from (".$model->toSql().") as f");
                 $count = DB::select($query);
                 print_r($count);exit;*/
-                $count = 0;
             }
             
             $count = 0;
-
+            
             // Gather all the results from the queries and paginate it.
             $result = $model->take(10)->get();
             
