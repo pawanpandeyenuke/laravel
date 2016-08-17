@@ -2628,7 +2628,7 @@ textarea{
     text-align: left;
     padding: 8px 10px;
     border-radius: 5px;
-    display: block;
+    display: inline-block;
     background: #f1f1f1;
 	position: relative;
 }
@@ -3813,7 +3813,4 @@ input.register-mobile {
 }
 body.modal-open {
     overflow: visible;
-}
-#conversejs .chatbox .chat-body .chat-message span {
-    display: inline-block;
 }
