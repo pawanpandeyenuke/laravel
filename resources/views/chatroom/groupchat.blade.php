@@ -784,7 +784,7 @@ function openChatGroup( grpjid,grpname,groupimage ){
 function openFirstChat( grpjid ){
 	groupChatRefresh( grpjid );
 	if( hideOpendBox( grpjid+conferencechatserver, 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver  );
+		conObj.rooms.open( grpjid+conferencechatserver );
 		$( '.chatnotification' ).remove();
 	}
 }
