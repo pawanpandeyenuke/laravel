@@ -777,13 +777,13 @@ function hideOpendBox( grpname , actiontype ){
 
 function openChatGroup( grpjid,grpname,groupimage ){
 	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver , '<?= Auth::User()->xmpp_username ?>_<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
+		conObj.rooms.open( grpjid+conferencechatserver );
 	}
 }
 function openFirstChat( grpjid ){
 	groupChatRefresh( grpjid );
 	if( hideOpendBox( grpjid+conferencechatserver, 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver , '<?= Auth::User()->xmpp_username ?>_<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
+		conObj.rooms.open( grpjid+conferencechatserver  );
 		$( '.chatnotification' ).remove();
 	}
 }
@@ -858,7 +858,7 @@ function closePublic( grpname ){
 	});
 
 	if( openChat == 1 ){
-		conObj.rooms.open( grpname+conferencechatserver, '<?= Auth::User()->xmpp_username ?>_<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
+		conObj.rooms.open( grpname+conferencechatserver );
 	}
 }
 
