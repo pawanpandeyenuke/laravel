@@ -27,7 +27,7 @@ $userdata = session('userdata');
 <div class="page-data login-page">
     <div class="container">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8 col-xs-12">
                 <div class="home-slider-cont">
                     <div class="slider-btns">
                         <ul class="list-inline">
@@ -74,7 +74,7 @@ $userdata = session('userdata');
                         </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 col-xs-12">
                 <div class="login-form registration-form">
                     <div class="already-member">Already have Account? <a href="#" title="" data-toggle="modal" data-target="#LoginPop">Login</a></div>
                     <h3 class="text-center">Registration</h3>

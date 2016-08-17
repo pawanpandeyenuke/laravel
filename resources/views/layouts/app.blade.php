@@ -13,10 +13,8 @@
 
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>	
 <script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script src="http://malsup.github.com/jquery.form.js"></script> 
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+<script type="text/javascript" src="{{url('/js/jquery.form.js')}}"></script>
+<script src="{{url('/js/jquery.validate.js')}}"></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,18 +27,18 @@
 
 </script>
 </head>
+<body>
 @include('panels.loginpopup')
-	<body>
-		<header>
+	<header>
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-2">
-				<a href="{{url('/')}}" title="" class="logo"><img src="/images/logo.png" alt="Friendz Square"></a>
+				<a href="{{url('/')}}" title="" class="logo"><img src="{{url('images/logo.png')}}" alt="Friendz Square"></a>
 			</div>
-			<div class="col-sm-6">
+			<div class="col-sm-6 col-xs-12">
 				<div class="top-search-cont">
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-sm-6 col-xs-12">
 							<div class="search-field">
 								{!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
 								<input type="text" name="searchfriends" id="searchfriends" value="" placeholder="Enter Name" class="form-control">
@@ -49,7 +47,7 @@
 							</div>
 						</div>
             		{!! Form::open(array('url' => 'search-forum', 'id' => 'search-forum', 'method' => 'post')) !!}
-						<div class="col-sm-6">
+						<div class="col-sm-6 col-xs-12">
 							<div class="search-field">
               					<input type = "hidden" name = "mainforum" value = "Forum">
               					<input type = "hidden" name = "check" value = "">
@@ -61,7 +59,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-4 col-xs-12">
 				<div class="header-right-menu">
 
 				<div class="suggestn_blk">
@@ -110,108 +108,106 @@
 
 {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<script type="text/javascript" >
+<script type="text/javascript">
+if(window.location.pathname == "/" || window.location.pathname == "/register"){
+    $('.login-footer').hide();
+}else{
+    $('.login-footer').show();
+}
 
-	if(window.location.pathname == "/" || window.location.pathname == "/register"){
-        $('.login-footer').hide();
-    }else{
-        $('.login-footer').show();
-    }
-    
-		$( "#searchform" ).submit(function( event ) {
-			var searchkey = $('#searchfriends').val();
-			if(searchkey == ''){
-				$('#searchfriends').attr('placeholder', 'Search here..').focus();
-				event.preventDefault();
-			}
-		});
+jQuery(function($){  
+	$( "#searchform" ).submit(function( event ) {
+		var searchkey = $('#searchfriends').val();
+		if(searchkey == ''){
+			$('#searchfriends').attr('placeholder', 'Search here..').focus();
+			event.preventDefault();
+		}
+	});
 
-			$( "#search-forum" ).submit(function( event ) {
-			var searchkey = $('#forum-keyword-app').val();
-			if(searchkey == ''){
-				$('#forum-keyword-app').attr('placeholder', 'Enter Keyword').focus();
-				event.preventDefault();
-			}
-		});
+	$( "#search-forum" ).submit(function( event ) {
+		var searchkey = $('#forum-keyword-app').val();
+		if(searchkey == ''){
+			$('#forum-keyword-app').attr('placeholder', 'Enter Keyword').focus();
+			event.preventDefault();
+		}
+	});
 
-		  $("#suggestionform").validate({ 
-          errorElement: 'span',
-          errorClass: 'help-inline',
-          rules: {
-              message_text: { required: true },
-              email: {email: true}
+	$("#suggestionform").validate({ 
+      errorElement: 'span',
+      errorClass: 'help-inline',
+      rules: {
+          message_text: { required: true },
+          email: {email: true}
+      },
+      messages:{
+          message_text:{
+              required: "Please write something to send your suggestion."
           },
-          messages:{
-              message_text:{
-                  required: "Please write something to send your suggestion."
-              },
-              email:{
-                  email: "Please check your email format."
-              }
+          email:{
+              email: "Please check your email format."
           }
-      });
- 
-		$("#suggestionform").ajaxForm(function(response) {
-			if(response == "success")
-			{
-				$('.modal-footer').hide();
-				$('.successmsg').toggle();
-			}
-		});
+      }
+  	});
 
-		$('.modalshow').click(function(){
-			$('.modal-footer').show();
+	$("#suggestionform").ajaxForm(function(response) {
+		if(response == "success")
+		{
+			$('.modal-footer').hide();
 			$('.successmsg').toggle();
-			$('.message_text').val('');
-			$('.useremail').val('');
-		});
+		}
+	});
 
-			$('.password-eye').change(function(){
-				 if($('.password-eye').is(':checked')) 
-				 	  $('#showpassword').prop('type', 'text');
-				 else
-				 	  $('#showpassword').prop('type', 'password');
-				 $("#showpassword").focus();
-				 $('#showpassword').val($('#showpassword').val() + ' ');
-				 $('#showpassword').val($.trim($('#showpassword').val()));
-			});
+	$('.modalshow').click(function(){
+		$('.modal-footer').show();
+		$('.successmsg').toggle();
+		$('.message_text').val('');
+		$('.useremail').val('');
+	});
 
-			$('#country').change(function(){
-				var countryId = $(this).val();
-				var _token = $('#searchform input[name=_token]').val();
-				$.ajax({			
-					'url' : '/ajax/getstates',
-					'data' : { 'countryId' : countryId, '_token' : _token },
-					'type' : 'post',
-					'success' : function(response){				
-						$('#state').html(response);
-					}			
-				});	
-			});
+	$('.password-eye').change(function(){
+		 if($('.password-eye').is(':checked')) 
+		 	  $('#showpassword').prop('type', 'text');
+		 else
+		 	  $('#showpassword').prop('type', 'password');
+		 $("#showpassword").focus();
+		 $('#showpassword').val($('#showpassword').val() + ' ');
+		 $('#showpassword').val($.trim($('#showpassword').val()));
+	});
 
+	$('#country').change(function(){
+		var countryId = $(this).val();
+		var _token = $('#searchform input[name=_token]').val();
+		$.ajax({			
+			'url' : '/ajax/getstates',
+			'data' : { 'countryId' : countryId, '_token' : _token },
+			'type' : 'post',
+			'success' : function(response){				
+				$('#state').html(response);
+			}			
+		});	
+	});
 
-			/**
-			*	Get cities ajax call handling.
-			*	Ajaxcontroller@getCities
-			*/
-			$('#state').change(function(){
-				var stateId = $(this).val();
-				var _token = $('#searchform input[name=_token]').val();
-				$.ajax({			
-					'url' : '/ajax/getcities',
-					'data' : { 'stateId' : stateId, '_token' : _token },
-					'type' : 'post',
-					'success' : function(response){
-						$('#city').html(response);
-					}			
-				});	
-			});
+	/**
+	*	Get cities ajax call handling.
+	*	Ajaxcontroller@getCities
+	*/
+	$('#state').change(function(){
+		var stateId = $(this).val();
+		var _token = $('#searchform input[name=_token]').val();
+		$.ajax({			
+			'url' : '/ajax/getcities',
+			'data' : { 'stateId' : stateId, '_token' : _token },
+			'type' : 'post',
+			'success' : function(response){
+				$('#city').html(response);
+			}			
+		});	
+	});
+});
 
-
-		    function googleTranslateElementInit() {
-		      new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-		    }
-			
+function googleTranslateElementInit() {
+  	new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}			
 		</script>
 	</body>
 </html>

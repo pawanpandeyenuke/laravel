@@ -58,13 +58,13 @@
  <header>
 	<div class="container">
 		<div class="row header-row-full">
-			<div class="col-sm-2">
+			<div class="col-sm-2 col-xs-12">
 				<a href="{{url('dashboard')}}" title="" class="logo"><img src="{{url('/images/logo.png')}}" alt="Friendz Square"></a>
 			</div>
-			<div class="col-sm-7 bPadding">
+			<div class="col-sm-7 col-xs-12 bPadding">
 				<div class="top-search-cont">
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-sm-6 col-xs-12">
 							<div class="search-field">
 							{!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
 								<input type="text" name="searchfriends" id="searchfriends" value="{{ Request::get('searchfriends')}}" placeholder="Enter Name" class="form-control">
@@ -73,7 +73,7 @@
 							</div>
 						</div>
             {!! Form::open(array('url' => 'search-forum', 'id' => 'search-forum-dashboard', 'method' => 'post')) !!}
-						<div class="col-sm-6">
+						<div class="col-sm-6 col-xs-12">
 							<div class="search-field">
               <input type = "hidden" name = "mainforum" value = "Forum">
               <input type = "hidden" name = "check" value = "">
@@ -85,7 +85,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-3 col-xs-12">
 				<div class="dashboard-header-menu text-right">
           @if(Auth::check())
 					<ul class="list-inline">

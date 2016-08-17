@@ -136,7 +136,7 @@
 											<div class="col-sm-5 col-xs-12">
 												<div class="p-data-title"><i class="flaticon-technology"></i>Contact</div>
 											</div>
-											<div class="col-sm-7 col-xs-126 ph-field">
+											<div class="col-sm-7 col-xs-12 ph-field">
 												<!-- <input type="text" name="phone_no" class="pr-edit numeric" maxlength="15" value="{{ $user->phone_no }}"> -->
 
 											    <span name="country_code" class="country-code-field-span country-code-field numeric" value="{{ $user->country_code }}" placeholder="000" >{{ $user->country_code }}</span>
@@ -251,7 +251,7 @@
 																			<?php } ?>
 																		</select>
 																</div>
-																<div class="col-sm-6">
+																<div class="col-sm-6 lPadding">
 																	<div class="p-data-title"><i class="flaticon-graduation"></i>Specialization</div>
 																		<select name="specialization[]" id="specialization" style="max-width: 180px;" >
 																			<option value="">Specialization</option>
@@ -288,7 +288,7 @@
 																	</select> -->
 																</div>
 															
-																<div class="col-sm-6">
+																<div class="col-sm-6 lPadding">
 																	<div class="p-data-title"><i class="flaticon-graduation"></i>Name of Establishment</div>
 																	
 																	<input type="text" class="year-input" name="education_establishment[]" value="{{$data->education_establishment}}" placeholder="">

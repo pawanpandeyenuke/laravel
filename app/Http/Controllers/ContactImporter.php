@@ -192,11 +192,12 @@ class ContactImporter extends Controller
                                         ->get()
                                         ->toArray();
 
-                    if(empty($frienddata))
+                    if(empty($frienddata)) 
+                    {
                         // $friends[] = $value;
                         $message = 'Please add me on FriendzSquare!';
                         self::mail($value, $message, 'Invitation', 'emails.friend');
-
+                    }
                 }
 
                 return redirect('invite-friends')->with('success', 'Invitation sent successfully!');

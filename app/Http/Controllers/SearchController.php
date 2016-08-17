@@ -180,11 +180,12 @@ class SearchController extends Controller
                     $model = $union1->union($union2)->union($union3);
                 }
 
-                echo $query = DB::raw("select count(*) as total from (".$model->toSql().") as f");
+                /*echo $query = DB::raw("select count(*) as total from (".$model->toSql().") as f");
                 $count = DB::select($query);
-                print_r($count);exit;
-                $count = 0;
+                print_r($count);exit;*/
             }
+            
+            $count = 0;
             
             // Gather all the results from the queries and paginate it.
             $result = $model->take(10)->get();
