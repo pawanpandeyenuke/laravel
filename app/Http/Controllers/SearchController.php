@@ -20,7 +20,7 @@ class SearchController extends Controller
             if($keyword == "") {
                 return redirect('/');
             }
-
+            
             $authUserId = Auth::check() ? Auth::User()->id : 0;
             //$authUserId = 65;
 

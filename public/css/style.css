@@ -1875,7 +1875,7 @@ width:495px;
 	right: 0;
 }
 .modal{
-  z-index: 9999999999999999;
+  z-index: 999999;
 }
 .no-left-padding{
 	padding-left: 10px;
@@ -2627,7 +2627,7 @@ textarea{
     padding: 8px 10px;
     border-radius: 5px;
     display: block;
-    background: #e9faf8;
+    background: #f1f1f1;
 	position: relative;
 }
 #chat-system .chat-msg-me .chat-msg-content:after{
@@ -2637,7 +2637,7 @@ textarea{
     height: 0;
     border-top: 0px solid transparent;
     border-bottom: 10px solid transparent;
-    border-left: 10px solid #e9faf8;
+    border-left: 10px solid #f1f1f1;
     left: 100%;
     top: 5px;
 }
@@ -2648,7 +2648,7 @@ textarea{
 	height: 0; 
 	border-top: 0px solid transparent;
 	border-bottom: 10px solid transparent; 
-	border-right:10px solid #e9faf8;
+	border-right:10px solid #f1f1f1;
     right: 100%;
     top: 5px;
 }
@@ -3794,4 +3794,22 @@ input.register-mobile {
 }
 .red{
 	color:red;
+}
+
+.modal-header .close {
+  background: #000 none repeat scroll 0 0;
+  border-radius: 28px;
+  color: #fff;
+  font-size: 20px;
+  height: 28px;
+  opacity: 1;
+  position: absolute;
+  right: -12px;
+  text-shadow: none;
+  top: -12px;
+  width: 28px;
+}
+
+body.modal-open {
+    overflow: visible;
 }
