@@ -150,7 +150,8 @@ $GroupsJidList = $SingleChatList = array();
                                             @if(!empty($userdata))
                                             @foreach($userdata as $data)
 
-                                              <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; ?>
+                                              <?php $user_picture = !empty($data['user']['picture']) ? url('uploads/user_img/'.$data['user']['picture']) : '/images/user-thumb.jpg';
+                                              ?>
 
                                               <li >
                                                   <div class='info' data-id="{{$data['user']['id']}}" style="position:relative;" >

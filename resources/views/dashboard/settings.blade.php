@@ -1,9 +1,9 @@
 @extends('layouts.dashboard')
 <?php  
-if($setting==null)
+if( !$setting )
 {
-$setting['contact-request']="friends-of-friends";
-$setting['friend-request'] ="friends-of-friends";
+$setting['contact-request']="all";
+$setting['friend-request'] ="all";
 }
 ?>
 @section('title', 'Settings - ')
