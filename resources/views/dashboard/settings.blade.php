@@ -35,17 +35,17 @@ $setting['friend-request'] ="all";
 								<div class="row">
 									<div class="col-sm-8 col-sm-offset-3">
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="contact-request" id="radio1" class="css-checkbox" value="friends-of-friends" <?php echo $setting['contact-request'] == 'friends-of-friends'? 'checked':''; ?>/>
+											<input type="radio" name="contact-request" id="radio1" class="css-checkbox" value="friends-of-friends" <?php echo isset($setting['contact-request']) && $setting['contact-request'] == 'friends-of-friends'? 'checked':''; ?>/>
 
 											<label for="radio1" class="css-label radGroup1">Friends of friends</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="contact-request" id="radio2" class="css-checkbox" value="nearby-app-user" <?php echo $setting['contact-request'] == 'nearby-app-user'? 'checked':''; ?>/>
+											<input type="radio" name="contact-request" id="radio2" class="css-checkbox" value="nearby-app-user" <?php echo isset($setting['contact-request']) && $setting['contact-request'] == 'nearby-app-user'? 'checked':''; ?>/>
 
 											<label for="radio2" class="css-label radGroup1">Nearby app user</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="contact-request" id="radio3" class="css-checkbox" value="all" <?php echo $setting['contact-request'] == 'all'? 'checked':''; ?>/>
+											<input type="radio" name="contact-request" id="radio3" class="css-checkbox" value="all" <?php echo isset($setting['contact-request']) && $setting['contact-request'] == 'all'? 'checked':''; ?>/>
 
 											<label for="radio3" class="css-label radGroup1">All</label>
 										</div>
@@ -58,17 +58,17 @@ $setting['friend-request'] ="all";
 								<div class="row">
 									<div class="col-sm-8 col-sm-offset-3">
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="friend-request" id="radior1" class="css-checkbox" value="friends-of-friends" <?php echo $setting['friend-request'] == 'friends-of-friends'? 'checked':'' ?>/>
+											<input type="radio" name="friend-request" id="radior1" class="css-checkbox" value="friends-of-friends" <?php echo isset($setting['friend-request']) && $setting['friend-request'] == 'friends-of-friends'? 'checked':'' ?>/>
 
 											<label for="radior1" class="css-label radGroup1">Friends of friends</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="friend-request" id="radior2" class="css-checkbox" value="nearby-app-user" <?php echo $setting['friend-request'] == 'nearby-app-user'? 'checked':'' ?>/>
+											<input type="radio" name="friend-request" id="radior2" class="css-checkbox" value="nearby-app-user" <?php echo isset($setting['friend-request']) && $setting['friend-request'] == 'nearby-app-user'? 'checked':'' ?>/>
 
 											<label for="radior2" class="css-label radGroup1">Nearby app user</label>
 										</div>
 										<div class="radio-cont radio-label-left">
-											<input type="radio" name="friend-request" id="radior3" class="css-checkbox" value="all" <?php echo $setting['friend-request'] == 'all'? 'checked':'' ?>/>
+											<input type="radio" name="friend-request" id="radior3" class="css-checkbox" value="all" <?php echo isset($setting['friend-request']) && $setting['friend-request'] == 'all'? 'checked':'' ?>/>
 
 											<label for="radior3" class="css-label radGroup1">All</label>
 										</div>
