@@ -1208,7 +1208,8 @@ public function sendImage(Request $request){
         $xmpu2 = User::whereIn('id',$members)->pluck('xmpp_username');
 
         foreach ($xmpu2 as $key => $value) {
-        	$converse->broadcast($xmpu1,$value,$input['msg']);
+        	$Message = json_encode( array( 'type' => 'text', 'message' => $input['msg'] ) );
+        	$converse->broadcast($xmpu1,$value,$Message);
         }
 
 		$date = date('d M Y,h:i a', time());
