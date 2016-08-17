@@ -73,14 +73,13 @@ class ApiController extends Controller
 				$input['confirmation_code'] = $confirmation_code;
 				$userdata = $user->create($input);
 				$full_name = $userdata->first_name.' '.$userdata->last_name;
-				
 				//Saving xmpp-username and xmpp-pasword into database.
 		        $xmpp_username = $userdata->first_name.$userdata->id;
 		        $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
-		        
+
 		        $raw_token = $userdata->first_name.date('Y-m-d H:i:s',time()).$userdata->last_name.$userdata->email;
 	        	$access_token = Hash::make($raw_token);
-	        	
+
 		        $user = User::find($userdata->id);
 		        $user->xmpp_username = strtolower($xmpp_username);
 		        $user->xmpp_password = $xmpp_password;
