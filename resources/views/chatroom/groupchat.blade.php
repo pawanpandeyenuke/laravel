@@ -157,8 +157,8 @@ $GroupsJidList = $SingleChatList = array();
                                                     <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif  data-id="{{$data['user']['id']}}" >
                                                         <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
                                                         <span class="title">{{ $data['user']['first_name'] }}</span>           
-                                                    <?php $SingleChatList[$data['user']['xmpp_username']]['title'] = $data['user']['first_name'];
-                                                    		$SingleChatList[$data['user']['xmpp_username']]['image'] = $user_picture;
+                                                    <?php $SingleChatList['name_'.$data['user']['xmpp_username']] = $data['user']['first_name'].' '.$data['user']['last_name'];
+                                                    		$SingleChatList['img_'.$data['user']['xmpp_username']] = $user_picture;
                                                     ?>
                                                     </a>
                                                      @if($data['user']['id'] != Auth::User()->id)
@@ -322,7 +322,7 @@ $GroupsJidList = $SingleChatList = array();
 	jQuery.noConflict();
 	var GroupName = <?php echo json_encode($groups); ?>;
     var GroupAuto = <?php echo json_encode($GroupsJidList); ?>;
-  	var SingleChatName = <?php echo json_encode($SingleChatList); ?>;
+  	var profiletitles = <?php echo json_encode($SingleChatList); ?>;
 
 	var encoderoomid = '';
     var userImage="{{$userpic}}";
@@ -379,16 +379,34 @@ $GroupsJidList = $SingleChatList = array();
           chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
 					var xmpp = chatbox.model.get('jid');
 					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
-					setTimeout( function(){
-            if( typeof SingleChatName[jidStr] != 'undefined' ){
-              console.log( SingleChatName[jidStr] );
-  						var groupimage = SingleChatName[jidStr]['image'];
-  						var grouptitle = SingleChatName[jidStr]['title'];
-              chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
-  						chatbox.$el.find( '.chat-title' ).html( grouptitle );
-  					
+
+            if( typeof profiletitles['img_'+jidStr] == 'undefined' ){
+              jQuery.ajax({
+                'url' : GetProfileUrl,
+                'type' : 'post',
+                'async' : false,
+                'dataType' : 'json',
+                'data' : { user_jid: jidStr },
+                'success' : function(data){
+                  if( typeof data.image != 'undefined' ){
+                    profiletitles['img_'+jidStr] = data.image;
+                  } else {
+                    profiletitles['img_'+jidStr] = defaultImage;
+                  }
+                  if( typeof data.name != 'undefined' ){
+                    profiletitles['name_'+jidStr] = data.name;
+                  } else {
+                    profiletitles['name_'+jidStr] = jidStr;
+                  }
+                }
+              });
             }
-          }  , 1000 );
+
+            var groupimage = profiletitles['img_'+jidStr];
+            var grouptitle = profiletitles['name_'+jidStr];
+            chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
+            chatbox.$el.find( '.chat-title' ).html( grouptitle );
+
 					//Emoji Picker
 					if(waitProfile == 1 ){
 						setTimeout( function(){
@@ -558,7 +576,16 @@ $GroupsJidList = $SingleChatList = array();
                    friendList = data.data;
                   } else {
                     $.each( data.data , function( k, v ){
-                      SingleChatName[v.xmpp] = {image:v.image,title:v.name};
+                      if( typeof data.image != 'undefined' ){
+                        profiletitles['img_'+v.xmpp] = v.image;
+                      } else {
+                        profiletitles['img_'+v.xmpp] = defaultImage;
+                      }
+                      if( typeof data.name != 'undefined' ){
+                        profiletitles['name_'+v.xmpp] = v.name;
+                      } else {
+                        profiletitles['name_'+v.xmpp] = v.xmpp;
+                      }
 
                       friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\''+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
 
@@ -585,7 +612,16 @@ $GroupsJidList = $SingleChatList = array();
                          friendList = data.data;
                         } else {
                           $.each( data.data , function( k, v ){
-                            SingleChatName[v.xmpp] = JSON.stringify({image:v.image,title:v.name});
+                            if( typeof data.image != 'undefined' ){
+                              profiletitles['img_'+v.xmpp] = v.image;
+                            } else {
+                              profiletitles['img_'+v.xmpp] = defaultImage;
+                            }
+                            if( typeof data.name != 'undefined' ){
+                              profiletitles['name_'+v.xmpp] = v.name;
+                            } else {
+                              profiletitles['name_'+v.xmpp] = v.xmpp;
+                            }
 
                             friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\''+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
 
