@@ -576,12 +576,12 @@ $GroupsJidList = $SingleChatList = array();
                    friendList = data.data;
                   } else {
                     $.each( data.data , function( k, v ){
-                      if( typeof data.image != 'undefined' ){
+                      if( typeof v.image != 'undefined' ){
                         profiletitles['img_'+v.xmpp] = v.image;
                       } else {
                         profiletitles['img_'+v.xmpp] = defaultImage;
                       }
-                      if( typeof data.name != 'undefined' ){
+                      if( typeof v.name != 'undefined' ){
                         profiletitles['name_'+v.xmpp] = v.name;
                       } else {
                         profiletitles['name_'+v.xmpp] = v.xmpp;
@@ -612,12 +612,12 @@ $GroupsJidList = $SingleChatList = array();
                          friendList = data.data;
                         } else {
                           $.each( data.data , function( k, v ){
-                            if( typeof data.image != 'undefined' ){
+                            if( typeof v.image != 'undefined' ){
                               profiletitles['img_'+v.xmpp] = v.image;
                             } else {
                               profiletitles['img_'+v.xmpp] = defaultImage;
                             }
-                            if( typeof data.name != 'undefined' ){
+                            if( typeof v.name != 'undefined' ){
                               profiletitles['name_'+v.xmpp] = v.name;
                             } else {
                               profiletitles['name_'+v.xmpp] = v.xmpp;
