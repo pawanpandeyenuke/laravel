@@ -93,7 +93,7 @@ class Converse
 		$enmsg = json_encode($msg);
 		$result=@exec("sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userto."@".$node." '".$msg."'");*/
 
-		$result2 = @exec( "sudo ejabberdctl send_message chat ".$userfrom."@".$node." ".$userto."@".$node." '".$subject."' '".$msg."'" );
+		$result2 = @exec( "sudo ejabberdctl send_message chat ".$userfrom."@".$node."/web ".$userto."@".$node." '".$subject."' '".$msg."'" );
 		//echo $result2;exit;
 	}
 
