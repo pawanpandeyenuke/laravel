@@ -421,3 +421,8 @@ Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
 	Route::post('change-password','DashboardController@changePassword');
 
 });
+
+
+Route::any('{all}', function(){
+    return view('errors.404');
+})->where('all', '.*');

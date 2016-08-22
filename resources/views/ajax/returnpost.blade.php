@@ -37,8 +37,8 @@
 
 		@if(!empty($postdata->image))
 			<div class="post-img-cont">
-			<a href="{{url("uploads/$postdata->image")}}" class="popup">
-				<img src="{{url("uploads/$postdata->image")}}" class="post-img">
+			<a href="<?php echo dashboardImg( $postdata->image, 'link' ) ?>" class="popup">
+				<img src="<?php echo dashboardImg( $postdata->image, 'thumb' ) ?>" class="post-img">
 				</a>
 			</div>
 		@endif
