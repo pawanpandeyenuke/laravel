@@ -289,7 +289,7 @@ Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
 	Route::get('/searchfriends', function(){
 		return redirect('/');
 	});
-	Route::post('/searchfriends',"SearchController@searchFromUsers");
+	Route::post('/searchfriends','SearchController@searchFromUsers');
 
 
 	Route::post('/contactus','SearchController@contactUs');

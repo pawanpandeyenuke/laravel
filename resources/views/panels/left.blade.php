@@ -47,25 +47,27 @@
 		      </h4>
 		    </div>
 		  </div>
-		  <div class="panel panel-default">
-		    <div class="panel-heading" role="tab" id="headingFive">
-		      <h4 class="panel-title">
-		      	<?php $uid = Auth::User()->id; ?>
-		        <a class="without-arrow" href="{{ url("profile/$uid") }}">
-		          <i class="flaticon-social"></i>Profile
-		        </a>
-		      </h4>
-		    </div>
-		  </div>
-		   <div class="panel panel-default">
-		    <div class="panel-heading" role="tab" id="headingSix">
-		      <h4 class="panel-title">
-		        <a href="{{ url('change-password') }}" class="without-arrow">
-		          <i class="flaticon-tool"></i>Change Password
-		        </a>
-		      </h4>
-		    </div>
-		  </div>
+		 <?php if(Auth::check()){ ?>
+			  <div class="panel panel-default">
+			    <div class="panel-heading" role="tab" id="headingFive">
+			      <h4 class="panel-title">
+			      	<?php $uid = Auth::User()->id; ?>
+			        <a class="without-arrow" href="{{ url('profile/'.$uid) }}">
+			          <i class="flaticon-social"></i>Profile
+			        </a>
+			      </h4>
+			    </div>
+			  </div>
+			   <div class="panel panel-default">
+			    <div class="panel-heading" role="tab" id="headingSix">
+			      <h4 class="panel-title">
+			        <a href="{{ url('change-password') }}" class="without-arrow">
+			          <i class="flaticon-tool"></i>Change Password
+			        </a>
+			      </h4>
+			    </div>
+			  </div>
+		<?php } ?>
 		  <div class="panel panel-default">
 		    <div class="panel-heading" role="tab" id="headingSix">
 		      <h4 class="panel-title">
