@@ -120,6 +120,11 @@ class AjaxController extends Controller
 
 						$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 						$arguments['image'] = $image_name;
+
+						/** resize image **/
+						$this->resizeImage( Input::file('image'), '200' ,public_path('uploads/thumb-small/') , $image_name );
+						$this->resizeImage( Input::file('image'), '500' ,public_path('uploads/thumb-large/') , $image_name );
+
 						$file->move(public_path('uploads'), $image_name);
 
 					}

@@ -251,6 +251,8 @@ class ApiController extends Controller
 
 					if($bytes < $maxsize){
 						$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+						$this->resizeImage( Request::file('image'), '200' ,public_path('uploads/thumb-small/') , $image_name );
+						$this->resizeImage( Request::file('image'), '500' ,public_path('uploads/thumb-large/') , $image_name );
 						$arguments['image'] = $image_name;
 						$file->move('uploads', $image_name);
 					}else{
