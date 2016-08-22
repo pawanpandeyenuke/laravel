@@ -797,6 +797,11 @@ class DashboardController extends Controller
     public function privateGroupDetail( $privategroupid = '' ){
         if( $privategroupid ){
             $groupdetail = Group::where('id',$privategroupid)->get()->toArray();
+
+            if( !$groupdetail ){
+                return redirect()->back()->with('error',"This private group does not exist.");
+            }
+
             $ownerid = Group::where('id',$privategroupid)->value('owner_id');
             $members = GroupMembers::where('group_id',$privategroupid)->where('status', '!=', 'Left')->pluck('member_id');
             $name=User::whereIn('id',$members)->orWhere('id',$ownerid)->get()->toArray();
