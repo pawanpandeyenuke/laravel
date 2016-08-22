@@ -1335,7 +1335,7 @@ public function sendImage(Request $request){
 			$CheckStatus = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['groups.group_jid' => $GroupJid, 'members.member_id' => $UserId, 'groups.status' => 'Active' ] )->select( 'members.status' )->first();
 			if( isset( $CheckStatus->status ) && $CheckStatus->status == 'Pending' ) {
 				$Result['status']	= 1;
-				$TotalCount = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['members.member_id' => $UserId,'members.status' => 'Joined'] )->count();
+				$TotalCount = GroupMembers::where(['member_id' => $UserId,'status' => 'Joined'] )->get()->count();
 				if( $TotalCount < Config::get('constants.private_group_limit') ){
 					$Result['limit'] = 1;
 				}
