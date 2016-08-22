@@ -21,7 +21,7 @@ class Group extends Model
 
    	public function groupMembers()
 	{
-		return $this->hasMany('App\GroupMembers', 'group_id', 'id')->join('users', 'users.id', '=', 'members.member_id')->select('members.group_id', 'members.member_id', 'users.first_name','users.last_name','users.xmpp_username');
+		return $this->hasMany('App\GroupMembers', 'group_id', 'id')->join('users', 'users.id', '=', 'members.member_id')->select('members.group_id','members.status', 'members.member_id', 'users.first_name','users.last_name','users.xmpp_username','users.picture');
 	}
 
 }

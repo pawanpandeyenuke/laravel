@@ -1895,7 +1895,7 @@ class ApiController extends Controller
 				if(empty($finduser))
 					throw new Exception("User does not exist.", 1);
 					
-				$groupowner = GroupMembers::where('member_id', $arguments['owner_id'])->where('status', 'Joined')->get()->toArray();
+				$groupowner = GroupMembers::where('member_id', $arguments['owner_id'])->get()->toArray();
 
 				if(empty($groupowner)){
 					$this->status = 'success';
@@ -1903,7 +1903,7 @@ class ApiController extends Controller
 				}
 
 				$groupIdsData = Group::with('groupMembers')
-									->whereIn('id', GroupMembers::where('member_id', $arguments['owner_id'] )->where('status', 'Joined')->pluck('group_id')->toArray() )
+									->whereIn('id', GroupMembers::where('member_id', $arguments['owner_id'] )->pluck('group_id')->toArray() )
 									->get()
 									->toArray();
 
