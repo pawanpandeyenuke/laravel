@@ -13,7 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Feed, Auth, Mail, File;
 
 use \Exception,Route;
-use App\Library\Converse, Config;
+use App\Library\Converse, App\Library\Functions, Config;
 use Illuminate\Support\Facades\Request, Intervention\Image\Facades\Image;
 
 class AjaxController extends Controller
@@ -1479,36 +1479,20 @@ public function sendImage(Request $request){
 		$per_page = 10;
 		$page = Input::get('pageid');
 		$keyword = Input::get('keyword');
-		$offset = ($page - 1) * $per_page;
-		if(Auth::check()){
-			$user_id = Auth::User()->id;
-		} else { 
-			$user_id="";
-		}
-
-		// Get total pages
-		$totalRecords = User::where('first_name','LIKE','%'. $keyword.'%')
-                    ->orWhere('last_name','LIKE','%'. $keyword.'%')
-            		->count();
-        $pages = ceil($totalRecords / $per_page);
-        $existmore = $page == $pages ? 0 : 1;
-
-       	$model = User::where('first_name','LIKE','%'. $keyword.'%')
-                    ->orWhere('last_name','LIKE','%'. $keyword.'%')
-                    ->skip($offset)
-                    ->take($per_page)
-                    ->orderBy('id','desc')
-                    ->get()
-                    ->toArray();
+		$user_id = Auth::check() ? Auth::User()->id : 0;
 		
-		$modelcount = count($model);
+		// Search users
+        $users = Functions::searchUsers($keyword, $user_id, $page, $per_page);
+        
+        $existmore = $users['pages'] == $page ? 0 : 1;
 		$auth = ($user_id != '') ? 1 : 0;
-		if($model)
+		if( $users['records'] )
 		{
 			$html = view('dashboard.getsearchresult')
-				->with('model',$model)
-				->with('modelcount',$modelcount)
-				->with('auth',$auth)->render();
+				->with('model', $users['records'])
+				->with('modelcount', count($users['records']))
+				->with('auth',$auth)
+				->render();
 			return response()->json(['html' => $html, 'existmore' => $existmore]);          
 		} else {
 			echo "No more results";
