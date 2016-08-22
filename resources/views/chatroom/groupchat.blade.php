@@ -587,7 +587,7 @@ $GroupsJidList = $SingleChatList = array();
                         profiletitles['name_'+v.xmpp] = v.xmpp;
                       }
 
-                      friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\''+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
+                      friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\'/uploads/user_img'+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
 
                     });
                   }
@@ -623,7 +623,7 @@ $GroupsJidList = $SingleChatList = array();
                               profiletitles['name_'+v.xmpp] = v.xmpp;
                             }
 
-                            friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\''+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
+                            friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\'/uploads/user_img'+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
 
                           });
                         }

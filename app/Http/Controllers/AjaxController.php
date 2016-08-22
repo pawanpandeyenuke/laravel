@@ -1066,13 +1066,15 @@ public function sendImage(Request $request){
 					$name=$value['friends']['first_name']." ".$value['friends']['last_name'];
 					$xmpp_username="'".$value['friends']['xmpp_username']."'";
 					$first_name="'".$value['friends']['first_name']."'";
-					$user_picture = !empty($value['friends']['picture']) ? url('uploads/user_img/'.$value['friends']['picture']) : url('/images/user-thumb.jpg');
+					
 					$msg="No friend found!";
 
 					if (stripos($name, $input) !== false) {
 						if( $Format == 'json' ){
-						  $data[] = array( 'xmpp' => $value['friends']['xmpp_username'], 'name' => $name, 'image' => $user_picture );
+						   $user_picture = !empty($value['friends']['picture']) ?$value['friends']['picture'] :'user-thumb.jpg';
+						   $data[] = array( 'xmpp' => $value['friends']['xmpp_username'], 'name' => $name, 'image' => $user_picture );
 						} else {
+							$user_picture = !empty($value['friends']['picture']) ? url('uploads/user_img/'.$value['friends']['picture']) : url('/images/user-thumb.jpg');
 							 $data[] = '<li > 
 							<a href="javascript:void(0)" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
 								<span class="chat-thumb"style="background: url('.$user_picture.');"></span>
