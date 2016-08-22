@@ -150,12 +150,12 @@ $GroupsJidList = $SingleChatList = array();
                                             @if(!empty($userdata))
                                             @foreach($userdata as $data)
 
-                                              <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; ?>
+                                              <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : 'user-thumb.jpg'; ?>
 
                                               <li >
                                                   <div class='info' data-id="{{$data['user']['id']}}" style="position:relative;" >
                                                     <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif  data-id="{{$data['user']['id']}}" >
-                                                        <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
+                                                        <span style="background: url('{{'/uploads/user_img/'.$user_picture}}');" class="chat-thumb"></span>
                                                         <span class="title">{{ $data['user']['first_name'] }}</span>           
                                                     <?php $SingleChatList['name_'.$data['user']['xmpp_username']] = $data['user']['first_name'].' '.$data['user']['last_name'];
                                                     		$SingleChatList['img_'.$data['user']['xmpp_username']] = $user_picture;
@@ -430,7 +430,7 @@ $GroupsJidList = $SingleChatList = array();
 					if( jidStr ==  groupid ){
 						GroupName[jidStr] = "<?php echo $groupname; ?>";
 						chatbox.$el.find( '.chat-title' ).html( "<?php echo $groupname; ?>" );
-            chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-group pull-right" id="leave">Leave</a>' );
+            chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-group pull-right" id="leave">Close</a>' );
             chatbox.$el.addClass( 'pubroom' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
@@ -438,7 +438,7 @@ $GroupsJidList = $SingleChatList = array();
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
 						<?php	} ?>
 					} else {
-						chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Leave</a>' );
+						chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
 						if( typeof GroupName[jidStr] != 'undefined' ){
 							var groupimage = $('#'+jidStr).data('groupimage');
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
@@ -487,7 +487,7 @@ $GroupsJidList = $SingleChatList = array();
         				  message_carbons: true,
         				  forward_messages: true,
         				  allow_logout: false,
-        				  debug: false,
+        				  debug: true,
         				  auto_subscribe: true,
                   message_archiving: 'always',
                   auto_join_on_invite:true,
@@ -587,7 +587,7 @@ $GroupsJidList = $SingleChatList = array();
                         profiletitles['name_'+v.xmpp] = v.xmpp;
                       }
 
-                      friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\''+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
+                      friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\'/uploads/user_img/'+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
 
                     });
                   }
@@ -623,7 +623,7 @@ $GroupsJidList = $SingleChatList = array();
                               profiletitles['name_'+v.xmpp] = v.xmpp;
                             }
 
-                            friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\''+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
+                            friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\'/uploads/user_img/'+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
 
                           });
                         }

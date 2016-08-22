@@ -1866,6 +1866,9 @@ width:495px;
    margin: 0 5px 10px 0;
    padding: 2px 5px;
 }
+#conversejs .chat-date {
+	width: 100%;
+}
 .page-title.req-search {
   position: relative;
   height: 50px;

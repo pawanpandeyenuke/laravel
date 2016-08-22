@@ -120,6 +120,11 @@ class AjaxController extends Controller
 
 						$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 						$arguments['image'] = $image_name;
+
+						/** resize image **/
+						$this->resizeImage( Input::file('image'), '200' ,public_path('uploads/thumb-small/') , $image_name );
+						$this->resizeImage( Input::file('image'), '500' ,public_path('uploads/thumb-large/') , $image_name );
+
 						$file->move(public_path('uploads'), $image_name);
 
 					}
@@ -995,7 +1000,7 @@ public function sendImage(Request $request){
 				if (in_array($ext, $valid_formats)) {
 			$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
 			$tmp = $uploadedfile;
-			$this->resizeImage( Request::file('chatsendimage'), '150' , $path , $actual_image_name );
+			$this->resizeImage( Request::file('chatsendimage'), '300' , $path.'thumb/' , $actual_image_name );
 
 			if (move_uploaded_file($tmp, $path . $actual_image_name)) {
 		        $data='/uploads/media/chat_images/'.$actual_image_name;
@@ -1025,11 +1030,11 @@ public function sendImage(Request $request){
 	    	}
 	    
 	    	$img = Image::make($imageRealPath); // use this if you want facade style code
-	    	$img->resize(intval($size), null, function($constraint) {
+	    	$img->resize(null, intval($size),function($constraint) {
 	    		 $constraint->aspectRatio();
 	    	});
 	    	
-	    	return $img->save($path.'thumb/'. $thumbName);
+	    	return $img->save($path. $thumbName);
     	}
     	catch(Exception $e)
     	{
@@ -1066,13 +1071,15 @@ public function sendImage(Request $request){
 					$name=$value['friends']['first_name']." ".$value['friends']['last_name'];
 					$xmpp_username="'".$value['friends']['xmpp_username']."'";
 					$first_name="'".$value['friends']['first_name']."'";
-					$user_picture = !empty($value['friends']['picture']) ? url('uploads/user_img/'.$value['friends']['picture']) : url('/images/user-thumb.jpg');
+					
 					$msg="No friend found!";
 
 					if (stripos($name, $input) !== false) {
 						if( $Format == 'json' ){
-						  $data[] = array( 'xmpp' => $value['friends']['xmpp_username'], 'name' => $name, 'image' => $user_picture );
+						   $user_picture = !empty($value['friends']['picture']) ?$value['friends']['picture'] :'user-thumb.jpg';
+						   $data[] = array( 'xmpp' => $value['friends']['xmpp_username'], 'name' => $name, 'image' => $user_picture );
 						} else {
+							$user_picture = !empty($value['friends']['picture']) ? url('uploads/user_img/'.$value['friends']['picture']) : url('/images/user-thumb.jpg');
 							 $data[] = '<li > 
 							<a href="javascript:void(0)" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
 								<span class="chat-thumb"style="background: url('.$user_picture.');"></span>
