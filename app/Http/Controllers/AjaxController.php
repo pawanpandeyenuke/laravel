@@ -2209,33 +2209,37 @@ public function sendImage(Request $request){
 			$member_id = Auth::User()->id;
 			$Status = 0;
 			if( empty( $group_id ) )
-				throw new Exception("Group jid is required.", 1);				
+				throw new Exception("Group is required.", 1);				
 
 			$group = Group::where('id', $group_id)->first();
 
 			if( !$group )
 				throw new Exception("Group does not exist.", 1);
 
+			$TotalCount = GroupMembers::where(['member_id' => $member_id,'status' => 'Joined'] )->get()->count();
+			
+			if( $TotalCount < Config::get('constants.private_group_limit') ){
+				$group_members = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->count();
 
-			$group_members = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->count();
+				if( $group_members > 0 ){
 
-			if( $group_members > 0 ){
+					$update = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->update(['status' => 'Joined']);
 
-				$update = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->update(['status' => 'Joined']);
+					// Broadcast message
+	                $members = GroupMembers::where(['group_id' => $group->id])->get();
+	                $name = $user->first_name.' '.$user->last_name;
+	                $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username, 'user_name'=>$name, 'message' => $name.' joined the group') );
+	                foreach($members as $key => $val) {
+	                    Converse::broadcastchatroom($group->group_jid, $name, $val->xmpp_username, $user->xmpp_username, $message);
+	                };
 
-				// Broadcast message
-                $members = GroupMembers::where(['group_id' => $group->id])->get();
-                $name = $user->first_name.' '.$user->last_name;
-                $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username, 'user_name'=>$name, 'message' => $name.' joined the group') );
-                foreach($members as $key => $val) {
-                    Converse::broadcastchatroom($group->group_jid, $name, $val->xmpp_username, $user->xmpp_username, $message);
-                };
-
-				if( $update ){
-					$Status = 1;
+					if( $update ){
+						$Status = 1;
+					}
 				}
+			} else {
+				throw new Exception("Sorry, you can be member only upto ".Config::get('constants.private_group_limit')." private groups.", 1);
 			}
-
 		}catch(Exception $e){
 			$e->getMessage();
 		}
