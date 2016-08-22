@@ -1304,7 +1304,7 @@ class ApiController extends Controller
 
 	}
 
-	private function ($image, $size , $path, $imagename = '')
+	private function  resizeImage ($image, $size , $path, $imagename = '')
     {
     	try 
     	{
