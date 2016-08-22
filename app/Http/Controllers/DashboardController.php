@@ -780,7 +780,7 @@ class DashboardController extends Controller
 			}
 		}
 
-        $group_count = Group::where('owner_id',$userid)->get()->count();
+        $group_count = GroupMembers::where(['member_id' => $userid, 'status' => 'Joined'])->get()->count();
         if($group_count >= Config::get('constants.private_group_limit')){
             Session::put('error', "Sorry, you can only create upto ".Config::get('constants.private_group_limit')." private groups.");
             return redirect()->back();
