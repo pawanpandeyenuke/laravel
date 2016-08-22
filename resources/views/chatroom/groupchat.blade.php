@@ -430,7 +430,7 @@ $GroupsJidList = $SingleChatList = array();
 					if( jidStr ==  groupid ){
 						GroupName[jidStr] = "<?php echo $groupname; ?>";
 						chatbox.$el.find( '.chat-title' ).html( "<?php echo $groupname; ?>" );
-            chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-group pull-right" id="leave">Leave</a>' );
+            chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-group pull-right" id="leave">Close</a>' );
             chatbox.$el.addClass( 'pubroom' );
 						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
@@ -438,7 +438,7 @@ $GroupsJidList = $SingleChatList = array();
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
 						<?php	} ?>
 					} else {
-						chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Leave</a>' );
+						chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
 						if( typeof GroupName[jidStr] != 'undefined' ){
 							var groupimage = $('#'+jidStr).data('groupimage');
 							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
