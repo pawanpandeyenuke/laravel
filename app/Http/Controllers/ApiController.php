@@ -251,8 +251,29 @@ class ApiController extends Controller
 
 					if($bytes < $maxsize){
 						$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
+						
+						$imageRealPath 	= 	$file->getRealPath();
+						$img = Image::make($imageRealPath);
+						$img->save( public_path('uploads/'). $image_name );
+
+						/** resize image **/
+						list($ImageWidth, $ImageHeight) = getimagesize( public_path('uploads/'.$image_name ) );
+
+						if( $ImageHeight > 200 ){
+							$SmallSize = 200;
+						} else {
+							$SmallSize = $ImageHeight;
+						}
+						$this->resizeImage( Request::file('image'), $SmallSize ,public_path('uploads/thumb-small/') , $image_name ); 
+
+						if( $ImageHeight > 500 ){
+							$LargeSize = 500;	
+						} else{
+							$LargeSize = $ImageHeight;
+						}
+						$this->resizeImage( Request::file('image'), $LargeSize ,public_path('uploads/thumb-large/') , $image_name );
+						
 						$arguments['image'] = $image_name;
-						$file->move('uploads', $image_name);
 					}else{
 						throw new Exception("Too large image.", 1);						
 					}
@@ -1278,7 +1299,7 @@ class ApiController extends Controller
 			if (in_array($ext, $valid_formats)) {
 				$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
 				
-				$this->resizeImage( Request::file('chatsendimage'), '150' , $path , $actual_image_name );
+				$this->resizeImage( Request::file('chatsendimage'), '300' , $path.'thumb/' , $actual_image_name );
 				$tmp = $uploadedfile;
 
 				if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
@@ -1304,7 +1325,7 @@ class ApiController extends Controller
 
 	}
 
-	private function resizeImage($image, $size , $path, $imagename = '')
+	private function  resizeImage ($image, $size , $path, $imagename = '')
     {
     	try 
     	{
@@ -1317,11 +1338,11 @@ class ApiController extends Controller
 	    	}
 	    
 	    	$img = Image::make($imageRealPath); // use this if you want facade style code
-	    	$img->resize(intval($size), null, function($constraint) {
+	    	$img->resize(null, intval($size) , function($constraint) {
 	    		 $constraint->aspectRatio();
 	    	});
 	    	
-	    	return $img->save($path.'thumb/'. $thumbName);
+	    	return $img->save($path. $thumbName);
     	}
     	catch(Exception $e)
     	{
