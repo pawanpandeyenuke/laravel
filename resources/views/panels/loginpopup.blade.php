@@ -11,7 +11,7 @@
         {!! Form::open(array('url' => '/ajax/login', 'id' => 'loginform')) !!}
                     <h3 class="text-center">Login with Accounts</h3>
                     <div class="row field-row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-12 col-xs-12">
                             <div class="form-group">
                                 <input type="text" name="email" class="form-control icon-field emailid" placeholder="Email ID">
                                     <span class="help-block">
@@ -36,13 +36,13 @@
                     </div>
 
                     <div class="row field-row">
-                        <div class="col-md-6 border-right">
+                        <div class="col-md-6 col-xs-12 border-right">
                             <div class="checkbox-cont">
                                 <input type="checkbox" name="log" id="checkboxG3" class="css-checkbox">
                                 <label for="checkboxG3" class="css-label">Keep me logged in</label>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 col-xs-12">
                             <a  href="{{ url('password/reset') }}" title="" class="fg-pw-link">Forgot Password?</a>
                         </div>
                     </div>

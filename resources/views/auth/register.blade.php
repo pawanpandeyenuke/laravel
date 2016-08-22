@@ -2,43 +2,32 @@
 
 @section('content')
 <style>
-    .small-text{
-        color: #717272;
-  font-size: 12px;
-  text-align: center;
-  padding: 5px 0;
-    }
-</style>
-
-<style>
-    .small-text{
-        color: #717272;
-  font-size: 12px;
-  text-align: center;
-  padding: 5px 0;
-    }
+.small-text{
+    color: #717272;
+    font-size: 12px;
+    text-align: center;
+    padding: 5px 0;
+}
 </style>
 <?php
 $prev_url = URL::previous();
-?>
-
-<?php 
-$userdata = session('userdata'); 
+$userdata = session('userdata');
 ?>
 
 @if (Session::has('success'))
- <div class="alert alert-success">{!! Session::get('success') !!}</div>
- @endif
- @if (Session::has('error'))
- <div class="alert alert-danger">{!! Session::get('error') !!}</div>
- @endif
+    <div class="alert alert-success">{!! Session::get('success') !!}</div>
+@endif
+
+@if (Session::has('error'))
+    <div class="alert alert-danger">{!! Session::get('error') !!}</div>
+@endif
 
 @include('panels.download-app')
 
 <div class="page-data login-page">
     <div class="container">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8 col-xs-12">
                 <div class="home-slider-cont">
                     <div class="slider-btns">
                         <ul class="list-inline">
@@ -85,19 +74,19 @@ $userdata = session('userdata');
                         </div>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 col-xs-12">
                 <div class="login-form registration-form">
                     <div class="already-member">Already have Account? <a href="#" title="" data-toggle="modal" data-target="#LoginPop">Login</a></div>
                     <h3 class="text-center">Registration</h3>
 
-                      <form class="form-horizontal" id="registerForm" role="form" method="POST" action="{{ url('/register') }}">
+                      <form class="form-horizontal" id="registerForm" role="form" method="POST" action="{{ url('/') }}">
                         {!! csrf_field() !!}
 
                     <div class="row field-row">
                         <div class="col-sm-12">
 
                             <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
-                                <input type="text" name="first_name" value="{{ Request::get('first_name') }}" class="form-control icon-field" placeholder="First Name">
+                                <input type="text" name="first_name" value="{{ Request::get('first_name') ? Request::get('first_name') : session('first_name') }}" class="form-control icon-field" placeholder="First Name">
                                     
                                     @if ($errors->has('first_name'))
                                         <span class="help-block">
@@ -109,7 +98,7 @@ $userdata = session('userdata');
                                 </div>
 
                             <div class="form-group{{ $errors->has('last_name') ? ' has-error' : '' }}">
-                                    <input type="text" name="last_name" value="{{ Request::get('last_name') }}" class="form-control icon-field" placeholder="Last Name">
+                                    <input type="text" name="last_name" value="{{ Request::get('last_name') ? Request::get('last_name') : session('last_name') }}" class="form-control icon-field" placeholder="Last Name">
                                     
                                     @if ($errors->has('last_name'))
                                         <span class="help-block">
@@ -122,7 +111,7 @@ $userdata = session('userdata');
 
 
                                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                                    <input type="email" name="email" value="{{ old('email') }}" class="form-control icon-field" placeholder="Email ID" >
+                                    <input type="email" name="email" value="{{ session('email') }}" class="form-control icon-field" placeholder="Email ID" >
                                     
                                     @if ($errors->has('email'))
                                         <span class="help-block">
@@ -157,7 +146,7 @@ $userdata = session('userdata');
                                     <option value="">Country</option>
                                     @foreach($countries as $key => $country)
                                     <?php
-                                        if(old('country')!="" && old('country')==$key)
+                                        if(session('country')!="" && session('country')==$key)
                                             $selected = "selected";
                                         else
                                             $selected = "";
@@ -165,7 +154,7 @@ $userdata = session('userdata');
                                         <option value="{{ $key }}" {{$selected}}>{{ $country }}</option>
                                     @endforeach
                                 </select>
-                                       @if ($errors->has('country'))
+                                    @if ($errors->has('country'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('country') }}</strong>
                                         </span>
@@ -173,25 +162,30 @@ $userdata = session('userdata');
                                 <span class="field-icon flaticon-web-1"></span>                                 
                             </div>
 
-                            <div class="form-group ph-field">
+                            <div class="form-group ph-field {{ $errors->has('mobile_unique') ? ' has-error' : '' }}">
                                 <?php 
-                                        if(old('country_code') != "")
-                                            $font = "";
-                                        else
-                                            $font = "#999";
+                                    if(session('country_code') != "")
+                                        $font = "";
+                                    else
+                                        $font = "#999";
                                 ?>
-                                <span  class="country-code-field country-code-field-span numeric"><font color={{$font}}><?php echo (old('country_code') != "")?old('country_code'):"00"; ?></font></span> 
-                                <input type="hidden" name="country_code" class="country-code-field numeric" value="{{ old('country_code') }}" placeholder="000" >
-                                <input type="text" class="form-control icon-field numeric" name = "phone_no" value="{{ old('phone_no') }}" placeholder="Mobile" id="mobileContact">
+                                <span  class="country-code-field country-code-field-span numeric"><font color={{$font}}><?php echo (session('country_code') != "")?session('country_code'):"00"; ?></font></span> 
+                                <input type="hidden" name="country_code" class="country-code-field numeric register-country-code" value="{{ session('country_code') }}" placeholder="000" >
+                                <input type="text" class="form-control icon-field numeric register-mobile" name = "phone_no" value="{{ session('phone_no') }}" placeholder="Mobile" id="mobileContact">
                                 <span class="field-icon flaticon-smartphone-with-blank-screen"></span>
+                                @if ($errors->has('mobile_unique'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('mobile_unique') }}</strong>
+                                    </span>
+                                @endif
                             </div>
 
                             <div class="form-group sex-option">
                                     <ul>
                                         <li>I am</li>
                                         <?php
-                                            if(old('gender') != ""){
-                                                if(old('gender') == "Male"){
+                                            if(session('gender') != ""){
+                                                if(session('gender') == "Male"){
                                                     $male = "checked";
                                                     $female = "";
                                                 }else{
@@ -222,13 +216,13 @@ $userdata = session('userdata');
                         <div class="form-group">
                         <div class = "checkbox-cont">
                         <?php 
-                                if(old('terms')!="")
+                                if(session('terms')!="")
                                     $terms = "checked";
                                 else
                                     $terms = "";
                         ?>
                         <input type="checkbox" name="terms" id="terms" {{$terms}} class="css-checkbox">
-                        <label for="terms" class="css-label" style="color: #0c0c0c" >I agree to the following<a href="{{url('terms-conditions')}}" style="color:#3ab29f "> Terms and Conditions</a>.</label>
+                        <label for="terms" class="css-label" style="color: #0c0c0c" >I agree to the following<a href="{{url('terms')}}" style="color:#3ab29f "> Terms and Conditions</a>.</label>
                         </div>
                      </div>
                     <input type="hidden" name="url" value="{{$prev_url}}"/>
@@ -238,11 +232,11 @@ $userdata = session('userdata');
                     <?php } ?>
 
                         </div>
-                                <div class="form-groups">
-                                    <div class="btn-cont text-center">
-                                        <input type="submit" class="btn btn-primary register" value="Get Started">
-                                    </div>
+                            <div class="form-groups">
+                                <div class="btn-cont text-center">
+                                    <input type="submit" class="btn btn-primary register" value="Get Started">
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -281,10 +275,9 @@ function getValidationArray(mobCode)
         return {min: "0", max: "15"};
     }
     return {min: countryMobValidLength.min, max: countryMobValidLength.max};
-    
 }
 
-$(document).ready(function () {
+jQuery(function($) {
     $(document).on('change', '#mob-country', function(){
         $('#mobileContact').val('');
         var countryId = $(this).val();
@@ -304,7 +297,7 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('focus', '#mobileContact', function(){
+    $(document).on('blur', '#mobileContact', function(){
         var array = $('.country-code-field').val();
         var validArray = getValidationArray(array);
         $('#mobileContact').prop('minlength', validArray.min);
@@ -313,11 +306,11 @@ $(document).ready(function () {
         $('#mobileContact').parent().find('#groupname-error').remove();
         
         var mobileContact = $('#mobileContact').val();
-        if(mobileContact.length < validArray.min){
+        if(mobileContact.length > 0 && mobileContact.length < validArray.min){
             $('#mobileContact').parent().append('<span id="groupname-error" class="help-inline">Minimum length must be greater than '+validArray.min+'.</span>');
         }
     });
-
+    
     $("#registerForm").validate({ 
         errorElement: 'span',
         errorClass: 'help-inline',
@@ -374,7 +367,7 @@ $(document).ready(function () {
     $('.numeric,input[type="number"]').bind('paste drop',function(e){
         e.preventDefault();
     });
-
+    
     // Opens popup for app download links
     $('#sendMsg2').modal('show');
 });

@@ -1277,6 +1277,8 @@ class ApiController extends Controller
 			list($txt, $ext) = explode(".", $name);
 			if (in_array($ext, $valid_formats)) {
 				$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
+				
+				$this->resizeImage( Request::file('chatsendimage'), '150' , $path , $actual_image_name );
 				$tmp = $uploadedfile;
 
 				if (move_uploaded_file($tmp, $path . $actual_image_name)) {           
@@ -1302,7 +1304,30 @@ class ApiController extends Controller
 
 	}
 
-
+	private function resizeImage($image, $size , $path, $imagename = '')
+    {
+    	try 
+    	{
+    		$extension 		= 	$image->getClientOriginalExtension();
+    		$imageRealPath 	= 	$image->getRealPath();
+    		if( empty($imagename) && $imagename == '' ){
+    			$thumbName 		= 	$image->getClientOriginalName();
+	    	} else {
+	    		$thumbName = $imagename;
+	    	}
+	    
+	    	$img = Image::make($imageRealPath); // use this if you want facade style code
+	    	$img->resize(intval($size), null, function($constraint) {
+	    		 $constraint->aspectRatio();
+	    	});
+	    	
+	    	return $img->save($path.'thumb/'. $thumbName);
+    	}
+    	catch(Exception $e)
+    	{
+    		return false;
+    	}
+    }
 	/*
 	 * update push notification details on user table on request.
 	 */
@@ -1849,7 +1874,7 @@ class ApiController extends Controller
 				if(empty($finduser))
 					throw new Exception("User does not exist.", 1);
 					
-				$groupowner = Group::where('owner_id', $arguments['owner_id'])->get()->toArray();
+				$groupowner = GroupMembers::where('member_id', $arguments['owner_id'])->where('status', 'Joined')->get()->toArray();
 
 				if(empty($groupowner)){
 					$this->status = 'success';
@@ -1857,12 +1882,14 @@ class ApiController extends Controller
 				}
 
 				$groupIdsData = Group::with('groupMembers')
-									->where('owner_id', $arguments['owner_id'])
+									->whereIn('id', GroupMembers::where('member_id', $arguments['owner_id'] )->where('status', 'Joined')->pluck('group_id')->toArray() )
 									->get()
 									->toArray();
 
-				$JoinedGroupsCount = Group::where('owner_id',$arguments['owner_id'])->get()->count();
+				$JoinedGroupsCount = GroupMembers::where('member_id',$arguments['owner_id'])->where('status', 'Joined')->get()->count();
+
 	            $MaxGroupLimit = Config::get('constants.private_group_limit');
+				
 				$this->data = array( 'max_group_limit' =>$MaxGroupLimit,'joined_groups_count'=>$JoinedGroupsCount,'data' => $groupIdsData );
 				$this->message = count($groupIdsData).' results found.';
 				$this->status = 'success';
@@ -2045,7 +2072,7 @@ class ApiController extends Controller
 			// Send Message
 				$owner_data = User::find($owner_id);
 				$name = $owner_data->first_name.' '.$owner_data->last_name;
-				$members = User::whereIn('id', GroupMembers::where('group_id', $group->id)->pluck('member_id')->toArray())->select('id as user_id', DB::raw('CONCAT(first_name, " ", last_name) AS username'), 'xmpp_username as xmpp_userid')->get()->toArray();
+				$members = User::whereIn('id', GroupMembers::where('group_id', $group->id)->pluck('member_id')->toArray())->select('id as user_id', DB::raw('CONCAT(first_name, " ", last_name) AS username'), 'xmpp_username as xmpp_userid','picture as user_image')->get()->toArray();
 
 				$message = json_encode( array( 'user_id' => $owner_data->id, 'user_image'=> $owner_data->picture ,'type' => 'room', 'groupname' => $group->title, 'sender_jid' => $owner_data->xmpp_username, 'groupjid'=>$group_jid, 'group_image' => $group->picture, 'created_by'=>$name,'message' => 'This invitation is for joining the '.$group->title.' group.', 'users' => $members) );
                 

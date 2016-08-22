@@ -32,8 +32,28 @@
 }
 
 #conversejs #minimized-chats{
-  top: 515px !important;
+  top: 463px !important;
   left: 3%;
+}
+#conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom {
+  font-size: 12px;
+  height: 27px !important;
+  padding: 0 4px !important;
+  width: 90px !important;
+}
+#conversejs a.close-chatbox-button, #conversejs a.configure-chatroom-button, #conversejs a.toggle-chatbox-button
+{
+  font-size:7px !important;
+  line-height: 8px !important;
+}
+
+#conversejs .minimized-chats-flyout.flyout {
+    float: left;
+    height: 40px !important;
+    overflow-y: auto !important;
+    position: relative;
+    top: 8px;
+    width: 97%;
 }
 </style>
 
@@ -137,8 +157,8 @@ $GroupsJidList = $SingleChatList = array();
                                                     <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif  data-id="{{$data['user']['id']}}" >
                                                         <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
                                                         <span class="title">{{ $data['user']['first_name'] }}</span>           
-                                                    <?php $SingleChatList[$data['user']['xmpp_username']]['title'] = $data['user']['first_name'];
-                                                    		$SingleChatList[$data['user']['xmpp_username']]['image'] = $user_picture;
+                                                    <?php $SingleChatList['name_'.$data['user']['xmpp_username']] = $data['user']['first_name'].' '.$data['user']['last_name'];
+                                                    		$SingleChatList['img_'.$data['user']['xmpp_username']] = $user_picture;
                                                     ?>
                                                     </a>
                                                      @if($data['user']['id'] != Auth::User()->id)
@@ -302,11 +322,11 @@ $GroupsJidList = $SingleChatList = array();
 	jQuery.noConflict();
 	var GroupName = <?php echo json_encode($groups); ?>;
     var GroupAuto = <?php echo json_encode($GroupsJidList); ?>;
-  	var SingleChatName = <?php echo json_encode($SingleChatList); ?>;
+  	var profiletitles = <?php echo json_encode($SingleChatList); ?>;
 
 	var encoderoomid = '';
     var userImage="{{$userpic}}";
- 
+    var ChatImageUrl = "{{url('/uploads/media/chat_images/')}}";
     var defaultUserImage = "{{url('/images/user-thumb.jpg')}}";
 
     var image_upload_url="ajax/sendimage";
@@ -347,33 +367,46 @@ $GroupsJidList = $SingleChatList = array();
       require(['converse'], function (converse) {
         conObj = converse;
 
-        conObj.listen.on('connected', function (event) {
-          $('.loader_blk').remove();
 
-          if( groupname != '' || groupid != '' ) {
-						setTimeout( function(){
-							closePublic( groupid );
-						}  , 2000 );
-					}
-         
-					setTimeout( function(){
+        conObj.listen.on('connected', function (event) {
+          console.log( 'connected' );
+            $('.loader_blk').remove();
+						closePublic( groupid );
 						waitProfile = 1;
-					}  , 3000 );
 				});
 				
 				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
-					chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
+          chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
 					var xmpp = chatbox.model.get('jid');
 					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
-					setTimeout( function(){
-            if( typeof SingleChatName[jidStr] != 'undefined' ){
-  						var groupimage = SingleChatName[jidStr]['image'];
-  						var grouptitle = SingleChatName[jidStr]['title'];
-              chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
-  						chatbox.$el.find( '.chat-title' ).html( grouptitle );
-  					
+
+            if( typeof profiletitles['img_'+jidStr] == 'undefined' ){
+              jQuery.ajax({
+                'url' : GetProfileUrl,
+                'type' : 'post',
+                'async' : false,
+                'dataType' : 'json',
+                'data' : { user_jid: jidStr },
+                'success' : function(data){
+                  if( typeof data.image != 'undefined' ){
+                    profiletitles['img_'+jidStr] = data.image;
+                  } else {
+                    profiletitles['img_'+jidStr] = defaultImage;
+                  }
+                  if( typeof data.name != 'undefined' ){
+                    profiletitles['name_'+jidStr] = data.name;
+                  } else {
+                    profiletitles['name_'+jidStr] = jidStr;
+                  }
+                }
+              });
             }
-          }  , 1000 );
+
+            var groupimage = profiletitles['img_'+jidStr];
+            var grouptitle = profiletitles['name_'+jidStr];
+            chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+userImagesUrl+groupimage+"');" );
+            chatbox.$el.find( '.chat-title' ).html( grouptitle );
+
 					//Emoji Picker
 					if(waitProfile == 1 ){
 						setTimeout( function(){
@@ -433,6 +466,7 @@ $GroupsJidList = $SingleChatList = array();
 						}
 					}
 					renderEmoji( chatbox );	
+          console.log( 'chatRoomOpened' );
 				});
 				
 				conObj.listen.on('disconnected', function (event) { 
@@ -542,7 +576,16 @@ $GroupsJidList = $SingleChatList = array();
                    friendList = data.data;
                   } else {
                     $.each( data.data , function( k, v ){
-                      SingleChatName[v.xmpp] = JSON.stringify({image:v.image,title:v.name});
+                      if( typeof v.image != 'undefined' ){
+                        profiletitles['img_'+v.xmpp] = v.image;
+                      } else {
+                        profiletitles['img_'+v.xmpp] = defaultImage;
+                      }
+                      if( typeof v.name != 'undefined' ){
+                        profiletitles['name_'+v.xmpp] = v.name;
+                      } else {
+                        profiletitles['name_'+v.xmpp] = v.xmpp;
+                      }
 
                       friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\''+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
 
@@ -569,7 +612,16 @@ $GroupsJidList = $SingleChatList = array();
                          friendList = data.data;
                         } else {
                           $.each( data.data , function( k, v ){
-                            SingleChatName[v.xmpp] = JSON.stringify({image:v.image,title:v.name});
+                            if( typeof v.image != 'undefined' ){
+                              profiletitles['img_'+v.xmpp] = v.image;
+                            } else {
+                              profiletitles['img_'+v.xmpp] = defaultImage;
+                            }
+                            if( typeof v.name != 'undefined' ){
+                              profiletitles['name_'+v.xmpp] = v.name;
+                            } else {
+                              profiletitles['name_'+v.xmpp] = v.xmpp;
+                            }
 
                             friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\''+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
 
@@ -757,13 +809,13 @@ function hideOpendBox( grpname , actiontype ){
 
 function openChatGroup( grpjid,grpname,groupimage ){
 	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver , '<?= Auth::User()->xmpp_username ?>_<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
+		conObj.rooms.open( grpjid+conferencechatserver );
 	}
 }
 function openFirstChat( grpjid ){
 	groupChatRefresh( grpjid );
 	if( hideOpendBox( grpjid+conferencechatserver, 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver , '<?= Auth::User()->xmpp_username ?>_<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
+		conObj.rooms.open( grpjid+conferencechatserver );
 		$( '.chatnotification' ).remove();
 	}
 }
@@ -814,7 +866,7 @@ function closePublic( grpname ){
 	$( '.privatechat' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getChat = conObj.chats.get(jid);
-		if( $(this).css('display') == 'block' ){
+		if( $(this).css('display') == 'block' && grpname != '' ){
 			getChat.minimize();
 		}
 	});
@@ -831,15 +883,20 @@ function closePublic( grpname ){
 			if( grouptype == 'pub' ){
 				getRooms.close();
         $('[data-bid="'+jid+'"]').parent('.chat-head').remove();
-			} else if( $(this).css('display') == 'block' ){
+			} else if( $(this).css('display') == 'block' && grpname != '' ){
 				getRooms.minimize();
 			}
 		}
 	});
 
-	if( openChat == 1 ){
-		conObj.rooms.open( grpname+conferencechatserver, '<?= Auth::User()->xmpp_username ?>_<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>' );
-	}
+	if( openChat == 1 && grpname != '' ){
+		conObj.rooms.open( grpname+conferencechatserver );
+	} else if(  $('.chatbox:visible').length == 0 ){
+    var firstChat = $( '.minimized-chats-flyout .chat-head:first .restore-chat' ).data( 'bid' );
+      if( typeof firstChat !== undefined ){
+        hideOpendBox( Base64.decode(firstChat) , 1 );
+      }
+  }
 }
 
 $('.status-r-btn').on('click',function(){

@@ -171,7 +171,7 @@ class Converse
 			$node = Config::get('constants.xmpp_host_Url');
 
 			// @Connect ejabberd with xmpp credentials
-			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', '', false, false);
+			$xmppPrebind = new XmppPrebind($node, 'http://'.$node.':5280/http-bind', uniqid(), false, false);
 			$xmppPrebind->connect($authuser->xmpp_username, $authuser->xmpp_password);
 			$xmppPrebind->auth();
 			$sessionInfo = $xmppPrebind->getSessionInfo();

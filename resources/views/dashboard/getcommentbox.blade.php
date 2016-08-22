@@ -9,19 +9,19 @@ $commentscountdata = \App\Comment::where(['feed_id' => $feeddata->id])->get()->c
 <div id="AllComment" class="post-list popup_list_with_img" data-value="{{ $feeddata->id }}" id="post_{{ $feeddata->id }}">
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-8 pop-post-left-side">
+			<div class="col-sm-8 col-xs-12 pop-post-left-side">
 				<div class="single-post" data-value="{{ $feeddata->id }}" id="post_{{ $feeddata->id }}">
 					<div class="pop-post-header">
 						<div class="post-header">
 							<div class="row">
-								<div class="col-md-7">
+								<div class="col-md-7 col-xs-12">
 									<a href="profile/{{$user->id}}" title="" class="user-thumb-link">
 									<?php // $userpic = !empty($user->picture) ? $user->picture : '/images/user-thumb.jpg' ?>
 										<span class="small-thumb" style="background: url('<?php echo userImage($user) ?>');"></span>
 										{{ $user->first_name.' '.$user->last_name }}
 									</a>
 								</div>
-								<div class="col-md-5">
+								<div class="col-md-5 col-xs-12">
 									<div class="post-time text-right">
 										<ul>
 											<li><span class="icon flaticon-days">{{ $feeddata->updated_at->format('d M Y') }}</span></li>
@@ -75,7 +75,7 @@ $commentscountdata = \App\Comment::where(['feed_id' => $feeddata->id])->get()->c
 					</div><!--pop post footer-->
 				</div><!--/single post-->
 			</div>
-			<div class="col-sm-4 pop-comment-side-outer">
+			<div class="col-sm-4 col-xs-12 pop-comment-side-outer">
 				<div class="pop-comment-side">
 					<div class="post-comment-cont">
 						<div class="comments-list">

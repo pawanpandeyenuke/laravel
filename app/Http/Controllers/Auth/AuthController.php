@@ -53,13 +53,13 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
-
         return Validator::make($data, [
             'first_name' => 'required|max:255',
             'last_name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6',
-            'country' => 'required'
+            'country' => 'required',
+            'phone_no' => 'required|unique_with:users,country_code'
         ]);
     }
 
@@ -69,9 +69,8 @@ class AuthController extends Controller
      * @param  array  $data
      * @return User
      */
-    protected function create(array $data)
+    public function create(array $data)
     {
-
         $confirmation_code = str_random(30);
         $raw_token = $data['first_name'].date('Y-m-d H:i:s',time()).$data['last_name'].$data['email'];
         $access_token = Hash::make($raw_token);
@@ -120,7 +119,7 @@ class AuthController extends Controller
 
         Converse::setNameVcard($user->xmpp_username, 'FN', $username);
         
-         $emaildata = array(
+        $emaildata = array(
             'confirmation_code' => $confirmation_code,
         );
 

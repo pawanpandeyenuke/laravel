@@ -58,26 +58,26 @@
  <header>
 	<div class="container">
 		<div class="row header-row-full">
-			<div class="col-sm-2">
-				<a href="/dashboard" title="" class="logo"><img src="{{url('/images/logo.png')}}" alt="Friendz Square"></a>
+			<div class="col-sm-2 col-xs-12">
+				<a href="{{url('dashboard')}}" title="" class="logo"><img src="{{url('/images/logo.png')}}" alt="Friendz Square"></a>
 			</div>
-			<div class="col-sm-7 bPadding">
+			<div class="col-sm-7 col-xs-12 bPadding">
 				<div class="top-search-cont">
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-sm-6 col-xs-12">
 							<div class="search-field">
 							{!! Form::open(array('url' => '/searchfriends', 'id' => 'searchform','method' => 'post')) !!}
-								<input type="text" name="searchfriends" id="searchfriends" value="" placeholder="Enter Name" class="form-control">
+								<input type="text" name="searchfriends" id="searchfriends" value="{{ Request::get('searchfriends')}}" placeholder="Enter Name" class="form-control">
 								<button type="submit" class="btn btn-primary btn-srch-top search-btn search" >Search Friends</button>
 									{!! Form::close() !!}
 							</div>
 						</div>
             {!! Form::open(array('url' => 'search-forum', 'id' => 'search-forum-dashboard', 'method' => 'post')) !!}
-						<div class="col-sm-6">
+						<div class="col-sm-6 col-xs-12">
 							<div class="search-field">
               <input type = "hidden" name = "mainforum" value = "Forum">
               <input type = "hidden" name = "check" value = "">
-								<input type="text" name="forum-keyword" value="" placeholder="Enter Keyword" class="form-control forum-keyword-app">
+								<input type="text" name="forum-keyword" value="{{ Request::get('forum-keyword')}}" placeholder="Enter Keyword" class="form-control forum-keyword-app">
 								<button type="submit" class="btn btn-primary btn-srch-top">Search Forum</button>
 							</div>
 						</div>
@@ -85,7 +85,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-3 col-xs-12">
 				<div class="dashboard-header-menu text-right">
           @if(Auth::check())
 					<ul class="list-inline">
@@ -112,37 +112,37 @@
 
 	<!--- Suggestion Popup -->
 
-		  <form id="suggestionform1" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" data-backdrop="static" data-keyboard="false">
-                            <div class="modal fade send-msg-popup" id="myModal" tabindex="-1" role="dialog" aria-labelledby="sendMsgLabel">
-                           
-                              <div class="modal-dialog modal-sm" role="document">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="sendMsgLabel" style="text-align: center;">Suggestion box</h4>
-                                  </div>
-                                  <div class="modal-body">
-                                   <div class="row">
-                                   <div class='alert alert-success successmsg'  style='text-align: center; display: none;'>Thank you for your feedback!<br><a href='#' class='modalshow'>Have another one?</a></div>
-                                    <div class="col-md-10 col-md-offset-1 successmsg">
-                                        <div class="profile-select-cont form-group">
-                                            <textarea name="message_text" class="form-control message_text" placeholder="Enter suggestion" ></textarea>
-                                        </div>
-                                        <div class="profile-select-cont form-group">
-                                            <input name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" placeholder="Enter email" class="form-control useremail" >
-                                        </div>
-                                    </div>
-                                   </div>
-                                    
-                                  </div>
-                                  <div class="modal-footer">
-                                    <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary suggest">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                           </form>
+  <form id="suggestionform1" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade send-msg-popup" id="myModal" tabindex="-1" role="dialog" aria-labelledby="sendMsgLabel">
+   
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="sendMsgLabel" style="text-align: center;">Suggestion box</h4>
+          </div>
+          <div class="modal-body">
+           <div class="row">
+           <div class='alert alert-success successmsg'  style='text-align: center; display: none;'>Thank you for your feedback!<br><a href='#' class='modalshow'>Have another one?</a></div>
+            <div class="col-md-10 col-md-offset-1 successmsg">
+                <div class="profile-select-cont form-group">
+                    <textarea name="message_text" class="form-control message_text" placeholder="Enter suggestion" ></textarea>
+                </div>
+                <div class="profile-select-cont form-group">
+                    <input name="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" placeholder="Enter email" class="form-control useremail" >
+                </div>
+            </div>
+           </div>
+            
+          </div>
+          <div class="modal-footer">
+            <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary suggest">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   </form>
                            <!-- Suggestion POPUP END-->
 </header><!--/header-->
 	

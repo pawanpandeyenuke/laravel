@@ -22,6 +22,7 @@ class SearchController extends Controller
             }
 
             $authUserId = Auth::check() ? Auth::User()->id : 0;
+            $authUserId = 65;
 
             // Search users
             if( !$authUserId )
@@ -38,6 +39,8 @@ class SearchController extends Controller
                                 ->orWhere( 'users.first_name', 'LIKE', '%'. $value.'%' );  
                         }
                     });
+
+                $count = $model->count();
             }
             else
             {
@@ -97,9 +100,9 @@ class SearchController extends Controller
                             $query->where('s.setting_value', 'nearby-app-user')
                                 ->orWhere('s.setting_value', 'all');
                         })
-                        ->where('users.country', $user->country)
+                        /*->where('users.country', $user->country)
                         ->where('users.state', $user->state)
-                        ->where('users.city', $user->city)
+                        ->where('users.city', $user->city)*/
                         ->where( function( $query ) use ( $input, $keyword ) {
                             $expVal = explode(' ', $keyword);
                             foreach( $expVal as $key => $value ) {                          
@@ -109,13 +112,13 @@ class SearchController extends Controller
                         });
 
                     $union2 = DB::table('users')
-                        ->select('users.*')                        
+                        ->select('users.*')
                         ->join('settings as s', 'users.id', '=', 's.user_id')
                         ->where('s.setting_title', 'friend-request')
                         ->where('s.setting_value', 'friends-of-friends')
-                        ->where('users.country', $user->country)
+                        /*->where('users.country', $user->country)
                         ->where('users.state', $user->state)
-                        ->where('users.city', $user->city)
+                        ->where('users.city', $user->city)*/
                         ->whereIn('users.id', $fof)
                         ->where( function( $query ) use ( $input, $keyword ) {
                             $expVal = explode(' ', $keyword);
@@ -176,10 +179,12 @@ class SearchController extends Controller
 
                     $model = $union1->union($union2)->union($union3);
                 }
-            }
 
-            // echo DB::raw("select count(*) as total from (".$model->toSql().") as f");
-            $count = DB::select(DB::raw("select count(*) as total from (".$model->toSql().") as f"));
+                /*echo $query = DB::raw("select count(*) as total from (".$model->toSql().") as f");
+                $count = DB::select($query);
+                print_r($count);exit;*/
+            }
+            
             $count = 0;
             
             // Gather all the results from the queries and paginate it.

@@ -18,6 +18,8 @@
 Route::get('pushnotification-iphone', 'DashboardController@pushNotificationIphone');
 Route::get('pushnotification-android', 'DashboardController@pushNotificationAndroid');
 
+Route::post('home/sendpushtoios','HomeController@sendpushtoios');
+
 /**
  * @Ajax Routes..
  *
@@ -404,6 +406,8 @@ Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
 		else
 			return view('auth.register');
 	});
+
+	Route::post('/', 'HomeController@postRegister');
 
 	/*Route::get('mail',function(){
 		return view('emails.invite')->with('username','Aditya')->with('id',"42");
