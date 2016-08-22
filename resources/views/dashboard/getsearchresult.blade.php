@@ -3,15 +3,15 @@ if(Auth::check())
 	$id1=Auth::User()->id;
 else
 	$id1 = "";
+
 $count=0;	
-		?>
+
+?>
 	
 @foreach($model as $data)
-
 	<?php 
-
-			$name = $data['first_name'].' '.$data['last_name'];
-		
+		$data = (array) $data;
+		$name = $data['first_name'].' '.$data['last_name'];
 	?>
 	<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="{{$id1}}" >
 		<div class="row">
@@ -26,19 +26,18 @@ $count=0;
 			</div>
 			<div class="col-sm-6">
 		@if(Auth::check())
-	<?php 
+	<?php
 		$count++;
-		if(Auth::check()){
-		$status1=\App\Friend::where('user_id',$data['id'])->where('friend_id',Auth::User()->id)->value('status');
-		$status2=\App\Friend::where('friend_id',$data['id'])->where('user_id',Auth::User()->id)->value('status');
-		}
-		else{
+		if(Auth::check())
+		{
+			$status1=\App\Friend::where('user_id',$data['id'])->where('friend_id',Auth::User()->id)->value('status');
+			$status2=\App\Friend::where('friend_id',$data['id'])->where('user_id',Auth::User()->id)->value('status');
+		} else {
 			$status1 = null;
 			$status2 = null;
 		}
 
-				if($status1 == 'Pending'){
-			?>
+		if($status1 == 'Pending'){ ?>
 				<div class="row">
 					<div class="col-sm-6">
 						<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Confirm</button>
@@ -96,4 +95,4 @@ $count=0;
 			</div>
 		</div>
 	</li>
-	@endforeach
+@endforeach
