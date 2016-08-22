@@ -120,13 +120,28 @@ class AjaxController extends Controller
 
 						$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
 						$arguments['image'] = $image_name;
+						
+						$imageRealPath 	= 	$file->getRealPath();
+						$img = Image::make($imageRealPath);
+						$img->save( public_path('uploads/'). $image_name );
 
 						/** resize image **/
-						$this->resizeImage( Input::file('image'), '200' ,public_path('uploads/thumb-small/') , $image_name );
-						$this->resizeImage( Input::file('image'), '500' ,public_path('uploads/thumb-large/') , $image_name );
+						list($ImageWidth, $ImageHeight) = getimagesize( public_path('uploads/'.$image_name ) );
 
-						$file->move(public_path('uploads'), $image_name);
+						if( $ImageHeight > 200 ){
+							$SmallSize = 200;
+						} else {
+							$SmallSize = $ImageHeight;
+						}
+						$this->resizeImage( Input::file('image'), $SmallSize ,public_path('uploads/thumb-small/') , $image_name ); 
 
+						if( $ImageHeight > 500 ){
+							$LargeSize = 500;	
+						} else{
+							$LargeSize = $ImageHeight;
+						}
+						$this->resizeImage( Input::file('image'), $LargeSize ,public_path('uploads/thumb-large/') , $image_name );
+						
 					}
 				}else{
 					throw new Exception("Max upload size is 4 MB.", 1);

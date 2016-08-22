@@ -251,10 +251,29 @@ class ApiController extends Controller
 
 					if($bytes < $maxsize){
 						$image_name = time()."_POST_".strtoupper($file->getClientOriginalName());
-						$this->resizeImage( Request::file('image'), '200' ,public_path('uploads/thumb-small/') , $image_name );
-						$this->resizeImage( Request::file('image'), '500' ,public_path('uploads/thumb-large/') , $image_name );
+						
+						$imageRealPath 	= 	$file->getRealPath();
+						$img = Image::make($imageRealPath);
+						$img->save( public_path('uploads/'). $image_name );
+
+						/** resize image **/
+						list($ImageWidth, $ImageHeight) = getimagesize( public_path('uploads/'.$image_name ) );
+
+						if( $ImageHeight > 200 ){
+							$SmallSize = 200;
+						} else {
+							$SmallSize = $ImageHeight;
+						}
+						$this->resizeImage( Request::file('image'), $SmallSize ,public_path('uploads/thumb-small/') , $image_name ); 
+
+						if( $ImageHeight > 500 ){
+							$LargeSize = 500;	
+						} else{
+							$LargeSize = $ImageHeight;
+						}
+						$this->resizeImage( Request::file('image'), $LargeSize ,public_path('uploads/thumb-large/') , $image_name );
+						
 						$arguments['image'] = $image_name;
-						$file->move('uploads', $image_name);
 					}else{
 						throw new Exception("Too large image.", 1);						
 					}
