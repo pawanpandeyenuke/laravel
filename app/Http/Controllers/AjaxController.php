@@ -995,7 +995,7 @@ public function sendImage(Request $request){
 				if (in_array($ext, $valid_formats)) {
 			$actual_image_name = "chatimg_" . time() . substr(str_replace(" ", "_", $txt), 5) . "." . $ext;
 			$tmp = $uploadedfile;
-			$this->resizeImage( Request::file('chatsendimage'), '150' , $path , $actual_image_name );
+			$this->resizeImage( Request::file('chatsendimage'), '300' , $path.'thumb/' , $actual_image_name );
 
 			if (move_uploaded_file($tmp, $path . $actual_image_name)) {
 		        $data='/uploads/media/chat_images/'.$actual_image_name;
@@ -1025,11 +1025,11 @@ public function sendImage(Request $request){
 	    	}
 	    
 	    	$img = Image::make($imageRealPath); // use this if you want facade style code
-	    	$img->resize(intval($size), null, function($constraint) {
+	    	$img->resize(null, intval($size),function($constraint) {
 	    		 $constraint->aspectRatio();
 	    	});
 	    	
-	    	return $img->save($path.'thumb/'. $thumbName);
+	    	return $img->save($path. $thumbName);
     	}
     	catch(Exception $e)
     	{
