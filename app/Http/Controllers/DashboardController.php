@@ -366,6 +366,7 @@ class DashboardController extends Controller
 		$friendid = Friend::where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 		$pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
 		$private_group_array = GroupMembers::where(['member_id' => $id, 'status' => 'Joined'])->pluck('group_id');
+      
 		$privategroup = Group::whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
 
 		 return view('chatroom.groupchat')
@@ -398,7 +399,7 @@ class DashboardController extends Controller
 
                     $pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
                     
-                    $private_group_array = GroupMembers::where('member_id',Auth::User()->id)->pluck('group_id');
+                    $private_group_array = GroupMembers::where( ['member_id' => Auth::User()->id, 'status' => 'Joined'] )->pluck('group_id');
             
                     $privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
                 }
@@ -428,7 +429,7 @@ class DashboardController extends Controller
 
         $pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
         
-        $private_group_array = GroupMembers::where('member_id',$id)->pluck('group_id');
+        $private_group_array = GroupMembers::where(['member_id' => $id, 'status' => 'Joined'])->pluck('group_id');
         
         $privategroup = Group::with('members')->whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
 
