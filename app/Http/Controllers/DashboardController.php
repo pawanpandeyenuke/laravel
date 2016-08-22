@@ -799,7 +799,7 @@ class DashboardController extends Controller
             $groupdetail = Group::where('id',$privategroupid)->get()->toArray();
 
             if( !$groupdetail ){
-                return redirect()->back()->with('error',"This private group does not exist.");
+                return redirect('private-group-list')->with('error',"This private group does not exist.");
             }
 
             $ownerid = Group::where('id',$privategroupid)->value('owner_id');
