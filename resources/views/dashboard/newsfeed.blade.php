@@ -34,8 +34,8 @@
 
 				@if($data['image'])
 					<div class="post-img-cont">
-						<a href="{{ url('uploads/'.$data['image']) }}" class="popup">
-						<img src="{{ url('uploads/'.$data['image']) }}" class="post-img">
+						<a href="<?php echo dashboardImg( $data['image'], 'link' ) ?>" class="popup">
+						<img src="<?php echo dashboardImg( $data['image'], 'thumb' ) ?>" class="post-img">
 						</a>
 					</div>
 				@endif

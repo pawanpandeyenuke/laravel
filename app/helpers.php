@@ -525,4 +525,41 @@ function getFileType($filename)
     }
 
 
+    function dashboardImg( $img_name, $type )
+    {
+
+        $path = '';
+
+        if( $type === 'link' ){
+
+            if( file_exists(public_path('uploads/'.$img_name)) )
+            {
+                
+                $path = url('uploads/'.$img_name);
+
+            }elseif( file_exists(public_path('uploads/thumb-large/'.$img_name))){
+
+                $path = url('uploads/thumb-large/'.$img_name);
+
+            }            
+
+        }elseif( $type === 'thumb' ){
+
+            if( file_exists(public_path('uploads/thumb-large/'.$img_name)) )
+            {
+
+                $path = url('uploads/thumb-large/'.$img_name);
+
+            }elseif( file_exists(public_path('uploads/'.$img_name))){
+
+                $path = url('uploads/'.$img_name);
+
+            }
+
+        }
+
+        return $path;
+
+    }
+
 ?>
