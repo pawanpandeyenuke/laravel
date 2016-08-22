@@ -150,15 +150,15 @@ $GroupsJidList = $SingleChatList = array();
                                             @if(!empty($userdata))
                                             @foreach($userdata as $data)
 
-                                              <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : '/images/user-thumb.jpg'; ?>
+                                              <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : 'user-thumb.jpg'; ?>
 
                                               <li >
                                                   <div class='info' data-id="{{$data['user']['id']}}" style="position:relative;" >
                                                     <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif  data-id="{{$data['user']['id']}}" >
-                                                        <span style="background: url('{{$user_picture}}');" class="chat-thumb"></span>
+                                                        <span style="background: url('{{'/uploads/user_img/'.$user_picture}}');" class="chat-thumb"></span>
                                                         <span class="title">{{ $data['user']['first_name'] }}</span>           
                                                     <?php $SingleChatList['name_'.$data['user']['xmpp_username']] = $data['user']['first_name'].' '.$data['user']['last_name'];
-                                                    		$SingleChatList['img_'.$data['user']['xmpp_username']] = !empty($data['user']['picture']) ? $data['user']['picture'] : 'user-thumb.jpg';
+                                                    		$SingleChatList['img_'.$data['user']['xmpp_username']] = $user_picture;
                                                     ?>
                                                     </a>
                                                      @if($data['user']['id'] != Auth::User()->id)
@@ -587,7 +587,7 @@ $GroupsJidList = $SingleChatList = array();
                         profiletitles['name_'+v.xmpp] = v.xmpp;
                       }
 
-                      friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\'/uploads/user_img'+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
+                      friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\'/uploads/user_img/'+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
 
                     });
                   }
@@ -623,7 +623,7 @@ $GroupsJidList = $SingleChatList = array();
                               profiletitles['name_'+v.xmpp] = v.xmpp;
                             }
 
-                            friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\'/uploads/user_img'+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
+                            friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\'/uploads/user_img/'+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
 
                           });
                         }
