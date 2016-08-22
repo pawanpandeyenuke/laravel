@@ -899,7 +899,7 @@ comments;
  		// print_r($input);die;
 
  		$categoryid = JobArea::where('job_area',$input['jobarea'])->value('job_area_id');
- 		$data = JobCategory::where('job_area_id',$categoryid)->pluck('job_category');
+ 		$data = JobCategory::where(['job_area_id' => $categoryid, 'status' => 1])->pluck('job_category');
 
 		$jcategory = array('<option value="">Category</option>');
 		foreach($data as $query){			
