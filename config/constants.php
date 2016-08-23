@@ -7,7 +7,8 @@ return [
 	'google_redirect_uri' => 'http://stage.friendzsquare.com/google/client/callback', 
 
 	// Hotmail Credentials
-	'client_id' => '0000000040194135',
+	// 'client_id' => '0000000040194135',
+	'client_id' => '000000004818F6AC',
 
 	'redirect_uri' => 'http://stage.friendzsquare.com/hotmail/client/callback',
 

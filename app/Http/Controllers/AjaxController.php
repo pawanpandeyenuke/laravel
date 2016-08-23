@@ -1415,19 +1415,20 @@ public function sendImage(Request $request){
 				$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
 				$subject = 'FriendzSquare Invitation';
 
-		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
+				$username = Auth::User()->first_name.' '.Auth::User()->last_name;
 
-		$data = array(
-			'message' => $message,
-			'subject' => $subject,
-			'id' => Auth::User()->id,
-			//'type' => $type,
-			'username' => $username,
-		);
-			Mail::send('emails.invite', $data, function($message) use($value, $subject) {
-			$message->from('no-reply@friendzsquare.com', 'Friend Square');
-			$message->to($value)->subject($subject);
-                });
+				$data = array(
+					'message' => $message,
+					'subject' => $subject,
+					'id' => Auth::User()->id,
+					//'type' => $type,
+					'username' => $username,
+				);
+				
+				Mail::send('emails.invite', $data, function($message) use($value, $subject) {
+					$message->from('no-reply@friendzsquare.com', 'Friend Square');
+					$message->to($value)->subject($subject);
+	            });
 			}
 
 		}
