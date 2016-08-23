@@ -402,10 +402,10 @@ $GroupsJidList = $SingleChatList = array();
               });
             }
 
-            var groupimage = profiletitles['img_'+jidStr];
-            var grouptitle = profiletitles['name_'+jidStr];
-            chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+userImagesUrl+groupimage+"');" );
-            chatbox.$el.find( '.chat-title' ).html( grouptitle );
+            var singleChatimage = profiletitles['img_'+jidStr];
+            var singleChattitle = profiletitles['name_'+jidStr];
+            chatbox.$el.find( '.profileavatar' ).attr( "style", "background-image: url('"+userImagesUrl+singleChatimage+"');" );
+            chatbox.$el.find( '.chat-title' ).html( singleChattitle );
 
 					//Emoji Picker
 					if(waitProfile == 1 ){
