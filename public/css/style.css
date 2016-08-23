@@ -1095,6 +1095,7 @@ a:hover{
 }
 .chat-user-list {
     height: 700px;
+    max-height: 660px;
     overflow-y: scroll;
 }
 .chat-user-list ul{
