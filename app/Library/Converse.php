@@ -287,7 +287,7 @@ class Converse
 	 				$data['linktype'] = 'Post';
 	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
 	 				$from_name = 'FriendzSquare Reply';
-	 				$subject = $name.' has replied on your post.';
+	 				$subject = $name.' has replied on your post';
 
 	 			}elseif ( $parameters['type'] === 'comment' ) {
 
@@ -300,7 +300,7 @@ class Converse
 	 				$data['linktype'] = 'Reply';
 	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
 	 				$from_name = 'FriendzSquare Comment';
-	 				$subject = $name.' has commented on your reply.';
+	 				$subject = $name.' has commented on your reply';
 
 	 			}
 

@@ -166,7 +166,7 @@
                               </div>
                             </td>
                           </tr>
-                          <tr><td height='25'></td></tr>
+                          <tr><td height='0'></td></tr>
                           <tr>
                             <td align='left'>
                               <div class="contentEditableContainer contentTextEditable">
@@ -174,8 +174,8 @@
                                   <p style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
                                     {{ $current_data }}
                                   </p>
-                                  <br>
-                                  <br>
+                                  <!-- <br>
+                                  <br> -->
                                   <p style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
                                     {{ $type }} {{ $post_message }}
                                   </p>
