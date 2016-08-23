@@ -1094,7 +1094,7 @@ a:hover{
 	padding-right:0px;
 }
 .chat-user-list {
-    height: 750px;
+    height: 630px;
     overflow-y: scroll;
 }
 .chat-user-list ul{
@@ -3821,5 +3821,5 @@ body.modal-open {
 
 #conversejs .chat-content
 {
-	height: calc(100% - -247px) !important;
+	height: calc(100% - -123px) !important;
 }
