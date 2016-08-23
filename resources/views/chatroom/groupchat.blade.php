@@ -57,7 +57,7 @@
 }
 #conversejs .chatbox, #conversejs .chatroom 
 {
-  height:auto;
+  height:auto !important;
 }
 </style>
 
