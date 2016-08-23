@@ -32,7 +32,7 @@ return [
 
 	'broadcast_limit' => '10',
 
-	'private_group_limit' => '20',
+	'private_group_limit' => '500',
 
 	'private_members' => '10',
 
