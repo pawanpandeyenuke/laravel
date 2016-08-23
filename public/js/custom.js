@@ -1565,11 +1565,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'data' : { 'group_id' : GroupId },
 			'type' : 'post',
 			'success' : function(response){
-				if( response.status == 1 ){
-		        	thisObj.parent().html( '<button data-forumtype="private-leave" class="btn btn-primary del-confirm-forum" value="'+GroupId+'">Leave Group</button>' );
-				} else {
-					thisObj.attr('disabled', false);
-				}
+		        thisObj.parent().html( '<button data-forumtype="private-leave" class="btn btn-primary del-confirm-forum" value="'+GroupId+'">Leave Group</button>' );
 			}
 		});
 
