@@ -799,7 +799,7 @@ comments;
 		
 		$MyDetails = User::find($input['friend_id']);
 		$FriendDetails = User::find($input['user_id']);
-		$Message = json_encode( array( 'type' => 'unfriend' , 'message' => 'You are remove from friend list.' ) );
+		$Message = json_encode( array( 'type' => 'unfriend' , 'message' => 'You removed from friend list.' ) );
 		Converse::broadcast($MyDetails->xmpp_username,$FriendDetails->xmpp_username,$Message);
 
 	}
