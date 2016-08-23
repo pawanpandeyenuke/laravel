@@ -2233,9 +2233,7 @@ public function sendImage(Request $request){
 	                    Converse::broadcastchatroom($group->group_jid, $name, $val->xmpp_username, $user->xmpp_username, $message);
 	                };
 
-					if( $update ){
-						$Status = 1;
-					}
+					$Status = 1;
 				}
 			} else {
 				throw new Exception("Sorry, you can be member only upto ".Config::get('constants.private_group_limit')." private groups.", 1);
