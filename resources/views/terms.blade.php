@@ -15,9 +15,9 @@
 					<ul>
 						<li>By using FriendzSquare through a website www.friendzsquare.com &amp;/or application on any
 
-						internet enabled device, its deemed to be considered that you understand that Friendz
+						internet enabled device, its deemed to be considered that you understand that FriendzSquare
 
-						Square is merely platform that facilitates communication between users on FriendzSquare
+						is merely platform that facilitates communication between users on FriendzSquare
 
 						and any interaction between users is solely between them and FriendzSquare don't take
 
