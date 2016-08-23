@@ -487,7 +487,7 @@ $GroupsJidList = $SingleChatList = array();
         				  message_carbons: true,
         				  forward_messages: true,
         				  allow_logout: false,
-        				  debug: true,
+        				  debug: false,
         				  auto_subscribe: true,
                   message_archiving: 'always',
                   auto_join_on_invite:true,
