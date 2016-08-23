@@ -55,6 +55,10 @@
     top: 8px;
     width: 97%;
 }
+#conversejs .chatbox, #conversejs .chatroom 
+{
+  height:auto;
+}
 </style>
 
 <?php 
