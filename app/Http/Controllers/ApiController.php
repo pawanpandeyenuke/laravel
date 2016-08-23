@@ -1011,6 +1011,10 @@ class ApiController extends Controller
 					->where('status', '=', 'Accepted')
 					->delete();
 			// print_r($friends);exit;
+
+
+				$Message = json_encode( array( 'type' => 'unfriend' , 'message' => 'You are remove from friend list.' ) );
+				Converse::broadcast($user->xmpp_username,$friend->xmpp_username,$Message);
 			}
 			$this->data = true;
 			$this->status = 'success';
