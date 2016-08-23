@@ -304,56 +304,76 @@
 	</div><!--/pagedata-->
 
 <script type="text/javascript">
-		$(document).on("click",".btn-post",function(){
-			// alert('hi');
-					    // Opera 8.0+
-			// var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-			//     // Firefox 1.0+
-			// var isFirefox = typeof InstallTrigger !== 'undefined';
-			//     // At least Safari 3+: "[object HTMLElementConstructor]"
-			// var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-			//     // Internet Explorer 6-11
-			// var isIE = /*@cc_on!@*/false || !!document.documentMode;
-			//     // Edge 20+
-			// var isEdge = !isIE && !!window.StyleMedia;
-			//     // Blink engine detection
-			// var isBlink = (isChrome || isOpera) && !!window.CSS;
-			
-			// Chrome 1+
-			var isChrome = !!window.chrome && !!window.chrome.webstore;
-				if(isChrome!="")
-					$(this).parents('form').submit();
-
-			if($('#newsfeed').val()!="" || !($('#image-holder').is(':empty')))
-			$('.btn-post').prop('disabled',true);
-					
+jQuery(function($){
+	$(document).on("click",".btn-postt",function(){
+		// Opera 8.0+
+		// var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+		//     // Firefox 1.0+
+		// var isFirefox = typeof InstallTrigger !== 'undefined';
+		//     // At least Safari 3+: "[object HTMLElementConstructor]"
+		// var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+		//     // Internet Explorer 6-11
+		// var isIE = /*@cc_on!@*/false || !!document.documentMode;
+		//     // Edge 20+
+		// var isEdge = !isIE && !!window.StyleMedia;
+		//     // Blink engine detection
+		// var isBlink = (isChrome || isOpera) && !!window.CSS;
+		
+		// Chrome 1+
+		var isChrome = !!window.chrome && !!window.chrome.webstore;
+		if(isChrome!="") {
+			$(this).parents('form').submit();
+		}
+		
+		if($('#newsfeed').val()!="" || !($('#image-holder').is(':empty')))
+		$('.btn-post').prop('disabled',true);
 	});
 
-		$(document).on("click","#status_up_btn",function(){
-			$('#image-holder').empty();
-			$('#fileUpload').val('');
-			$('.badge').html('');
-		});	
+	$(document).on("click","#status_up_btn",function(){
+		$('#image-holder').empty();
+		$('#fileUpload').val('');
+		$('.badge').html('');
+	});
 
-		$('#postform').submit(function(event){
-				//if($('.status').val()== "" && $('#image-holder').is(':empty')){
-					if($('#status_up_btn').is(':checked')){
-						if($('.status').val()== ""){
-							$('.status').focus();
-							event.preventDefault();
-						}
-						
-					}
-					if($('#status_img_up').is(':checked')){
-						if($('.status').val()== "" && $('#image-holder').is(':empty')){
-							$('.status').focus();
-							event.preventDefault();
-						}
-					}
-					
-					
-				//}
-		});
+	// Post status updates via ajax call.
+	$("#postform").ajaxForm({
+		beforeSubmit: function(){
+			if($('#status_up_btn').is(':checked')){
+				if($('.status').val()== ""){
+					$('.status').focus();
+					return false;
+				}	
+			}
+			if($('#status_img_up').is(':checked')){
+				if($('.status').val()== "" && $('#image-holder').is(':empty')){
+					$('.status').focus();
+					return false;
+				}
+			}
+			$('.btn-post').prop('disabled',true);
+		},
+		success: function(response) { 
+	 		var current = $("#postform");
+			if(response)
+			{
+				$('#newsfeed').val('');
+				$('#image-holder img').remove();
+				$('#fileUpload').val('');
+				$('.group-span-filestyle label .badge').html('');
+				if(response != 'Post something to update.')
+				{
+					$('#postlist').first('.single-post').prepend(response);
+					current.parents('.row').find('#newsfeed').text('');
+					current.parents('.row').find('.emoji-wysiwyg-editor').text('');
+					loadImg();
+					var original =$('.single-post .post-data').first('p').html();		
+			        var converted = emojione.toImage(original);
+			        $('.single-post .post-data').first('p').html(converted);
+				}
+				jQuery('.btn-post').prop('disabled',false);
+			}
+		} 
+    });
+});
 </script>
-
 @endsection
