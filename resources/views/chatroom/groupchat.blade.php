@@ -32,7 +32,7 @@
 }
 
 #conversejs #minimized-chats{
-  top: 463px !important;
+  top: 700px !important;
   left: 3%;
 }
 #conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom {
@@ -54,6 +54,10 @@
     position: relative;
     top: 8px;
     width: 97%;
+}
+#conversejs .chatbox, #conversejs .chatroom 
+{
+  height:auto !important;
 }
 </style>
 
