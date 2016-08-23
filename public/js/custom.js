@@ -187,33 +187,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	});
 
 
-	 $("#uploadgroupimage").ajaxForm(function(response) {});
-
-	// Post status updates via ajax call.
-	$("#postform").ajaxForm(function(response) { 
- 		var current = $("#postform");
-		if(response){
-			$('#newsfeed').val('');
-			$('#image-holder img').remove();
-			$('#fileUpload').val('');
-			$('.group-span-filestyle label .badge').html('');
-
-			if(response != 'Post something to update.'){
-				$('#postlist').first('.single-post').prepend(response);
-				current.parents('.row').find('#newsfeed').text('');
-				current.parents('.row').find('.emoji-wysiwyg-editor').text('');
-				loadImg();
-				var original =$('.single-post .post-data').first('p').html();		
-		        var converted = emojione.toImage(original);
-		        $('.single-post .post-data').first('p').html(converted);	
-
-			 jQuery('.btn-post').prop('disabled',false); 
-			}
-			
-		} 
-    }); 
-
-
+	$("#uploadgroupimage").ajaxForm(function(response) {});
 	$(document).on('click', '#cancel-btn', function(){
 		$('#newsfeed').val('');
 		$('.emoji-wysiwyg-editor').text('');
