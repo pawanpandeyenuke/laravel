@@ -373,6 +373,7 @@ $GroupsJidList = $SingleChatList = array();
         conObj = converse;
 
         conObj.listen.on('connected', function (event) {
+        	console.log( 'connected' );
             $('.loader_blk').remove();
 			closePublic( groupid );
 			waitProfile = 1;
