@@ -71,7 +71,7 @@
 				</li>
 				<li> Your responsibility <br><br>
 
-					You agree to be responsible for all activities done on FriendzSquare.com or FriendzSquare application from your registration user id.
+					You agree to be responsible for all activities done on friendzsquare.com or FriendzSquare application from your registration user id.
 				</li>
 				<li> Your conduct: <br><br>
 
