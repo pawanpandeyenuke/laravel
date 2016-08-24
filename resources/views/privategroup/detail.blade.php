@@ -41,9 +41,9 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 								<b><input type="text" name="privategroupname" class="pr-edit pr-gname" disabled="disabled"  value="{{$groupdetail[0]['title']}}"></b>
 								<?php if($ownerid == Auth::user()->id){ ?>
 									<div id='friendsContainer'>
-									<select id='friends' class='multiple-slt' multiple>
+									<select id='friends' class='multiple-slt' multiple data-placeholder="Add members">
 										@foreach($friends as $data)
-											<?php 
+											<?php
 												$friendName = $data['user']['first_name']." ".$data['user']['last_name'];
 												$id=$data['user']['id'];
 											?>
