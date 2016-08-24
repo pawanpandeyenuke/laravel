@@ -25,12 +25,12 @@
 			
 			<div style="background-color:#EDEDED;height:7px;width:680px; margin-bottom:20px;"></div>
 			
-			<div style="background-color:#EDEDED;height:380px;padding:35px 50px 0 20px;">
+			<div style="background-color:#EDEDED;height:410px;padding:10px 10px 0 10px;">
 				
 				<div style="background-color:#fff;padding:10px 0px 20px 15px;margin-bottom:25px;">
 				<p style="font-size:18px;">Hi,</p>
 				
-				<p style="font-size:18px;">{{ $username }} invites you to join FriendzSquare. On Friendzsquare you can make new friends by joining <strong>Chat Rooms</strong>, Participate in <strong>Forums</strong>, post comments on <strong>Newsfeed</strong> and much more. </p>
+				<p style="font-size:18px;">{{ $username }} has join Friendszsquare. On Friendzsquare you can make new friends by joining <strong>Chat Rooms</strong>, Participate in <strong>Forums</strong>, post comments on <strong>Newsfeed</strong> and much more. </p>
 				
 				<p style="font-size:18px;margin-bottom:30px;">Explore and grow your social Network.</p>
 				
