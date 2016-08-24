@@ -1015,6 +1015,7 @@ class ApiController extends Controller
 
 				$Message = json_encode( array( 'type' => 'unfriend' , 'message' => 'You removed from friend list.' ) );
 				Converse::broadcast($user->xmpp_username,$friend->xmpp_username,$Message);
+				Converse::broadcast($friend->xmpp_username,$user->xmpp_username,$Message);
 			}
 			$this->data = true;
 			$this->status = 'success';
