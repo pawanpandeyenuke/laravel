@@ -17,15 +17,15 @@
   </head>
   <body style="font-family: 'Roboto', sans-serif;">
 		<div style="width:680px;margin:0 auto;">
-			<div style="background-color:#EDEDED;height:7px;width:680px;margin-bottom:3px;"></div>
+			<div style="background-color:#e9e9e9;height:7px;width:680px;margin-bottom:3px;"></div>
 			
-			<div style="background-color:#A6FFED;padding:0 15px;height:78px;">
+			<div style="background-color:#A6FFED;padding:0 10px;height:78px;">
 			<img src="{{url('/images/logo.jpg')}}" alt="" title=""/>
 			</div>
 			
-			<div style="background-color:#EDEDED;height:7px;width:680px; margin-bottom:20px;"></div>
+			<div style="background-color:#e9e9e9;height:7px;width:680px; margin-bottom:20px;"></div>
 			
-			<div style="background-color:#EDEDED;height:410px;padding:10px 10px 0 10px;">
+			<div style="background-color:#e9e9e9;height:370px;padding:10px 10px 0 10px;">
 				
 				<div style="background-color:#fff;padding:10px 0px 20px 15px;margin-bottom:25px;">
 				<p style="font-size:18px;">Hi,</p>
@@ -38,7 +38,7 @@
 				
 				</div>
 				
-				<p style="font-size:15px;margin:0;">This email has been sent to <a href="#" style="color:#0561C1;">{{ $userobj->email }}</a></p>
+				<!-- <p style="font-size:15px;margin:0;">This email has been sent to <a href="#" style="color:#0561C1;">{{ $userobj->email }}</a></p> -->
 				<p style="font-size:15px;margin:0;">It is an invitation to connect. <a href="#" style="color:#0561C1;">Unsubscribe</a></p>
 				<p style="font-size:15px;margin-top:0;margin-bottom:15px;">If you have any questions, then please contact at <a href="#" style="color:#0561C1;">contact@friendzsquare.com </a>	
 				</p>
