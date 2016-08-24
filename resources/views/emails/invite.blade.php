@@ -30,9 +30,9 @@
 				<div style="background-color:#fff;padding:10px 0px 20px 15px;margin-bottom:25px;">
 				<p style="font-size:18px;">Hi,</p>
 				
-				<p style="font-size:18px;">{{ $username }} has join Friendszsquare. On Friendzsquare you can make new friends by joining <strong>Chat Rooms</strong>, Participate in <strong>Forums</strong>, post comments on <strong>Newsfeed</strong> and much more. </p>
+				<p style="font-size:18px;">{{ $username }} has join FriendzSquare. On FriendzSquare you can make new friends by joining <strong>Chat Rooms</strong>, Participate in <strong>Forums</strong>, post comments on <strong>Newsfeed</strong> and much more. </p>
 				
-				<p style="font-size:18px;margin-bottom:30px;">Explore and grow your social Network.</p>
+				<p style="font-size:18px;margin-bottom:30px;">Explore and grow your social network.</p>
 				
 				<a href="{{url('profile/'.$id)}}" style="background-color:#A6FFED;color:#000;padding:10px 20px;margin-bottom:20px;text-decoration:none;">Accept Invite<a/>
 				

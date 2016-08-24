@@ -249,7 +249,7 @@ class ContactImporter extends Controller
 
     	$data = array(
     			'message' => $message,
-    			'subject' => $subject,
+    			'subject' => $username.' invites you to join FriendzSquare',
     			'id' => Auth::User()->id,
     			'type' => $type,
     			'username' => $username,
@@ -258,7 +258,7 @@ class ContactImporter extends Controller
 
         if($email != ''){
     		Mail::send('emails.invite', $data, function($message) use($email, $subject) {
-        		$message->from('no-reply@friendzsquare.com', 'Friend Square');
+        		$message->from('no-reply@friendzsquare.com', 'FriendzSquare');
         		$message->to($email)->subject($subject);
     	    });
         }
