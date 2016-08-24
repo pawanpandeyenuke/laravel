@@ -39,9 +39,21 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 						<div class="col-md-10 col-md-offset-1">
 							<div class="edit-grp-name">
 								<b><input type="text" name="privategroupname" class="pr-edit pr-gname" disabled="disabled"  value="{{$groupdetail[0]['title']}}"></b>
-					<button type="button" class="edit-profile editgroupname" title="Edit Profile"><i class="fa fa-pencil"></i></button>
-					<button type="button" class="save-profile-changes savegroupname" title="Save Profile" value="{{$groupid}}"><i class="fa fa-check-circle"></i></button>
-								<!-- <button type="button" class="editbtn-pencil"><i class="fa fa-pencil"></i></button> -->
+								<?php if($ownerid == Auth::user()->id){ ?>
+									<div id='friendsContainer'>
+									<select id='friends' class='multiple-slt' multiple data-placeholder="Add members">
+										@foreach($friends as $data)
+											<?php
+												$friendName = $data['user']['first_name']." ".$data['user']['last_name'];
+												$id=$data['user']['id'];
+											?>
+											<option value="{{$id}}">{{$friendName}}</option>
+										@endforeach
+									</select>
+									</div>
+								<?php } ?>
+								<button type="button" class="edit-profile editgroupname" title="Edit Profile"><i class="fa fa-pencil"></i></button>
+								<button type="button" class="save-profile-changes savegroupname" title="Save Profile" value="{{$groupid}}"><i class="fa fa-check-circle"></i></button>
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -92,8 +104,8 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 								<ul class="list-inline">
 								<?php if(Auth::User()->id==$ownerid){ ?>
 								<li><a href="{{url("private-group-list")}}" title=""  class="btn btn-primary">Back</a></li>
-								<?php }else{ ?>
-								<li><a href="{{url("private-group-list/".$groupid)}}" title=""  class="btn btn-primary userleave">Leave Group</a></li>
+								<?php } else { ?>
+								<li><button value="{{ $groupid }}" class="btn btn-primary del-confirm-forum" data-forumtype="private-leave">Leave Group</button></li>
 								<?php } ?>
 								<li><a href="{{url("groupchat/pg/".$groupid)}}" title=""  class="btn btn-primary startchat">Start Chat</a></li>
 								</ul>
@@ -114,13 +126,21 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 					</div>
 
 				</div><!--/page center data-->
-				<div class="shadow-box bottom-ad"><img src="/images/bottom-ad.jpg" alt="" class="img-responsive"></div>
+				<div class="shadow-box bottom-ad"><img src="{{ url('images/bottom-ad.jpg') }}" alt="" class="img-responsive"></div>
 			</div>
-			
-
-
-   			 @include('panels.right')
+   		@include('panels.right')
 		</div>
 	</div>
 </div>
+
+<style>
+.select2-container {
+	width:200px;
+	display:block;
+}
+#friendsContainer {
+	width:89.5%;
+	display:none;
+}
+</style>
 @endsection

@@ -1094,8 +1094,8 @@ a:hover{
 	padding-right:0px;
 }
 .chat-user-list {
-    height: 673px;
-    min-height: 660px;
+    height: 571px;
+    min-height: 571px;
     overflow-y: scroll;
 }
 .chat-user-list ul{
@@ -3823,9 +3823,19 @@ body.modal-open {
 
 #conversejs .chat-content
 {
-	height: calc(100% - -123px) !important;
+	height: calc(100% - -90px) !important;
 }
 
 .bl-del-btn .fa-pencil {
   font-size: 25px;
+}
+
+#gccollapseThree .panel-body .chat-user-list {
+  height: 635px !important;
+  min-height: 635px !important;
+}
+
+#gccollapseOne .panel-body .chat-user-list {
+  height: 630px !important;
+  min-height: 630px !important;
 }

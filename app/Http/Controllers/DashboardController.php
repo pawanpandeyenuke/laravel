@@ -857,7 +857,6 @@ class DashboardController extends Controller
             return redirect('private-group-list');
         }
 		$friends=Friend::with('user')
-                    ->with('user')
                     ->where('friend_id', '=', $userid)
                     ->where('status', '=', 'Accepted')
                     ->get()
@@ -865,26 +864,28 @@ class DashboardController extends Controller
 
      return view( 'privategroup.add' )->with( 'friends' ,$friends );
   }
-
-    public function privateGroupDetail( $privategroupid = '' ){
-        if( $privategroupid ){
+    
+    public function privateGroupDetail( $privategroupid = '' )
+    {
+        if( $privategroupid )
+        {
             $groupdetail = Group::where('id',$privategroupid)->get()->toArray();
 
             if( !$groupdetail ){
-                return redirect('private-group-list')->with('error',"This private group does not exist.");
+                return redirect('private-group-list')->with('error','This private group does not exist.');
             }
 
             $ownerid = Group::where('id',$privategroupid)->value('owner_id');
             $members = GroupMembers::where('group_id',$privategroupid)->where('status', '!=', 'Left')->pluck('member_id');
-            $name=User::whereIn('id',$members)->orWhere('id',$ownerid)->get()->toArray();
-
-            $friends=Friend::with('user')
-                        ->with('user')
+            $name = User::whereIn('id',$members)->orWhere('id',$ownerid)->get()->toArray();
+            
+            $friends = Friend::with('user')
                         ->where('friend_id', '=', Auth::User()->id)
                         ->where('status', '=', 'Accepted')
+                        ->whereNotIn('user_id', $members->toArray())
                         ->get()
                         ->toArray();
-
+                        
             return view('privategroup.detail')
                    ->with('groupdetail',$groupdetail)
                    ->with('name',$name)
