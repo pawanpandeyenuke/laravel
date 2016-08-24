@@ -864,7 +864,7 @@ class DashboardController extends Controller
 
      return view( 'privategroup.add' )->with( 'friends' ,$friends );
   }
-
+    
     public function privateGroupDetail( $privategroupid = '' )
     {
         if( $privategroupid )
@@ -872,7 +872,7 @@ class DashboardController extends Controller
             $groupdetail = Group::where('id',$privategroupid)->get()->toArray();
 
             if( !$groupdetail ){
-                return redirect('private-group-list')->with('error',"This private group does not exist.");
+                return redirect('private-group-list')->with('error','This private group does not exist.');
             }
 
             $ownerid = Group::where('id',$privategroupid)->value('owner_id');
@@ -885,7 +885,7 @@ class DashboardController extends Controller
                         ->whereNotIn('user_id', $members->toArray())
                         ->get()
                         ->toArray();
-
+                        
             return view('privategroup.detail')
                    ->with('groupdetail',$groupdetail)
                    ->with('name',$name)

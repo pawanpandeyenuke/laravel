@@ -1419,7 +1419,7 @@ public function sendImage(Request $request){
 		}
 
 		// Add new members
-		if( $input['members'] )
+		if( isset($input['members']) && $input['members'] )
 		{
 			foreach($input['members'] as $user_id)
 			{
@@ -1455,8 +1455,7 @@ public function sendImage(Request $request){
 			}
 		}
 	}
-
-
+	
 	/**
 	*  Send mails to hotmail contacts.
 	*/

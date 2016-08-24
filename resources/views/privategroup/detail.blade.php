@@ -39,17 +39,19 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 						<div class="col-md-10 col-md-offset-1">
 							<div class="edit-grp-name">
 								<b><input type="text" name="privategroupname" class="pr-edit pr-gname" disabled="disabled"  value="{{$groupdetail[0]['title']}}"></b>
-								<div id='friendsContainer'>
-								<select id='friends' class='multiple-slt' multiple>
-									@foreach($friends as $data)
-										<?php 
-											$friendName = $data['user']['first_name']." ".$data['user']['last_name'];
-											$id=$data['user']['id'];
-										?>
-												<option value="{{$id}}">{{$friendName}}</option>
-									@endforeach
-								</select>
-								</div>
+								<?php if($ownerid == Auth::user()->id){ ?>
+									<div id='friendsContainer'>
+									<select id='friends' class='multiple-slt' multiple>
+										@foreach($friends as $data)
+											<?php 
+												$friendName = $data['user']['first_name']." ".$data['user']['last_name'];
+												$id=$data['user']['id'];
+											?>
+											<option value="{{$id}}">{{$friendName}}</option>
+										@endforeach
+									</select>
+									</div>
+								<?php } ?>
 								<button type="button" class="edit-profile editgroupname" title="Edit Profile"><i class="fa fa-pencil"></i></button>
 								<button type="button" class="save-profile-changes savegroupname" title="Save Profile" value="{{$groupid}}"><i class="fa fa-check-circle"></i></button>
 							</div>
