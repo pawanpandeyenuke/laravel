@@ -1870,8 +1870,8 @@ width:495px;
 #conversejs .chat-date {
 	width: 100%;
 }
-#conversejs .toggle-minimized-chats .unread-message-count{
-	display: none;
+#conversejs #toggle-minimized-chats .unread-message-count{
+	display: none !important;
 }
 .page-title.req-search {
   position: relative;
