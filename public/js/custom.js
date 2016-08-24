@@ -1195,8 +1195,8 @@ $('.btn-upload-icon').find(".badge").remove();
 		});
 	});
 
-	$(document).on('click','.userleave',function()
-	{
+	$(document).on('click','.userleave',function(e){
+		e.preventDefault();
 		var current = $(this);
 		var id=current.val();
 		current.attr('disabled', true);
