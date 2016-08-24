@@ -374,8 +374,10 @@ $GroupsJidList = $SingleChatList = array();
 
         conObj.listen.on('connected', function (event) {
         	console.log( 'connected' );
-            $('.loader_blk').remove();
-			closePublic( groupid );
+            setTimeout( function(){
+            	$('.loader_blk').remove();
+				closePublic( groupid );
+			}, 2000 );
 			waitProfile = 1;
 		});
 				
@@ -420,7 +422,7 @@ $GroupsJidList = $SingleChatList = array();
 
 			var xmpp = chatbox.model.get('jid');
 			var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
-
+			var grouptype = jidStr.substr(jidStr.length - 3);
 			if( jidStr ==  groupid ){
 				GroupName[jidStr] = "<?php echo $groupname; ?>";
 				chatbox.$el.find( '.chat-title' ).html( "<?php echo $groupname; ?>" );
@@ -431,6 +433,9 @@ $GroupsJidList = $SingleChatList = array();
 				<?php } else { ?>
 					chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
 				<?php } ?>
+			} else if( grouptype == 'pub' ){
+				chatbox.close();
+				return;
 			} else {
 				chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
 				if( typeof GroupName[jidStr] != 'undefined' ){
@@ -590,10 +595,8 @@ $GroupsJidList = $SingleChatList = array();
             var getRooms = conObj.rooms.get( groupid+conferencechatserver );
             getRooms.close();
             $('#leaveModal').modal('hide');
-            var firstChat = $( '.minimized-chats-flyout .chat-head:first .restore-chat' ).data( 'bid' );
-            if( typeof firstChat !== undefined ){
-              hideOpendBox( Base64.decode(firstChat) , 1 );
-            }
+            OpenFirstMinChat();
+
           });
         });
         
@@ -609,11 +612,7 @@ $GroupsJidList = $SingleChatList = array();
             var PvtJid = $(this).attr( 'data-jid' );
             var getRooms = conObj.rooms.get( PvtJid+conferencechatserver );
             getRooms.close();
-            $('#leavePvtModal').modal('hide');
-            var firstChat = $( '.minimized-chats-flyout .chat-head:first .restore-chat' ).data( 'bid' );
-            if( typeof firstChat !== undefined ){
-              hideOpendBox( Base64.decode(firstChat) , 1 );
-            }
+            OpenFirstMinChat();
         });
 
       });
@@ -625,11 +624,13 @@ $GroupsJidList = $SingleChatList = array();
              conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
          }
          if( hideOpendBox( xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>' , 1 ) ){
-			conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+			var SingleChat = conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+			SingleChat.maximize();
 		 }
      }
 
-
+    /**
+    // comment by vc
     function checkChatboxAndChatRoom(obj)
     {
          var id=$(obj).attr('id');
@@ -642,6 +643,7 @@ $GroupsJidList = $SingleChatList = array();
             is_first=false; 
          }
      }
+    **/
 	/** 
 	*	append emoji in chatbox
 	**/
@@ -662,6 +664,7 @@ $GroupsJidList = $SingleChatList = array();
 	}
 
 /*
+// Comment By VC
 function openChatbox( xmpusername,username ){
    //var chatbox=conObj.chats.get(xmpusername+chatserver);
    //console.log(chatbox);
@@ -710,7 +713,8 @@ function bootstrapCustomCollapse( collapsedtarget ){
 		}
 	});
 }
-
+/**
+//comment By VC
 $(document).ready(function() {
 	$("#gccollapseThree").click();
 	$( document ).on( 'click' , '.restore-chat.chatgroup' , function(){
@@ -722,9 +726,11 @@ $(document).ready(function() {
 		hideOpendBox( jid , 2 );
 	});
 });
-
+**/
 function hideOpendBox( grpname , actiontype ){
 	var resultreturn = true;
+	/**
+	// Comment By VC
 	$( '.privatechat' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getChat = conObj.chats.get(jid);
@@ -751,17 +757,17 @@ function hideOpendBox( grpname , actiontype ){
 			getRooms.minimize();
 		}
 	});
+	**/
 	return resultreturn;
+
 }
 
 function openChatGroup( grpjid,grpname,groupimage ){
-	if( hideOpendBox( grpjid+conferencechatserver , 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver );
-	}
+	conObj.rooms.open( grpjid+conferencechatserver );
 }
 function openFirstChat( grpjid ){
 	groupChatRefresh( grpjid );
-	var NewGroup = conObj.rooms.open( grpjid+conferencechatserver );
+	var NewGroup = conObj.rooms.get( grpjid+conferencechatserver );
 	$( '.chatnotification' ).remove();
 	NewGroup.minimize();
 }
@@ -797,11 +803,26 @@ function removeGroup( chatbox ){
 	chatbox.$el.find('.chat-area').append( '<div class="chat-notification" >You are removed from group</div>' );
 	setTimeout( function(){
 		chatbox.close();
-		var firstChat = $( '.minimized-chats-flyout .chat-head:first .restore-chat' ).data( 'bid' );
-		if( typeof firstChat !== undefined ){
-			hideOpendBox( Base64.decode(firstChat) , 1 );
-		}
+		OpenFirstMinChat();
 	}  , 5000 );
+}
+
+/** 
+* show only one public group
+**/
+function OpenFirstMinChat(  ){
+	if(  $('.chatbox:visible').length == 0 ){
+    	var firstChatObj = $('.minimized-chats-flyout .chat-head:first .restore-chat');
+    	var firstChat =  firstChatObj.data( 'bid' );
+    	if( typeof firstChatObj !== undefined ){
+    		if( firstChatObj.hasClass( "singlechat" ) ) {
+    			var chatbox = conObj.chats.get( Base64.decode(firstChat) );
+    		} else {
+    			var chatbox = conObj.rooms.get( Base64.decode(firstChat) );
+    		}
+    		chatbox.maximize();
+    	}
+	}
 }
 
 /** 
@@ -817,32 +838,38 @@ function closePublic( grpname ){
 		}
 	});
 	
+
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
 		var xmpp = jid.substring(0, jid.indexOf('@')); //jid.replace( conferencechatserver , '' );
-    if( xmpp == grpname ){
-			getRooms.maximize();
+    	if( xmpp == grpname ){
 			openChat = 0;
+			getRooms.maximize();
 		} else {
 			var grouptype = xmpp.substr(xmpp.length - 3);
+			console.log( grouptype );
 			if( grouptype == 'pub' ){
 				getRooms.close();
-        $('[data-bid="'+jid+'"]').parent('.chat-head').remove();
 			} else if( $(this).css('display') == 'block' && grpname != '' ){
 				getRooms.minimize();
 			}
 		}
 	});
+	$( '.chatgroup' ).each( function(){
+		var jid = Base64.decode($(this).data( 'bid' ));
+		var xmpp = jid.substring(0, jid.indexOf('@'));
+		var grouptype = xmpp.substr(xmpp.length - 3);
+		if( grouptype == 'pub' ){
+			$(this).parent('.chat-head').remove();
+		}
+	});
 
-	if( openChat == 1 && grpname != '' ){
+	if( openChat == 1 && grpname != '' && grpname != ' ' ){
 		conObj.rooms.open( grpname+conferencechatserver );
-	} else if(  $('.chatbox:visible').length == 0 ){
-    var firstChat = $( '.minimized-chats-flyout .chat-head:first .restore-chat' ).data( 'bid' );
-      if( typeof firstChat !== undefined ){
-        hideOpendBox( Base64.decode(firstChat) , 1 );
-      }
-  }
+	} else {
+		OpenFirstMinChat();
+	}
 }
 
 $('.status-r-btn').on('click',function(){

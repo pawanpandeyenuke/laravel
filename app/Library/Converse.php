@@ -332,10 +332,10 @@ class Converse
 	    
 	    $length = strlen($parameter);
 
-		if($length < 30){
+		if($length < 60){
 		    $result = $parameter;
 		}else{
-		    $result = substr($parameter, 0, 30);
+		    $result = mb_substr($parameter, 0, 60, 'UTF-8');
 		    $result = $result.'...';
 		}
 
