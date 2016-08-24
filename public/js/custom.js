@@ -1224,6 +1224,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'success' : function(data){
 				$('.private-member-'+id).remove();
 				$('#forum-confirm-modal').modal('hide');
+				window.location.reload();
 			}
 		});
 	});
@@ -1234,32 +1235,30 @@ $('.btn-upload-icon').find(".badge").remove();
 	$(document).on('click','.editgroupname',function(){
 		$('.pr-edit').prop('disabled', false);
 		$(this).hide();
-		$('.savegroupname').show();
-		$('button.edit-pr-img').show();
-		$('.subbtn').show();
+		$('.savegroupname, button.edit-pr-img, .subbtn, #friendsContainer').show();
 	});
 
 	$(document).on('click','.savegroupname',function(){
 		var current = $(this);
-		var id=current.val();
-		var gname=$('.pr-gname').val();
+		var id = current.val();
+		var gname = $('.pr-gname').val();
+		var newmembers = $('#friends').val();
 		if(gname==""){
 			alert("Group name can't be empty");
-		}
-		else{
-		$.ajax({
-			'url' : '/ajax/editgroupname',
-			'type' : 'post',
-			'data' : {'gid':id,'gname':gname},
-			'success' : function(data){
+		} else {
+			$.ajax({
+				'url' : '/ajax/editgroupname',
+				'type' : 'post',
+				'data' : {'gid':id,'gname':gname, 'members': newmembers},
+				'success' : function(data){
 					$('.pr-edit').prop('disabled', true);
 					current.hide();
 					$('.editgroupname').show();
 					$('button.edit-pr-img').hide();
-
-			}
-		});
-	}
+					window.location.reload();
+				}
+			});
+		}
 	});
 
 	/***** Forum Delete Confirmation Box****/
