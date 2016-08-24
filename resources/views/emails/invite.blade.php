@@ -25,7 +25,7 @@
 			
 			<div style="background-color:#e9e9e9;height:7px;width:680px; margin-bottom:20px;"></div>
 			
-			<div style="background-color:#e9e9e9;height:410px;padding:10px 10px 0 10px;">
+			<div style="background-color:#e9e9e9;height:370px;padding:10px 10px 0 10px;">
 				
 				<div style="background-color:#fff;padding:10px 0px 20px 15px;margin-bottom:25px;">
 				<p style="font-size:18px;">Hi,</p>
