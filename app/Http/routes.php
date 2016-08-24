@@ -60,6 +60,7 @@ Route::post('ajax/resend','AjaxController@resend');
 Route::post('ajax/remove','AjaxController@remove');
 Route::post('ajax/cancelrequest','AjaxController@cancelRequest');
 Route::post('profile/ajax/cancelrequest','AjaxController@cancelRequest');
+Route::post('ajax/isfriend','AjaxController@isFriendByJid');
 
 Route::post('ajax/deletepost','AjaxController@deletepost');
 Route::post('ajax/deletecomments','AjaxController@deletecomments');

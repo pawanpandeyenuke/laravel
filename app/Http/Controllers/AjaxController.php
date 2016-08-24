@@ -805,8 +805,26 @@ comments;
 
 	}
 
-
- 
+	/**
+	*	Check Friend by Friend xmpp jid.
+	*/
+	public function isFriendByJid()
+	{
+		$arguments = Input::all();
+		$Status = 0;
+		if( !empty($arguments['user_jid']) ){
+			$FriendJid = $arguments['user_jid'];
+			$userId = Auth::User()->id;
+			$FriendID =User::where('xmpp_username',$FriendJid)->value('id');
+			$IsFriend = Friend::where(['user_id' => $userId, 'friend_id'=> $FriendID, 'status' => 'Accepted'])->get()->count();
+			if( $IsFriend ){
+				$Status = 1;
+			}
+		}
+		echo json_encode(array('status'=>$Status));
+      	die(); 
+	}
+	
 	/**
 	*	Get postbox on ajax call handling.
 	*	Ajaxcontroller@getPostBox
