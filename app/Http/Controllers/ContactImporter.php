@@ -257,9 +257,9 @@ class ContactImporter extends Controller
     		);
 
         if($email != ''){
-    		Mail::send('emails.invite', $data, function($message) use($email, $subject) {
+    		Mail::send('emails.invite', $data, function($message) use($email, $data) {
         		$message->from('no-reply@friendzsquare.com', 'FriendzSquare');
-        		$message->to($email)->subject($subject);
+        		$message->to($email)->subject($data['subject']);
     	    });
         }
 
