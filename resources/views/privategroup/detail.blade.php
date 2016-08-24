@@ -105,7 +105,7 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 								<?php if(Auth::User()->id==$ownerid){ ?>
 								<li><a href="{{url("private-group-list")}}" title=""  class="btn btn-primary">Back</a></li>
 								<?php } else { ?>
-								<li><button val="{{ $groupid }}" class="btn btn-primary del-confirm-forum" data-forumtype="private-leave">Leave Group</button></li>
+								<li><button value="{{ $groupid }}" class="btn btn-primary del-confirm-forum" data-forumtype="private-leave">Leave Group</button></li>
 								<?php } ?>
 								<li><a href="{{url("groupchat/pg/".$groupid)}}" title=""  class="btn btn-primary startchat">Start Chat</a></li>
 								</ul>
