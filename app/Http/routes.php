@@ -361,6 +361,8 @@ Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
 	Route::get('broadcast-add', 'DashboardController@broadcastAdd');
 	Route::post('broadcast-add', 'DashboardController@broadcastAdd');
 
+	Route::match(['post', 'get'], 'broadcast-edit/{id}', 'DashboardController@broadcastEdit');
+
 	Route::get('broadcast-msg/{broadcastid}', 'DashboardController@broadcastMessage');
 	
 	Route::get('private-group-list/{privategroupid}', 'DashboardController@privateGroupList');

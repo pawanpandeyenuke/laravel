@@ -1094,8 +1094,8 @@ a:hover{
 	padding-right:0px;
 }
 .chat-user-list {
-    height: 700px;
-    max-height: 660px;
+    height: 673px;
+    min-height: 660px;
     overflow-y: scroll;
 }
 .chat-user-list ul{
@@ -1961,7 +1961,7 @@ width:495px;
   color: #000;
   font-size: 27px;
   padding: 0px;
-  margin: 5px 0 0;
+  margin: 5px 2px 0;
 }
 .bcast-list .single-list{
 	padding-bottom: 20px;
@@ -3824,4 +3824,8 @@ body.modal-open {
 #conversejs .chat-content
 {
 	height: calc(100% - -123px) !important;
+}
+
+.bl-del-btn .fa-pencil {
+  font-size: 25px;
 }
