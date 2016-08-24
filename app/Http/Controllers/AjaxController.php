@@ -797,10 +797,34 @@ comments;
 				->where(['status'=>'Accepted'])
 				->delete();      
 		
+		$MyDetails = User::find($input['friend_id']);
+		$FriendDetails = User::find($input['user_id']);
+		$Message = json_encode( array( 'type' => 'unfriend' , 'message' => 'You removed from friend list.' ) );
+		Converse::broadcast($MyDetails->xmpp_username,$FriendDetails->xmpp_username,$Message);
+		Converse::broadcast($FriendDetails->xmpp_username, $MyDetails->xmpp_username,$Message);
+
 	}
 
-
- 
+	/**
+	*	Check Friend by Friend xmpp jid.
+	*/
+	public function isFriendByJid()
+	{
+		$arguments = Input::all();
+		$Status = 0;
+		if( !empty($arguments['user_jid']) ){
+			$FriendJid = $arguments['user_jid'];
+			$userId = Auth::User()->id;
+			$FriendID =User::where('xmpp_username',$FriendJid)->value('id');
+			$IsFriend = Friend::where(['user_id' => $userId, 'friend_id'=> $FriendID, 'status' => 'Accepted'])->get()->count();
+			if( $IsFriend ){
+				$Status = 1;
+			}
+		}
+		echo json_encode(array('status'=>$Status));
+      	die(); 
+	}
+	
 	/**
 	*	Get postbox on ajax call handling.
 	*	Ajaxcontroller@getPostBox
@@ -1457,19 +1481,20 @@ public function sendImage(Request $request){
 				$message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
 				$subject = 'FriendzSquare Invitation';
 
-		$username = Auth::User()->first_name.' '.Auth::User()->last_name;
+				$username = Auth::User()->first_name.' '.Auth::User()->last_name;
 
-		$data = array(
-			'message' => $message,
-			'subject' => $subject,
-			'id' => Auth::User()->id,
-			//'type' => $type,
-			'username' => $username,
-		);
-			Mail::send('emails.invite', $data, function($message) use($value, $subject) {
-			$message->from('no-reply@friendzsquare.com', 'Friend Square');
-			$message->to($value)->subject($subject);
-                });
+				$data = array(
+					'message' => $message,
+					'subject' => $subject,
+					'id' => Auth::User()->id,
+					//'type' => $type,
+					'username' => $username,
+				);
+				
+				Mail::send('emails.invite', $data, function($message) use($value, $subject) {
+					$message->from('no-reply@friendzsquare.com', 'Friend Square');
+					$message->to($value)->subject($subject);
+	            });
 			}
 
 		}
@@ -2249,6 +2274,7 @@ public function sendImage(Request $request){
 		{
 			$group_id = Request::get('group_id');
 			$member_id = Auth::User()->id;
+			$user = Auth::User();
 			$Status = 0;
 			if( empty( $group_id ) )
 				throw new Exception("Group is required.", 1);				
@@ -2268,16 +2294,16 @@ public function sendImage(Request $request){
 					$update = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->update(['status' => 'Joined']);
 
 					// Broadcast message
-	                $members = GroupMembers::where(['group_id' => $group->id])->get();
+
+	               $members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$group->id)->pluck('xmpp_username');
 	                $name = $user->first_name.' '.$user->last_name;
 	                $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username, 'user_name'=>$name, 'message' => $name.' joined the group') );
+
 	                foreach($members as $key => $val) {
-	                    Converse::broadcastchatroom($group->group_jid, $name, $val->xmpp_username, $user->xmpp_username, $message);
+	                    Converse::broadcastchatroom($group->group_jid, $name, $val, $user->xmpp_username, $message);
 	                };
 
-					if( $update ){
-						$Status = 1;
-					}
+					$Status = 1;
 				}
 			} else {
 				throw new Exception("Sorry, you can be member only upto ".Config::get('constants.private_group_limit')." private groups.", 1);

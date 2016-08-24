@@ -636,60 +636,131 @@ class DashboardController extends Controller
         return view('broadcast.list')->with('broadcast',$broadcast);
     }
 
+
     public function broadcastAdd()
     {
-        $userid=Auth::User()->id;
+        $userid = Auth::User()->id;
 
         if(Request::isMethod('post'))
         { 
-            $input=Request::all();
-            
-        if(isset($input['broadcastuser'])&&$input['broadcastname']!=null)
+            $input = Request::all();
+                
+            if(isset($input['broadcastuser']) && $input['broadcastname'] != null)
             {
                 $members=implode(",",$input['broadcastuser']);
                 
                 $data = array(
-                        'title'=>$input['broadcastname'],
-                        'user_id'=>$userid
-                            );  
+                            'title' => $input['broadcastname'],
+                            'user_id' => $userid
+                        );  
 
-
-                $br=Broadcast::create($data);
+                $br = Broadcast::create($data);
                 
                 foreach ($input['broadcastuser'] as $key => $value) {
-                   
-                $data1 = array(
-                        'broadcast_id'=>$br['id'],
-                        'member_id'=>$value
-                            );  
+                    $data1 = array(
+                                'broadcast_id' => $br['id'],
+                                'member_id' => $value
+                            );
+
                     BroadcastMembers::create($data1);
                 }
-              return redirect(url('broadcast-list'));  
-                
-            }
-            else
-            {
-                return redirect()->back();
-            }
 
+                return redirect(url('broadcast-list'));  
+                
+            }else{
+
+                return redirect()->back();
+
+            }
 
         }
 
-    $broadcast_count = Broadcast::where('user_id',$userid)->get()->count();
-    if($broadcast_count > Config::get('constants.broadcast_limit')){
-        Session::put('error', "Sorry, you can only add upto ".Config::get('constants.broadcast_limit')." broadcasts.");
-        return redirect()->back();
+        $broadcast_count = Broadcast::where('user_id',$userid)->get()->count();
+        if($broadcast_count > Config::get('constants.broadcast_limit')){
+            Session::put('error', "Sorry, you can only add upto ".Config::get('constants.broadcast_limit')." broadcasts.");
+            return redirect()->back();
+        }
+
+        $friends=Friend::with('user')
+                        ->with('user')
+                        ->where('friend_id', '=', Auth::User()->id)
+                        ->where('status', '=', 'Accepted')
+                        ->get()
+                        ->toArray();
+
+        return view('broadcast.add')->with('friends',$friends);   
+
     }
 
-    $friends=Friend::with('user')
-                    ->with('user')
-                    ->where('friend_id', '=', Auth::User()->id)
-                    ->where('status', '=', 'Accepted')
-                    ->get()
-                    ->toArray();
 
-                return view('broadcast.add')->with('friends',$friends);   
+    public function broadcastEdit( $broadcast_id )
+    {
+
+        $userid = Auth::User()->id;
+
+        $broadcast = Broadcast::with('broadcastMembers')->where('id', $broadcast_id)->first()->toArray();
+
+        $broadcast_prev_members = BroadcastMembers::where('broadcast_id', $broadcast_id)
+                        ->pluck('member_id')
+                        ->toArray();
+
+        $friends = Friend::with('user')
+                        ->where('friend_id', '=', $userid)
+                        ->where('status', '=', 'Accepted')
+                        ->get()
+                        ->toArray();
+
+
+        if(Request::isMethod('post'))
+        { 
+            $input = Request::all();
+                
+            if( isset( $input['broadcastuser'] ) && $input['broadcastname'] != null )
+            {
+
+                // Update broadcast details
+                $b_cast = Broadcast::find($broadcast_id);
+                $b_cast->title = $input['broadcastname'];
+                $b_cast->save();
+
+
+                // Update broadcast members
+                $broadcastmembers = BroadcastMembers::where('broadcast_id', $broadcast_id)->delete();
+                // echo '<pre>';print_r($input['broadcastuser']);die;
+                if( !empty( $input['broadcastuser'] ) ){
+
+                    foreach ( $input['broadcastuser'] as $key => $value ) {
+
+                        $update_data = array(
+                                    'broadcast_id' => $broadcast_id,
+                                    'member_id' => $value
+                                );
+
+                        BroadcastMembers::create($update_data);
+
+                    }
+
+                }
+
+                return redirect(url('broadcast-list'));  
+                
+            }else{
+
+                return redirect()->back();
+
+            }
+
+        }
+
+        return view('broadcast.edit')->with([
+                    'friends' => $friends, 
+                    'broadcast' => $broadcast,
+                    'broadcast_prev_members' => $broadcast_prev_members,
+                ]);
+
+
     }
+
 
     public function broadcastMessage($broadcastid='')
     {   

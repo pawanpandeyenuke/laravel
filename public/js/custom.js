@@ -1179,11 +1179,10 @@ $('.btn-upload-icon').find(".badge").remove();
 	 Private Group delete & Delete user from private group
 
 	*/
-	$(document).on('click','.delprivategroup',function()
-	{
+	$(document).on('click','.delprivategroup',function(){
 		var current = $(this);
 		var id=current.val();
-	
+		current.attr('disabled', true);
 		$.ajax({
 			'url' : '/ajax/delprivategroup',
 			'type' : 'post',
@@ -1191,6 +1190,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'success' : function(data){
 		 		$('.private-group_'+id).remove();
 		 		$('#forum-confirm-modal').modal('hide');
+		 		current.attr('disabled', false);
 			}
 		});
 	});
@@ -1199,7 +1199,7 @@ $('.btn-upload-icon').find(".badge").remove();
 	{
 		var current = $(this);
 		var id=current.val();
-	
+		current.attr('disabled', true);
 		$.ajax({
 			'url' : '/ajax/leaveprivategroup',
 			'type' : 'post',
@@ -1207,6 +1207,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'success' : function(data){
 		 		$('.private-group_'+id).remove();
 		 		$('#forum-confirm-modal').modal('hide');
+		 		current.attr('disabled', false);
 			}
 		});
 	});
@@ -1216,7 +1217,7 @@ $('.btn-upload-icon').find(".badge").remove();
 		var current = $(this);
 		var id=current.val();
 		var gid=current.data('gid');
-
+		current.attr('disabled', true);
 		$.ajax({
 			'url' : '/ajax/deluser',
 			'type' : 'post',
@@ -1224,6 +1225,7 @@ $('.btn-upload-icon').find(".badge").remove();
 			'success' : function(data){
 				$('.private-member-'+id).remove();
 				$('#forum-confirm-modal').modal('hide');
+				current.attr('disabled', false);
 				window.location.reload();
 			}
 		});
@@ -1553,9 +1555,10 @@ $('.btn-upload-icon').find(".badge").remove();
 		}	
 	});
 
-	$(document).on('click', '.join-group', function(){    
+	$(document).on('click', '.join-group', function(){ 
 		var thisObj = $(this);
 		var GroupId = thisObj.data('value');
+		thisObj.attr('disabled', true);
 		$.ajax({
 			'url' : 'ajax/joingroup',
 			'data' : { 'group_id' : GroupId },

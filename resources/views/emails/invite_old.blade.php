@@ -61,30 +61,7 @@
     .bgItem{
       background: #ffffff;
     }
-    .contentEditable .btn.btn-primary.btn-lg.icon-btn{  
-      -moz-user-select: none;
-      background-image: none;
-      border: 1px solid transparent;
-      border-radius: 4px;
-      cursor: pointer;
-      display: inline-block;
-      font-size: 14px;
-      font-weight: normal;
-      line-height: 1.42857;
-      margin-bottom: 0;
-      padding: 6px 12px;
-      text-align: center;
-      vertical-align: middle;
-      white-space: nowrap;
-      font-size: 15px;
-      height: 40px;
-      line-height: 40px;
-      margin-top: 15px;
-      padding: 0 30px;
-      background: #3ab29f none repeat scroll 0 0;
-      color: #fff;
-      text-decoration: none;
-    }
+
     </style>
 <script type="colorScheme" class="swatch active">
 {
@@ -100,6 +77,7 @@
   <body paddingwidth="0" paddingheight="0"   style="padding-top: 0; padding-bottom: 0; padding-top: 0; padding-bottom: 0; background-repeat: repeat; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; -webkit-font-smoothing: antialiased;" offset="0" toppadding="0" leftpadding="0">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableContent bgBody" align="center"  style='font-family:Helvetica, Arial,serif;'>
 
+      
       <tr><td height='35'></td></tr>
 
       <tr>
@@ -110,18 +88,7 @@
               <td width='520'>
                 <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
 
-<!-- =============================== Header ====================================== -->           
-
-                  <tr>
-                    <td height='75' style="padding-bottom: 10px; border-bottom: 3px solid #A0F0E8;">
-                      <a href="#" title="">
-                        <img src="{{url('/images/logo.png')}}" alt="">
-                      </a>
-                    </td>
-                  </tr>
-
-<!-- =============================== Body ====================================== -->
-
+                  <tr><td height='75' style="padding-bottom: 10px; border-bottom: 3px solid #A0F0E8;"><a href="#" title=""><img src="{{url('/images/logo.jpg')}}" alt=""></a></td></tr>
                   <tr>
                     <td class='movableContentContainer' valign='top' style="padding-top: 20px;">
 
@@ -132,7 +99,7 @@
                               <div class="contentEditableContainer contentTextEditable">
                                 <div class="contentEditable">
 
-                                  <p style='text-align:center;margin:0;font-family:Georgia,Time,sans-serif;font-size:26px;color:#2e6da4;'>FriendzSquare</p>
+                                  <p style='text-align:center;margin:0;font-family:Georgia,Time,sans-serif;font-size:26px;color:#222222;'>Welcome to <a href="{{url('/')}}" style="text-decoration:none"><span style='color:#A0F0E6;'>Friendz Square</span></a></p>
 
                                 </div>
                               </div>
@@ -154,72 +121,81 @@
 
                       <div class='movableContent'>
                         <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
-                          <tr><td height='55'></td></tr>
-                          <tr>
-                            <td align='left'>
-                              <div class="contentEditableContainer contentTextEditable">
-                                <div class="contentEditable" align='left'>
-
-                                  <p style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>Hi,</p>
-
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr><td height='0'></td></tr>
+                          <tr><td height='30'></td></tr>
                           <tr>
                             <td align='left'>
                               <div class="contentEditableContainer contentTextEditable">
                                 <div class="contentEditable" align='center'>
-                                  <p style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
-                                    {{ $current_data }}
-                                  </p>
-                                  <!-- <br>
-                                  <br> -->
-                                  <p style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
-                                    {{ $type }} {{ $post_message }}
-                                  </p>
-                                  <br>
-                                  <p  style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
-                                      <a class="btn btn-primary btn-lg icon-btn" title="" href="{{ $post_url }}" style="text-decoration: none;-moz-user-select: none; background-image: none; border: 1px solid transparent; border-radius: 4px; cursor: pointer; display: inline-block; font-size: 14px; font-weight: normal; line-height: 1.42857; margin-bottom: 0; padding: 6px 12px; text-align: center; vertical-align: middle; white-space: nowrap; background: #a0f0e6 none repeat scroll 0 0; color: #000; font-size: 15px;"><i class="flaticon-draw"></i>Go To {{ $linktype }}</a>
-                                    <br>
-                                  </p>
 
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <br>
-                                  
+                                  <h2> Connect to your friends and stay updated about their lives!</h2>
+
                                 </div>
                               </div>
                             </td>
                           </tr>
+
+                          <tr><td height='15'> </td></tr>
+
+                          <tr>
+                            <td align='left'>
+                              <div class="contentEditableContainer contentTextEditable">
+                                <div class="contentEditable" align='center'>
+                                  <p  style='text-align:left;color:#999999;font-size:14px;font-weight:normal;line-height:19px;'>
+                                    Hi, <br/> <br/> {{ $username }} has joined Friendzsquare. On FriendzSqaure you can make new friends by joining chat rooms, participate in forums, post comments on newsfeed and much more. </br> </br> Explore and grow your social network.<!--  <a target='_blank' class='link1' href="{{url('profile/'.$id)}}"> clicking here</a> -->
+
+                                    <!-- <span style='color:#222222;'>{{$username}}</span> -->
+
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <tr><td height='55'></td></tr>
+
+                          <tr>
+                            <td align='center'>
+                              <table>
+                                <tr>
+                                  <td align='center' bgcolor='#A0F0E6' style='background:#A0F0E6; padding:15px 18px;-webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;'>
+                                    <div class="contentEditableContainer contentTextEditable">
+                                      <div class="contentEditable" align='center'>
+
+                                        <a target='_blank' href="{{url('profile/'.$id)}}" class='link2' style='color:#ffffff;'>Accept Invite</a>
+
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                          <tr><td height='20'></td></tr>
                         </table>
                       </div>
 
                       <div lass='movableContent'>
                         <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
-                          <tr><td height='65'></td></tr>
+                          <tr><td height='35'></td></tr>
                           <tr><td  style='border-bottom:1px solid #DDDDDD;'></td></tr>
 
                           <tr><td height='25'></td></tr>
 
                           <tr>
                             <td>
-                              <table width="520" border="0" cellspacing="0" cellpadding="0" align="center" >
+                              <table width="520" border="0" cellspacing="0" cellpadding="0" align="center">
                                 <tr>
                                   <td valign='top' align='left' width='370'>
                                     <div class="contentEditableContainer contentTextEditable">
                                       <div class="contentEditable" align='center'>
-                                        <p style='text-align:left;color:#CCCCCC;font-size:12px;font-weight:normal;line-height:20px;display:none'>
-                                          
+                                        <p  style='text-align:left;color:#CCCCCC;font-size:12px;font-weight:normal;line-height:20px;'>                                        
+                                          <a target='_blank' style="margin-left:40px;" href="#">Forward to a friend</a>
+                                          <a target='_blank' style="margin-left:50px;" href="#" class='link1' class='color:#382F2E;'>Unsubscribe</a>
+                                          <a target='_blank' style="margin-left:50px;" class='link1' class='color:#382F2E;' href="#">Show this email in your browser</a>
                                         </p>
                                       </div>
                                     </div>
                                   </td>
-
-                                  <td width='30'></td>
-
                                 </tr>
                               </table>
                             </td>
@@ -229,13 +205,6 @@
 
                     </td>
                   </tr>
-
-                  
-
-<!-- =============================== footer ====================================== -->
-                  
-
-
                 </table>
               </td>
               <td width='40'></td>
@@ -243,11 +212,8 @@
           </table>
         </td>
       </tr>
-
       <tr><td height='88'></td></tr>
-
-
     </table>
       </body>
       </html>
-
+ 

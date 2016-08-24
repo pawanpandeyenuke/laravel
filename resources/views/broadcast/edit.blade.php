@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('title', 'Broadcast - ')
 @section('content')
-
+<?php  // echo '<pre>';print_r($broadcast);die; ?>
 <div class="page-data dashboard-body">
 	<div class="container">
 		<div class="row">
@@ -10,26 +10,27 @@
 			
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
-					<div class="page-title no-left-padding">Create New Broadcast List</div>
+					<div class="page-title no-left-padding">Edit Broadcast</div>
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
 							{!! Form::open(array('id' => 'broadcastAdd')) !!}
 								<div class="b-cast-name">
 									<h5>Broadcast Name</h5>
 
-									<input type="text" name="broadcastname" value="" class="form-control bcast-field b-valid">
+									<input type="text" name="broadcastname" value="<?= isset($broadcast['title']) ? $broadcast['title'] : '' ?>" class="form-control bcast-field b-valid">
 								</div>
 				
 								<div class="bcast-list">
-									<h5>Add Friends</h5>
+									<h5>Friends</h5>
 
 									<select class="multiple-slt form-control b-valid" id="select-multiuser-broadcast" name="broadcastuser[]" multiple="multiple">
 										@foreach($friends as $data)
 											<?php 
 												$name=$data['user']['first_name']." ".$data['user']['last_name'];
 												$id=$data['user']['id'];
+												$selected = in_array($id, $broadcast_prev_members) ? 'selected' : '';
 											?>
-											<option value="{{$id}}">{{$name}}</option>
+											<option value="{{$id}}" <?= $selected ?> >{{$name}}</option>
 										@endforeach
 									</select>
 								</div>
@@ -37,7 +38,7 @@
 					
 								<div class="btn-cont text-center">
 									<ul class="list-inline">
-										<li><input type="submit" title="" class="btn btn-primary broadcastadd-btn" value="Save"/></li>
+										<li><input type="submit" title="" class="btn btn-primary broadcastadd-btn" value="Update"/></li>
 										<li><a href="{{url('broadcast-list')}}" title="" class="btn btn-primary">Cancel</a></li>
 									</ul>
 								</div>
@@ -57,6 +58,8 @@
 <script type="text/javascript" >
 
 $(document).ready(function () {
+
+
 
 /*    $("#broadcastAdd").validate({ 
         errorElement: 'span',
@@ -87,13 +90,11 @@ $(document).ready(function () {
 				if($(this).val() === ''){
 					$(this).closest('.b-cast-name').append('<span id="groupname-error" class="help-inline">Please enter the name of broadcast.</span>');
 					$(this).addClass('help-inline');
-					// $(this).focus();
 					event.preventDefault();
 				}
 			}else if($(this).is('select')){	
 				$(this).closest('.bcast-list').find('#groupuser-error').remove();
 				$('.select2-selection').removeClass('help-inline');
-				// alert($(this).val());
 				if($(this).val() === null){
 					$('#select-multiuser-broadcast').closest('.bcast-list').append('<span id="groupuser-error" class="help-inline">Please add at least one contact to broadcast list.</span>');
 					$('.select2-selection').addClass('help-inline');

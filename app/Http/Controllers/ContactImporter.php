@@ -58,20 +58,36 @@ class ContactImporter extends Controller
                 $nonExistingUser = array();
                 foreach ($emailsarray as $value) {                
                     if($value != Auth::User()->email){
-                        $userData = User::where('email', '=', $value)->get()->toArray();
-                        if(!empty($userData))
+
+                        $userData = User::whereEmail($value)->select('email')->first();
+
+                        if($userData){
+                            // echo '<pre>';print_r($userData);die;
                             $existingUser[] = $value;
-                        else
-                            // $nonExistingUser[] = $value
-                        {
-                            
+                        }
+                        else{
+                            $nonExistingUser[] = $value;
                             $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
                             self::mail($value, $message, 'Invitation', 'Friend');
                         }
                     }
                 }
 
-                $friends = array();
+                if($existingUser){
+                    $list_users = implode(', ', $existingUser);
+
+                    $msg = (count($existingUser) > 1) ? $list_users.' are already members of friendzsquare.' : $list_users.' is already a member of friendzsquare.';
+                    Session::put('error', $msg); 
+                }
+
+                if($nonExistingUser){
+                    $list_non_users = implode(', ', $nonExistingUser);
+
+                    $msg = 'Invitation sent successfully to '.$list_non_users.'.';
+                    Session::put('success', $msg); 
+                }
+
+/*                $friends = array();
                 foreach ($existingUser as $value) {
 
                     $id = User::where('email', '=', $value)->pluck('first_name','id')->toArray();
@@ -86,9 +102,8 @@ class ContactImporter extends Controller
                         $message = 'Please add me on FriendzSquare!';
                         self::mail($value, $message, 'Invitation', array_values($id)[0]);
                     }
-                }
+                }*/
 
-                Session::put('success', 'Invitation sent successfully.'); 
                 return redirect()->back();
             }else{
                 return redirect()->back()->with('error', 'Please enter an email address.');  
@@ -131,7 +146,7 @@ class ContactImporter extends Controller
             $post = rtrim($post,'&');
             $result = self::curl('https://accounts.google.com/o/oauth2/token',$post);
             $response =  json_decode($result);
-            // echo '<pre>';print_r($response);die;
+
             $google_contacts = '';
             if(isset($response->access_token))
             {
@@ -181,7 +196,23 @@ class ContactImporter extends Controller
                     }}
                 }
 
-                $friends = array();
+
+                if($existingUser){
+
+                    $list_users = implode(', ', $existingUser);
+
+                    $msg = (count($existingUser) > 1) ? $list_users.' are already members of friendzsquare.' : $list_users.' is already a member of friendzsquare.';
+                    Session::put('error', $msg); 
+
+                }elseif($nonExistingUser){
+
+                    $list_non_users = implode(', ', $nonExistingUser);
+
+                    $msg = 'Invitation sent successfully to .'.$list_non_users;
+
+                }
+
+/*                $friends = array();
                 foreach ($existingUser as $value) {
                     // $friends[$value]
                     $id = User::where('email', '=', $value)->value('id');
@@ -198,7 +229,7 @@ class ContactImporter extends Controller
                         $message = 'Please add me on FriendzSquare!';
                         self::mail($value, $message, 'Invitation', 'emails.friend');
                     }
-                }
+                }*/
 
                 return redirect('invite-friends')->with('success', 'Invitation sent successfully!');
             }else{
@@ -218,16 +249,17 @@ class ContactImporter extends Controller
 
     	$data = array(
     			'message' => $message,
-    			'subject' => $subject,
+    			'subject' => $username.' invites you to join FriendzSquare',
     			'id' => Auth::User()->id,
     			'type' => $type,
     			'username' => $username,
+                'userobj' => Auth::User(),
     		);
 
         if($email != ''){
-    		Mail::send('emails.invite', $data, function($message) use($email, $subject) {
-        		$message->from('no-reply@friendzsquare.com', 'Friend Square');
-        		$message->to($email)->subject($subject);
+    		Mail::send('emails.invite', $data, function($message) use($email, $data) {
+        		$message->from('no-reply@friendzsquare.com', 'FriendzSquare');
+        		$message->to($email)->subject($data['subject']);
     	    });
         }
 

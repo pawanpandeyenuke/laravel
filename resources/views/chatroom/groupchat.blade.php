@@ -32,7 +32,7 @@
 }
 
 #conversejs #minimized-chats{
-  top: 463px !important;
+  top: 700px !important;
   left: 3%;
 }
 #conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom {
@@ -54,6 +54,10 @@
     position: relative;
     top: 8px;
     width: 97%;
+}
+#conversejs .chatbox, #conversejs .chatroom 
+{
+  height:auto !important;
 }
 </style>
 
@@ -329,7 +333,7 @@ $GroupsJidList = $SingleChatList = array();
     var ChatImageUrl = "{{url('/uploads/media/chat_images/')}}";
     var defaultUserImage = "{{url('/images/user-thumb.jpg')}}";
 
-    var image_upload_url="ajax/sendimage";
+    var image_upload_url = "{{url('/ajax/sendimage')}}";
     var chatserver='@<?= Config::get('constants.xmpp_host_Url') ?>';
    
     var subcategory="<?php echo Request::get('subcategory'); ?>";
@@ -350,6 +354,7 @@ $GroupsJidList = $SingleChatList = array();
 	var baseUrl = '<?= url('/') ?>';
 	var checkActiveGroupUrl = '<?= url('/ajax/isactivemember') ?>';
 	var GetProfileUrl = '<?= url('/ajax/profilenameimage') ?>';
+	var checkFriendUrl = '<?= url('/ajax/isfriend') ?>';
 	var profiletitles = {};
 	var myFullname = '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>';
 	
@@ -367,18 +372,17 @@ $GroupsJidList = $SingleChatList = array();
       require(['converse'], function (converse) {
         conObj = converse;
 
-
         conObj.listen.on('connected', function (event) {
-          console.log( 'connected' );
+        	console.log( 'connected' );
             $('.loader_blk').remove();
-						closePublic( groupid );
-						waitProfile = 1;
-				});
+			closePublic( groupid );
+			waitProfile = 1;
+		});
 				
-				conObj.listen.on('chatBoxOpened', function (event, chatbox) {
-          chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
-					var xmpp = chatbox.model.get('jid');
-					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
+		conObj.listen.on('chatBoxOpened', function (event, chatbox) {
+        	chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
+			var xmpp = chatbox.model.get('jid');
+			var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
 
             if( typeof profiletitles['img_'+jidStr] == 'undefined' ){
               jQuery.ajax({
@@ -407,159 +411,102 @@ $GroupsJidList = $SingleChatList = array();
             chatbox.$el.find( '.profileavatar' ).attr( "style", "background-image: url('"+userImagesUrl+singleChatimage+"');" );
             chatbox.$el.find( '.chat-title' ).html( singleChattitle );
 
-					//Emoji Picker
-					if(waitProfile == 1 ){
-						setTimeout( function(){
-							hideOpendBox( xmpp, 2 );
-						}  , 1000 );
-					}
-					renderEmoji( chatbox );
-				});
+			//Emoji Picker
+			renderEmoji( chatbox );
+		});
 				
-				conObj.listen.on('chatRoomOpened', function (event, chatbox) {
-					chatbox.$el.attr( 'data-bid', Base64.encode(chatbox.model.get('jid')) );
+		conObj.listen.on('chatRoomOpened', function (event, chatbox) {
+			chatbox.$el.attr( 'data-bid', Base64.encode(chatbox.model.get('jid')) );
 
-					var xmpp = chatbox.model.get('jid');
-					if(waitProfile == 1 ){
-						setTimeout( function(){
-							hideOpendBox( xmpp, 2 );
-						}  , 1000 );
-					}
-					var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
+			var xmpp = chatbox.model.get('jid');
+			var jidStr =  xmpp.substring(0, xmpp.indexOf('@')); //xmpp.replace( conferencechatserver , '' );
 
-					if( jidStr ==  groupid ){
-						GroupName[jidStr] = "<?php echo $groupname; ?>";
-						chatbox.$el.find( '.chat-title' ).html( "<?php echo $groupname; ?>" );
-            chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-group pull-right" id="leave">Close</a>' );
-            chatbox.$el.addClass( 'pubroom' );
-						<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
-							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
-						<?php } else { ?>
-							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
-						<?php	} ?>
-					} else {
-						chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
-						if( typeof GroupName[jidStr] != 'undefined' ){
-							var groupimage = $('#'+jidStr).data('groupimage');
-							chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
-							chatbox.$el.find( '.chat-title' ).html( GroupName[jidStr] );
-						} else {
-							$.ajax({
-								'url' : "/ajax/getgroupdeatils",
-								'type' : 'post',
-								'async' : false,
-								'dataType' : 'json',
-								'data' : { group_jid: xmpp },
-								'success' : function(data){
-									if( data.status == 1 ){
-										if( data.title !== undefined ){
-											chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
-											chatbox.$el.find( '.chat-title' ).html( data.title );
-											GroupName[jidStr] = data.title;
-										}	
-									} else {
-										chatbox.close();
-										groupChatRefresh( '' );
-									}
-								}
-							});
+			if( jidStr ==  groupid ){
+				GroupName[jidStr] = "<?php echo $groupname; ?>";
+				chatbox.$el.find( '.chat-title' ).html( "<?php echo $groupname; ?>" );
+           		chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-group pull-right" id="leave">Close</a>' );
+            	chatbox.$el.addClass( 'pubroom' );
+				<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
+					chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
+				<?php } else { ?>
+					chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
+				<?php } ?>
+			} else {
+				chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
+				if( typeof GroupName[jidStr] != 'undefined' ){
+					var groupimage = $('#'+jidStr).data('groupimage');
+					chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
+					chatbox.$el.find( '.chat-title' ).html( GroupName[jidStr] );
+				} else {
+					$.ajax({
+						'url' : "/ajax/getgroupdeatils",
+						'type' : 'post',
+						'async' : false,
+						'dataType' : 'json',
+						'data' : { group_jid: xmpp },
+						'success' : function(data){
+							if( data.status == 1 ){
+								if( data.title !== undefined ){
+									chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+data.image+"');" );
+									chatbox.$el.find( '.chat-title' ).html( data.title );
+									GroupName[jidStr] = data.title;
+								}	
+							} else {
+								chatbox.close();
+								groupChatRefresh( '' );
+							}
 						}
-					}
-					renderEmoji( chatbox );	
-          console.log( 'chatRoomOpened' );
-				});
+					});
+				}
+			}
+			renderEmoji( chatbox );	
+		});
 				
-				conObj.listen.on('disconnected', function (event) { 
-					location.reload();
-				});
-                conObj.initialize({                           
-                  prebind: true,
-                  bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
-                  keepalive: true,
-                  show_desktop_notifications: false,
-                  jid: '<?= Auth::User()->xmpp_username ?>@<?= Config::get('constants.xmpp_host_Url') ?>',
-                  authentication: 'prebind',
-                  prebind_url: "{{url('/ajax/getxmppuser')}}",
-                  send_initial_presence:true,
-                  visible_toolbar_buttons: {'toggle_occupants':false,'clear':false,'emoticons':false,'call': false},
-                  auto_reconnect: true,
-        				  ping_interval: 5,
-        				  message_carbons: true,
-        				  forward_messages: true,
-        				  allow_logout: false,
-        				  debug: false,
-        				  auto_subscribe: true,
-                  message_archiving: 'always',
-                  auto_join_on_invite:true,
-                  allow_chat_pending_contacts: true,
-                  notify_all_room_messages: true,
-                  //auto_join_rooms: GroupAuto
-                });
-              
-				
-                // jQuery('.chatroom .icon-minus','.chatbox .icon-minus').click();
-                // jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
+		conObj.listen.on('disconnected', function (event) { 
+			location.reload();
+		});
 
-                /* pawanpandey Code */
-                
-
-
-                  
-
-/*                  $('.icon-minus').each(function(){
-                    $(this).trigger('click');
-                  });*/
-                  // jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click();
-
-
-                /* pawanpandey Code */
-				/**
-                $(".chatroom:visible").each(function()  {
-                  checkChatboxAndChatRoom(this);
-                });                     
-    
-                $(".chatbox:visible").each(function()  {
-                  checkChatboxAndChatRoom(this);
-                });
-
-                if(is_first){
-                  jQuery('.minimized-chats-flyout .chat-head:first .restore-chat').click(); 
-                }
-				**/
-				
-				
-            
-              
-
-      });
-
-	$( document ).on( 'keydown', '.emoji-wysiwyg-editor' , function(e) {
-		if(e.which == 13) {
-			var obj = $(this);
-			var t = $.Event("keypress");
-			t.which = 13; //choose the one you want
-			obj.parent().find('textarea').focus();
-			obj.parent().find('textarea').trigger(t);
-			obj.html( "" );
-			setTimeout(function() { obj.focus(); }, 200);
-			
-		}
-	});
-
-        $(document).on('click','.invite',function(){
-          var current = $(this);
-          var user_id = current.closest('.info').data('id');
-          
-          $.ajax({
-            'url' : "{{url('/ajax/sendrequest')}}",
-            'type' : 'post',
-            'data' : {'user_id' : user_id },
-            'success' : function(data){
-              current.closest('.info').find('.invite').hide(200);
-              current.closest('.info').find('.sentinvite').show(500);
-            }
-          });
+        conObj.initialize({                           
+          prebind: true,
+          bosh_service_url: '//<?= Config::get('constants.xmpp_host_Url') ?>:5280/http-bind',
+          keepalive: true,
+          show_desktop_notifications: false,
+          jid: '<?= Auth::User()->xmpp_username ?>@<?= Config::get('constants.xmpp_host_Url') ?>',
+          authentication: 'prebind',
+          prebind_url: "{{url('/ajax/getxmppuser')}}",
+          send_initial_presence:true,
+          visible_toolbar_buttons: {'toggle_occupants':false,'clear':false,'emoticons':false,'call': false},
+          auto_reconnect: true,
+		  ping_interval: 5,
+		  message_carbons: true,
+		  forward_messages: true,
+		  allow_logout: false,
+		  debug: false,
+		  auto_subscribe: true,
+          message_archiving: 'always',
+          auto_join_on_invite:true,
+          allow_chat_pending_contacts: true,
+          notify_all_room_messages: true,
+          //auto_join_rooms: GroupAuto
         });
+                   
+
+    });
+
+    $(document).on('click','.invite',function(){
+        var current = $(this);
+        var user_id = current.closest('.info').data('id');
+          
+      $.ajax({
+        'url' : "{{url('/ajax/sendrequest')}}",
+        'type' : 'post',
+        'data' : {'user_id' : user_id },
+        'success' : function(data){
+          current.closest('.info').find('.invite').hide(200);
+          current.closest('.info').find('.sentinvite').show(500);
+        }
+      });
+    });
 
 
         $(document).on('click','#search',function() {
@@ -814,10 +761,9 @@ function openChatGroup( grpjid,grpname,groupimage ){
 }
 function openFirstChat( grpjid ){
 	groupChatRefresh( grpjid );
-	if( hideOpendBox( grpjid+conferencechatserver, 1 ) ){
-		conObj.rooms.open( grpjid+conferencechatserver );
-		$( '.chatnotification' ).remove();
-	}
+	var NewGroup = conObj.rooms.open( grpjid+conferencechatserver );
+	$( '.chatnotification' ).remove();
+	NewGroup.minimize();
 }
 function groupChatRefresh( grpjid ){
 	$.ajax({
