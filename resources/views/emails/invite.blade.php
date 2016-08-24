@@ -38,7 +38,7 @@
 				
 				</div>
 				
-				<p style="font-size:15px;margin:0;">This email has been sent to <a href="#" style="color:#0561C1;">{{ $userobj->email }}</a></p>
+				<!-- <p style="font-size:15px;margin:0;">This email has been sent to <a href="#" style="color:#0561C1;">{{ $userobj->email }}</a></p> -->
 				<p style="font-size:15px;margin:0;">It is an invitation to connect. <a href="#" style="color:#0561C1;">Unsubscribe</a></p>
 				<p style="font-size:15px;margin-top:0;margin-bottom:15px;">If you have any questions, then please contact at <a href="#" style="color:#0561C1;">contact@friendzsquare.com </a>	
 				</p>
