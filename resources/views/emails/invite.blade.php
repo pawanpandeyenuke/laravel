@@ -30,7 +30,7 @@
 				<div style="background-color:#fff;padding:10px 0px 20px 15px;margin-bottom:25px;">
 				<p style="font-size:18px;">Hi,</p>
 				
-				<p style="font-size:18px;">{{ $username }} has joined FriendzSquare. On FriendzSquare you can make new friends by joining <strong>Chat Rooms</strong>, Participate in <strong>Forums</strong>, post comments on <strong>Newsfeed</strong> and much more. </p>
+				<p style="font-size:18px;line-height: 1.42857;">{{ $username }} has joined FriendzSquare. On FriendzSquare you can make new friends by joining <strong>Chat rooms</strong>, participate in <strong>Forums</strong>, post comments on <strong>Newsfeed</strong> and much more. </p>
 				
 				<p style="font-size:18px;margin-bottom:30px;">Explore and grow your social network.</p>
 				
