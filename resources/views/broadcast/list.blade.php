@@ -40,6 +40,7 @@
 											</div>
 											<div class="col-sm-3">
 												<div class="bl-del text-right">
+													<a href="{{ url('broadcast-edit/'.$data['id']) }}" title="" class="bl-del-btn"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;&nbsp;
 													<button type="button" value="{{$data['id']}}" data-forumtype = "broadcast" class="bl-del-btn del-confirm-forum"><i class="fa fa-trash"></i></button>
 												</div>
 											</div>

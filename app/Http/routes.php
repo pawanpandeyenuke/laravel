@@ -60,6 +60,7 @@ Route::post('ajax/resend','AjaxController@resend');
 Route::post('ajax/remove','AjaxController@remove');
 Route::post('ajax/cancelrequest','AjaxController@cancelRequest');
 Route::post('profile/ajax/cancelrequest','AjaxController@cancelRequest');
+Route::post('ajax/isfriend','AjaxController@isFriendByJid');
 
 Route::post('ajax/deletepost','AjaxController@deletepost');
 Route::post('ajax/deletecomments','AjaxController@deletecomments');
@@ -359,6 +360,8 @@ Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
 	
 	Route::get('broadcast-add', 'DashboardController@broadcastAdd');
 	Route::post('broadcast-add', 'DashboardController@broadcastAdd');
+
+	Route::match(['post', 'get'], 'broadcast-edit/{id}', 'DashboardController@broadcastEdit');
 
 	Route::get('broadcast-msg/{broadcastid}', 'DashboardController@broadcastMessage');
 	
