@@ -15,9 +15,9 @@
 					<ul>
 						<li>By using FriendzSquare through a website www.friendzsquare.com &amp;/or application on any
 
-						internet enabled device, its deemed to be considered that you understand that Friendz
+						internet enabled device, its deemed to be considered that you understand that FriendzSquare
 
-						Square is merely platform that facilitates communication between users on FriendzSquare
+						is merely platform that facilitates communication between users on FriendzSquare
 
 						and any interaction between users is solely between them and FriendzSquare don't take
 
@@ -71,7 +71,7 @@
 				</li>
 				<li> Your responsibility <br><br>
 
-					You agree to be responsible for all activities done on FriendzSquare.com or FriendzSquare application from your registration user id.
+					You agree to be responsible for all activities done on friendzsquare.com or FriendzSquare application from your registration user id.
 				</li>
 				<li> Your conduct: <br><br>
 
