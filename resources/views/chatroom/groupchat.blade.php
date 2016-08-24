@@ -333,7 +333,7 @@ $GroupsJidList = $SingleChatList = array();
     var ChatImageUrl = "{{url('/uploads/media/chat_images/')}}";
     var defaultUserImage = "{{url('/images/user-thumb.jpg')}}";
 
-    var image_upload_url="ajax/sendimage";
+    var image_upload_url = "{{url('/ajax/sendimage')}}";
     var chatserver='@<?= Config::get('constants.xmpp_host_Url') ?>';
    
     var subcategory="<?php echo Request::get('subcategory'); ?>";
