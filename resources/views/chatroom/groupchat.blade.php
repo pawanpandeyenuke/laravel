@@ -376,7 +376,7 @@ $GroupsJidList = $SingleChatList = array();
         	console.log( 'connected' );
             setTimeout( function(){
             	$('.loader_blk').remove();
-				closePublic( groupid );
+				//closePublic( groupid );
 			}, 2000 );
 			waitProfile = 1;
 		});
