@@ -864,15 +864,13 @@ function closePublic( grpname ){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
 		var xmpp = jid.substring(0, jid.indexOf('@')); //jid.replace( conferencechatserver , '' );
-    	if( xmpp == grpname ){
-    		console.log( 'open group exist' );
-    		console.log( xmpp );
+    if( xmpp == grpname ){
 			openChat = 0;
 			getRooms.maximize();
 		} else {
 			var grouptype = xmpp.substr(xmpp.length - 3);
 			if( grouptype == 'pub' ){
-				getRooms.close();
+				//getRooms.close();
 			} else if( $(this).css('display') == 'block' && grpname != '' && grpname != '' ){
 				getRooms.minimize();
 			}
@@ -883,14 +881,9 @@ function closePublic( grpname ){
 		var xmpp = jid.substring(0, jid.indexOf('@'));
 		var grouptype = xmpp.substr(xmpp.length - 3);
 		if( grouptype == 'pub' ){
-			console.log(xmpp);
       var publicRoom = conObj.rooms.open(jid);
-      console.log(publicRoom);
-      console.log(this);
       $(this).parent().find( '.close-chatbox-button' ).click();
       $(this).parent().remove();
-
-      console.log(this);
 		}
 	});
 	
