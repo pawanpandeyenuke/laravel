@@ -559,4 +559,26 @@ function userImage( $object )
 
     }
 
+
+    function truncatePrivateGroupName( $pvtgrpname )
+    {
+
+        $length = strlen($pvtgrpname);
+
+        if($length < 15){
+            $result = $pvtgrpname;
+        }else{
+            $result = substr($pvtgrpname, 0, 15);
+            $result = $result.'..';
+        }
+
+        return $result;
+
+    }
+
+
+
+
+
+
 ?>

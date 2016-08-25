@@ -245,7 +245,7 @@ $GroupsJidList = $SingleChatList = array();
 													<div class="pvt-room-list" style="position:relative;" >
 														<a href="<?php echo url("private-group-detail/".$data['id']); ?>" >
 															<span class="chat-thumb" style="background: url('<?= $group_picture ?>');"></span>
-															<span class="title">{{$data['title']}}</span>
+															<span class="title" title="{{$data['title']}}"><?php echo truncatePrivateGroupName($data['title']) ?></span>
 														</a>
 														<button id="<?= $data['group_jid'] ?>" data-groupimage="<?= $group_picture ?>" onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>','<?= $group_picture ?>');" class="time">Chat</button>
 													 </div>

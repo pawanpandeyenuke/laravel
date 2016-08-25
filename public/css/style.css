@@ -215,7 +215,7 @@ span.field-icon:before{
   line-height: 22px;
   background-repeat: no-repeat;
   background-position: 0 0;
-  font-size: 14px;
+  font-size: 13px;
   vertical-align: middle;
   cursor: pointer;
   font-weight: 500;
@@ -1732,7 +1732,7 @@ width:495px;
 .p-edit-btn{
 	position: absolute;
   right: 28px;
-  top: 3px;
+  top: 6px;
   background: none;
   border: 0px;
   padding: 0px;
@@ -3308,6 +3308,7 @@ body {
 .btn-tab-cont .tab-content select{
   border-color: #a5a5a5;
   height: 34px;
+  margin-bottom:10px;
 }
 .btn-tab-cont .tab-btn-cont{
   margin: 100px 0 0;
@@ -3841,4 +3842,13 @@ body.modal-open {
 #gccollapseOne .panel-body .chat-user-list {
   height: 630px !important;
   min-height: 630px !important;
+}
+
+#conversejs #minimized-chats .chat-head-message-count, #conversejs #minimized-chats .unread-message-count
+{
+	right: 77px;
+	bottom: 14px;
+	font-size: 9px;
+  	font-weight: 700;
+  	line-height: 5px;
 }

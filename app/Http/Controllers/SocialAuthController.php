@@ -21,7 +21,7 @@ class SocialAuthController extends Controller
 	public function socialLogin( $providerUser )
 	{		
 		
-		 echo '<pre>';print_r($providerUser);die;
+		 // echo '<pre>';print_r($providerUser);die;
 		
 		if( !empty( $providerUser ) ){		
 			if( isset( $providerUser['email']) ){
@@ -141,6 +141,7 @@ class SocialAuthController extends Controller
         Auth::login($user);
         return redirect('home');
     }
+
 
 }
 
