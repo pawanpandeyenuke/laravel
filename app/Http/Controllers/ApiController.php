@@ -1013,7 +1013,7 @@ class ApiController extends Controller
 			// print_r($friends);exit;
 
 
-				$Message = json_encode( array( 'type' => 'unfriend' , 'message' => 'You removed from friend list.' ) );
+				$Message = json_encode( array( 'type' => 'unfriend','message' => 'You removed from friend list.' ) );
 				Converse::broadcast($user->xmpp_username,$friend->xmpp_username,$Message);
 				Converse::broadcast($friend->xmpp_username,$user->xmpp_username,$Message);
 			}
@@ -2021,7 +2021,7 @@ class ApiController extends Controller
                 $members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id', $group->id)->pluck('xmpp_username');
                	
                 $name = $user->first_name.' '.$user->last_name;
-                $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username, 'user_name'=>$name, 'message' => $name.' joined the group') );
+                $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username,'user_id' => $user->id, 'user_image' => $user->picture, 'user_name'=>$name, 'message' => $name.' joined the group') );
                 foreach($members as $memberxmpp) {
                     Converse::broadcastchatroom($group->group_jid, $name, $memberxmpp, $user->xmpp_username, $message);
                 };
