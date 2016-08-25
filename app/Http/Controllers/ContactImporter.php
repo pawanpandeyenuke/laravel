@@ -239,6 +239,7 @@ class ContactImporter extends Controller
     			'type' => $type,
     			'username' => $username,
                 'userobj' => Auth::User(),
+                'email' => $email,
     		);
 
         if($email != ''){
