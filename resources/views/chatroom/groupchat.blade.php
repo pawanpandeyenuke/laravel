@@ -850,15 +850,6 @@ function OpenLastMinChat(  ){
 **/
 function closePublic( grpname ){
 	var openChat = 1;
-	if(grpname != '' ){
-		$( '.privatechat' ).each( function(){
-			var jid = Base64.decode($(this).data( 'bid' ));
-			var getChat = conObj.chats.get(jid);
-			if( $(this).css('display') == 'block' && grpname != '' ){
-				getChat.minimize();
-			}
-		});
-	}
 
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
@@ -871,11 +862,10 @@ function closePublic( grpname ){
 			var grouptype = xmpp.substr(xmpp.length - 3);
 			if( grouptype == 'pub' ){
 				//getRooms.close();
-			} else if( $(this).css('display') == 'block' && grpname != '' && grpname != '' ){
-				getRooms.minimize();
 			}
 		}
 	});
+
 	$( '.chatgroup' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var xmpp = jid.substring(0, jid.indexOf('@'));
