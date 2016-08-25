@@ -459,6 +459,7 @@ $GroupsJidList = $SingleChatList = array();
 							} else {
 								chatbox.close();
 								groupChatRefresh( '' );
+                return;
 							}
 						}
 					});
