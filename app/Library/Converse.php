@@ -270,8 +270,8 @@ class Converse
  	{
  		try
  		{
- 			if(!empty($parameters['object_id']) && !empty($parameters['user_id']) && !empty($parameters['type']) && !empty($parameters['current_data'])){
-
+ 			if(!empty($parameters['object_id']) && !empty($parameters['user_id']) && !empty($parameters['type']) && !empty($parameters['current_data']))
+ 			{
  				$data = array();
  				$subject = User::find($parameters['user_id']);
  				$name = $subject->first_name.' '.$subject->last_name;
@@ -289,7 +289,7 @@ class Converse
 	 				$from_name = 'FriendzSquare Reply';
 	 				$subject = $name.' has replied on your post';
 
-	 			}elseif ( $parameters['type'] === 'comment' ) {
+	 			} elseif ( $parameters['type'] === 'comment' ) {
 
 	 				$object = ForumReply::find($parameters['object_id']);
 	 				$result = self::viewLessMore($object->reply);
@@ -301,32 +301,35 @@ class Converse
 	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
 	 				$from_name = 'FriendzSquare Comment';
 	 				$subject = $name.' has commented on your reply';
-
 	 			}
 
-	 			if( $parameters['user_id'] != $object->owner_id ){
+	 			if( $parameters['user_id'] == $object->owner_id ) {
+ 					return;
+ 				}
+ 				
+ 				// Get post owner
+ 				$userObj = User::find($object->owner_id);
+ 				if( !$userObj->subscribe ) {
+ 					return;
+ 				}
 
-	 				$userObj = User::find($object->owner_id);
-		 			// echo '<pre>';print_r($data);die;
-	 				$data['user_name'] = $userObj->name;
-	 				$data['post_type'] = $parameters['type'];
-	 				$user_email = $userObj->email;
-	 				$user_name = $userObj->first_name.' '.$userObj->last_name;
+ 				$userObj = User::find($object->owner_id);
+ 				$data['user_name'] = $userObj->name;
+ 				$data['post_type'] = $parameters['type'];
+ 				$data['access_token'] = urlencode($userObj->access_token);
+ 				$user_email = $userObj->email;
+ 				$user_name = $userObj->first_name.' '.$userObj->last_name;
 
-					Mail::send('panels.email-template', $data, function( $message ) use( $user_email, $user_name, $from_name, $subject ){
-						$message->from('no-reply@friendzsquare.com', $from_name);
-						$message->to( $user_email, $user_name )->subject( $subject );
-					});	 	 				
-	 			}
-
+ 				// Send email
+				Mail::send('panels.email-template', $data, function( $message ) use( $user_email, $user_name, $from_name, $subject ){
+					$message->from('no-reply@friendzsquare.com', $from_name);
+					$message->to( $user_email, $user_name )->subject( $subject );
+				});
  			}
-
- 		}catch(Exception $e){
+ 		} catch(Exception $e) {
  			return $e->getMessage();
  		}
-
  	}
-
 
 	public static function viewLessMore( $parameter ){
 	    

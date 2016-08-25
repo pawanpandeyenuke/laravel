@@ -212,6 +212,25 @@
 											</div>
 										</div>
 									</div>
+									<div class="pe-row">
+										<div class="row">
+											<div class="col-sm-5 col-xs-12">
+												<div class="p-data-title"><i class="flaticon-graduation"></i>Subscribe for forum notifications</div>
+											</div>
+											<div class="col-sm-7 col-xs-12">
+												<div class="clearfix">
+													<div class="radio-cont pull-left center-label">
+														<input type="radio" name="subscribe" id="subscribeYes" value="1" class="css-checkbox" {{ $user->subscribe ? 'checked' : ''}} >
+														<label for="subscribeYes" class="css-label radGroup1">Yes</label>
+													</div>
+													<div class="radio-cont pull-left center-label">
+														<input type="radio" value="0" name="subscribe" id="subscribeNo" class="css-checkbox" {{ !$user->subscribe ? 'checked' : ''}} >
+														<label for="subscribeNo" class="css-label radGroup1">&nbsp;No&nbsp;</label>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 									<div class="study-data-outer">
 										<div class="study-detail">
 											<div class="study-heading">
