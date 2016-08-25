@@ -883,7 +883,8 @@ function closePublic( grpname ){
 		var xmpp = jid.substring(0, jid.indexOf('@'));
 		var grouptype = xmpp.substr(xmpp.length - 3);
 		if( grouptype == 'pub' ){
-			var publicRoom = conObj.rooms.open(jid);
+			console.log(xmpp);
+      var publicRoom = conObj.rooms.open(jid);
 		}
 	});
 	
