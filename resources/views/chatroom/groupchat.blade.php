@@ -855,7 +855,7 @@ function closePublic( grpname ){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
 		var xmpp = jid.substring(0, jid.indexOf('@')); //jid.replace( conferencechatserver , '' );
-    if( xmpp == grpname ){
+    if( grpname != '' && xmpp == grpname ){
 			openChat = 0;
 			getRooms.maximize();
 		} else {
@@ -879,7 +879,7 @@ function closePublic( grpname ){
 	if( openChat == 1 && grpname != '' ){
 		conObj.rooms.open( grpname+conferencechatserver );
 	} else if( openChat == 1 ) {
-		OpenLastMinChat();
+		//OpenLastMinChat();
 	}
 }
 
