@@ -594,9 +594,8 @@ $GroupsJidList = $SingleChatList = array();
           $.post('/ajax/leave-group', {group_jid: groupid}, function(response){
             var getRooms = conObj.rooms.get( groupid+conferencechatserver );
             getRooms.close();
-            $('#leaveModal').modal('hide');
             OpenFirstMinChat();
-
+            $('#leaveModal').modal('hide');
           });
         });
         
@@ -613,6 +612,7 @@ $GroupsJidList = $SingleChatList = array();
             var getRooms = conObj.rooms.get( PvtJid+conferencechatserver );
             getRooms.close();
             OpenFirstMinChat();
+            $('#leavePvtModal').modal('hide');
         });
 
       });
@@ -848,28 +848,30 @@ function OpenLastMinChat(  ){
 **/
 function closePublic( grpname ){
 	var openChat = 1;
-	$( '.privatechat' ).each( function(){
-		var jid = Base64.decode($(this).data( 'bid' ));
-		var getChat = conObj.chats.get(jid);
-		if( $(this).css('display') == 'block' && grpname != '' ){
-			getChat.minimize();
-		}
-	});
-	
+	if(grpname != '' ){
+		$( '.privatechat' ).each( function(){
+			var jid = Base64.decode($(this).data( 'bid' ));
+			var getChat = conObj.chats.get(jid);
+			if( $(this).css('display') == 'block' && grpname != '' ){
+				getChat.minimize();
+			}
+		});
+	}
 
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
 		var xmpp = jid.substring(0, jid.indexOf('@')); //jid.replace( conferencechatserver , '' );
     	if( xmpp == grpname ){
+    		console.log( 'open group exist' );
+    		console.log( xmpp );
 			openChat = 0;
 			getRooms.maximize();
 		} else {
 			var grouptype = xmpp.substr(xmpp.length - 3);
-			console.log( grouptype );
 			if( grouptype == 'pub' ){
 				getRooms.close();
-			} else if( $(this).css('display') == 'block' && grpname != '' ){
+			} else if( $(this).css('display') == 'block' && grpname != '' && grpname != '' ){
 				getRooms.minimize();
 			}
 		}
@@ -879,14 +881,14 @@ function closePublic( grpname ){
 		var xmpp = jid.substring(0, jid.indexOf('@'));
 		var grouptype = xmpp.substr(xmpp.length - 3);
 		if( grouptype == 'pub' ){
-			$(this).parent('.chat-head').remove();
+			var publicRoom = conObj.rooms.open(jid);
 		}
 	});
-
-	if( openChat == 1 && grpname != '' && grpname != ' ' ){
+	
+	if( openChat == 1 && grpname != '' ){
 		conObj.rooms.open( grpname+conferencechatserver );
-	} else {
-		OpenFirstMinChat();
+	} else if( openChat == 1 ) {
+		OpenLastMinChat();
 	}
 }
 
