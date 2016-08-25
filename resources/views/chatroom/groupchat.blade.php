@@ -434,9 +434,7 @@ $GroupsJidList = $SingleChatList = array();
 					chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
 				<?php } ?>
 			} else if( grouptype == 'pub' ){
-				console.log( xmpp );
-        //chatbox.close();
-        console.log( xmpp );
+        chatbox.close();
 				return;
 			} else {
 				chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
@@ -852,7 +850,7 @@ function OpenLastMinChat(  ){
 **/
 function closePublic( grpname ){
 	var openChat = 1;
-  /**
+  
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
@@ -863,11 +861,10 @@ function closePublic( grpname ){
 		} else {
 			var grouptype = xmpp.substr(xmpp.length - 3);
 			if( grouptype == 'pub' ){
-				//getRooms.close();
+				getRooms.close();
 			}
 		}
 	});
-
 	$( '.chatgroup' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var xmpp = jid.substring(0, jid.indexOf('@'));
@@ -878,7 +875,7 @@ function closePublic( grpname ){
       $(this).parent().remove();
 		}
 	});
-	**/
+	
 	if( openChat == 1 && grpname != '' ){
 		conObj.rooms.open( grpname+conferencechatserver );
 	} else if( openChat == 1 ) {
