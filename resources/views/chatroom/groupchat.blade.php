@@ -850,7 +850,7 @@ function OpenLastMinChat(  ){
 **/
 function closePublic( grpname ){
 	var openChat = 1;
-
+  /**
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
@@ -876,7 +876,7 @@ function closePublic( grpname ){
       $(this).parent().remove();
 		}
 	});
-	
+	**/
 	if( openChat == 1 && grpname != '' ){
 		conObj.rooms.open( grpname+conferencechatserver );
 	} else if( openChat == 1 ) {
