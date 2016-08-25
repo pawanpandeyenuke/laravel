@@ -879,7 +879,7 @@ function closePublic( grpname ){
 	if( openChat == 1 && grpname != '' ){
 		conObj.rooms.open( grpname+conferencechatserver );
 	} else if( openChat == 1 ) {
-		//OpenLastMinChat();
+		OpenLastMinChat();
 	}
 }
 
