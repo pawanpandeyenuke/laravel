@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Library\ContactsImporter, Mail, Config;
-use Google_Client, Auth, App\User, App\Friend;
+use Google_Client, Auth, App\User, App\Friend, App\UnsubscribedUsers;
 use Request, Session, Validator, Input, Cookie;
 
 class ContactImporter extends Controller
@@ -21,8 +21,6 @@ class ContactImporter extends Controller
  
     public function inviteFriends()
     {
-        // somethingOrOther();
-
         $client = new Google_Client();
         $client -> setApplicationName('FriendzSquare');
         $client -> setClientid($this->google_client_id);
@@ -56,6 +54,7 @@ class ContactImporter extends Controller
                     
                 $existingUser = array();
                 $nonExistingUser = array();
+                $unsubscribedUser = array();
                 foreach ($emailsarray as $value) {                
                     if($value != Auth::User()->email){
 
@@ -66,9 +65,14 @@ class ContactImporter extends Controller
                             $existingUser[] = $value;
                         }
                         else{
-                            $nonExistingUser[] = $value;
-                            $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
-                            self::mail($value, $message, 'Invitation', 'Friend');
+                            $unsubscribedUserCheck = UnsubscribedUsers::whereEmail($value)->select('email')->first();
+                            if($unsubscribedUserCheck){
+                                $unsubscribedUser[] = $value;
+                            }else{
+                                $nonExistingUser[] = $value;
+                                $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
+                                self::mail($value, $message, 'Invitation', 'Friend');
+                            }
                         }
                     }
                 }
@@ -87,22 +91,11 @@ class ContactImporter extends Controller
                     Session::put('success', $msg); 
                 }
 
-/*                $friends = array();
-                foreach ($existingUser as $value) {
-
-                    $id = User::where('email', '=', $value)->pluck('first_name','id')->toArray();
-
-                    $frienddata = Friend::where('user_id', '=', Auth::User()->id)
-                                        ->where('friend_id', '=', array_keys($id)[0])
-                                        ->where('status', '=', 'Accepted')
-                                        ->get()
-                                        ->toArray();
-
-                    if(empty($frienddata)){
-                        $message = 'Please add me on FriendzSquare!';
-                        self::mail($value, $message, 'Invitation', array_values($id)[0]);
-                    }
-                }*/
+                if($unsubscribedUser){
+                    $list_unsubscribed_users = implode(', ', $unsubscribedUser);
+                    $msg = $list_unsubscribed_users.' has already unsubscribed, so cannot be invited.';
+                    Session::put('error', $msg); 
+                }
 
                 return redirect()->back();
             }else{
@@ -159,12 +152,12 @@ class ContactImporter extends Controller
                 if (!empty($contacts['feed']['entry'])) {
                     foreach($contacts['feed']['entry'] as $contact) {
                        //retrieve Name and email address  
-			if(!empty($contact['gd$email'])){
+			            if(!empty($contact['gd$email'])){
 	                        $return[] = array (
 	                            'name'=> $contact['title']['$t'],
 	                            'email' => $contact['gd$email'][0]['address'],
 	                        );
-			}
+			            }
                     }               
                 }           
                 $google_contacts = $return;
@@ -175,7 +168,7 @@ class ContactImporter extends Controller
         if(Request::isMethod('post')){
 
             $request = Request::all();
-	    //print_r($request);die;
+
             unset($request['_token']);
             unset($request['selectall']);
 
@@ -184,18 +177,23 @@ class ContactImporter extends Controller
 
                 $existingUser = array();
                 $nonExistingUser = array();
+                $unsubscribedUser = array();
                 foreach ($request as $value) {                
                     if($value != Auth::User()->email){
                         $userData = User::where('email', '=', $value)->get()->toArray();
                         if(!empty($userData))
                             $existingUser[] = $value;
                         else{
-                            // $nonExistingUser[] = $value;
-                            $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
-                            self::mail($value, $message, 'Invitation', 'emails.invite');
-                    }}
+                            $unsubscribedUserCheck = UnsubscribedUsers::whereEmail($value)->select('email')->first();
+                            if($unsubscribedUserCheck){
+                                $unsubscribedUser[] = $value;
+                            }else{
+                                $message = 'Hi, Take a look at this cool social site "FriendzSquare!"';
+                                self::mail($value, $message, 'Invitation', 'emails.invite');
+                            }
+                        }
+                    }
                 }
-
 
                 if($existingUser){
 
@@ -212,24 +210,11 @@ class ContactImporter extends Controller
 
                 }
 
-/*                $friends = array();
-                foreach ($existingUser as $value) {
-                    // $friends[$value]
-                    $id = User::where('email', '=', $value)->value('id');
-
-                    $frienddata = Friend::where('user_id', '=', Auth::User()->id)
-                                        ->where('friend_id', '=', $id)
-                                        ->where('status', '=', 'Accepted')
-                                        ->get()
-                                        ->toArray();
-
-                    if(empty($frienddata)) 
-                    {
-                        // $friends[] = $value;
-                        $message = 'Please add me on FriendzSquare!';
-                        self::mail($value, $message, 'Invitation', 'emails.friend');
-                    }
-                }*/
+                if($unsubscribedUser){
+                    $list_unsubscribed_users = implode(', ', $unsubscribedUser);
+                    $msg = $list_unsubscribed_users.' has already unsubscribed, so cannot be invited.';
+                    Session::put('error', $msg); 
+                }
 
                 return redirect('invite-friends')->with('success', 'Invitation sent successfully!');
             }else{
@@ -304,6 +289,10 @@ class ContactImporter extends Controller
         // echo '<pre>';print_r($request);die; 
 
     }
+
+
+
+
 
 
 }

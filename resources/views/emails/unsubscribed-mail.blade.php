@@ -30,16 +30,10 @@
 				<div style="background-color:#fff;padding:10px 0px 20px 15px;margin-bottom:25px;">
 				<p style="font-size:18px;">Hi,</p>
 				
-				<p style="font-size:18px;line-height: 1.42857;">{{ $username }} has joined FriendzSquare. On FriendzSquare you can make new friends by joining <strong>Chat rooms</strong>, participate in <strong>Forums</strong>, post comments on <strong>Newsfeed</strong> and much more. </p>
-				
-				<p style="font-size:18px;margin-bottom:30px;">Explore and grow your social network.</p>
-				
-				<a href="{{url('profile/'.$id)}}" style="background-color:#A6FFED;color:#000;padding:10px 20px;margin-bottom:20px;text-decoration:none;">Accept Invite<a/>
-				
+				<p style="font-size:18px;line-height: 1.42857;">You have been unsubscribed from FriendzSquare. If you want to subscribe again, please <a href="{{ url('subscribe?email='.$email) }}">click here</a>.</p>
+			
 				</div>
-				
-				<!-- <p style="font-size:15px;margin:0;">This email has been sent to <a href="#" style="color:#0561C1;">{{ $userobj->email }}</a></p> -->
-				<p style="font-size:15px;margin:0;">It is an invitation to connect. <a href="{{ url('unsubscribe?email='.$userobj->email) }}" style="color:#0561C1;">Unsubscribe</a></p>
+
 				<p style="font-size:15px;margin-top:0;margin-bottom:15px;">If you have any questions, then please contact at <a href="#" style="color:#0561C1;">contact@friendzsquare.com </a>	
 				</p>
 

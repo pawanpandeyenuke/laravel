@@ -403,6 +403,9 @@ Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
 	Route::post('send-verification-link','SearchController@verify');
 	Route::get('email-verified/{user_id}/{confirmation_code}','SearchController@emailVerified');	
  
+	Route::match(['get', 'post'], 'unsubscribe','SearchController@unsubscribe');
+	Route::get('subscribe','SearchController@subscribe');
+
 	Route::get('/', function(){
 		if(Auth::check())
 			return redirect()->action('DashboardController@dashboard');

@@ -7,7 +7,7 @@
 		<div class="row">
    			 
    			 @include('panels.left')
-			<div class="col-sm-6">
+			<div class="col-sm-6 col-xs-12">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title no-left-padding">Broadcast List</div>
 					<div class="row">
@@ -25,7 +25,7 @@
 								 ?>
 									<div class="single-list broadcast_{{$data['id']}}" data-broadcastid="{{$data['id']}}">
 										<div class="row">
-											<div class="col-sm-9">
+											<div class="col-sm-9 col-xs-12">
 												<div class="bclist-detail bclist1">
 													<div class="bc-img" style="background: url('images/post-img-big.jpg');"></div>
 													<div class="list-name">
@@ -38,7 +38,7 @@
 												</div>
 
 											</div>
-											<div class="col-sm-3">
+											<div class="col-sm-3 col-sx-12">
 												<div class="bl-del text-right">
 													<a href="{{ url('broadcast-edit/'.$data['id']) }}" title="" class="bl-del-btn"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;&nbsp;
 													<button type="button" value="{{$data['id']}}" data-forumtype = "broadcast" class="bl-del-btn del-confirm-forum"><i class="fa fa-trash"></i></button>

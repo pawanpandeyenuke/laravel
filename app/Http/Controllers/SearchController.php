@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests,Config;
 use Request, Session, Validator, Input, Cookie, URL;
 use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend,App\ForumLikes,App\ForumReply,App\ForumsDoctor;
-use App\Setting;
+use App\Setting, App\UnsubscribedUsers;
 use App\Library\Functions;
 
 class SearchController extends Controller
@@ -474,5 +474,60 @@ class SearchController extends Controller
             return redirect('/');
     }
   
+
+
+    public function unsubscribe()
+    {
+        $request = Request::all();
+        $validator = Validator::make($request, ['email' => 'required|email']);
+
+        if($validator->fails())            
+           return view('errors.404');
+
+        $email = Request::get('email');
+
+        $exists = UnsubscribedUsers::whereEmail($email)->first();
+        if(!$exists){
+            if(Request::isMethod('post')){
+                if($email){
+                    $unsubscribed = new UnsubscribedUsers;
+                    $unsubscribed->email = $email;
+                    $unsubscribed->save();                    
+                }
+                return redirect('unsubscribe?email='.$email.'&success=1');
+            }
+        }elseif(isset($request['success']) && $request['success'] == 1){
+            Session::put('success', 'Your E-mail Notification Settings have been saved. <br> You will receive an e-mail confirming your new choices.');
+
+            Mail::send('emails.unsubscribed-mail', ['email' => $email], function($message) use($email) {
+                $message->from('no-reply@friendzsquare.com', 'FriendzSquare');
+                $message->to($email)->subject('FriendzSquare Unsubscription');
+            });
+
+        }else{
+            Session::put('success', 'You are already unsubscribed.');
+        }
+        return view('emails.unsubscribe')->with('email', $request['email']);
+    }
+
+
+    public function subscribe()
+    {
+        $request = Request::all();
+        $validator = Validator::make($request, ['email' => 'required|email']);
+
+        if($validator->fails())            
+           return view('errors.404');
+
+        $email = Request::get('email');
+
+        if($email){
+            $exists = UnsubscribedUsers::whereEmail($email)->delete();
+            Session::put('success', 'You have been subscribed successfully.');
+        }
+
+        return view('emails.subscribe')->with('email', $email);
+
+    }
 
 }
