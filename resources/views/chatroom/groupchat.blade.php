@@ -435,7 +435,7 @@ $GroupsJidList = $SingleChatList = array();
 				<?php } ?>
 			} else if( grouptype == 'pub' ){
 				console.log( xmpp );
-        chatbox.close();
+        //chatbox.close();
         console.log( xmpp );
 				return;
 			} else {
