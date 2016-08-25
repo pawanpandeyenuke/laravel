@@ -128,19 +128,33 @@ class AjaxController extends Controller
 						/** resize image **/
 						list($ImageWidth, $ImageHeight) = getimagesize( public_path('uploads/'.$image_name ) );
 
-						if( $ImageHeight > 200 ){
-							$SmallSize = 200;
-						} else {
+						$NeedImage = 350 / 200;
+						$ImageHave = $ImageWidth / $ImageHeight;
+						if( $ImageHeight <= 200 && $ImageWidth <= 350 ){
 							$SmallSize = $ImageHeight;
+							$ByResize = 'height';
+						} else if( $ImageHave < $NeedImage ){
+							$SmallSize = 200;
+							$ByResize = 'height';
+						} else {
+							$SmallSize = 350;
+							$ByResize = 'width';
 						}
-						$this->resizeImage( Input::file('image'), $SmallSize ,public_path('uploads/thumb-small/') , $image_name ); 
+						$this->resizeImageByCompare( Input::file('image'), $SmallSize, $ByResize, public_path('uploads/thumb-small/') , $image_name ); 
 
-						if( $ImageHeight > 500 ){
-							$LargeSize = 500;	
-						} else{
+						$NeedImage = 680 / 300;
+						$ImageHave = $ImageWidth / $ImageHeight;
+						if( $ImageHeight <= 300 && $ImageWidth <= 680 ){
 							$LargeSize = $ImageHeight;
+							$ByLargeResize = 'height';
+						} else if( $ImageHave < $NeedImage ){
+							$LargeSize = 300;
+							$ByLargeResize = 'height';
+						} else {
+							$LargeSize = 680;
+							$ByLargeResize = 'width';
 						}
-						$this->resizeImage( Input::file('image'), $LargeSize ,public_path('uploads/thumb-large/') , $image_name );
+						$this->resizeImageByCompare( Input::file('image'), $LargeSize, $ByLargeResize, public_path('uploads/thumb-large/') , $image_name );
 						
 					}
 				}else{
@@ -176,6 +190,36 @@ class AjaxController extends Controller
 		exit;
 	}
 
+	private function resizeImageByCompare($image, $size , $By ,$path, $imagename = '')
+    {
+    	try 
+    	{
+    		$extension 		= 	$image->getClientOriginalExtension();
+    		$imageRealPath 	= 	$image->getRealPath();
+    		if( empty($imagename) && $imagename == '' ){
+    			$thumbName 		= 	$image->getClientOriginalName();
+	    	} else {
+	    		$thumbName = $imagename;
+	    	}
+	    
+	    	$img = Image::make($imageRealPath); // use this if you want facade style code
+	    	
+	    	if($By == 'width' ){
+	    		$img->resize(intval($size),null ,function($constraint) {
+		    		 $constraint->aspectRatio();
+		    	});
+	    	} else {
+		    	$img->resize(null, intval($size),function($constraint) {
+		    		 $constraint->aspectRatio();
+		    	});
+	    	}
+	    	return $img->save($path. $thumbName);
+    	}
+    	catch(Exception $e)
+    	{
+    		return false;
+    	}
+    }
 
 	public function editposts()
 	{

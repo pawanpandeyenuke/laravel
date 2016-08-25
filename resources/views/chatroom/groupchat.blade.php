@@ -767,9 +767,10 @@ function openChatGroup( grpjid,grpname,groupimage ){
 }
 function openFirstChat( grpjid ){
 	groupChatRefresh( grpjid );
-	var NewGroup = conObj.rooms.get( grpjid+conferencechatserver );
+	var NewGroup = conObj.rooms.open( grpjid+conferencechatserver );
 	$( '.chatnotification' ).remove();
 	NewGroup.minimize();
+	OpenLastMinChat();
 }
 function groupChatRefresh( grpjid ){
 	$.ajax({
@@ -825,6 +826,23 @@ function OpenFirstMinChat(  ){
 	}
 }
 
+/** 
+* show only last chatbox
+**/
+function OpenLastMinChat(  ){
+	if(  $('.chatbox:visible').length == 0 ){
+    	var firstChatObj = $('.minimized-chats-flyout .chat-head:last .restore-chat');
+    	var firstChat =  firstChatObj.data( 'bid' );
+    	if( typeof firstChatObj !== undefined ){
+    		if( firstChatObj.hasClass( "singlechat" ) ) {
+    			var chatbox = conObj.chats.get( Base64.decode(firstChat) );
+    		} else {
+    			var chatbox = conObj.rooms.get( Base64.decode(firstChat) );
+    		}
+    		chatbox.maximize();
+    	}
+	}
+}
 /** 
 * show only one public group
 **/
