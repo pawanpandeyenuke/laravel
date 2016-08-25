@@ -70,7 +70,7 @@ class AjaxController extends Controller
 
 			$data = json_encode($err);
 
-		}else{
+		} else {
 
 			if(Auth::attempt(['email' => $email, 'password'=>$password , 'is_email_verified'=>
 				'Y'], $log)) {
@@ -1484,9 +1484,9 @@ public function sendImage(Request $request){
 				}
 
 				// Send hint
-				$user = User::where('id', $user_id)->select(['first_name', 'last_name', 'xmpp_username'])->first();
+				$user = User::where('id', $user_id)->select(['first_name', 'last_name', 'xmpp_username','id','picture'])->first();
 				$inviteeName = $user->first_name.' '.$user->last_name;
-				$addMessage = json_encode(array( 'type' => 'hint', 'action'=>'','sender_jid' => $userJid, 'groupname' => $GroupName, 'message' => webEncode($inviteeName.' is invited for joining the group.'), 'group_jid'=>$GroupDetail->group_jid) );
+				$addMessage = json_encode(array( 'type' => 'hint', 'action'=>'add','sender_jid' => $userJid, 'user_id' => $user->id, 'user_image' => $user->picture,'groupname' => $GroupName, 'message' => webEncode($inviteeName.' is invited for joining the group.'), 'group_jid'=>$GroupDetail->group_jid) );
 				foreach ($xmp as $key => $value) {
 					Converse::broadcastchatroom( $GroupDetail->group_jid, $name, $value, $userJid, $message );
 				}

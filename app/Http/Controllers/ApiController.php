@@ -2110,7 +2110,7 @@ class ApiController extends Controller
 	            foreach($new_members as $key1 => $val1) 
 	            {
 	            	// die('kill');
-	            	$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner_data->xmpp_username, 'action'=>'add','message' => $val1->first_name.' '.$val1->last_name.' has invited for joining the group', 'xmpp_userid' => $val1->xmpp_username, 'user_name' => $val1->first_name.' '.$val1->last_name, 'user_id' => $val1->id) );
+	            	$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner_data->xmpp_username, 'action'=>'add','user_id' => $val1->id, 'user_image' => $val1->picture,'message' => $val1->first_name.' '.$val1->last_name.' has invited for joining the group', 'xmpp_userid' => $val1->xmpp_username, 'user_name' => $val1->first_name.' '.$val1->last_name, 'user_id' => $val1->id) );
 
 	            	foreach($old_member as $key => $val) 
 	                {
