@@ -374,12 +374,12 @@ $GroupsJidList = $SingleChatList = array();
 
         conObj.listen.on('connected', function (event) {
         	console.log( 'connected' );
-            setTimeout( function(){
-            	$('.loader_blk').remove();
-				//closePublic( groupid );
-			}, 2000 );
-			waitProfile = 1;
-		});
+          setTimeout( function(){
+            $('.loader_blk').remove();
+				    closePublic( groupid );
+			    }, 2000 );
+    			waitProfile = 1;
+    		});
 				
 		conObj.listen.on('chatBoxOpened', function (event, chatbox) {
         	chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
