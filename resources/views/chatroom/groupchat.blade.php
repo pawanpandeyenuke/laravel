@@ -434,7 +434,9 @@ $GroupsJidList = $SingleChatList = array();
 					chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
 				<?php } ?>
 			} else if( grouptype == 'pub' ){
-				chatbox.close();
+				console.log( xmpp );
+        chatbox.close();
+        console.log( xmpp );
 				return;
 			} else {
 				chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
