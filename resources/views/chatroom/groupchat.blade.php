@@ -886,8 +886,11 @@ function closePublic( grpname ){
 			console.log(xmpp);
       var publicRoom = conObj.rooms.open(jid);
       console.log(publicRoom);
-      $(this).parent('.chat-head-chatroom').find( '.close-chatbox-button' ).click();
-      $(this).parent('.chat-head-chatroom').remove();
+      console.log(this);
+      $(this).parent().find( '.close-chatbox-button' ).click();
+      $(this).parent().remove();
+
+      console.log(this);
 		}
 	});
 	
