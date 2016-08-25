@@ -70,7 +70,7 @@ class AjaxController extends Controller
 
 			$data = json_encode($err);
 
-		}else{
+		} else {
 
 			if(Auth::attempt(['email' => $email, 'password'=>$password , 'is_email_verified'=>
 				'Y'], $log)) {
@@ -1484,9 +1484,9 @@ public function sendImage(Request $request){
 				}
 
 				// Send hint
-				$user = User::where('id', $user_id)->select(['first_name', 'last_name', 'xmpp_username'])->first();
+				$user = User::where('id', $user_id)->select(['first_name', 'last_name', 'xmpp_username','id','picture'])->first();
 				$inviteeName = $user->first_name.' '.$user->last_name;
-				$addMessage = json_encode(array( 'type' => 'hint', 'action'=>'','sender_jid' => $userJid, 'groupname' => $GroupName, 'message' => webEncode($inviteeName.' is invited for joining the group.'), 'group_jid'=>$GroupDetail->group_jid) );
+				$addMessage = json_encode(array( 'type' => 'hint', 'action'=>'add','sender_jid' => $userJid, 'user_id' => $user->id, 'user_image' => $user->picture,'groupname' => $GroupName, 'message' => webEncode($inviteeName.' is invited for joining the group.'), 'group_jid'=>$GroupDetail->group_jid) );
 				foreach ($xmp as $key => $value) {
 					Converse::broadcastchatroom( $GroupDetail->group_jid, $name, $value, $userJid, $message );
 				}
@@ -2340,7 +2340,7 @@ public function sendImage(Request $request){
 
 	               $members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$group->id)->pluck('xmpp_username');
 	                $name = $user->first_name.' '.$user->last_name;
-	                $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username, 'user_name'=>$name, 'message' => $name.' joined the group') );
+	                $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'user_id' => $user->id, 'user_image' => $user->picture,'xmpp_userid' => $user->xmpp_username, 'user_name'=>$name, 'message' => $name.' joined the group') );
 
 	                foreach($members as $key => $val) {
 	                    Converse::broadcastchatroom($group->group_jid, $name, $val, $user->xmpp_username, $message);
