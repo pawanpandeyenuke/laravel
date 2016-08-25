@@ -763,7 +763,8 @@ function hideOpendBox( grpname , actiontype ){
 }
 
 function openChatGroup( grpjid,grpname,groupimage ){
-	conObj.rooms.open( grpjid+conferencechatserver );
+	var openNewGroup = conObj.rooms.open( grpjid+conferencechatserver );
+  openNewGroup.maximize();
 }
 function openFirstChat( grpjid ){
 	groupChatRefresh( grpjid );
