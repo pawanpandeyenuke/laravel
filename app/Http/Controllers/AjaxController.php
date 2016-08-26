@@ -1491,7 +1491,8 @@ public function sendImage(Request $request){
 				$addMessage = json_encode(array( 'type' => 'hint', 'action'=>'add','sender_jid' => $userJid, 'user_id' => $user->id, 'user_image' => $user->picture,'groupname' => $GroupName, 'message' => webEncode($inviteeName.' is invited for joining the group.'), 'group_jid'=>$GroupDetail->group_jid) );
 
 				foreach ($xmp as $key => $value) {
-					Converse::broadcastchatroom( $GroupDetail->group_jid, $name, $value->xmpp_username, $userJid, $message );
+				
+					Converse::broadcastchatroom( $GroupDetail->group_jid, $name, $value->xmpp_username, $userJid, $addMessage );
 				}
 
 				$converse  = new Converse;
