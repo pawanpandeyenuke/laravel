@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Validator,Request;
+use Validator,Request, Session;
 use App\User;
 
 class HomeController extends Controller
@@ -91,5 +91,36 @@ class HomeController extends Controller
                 ));
             }
         }
+    }
+
+    // Unsubscribe
+    public function unsubscribeForumNotifications()
+    {
+        $data = Request::all();
+        if( !isset($data['token']) || !$data['token'] ){
+            return redirect('/');
+        }
+
+        $user = User::where('access_token', urldecode($data['token']))->first();
+        if( !$user ){
+            return view('errors.404');
+        }
+
+        if( $user->subscribe == 0 && !isset($data['success'])) {
+            Session::put('success', 'You are already unsubscribed.');
+        } elseif( $user->subscribe == 0 && isset($data['success']) ) {
+            Session::put('success', 'You are unsubscribed successfully.');
+        }
+        else
+        {
+            if( isset($data['action']) && $data['action'] == 'yes' )
+            {
+                $user->subscribe = 0;
+                $user->save();       
+                return redirect('forums/unsubscribe?token='.$data['token'].'&action=yes&success=1');
+            }
+        }
+
+        return view('forums.unsubscribe');
     }
 }

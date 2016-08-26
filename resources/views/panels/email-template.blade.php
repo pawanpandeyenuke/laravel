@@ -185,10 +185,8 @@
                                     <br>
                                   </p>
 
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <br>
+                                  <br><br>
+                                  <p><a href="{{ url('forums/unsubscribe?token='.$access_token) }}" target='_blank'>Click here!</a> to unsubscribe.</p>
                                   
                                 </div>
                               </div>

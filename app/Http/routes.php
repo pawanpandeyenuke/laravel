@@ -405,6 +405,7 @@ Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
  
 	Route::match(['get', 'post'], 'unsubscribe','SearchController@unsubscribe');
 	Route::get('subscribe','SearchController@subscribe');
+	Route::get('forums/unsubscribe','HomeController@unsubscribeForumNotifications');
 
 	Route::get('/', function(){
 		if(Auth::check())
