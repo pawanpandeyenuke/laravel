@@ -1442,7 +1442,7 @@ public function sendImage(Request $request){
 		$input		=	Input::all();
 		$GroupId 	=	$input['gid'];
 		$GroupName 	=	$input['gname'];
-		$GroupDetail = 	Group::where('id',$GroupId)->select( 'group_jid' )->first();
+		$GroupDetail = 	Group::where('id',$GroupId)->select( 'group_jid','title','picture' )->first();
 		
 		$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
 		$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name
@@ -1491,7 +1491,7 @@ public function sendImage(Request $request){
 				$addMessage = json_encode(array( 'type' => 'hint', 'action'=>'add','sender_jid' => $userJid, 'user_id' => $user->id, 'user_image' => $user->picture,'groupname' => $GroupName, 'message' => webEncode($inviteeName.' is invited for joining the group.'), 'group_jid'=>$GroupDetail->group_jid) );
 
 				foreach ($xmp as $key => $value) {
-				
+
 					Converse::broadcastchatroom( $GroupDetail->group_jid, $name, $value->xmpp_userid, $userJid, $addMessage );
 				}
 
