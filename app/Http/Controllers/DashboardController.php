@@ -565,20 +565,20 @@ class DashboardController extends Controller
                 if(empty($arguments['state'])){
                     $arguments['city'] = '';
                 }
+                
                 $full_name = $arguments['first_name'].' '.$arguments['last_name'];
                 Converse::setNameVcard(Auth::User()->xmpp_username, 'FN', $full_name);
-                foreach ($arguments as $key => $value) {
-                    if( $key != 'email' && $key != 'password' ){
-                        User::where([ 'id' => $id ])
-                            ->update([ $key => $value ]);
-                    }
-                }
+                unset($arguments['email'], $arguments['password']);
+                
+                // Update user
+                User::where([ 'id' => $id ])->update($arguments);
+                
                 Session::put('success', 'Profile saved successfully');
             }
-
+            
             return redirect("/profile/$id");
         }
-
+        
         $user = User::where('id', $id)->get()->first();
         $education = EducationDetails::where('user_id', $id)->get();
 

@@ -99,7 +99,7 @@ if($mainforum->title == "Doctor")
 					                            	$aria = "international";
 					                            	}                 
 ?>
-												 <li role="presentation" class="col-md-4"><a href="#{{$aria}}" aria-controls="{{$aria}}" role="tab" data-toggle="tab">{{$view_title}}</a></li>
+												 <li role="presentation" class="col-md-4 col-xs-12"><a href="#{{$aria}}" aria-controls="{{$aria}}" role="tab" data-toggle="tab">{{$view_title}}</a></li>
 												@endforeach
 											</ul>
 											<div class="tab-content">
@@ -109,7 +109,7 @@ if($mainforum->title == "Doctor")
 														    	<input type="hidden" name="subcategory" value="international" />
 													    	@if($mainforum->title == "Doctor")
 													    		<div class="row">
-													    			<div class="col-md-4 col-md-offset-4">
+													    			<div class="col-md-4 col-xs-12 col-md-offset-4">
 													    				<select name="idiseases" class="form-control">
 														    					<option value="">Select Option</option>
 															    				@foreach($diseases as $doc)					
@@ -136,7 +136,7 @@ if($mainforum->title == "Doctor")
 																		else
 																			$cls = "col-md-offset-4";
 																	?>
-																	<div class="col-md-4 {{$cls}}">
+																	<div class="col-md-4 col-xs-12 {{$cls}}">
 																		<select name="country1" class="form-control">
 																				<option value="">Select Country</option>
 																				@foreach($countries as $data)					
@@ -145,7 +145,7 @@ if($mainforum->title == "Doctor")
 																		</select>
 																	</div>
 																	@if($mainforum->title == "Doctor")
-																	<div class="col-md-4">
+																	<div class="col-md-4 col-xs-12">
 													    				<select name="cdiseases" class="form-control">
 														    					<option value="">Select Option</option>
 														    					@foreach($diseases as $doc)					
@@ -166,7 +166,7 @@ if($mainforum->title == "Doctor")
 														    	<input type="hidden" name="mainforum" value="{{$mainforum->title}}" />
 														    	<input type="hidden" name="subcategory" value="country,state,city" />
 																<div class="row">
-																		<div class="col-md-4">
+																		<div class="col-md-4 col-xs-12">
 																			<select name="country" class="form-control" id="subcountry-forum">
 																					<option value="">Select Country</option>
 																					@foreach($countries as $data)					
@@ -174,18 +174,18 @@ if($mainforum->title == "Doctor")
 																					@endforeach
 																			</select>
 																		</div>
-																		<div class="col-md-4">
+																		<div class="col-md-4 col-xs-12">
 																				<select name="state" class="form-control" id="substate-forum">
 																						<option>Select State</option>
 																				</select>
 																		</div>
-																		<div class="col-md-4">
+																		<div class="col-md-4 col-xs-12">
 																				<select name="city" class="form-control" id="subcity-forum">
 																						<option>Select City</option>
 																				</select>
 																		</div>
 																		@if($mainforum->title == "Doctor")
-																		<div class="col-md-4 col-md-offset-4 margin-top20">
+																		<div class="col-md-4 col-xs-12 col-md-offset-4 margin-top20">
 													    					<select name="cscdiseases" class="form-control">
 													    							<option value="">Select Option</option>
 													    							@foreach($diseases as $doc)					

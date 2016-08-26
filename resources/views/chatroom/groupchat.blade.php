@@ -245,7 +245,7 @@ $GroupsJidList = $SingleChatList = array();
 													<div class="pvt-room-list" style="position:relative;" >
 														<a href="<?php echo url("private-group-detail/".$data['id']); ?>" >
 															<span class="chat-thumb" style="background: url('<?= $group_picture ?>');"></span>
-															<span class="title">{{$data['title']}}</span>
+															<span class="title" title="{{$data['title']}}"><?php echo truncatePrivateGroupName($data['title']) ?></span>
 														</a>
 														<button id="<?= $data['group_jid'] ?>" data-groupimage="<?= $group_picture ?>" onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>','<?= $group_picture ?>');" class="time">Chat</button>
 													 </div>
@@ -374,12 +374,12 @@ $GroupsJidList = $SingleChatList = array();
 
         conObj.listen.on('connected', function (event) {
         	console.log( 'connected' );
-            setTimeout( function(){
-            	$('.loader_blk').remove();
-				closePublic( groupid );
-			}, 2000 );
-			waitProfile = 1;
-		});
+          setTimeout( function(){
+            $('.loader_blk').remove();
+				    closePublic( groupid );
+			    }, 2000 );
+    			waitProfile = 1;
+    		});
 				
 		conObj.listen.on('chatBoxOpened', function (event, chatbox) {
         	chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
@@ -434,7 +434,7 @@ $GroupsJidList = $SingleChatList = array();
 					chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
 				<?php } ?>
 			} else if( grouptype == 'pub' ){
-				chatbox.close();
+        chatbox.close();
 				return;
 			} else {
 				chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
@@ -459,6 +459,7 @@ $GroupsJidList = $SingleChatList = array();
 							} else {
 								chatbox.close();
 								groupChatRefresh( '' );
+                return;
 							}
 						}
 					});
@@ -849,31 +850,18 @@ function OpenLastMinChat(  ){
 **/
 function closePublic( grpname ){
 	var openChat = 1;
-	if(grpname != '' ){
-		$( '.privatechat' ).each( function(){
-			var jid = Base64.decode($(this).data( 'bid' ));
-			var getChat = conObj.chats.get(jid);
-			if( $(this).css('display') == 'block' && grpname != '' ){
-				getChat.minimize();
-			}
-		});
-	}
-
+  
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var getRooms = conObj.rooms.get(jid);
 		var xmpp = jid.substring(0, jid.indexOf('@')); //jid.replace( conferencechatserver , '' );
-    	if( xmpp == grpname ){
-    		console.log( 'open group exist' );
-    		console.log( xmpp );
+    if( grpname != '' && xmpp == grpname ){
 			openChat = 0;
 			getRooms.maximize();
 		} else {
 			var grouptype = xmpp.substr(xmpp.length - 3);
 			if( grouptype == 'pub' ){
 				getRooms.close();
-			} else if( $(this).css('display') == 'block' && grpname != '' && grpname != '' ){
-				getRooms.minimize();
 			}
 		}
 	});
@@ -882,7 +870,9 @@ function closePublic( grpname ){
 		var xmpp = jid.substring(0, jid.indexOf('@'));
 		var grouptype = xmpp.substr(xmpp.length - 3);
 		if( grouptype == 'pub' ){
-			var publicRoom = conObj.rooms.open(jid);
+      var publicRoom = conObj.rooms.open(jid);
+      $(this).parent().find( '.close-chatbox-button' ).click();
+      $(this).parent().remove();
 		}
 	});
 	
