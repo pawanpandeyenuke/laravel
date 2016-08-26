@@ -864,6 +864,9 @@ function closePublic( grpname ){
 		if( grouptype == 'pub' && xmpp !=  groupid  ){
 	      var publicRoom = conObj.rooms.get(jid);
 	      publicRoom.close();
+		} else if( grouptype == 'pvt'  && typeof GroupName[xmpp] == 'undefined' ){
+			var pvtRoom = conObj.rooms.get(jid);
+	        pvtRoom.close();
 		}
 	});
 	$( '.chatgroup' ).each( function(){
@@ -873,9 +876,12 @@ function closePublic( grpname ){
 		if( grouptype == 'pub' && xmpp !=  groupid  ){
 	      var publicRoom = conObj.rooms.get(jid);
 	      publicRoom.close();
+		} else if( grouptype == 'pvt'  && typeof GroupName[xmpp] == 'undefined' ){
+			var pvtRoom = conObj.rooms.get(jid);
+	        pvtRoom.close();
 		}
 	});
-
+	OpenLastMinChat();
 }
 
 $('.status-r-btn').on('click',function(){
