@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Invite - ')
+@section('title', 'Invite Friends')
 <head>
 	<meta property="og:url" content="{{url('/')}}" />
 	<meta property="og:type" content="Friendz Square" />

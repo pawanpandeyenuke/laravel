@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends( isset($_GET['mobile']) ? 'layouts.noheaderfooter' : 'layouts.app')
 
 @section('title', 'Terms of use')
 
@@ -10,7 +10,7 @@
 	    	<h3 class='text-center'><b>Terms of Use</b></h3>
 	        FriendzSquare application on any internet enabled device is collectively referred here in this Terms of Use as "FriendzSquare" ("We"). <br> <br>
 
-			This Terms of Use is applicable to FriendzSquare and by accessing FriendzSquare you consent to accept the following terms as specified below. Furthermore, by accepting these Terms of Use, you also agree to be bound by the FriendzSquare’s Privacy Policy. <br>
+			This Terms of Use is applicable to FriendzSquare and by accessing FriendzSquare you consent to accept the following terms as specified below. Furthermore, by accepting these Terms of Use, you also agree to be bound by the FriendzSquare's Privacy Policy. <br>
 
 			<ol>
 				<li>FriendzSquare as a platform <br>
@@ -154,13 +154,15 @@
   	</div>
 </div>
 
-<footer>
- 	<div class="container">
-        <ul class="f-links text-center list-inline">
-            <li>&copy; 2016 FriendzSquare</li>       
-            <li><a href="{{ url('terms') }}" title="">Terms of Use</a></li>
-            <li><a href="{{ url('privacy-policy') }}" title="">Privacy Policy</a></li>
-        </ul>
-    </div>
-</footer>
+<?php if( !isset($_GET['mobile']) ){ ?>
+	<footer>
+	 	<div class="container">
+	        <ul class="f-links text-center list-inline">
+	            <li>&copy; 2016 FriendzSquare</li>       
+	            <li><a href="{{ url('terms') }}" title="Terms">Terms of Use</a></li>
+	            <li><a href="{{ url('privacy-policy') }}" title="Privacy Policy">Privacy Policy</a></li>
+	        </ul>
+	    </div>
+	</footer>
+<?php } ?>
 @endsection

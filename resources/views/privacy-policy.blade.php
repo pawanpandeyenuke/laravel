@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends( isset($_GET['mobile']) ? 'layouts.noheaderfooter' : 'layouts.app')
 
 @section('title', 'Privacy Policy')
 
@@ -82,13 +82,15 @@
   	</div>
 </div>
 
-<footer>
- 	<div class="container">
-        <ul class="f-links text-center list-inline">
-            <li>&copy; 2016 FriendzSquare</li>       
-            <li><a href="{{ url('terms') }}" title="">Terms of Use</a></li>
-            <li><a href="{{ url('privacy-policy') }}" title="">Privacy Policy</a></li>
-        </ul>
-    </div>
-</footer>
+<?php if( !isset($_GET['mobile']) ){ ?>
+	<footer>
+	 	<div class="container">
+	        <ul class="f-links text-center list-inline">
+	            <li>&copy; 2016 FriendzSquare</li>       
+	            <li><a href="{{ url('terms') }}" title="Terms">Terms of Use</a></li>
+	            <li><a href="{{ url('privacy-policy') }}" title="Privacy Policy">Privacy Policy</a></li>
+	        </ul>
+	    </div>
+	</footer>
+<?php } ?>
 @endsection
