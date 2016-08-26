@@ -429,7 +429,11 @@ $GroupsJidList = $SingleChatList = array();
            		chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-group pull-right" id="leave">Close</a>' );
             	chatbox.$el.addClass( 'pubroom' );
 				<?php if( isset( $group_image ) && !empty($group_image) ) { ?>
-					chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
+          if( grouptype == 'pub' ){
+					 chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
+          } else {
+            chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/upload/<?php echo $group_image; ?>');" );
+          } 
 				<?php } else { ?>
 					chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
 				<?php } ?>
