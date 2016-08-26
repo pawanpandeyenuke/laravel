@@ -374,12 +374,12 @@ $GroupsJidList = $SingleChatList = array();
 
         conObj.listen.on('connected', function (event) {
         	console.log( 'connected' );
-            setTimeout( function(){
-            	$('.loader_blk').remove();
-				closePublic( groupid );
-			}, 2000 );
-			waitProfile = 1;
-		});
+          setTimeout( function(){
+            $('.loader_blk').remove();
+				    closePublic( groupid );
+			    }, 2000 );
+    			waitProfile = 1;
+    		});
 				
 		conObj.listen.on('chatBoxOpened', function (event, chatbox) {
         	chatbox.$el.attr('data-bid', Base64.encode(chatbox.model.get('jid')));
@@ -434,7 +434,7 @@ $GroupsJidList = $SingleChatList = array();
 					chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
 				<?php } ?>
 			} else if( grouptype == 'pub' ){
-				chatbox.close();
+        		//chatbox.close();
 				return;
 			} else {
 				chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
@@ -459,6 +459,7 @@ $GroupsJidList = $SingleChatList = array();
 							} else {
 								chatbox.close();
 								groupChatRefresh( '' );
+                				return;
 							}
 						}
 					});
@@ -466,7 +467,12 @@ $GroupsJidList = $SingleChatList = array();
 			}
 			renderEmoji( chatbox );	
 		});
-				
+		conObj.listen.on('chatBoxClosed', function (event, chatbox) {
+			OpenFirstMinChat();
+		});	
+		conObj.listen.on('chatBoxToggled', function (event, chatbox) {
+			console.log( event );
+		});	
 		conObj.listen.on('disconnected', function (event) { 
 			location.reload();
 		});
@@ -492,7 +498,10 @@ $GroupsJidList = $SingleChatList = array();
           auto_join_on_invite:true,
           allow_chat_pending_contacts: true,
           notify_all_room_messages: true,
-          //auto_join_rooms: GroupAuto
+          show_controlbox_by_default: true,
+          <?php if( !empty($groupid) && $groupid != ' ' ){ ?>
+          auto_join_rooms:[{'jid': groupid+conferencechatserver}]
+          <?php } ?>
         });
                    
 
@@ -594,7 +603,6 @@ $GroupsJidList = $SingleChatList = array();
           $.post('/ajax/leave-group', {group_jid: groupid}, function(response){
             var getRooms = conObj.rooms.get( groupid+conferencechatserver );
             getRooms.close();
-            OpenFirstMinChat();
             $('#leaveModal').modal('hide');
           });
         });
@@ -611,7 +619,6 @@ $GroupsJidList = $SingleChatList = array();
             var PvtJid = $(this).attr( 'data-jid' );
             var getRooms = conObj.rooms.get( PvtJid+conferencechatserver );
             getRooms.close();
-            OpenFirstMinChat();
             $('#leavePvtModal').modal('hide');
         });
 
@@ -805,7 +812,6 @@ function removeGroup( chatbox ){
 	chatbox.$el.find('.chat-area').append( '<div class="chat-notification" >You are removed from group</div>' );
 	setTimeout( function(){
 		chatbox.close();
-		OpenFirstMinChat();
 	}  , 5000 );
 }
 
@@ -815,14 +821,16 @@ function removeGroup( chatbox ){
 function OpenFirstMinChat(  ){
 	if(  $('.chatbox:visible').length == 0 ){
     	var firstChatObj = $('.minimized-chats-flyout .chat-head:first .restore-chat');
-    	var firstChat =  firstChatObj.data( 'bid' );
-    	if( typeof firstChatObj !== undefined ){
+    	var firstChat =  firstChatObj.attr( 'data-bid' );
+    	if( typeof firstChat === "string" ){
     		if( firstChatObj.hasClass( "singlechat" ) ) {
     			var chatbox = conObj.chats.get( Base64.decode(firstChat) );
     		} else {
     			var chatbox = conObj.rooms.get( Base64.decode(firstChat) );
     		}
-    		chatbox.maximize();
+    		if( typeof chatbox !== undefined ){
+    			chatbox.maximize();
+    		}
     	}
 	}
 }
@@ -833,8 +841,8 @@ function OpenFirstMinChat(  ){
 function OpenLastMinChat(  ){
 	if(  $('.chatbox:visible').length == 0 ){
     	var firstChatObj = $('.minimized-chats-flyout .chat-head:last .restore-chat');
-    	var firstChat =  firstChatObj.data( 'bid' );
-    	if( typeof firstChatObj !== undefined ){
+    	var firstChat =  firstChatObj.attr( 'data-bid' );
+    	if( typeof firstChat === "string" ){
     		if( firstChatObj.hasClass( "singlechat" ) ) {
     			var chatbox = conObj.chats.get( Base64.decode(firstChat) );
     		} else {
@@ -849,48 +857,25 @@ function OpenLastMinChat(  ){
 **/
 function closePublic( grpname ){
 	var openChat = 1;
-	if(grpname != '' ){
-		$( '.privatechat' ).each( function(){
-			var jid = Base64.decode($(this).data( 'bid' ));
-			var getChat = conObj.chats.get(jid);
-			if( $(this).css('display') == 'block' && grpname != '' ){
-				getChat.minimize();
-			}
-		});
-	}
-
 	$( '.chatroom' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
-		var getRooms = conObj.rooms.get(jid);
-		var xmpp = jid.substring(0, jid.indexOf('@')); //jid.replace( conferencechatserver , '' );
-    	if( xmpp == grpname ){
-    		console.log( 'open group exist' );
-    		console.log( xmpp );
-			openChat = 0;
-			getRooms.maximize();
-		} else {
-			var grouptype = xmpp.substr(xmpp.length - 3);
-			if( grouptype == 'pub' ){
-				getRooms.close();
-			} else if( $(this).css('display') == 'block' && grpname != '' && grpname != '' ){
-				getRooms.minimize();
-			}
+		var xmpp = jid.substring(0, jid.indexOf('@'));
+		var grouptype = xmpp.substr(xmpp.length - 3);
+		if( grouptype == 'pub' && xmpp !=  groupid  ){
+	      var publicRoom = conObj.rooms.get(jid);
+	      publicRoom.close();
 		}
 	});
 	$( '.chatgroup' ).each( function(){
 		var jid = Base64.decode($(this).data( 'bid' ));
 		var xmpp = jid.substring(0, jid.indexOf('@'));
 		var grouptype = xmpp.substr(xmpp.length - 3);
-		if( grouptype == 'pub' ){
-			var publicRoom = conObj.rooms.open(jid);
+		if( grouptype == 'pub' && xmpp !=  groupid  ){
+	      var publicRoom = conObj.rooms.get(jid);
+	      publicRoom.close();
 		}
 	});
-	
-	if( openChat == 1 && grpname != '' ){
-		conObj.rooms.open( grpname+conferencechatserver );
-	} else if( openChat == 1 ) {
-		OpenLastMinChat();
-	}
+
 }
 
 $('.status-r-btn').on('click',function(){
