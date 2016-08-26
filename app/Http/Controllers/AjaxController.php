@@ -1460,7 +1460,7 @@ public function sendImage(Request $request){
 			 * sending hint chat message all group member
 			 * */
 			foreach ($xmp as $key => $value) {
-				Converse::broadcastchatroom( $GroupDetail->group_jid, $name, $value->xmpp_username, $userJid, $message ); // message broadcast per group member
+				Converse::broadcastchatroom( $GroupDetail->group_jid, $name, $value->xmpp_userid, $userJid, $message ); // message broadcast per group member
 			}
 		}
 		
@@ -1492,13 +1492,13 @@ public function sendImage(Request $request){
 
 				foreach ($xmp as $key => $value) {
 				
-					Converse::broadcastchatroom( $GroupDetail->group_jid, $name, $value->xmpp_username, $userJid, $addMessage );
+					Converse::broadcastchatroom( $GroupDetail->group_jid, $name, $value->xmpp_userid, $userJid, $addMessage );
 				}
 
 				$converse  = new Converse;
 				$Message = json_encode( array( 'type' => 'room', 'groupname' => $GroupName, 'sender_jid' => $userJid, 'groupjid'=>$GroupDetail->group_jid, 'group_image' => $GroupDetail->picture, 'created_by'=>$name,'message' => webEncode('This invitation is for joining the '.$GroupName.' group.'), 'users' => $xmp) );
 				// $converse->addUserGroup( $GroupJid,$value->xmpp_userid );
-				$converse->broadcast(Auth::user()->xmpp_username, $user->xmpp_username, $Message);
+				$converse->broadcast(Auth::user()->xmpp_username, $user->xmpp_userid, $Message);
 			}
 		}
 		json_encode(array( 'status' => '1' ));
