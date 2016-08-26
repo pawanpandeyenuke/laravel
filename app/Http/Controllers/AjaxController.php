@@ -1496,7 +1496,7 @@ public function sendImage(Request $request){
 				}
 
 				$converse  = new Converse;
-				$Message = json_encode( array( 'type' => 'room', 'groupname' => $GroupName, 'sender_jid' => $userJid, 'groupjid'=>$GroupDetail->group_jid, 'group_image' => $GroupDetail->picture, 'created_by'=>$name,'message' => webEncode('This invitation is for joining the '.$GroupName.' group.'), 'users' => $xmp) );
+				$Message = json_encode( array( 'type' => 'room', 'groupname' => $GroupName, 'sender_jid' => $userJid, 'groupjid'=>$GroupDetail->group_jid, 'group_image' => $GroupDetail->picture, 'created_by'=>$name,'message' => webEncode('Invitation to join "'.$GroupName.'" group.'), 'users' => $xmp) );
 				// $converse->addUserGroup( $GroupJid,$value->xmpp_userid );
 				$converse->broadcast(Auth::user()->xmpp_username, $user->xmpp_userid, $Message);
 			}

@@ -840,7 +840,7 @@ class DashboardController extends Controller
 					}
 					array_push($input['groupmembers'],$userid);
 					$xmp = User::whereIn('id',$input['groupmembers'])->select('id as user_id', DB::raw('CONCAT(first_name, " ", last_name) AS username'), 'xmpp_username as xmpp_userid','picture as user_image')->get();
-					$Message = json_encode( array( 'type' => 'room', 'groupname' => $GroupTitle, 'sender_jid' => $userXamp, 'groupjid'=>$GroupJid, 'group_image' => '', 'created_by'=>$name,'message' => webEncode('This invitation is for joining the '.$GroupTitle.' group.'), 'users' => $xmp) );
+					$Message = json_encode( array( 'type' => 'room', 'groupname' => $GroupTitle, 'sender_jid' => $userXamp, 'groupjid'=>$GroupJid, 'group_image' => '', 'created_by'=>$name,'message' => webEncode('Invitation to join "'.$GroupTitle.'" group.'), 'users' => $xmp) );
 
 					foreach ($xmp as $key => $value) {
 						$converse->addUserGroup( $GroupJid,$value->xmpp_userid );
