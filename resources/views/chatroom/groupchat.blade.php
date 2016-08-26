@@ -875,7 +875,7 @@ function closePublic( grpname ){
 	      publicRoom.close();
 		}
 	});
-
+	OpenLastMinChat();
 }
 
 $('.status-r-btn').on('click',function(){
