@@ -30,11 +30,11 @@
 				<div style="background-color:#fff;padding:10px 0px 20px 15px;margin-bottom:25px;">
 				<p style="font-size:18px;">Hi,</p>
 				
-				<p style="font-size:18px;line-height: 1.42857;">You have been unsubscribed from FriendzSquare. If you want to subscribe again, please <a href="{{ url('subscribe?email='.$email) }}">click here</a>.</p>
+				<p style="font-size:18px;line-height: 1.42857;">You have been unsubscribed from FriendzSquare. If you want to subscribe again, please <a href="{{ url('subscribe?email='.$email) }}" target="_blank">click here</a>.</p>
 			
 				</div>
 
-				<p style="font-size:15px;margin-top:0;margin-bottom:15px;">If you have any questions, then please contact at <a href="#" style="color:#0561C1;">contact@friendzsquare.com </a>	
+				<p style="font-size:15px;margin-top:0;margin-bottom:15px;">If you have any questions, then please contact at <a href="mailto:contact@friendzsquare.com" style="color:#0561C1;">contact@friendzsquare.com </a>	
 				</p>
 
 				<a href="#" style="text-decoration:none;font-size:15px;color:#0561C1;">You may see this email in browser</a>

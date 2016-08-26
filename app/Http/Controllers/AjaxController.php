@@ -786,7 +786,7 @@ comments;
 		}
 
 		// @ Send push notification on request accept action
-		$response = Converse::notifyMe( $input['user_id'], $input['friend_id'], 'accept' );
+		$response = Converse::notifyMe( $input['friend_id'], $input['user_id'], 'accept' );
 
 	}
 
