@@ -432,7 +432,7 @@ $GroupsJidList = $SingleChatList = array();
           if( grouptype == 'pub' ){
 					 chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/category_images/<?php echo $group_image; ?>');" );
           } else {
-            chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/upload/<?php echo $group_image; ?>');" );
+            chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('/uploads/<?php echo $group_image; ?>');" );
           } 
 				<?php } else { ?>
 					chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+defaultImage+"');" );
