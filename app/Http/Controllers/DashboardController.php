@@ -521,12 +521,14 @@ class DashboardController extends Controller
             	unset($arguments[$key]);
             } 
 
-            $time=strtotime($arguments['birthday']);
-            $arguments['birthday'] = date('Y-m-d',$time);
- 
-            if($arguments){
+            if( ! $arguments['birthday'] ) {
+                $arguments['birthday'] = null;
+            }
+            
+            if($arguments)
+            {
                 unset($arguments['_token']);
-
+                
                 //Check for image upload.
                 $file = Request::file('picture');
                 if( isset($arguments['picture']) && $file != null )
