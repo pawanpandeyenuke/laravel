@@ -3270,9 +3270,9 @@ class ApiController extends Controller
 			$req = Request::all();
 
 			$validator = Validator::make($req, [
-					'user_id' => 'required|numeric',
+					'user_id' => 'required|numeric|exists:users,id',
 					'user_jid' => 'required',
-					'blocked_user_id' => 'required|numeric',
+					'blocked_user_id' => 'required|numeric|exists:users,id',
 					'blocked_user_jid' => 'required',
 					'message' => 'required',
 				]);
