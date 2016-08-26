@@ -870,9 +870,9 @@ function closePublic( grpname ){
 		var xmpp = jid.substring(0, jid.indexOf('@'));
 		var grouptype = xmpp.substr(xmpp.length - 3);
 		if( grouptype == 'pub' ){
-      var publicRoom = conObj.rooms.open(jid);
-      $(this).parent().find( '.close-chatbox-button' ).click();
-      $(this).parent().remove();
+	      var publicRoom = conObj.rooms.open(jid);
+	      $(this).parent().find( '.close-chatbox-button' ).click();
+	      $(this).parent().remove();
 		}
 	});
 	
