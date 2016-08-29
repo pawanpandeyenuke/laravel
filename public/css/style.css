@@ -3847,11 +3847,12 @@ body.modal-open {
 
 #conversejs #minimized-chats .chat-head-message-count, #conversejs #minimized-chats .unread-message-count
 {
-	right: 77px;
-	bottom: 14px;
-	font-size: 9px;
-  	font-weight: 700;
-  	line-height: 5px;
+	right: 20px !important;
+	bottom: 14px !important;
+	font-size: 9px !important;
+  	font-weight: 700 !important;
+  	line-height: 5px !important;
+  	background: #fff none repeat scroll 0 0 !important;
 }
 
 /** Safari Issues **/
