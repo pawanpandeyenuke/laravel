@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'User Profile - ')
+@section('title', 'User Profile')
 <?php
 
 	$gender = isset($user->gender) ? $user->gender : '';

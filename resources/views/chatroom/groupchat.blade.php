@@ -1,6 +1,6 @@
 @extends('layouts.chat')
 
-@section('title', 'Chat - ')
+@section('title', 'Chat')
 
 @section('content')
 <style>

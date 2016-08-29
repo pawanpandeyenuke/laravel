@@ -6,7 +6,7 @@ $setting['contact-request']="all";
 $setting['friend-request'] ="all";
 }
 ?>
-@section('title', 'Settings - ')
+@section('title', 'Settings')
 @section('content')
 
 	<div class="page-data dashboard-body">

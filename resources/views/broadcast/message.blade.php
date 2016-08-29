@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Broadcast - ')
+@section('title', 'Broadcast')
 @section('content')
 
 <div class="page-data dashboard-body">

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'User Search - ')
+@section('title', 'User Search')
 @section('content')
 
 <?php

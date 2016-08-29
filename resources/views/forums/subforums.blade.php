@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Forums - ')
+@section('title', 'Forums')
 <?php
 unset($countries[0]);
 if($mainforum->title == "Doctor")

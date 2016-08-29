@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Private Group - ')
+@section('title', 'Private Group')
 @section('content')
 
 <div class="page-data dashboard-body">

@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Group Chat - ')
+@section('title', 'Group Chat')
 @section('content')
 
 <div class="page-data dashboard-body">

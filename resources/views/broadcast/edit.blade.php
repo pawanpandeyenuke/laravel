@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Broadcast - ')
+@section('title', 'Broadcast')
 @section('content')
 <?php  // echo '<pre>';print_r($broadcast);die; ?>
 <div class="page-data dashboard-body">

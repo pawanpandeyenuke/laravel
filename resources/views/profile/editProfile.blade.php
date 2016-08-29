@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'User Profile - ')
+@section('title', 'User Profile')
 @section('content')
 
 <?php
