@@ -3281,6 +3281,9 @@ class ApiController extends Controller
 				$this->message = $this->getError($validator);
 			}else{
 
+				if( $req['user_id'] === $req['blocked_user_id'] )
+					throw new Exception("You cannot report about yourself.", 1);
+
 				$check_if_exists = ReportUser::where(['user_id' => $req['user_id'], 'blocked_user_id' => $req['blocked_user_id'], ])->first();
 
 				if( !$check_if_exists ){
