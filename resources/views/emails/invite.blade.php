@@ -26,13 +26,13 @@
 			<p style="font-size:16px;">{{ $username }} has joined FriendzSquare. On FriendzSquare you can make new friends by joining <strong>Chat rooms</strong>, participate in <strong>Forums</strong>, post comments on <strong>Newsfeed</strong> and much more.</p>
 			<p style="font-size:16px;margin-bottom:40px;">Explore and grow your social network.</p>
 				<div style="margin-bottom:20px;text-align:center;padding:10px;">
-				<a href="{{url('profile/'.$id)}}" style="background-color:#5df7e3;color:#000;padding:10px 40px;margin-bottom:20px;text-decoration:none;border-radius:3px;text-transform:uppercase;font-weight:600;">Accept Invite</a>
+				<a href="{{url('profile/'.$id)}}" style="background-color:#5df7e3;color:#000;padding:10px 40px;margin-bottom:20px;text-decoration:none;border-radius:3px;font-weight:600;">Accept Invite</a>
 				</div>	
 			</div>
 			<div style="background-color:#e9faf8;padding:10px 20px;text-align:center;margin-bottom:20px;">
 			<p style="font-size:16px;margin-top:20px;margin-bottom:0;">This email has been sent to <a href="mailto:{{$email}}" style="color:#000;font-weight:bold;">{{ $email }}</a></p>
 			<p style="font-weight:bold;">It is an invitation to connect</p>
-			<a href="{{ url('unsubscribe?email='.$email) }}" style="background-color:#5df7e3;color:#000;padding:10px 20px;margin-bottom:25px;text-decoration:none;text-transform:uppercase;font-weight:bold;">Unsubscribe</a>
+			<a href="{{ url('unsubscribe?email='.$email) }}" style="background-color:#5df7e3;color:#000;padding:10px 20px;margin-bottom:25px;text-decoration:none;font-weight:bold;">Unsubscribe</a>
 			</div>
 			<div style="background-color:#fff;padding:10px 15px;text-align:center;">
 			<p style="font-size:12px;margin-top:15px;margin-bottom:15px;">If you have any questions, then please contact at <a href="mailto:contact@friendzsquare.com" style="color:#000;font-weight:bold;">contact@friendzsquare.com </a>
