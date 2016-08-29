@@ -18,7 +18,7 @@
 Route::get('pushnotification-iphone', 'DashboardController@pushNotificationIphone');
 Route::get('pushnotification-android', 'DashboardController@pushNotificationAndroid');
 
-Route::post('home/sendpushtoios','HomeController@sendpushtoios');
+Route::post('sendpushtoios','HomeController@sendpushtoios');
 
 /**
  * @Ajax Routes..
