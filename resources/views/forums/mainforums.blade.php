@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Forums - ')
+@section('title', 'Forums')
 @section('content')
 	<div class="page-data dashboard-body">
 	        <div class="container">

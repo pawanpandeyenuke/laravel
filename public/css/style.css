@@ -3853,3 +3853,30 @@ body.modal-open {
   	font-weight: 700;
   	line-height: 5px;
 }
+
+/** Safari Issues **/
+
+.goog-te-gadget .goog-te-combo
+{
+ line-height:42px;
+}
+
+select#mob-country 
+{
+line-height: 42px;
+}
+.btn-tab-cont .tab-content select
+{
+ line-height:28px;
+}
+
+select#profile_country,select#profile_state,select#profile_city,select#educationlevel,select#specialization,select#edu_country,select#jobarea,select#jobcategory {
+line-height: 28px;
+}
+
+select.state {
+line-height: 28px !important;
+}
+select.city {
+line-height: 28px;
+}

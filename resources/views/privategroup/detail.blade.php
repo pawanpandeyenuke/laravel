@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Private Group - ')
+@section('title', 'Private Group')
 <?php 
 
 $title1 = strtolower($groupdetail[0]['title']);

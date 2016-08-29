@@ -43,7 +43,7 @@
 			  	@endif
 		  	@endif
 			<span class="u-img" style="background: url('<?php echo userImage($user) ?>');"></span>
-			<span class="title">{{ $user->first_name.' '.$user->first_name }}</span>
+			<span class="title">{{ $user->first_name.' '.$user->last_name }}</span>
 			<div class="post-time">
 				<span class="date"><img src="{{url('/forums-data/images/date-icon.png')}}" alt="">{{ $posts->updated_at->format('d M Y') }}</span>
 				<span class="time"><img src="{{url('/forums-data/images/time-icon.png')}}" alt="">{{ $posts->updated_at->format('h:i A').' (UTC)' }}</span>
