@@ -3858,7 +3858,7 @@ body.modal-open {
 
 .goog-te-gadget .goog-te-combo
 {
- line-height:42px;
+ line-height:28px;
 }
 
 select#mob-country 
@@ -3878,5 +3878,13 @@ select.state {
 line-height: 28px !important;
 }
 select.city {
+line-height: 28px;
+}
+
+select#getsubcategory {
+line-height: 28px;
+}
+
+select#search-subforums {
 line-height: 28px;
 }

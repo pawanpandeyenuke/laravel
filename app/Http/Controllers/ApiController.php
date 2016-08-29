@@ -3316,4 +3316,29 @@ class ApiController extends Controller
 	}
 
 
+	//Remove user image
+	public function removeUserImage()
+	{
+		try
+		{
+			$req = Request::all();
+			$converse = Converse::removeFile($req);
+
+			if( $converse == 1){
+	            $this->status = "Success";
+	            $this->message = "Image has been removed successfully.";
+			}else{
+	            $this->status = "error";
+	            $this->message = $converse;
+			}
+			// echo "<pre>";print_r($converse);die;
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+	}
+
+
 }

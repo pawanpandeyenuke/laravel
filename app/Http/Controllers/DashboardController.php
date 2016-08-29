@@ -425,8 +425,9 @@ class DashboardController extends Controller
         $usersData = "";
         $GroupImage="";
         $id = Auth::User()->id;
-        $friendid = Friend::where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 
+        $friendObj = Friend::with('friends')->where('user_id',$id)->where('status','Accepted')->get();
+        // echo '<pre>';print_r($friendObj->toArray());die;
         $pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
         
         $private_group_array = GroupMembers::where(['member_id' => $id, 'status' => 'Joined'])->pluck('group_id');
@@ -437,7 +438,7 @@ class DashboardController extends Controller
                     ->with('groupname', $check_name)
                     ->with('group_jid',$group_jid)
                     ->with('userdata', $usersData)
-                    ->with('friendid',$friendid)
+                    ->with('friendObj', $friendObj)
                     ->with('authid',$id)
                     ->with('group_image',$GroupImage)
                     ->with('pendingfriend',$pendingfriend)

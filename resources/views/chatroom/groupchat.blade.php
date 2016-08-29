@@ -80,12 +80,6 @@ $GroupsJidList = $SingleChatList = array();
                 <div id="afterload" class="shadow-box page-center-data no-margin-top no-bottom-padding">
                     <div class="row">
                         <div class="col-sm-4 padding-right-none chat-list-outer">
-                <!-- <div class="chat-list-search">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Search">
-                                    <button type="button" class="search-btn"><i class="glyph-icon flaticon-magnifyingglass138"></i></button>
-                                </div>
-                            </div> -->
                             <div class="group-chat-cont">
                                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                   <div class="panel panel-default">
@@ -215,7 +209,21 @@ $GroupsJidList = $SingleChatList = array();
                                         </div>
                                         
                                         <div class="chat-user-list StyleScroll">
-                                        <ul id="userslist"></ul>
+                                        <?php //echo '<pre>';print_r($friendObj);die; ?>
+                                        <ul id="userslist">
+                                          @foreach($friendObj as $friendsList)
+                                            <?php 
+                                              $friendsListUser = $friendsList->friends;
+                                              $name = $friendsListUser->first_name.' '.$friendsListUser->last_name; 
+                                            ?>
+                                            <li > 
+                                              <a href="javascript:void(0)" title="" class="list" onclick="openChatbox(<?= $friendsListUser->xmpp_username ?>,<?= $friendsListUser->first_name ?>);">
+                                                <span class="chat-thumb"style="background: url(<?= userImage($friendsListUser) ?>);"></span>
+                                                <span class="title"><?= $name ?></span>
+                                              </a>
+                                            </li>
+                                          @endforeach
+                                        </ul>
                                             </div><!--/chat user list-->
                                       </div>
                                     </div>

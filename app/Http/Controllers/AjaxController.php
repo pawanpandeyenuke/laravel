@@ -1133,13 +1133,17 @@ public function sendImage(Request $request){
 			if( Input::get('format') ){	
 				$Format = Input::get('format');
 			}
-			$friend = Friend::with('friends')->with('user')
-					->where('user_id', '=', Auth::User()->id)
-					->where('status','Accepted')
-					->get()
- 					->toArray();
-          
-            $data=array();
+
+			$friend	= Friend::leftJoin('users', 'users.id', '=', 'friends.friend_id')->where('friends.user_id', '=', Auth::User()->id)->where('friends.status','Accepted');
+
+			if( $input ){
+				$friend	= $friend->where( function($query) use( $input ) {
+					        $query->where('users.first_name', 'like', "%".$input."%")->orWhere('users.last_name', 'like', "%".$input."%");
+					});
+			}
+
+			$friend	= $friend->get()->toArray();
+            $data = array();
 			$count= count( $friend );
 			$Status = 0;
 			$msg="Sorry, no such friend found.";
@@ -1151,26 +1155,24 @@ public function sendImage(Request $request){
 				$Status = 1;
 				foreach ($friend as $key => $value) {
 
-					$name=$value['friends']['first_name']." ".$value['friends']['last_name'];
-					$xmpp_username="'".$value['friends']['xmpp_username']."'";
-					$first_name="'".$value['friends']['first_name']."'";
-					
+					$name=$value['first_name']." ".$value['last_name'];
+					$xmpp_username="'".$value['xmpp_username']."'";
 					$msg="No friend found!";
 
-					if (stripos($name, $input) !== false) {
-						if( $Format == 'json' ){
-						   $user_picture = !empty($value['friends']['picture']) ?$value['friends']['picture'] :'user-thumb.jpg';
-						   $data[] = array( 'xmpp' => $value['friends']['xmpp_username'], 'name' => $name, 'image' => $user_picture );
-						} else {
-							$user_picture = !empty($value['friends']['picture']) ? url('uploads/user_img/'.$value['friends']['picture']) : url('/images/user-thumb.jpg');
-							 $data[] = '<li > 
-							<a href="javascript:void(0)" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
-								<span class="chat-thumb"style="background: url('.$user_picture.');"></span>
-								<span class="title">'.$name.'</span>
-							</a>
-							</li>';
-						}
+				
+					if( $Format == 'json' ){
+					   $user_picture = !empty($value['picture']) ?$value['picture'] :'user-thumb.jpg';
+					   $data[] = array( 'xmpp' => $value['xmpp_username'], 'name' => $name, 'image' => $user_picture );
+					} else {
+						$user_picture = !empty($value['picture']) ? url('uploads/user_img/'.$value['picture']) : url('/images/user-thumb.jpg');
+						 $data[] = '<li > 
+						<a href="javascript:void(0)" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$name.');">
+							<span class="chat-thumb"style="background: url('.$user_picture.');"></span>
+							<span class="title">'.$name.'</span>
+						</a>
+						</li>';
 					}
+					
 				}
 			}
 

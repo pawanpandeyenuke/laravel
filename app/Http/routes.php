@@ -264,6 +264,7 @@ Route::post('/api/get-privacy-setting','ApiController@getPrivacySettings');
 Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
 
 Route::post('api/report-user','ApiController@reportUser');
+Route::post('api/remove-user-image','ApiController@removeUserImage');
 
 
 
