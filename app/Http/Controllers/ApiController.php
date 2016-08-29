@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use Mail, Config;
 use App\Library\Converse;
-use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages;
+use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages, App\ReportUser;
 use App\Http\Controllers\Controller;
 use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments,App\ForumsDoctor, App\Setting;
 use Validator, Redirect, Request, Session, Hash, DB, File;
@@ -1791,7 +1791,7 @@ class ApiController extends Controller
 	            		throw new Exception("No user found");					
 	            	else {
 
-	            		$groupsDataCount = Group::where('owner_id', $input['owner_id'])->get();
+	            		$groupsDataCount = GroupMembers::where(['member_id' => $input['owner_id'],'status' => 'Joined'] )->get();
 
 	            		if($groupsDataCount->count() >= Config::get('constants.private_group_limit'))
 	            			throw new Exception("You have reached the limit of creating private groups.", 1);
@@ -2778,6 +2778,7 @@ class ApiController extends Controller
 
 	}
 
+
 	/*
 	 * Return output of the request.
 	 */
@@ -2791,6 +2792,7 @@ class ApiController extends Controller
 		));
 
 	}
+
 
 	public function mail($email = '', $message, $subject, $type,$userid) {
 
@@ -2827,6 +2829,7 @@ class ApiController extends Controller
 		return $this->output();
 	}
 
+
 	public function getDoctorCategories()
 	{
 		$this->data = ForumsDoctor::all();
@@ -2835,6 +2838,7 @@ class ApiController extends Controller
 		
 		return $this->output();
 	}
+
 
 	public function postForum()
 	{
@@ -2928,6 +2932,7 @@ class ApiController extends Controller
 		return $this->output();	
 	}
 
+
 	public function postForumReply()
 	{
 		try{
@@ -2973,6 +2978,7 @@ class ApiController extends Controller
 		return $this->output();		
 	}
 
+
 	public function editForumReply()
 	{
 		try{
@@ -3010,6 +3016,7 @@ class ApiController extends Controller
 
 		return $this->output();	
 	}
+
 
 	public function postForumComment()
 	{
@@ -3049,6 +3056,7 @@ class ApiController extends Controller
 
 		return $this->output();			
 	}
+
 
 	public function uploadChatImage()
 	{		
@@ -3115,6 +3123,7 @@ class ApiController extends Controller
 			   		->with('data',$data);
 	}
 
+
 	public function emailVerification()
 	{
 
@@ -3149,6 +3158,7 @@ class ApiController extends Controller
 		return $this->output();	
 
 	}
+
 
 	public function changePassword()
 	{
@@ -3251,4 +3261,55 @@ class ApiController extends Controller
 
 		return $this->output();	
 	}
+
+
+	public function reportUser()
+	{
+		try
+		{
+			$req = Request::all();
+
+			$validator = Validator::make($req, [
+					'user_id' => 'required|numeric|exists:users,id',
+					'user_jid' => 'required',
+					'blocked_user_id' => 'required|numeric|exists:users,id',
+					'blocked_user_jid' => 'required',
+					'message' => 'required',
+				]);
+			
+			if($validator->fails()) {
+				$this->message = $this->getError($validator);
+			}else{
+
+				$check_if_exists = ReportUser::where(['user_id' => $req['user_id'], 'blocked_user_id' => $req['blocked_user_id'], ])->first();
+
+				if( !$check_if_exists ){
+
+					$report_user = new ReportUser;
+					$report_user->user_id = $req['user_id'];
+					$report_user->user_jid = $req['user_jid'];
+					$report_user->blocked_user_id = $req['blocked_user_id'];
+					$report_user->blocked_user_jid = $req['blocked_user_jid'];
+					$report_user->reason = $req['reason'];
+					$report_user->message = $req['message'];
+					$report_user->save();
+
+					$this->message = 'Thanks for reporting! You will no longer receive messages from the blocked user.';
+
+				}else{
+					$this->message = 'You have already spammed this user.';
+
+				}
+				
+				$this->status = "success";
+			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+	}
+
+
 }
