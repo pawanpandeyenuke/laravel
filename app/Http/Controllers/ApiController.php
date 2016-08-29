@@ -1791,7 +1791,7 @@ class ApiController extends Controller
 	            		throw new Exception("No user found");					
 	            	else {
 
-	            		$groupsDataCount = Group::where('owner_id', $input['owner_id'])->get();
+	            		$groupsDataCount = GroupMembers::where(['member_id' => $input['owner_id'],'status' => 'Joined'] )->get();
 
 	            		if($groupsDataCount->count() >= Config::get('constants.private_group_limit'))
 	            			throw new Exception("You have reached the limit of creating private groups.", 1);
