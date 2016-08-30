@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Subscribe - ')
+@section('title', 'Subscribe')
 @section('content')
 <div class="default-page">
     <div class="container" style="margin-top:5%">

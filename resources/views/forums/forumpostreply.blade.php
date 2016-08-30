@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Forums - ')
+@section('title', 'Forums')
 <style type="text/css">
 	.boxsize{width:200px;}
 </style>

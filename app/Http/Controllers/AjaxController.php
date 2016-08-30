@@ -416,12 +416,15 @@ comments;
 		return $response;
 
  	}
-	/** get user profile image and name by user jid **/
+
+	/** 
+	** get user profile image and name by user jid 
+	**/
 	public function profileNameImage(){
 		$input = Input::all();
 		if( isset($input['user_jid']) && !empty($input['user_jid']) ){
 			$UserJid = $input['user_jid'];
-			$UserDetails = User::where('xmpp_username',$UserJid)->select('picture','first_name', 'last_name')->first();
+			$UserDetails = User::where('xmpp_username',$UserJid)->select('picture','first_name', 'last_name','id')->first();
 			if( $UserDetails ){
 				if( isset($UserDetails->picture) && !empty($UserDetails->picture) ){
 					$Image = $UserDetails->picture;
@@ -433,13 +436,16 @@ comments;
 				} else {
 					$Name = $input['user_jid'];
 				}
+				$UserId = $UserDetails->id;
 			} else {
 				$Image = 'user-thumb.jpg';
 				$Name = $input['user_jid'];
+				$UserId = 0;
 			}
-			echo json_encode(array( 'image'=>$Image, 'name' => $Name ));
+			echo json_encode(array( 'image'=>$Image, 'name' => $Name, 'user_id' => $UserId ));
 		}
 	}
+
 	public function searchfriend(){
 
 		$xmppusername = Input::get('xmpp_username');
@@ -1133,13 +1139,17 @@ public function sendImage(Request $request){
 			if( Input::get('format') ){	
 				$Format = Input::get('format');
 			}
-			$friend = Friend::with('friends')->with('user')
-					->where('user_id', '=', Auth::User()->id)
-					->where('status','Accepted')
-					->get()
- 					->toArray();
-          
-            $data=array();
+
+			$friend	= Friend::leftJoin('users', 'users.id', '=', 'friends.friend_id')->where('friends.user_id', '=', Auth::User()->id)->where('friends.status','Accepted');
+
+			if( $input ){
+				$friend	= $friend->where( function($query) use( $input ) {
+					        $query->where('users.first_name', 'like', "%".$input."%")->orWhere('users.last_name', 'like', "%".$input."%");
+					});
+			}
+
+			$friend	= $friend->get()->toArray();
+            $data = array();
 			$count= count( $friend );
 			$Status = 0;
 			$msg="Sorry, no such friend found.";
@@ -1151,26 +1161,24 @@ public function sendImage(Request $request){
 				$Status = 1;
 				foreach ($friend as $key => $value) {
 
-					$name=$value['friends']['first_name']." ".$value['friends']['last_name'];
-					$xmpp_username="'".$value['friends']['xmpp_username']."'";
-					$first_name="'".$value['friends']['first_name']."'";
-					
+					$name=$value['first_name']." ".$value['last_name'];
+					$xmpp_username="'".$value['xmpp_username']."'";
 					$msg="No friend found!";
 
-					if (stripos($name, $input) !== false) {
-						if( $Format == 'json' ){
-						   $user_picture = !empty($value['friends']['picture']) ?$value['friends']['picture'] :'user-thumb.jpg';
-						   $data[] = array( 'xmpp' => $value['friends']['xmpp_username'], 'name' => $name, 'image' => $user_picture );
-						} else {
-							$user_picture = !empty($value['friends']['picture']) ? url('uploads/user_img/'.$value['friends']['picture']) : url('/images/user-thumb.jpg');
-							 $data[] = '<li > 
-							<a href="javascript:void(0)" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
-								<span class="chat-thumb"style="background: url('.$user_picture.');"></span>
-								<span class="title">'.$name.'</span>
-							</a>
-							</li>';
-						}
+				
+					if( $Format == 'json' ){
+					   $user_picture = !empty($value['picture']) ?$value['picture'] :'user-thumb.jpg';
+					   $data[] = array( 'xmpp' => $value['xmpp_username'], 'name' => $name, 'image' => $user_picture, 'id' => $value['id'] );
+					} else {
+						$user_picture = !empty($value['picture']) ? url('uploads/user_img/'.$value['picture']) : url('/images/user-thumb.jpg');
+						 $data[] = '<li > 
+						<a href="javascript:void(0)" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$name.');">
+							<span class="chat-thumb"style="background: url('.$user_picture.');"></span>
+							<span class="title">'.$name.'</span>
+						</a>
+						</li>';
 					}
+					
 				}
 			}
 
@@ -1496,7 +1504,7 @@ public function sendImage(Request $request){
 				}
 
 				$converse  = new Converse;
-				$Message = json_encode( array( 'type' => 'room', 'groupname' => $GroupName, 'sender_jid' => $userJid, 'groupjid'=>$GroupDetail->group_jid, 'group_image' => $GroupDetail->picture, 'created_by'=>$name,'message' => webEncode('This invitation is for joining the '.$GroupName.' group.'), 'users' => $xmp) );
+				$Message = json_encode( array( 'type' => 'room', 'groupname' => $GroupName, 'sender_jid' => $userJid, 'groupjid'=>$GroupDetail->group_jid, 'group_image' => $GroupDetail->picture, 'created_by'=>$name,'message' => webEncode('Invitation to join "'.$GroupName.'" group.'), 'users' => $xmp) );
 				// $converse->addUserGroup( $GroupJid,$value->xmpp_userid );
 				$converse->broadcast(Auth::user()->xmpp_username, $user->xmpp_userid, $Message);
 			}

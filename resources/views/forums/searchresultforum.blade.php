@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Forums - ')
+@section('title', 'Forums')
 <?php
 	if($keyword == ""){
 		$breadcrum = rtrim($breadcrum, ' > ');

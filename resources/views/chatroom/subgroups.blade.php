@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Group Chat - ')
+@section('title', 'Group Chat')
 <?php 
 $groupnamestr = ucwords($p_group->title);
 unset($countries[0]);

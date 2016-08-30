@@ -70,12 +70,16 @@ class HomeController extends Controller
     public function sendpushtoios()
     {
         $data = Request::all();
-        if( isset($data['access_token']) && $data['access_token']=='rinku@xmpp' )
+
+$token=base64_decode($data['access_token']);
+        if( isset($data['access_token']) && $token=='rinku@xmpp' )
         {
-            $user = User::where(['xmpp_username'=> $data['to']])->first();
+             $to=explode('@',$data['to']);
+            $user = User::where(['xmpp_username'=> $to[0]])->first();
             if( $user && $user->device_type == 'IPHONE')
             {
-                $sender = User::where(['xmpp_username'=> $data['from']])->first();
+                  $from=explode('@',$data['from']);
+                $sender = User::where(['xmpp_username'=> $from[0]])->first();
                 iphonePushNotification(array(
                     'notification_type' => 'text',
                     'message' => $sender->first_name.' '.$sender->last_name.' has sent a message',
@@ -83,14 +87,21 @@ class HomeController extends Controller
                 ), array(
                     "isMediaMessage" => "0",
                     "type" => "text",
-                    "text" => $data['body'],
+                    "text" => base64_decode($data['body']),
                     "media" => null,
                     "senderid" => $sender->xmpp_username,
                     "first_name" => $sender->first_name,
                     "last_name" => $sender->last_name
                 ));
             }
-        }
+            else
+{
+return "Invalid User";
+}
+        }else
+         {
+                  return "Invalid Token";
+}
     }
 
     // Unsubscribe

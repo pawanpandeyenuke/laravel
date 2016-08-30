@@ -1791,7 +1791,7 @@ class ApiController extends Controller
 	            		throw new Exception("No user found");					
 	            	else {
 
-	            		$groupsDataCount = Group::where('owner_id', $input['owner_id'])->get();
+	            		$groupsDataCount = GroupMembers::where(['member_id' => $input['owner_id'],'status' => 'Joined'] )->get();
 
 	            		if($groupsDataCount->count() >= Config::get('constants.private_group_limit'))
 	            			throw new Exception("You have reached the limit of creating private groups.", 1);
@@ -3270,16 +3270,20 @@ class ApiController extends Controller
 			$req = Request::all();
 
 			$validator = Validator::make($req, [
-					'user_id' => 'required|numeric|exists:users,id',
-					'user_jid' => 'required',
-					'blocked_user_id' => 'required|numeric|exists:users,id',
-					'blocked_user_jid' => 'required',
+					'user_jid' => 'required|exists:users,xmpp_username',
+					'blocked_user_jid' => 'required|exists:users,xmpp_username',
 					'message' => 'required',
 				]);
 			
 			if($validator->fails()) {
 				$this->message = $this->getError($validator);
 			}else{
+
+				if( $req['user_jid'] === $req['blocked_user_jid'] )
+					throw new Exception("You cannot report about yourself.", 1);
+
+				$req['user_id'] = User::where('xmpp_username', $req['user_jid'])->value('id');
+				$req['blocked_user_id'] = User::where('xmpp_username', $req['blocked_user_jid'])->value('id');
 
 				$check_if_exists = ReportUser::where(['user_id' => $req['user_id'], 'blocked_user_id' => $req['blocked_user_id'], ])->first();
 
@@ -3303,6 +3307,31 @@ class ApiController extends Controller
 				
 				$this->status = "success";
 			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+	}
+
+
+	//Remove user image
+	public function removeUserImage()
+	{
+		try
+		{
+			$req = Request::all();
+			$converse = Converse::removeFile($req);
+
+			if( $converse == 1){
+	            $this->status = "Success";
+	            $this->message = "Image has been removed successfully.";
+			}else{
+	            $this->status = "error";
+	            $this->message = $converse;
+			}
+			// echo "<pre>";print_r($converse);die;
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();
