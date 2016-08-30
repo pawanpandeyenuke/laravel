@@ -2348,16 +2348,23 @@ class ApiController extends Controller
             		$status = \App\Friend::where('user_id',$val->id)
 							->where('friend_id', $input['user_id'])
 							->value('status');
-					if( !$status ) {
+					if( !$status ) 
+					{
 						$status = \App\Friend::where('friend_id',$val->id)
 							->where('user_id', $input['user_id'])
 							->value('status');
+						if( $status == 'Rejected') {
+							$status = null;
+						}
+						if( $status == 'Pending') {
+							$status = 'Received';
+						}
 					}
 					$status = $status ? $status : null;
 					$users['records'][$key]->fstatus = $status;
             	}
             }
-            
+
 			$this->status = 'success';
 			$this->data = $users['records'];
 			$total = $users['total'];
