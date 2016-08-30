@@ -32,14 +32,15 @@
 }
 
 #conversejs #minimized-chats{
-  top: 676px !important;
+  top: 665px !important;
   left: 3%;
 }
 #conversejs .minimized-chats-flyout .chat-head, #conversejs .minimized-chats-flyout .chat-head-chatroom {
-  font-size: 12px;
-  height: 27px !important;
-  padding: 0 4px !important;
-  width: 90px !important;
+   font-size: 12px;
+    height: 35px !important;
+    margin-top: 5px !important;
+    padding: 4px !important;
+    width: 135px !important;
 }
 #conversejs a.close-chatbox-button, #conversejs a.configure-chatroom-button, #conversejs a.toggle-chatbox-button
 {
@@ -49,7 +50,7 @@
 
 #conversejs .minimized-chats-flyout.flyout {
     float: left;
-    height: 40px !important;
+    height: 45px !important;
     overflow-y: auto !important;
     position: relative;
     top: 8px;
