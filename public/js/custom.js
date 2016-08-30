@@ -1253,11 +1253,13 @@ $('.btn-upload-icon').find(".badge").remove();
 				'type' : 'post',
 				'data' : {'gid':id,'gname':gname, 'members': newmembers},
 				'success' : function(data){
-					$('.pr-edit').prop('disabled', true);
-					current.hide();
-					$('.editgroupname').show();
-					$('button.edit-pr-img').hide();
-					window.location.reload();
+					if( typeof data.status != 'undefined'  && data.status == 1 ){
+						$('.pr-edit').prop('disabled', true);
+						current.hide();
+						$('.editgroupname').show();
+						$('button.edit-pr-img').hide();
+						window.location.reload();
+					}
 				}
 			});
 		}

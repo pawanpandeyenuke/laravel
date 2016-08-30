@@ -155,8 +155,7 @@
 { ?>
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <?php } ?>
-</body>
-</html>
+
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
 	
@@ -214,5 +213,17 @@
 
 </script>
 
+<!-- <script src="{{ url('js/idle-timer.min.js') }}"></script>
+<script>
+jQuery(function($){
+  $( document ).idleTimer( 60000 );
+  $( document ).on( "idle.idleTimer", function(event, elem, obj){
+    window.location.href = "/";
+  }); 
+})
+</script> -->
 {!! Session::forget('error') !!}
 {!! Session::forget('success') !!}
+
+</body>
+</html>
