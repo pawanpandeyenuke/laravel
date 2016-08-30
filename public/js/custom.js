@@ -1570,6 +1570,35 @@ $('.btn-upload-icon').find(".badge").remove();
 
 	});
 
+
+	$(document).on('click', '.removeimg', function(){ 
+		var current = $(this);
+		var userid = $(this).data('userid');
+		// alert(userid);
+		if(userid){
+			$.ajax({
+				'url' : '/ajax/remove-image',
+				'data' : { 'user_id' : userid },
+				'type' : 'post',
+				'success' : function(response){
+			        // alert('success');
+			        if(response == 1){
+			        	$('#remove-image-area').modal('hide');
+			        	location.reload();
+/*			        	$('h5').hide();
+				        var imageUrl = '/images/user-thumb.jpg';
+				        $('.profile-img').css('background-image', 'url(' + imageUrl + ')');
+				        $('.remove-profile').hide();
+				        $('.success-msg').show();
+				        $('#remove-image-area').delay( 900 ).modal('hide');*/
+					}
+				}
+			});
+		}
+
+	});
+
+
 });
 
 function loadImg()

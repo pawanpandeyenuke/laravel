@@ -364,10 +364,19 @@ class Converse
 		        if($user){
 		            if(!empty($user->picture)){
 		                $img_url = '/uploads/user_img/'.$user->picture;
+		                $img_url_original = '/uploads/user_img/original_'.$user->picture;
+
 		                $url = public_path($img_url); 
+		                $url_original = public_path($img_url_original); 
+		                
 		                if(file_exists($url)){
 		                    unlink($url);
 		                }
+
+		                if(file_exists($url_original)){
+		                    unlink($url_original);
+		                }
+
 		                $user->picture = NULL;
 		                $user->save();
 		            }

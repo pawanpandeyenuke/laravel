@@ -1397,6 +1397,13 @@ width:495px;
   border-bottom: 1px solid #ebebeb;
   position:relative;
 }
+.p-header-outer .remove-profile 
+{
+  bottom: -29px;
+  font-size: 12px;
+  left: 2px;
+  position: absolute;
+}
 .edit-profile{
   position: absolute;
   right: 10px;

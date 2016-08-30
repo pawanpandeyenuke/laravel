@@ -209,15 +209,15 @@ $GroupsJidList = $SingleChatList = array();
                                         </div>
                                         
                                         <div class="chat-user-list StyleScroll">
-                                        <?php //echo '<pre>';print_r($friendObj);die; ?>
                                         <ul id="userslist">
                                           @foreach($friendObj as $friendsList)
                                             <?php 
                                               $friendsListUser = $friendsList->friends;
+                                              // echo '<pre>';print_r($friendsListUser->xmpp_username);die; 
                                               $name = $friendsListUser->first_name.' '.$friendsListUser->last_name; 
                                             ?>
                                             <li > 
-                                              <a href="javascript:void(0)" title="" class="list" onclick="openChatbox(<?= $friendsListUser->xmpp_username ?>,<?= $friendsListUser->first_name ?>);">
+                                              <a href="javascript:void(0)" title="" class="list" onclick="openChatbox(<?= "'".$friendsListUser->xmpp_username."'" ?>,<?= "'".$friendsListUser->first_name."'" ?>);">
                                                 <span class="chat-thumb"style="background: url(<?= userImage($friendsListUser) ?>);"></span>
                                                 <span class="title"><?= $name ?></span>
                                               </a>

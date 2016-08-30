@@ -154,6 +154,9 @@ Route::post('/ajax/isactivemember','AjaxController@isMemberActive');
 Route::post('/ajax/profilenameimage','AjaxController@profileNameImage');
 
 Route::post('/ajax/joingroup','AjaxController@joinPrivateGroup');
+
+Route::post('/ajax/remove-image', 'AjaxController@removeImageWeb');
+
 /**
  * @Api Routes..
  *
