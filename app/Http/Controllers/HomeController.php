@@ -71,14 +71,14 @@ class HomeController extends Controller
     {
         $data = Request::all();
 
-$token=base64_decode($data['access_token']);
+        $token=base64_decode($data['access_token']);
         if( isset($data['access_token']) && $token=='rinku@xmpp' )
         {
-             $to=explode('@',$data['to']);
+            $to=explode('@',$data['to']);
             $user = User::where(['xmpp_username'=> $to[0]])->first();
             if( $user && $user->device_type == 'IPHONE')
             {
-                  $from=explode('@',$data['from']);
+                $from=explode('@',$data['from']);
                 $sender = User::where(['xmpp_username'=> $from[0]])->first();
                 iphonePushNotification(array(
                     'notification_type' => 'text',
@@ -93,15 +93,15 @@ $token=base64_decode($data['access_token']);
                     "first_name" => $sender->first_name,
                     "last_name" => $sender->last_name
                 ));
+            
+            } else {
+                return "Invalid User";
             }
-            else
-{
-return "Invalid User";
-}
-        }else
-         {
-                  return "Invalid Token";
-}
+
+        } else {
+            return "Invalid Token";
+        }
+        
     }
 
     // Unsubscribe

@@ -2371,4 +2371,22 @@ public function sendImage(Request $request){
 		return json_encode(array('status' => $Status));
 
 	}
+
+
+	public function removeImageWeb()
+	{
+		$req = Input::all();
+		$converse = Converse::removeFile($req);
+
+		$retData = ($converse == 1) ? 1 : 0;
+		echo $retData;
+/*		if( $converse == 1){
+	        echo "Image has been removed successfully.";
+		}else{
+			echo "Not removed i guess.";
+		}*/
+	}
+
+
+
 }
