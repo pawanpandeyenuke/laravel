@@ -2939,6 +2939,8 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
 .chat-header-small {
     padding: 10px 10px;
     border-bottom: 1px solid #ddd;
+    width:100%;
+    float: left;
 }
 .chat-user-list li a, .user-list-with-thumb li a{
 	padding: 15px 5px 15px 45px;
@@ -3067,7 +3069,7 @@ div#forumreply-edit-modal {
 	display: none;
 }
 .fp-master-header{
-	padding: 20px 0 5px;
+	padding: 5px 0 15px;
   border-bottom: 1px solid #ddd;
   margin: 0 0 10px;
 }
@@ -3231,7 +3233,7 @@ body {
 }
 .forum-srch-list .fs-breadcrumb{
 	margin: 0 -30px -1px;
-	padding: 10px 30px 5px;
+	padding: 10px 30px;
 }
 .alert-info {
     background-color: #A0F0E6;
@@ -3392,6 +3394,11 @@ header{
     margin-right: 10px;
     width: 25px;
 }
+
+.chat-header-small a
+{
+	float: right;
+}
 .broadcastbtn {
     padding: 0 10px;
 }
@@ -3455,7 +3462,7 @@ header{
 	margin-left: 60px !important;
 }
 .backbutton{
-	margin-top:-5px;
+	margin-top:-10px;
 }
 .forum-srch-list .forum-master-post p.forum_post{
 	max-height: 125px;
@@ -3723,6 +3730,7 @@ p.readmore {
 }
 .terms, .privacy {
 	font-size:15px;
+	line-height: 24px;
 }
 
 
@@ -3850,6 +3858,8 @@ body.modal-open {
 #gccollapseOne .panel-body .chat-user-list {
   height: 630px !important;
   min-height: 630px !important;
+  width:100%;
+  float: left;
 }
 
 #conversejs #minimized-chats .chat-head-message-count, #conversejs #minimized-chats .unread-message-count
