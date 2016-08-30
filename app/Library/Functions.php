@@ -8,13 +8,13 @@ use App\User, App\Setting, App\Friend;
 class Functions
 {
 	// Search users
-	public static function searchUsers($keyword, $authUserId = 0, $page = 1, $perPage = 10)
+	public static function searchUsers($keyword, $authUserId = 0, $page = 1, $perPage = 10, $select = 'users.*')
 	{
 	    $offset = ($page - 1) * $perPage;
 	    if( !$authUserId )
 	    {
 	        $model = DB::table('users')
-	            ->select('users.*')
+	            ->select($select)
 	            ->join('settings as s', 'users.id', '=', 's.user_id')
 	            ->where('s.setting_title', 'friend-request')
 	            ->where('s.setting_value', 'all')
@@ -35,11 +35,11 @@ class Functions
 	        $arr = $myFriends = Friend::where('user_id',$authUserId)->where('status', 'Accepted')->pluck('friend_id')->toArray();
 	        $arr[] = $authUserId;
 	        $fof = Friend::whereIn('user_id', $myFriends)->whereNotIn('friend_id', $arr)->where('status', 'Accepted')->pluck('friend_id')->toArray();
-	        
+	        $fof = array_unique(array_merge($myFriends, $fof));
 	        if( $mySetting == 'friends-of-friends' )
 	        {
 	            $model = DB::table('users')
-	                ->select('users.*')
+	                ->select($select)
 	                ->join('settings as s', 'users.id', '=', 's.user_id')
 	                ->where( function( $query ) use ( $keyword ) {
 	                    $expVal = explode(' ', $keyword);
@@ -69,7 +69,7 @@ class Functions
 	        elseif( $mySetting == 'nearby-app-user' )
 	        {
 	            $model = DB::table('users')
-	                ->select('users.*')
+	                ->select($select)
 	                ->join('settings as s', 'users.id', '=', 's.user_id')
 	                ->where( function( $query ) use ( $keyword ) {
 	                    $expVal = explode(' ', $keyword);
@@ -99,7 +99,7 @@ class Functions
 	        else
 	        {
 	            $model = DB::table('users')
-	                ->select('users.*')
+	                ->select($select)
 	                ->join('settings as s', 'users.id', '=', 's.user_id')
 	                ->where('users.id', '!=', $authUserId)
 	                ->where( function( $query ) use ( $keyword ) {
@@ -129,7 +129,7 @@ class Functions
 	    }
 	    
 	    $count = $model->count();
-	    $result = $model->skip($offset)->take($perPage)->get();
+	    $result = $model->skip($offset)->take($perPage)->orderBy('id','desc')->get();
 	    $pages = ceil($count/$perPage);
 	    
 	    return array(
