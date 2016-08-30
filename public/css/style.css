@@ -3155,7 +3155,7 @@ div#forumreply-edit-modal {
  width: 20px;
 }
 #conversejs .chatbox .box-flyout {
-	height: 490px !important;
+	height: 475px !important;
 	border: 0px !important;
 }
 div#chat-system {
@@ -3881,12 +3881,12 @@ body.modal-open {
 
 #conversejs #minimized-chats .chat-head-message-count, #conversejs #minimized-chats .unread-message-count
 {
-	right: 20px !important;
-	bottom: 14px !important;
-	font-size: 9px !important;
-  	font-weight: 700 !important;
-  	line-height: 5px !important;
-  	background: #fff none repeat scroll 0 0 !important;
+	background: #fff none repeat scroll 0 0 !important;
+    bottom: 23px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 9px !important;
+    right: 60px !important;
 }
 
 /** Safari Issues **/
