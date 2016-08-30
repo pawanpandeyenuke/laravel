@@ -94,8 +94,8 @@
 
 							<?php $user = Auth::User(); ?>
               
-							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('<?php echo userImage($user) ?>');"></span>
-							{{Auth::User()->first_name}}</a>
+							<a href="{{url("profile/".Auth::User()->id)}}"><span class="user-thumb" style="background: url('<?php echo userImage($user) ?>');"></span><span class="user-name" title="{{Auth::User()->first_name}}">
+							{{Auth::User()->first_name}}</span></a>
 						</li>
 						<li><div class="logout"><a class = "logout-link" href="{{ url('/logout') }}" title="">Logout</a></div></li>
 					</ul>

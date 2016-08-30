@@ -410,6 +410,14 @@ height: calc(100% - 2px) !important;
     margin-bottom: 8px;
 }
 
+span.user-name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100px;
+}
+
 
 
 }

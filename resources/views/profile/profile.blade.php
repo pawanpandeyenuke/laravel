@@ -53,7 +53,7 @@
 								@endif
 
 								<div class="pr-field">
-									<span style="font-size: xx-large;">
+									<span class="user-name" style="font-size: xx-large;">
 										{{ $user->first_name.' '.$user->last_name }}
 									</span>
 								</div>

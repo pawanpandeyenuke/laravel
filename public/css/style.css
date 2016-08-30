@@ -1378,6 +1378,23 @@ a:hover{
 .pr-field {
   margin: 0 0 3px;
 }
+span.user-name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 250px;
+}
+
+.user-info-top span.user-name
+{
+	display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 55px;
+}
+
 .pr-edit[disabled]{
   background: none;
   border-color: transparent;
@@ -3106,7 +3123,7 @@ div#forumreply-edit-modal {
   font-size: 10px;
 }
 .fp-master-header-right span{
-  margin: 4px 0 0 15px;
+  margin: 2px 0 0 15px;
 }
 .f-single-post .f-post-title .fp-meta{
   position: absolute;

@@ -38,25 +38,14 @@ class ContactImporter extends Controller
             if($requestemails){
 
                 $emailsarray = explode(',', $requestemails);
-            
-                foreach ($emailsarray as $key => $value) {
-
-                    $validator=null;
-                    $validator = Validator::make($emailsarray, [
-                        $key => 'required|email'
-                    ]); 
-                   $validator->each($key, ['required', 'email']);
-                   
-                   if($validator->fails()) {
-                        return redirect()->back()->withInput()->with('error', 'Please check email addresses entered and try again.');                 
-                    }
-                }
-                    
+                
+                $currentemail = Auth::User()->email;
                 $existingUser = array();
                 $nonExistingUser = array();
                 $unsubscribedUser = array();
-                foreach ($emailsarray as $value) {                
-                    if($value != Auth::User()->email){
+                foreach ($emailsarray as $value) {
+
+                    if($value && __isemail($value) && ($value != $currentemail)){
 
                         $userData = User::whereEmail($value)->select('email')->first();
 
@@ -94,7 +83,7 @@ class ContactImporter extends Controller
                 if($unsubscribedUser){
                     $list_unsubscribed_users = implode(', ', $unsubscribedUser);
                     $msg = $list_unsubscribed_users.' has already unsubscribed, so cannot be invited.';
-                    Session::put('error', $msg); 
+                    Session::put('error1', $msg); 
                 }
 
                 return redirect()->back();
@@ -213,7 +202,7 @@ class ContactImporter extends Controller
                 if($unsubscribedUser){
                     $list_unsubscribed_users = implode(', ', $unsubscribedUser);
                     $msg = $list_unsubscribed_users.' has already unsubscribed, so cannot be invited.';
-                    Session::put('error', $msg); 
+                    Session::put('error1', $msg); 
                 }
 
                 return redirect('invite-friends')->with('success', 'Invitation sent successfully!');

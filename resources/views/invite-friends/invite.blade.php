@@ -22,12 +22,17 @@
 				<div class="col-sm-6">
 					<div class="shadow-box page-center-data no-margin-top">
 						<div class="page-title no-left-padding">Invite Contacts</div>
-					@if (Session::has('error'))
-						<div class="alert alert-danger">{!! Session::get('error') !!}</div>
-					@endif
-					@if (Session::has('success'))
-						<div class="alert alert-success">{!! Session::get('success') !!}</div>
-					@endif
+						<div class="container">
+							@if (Session::has('error'))
+								<div class="alert alert-danger">{!! Session::get('error') !!}</div>
+							@endif
+							@if (Session::has('error1'))
+								<div class="alert alert-danger">{!! Session::get('error1') !!}</div>
+							@endif
+							@if (Session::has('success'))
+								<div class="alert alert-success">{!! Session::get('success') !!}</div>
+							@endif
+						</div>
 						<div class="row">
 
 
@@ -180,4 +185,5 @@
 		});
 	}
 </script>
+{{ Session::forget('error1') }}
 @endsection
