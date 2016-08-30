@@ -141,7 +141,13 @@ $GroupsJidList = $SingleChatList = array();
                                           if( isset($group_image) && !empty($group_image) ) { ?>
                                            <img src="{{$icon_url}}" alt="" class="img-icon">
                                           <?php } ?>
-                                         <b><?php echo ($exception == "private")?"":$groupname; ?></b>
+                                         
+                                         <b><?php echo ($exception == "private")?"":$groupname; ?>
+                                           <a href="#" title="Refresh">
+                                           <i class="fa fa-refresh"></i>
+                                           </a>
+                                         </b>
+
                                         </div>
                                         <div class="chat-user-list StyleScroll">
                                           <ul>
