@@ -416,12 +416,15 @@ comments;
 		return $response;
 
  	}
-	/** get user profile image and name by user jid **/
+
+	/** 
+	** get user profile image and name by user jid 
+	**/
 	public function profileNameImage(){
 		$input = Input::all();
 		if( isset($input['user_jid']) && !empty($input['user_jid']) ){
 			$UserJid = $input['user_jid'];
-			$UserDetails = User::where('xmpp_username',$UserJid)->select('picture','first_name', 'last_name')->first();
+			$UserDetails = User::where('xmpp_username',$UserJid)->select('picture','first_name', 'last_name','id')->first();
 			if( $UserDetails ){
 				if( isset($UserDetails->picture) && !empty($UserDetails->picture) ){
 					$Image = $UserDetails->picture;
@@ -433,13 +436,16 @@ comments;
 				} else {
 					$Name = $input['user_jid'];
 				}
+				$UserId = $UserDetails->id;
 			} else {
 				$Image = 'user-thumb.jpg';
 				$Name = $input['user_jid'];
+				$UserId = 0;
 			}
-			echo json_encode(array( 'image'=>$Image, 'name' => $Name ));
+			echo json_encode(array( 'image'=>$Image, 'name' => $Name, 'user_id' => $UserId ));
 		}
 	}
+
 	public function searchfriend(){
 
 		$xmppusername = Input::get('xmpp_username');
@@ -1162,7 +1168,7 @@ public function sendImage(Request $request){
 				
 					if( $Format == 'json' ){
 					   $user_picture = !empty($value['picture']) ?$value['picture'] :'user-thumb.jpg';
-					   $data[] = array( 'xmpp' => $value['xmpp_username'], 'name' => $name, 'image' => $user_picture );
+					   $data[] = array( 'xmpp' => $value['xmpp_username'], 'name' => $name, 'image' => $user_picture, 'id' => $value['id'] );
 					} else {
 						$user_picture = !empty($value['picture']) ? url('uploads/user_img/'.$value['picture']) : url('/images/user-thumb.jpg');
 						 $data[] = '<li > 

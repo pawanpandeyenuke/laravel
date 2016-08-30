@@ -153,10 +153,11 @@ $GroupsJidList = $SingleChatList = array();
                                               <li >
                                                   <div class='info' data-id="{{$data['user']['id']}}" style="position:relative;" >
                                                     <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif  data-id="{{$data['user']['id']}}" >
-                                                        <span style="background: url('{{'/uploads/user_img/'.$user_picture}}');" class="chat-thumb"></span>
-                                                        <span class="title">{{ $data['user']['first_name'] }}</span>           
+                                                        <span style="background: url('{{'/uploads/user_img/'.$user_picture}}');" class="chat-thumb userpic-<?php echo $data['user']['xmpp_username']; ?>"></span>
+                                                        <span class="title usertitle-<?php echo $data['user']['xmpp_username']; ?>">{{ $data['user']['first_name'] }}</span>           
                                                     <?php $SingleChatList['name_'.$data['user']['xmpp_username']] = $data['user']['first_name'].' '.$data['user']['last_name'];
-                                                    		$SingleChatList['img_'.$data['user']['xmpp_username']] = $user_picture;
+                                                    	$SingleChatList['img_'.$data['user']['xmpp_username']] = $user_picture;
+                                                      $SingleChatList['user_'.$data['user']['xmpp_username']] = $data['user']['id'];
                                                     ?>
                                                     </a>
                                                      @if($data['user']['id'] != Auth::User()->id)
@@ -215,11 +216,18 @@ $GroupsJidList = $SingleChatList = array();
                                               $friendsListUser = $friendsList->friends;
                                               // echo '<pre>';print_r($friendsListUser->xmpp_username);die; 
                                               $name = $friendsListUser->first_name.' '.$friendsListUser->last_name; 
+                                              /** Friend List Data add in Variable **/
+                                              $SingleChatList['name_'.$friendsListUser->xmpp_username] = $name;
+
+                                              $SingleChatList['user_'.$friendsListUser->xmpp_username] = $friendsListUser->id;
+
+                                              $SingleChatList['img_'.$friendsListUser->xmpp_username] = !empty($friendsListUser->picture) ? $friendsListUser->picture : 'user-thumb.jpg';
+                                                 
                                             ?>
                                             <li > 
                                               <a href="javascript:void(0)" title="" class="list" onclick="openChatbox(<?= "'".$friendsListUser->xmpp_username."'" ?>,<?= "'".$friendsListUser->first_name."'" ?>);">
-                                                <span class="chat-thumb"style="background: url(<?= userImage($friendsListUser) ?>);"></span>
-                                                <span class="title"><?= $name ?></span>
+                                                <span class="chat-thumb userpic-<?php echo $friendsListUser->xmpp_username; ?>" style="background: url(<?= userImage($friendsListUser) ?>);"></span>
+                                                <span class="title usertitle-<?php echo $friendsListUser->xmpp_username; ?>"><?= $name ?></span>
                                               </a>
                                             </li>
                                           @endforeach
@@ -252,10 +260,10 @@ $GroupsJidList = $SingleChatList = array();
 													 
 													<div class="pvt-room-list" style="position:relative;" >
 														<a href="<?php echo url("private-group-detail/".$data['id']); ?>" >
-															<span class="chat-thumb" style="background: url('<?= $group_picture ?>');"></span>
-															<span class="title" title="{{$data['title']}}"><?php echo truncatePrivateGroupName($data['title']) ?></span>
+															<span class="chat-thumb grouppic-<?php echo $data['group_jid']; ?>" style="background: url('<?= $group_picture ?>');"></span>
+															<span class="title grouptitle-<?php echo $data['group_jid']; ?>" title="{{$data['title']}}"><?php echo truncatePrivateGroupName($data['title']) ?></span>
 														</a>
-														<button id="<?= $data['group_jid'] ?>" data-groupimage="<?= $group_picture ?>" onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>','<?= $group_picture ?>');" class="time">Chat</button>
+														<button id="<?= $data['group_jid'] ?>" data-groupimage="<?= $group_picture ?>" onclick="return openChatGroup('<?php echo $data['group_jid']; ?>', '<?php echo $data['title']; ?>','<?= $group_picture ?>');" class="groupdatapic-<?php echo $data['group_jid']; ?> time">Chat</button>
 													 </div>
 												 </li>
 											@endforeach
@@ -469,9 +477,9 @@ $GroupsJidList = $SingleChatList = array();
 									GroupName[jidStr] = data.title;
 								}	
 							} else {
-								chatbox.close();
+								closePublic( '' );
 								groupChatRefresh( '' );
-                				return;
+                return;
 							}
 						}
 					});
@@ -559,8 +567,8 @@ $GroupsJidList = $SingleChatList = array();
                       } else {
                         profiletitles['name_'+v.xmpp] = v.xmpp;
                       }
-
-                      friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\'/uploads/user_img/'+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
+                      profiletitles['user_'+v.xmpp] = v.id;
+                      friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb userpic-'+v.xmpp+'" style="background: url(\'/uploads/user_img/'+v.image+'\');"></span><span class="title usertitle-'+v.xmpp+'">'+v.name+'</span></a></li>';
 
                     });
                   }
@@ -596,7 +604,9 @@ $GroupsJidList = $SingleChatList = array();
                               profiletitles['name_'+v.xmpp] = v.xmpp;
                             }
 
-                            friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb"style="background: url(\'/uploads/user_img/'+v.image+'\');"></span><span class="title">'+v.name+'</span></a></li>';
+                            profiletitles['user_'+v.xmpp] = v.id;
+
+                            friendList +='<li ><a href="javascript:void(0)" title="'+v.name+'" class="list" onclick="openChatbox(\''+v.xmpp+'\',\''+v.name+'\');"><span class="chat-thumb userpic-'+v.xmpp+'"style="background: url(\'/uploads/user_img/'+v.image+'\');"></span><span class="title usertitle-'+v.xmpp+'">'+v.name+'</span></a></li>';
 
                           });
                         }
@@ -792,6 +802,7 @@ function openFirstChat( grpjid ){
 	NewGroup.minimize();
 	OpenLastMinChat();
 }
+
 function groupChatRefresh( grpjid ){
 	$.ajax({
 		'url' : "/ajax/getchatgroup",
@@ -804,11 +815,12 @@ function groupChatRefresh( grpjid ){
 			$.each( data.data , function( i, v){
 				GroupName[v.group_jid] = v.title;
 				var GroupImage = ((v.picture != '' ) ? v.picture : defaultImage);
+
 				ChatHtml += '<li><div style="position:relative;" class="pvt-room-list">';
 					ChatHtml += '<a href="/private-group-detail/'+v.id+'">';
-					ChatHtml += '<span style="background: url(\''+GroupImage+'\');" class="chat-thumb"></span>';
-					ChatHtml += '<span class="title">'+v.title+'</span></a>';
-					ChatHtml += '<button id="'+v.group_jid+'" data-groupimage="'+GroupImage+'" class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\', \''+GroupImage+'\' );">Chat</button></div></li>';
+					ChatHtml += '<span style="background: url(\''+GroupImage+'\');" class="chat-thumb groupdatapic-'+v.group_jid+'"></span>';
+					ChatHtml += '<span class="title grouptitle-'+v.group_jid+'">'+v.title+'</span></a>';
+					ChatHtml += '<button id="'+v.group_jid+' groupdatapic-'+v.group_jid+'" data-groupimage="'+GroupImage+'" class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\', \''+GroupImage+'\' );">Chat</button></div></li>';
 			});
 			$('#gccollapseThree').find( '.chat-user-list' ).html( '<ul>'+ChatHtml+'</ul>' );
 		}
