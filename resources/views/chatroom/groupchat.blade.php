@@ -419,7 +419,7 @@ $GroupsJidList = $SingleChatList = array();
                   } else {
                     profiletitles['name_'+jidStr] = jidStr;
                   }
-                  profiletitles['user_'+v.xmpp] = data.id;
+                  profiletitles['user_'+v.xmpp] = data.user_id;
                 }
               });
             }
