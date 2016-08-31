@@ -157,6 +157,7 @@ Route::post('/ajax/joingroup','AjaxController@joinPrivateGroup');
 
 Route::post('/ajax/remove-image', 'AjaxController@removeImageWeb');
 
+Route::post('/ajax/default-group-user', 'AjaxController@getDefaultGroupUser');
 /**
  * @Api Routes..
  *
