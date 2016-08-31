@@ -376,9 +376,17 @@ class Converse
 		                if(file_exists($url_original)){
 		                    unlink($url_original);
 		                }
-
+		               
 		                $user->picture = NULL;
 		                $user->save();
+
+		                /** Set Default Image **/
+		                $path = public_path('uploads/user_img/user-thumb.jpg');
+
+						$ImageData = file_get_contents($path);
+						$ImageType = pathinfo($path, PATHINFO_EXTENSION);
+						$ImageData = base64_encode($ImageData);
+						Converse::setVcard($user->xmpp_username, $ImageData, $ImageType);
 		            }
 		        }
 		        return true;
