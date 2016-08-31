@@ -2673,7 +2673,7 @@ textarea{
     height: 0;
     border-top: 0px solid transparent;
     border-bottom: 10px solid transparent;
-    border-left: 10px solid #f1f1f1;
+    border-left: 10px solid #d0e6ff;
     left: 100%;
     top: 5px;
 }
@@ -2687,6 +2687,9 @@ textarea{
 	border-right:10px solid #f1f1f1;
     right: 100%;
     top: 5px;
+}
+#chat-system .chat-msg-me .chat-msg-content{
+	background: #d0e6ff !important;
 }
 .page-loading{
   position: fixed;
