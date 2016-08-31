@@ -28,12 +28,11 @@
 		</div>
 	</div>
 	<div class="post-data">
-	<?php $argumentsMessage = nl2br($postdata->message); ?>
+		<?php $argumentsMessage = nl2br($postdata->message); ?>
 		
-
+		@if( $argumentsMessage )
 			<p> <?= $argumentsMessage ?></p>
-
-
+		@endif
 
 		@if(!empty($postdata->image))
 			<div class="post-img-cont">

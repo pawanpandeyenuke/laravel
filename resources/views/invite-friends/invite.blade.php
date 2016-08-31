@@ -105,7 +105,9 @@
 	    response_type: "token"
 	});
 
-		$("#invite_form").validate({ 
+jQuery( document ).ready(function($) {
+	
+	$("#invite_form").validate({ 
         errorElement: 'span',
         errorClass: 'help-inline',
         rules: {
@@ -118,57 +120,54 @@
         }
     });
 
-	jQuery( document ).ready(function() {
-		//live.com api
-		// alert('import');
-		jQuery('#import').click(function(e) {
-		    e.preventDefault();
-		    WL.login({
-		        scope: ["wl.basic", "wl.contacts_emails"]
-		    }).then(function (response) 
-		    {
-				WL.api({
-		            path: "me/contacts",
-		            method: "GET"
-		        }).then(
-		            function (response) {
+	jQuery('#import').click(function(e) {
+	    e.preventDefault();
+	    WL.login({
+	        scope: ["wl.basic", "wl.contacts_emails"]
+	    }).then(function (response) 
+	    {
+			WL.api({
+	            path: "me/contacts",
+	            method: "GET"
+	        }).then(
+	            function (response) {
 
-	                    //your response data with contacts 
-		            	
-		            	var people = response.data, emailsObj = [];
+                    //your response data with contacts 
+	            	
+	            	var people = response.data, emailsObj = [];
 
-		            	$.each(people, function(index, value){
-		            		emailsObj.push(value.emails.preferred);		            		
-		            	});
+	            	$.each(people, function(index, value){
+	            		emailsObj.push(value.emails.preferred);		            		
+	            	});
 
-		            	if(emailsObj.length > 0){
-		            		// alert('have something');
-		            		$.ajax({
-		            			'url': 'ajax/send-hotmail-invitation',
-		            			'type': 'post',
-		            			'data': {'emails': emailsObj},
-		            			'success': function(response){
-		            				if(response == '')
-		            					alert('An invitation is sent to all your contacts!');
-		            				else
-		            					alert(response);
-		            			}
-		            		});
-		            	}
-		            	console.log(emailsObj);
-		            },
-		            function (responseFailed) {
-		            	//console.log(responseFailed);
-		            }
-		        );		        
-		    },
-		    function (responseFailed) 		    {
-		        //console.log("Error signing in: " + responseFailed.error_description);
-		    });
-		});
+	            	if(emailsObj.length > 0){
+	            		// alert('have something');
+	            		$.ajax({
+	            			'url': 'ajax/send-hotmail-invitation',
+	            			'type': 'post',
+	            			'data': {'emails': emailsObj},
+	            			'success': function(response){
+	            				if(response == '')
+	            					alert('An invitation is sent to all your contacts!');
+	            				else
+	            					alert(response);
+	            			}
+	            		});
+	            	}
+	            	console.log(emailsObj);
+	            },
+	            function (responseFailed) {
+	            	
+	            }
+	        );		        
+	    },
+	    function (responseFailed) 		    {
+	        //console.log("Error signing in: " + responseFailed.error_description);
+	    });
 	});
+});
 </script>
- 
+
 <script>
 	FB.init({
 		appId:'<?= Config::get('constants.appId') ?>',
@@ -181,7 +180,7 @@
 	{
 		FB.ui({
 			method: 'apprequests',
-			message: 'Welcome to Friendzsquare',
+			message: 'Welcome to FriendzSquare',
 		});
 	}
 </script>

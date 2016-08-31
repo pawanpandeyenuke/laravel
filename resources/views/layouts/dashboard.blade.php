@@ -20,35 +20,7 @@
 
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 <script type="text/javascript" src="{{url('/js/readmore.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
-<script src="{{url('/js/jquery.validate.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/jquery.form.js')}}"></script>
-<script type="text/javascript" src="{{url('/fancybox/jquery.fancybox.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/fileinput.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/custom.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap-filestyle.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/bootstrap-datepicker.min.js')}}"></script>
-<script src="{{url('/c-lib/lib/js/emojione.js')}}"></script>
-<script src="{{url('/js/select2.min.js')}}"></script>
-<!--Emoji libraries-->
-<script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>
-<script src="{{url('/lib/js/tether.min.js')}}"></script>
-<script src="{{url('/lib/js/config.js')}}"></script>
-<script src="{{url('/lib/js/util.js')}}"></script>
-<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
-<script src="{{url('/lib/js/emoji-picker.js')}}"></script>
-<script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-77777490-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
+<script type="text/javascript" src="{{url('js/jquery.validate.js')}}"></script>
 </head>
 @include('panels.loginpopup')
 @include('panels.deletebox')
@@ -144,8 +116,7 @@
       </div>
     </div>
    </form>
-                           <!-- Suggestion POPUP END-->
-</header><!--/header-->
+</header>
 	
 @yield('content')
 
@@ -156,61 +127,80 @@
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <?php } ?>
 
+<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/jquery.form.js')}}"></script>
+<script type="text/javascript" src="{{url('/fancybox/jquery.fancybox.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/fileinput.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/bootstrap-filestyle.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/bootstrap-datepicker.min.js')}}"></script>
+<script src="{{url('/c-lib/lib/js/emojione.js')}}"></script>
+<script src="{{url('/js/select2.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/custom.js')}}"></script>
+
+<!--Emoji libraries-->
+<script src="{{url('/lib/js/nanoscroller.min.js')}}"></script>
+<script src="{{url('/lib/js/tether.min.js')}}"></script>
+<script src="{{url('/lib/js/config.js')}}"></script>
+<script src="{{url('/lib/js/util.js')}}"></script>
+<script src="{{url('/lib/js/jquery.emojiarea.js')}}"></script>
+<script src="{{url('/lib/js/emoji-picker.js')}}"></script>
+<script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
+
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
-	
-    if(window.location.pathname == "/" || window.location.pathname == "/register"){
-        $('.login-footer').hide();
-    }else{
-        $('.login-footer').show();
+if(window.location.pathname == "/" || window.location.pathname == "/register"){
+    $('.login-footer').hide();
+}else{
+    $('.login-footer').show();
+}
+
+jQuery(function($){
+  $( "#search-forum-dashboard" ).submit(function( event ) {
+    var searchkey = $('.forum-keyword-app').val();
+    if(searchkey == ''){
+      $('.forum-keyword-app').attr('placeholder', 'Enter Keyword').focus();
+      event.preventDefault();
     }
+  });
 
-    $( "#search-forum-dashboard" ).submit(function( event ) {
-      var searchkey = $('.forum-keyword-app').val();
-      if(searchkey == ''){
-        $('.forum-keyword-app').attr('placeholder', 'Enter Keyword').focus();
-        event.preventDefault();
+  $("#suggestionform1").validate({ 
+      errorElement: 'span',
+      errorClass: 'help-inline',
+      rules: {
+          message_text: { required: true },
+          email: {email: true}
+      },
+      messages:{
+          message_text:{
+              required: "Please write something to send your suggestion."
+          },
+          email:{
+              email: "Please check your email format."
+          }
       }
-    });
+  });
 
-    $("#suggestionform1").validate({ 
-        errorElement: 'span',
-        errorClass: 'help-inline',
-        rules: {
-            message_text: { required: true },
-            email: {email: true}
-        },
-        messages:{
-            message_text:{
-                required: "Please write something to send your suggestion."
-            },
-            email:{
-                email: "Please check your email format."
-            }
-        }
-    });
-
-	$("#suggestionform1").ajaxForm(function(response) {
-      if(response == "success")
-      {
-        $('.modal-title').hide();
-        $('.modal-footer').hide();
-        $('.successmsg').toggle();  
-      }
-    });
-
-    $('.modalshow').click(function(){
-      $('.modal-title').show();
-      $('.modal-footer').show();
-      $('.successmsg').toggle();
-      $('.message_text').val('');
-      $('.useremail').val('');
-    });
-
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+  $("#suggestionform1").ajaxForm(function(response) {
+    if(response == "success")
+    {
+      $('.modal-title').hide();
+      $('.modal-footer').hide();
+      $('.successmsg').toggle();  
     }
+  });
 
+  $('.modalshow').click(function(){
+    $('.modal-title').show();
+    $('.modal-footer').show();
+    $('.successmsg').toggle();
+    $('.message_text').val('');
+    $('.useremail').val('');
+  });
+});
+
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
 </script>
 
 <!-- <script src="{{ url('js/idle-timer.min.js') }}"></script>
@@ -222,8 +212,18 @@ jQuery(function($){
   }); 
 })
 </script> -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77777490-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
 {!! Session::forget('error') !!}
 {!! Session::forget('success') !!}
-
 </body>
 </html>

@@ -11,30 +11,15 @@
 <link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/style.css')}}" rel="stylesheet">
 <link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
-
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>	
-<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
-<script type="text/javascript" src="{{url('/js/jquery.form.js')}}"></script>
-<script src="{{url('/js/jquery.validate.js')}}"></script>
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-77777490-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
+<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 </head>
 <body>
 @include('panels.loginpopup')
-	<header>
+<header>
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-2">
-				<a href="{{url('/')}}" title="" class="logo"><img src="{{url('images/logo.png')}}" alt="Friendz Square"></a>
+				<a href="{{url('/')}}" class="logo"><img src="{{url('images/logo.png')}}" alt="FriendzSquare"></a>
 			</div>
 			<div class="col-sm-6 col-xs-12">
 				<div class="top-search-cont">
@@ -68,7 +53,7 @@
 				</div>
 					<div class="log_out"><div id="google_translate_element" name="Select Language"></div></div>
 
-							  <form id="suggestionform" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" >
+							<form id="suggestionform" class="form-horizontal" role="form" method="post" action="{{url('/contactus')}}" >
                             <div class="modal fade send-msg-popup" id="myModal" tabindex="-1" role="dialog" aria-labelledby="sendMsgLabel">
                            
                               <div class="modal-dialog modal-sm" role="document">
@@ -106,6 +91,10 @@
 </header>
 		
 @yield('content')
+
+<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{url('/js/jquery.form.js')}}"></script>
+<script src="{{url('/js/jquery.validate.js')}}"></script>
 
 {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
@@ -209,6 +198,17 @@ jQuery(function($){
 function googleTranslateElementInit() {
   	new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
 }			
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-77777490-1', 'auto');
+  ga('send', 'pageview');
+
 </script>
 
 {!! Session::forget('error') !!}

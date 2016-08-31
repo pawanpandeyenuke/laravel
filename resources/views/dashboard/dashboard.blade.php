@@ -150,7 +150,10 @@
 								</div><!--/post header-->
 								<div class="post-data">
 									<?php $argumentsMessage = nl2br($data['message']); ?>
-									<p><?= $argumentsMessage ?></p>
+
+									@if( $argumentsMessage )
+										<p><?= $argumentsMessage ?></p>
+									@endif
 
 									@if($data['image'])
 										<div class="post-img-cont">

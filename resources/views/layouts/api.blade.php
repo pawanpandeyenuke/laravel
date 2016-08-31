@@ -1,38 +1,37 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<link rel="shortcut icon" href="{{ url('images/favicon.png') }}" type="image/x-icon" />
-		<title>FS - @yield('title')</title>
-		<link href="{{ url('forums-data/css/bootstrap.css') }}" rel="stylesheet">
-		<link href="{{ url('forums-data/css/style.css?v=1.0') }}" rel="stylesheet">
-		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-		<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
-		<style type="text/css">
-			.btn-reply {
-			    text-align: center !important;
-			}
-			.loading-btn{
-				color: #000;
-				background: #92e7dc;
-				border-color: #92e7dc;
-			}
-		</style>
-	</head>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="{{ url('images/favicon.png') }}" type="image/x-icon" />
+<title>@yield('title', 'FriendzSquare')</title>
+<link href="{{ url('forums-data/css/bootstrap.css') }}" rel="stylesheet">
+<link href="{{ url('forums-data/css/style.css?v=1.0') }}" rel="stylesheet">
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<style type="text/css">
+	.btn-reply {
+	    text-align: center !important;
+	}
+	.loading-btn{
+		color: #000;
+		background: #92e7dc;
+		border-color: #92e7dc;
+	}
+</style>
+</head>
+<body>
+		
+<div class = "text-center" id="google_translate_element"></div>
+<div class="modal fade" id="forum-confirm-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
 
-	<body>
-		
-		<div class = "text-center" id="google_translate_element"></div>
-		<div class="modal fade" id="forum-confirm-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		</div>
-		
-		@yield('content')
+@yield('content')
 
 <script type="text/javascript" src="{{ url('forums-data/js/jquery-1.11.3.min.js') }}"></script>
 <script type="text/javascript" src="{{ url('forums-data/js/bootstrap.min.js') }}"></script>
@@ -40,8 +39,7 @@
 <script type="text/javascript" src="{{url('/js/readmore.min.js')}}"></script>
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-
+jQuery(function($){
 	$('.readmore').readmore({
 	  	speed: 300,
 	  	collapsedHeight: 80,
@@ -148,13 +146,9 @@ $(document).ready(function(){
 		});
 	});
 
-	$(document).on('click', '.api-likeforumpost', function(){		
-		//var _token = $('#postform input[name=_token]').val();
+	$(document).on('click', '.api-likeforumpost', function(){
 		var forumPostID = $(this).data('forumpostid');
 		var userid = $(this).data('userid');
-		// var user_id = $('#user_id').val();
-		// var attrId = $(this).attr('id');	
-		// alert(attrId);
 		var current = $(this);		
 		$.ajax({			
 			'url' : '/ajax/likeforumpost',
@@ -184,13 +178,7 @@ $(document).ready(function(){
 			'type' : 'post',
 			'success' : function(response){
 				var newresponse = jQuery.parseJSON(response);
-					current.parent().find('.replies-like-count').html(newresponse.likecount);
-					// $('#checkbox_forumreply_'+forumreplyid).parents('.p-likes').find('.forumreplylike').html(newresponse.likecount);
-					// current.parents('.like-cont').find('.forumreplylike').html(newresponse.likecount);
-					// if(newresponse.check == "unchecked")
-					// 	$('#checkbox_forumreply_'+forumreplyid).prop('checked',false);
-					// else
-					// 	$('#checkbox_forumreply_'+forumreplyid).prop('checked',true);
+				current.parent().find('.replies-like-count').html(newresponse.likecount);
 			}			
 		});	
 	});
@@ -226,27 +214,7 @@ $(document).ready(function(){
 			}
 		});
 	});
-
-	var moretext = "More";
-	var lesstext = "Less";
-	$(document).on('click','.morelinkk',function(){
-		if($('.morelink').attr('href') == "javascript:void(0);")
-		{
-	      	if($(this).hasClass("less")) {
-	          	$(this).removeClass("less");
-	          	$(this).html(moretext);
-	      	} else {
-	          	$(this).addClass("less");
-	          	$(this).html(lesstext);
-	      	} 
-	      	$(this).parent().prev().toggle();
-	      	$(this).prev().toggle();
-	      	return false;
-	    } else {
-			window.location = $('.morelink').attr("href");
-		}
-	});
-
+	
 	function loadOrgionalImogi()
 	{
 		$(".single-post .post-data p, .single-post .comment-text, .f-single-post p, .forum-srch-list p, .f-single-post .more .morecontent span").each(function() {

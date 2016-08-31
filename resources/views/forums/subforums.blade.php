@@ -1,17 +1,15 @@
 @extends('layouts.dashboard')
 @section('title', 'Forums')
 <?php
-unset($countries[0]);
-if($mainforum->title == "Doctor")
+if($mainforum->title == "Doctor") {
 	$diseases = \App\ForumsDoctor::pluck('title')->toArray();
-
-
- ?>
-
+}
+?>
 
 <style type="text/css">
-	.boxsize{width:200px;}
+.boxsize{width:200px;}
 </style>
+
 @section('content')
 	<div class="page-data dashboard-body">
 	   <div class="container">
@@ -214,8 +212,8 @@ if($mainforum->title == "Doctor")
         </div>
     </div><!--/pagedata-->
 
- <script type="text/javascript">
-
+<script type="text/javascript">
+jQuery(function($){
     $("#forum_select_form").validate({ 
         errorElement: 'span',
         errorClass: 'help-inline',
@@ -320,7 +318,7 @@ if($mainforum->title == "Doctor")
 			$('#subcity-forum').html('<option value="">Select City</option>');
 		}
 	});
+});
 </script>
-
-@endsection
 {!! Session::forget('error') !!}
+@endsection

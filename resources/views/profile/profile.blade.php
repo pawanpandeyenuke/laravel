@@ -46,10 +46,13 @@
 
 								<div class="profile-img" style="background: url('<?php echo userImage($user) ?>');">
 								</div><!--Profile-img-->
-								@if(!empty($user->picture))
-									<div class="remove-profile">
-									<p><a href="#" data-toggle="modal" class="imgremove-btn" data-target="#remove-image-area">Remove Image</a></p>
-									</div>
+
+								@if( $userId == $user->id )
+									@if(!empty($user->picture))
+										<div class="remove-profile">
+										<p><a href="#" data-toggle="modal" class="imgremove-btn" data-target="#remove-image-area">Remove Image</a></p>
+										</div>
+									@endif
 								@endif
 
 								<div class="pr-field">
@@ -59,7 +62,30 @@
 								</div>
 
 								<div class="pr-field">
-							 		<span style="font-size: large;">{{$user->city}}</span>
+									<div class="col-md-12 col-sm-12 col-xs-12 lPadding">
+										<div class="info-list">
+											<ul class="list-inline">
+												<li>
+													<i class="flaticon-web-1"></i>
+													<span style="font-weight:500">{{ !empty($user->country)?$user->country:'NA'}}</span>
+												</li>
+
+												<li>
+													<i class="flaticon-gps"></i>
+													<span style="font-weight:500">{{!empty($user->state)?$user->state:'NA'}}</span>
+												</li>
+
+												<li>
+													<i class="flaticon-city"></i>
+													<span style="font-weight:500">{{!empty($user->city)?$user->city:'NA'}}</span>
+												</li>
+
+											</ul>
+										</div>
+									</div>
+
+
+							 		
 
 										@if( $userId != $user->id )
 										<?php
@@ -129,7 +155,7 @@
 									<div class="profile-data-table">
 										<div class="table-responsive">
 											<table class="table">
-												<tr>
+												<!-- <tr>
 													<td><div class="p-data-title"></div></td>
 													<td>
 														<span></span>
@@ -152,7 +178,7 @@
 													<td>
 														<span style="font-weight:500">{{!empty($user->city)?$user->city:'NA'}}</span>
 													</td>
-												</tr>
+												</tr> -->
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-technology"></i>Mobile Contact</div></td>
 													<td>
@@ -167,7 +193,11 @@
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-calendar"></i>Date of Birth <span style="">[it's confidential] </span> </div></td>
 													<td>
-														<span style="font-weight:500">{{!empty($user->birthday)?date('d F Y',strtotime($user->birthday)):'NA'}}</span>
+														@if( $userId == $user->id )
+															<span style="font-weight:500">{{!empty($user->birthday)?date('d F Y',strtotime($user->birthday)):'NA'}}</span>
+														@else
+															<span style="font-weight:500">******</span>
+														@endif
 													</td>
 												</tr>
 												<tr>
@@ -232,7 +262,7 @@
 												<?php $customcounter++; ?>
 												@endforeach
 												<tr>
-													<td><div class="p-data-title"><i class="flaticon-graduation"></i>Currently Studying</div></td>
+													<td><div class="p-data-title"><i class="flaticon-graduation"></i>Currently Studying?</div></td>
 													<td>
 														<span style="font-weight:500">{{$currentlystudy}}</span>
 													</td>

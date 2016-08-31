@@ -7,6 +7,7 @@
 <div class="container">
 	<div class="row">
 	    <div class="col-md-10 col-md-offset-1 privacy">
+	    <div class="privacy-container">
 	    	<h3 class='text-center'><b>Privacy Policy</b></h3>
 	        FriendzSquare application on any internet enabled device is collectively referred here in this Privacy Policy as "FriendzSquare" ("We"). <br> <br>
 
@@ -85,6 +86,7 @@
 					This Privacy Policy shall be governed in accordance with the laws of Singapore.<br><br>
 				</li>
 			</ol>
+	    </div>
 	    </div>
   	</div>
 </div>
