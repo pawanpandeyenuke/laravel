@@ -103,9 +103,9 @@
 			</div>
 		</div>
 	</div>
-</header><!--/header-->
+</header>
 		
-	@yield('content')
+@yield('content')
 
 {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
@@ -209,9 +209,9 @@ jQuery(function($){
 function googleTranslateElementInit() {
   	new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
 }			
-		</script>
-	</body>
-</html>
+</script>
 
 {!! Session::forget('error') !!}
 {!! Session::forget('success') !!}
+</body>
+</html>
