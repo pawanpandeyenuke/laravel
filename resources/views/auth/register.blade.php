@@ -241,7 +241,7 @@ $userdata = session('userdata');
                     </div>
                 </form>
                     <div class="or-divider"><span>Or</span></div>
-                 <div class="small-text">Your social networking login details would be kept confidential.</div>                 
+                 <div class="small-text">Your social networking login details will be kept confidential.</div>                 
                     <div class="social-login top-margin">
                         <ul>
                             <li><a href="{{ url('redirect/facebook') }}" class="fb"><i class="fa fa-facebook"></i></a></li>
