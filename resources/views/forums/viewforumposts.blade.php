@@ -160,7 +160,7 @@
     
 <script type="text/javascript">
 window.onload = function() {
-  var w = $('#sticky-anchor').width();
+  	var w = $('#sticky-anchor').width();
 	$('.fix-header').css('width',w+60);
 }
 
