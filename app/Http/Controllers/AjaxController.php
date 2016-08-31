@@ -2387,6 +2387,51 @@ public function sendImage(Request $request){
 		}*/
 	}
 
+	public function getDefaultGroupUser(){
+		$input = Request::all();
+		$group_jid = $input['group_jid'];
+		$userdata = DefaultGroup::with('user')->where('group_name', $group_jid)->get()->toArray();
+		$ReturnHtml = '';
+		$GroupUserDeatils = array();
+		if(!empty($userdata)){
+            foreach($userdata as $data){
+				$ReturnHtml .= '<li ><div class="info" data-id="'.$data['user']['id'].'" style="position:relative;" ><a';
+				if( $data['user']['id'] != Auth::User()->id){
+				 	$ReturnHtml .= ' href="'.url('/profile/'.$data['user']['id']).'" ';
+				}
+				$user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : 'user-thumb.jpg';
+				
+				$GroupUserDeatils[$data['user']['xmpp_username']] = array( 'name' => $data['user']['first_name'].' '.$data['user']['last_name'], 'image' => $user_picture, 'id' => $data['user']['id'] ); 
+
+				$ReturnHtml .= ' data-id="'.$data['user']['id'].'" ><span style="background: url('."'/uploads/user_img/".$user_picture."');";
+				$ReturnHtml .= ' class="chat-thumb userpic-'.$data['user']['xmpp_username'].'"></span><span class="title usertitle-'.$data['user']['xmpp_username'].'">'.$data['user']['first_name'].' '.$data['user']['last_name'].'</span></a>';
+                if($data['user']['id'] != Auth::User()->id){
+                    $status = Friend::where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
+                    $status1 = Friend::where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
+
+ 							if($status != null || $status1 != null){
+								if($status == 'Accepted'){
+	                                $ReturnHtml .= '<button class="time" onclick="openChatbox(';
+	                               $ReturnHtml .= "'".$data['user']['xmpp_username']."', '".$data['user']['first_name']."'";
+	                               $ReturnHtml .=  ');" >Chat</button>';
+	                            } else if($status=='Pending'){
+	                                $ReturnHtml .= '<span class="time">Sent</span>';
+	                            } elseif($status1=='Pending'){
+	                            	$ReturnHtml .= '<span class="time"></span>';
+	                            }
+	                        } else {
+								$ReturnHtml .= '<button type="button" class="time btn btn-sm btn-chat btn-primary invite">Invite</button><span class="time sentinvite" style="display: none;">Sent</span>';
+							}
+
+                        $ReturnHtml .= '</div>';
+                    }
+                $ReturnHtml .= '</li>';
+            }
+        }
+		return json_encode(array('html' => $ReturnHtml,'users' => $GroupUserDeatils));
+		exit();
+
+	}
 
 
 }
