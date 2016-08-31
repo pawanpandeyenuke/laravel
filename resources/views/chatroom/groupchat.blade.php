@@ -693,7 +693,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
         'async' : false,
         'data' : {'group_jid':groupid},
         'success' : function(data){
-          $('#gccollapseOne .chat-user-list ul').html(data.html);
+          $('#gccollapseOne .chat-user-list ul').html( $.parseHTML(data.html) );
           PublicGroupUser = [];
           $.each( data.users , function( k, v ){
              if( typeof v.image != 'undefined' ){
