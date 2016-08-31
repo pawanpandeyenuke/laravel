@@ -3,7 +3,7 @@
 <?php
 
 	$gender = isset($user->gender) ? $user->gender : '';
-	// echo $gender;die;
+	
 	if(empty($gender)){
 		$gender = 'NA';
 	}
@@ -43,9 +43,18 @@
 								<a href="/editprofile/{{$userId}}" class="edit-profile"><i class="fa fa-pencil"></i></a>
 							@endif
 							<div class="profile-header">
-
-								<div class="profile-img" style="background: url('<?php echo userImage($user) ?>');">
-								</div><!--Profile-img-->
+								<?php if( $user->picture ){ 
+									$userpicture = url('uploads/user_img/'.$user->picture); ?>
+									<a class='popup' href="{{url('uploads/user_img/original_'.$user->picture)}}">
+										<div class="profile-img" style="background: url('{{$userpicture}}');">
+										</div>
+									</a>
+								<?php } else { 
+									$userpicture = url('images/user-thumb.jpg');
+									?>
+									<div class="profile-img" style="background: url('{{$userpicture}}');">
+									</div>
+								<?php } ?>
 
 								@if( $userId == $user->id )
 									@if(!empty($user->picture))
