@@ -1611,6 +1611,7 @@ width:495px;
 .page-footer li{
   display: inline-block;
   margin: 0 15px;
+  font-size:12px;
 }
 .page-footer li a{
 	font-size:12px;

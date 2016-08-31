@@ -185,8 +185,8 @@
     });
 
 </script>
-</body>
-</html>
 
 {!! Session::forget('error') !!}
 {!! Session::forget('success') !!}
+</body>
+</html>
