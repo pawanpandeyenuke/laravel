@@ -7,6 +7,7 @@
 <div class="container">
 	<div class="row">
 	    <div class="col-md-10 col-md-offset-1 terms">
+	    <div class="terms-container">
 	    	<h3 class='text-center'><b>Terms of Use</b></h3>
 	        FriendzSquare application on any internet enabled device is collectively referred here in this Terms of Use as "FriendzSquare" ("We"). <br> <br>
 
@@ -155,6 +156,7 @@
 					FriendzSquare may amend this Terms of Use anytime without any intimation and the amended Terms of Use will be effective immediately on posting. If you continue to use the service then it will be deemed as your acceptance to the changed terms. Hence, if you do not agree to the changes to the Terms of Use, then stop using the service.
 				<br><br>
 			</ol>
+	    </div>
 	    </div>
   	</div>
 </div>

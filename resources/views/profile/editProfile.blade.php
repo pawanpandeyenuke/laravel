@@ -196,7 +196,7 @@
 									<div class="pe-row">
 										<div class="row">
 											<div class="col-sm-5 col-xs-12">
-												<div class="p-data-title"><i class="flaticon-graduation"></i>Currently Studing or Not</div>
+												<div class="p-data-title"><i class="flaticon-graduation"></i>Currently Studying?</div>
 											</div>
 											<div class="col-sm-7 col-xs-12">
 												<div class="clearfix">

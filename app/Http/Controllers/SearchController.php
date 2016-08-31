@@ -88,15 +88,15 @@ class SearchController extends Controller
                      return redirect()->back();
                  }
                  elseif($user->is_email_verified == "N"){
-                     $useremail = $user->email;
+                    $useremail = $user->email;
                     $username = $user->first_name." ".$user->last_name;
                     $confirmation_code = str_random(30);
                     User::where('email',$arguments['email'])->update(['confirmation_code'=>$confirmation_code]);
-                    $emaildata = array('confirmation_code' => $confirmation_code);
+                    $emaildata = array('confirmation_code' => $confirmation_code, 'email' => $useremail);
 
                         Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
-                        $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
-                        $message->to($useremail,$username)->subject('Verify your email address');
+                            $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
+                            $message->to($useremail,$username)->subject('Verify your email address');
                         });
                     Session::put('success', 'Verification link sent to '.$useremail.' !');
                       return redirect()->back();
