@@ -2633,6 +2633,7 @@ textarea{
 	position: absolute;
 	top: 15px;
 	left: 0px;
+	margin-top: 5px;
 }
 #chat-system .chat-msg-me{
 	text-align: right;
@@ -2641,6 +2642,11 @@ textarea{
 #chat-system .chat-msg-them{
 	text-align: left;
 	padding-left: 60px;
+}
+#chat-system .chat-message .chat-msg-author {
+    color: #000;
+    margin-bottom: 5px;
+    width: 100%;
 }
 #chat-system .chat-msg-me .profile-pic{
 	margin-left: 10px !important;
