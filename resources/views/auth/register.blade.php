@@ -65,11 +65,11 @@ $userdata = session('userdata');
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                         <span class="sr-only">Next</span>
                       </a>
-
-                      <div class="social-btns-cont">
+                      
+                        <div class="social-btns-cont">
                             <ul class="list-inline">
-                                <li><a href="#" title="" class=""><img src="images/apple-stroe-btn.png" alt=""></a></li>
-                                <li><a href="#" title="" class=""><img src="images/android-store-btn.png" alt=""></a></li>
+                                <li><a href="{{ Config::get('constants.ios_app_link') }}" title="" target='_blank'><img src="images/apple-stroe-btn.png" alt="iTunes"></a></li>
+                                <li><a href="{{ Config::get('constants.android_app_link') }}" title="" target='_blank'><img src="images/android-store-btn.png" alt="Google Play Store"></a></li>
                             </ul>
                         </div>
                 </div>
@@ -241,7 +241,7 @@ $userdata = session('userdata');
                     </div>
                 </form>
                     <div class="or-divider"><span>Or</span></div>
-                 <div class="small-text">Your social networking login details would be kept confidential.</div>                 
+                 <div class="small-text">Your social networking login details will be kept confidential.</div>                 
                     <div class="social-login top-margin">
                         <ul>
                             <li><a href="{{ url('redirect/facebook') }}" class="fb"><i class="fa fa-facebook"></i></a></li>
@@ -260,7 +260,7 @@ $userdata = session('userdata');
             <ul>
                 <li><a href="{{url('terms')}}" title="Terms of Use">Terms of Use</a></li>
                 <li><a href="{{url('privacy-policy')}}" title="Privacy Policy">Privacy Policy</a></li>
-                <li><a href="#" title="">&copy; 2016 friendzsquare</a></li>
+                <li>Copyright 2016 Connect All Pte Ltd.</li>
             </ul>
         </div>
     </div>

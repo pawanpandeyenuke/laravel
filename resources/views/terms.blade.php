@@ -17,7 +17,7 @@
 				<p>1. FriendzSquare as a platform </p>
 				
 					<ul>
-						<li>By using FriendzSquare through a website www.friendzsquare.com &amp;/or application on any
+						<li>By using FriendzSquare through a website <a href="{{ url('/') }}">www.friendzsquare.com</a> &amp;/or application on any
 
 						internet enabled device, its deemed to be considered that you understand that FriendzSquare
 
@@ -91,7 +91,7 @@
 
 					You will not:
 					<ul>
-						<li>Post anything that is incorrect, obscene, abusive, racist, illegal, defamatory or fraudulent.</li>
+						<li>Post anything that is incorrect, obscene, sexually explicit, harassing, abusive, racist, illegal, defamatory or fraudulent.</li>
 
 						<li>Encroach on intellectual property of any third party.</li>
 
@@ -111,7 +111,7 @@
 
 						nonetheless may be exposed to such conduct and/or posts and that you use FriendzSquare at your own risk.</li>
 					</ul>
-				<br><br>
+				<br>
 				<p>8.Sole right to refuse registration/delete profile </p>
 
 					We are at sole discretion to refuse the registration to anyone or delete profile at any point in time in
@@ -120,23 +120,29 @@
 
 					in anything which is against the Terms of Use.
 				<br><br>
-				<p>9.Modification/deletion of posts</p>
+				<p>9.Block/Report:</p>
+
+					FriendzSquare strives to provide an environment where users feel free to express themselves. However, if you find any content in chat rooms that is wrongful &amp;/or you don't want to receive any further message from that user then you can block/report by simply long pressing on that message &amp; then select ‘Block/Report’ and a reason for blocking/reporting, then you are done. Your reasons for reporting maybe when user is spamming, user is sexually explicit or user is harassing you.
+					<br><br>
+					We will take necessary steps on your reporting and ensure that by reporting any user you will no longer receive any message from that user and if the user is reported again by other users then he/she might face account deactivation by FriendzSquare. <br><br>
+
+				<p>10.Modification/deletion of posts</p>
 
 					You can see, modify or erase your posts on forums and it will be deleted immediately on your submitting the delete button.
 				<br><br>
-				<p>10.Sole right to add/delete categories</p>
+				<p>11.Sole right to add/delete categories</p>
 
 					We are at sole discretion to delete/add/edit a category and subcategories of forums and chat rooms, as we want to at any point in time.
 				<br><br>
-				<p>11.We have right to delete user's post</p>
+				<p>12.We have right to delete user's post</p>
 
 					If user posts anything inconsistent with the terms of use, then we have the right to delete user's post.
 				<br><br>
-				<p>12.FriendzSquare is available worldwide</p>
+				<p>13.FriendzSquare is available worldwide</p>
 
 					FriendzSquare website &amp;/or application is available worldwide for users of any age.
 				<br><br>
-				<p>13.Website links</p>
+				<p>14.Website links</p>
 
 					FriendzSquare may have its users posting links of other websites. If the user views these links it will
 
@@ -144,14 +150,14 @@
 
 					safeguard themselves against any viruses they may encounter by visiting those websites. FriendzSquare don’t endorse any website.
 				<br><br>
-				<p>14.Intellectual property rights</p>
+				<p>15.Intellectual property rights</p>
 
 					Connect All Pte Ltd. is the sole owner or lawful licensee of all the rights to FriendzSquare. By accepting the terms users agree that that they will not copy any information, structure database etc. of FriendzSquare.
 				<br><br>
-				<p>15.Governing Law &amp; Jurisdiction</p>
+				<p>16.Governing Law &amp; Jurisdiction</p>
 					This Terms of Use shall be governed in accordance with the laws of Singapore.<br><br>
 				
-				<p>16.Amendment to Terms of Use</p>
+				<p>17.Amendment to Terms of Use</p>
 
 					FriendzSquare may amend this Terms of Use anytime without any intimation and the amended Terms of Use will be effective immediately on posting. If you continue to use the service then it will be deemed as your acceptance to the changed terms. Hence, if you do not agree to the changes to the Terms of Use, then stop using the service.
 				<br><br>
@@ -165,8 +171,8 @@
 	<footer>
 	 	<div class="container">
 	        <ul class="f-links text-center list-inline">
-	            <li>&copy; 2016 FriendzSquare</li>       
-	            <li><a href="{{ url('terms') }}" title="Terms">Terms of Use</a></li>
+	            <li>Copyright 2016 Connect All Pte Ltd.</li>
+	            <li><a href="{{ url('terms') }}" title="Terms of Use">Terms of Use</a></li>
 	            <li><a href="{{ url('privacy-policy') }}" title="Privacy Policy">Privacy Policy</a></li>
 	        </ul>
 	    </div>

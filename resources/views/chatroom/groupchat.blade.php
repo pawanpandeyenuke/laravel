@@ -60,11 +60,15 @@
 {
   height:auto !important;
 }
+.load-pub-user{
+  cursor: pointer;
+  float: right;
+}
 </style>
 
 <?php 
 $groupid = $group_jid;
-$GroupsJidList = $SingleChatList = array();
+$GroupsJidList = $SingleChatList = $PublicGroupUser = array();
 ?>
 <div class="page-data dashboard-body">
         <div class="container">
@@ -143,19 +147,24 @@ $GroupsJidList = $SingleChatList = array();
                                            <img src="{{$icon_url}}" alt="" class="img-icon">
                                           <?php } ?>
                                          <b><?php echo ($exception == "private")?"":$groupname; ?></b>
+                                         <?php if( $groupname && $exception != 'private' ){ ?>
+                                            <i class="fa fa-refresh load-pub-user" aria-hidden="true"></i>
+                                         <?php } ?>
                                         </div>
                                         <div class="chat-user-list StyleScroll">
                                           <ul>
                                             @if(!empty($userdata))
                                             @foreach($userdata as $data)
 
-                                              <?php $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : 'user-thumb.jpg'; ?>
+                                              <?php 
+                                              $PublicGroupUser[] = $data['user']['xmpp_username'];
+                                              $user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : 'user-thumb.jpg'; ?>
 
                                               <li >
                                                   <div class='info' data-id="{{$data['user']['id']}}" style="position:relative;" >
                                                     <a title="" @if( $data['user']['id'] != Auth::User()->id) href="{{url('/profile/'.$data['user']['id'])}}" @endif  data-id="{{$data['user']['id']}}" >
                                                         <span style="background: url('{{'/uploads/user_img/'.$user_picture}}');" class="chat-thumb userpic-<?php echo $data['user']['xmpp_username']; ?>"></span>
-                                                        <span class="title usertitle-<?php echo $data['user']['xmpp_username']; ?>">{{ $data['user']['first_name'] }}</span>           
+                                                        <span class="title usertitle-<?php echo $data['user']['xmpp_username']; ?>">{{ $data['user']['first_name'] }} {{ $data['user']['last_name'] }}</span>           
                                                     <?php $SingleChatList['name_'.$data['user']['xmpp_username']] = $data['user']['first_name'].' '.$data['user']['last_name'];
                                                       $SingleChatList['img_'.$data['user']['xmpp_username']] = $user_picture;
                                                       $SingleChatList['user_'.$data['user']['xmpp_username']] = $data['user']['id'];
@@ -344,7 +353,7 @@ $GroupsJidList = $SingleChatList = array();
   var GroupName = <?php echo json_encode($groups); ?>;
     var GroupAuto = <?php echo json_encode($GroupsJidList); ?>;
     var profiletitles = <?php echo json_encode($SingleChatList); ?>;
-
+    var PublicGroupUser = <?php echo json_encode($PublicGroupUser); ?>;
   var encoderoomid = '';
     var userImage="{{$userpic}}";
     var ChatImageUrl = "{{url('/uploads/media/chat_images/')}}";
@@ -499,7 +508,6 @@ $GroupsJidList = $SingleChatList = array();
     });
 
     conObj.listen.on('message', function (event, messageXML) { 
-      console.log( messageXML );
       var $message = $(messageXML),
           $forwarded = $message.find('forwarded');
         if ($forwarded.length) {
@@ -508,10 +516,12 @@ $GroupsJidList = $SingleChatList = array();
         var From = $message.attr('from');
         var ChatType = $message.attr('type');
         var GroupJid = From.substring(0, From.indexOf('@'));
-        var UserJid  = From.substring(0, From.indexOf('/'));
+        var UserJid  = From.substring( From.indexOf('/') );
         GroupType = GroupJid.substr(GroupJid.length - 3);
-        if( GroupType == 'pub' && ChatType == 'groupchat' ){
-
+        if( GroupType == 'pub' && GroupJid == groupid && ChatType == 'groupchat' ){
+          if( jQuery.inArray( UserJid, PublicGroupUser ) == -1 ){
+            updatePublicGroup()
+          }  
         }    
     });
 
@@ -662,7 +672,49 @@ $GroupsJidList = $SingleChatList = array();
             $('#leavePvtModal').modal('hide');
         });
 
+        $(document).on('click', '.load-pub-user', function(e){
+          var SpinObj = $(this);
+          if (!SpinObj.hasClass('fa-spin')) {
+              SpinObj.addClass( 'fa-spin' );
+              if( updatePublicGroup() ){
+                SpinObj.removeClass( 'fa-spin' );
+              }
+          }
+        });
+        
+
       });
+    
+    function updatePublicGroup(){
+      $.ajax({
+        'url' : "{{url('/ajax/default-group-user')}}",
+        'type' : 'post',
+        'dataType' : 'json',
+        'async' : false,
+        'data' : {'group_jid':groupid},
+        'success' : function(data){
+          $('#gccollapseOne .chat-user-list ul').html( $.parseHTML(data.html) );
+          PublicGroupUser = [];
+          $.each( data.users , function( k, v ){
+             if( typeof v.image != 'undefined' ){
+                profiletitles['img_'+k] = v.image;
+              } else {
+                profiletitles['img_'+k] = defaultImage;
+              }
+              if( typeof v.name != 'undefined' ){
+                profiletitles['name_'+k] = v.name;
+              } else {
+                profiletitles['name_'+k] = k;
+              }
+              profiletitles['user_'+k] = v.id;
+              PublicGroupUser.push(k);
+          });
+          
+        }       
+      });
+      return true;
+    }
+
 
      function openChatbox(xmpusername,username)
      {

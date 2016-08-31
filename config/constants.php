@@ -38,6 +38,10 @@ return [
 	'private_members' => '10',
 
 	'max_upload_filesize' => '4194304',
+	
+	'ios_app_link' => 'https://itunes.apple.com/us/app/friendzsquare/id1076919346?ls=1&mt=8',
+	
+	'android_app_link' => '#'
 ]
 
 ?>
