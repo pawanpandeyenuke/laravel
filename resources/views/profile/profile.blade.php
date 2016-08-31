@@ -30,7 +30,7 @@
 
 ?>
 @section('content')
-
+@include('panels.deluserimg')
 <div class="page-data dashboard-body">
 	<div class="container">
 		<div class="row">   			 
@@ -46,8 +46,14 @@
 
 								<div class="profile-img" style="background: url('<?php echo userImage($user) ?>');">
 								</div><!--Profile-img-->
+								@if(!empty($user->picture))
+									<div class="remove-profile">
+									<p><a href="#" data-toggle="modal" class="imgremove-btn" data-target="#remove-image-area">Remove Image</a></p>
+									</div>
+								@endif
+
 								<div class="pr-field">
-									<span style="font-size: xx-large;">
+									<span class="user-name" style="font-size: xx-large;">
 										{{ $user->first_name.' '.$user->last_name }}
 									</span>
 								</div>

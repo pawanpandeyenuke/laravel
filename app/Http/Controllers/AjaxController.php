@@ -416,12 +416,15 @@ comments;
 		return $response;
 
  	}
-	/** get user profile image and name by user jid **/
+
+	/** 
+	** get user profile image and name by user jid 
+	**/
 	public function profileNameImage(){
 		$input = Input::all();
 		if( isset($input['user_jid']) && !empty($input['user_jid']) ){
 			$UserJid = $input['user_jid'];
-			$UserDetails = User::where('xmpp_username',$UserJid)->select('picture','first_name', 'last_name')->first();
+			$UserDetails = User::where('xmpp_username',$UserJid)->select('picture','first_name', 'last_name','id')->first();
 			if( $UserDetails ){
 				if( isset($UserDetails->picture) && !empty($UserDetails->picture) ){
 					$Image = $UserDetails->picture;
@@ -433,13 +436,16 @@ comments;
 				} else {
 					$Name = $input['user_jid'];
 				}
+				$UserId = $UserDetails->id;
 			} else {
 				$Image = 'user-thumb.jpg';
 				$Name = $input['user_jid'];
+				$UserId = 0;
 			}
-			echo json_encode(array( 'image'=>$Image, 'name' => $Name ));
+			echo json_encode(array( 'image'=>$Image, 'name' => $Name, 'user_id' => $UserId ));
 		}
 	}
+
 	public function searchfriend(){
 
 		$xmppusername = Input::get('xmpp_username');
@@ -1133,13 +1139,17 @@ public function sendImage(Request $request){
 			if( Input::get('format') ){	
 				$Format = Input::get('format');
 			}
-			$friend = Friend::with('friends')->with('user')
-					->where('user_id', '=', Auth::User()->id)
-					->where('status','Accepted')
-					->get()
- 					->toArray();
-          
-            $data=array();
+
+			$friend	= Friend::leftJoin('users', 'users.id', '=', 'friends.friend_id')->where('friends.user_id', '=', Auth::User()->id)->where('friends.status','Accepted');
+
+			if( $input ){
+				$friend	= $friend->where( function($query) use( $input ) {
+					        $query->where('users.first_name', 'like', "%".$input."%")->orWhere('users.last_name', 'like', "%".$input."%");
+					});
+			}
+
+			$friend	= $friend->get()->toArray();
+            $data = array();
 			$count= count( $friend );
 			$Status = 0;
 			$msg="Sorry, no such friend found.";
@@ -1151,26 +1161,24 @@ public function sendImage(Request $request){
 				$Status = 1;
 				foreach ($friend as $key => $value) {
 
-					$name=$value['friends']['first_name']." ".$value['friends']['last_name'];
-					$xmpp_username="'".$value['friends']['xmpp_username']."'";
-					$first_name="'".$value['friends']['first_name']."'";
-					
+					$name=$value['first_name']." ".$value['last_name'];
+					$xmpp_username="'".$value['xmpp_username']."'";
 					$msg="No friend found!";
 
-					if (stripos($name, $input) !== false) {
-						if( $Format == 'json' ){
-						   $user_picture = !empty($value['friends']['picture']) ?$value['friends']['picture'] :'user-thumb.jpg';
-						   $data[] = array( 'xmpp' => $value['friends']['xmpp_username'], 'name' => $name, 'image' => $user_picture );
-						} else {
-							$user_picture = !empty($value['friends']['picture']) ? url('uploads/user_img/'.$value['friends']['picture']) : url('/images/user-thumb.jpg');
-							 $data[] = '<li > 
-							<a href="javascript:void(0)" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$first_name.');">
-								<span class="chat-thumb"style="background: url('.$user_picture.');"></span>
-								<span class="title">'.$name.'</span>
-							</a>
-							</li>';
-						}
+				
+					if( $Format == 'json' ){
+					   $user_picture = !empty($value['picture']) ?$value['picture'] :'user-thumb.jpg';
+					   $data[] = array( 'xmpp' => $value['xmpp_username'], 'name' => $name, 'image' => $user_picture, 'id' => $value['id'] );
+					} else {
+						$user_picture = !empty($value['picture']) ? url('uploads/user_img/'.$value['picture']) : url('/images/user-thumb.jpg');
+						 $data[] = '<li > 
+						<a href="javascript:void(0)" title="" class="list" onclick="openChatbox('.$xmpp_username.','.$name.');">
+							<span class="chat-thumb"style="background: url('.$user_picture.');"></span>
+							<span class="title">'.$name.'</span>
+						</a>
+						</li>';
 					}
+					
 				}
 			}
 
@@ -2363,4 +2371,67 @@ public function sendImage(Request $request){
 		return json_encode(array('status' => $Status));
 
 	}
+
+
+	public function removeImageWeb()
+	{
+		$req = Input::all();
+		$converse = Converse::removeFile($req);
+
+		$retData = ($converse == 1) ? 1 : 0;
+		echo $retData;
+/*		if( $converse == 1){
+	        echo "Image has been removed successfully.";
+		}else{
+			echo "Not removed i guess.";
+		}*/
+	}
+
+	public function getDefaultGroupUser(){
+		$input = Request::all();
+		$group_jid = $input['group_jid'];
+		$userdata = DefaultGroup::with('user')->where('group_name', $group_jid)->get()->toArray();
+		$ReturnHtml = '';
+		$GroupUserDeatils = array();
+		if(!empty($userdata)){
+            foreach($userdata as $data){
+				$ReturnHtml .= '<li ><div class="info" data-id="'.$data['user']['id'].'" style="position:relative;" ><a';
+				if( $data['user']['id'] != Auth::User()->id){
+				 	$ReturnHtml .= ' href="'.url('/profile/'.$data['user']['id']).'" ';
+				}
+				$user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : 'user-thumb.jpg';
+				
+				$GroupUserDeatils[$data['user']['xmpp_username']] = array( 'name' => $data['user']['first_name'].' '.$data['user']['last_name'], 'image' => $user_picture, 'id' => $data['user']['id'] ); 
+
+				$ReturnHtml .= ' data-id="'.$data['user']['id'].'" ><span style="background: url('."'/uploads/user_img/".$user_picture."');";
+				$ReturnHtml .= ' class="chat-thumb userpic-'.$data['user']['xmpp_username'].'"></span><span class="title usertitle-'.$data['user']['xmpp_username'].'">'.$data['user']['first_name'].' '.$data['user']['last_name'].'</span></a>';
+                if($data['user']['id'] != Auth::User()->id){
+                    $status = Friend::where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
+                    $status1 = Friend::where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
+
+ 							if($status != null || $status1 != null){
+								if($status == 'Accepted'){
+	                                $ReturnHtml .= '<button class="time" onclick="openChatbox(';
+	                               $ReturnHtml .= "'".$data['user']['xmpp_username']."', '".$data['user']['first_name']."'";
+	                               $ReturnHtml .=  ');" >Chat</button>';
+	                            } else if($status=='Pending'){
+	                                $ReturnHtml .= '<span class="time">Sent</span>';
+	                            } elseif($status1=='Pending'){
+	                            	$ReturnHtml .= '<span class="time"></span>';
+	                            }
+	                        } else {
+								$ReturnHtml .= '<button type="button" class="time btn btn-sm btn-chat btn-primary invite">Invite</button><span class="time sentinvite" style="display: none;">Sent</span>';
+							}
+
+                        $ReturnHtml .= '</div>';
+                    }
+                $ReturnHtml .= '</li>';
+            }
+        }
+		return json_encode(array('html' => $ReturnHtml,'users' => $GroupUserDeatils));
+		exit();
+
+	}
+
+
 }

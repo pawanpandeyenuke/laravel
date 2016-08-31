@@ -345,6 +345,50 @@ class Converse
 		return $result;
 	}
 
+
+
+    // Remove Files
+    public static function removeFile( $request ) 
+    {
+    	if( $request ){
+
+			$validator = Validator::make($request, [
+					'user_id' => 'required|numeric|exists:users,id'
+				]);
+			
+			if($validator->fails()) {
+				return $validator->errors()->first();
+			}else{
+
+				$user = User::find($request['user_id']);
+		        if($user){
+		            if(!empty($user->picture)){
+		                $img_url = '/uploads/user_img/'.$user->picture;
+		                $img_url_original = '/uploads/user_img/original_'.$user->picture;
+
+		                $url = public_path($img_url); 
+		                $url_original = public_path($img_url_original); 
+		                
+		                if(file_exists($url)){
+		                    unlink($url);
+		                }
+
+		                if(file_exists($url_original)){
+		                    unlink($url_original);
+		                }
+
+		                $user->picture = NULL;
+		                $user->save();
+		            }
+		        }
+		        return true;
+			}
+			
+    	}
+
+    }
+
+
 }
 
 

@@ -369,10 +369,13 @@ class DashboardController extends Controller
       
 		$privategroup = Group::whereIn('id',$private_group_array)->orderBy('id','DESC')->get()->toArray();
 
+        $friendObj = Friend::with('friends')->where('user_id',$id)->where('status','Accepted')->get();
+
 		 return view('chatroom.groupchat')
 			->with('groupname', $check_name)
 			->with('group_jid',$group_jid)
 			->with('group_image',$GroupImage)
+            ->with('friendObj',$friendObj)
 			->with('userdata', $usersData)
 			->with('friendid',$friendid)
 			->with('authid',$id)
@@ -405,6 +408,9 @@ class DashboardController extends Controller
                 }
 
         }
+
+        $friendObj = Friend::with('friends')->where('user_id',$id)->where('status','Accepted')->get();
+
 		return view('chatroom.groupchat')
 			->with('groupname', $group_name)
 			->with('group_jid',$group_jid)
@@ -412,6 +418,7 @@ class DashboardController extends Controller
 			->with('group_image',$GroupImage)
 			->with('friendid',$friendid)
 			->with('authid',$id)
+            ->with('friendObj',$friendObj)
 			->with('pendingfriend',$pendingfriend)
 			->with('exception',$private_group_check)
 			->with('privategroup',$privategroup);
@@ -425,8 +432,9 @@ class DashboardController extends Controller
         $usersData = "";
         $GroupImage="";
         $id = Auth::User()->id;
-        $friendid = Friend::where('user_id',$id)->where('status','Accepted')->pluck('friend_id');
 
+        $friendObj = Friend::with('friends')->where('user_id',$id)->where('status','Accepted')->get();
+        // echo '<pre>';print_r($friendObj->toArray());die;
         $pendingfriend = Friend::where('user_id',$id)->where('status','Pending')->pluck('friend_id');
         
         $private_group_array = GroupMembers::where(['member_id' => $id, 'status' => 'Joined'])->pluck('group_id');
@@ -437,7 +445,7 @@ class DashboardController extends Controller
                     ->with('groupname', $check_name)
                     ->with('group_jid',$group_jid)
                     ->with('userdata', $usersData)
-                    ->with('friendid',$friendid)
+                    ->with('friendObj', $friendObj)
                     ->with('authid',$id)
                     ->with('group_image',$GroupImage)
                     ->with('pendingfriend',$pendingfriend)

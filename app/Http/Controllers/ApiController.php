@@ -10,6 +10,7 @@ use Validator, Redirect, Request, Session, Hash, DB, File;
 use Illuminate\Support\Facades\Input;
 use Intervention\Image\Facades\Image;
 use \Exception;
+use App\Library\Functions;
 
 class ApiController extends Controller
 {
@@ -2326,55 +2327,58 @@ class ApiController extends Controller
 	 */
 	public function searchSiteFriends()
 	{
-		try{
+		try
+		{
+			$total = $pages = 0;
 			$input = Request::all();
-
 			$per_page = $input['page_size'];
 			$page = $input['page'];
 			$offset = ($page - 1) * $per_page;
-
-			$model = new User;
-
-            // Search for the following people.
-          	if(trim($input['keyword']) != ''){
-
-	          	$model = $model->where( function( $query ) use ( $input ) {	          		
-	          		$expVal = explode(' ', $input['keyword']);
-	          		foreach( $expVal as $key => $value ) {  			        	
-			           	$query->orWhere( 'last_name', 'LIKE', '%'. $value.'%' )
-			           	 	->orWhere( 'first_name', 'LIKE', '%'. $value.'%' );  
-			        }
-				});
-
-	        }
-
-           	if( isset( $input['user_id'] ) ){
-				
-				// User cannot search himself.
-            	$model = $model->where('id', '!=', $input['user_id']);
-
-            	// Search for user's who are not friends with me.
-	        	$model = $model->whereNotIn('id', Friend::where('user_id', '=', $input['user_id'])
-	                            ->where('status', '=', 'Accepted')
-	                            ->pluck('friend_id')
-	                            ->toArray() );
-
-	        }
-
-	        // Gather all the results from the queries and paginate it.
-	     	$model = $model->select('id', 'first_name', 'last_name', 'email', 'picture');
-	     	$model = $model->orderBy('id','desc');
-	     	$result = $model->skip($offset)->take($per_page)->get()->toArray();
+			$keyword = isset($input['keyword']) ? trim($input['keyword']) : '';
+			$authUserId = isset($input['user_id']) ? $input['user_id'] : 0;
+			$select = array('users.id', 'first_name', 'last_name', 'email', 'picture','status as fstatus');
+			
+			// Search users
+            $users = Functions::searchUsers($keyword, $authUserId, $page, $input['page_size'],$select);
+            
+            if($authUserId && $users['records'])
+            {
+            	foreach($users['records'] as $key => $val)
+            	{
+            		$status = \App\Friend::where('user_id',$val->id)
+							->where('friend_id', $input['user_id'])
+							->value('status');
+					if( !$status ) 
+					{
+						$status = \App\Friend::where('friend_id',$val->id)
+							->where('user_id', $input['user_id'])
+							->value('status');
+						if( $status == 'Rejected') {
+							$status = null;
+						}
+						if( $status == 'Pending') {
+							$status = 'Received';
+						}
+					}
+					$status = $status ? $status : null;
+					$users['records'][$key]->fstatus = $status;
+            	}
+            }
 
 			$this->status = 'success';
-			$this->data = $result;
-			$this->message = count($result).' users found.';
+			$this->data = $users['records'];
+			$total = $users['total'];
+			$pages = $users['pages'];
+			$this->message = count($users['records']).' users found.';
 
-		}catch(Exception $e){
+		} catch(Exception $e) {
 			$this->message = $e->getMessage();
 		}
 
-		return $this->output();
+		return $this->output( array(
+			'total' => $total,
+			'pages' => $pages
+		) );
 
 	}
 
@@ -2782,14 +2786,14 @@ class ApiController extends Controller
 	/*
 	 * Return output of the request.
 	 */
-	protected function output()
+	protected function output($extra = array())
 	{
 		$this->data = empty($this->data) ? null : $this->data;
-		return json_encode(array(
+		return json_encode(array_merge(array(
 			'status' => $this->status, 
 			'message' => $this->message,
 			'data' => $this->data
-		));
+		), $extra));
 
 	}
 
@@ -3307,6 +3311,31 @@ class ApiController extends Controller
 				
 				$this->status = "success";
 			}
+
+		}catch(Exception $e){
+			$this->message = $e->getMessage();
+		}
+
+		return $this->output();	
+	}
+
+
+	//Remove user image
+	public function removeUserImage()
+	{
+		try
+		{
+			$req = Request::all();
+			$converse = Converse::removeFile($req);
+
+			if( $converse == 1){
+	            $this->status = "Success";
+	            $this->message = "Image has been removed successfully.";
+			}else{
+	            $this->status = "error";
+	            $this->message = $converse;
+			}
+			// echo "<pre>";print_r($converse);die;
 
 		}catch(Exception $e){
 			$this->message = $e->getMessage();

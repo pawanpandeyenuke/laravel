@@ -1378,6 +1378,23 @@ a:hover{
 .pr-field {
   margin: 0 0 3px;
 }
+span.user-name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 250px;
+}
+
+.user-info-top span.user-name
+{
+	display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 55px;
+}
+
 .pr-edit[disabled]{
   background: none;
   border-color: transparent;
@@ -1396,6 +1413,13 @@ width:495px;
   padding: 20px 25px;
   border-bottom: 1px solid #ebebeb;
   position:relative;
+}
+.p-header-outer .remove-profile 
+{
+  bottom: -29px;
+  font-size: 12px;
+  left: 2px;
+  position: absolute;
 }
 .edit-profile{
   position: absolute;
@@ -1587,6 +1611,7 @@ width:495px;
 .page-footer li{
   display: inline-block;
   margin: 0 15px;
+  font-size:12px;
 }
 .page-footer li a{
 	font-size:12px;
@@ -2932,6 +2957,8 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
 .chat-header-small {
     padding: 10px 10px;
     border-bottom: 1px solid #ddd;
+    width:100%;
+    float: left;
 }
 .chat-user-list li a, .user-list-with-thumb li a{
 	padding: 15px 5px 15px 45px;
@@ -3060,7 +3087,7 @@ div#forumreply-edit-modal {
 	display: none;
 }
 .fp-master-header{
-	padding: 20px 0 5px;
+	padding: 5px 0 15px;
   border-bottom: 1px solid #ddd;
   margin: 0 0 10px;
 }
@@ -3097,7 +3124,7 @@ div#forumreply-edit-modal {
   font-size: 10px;
 }
 .fp-master-header-right span{
-  margin: 4px 0 0 15px;
+  margin: 2px 0 0 15px;
 }
 .f-single-post .f-post-title .fp-meta{
   position: absolute;
@@ -3129,7 +3156,7 @@ div#forumreply-edit-modal {
  width: 20px;
 }
 #conversejs .chatbox .box-flyout {
-	height: 490px !important;
+	height: 475px !important;
 	border: 0px !important;
 }
 div#chat-system {
@@ -3224,7 +3251,7 @@ body {
 }
 .forum-srch-list .fs-breadcrumb{
 	margin: 0 -30px -1px;
-	padding: 10px 30px 5px;
+	padding: 10px 30px;
 }
 .alert-info {
     background-color: #A0F0E6;
@@ -3385,6 +3412,11 @@ header{
     margin-right: 10px;
     width: 25px;
 }
+
+.chat-header-small a
+{
+	float: right;
+}
 .broadcastbtn {
     padding: 0 10px;
 }
@@ -3448,7 +3480,7 @@ header{
 	margin-left: 60px !important;
 }
 .backbutton{
-	margin-top:-5px;
+	margin-top:-10px;
 }
 .forum-srch-list .forum-master-post p.forum_post{
 	max-height: 125px;
@@ -3716,6 +3748,7 @@ p.readmore {
 }
 .terms, .privacy {
 	font-size:15px;
+	line-height: 24px;
 }
 
 
@@ -3843,22 +3876,25 @@ body.modal-open {
 #gccollapseOne .panel-body .chat-user-list {
   height: 630px !important;
   min-height: 630px !important;
+  width:100%;
+  float: left;
 }
 
 #conversejs #minimized-chats .chat-head-message-count, #conversejs #minimized-chats .unread-message-count
 {
-	right: 77px;
-	bottom: 14px;
-	font-size: 9px;
-  	font-weight: 700;
-  	line-height: 5px;
+	background: #fff none repeat scroll 0 0 !important;
+    bottom: 23px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 9px !important;
+    right: 60px !important;
 }
 
 /** Safari Issues **/
 
 .goog-te-gadget .goog-te-combo
 {
- line-height:42px;
+ line-height:28px;
 }
 
 select#mob-country 
@@ -3878,5 +3914,13 @@ select.state {
 line-height: 28px !important;
 }
 select.city {
+line-height: 28px;
+}
+
+select#getsubcategory {
+line-height: 28px;
+}
+
+select#search-subforums {
 line-height: 28px;
 }

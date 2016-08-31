@@ -241,7 +241,7 @@ $userdata = session('userdata');
                     </div>
                 </form>
                     <div class="or-divider"><span>Or</span></div>
-                 <div class="small-text">Your social networking login details would be kept confidential.</div>                 
+                 <div class="small-text">Your social networking login details will be kept confidential.</div>                 
                     <div class="social-login top-margin">
                         <ul>
                             <li><a href="{{ url('redirect/facebook') }}" class="fb"><i class="fa fa-facebook"></i></a></li>
@@ -260,7 +260,7 @@ $userdata = session('userdata');
             <ul>
                 <li><a href="{{url('terms')}}" title="Terms of Use">Terms of Use</a></li>
                 <li><a href="{{url('privacy-policy')}}" title="Privacy Policy">Privacy Policy</a></li>
-                <li><a href="#" title="">&copy; 2016 friendzsquare</a></li>
+                <li>Copyright 2016 Connect All Pte Ltd.</li>
             </ul>
         </div>
     </div>

@@ -18,7 +18,7 @@
 Route::get('pushnotification-iphone', 'DashboardController@pushNotificationIphone');
 Route::get('pushnotification-android', 'DashboardController@pushNotificationAndroid');
 
-Route::post('home/sendpushtoios','HomeController@sendpushtoios');
+Route::post('sendpushtoios','HomeController@sendpushtoios');
 
 /**
  * @Ajax Routes..
@@ -154,6 +154,10 @@ Route::post('/ajax/isactivemember','AjaxController@isMemberActive');
 Route::post('/ajax/profilenameimage','AjaxController@profileNameImage');
 
 Route::post('/ajax/joingroup','AjaxController@joinPrivateGroup');
+
+Route::post('/ajax/remove-image', 'AjaxController@removeImageWeb');
+
+Route::post('/ajax/default-group-user', 'AjaxController@getDefaultGroupUser');
 /**
  * @Api Routes..
  *
@@ -264,6 +268,7 @@ Route::post('/api/get-privacy-setting','ApiController@getPrivacySettings');
 Route::post('/api/set-privacy-setting','ApiController@setPrivacySettings');
 
 Route::post('api/report-user','ApiController@reportUser');
+Route::post('api/remove-user-image','ApiController@removeUserImage');
 
 
 

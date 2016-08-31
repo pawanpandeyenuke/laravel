@@ -25,7 +25,10 @@
 						@include('forums.searchforum')
 
 						<div class="forum-srch-list" id="forum-post-reply_{{$post->id}}">
-							<div class="fs-breadcrumb">{{$post->forum_category_breadcrum}}</div>
+							<div class="fs-breadcrumb">
+								{{$post->forum_category_breadcrum}}
+									<a class='backbutton pull-right' href="{{$lastURL}}" title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back"></a>
+							</div>
 
 							<div class="forum-master-post">
 								<div id="sticky-anchor"></div>
@@ -68,9 +71,6 @@
 											</div>
 												<span class="p-date pull-left"><i class="flaticon-days"></i> {{$post->updated_at->format('d M Y')}}</span>
 												<span class="p-time pull-left"><i class="flaticon-time"></i>  {{$post->updated_at->format('h:i A').' (UTC)'}}</span>
-												<div class='text-right'>
-													<a class='backbutton' href="{{$lastURL}}" title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back"></a>
-												</div>
 											</div>
 										</div>
 									</div>

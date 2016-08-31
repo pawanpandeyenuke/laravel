@@ -132,7 +132,7 @@
 </header><!--/header-->
 	
 	@yield('content')
-
+@include('panels.footer')
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
@@ -185,8 +185,8 @@
     });
 
 </script>
-</body>
-</html>
 
 {!! Session::forget('error') !!}
 {!! Session::forget('success') !!}
+</body>
+</html>
