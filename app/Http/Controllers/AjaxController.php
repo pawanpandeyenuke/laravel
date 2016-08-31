@@ -2395,16 +2395,16 @@ public function sendImage(Request $request){
 		$GroupUserDeatils = array();
 		if(!empty($userdata)){
             foreach($userdata as $data){
-				$ReturnHtml .= '<li ><div class="info" data-id="'.$data['user']['id'].'" style="position:relative;" ><a';
+            	$user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : 'user-thumb.jpg';
+				
+				$GroupUserDeatils[$data['user']['xmpp_username']] = array( 'name' => $data['user']['first_name'].' '.$data['user']['last_name'], 'image' => $user_picture, 'id' => $data['user']['id'] ); 
+				$PicWithPath = "'/uploads/user_img/$user_picture'";
+				
+				$ReturnHtml .= '<li ><div class="info" data-id="'.$data['user']['id'].'" style="position:relative;" ><a ';
 				if( $data['user']['id'] != Auth::User()->id){
 				 	$ReturnHtml .= ' href="'.url('/profile/'.$data['user']['id']).'" ';
 				}
-				$user_picture = !empty($data['user']['picture']) ? $data['user']['picture'] : 'user-thumb.jpg';
-				
-				$GroupUserDeatils[$data['user']['xmpp_username']] = array( 'name' => $data['user']['first_name'].' '.$data['user']['last_name'], 'image' => $user_picture, 'id' => $data['user']['id'] ); 
-
-				$ReturnHtml .= ' data-id="'.$data['user']['id'].'" ><span style="background: url('."'/uploads/user_img/".$user_picture."');";
-				$ReturnHtml .= ' class="chat-thumb userpic-'.$data['user']['xmpp_username'].'"></span><span class="title usertitle-'.$data['user']['xmpp_username'].'">'.$data['user']['first_name'].' '.$data['user']['last_name'].'</span></a>';
+				$ReturnHtml .= ' data-id="'.$data['user']['id'].'" ><span style="background:url('.$PicWithPath.')" class="chat-thumb userpic-'.$data['user']['xmpp_username'].'"></span><span  class="title usertitle-'.$data['user']['xmpp_username'].'">'.$data['user']['first_name'].' '.$data['user']['last_name'].'</span></a>';
                 if($data['user']['id'] != Auth::User()->id){
                     $status = Friend::where('user_id',Auth::User()->id)->where('friend_id',$data['user']['id'])->value('status');
                     $status1 = Friend::where('user_id',$data['user']['id'])->where('friend_id',Auth::User()->id)->value('status'); 
@@ -2422,10 +2422,8 @@ public function sendImage(Request $request){
 	                        } else {
 								$ReturnHtml .= '<button type="button" class="time btn btn-sm btn-chat btn-primary invite">Invite</button><span class="time sentinvite" style="display: none;">Sent</span>';
 							}
-
-                        $ReturnHtml .= '</div>';
                     }
-                $ReturnHtml .= '</li>';
+                $ReturnHtml .= '</div></li>';
             }
         }
 		return json_encode(array('html' => $ReturnHtml,'users' => $GroupUserDeatils));
