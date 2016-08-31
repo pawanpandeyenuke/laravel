@@ -7,13 +7,11 @@
 <link rel="shortcut icon" href="{{ url('images/favicon.png') }}" type="image/x-icon" />
 <title>@yield('title', 'FriendzSquare')</title>
 <link href="{{url('/css/bootstrap.css')}}" rel="stylesheet">
-<link href="{{url('/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
-<link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/style.css')}}" rel="stylesheet">
 <link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
-
-<script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>  
-<script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
+</head>
+<body>
+@yield('content')
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -24,8 +22,5 @@
   ga('send', 'pageview');
 
 </script>
-</head>
-<body>
-  @yield('content')
 </body>
 </html>

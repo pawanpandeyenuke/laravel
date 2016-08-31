@@ -97,7 +97,6 @@ class ContactImporter extends Controller
 
     }
 
- 
     public function inviteContactList(){
 
         $request = Request::all();
@@ -137,7 +136,7 @@ class ContactImporter extends Controller
                 $xmlresponse =  self::curl($url);           
                 $contacts = json_decode($xmlresponse,true);
                 $return = array();
-                //echo '<pre>';print_r($contacts);die;
+                
                 if (!empty($contacts['feed']['entry'])) {
                     foreach($contacts['feed']['entry'] as $contact) {
                        //retrieve Name and email address  

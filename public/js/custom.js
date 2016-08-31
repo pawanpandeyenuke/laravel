@@ -101,6 +101,7 @@ $(document).ready(function(){
 
 
 	 $('.edit-pr-img').find(".badge").remove();
+
 	//Profile Pic Upload Js
 	 $("#profilepicture").on('change', function () {
 	 	 
@@ -144,11 +145,9 @@ $(document).ready(function(){
 	     }
 	});
 
-
-$('.btn-upload-icon').find(".badge").remove();
-	 //Group Image
-	 $("#groupimage").on('change', function () {
-	     //Get count of selected files
+	$('.btn-upload-icon').find(".badge").remove();
+	
+	$("#groupimage").on('change', function () {
 	     var countFiles = $(this)[0].files.length;
 	 	 
 	     var imgPath = $(this)[0].value;
@@ -186,7 +185,6 @@ $('.btn-upload-icon').find(".badge").remove();
 	     }
 	});
 
-
 	$("#uploadgroupimage").ajaxForm(function(response) {});
 	$(document).on('click', '#cancel-btn', function(){
 		$('#newsfeed').val('');
@@ -197,7 +195,6 @@ $('.btn-upload-icon').find(".badge").remove();
 		$('#fileUpload').val('');
 	});
 
-	
 	$(document).on('click', '.group-radio', function(){		
 
 		var current = $(this);
@@ -435,8 +432,6 @@ $('.btn-upload-icon').find(".badge").remove();
 		});
 	});
 
-
-
 	/**
 	*	Delete posts on ajax call handling.
 	*	Ajaxcontroller@deletepost
@@ -445,30 +440,9 @@ $('.btn-upload-icon').find(".badge").remove();
 	$(document).on('click', '.post-delete', function(){
 		var commentId = $(this).closest('li').data('value'); 
 		var feedId = $(this).closest('.single-post').data('value');
-
-		// $('#modal').bind('show',function(){
-			// alert(feedId);
-			// $("#delete-confirm").data('value', commentId);
-			$("#delete-confirm").attr('data-feedid', feedId);
-			// $("#delete-confirm").attr('data-value', commentId);
-			$("#del-box").addClass('postdelete');
-			// $("#delete-confirm").data('forumreplycommentid', commentId);
-		// });
-
+		$("#delete-confirm").attr('data-feedid', feedId);
+		$("#del-box").addClass('postdelete');
 		$("#modal").modal();
-/*		$.ajax({
-			'url' : '/ajax/deletebox',
-			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'postdelete'},
-			'type' : 'post',
-			'success' : function(response){
-				if(response){
-					$("#modal").append(response);
-					$("#modal").modal();
-					hideLoading();
-				}
-			}
-		});
-		$("#modal").html('');*/
 	});
 	
 	$(document).on('click', '.postdelete', function(){
@@ -499,20 +473,6 @@ $('.btn-upload-icon').find(".badge").remove();
 		$("#delete-confirm").attr('data-value', commentId);
 		$("#del-box").addClass('deletecomment');
 		$("#modal").modal();
-
-/*		$.ajax({
-			'url' : '/ajax/deletebox',
-			'data' : {'commentId':commentId, 'feedId' : feedId, 'class' : 'deletecomment'},
-			'type' : 'post',
-			'success' : function(response){
-				if(response){
-					$("#modal").append(response);
-					$("#modal").modal();
-					hideLoading();
-				}
-			}
-		});
-		$("#modal").html('');*/
 	});
 
 		/**
@@ -1268,7 +1228,6 @@ $('.btn-upload-icon').find(".badge").remove();
 	/***** Forum Delete Confirmation Box****/
 
 	$(document).on('click', '.del-confirm-forum', function(){
-		// showLoading();
 		var type = $(this).data('forumtype'); 
 		var type_id = $(this).val();
 		var breadcrum = $(this).data('breadcrum');
@@ -1309,22 +1268,8 @@ $('.btn-upload-icon').find(".badge").remove();
 			$('.modal-message').text("Are you sure you want to delete this user from  the group?");
 			delBtn.val(type_id);
 		}
- 
+ 		
 		$("#forum-confirm-modal").modal();
-
-/*		$.ajax({
-			'url' : '/ajax/forum-del-confirm',
-			'data' : {'type':type, 'type_id' : type_id, 'breadcrum' : breadcrum, 'reply_post_id' : reply_post_id, 'gid' : gid},
-			'type' : 'post',
-			'success' : function(response){
-				if(response){
-					$("#forum-confirm-modal").append(response);
-					$("#forum-confirm-modal").modal();
-					// hideLoading();
-				}
-			}
-		});
-		$("#forum-confirm-modal").html('');*/
 	});
 	
 	
@@ -1457,7 +1402,8 @@ $('.btn-upload-icon').find(".badge").remove();
 				setInterval(function(){ $('#forumpost_'+forumPostID).fadeOut(200);}, 5000);
 				$('#forum-post-reply_'+forumPostID).html("<div class ='alert alert-danger'>You can't like the post as it doesn't exist anymore.</div>");
 				}
-				else{
+				else
+				{
 					if(current.is(':checked')){
 						$('#checkbox_forumpost_'+forumPostID).prop('checked',true);
 						$('#checkbox_forumpost_replypage_'+forumPostID).prop('checked',true);
@@ -1469,7 +1415,7 @@ $('.btn-upload-icon').find(".badge").remove();
 					}
 					current.parents('.p-likes').find('.plike-count').html(response);
 					current.parents('.fp-likes').find('.plike-count').html(response);
-			}
+				}
 			}			
 		});	
 	});
@@ -1583,24 +1529,14 @@ $('.btn-upload-icon').find(".badge").remove();
 				'data' : { 'user_id' : userid },
 				'type' : 'post',
 				'success' : function(response){
-			        // alert('success');
 			        if(response == 1){
 			        	$('#remove-image-area').modal('hide');
-			        	location.reload();
-/*			        	$('h5').hide();
-				        var imageUrl = '/images/user-thumb.jpg';
-				        $('.profile-img').css('background-image', 'url(' + imageUrl + ')');
-				        $('.remove-profile').hide();
-				        $('.success-msg').show();
-				        $('#remove-image-area').delay( 900 ).modal('hide');*/
+			        	window.location.reload();
 					}
 				}
 			});
 		}
-
 	});
-
-
 });
 
 function loadImg()
@@ -1610,7 +1546,7 @@ function loadImg()
 		assetsPath: '/lib/img/',
 		popupButtonClasses: 'fa fa-smile-o'
   	});
-  window.emojiPicker.discover();
+  	window.emojiPicker.discover();
 }
 
 /*********** To display emoji onload of a page******************/

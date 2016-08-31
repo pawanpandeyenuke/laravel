@@ -134,8 +134,8 @@ class SearchController extends Controller
 
     public function subForums($parentid='')
     {
-        if($parentid){
-            // echo '<pre>';print_r($parentid);die;
+        if($parentid)
+        {
             $r1 = Forums::where('id',$parentid)->where('parent_id',0)->first();
             if($r1 == "")
                 return redirect('forums');

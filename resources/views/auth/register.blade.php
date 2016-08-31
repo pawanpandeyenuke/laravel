@@ -65,11 +65,11 @@ $userdata = session('userdata');
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                         <span class="sr-only">Next</span>
                       </a>
-
-                      <div class="social-btns-cont">
+                      
+                        <div class="social-btns-cont">
                             <ul class="list-inline">
-                                <li><a href="#" title="" class=""><img src="images/apple-stroe-btn.png" alt=""></a></li>
-                                <li><a href="#" title="" class=""><img src="images/android-store-btn.png" alt=""></a></li>
+                                <li><a href="{{ Config::get('constants.ios_app_link') }}" title="" target='_blank'><img src="images/apple-stroe-btn.png" alt="iTunes"></a></li>
+                                <li><a href="{{ Config::get('constants.android_app_link') }}" title="" target='_blank'><img src="images/android-store-btn.png" alt="Google Play Store"></a></li>
                             </ul>
                         </div>
                 </div>
