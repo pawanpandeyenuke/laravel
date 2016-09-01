@@ -139,8 +139,9 @@
 											<div class="col-sm-7 col-xs-12 ph-field">
 												<!-- <input type="text" name="phone_no" class="pr-edit numeric" maxlength="15" value="{{ $user->phone_no }}"> -->
 
-											    <span name="country_code" class="country-code-field-span country-code-field numeric" value="{{ $user->country_code }}" placeholder="000" >{{ $user->country_code }}</span>
-											    <input type="hidden" name="country_code" class="country-code-field" value="{{ $user->country_code }}" />
+											    	<input type="text" name="country_code" class="country-code-field numeric" placeholder='000' value="{{$user->country_code}}" >
+											    <!-- <span name="country_code" class="country-code-field-span country-code-field numeric" value="{{ $user->country_code }}" placeholder="000" ></span> -->
+											    <!-- <input type="text" name="country_code" class="country-code-field" value="{{ $user->country_code }}" /> -->
 											    <input type="text" class="ph-input numeric" name = "phone_no" id="mobileContact" value="{{ $user->phone_no }}">
 											</div>
 										</div>
