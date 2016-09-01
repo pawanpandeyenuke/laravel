@@ -77,7 +77,7 @@ class AuthController extends Controller
 
         $data['country'] = Country::where('country_id',$data['country'])->value('country_name');
 
-        if($data['country_code'] != 0 && $data['phone_no'] != null)
+       /* if($data['country_code'] != 0 && $data['phone_no'] != null)
         {
             $min = countryMobileLength($data['country_code']);
             $len = strlen($data['phone_no']);
@@ -86,7 +86,7 @@ class AuthController extends Controller
                 $data['phone_no'] = "";
                 $data['country_code'] = "";
             }
-        }
+        }*/
 
         if(!(isset($data['gender'])))
             $data['gender'] = "";

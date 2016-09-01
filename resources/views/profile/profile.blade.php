@@ -74,27 +74,27 @@
 									<div class="col-md-12 col-sm-12 col-xs-12 lPadding">
 										<div class="info-list">
 											<ul class="list-inline">
-												<li>
-													<i class="flaticon-web-1"></i>
-													<span style="font-weight:500">{{ !empty($user->country)?$user->country:'NA'}}</span>
-												</li>
-
-												<li>
-													<i class="flaticon-gps"></i>
-													<span style="font-weight:500">{{!empty($user->state)?$user->state:'NA'}}</span>
-												</li>
-
-												<li>
-													<i class="flaticon-city"></i>
-													<span style="font-weight:500">{{!empty($user->city)?$user->city:'NA'}}</span>
-												</li>
-
+												@if(!empty($user->country))
+													<li>
+														<i class="flaticon-web-1"></i>
+														<span style="font-weight:500">{{ !empty($user->country)?$user->country:'NA'}}</span>
+													</li>
+												@endif
+												@if(!empty($user->state))
+													<li>
+														<i class="flaticon-gps"></i>
+														<span style="font-weight:500">{{!empty($user->state)?$user->state:'NA'}}</span>
+													</li>
+												@endif
+												@if(!empty($user->city))
+													<li>
+														<i class="flaticon-city"></i>
+														<span style="font-weight:500">{{!empty($user->city)?$user->city:'NA'}}</span>
+													</li>
+												@endif
 											</ul>
 										</div>
 									</div>
-
-
-							 		
 
 										@if( $userId != $user->id )
 										<?php

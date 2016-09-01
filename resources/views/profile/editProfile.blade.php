@@ -139,9 +139,10 @@
 											<div class="col-sm-7 col-xs-12 ph-field">
 												<!-- <input type="text" name="phone_no" class="pr-edit numeric" maxlength="15" value="{{ $user->phone_no }}"> -->
 
-											    	<input type="text" name="country_code" class="country-code-field numeric" placeholder='000' value="{{$user->country_code}}" >
-											    <!-- <span name="country_code" class="country-code-field-span country-code-field numeric" value="{{ $user->country_code }}" placeholder="000" ></span> -->
-											    <!-- <input type="text" name="country_code" class="country-code-field" value="{{ $user->country_code }}" /> -->
+											    <span name="country_code" class="country-code-field numeric" value="{{ $user->country_code }}" placeholder="000" >
+											    	<input type="text" name="country_code" class="country-code-field-span edit-country-code" value="{{ $user->country_code }}" maxlength="4"/>
+											    </span>
+											    
 											    <input type="text" class="ph-input numeric" name = "phone_no" id="mobileContact" value="{{ $user->phone_no }}">
 											</div>
 										</div>
@@ -604,7 +605,7 @@ jQuery(function($){
 							{
 								var mobCode = response[0].phonecode;
 								$('.country-code-field').val(mobCode);
-								$('.country-code-field-span').html(mobCode);
+								$('.country-code-field-span').val(mobCode);
 								$('.country-code-field').attr('data-value', mobCode);
 	              var validArray = getValidationArray(mobCode);
 	            }

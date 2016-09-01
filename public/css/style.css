@@ -3019,9 +3019,9 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
 }
 .country-code-field{
 	border: 0 none;
-    left: 40px;
+    left: 26px;
     position: absolute;
-    top: 15px;
+    top: 7px;
     width: 50px;
     padding-left: 11px;
 }
@@ -3218,7 +3218,7 @@ margin-left: -15px;
 }
 .pe-row .ph-field::before {
     content: "-" !important;
-    left: 70px;
+    left: 78px;
     position: absolute;
     top: 6px;
     z-index: 1;
@@ -3804,7 +3804,14 @@ body
 }
 
 .ph-field input {
-    padding: 6px 65px !important;
+    padding: 6px 70px !important;
+}
+
+.ph-field  span input
+{
+	padding:2px !important;
+	border:0 none !important;
+	width:40px !important;
 }
 
 
