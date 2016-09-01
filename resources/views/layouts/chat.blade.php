@@ -18,7 +18,7 @@
 <link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script type="text/javascript" src="http://malsup.github.com/jquery.form.js"></script>
+<script type="text/javascript" src="{{url('/js/jquery.form.js')}}"></script>
 <script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 
 <!-- Emoji Inclues -->
@@ -49,7 +49,7 @@
 	<div class="container">
 		<div class="row header-row-full">
 			<div class="col-sm-2">
-				<a href="/dashboard" title="" class="logo"><img src="/images/logo.png" alt="Friendz Square"></a>
+				<a href="/dashboard" class="logo"><img src="{{url('images/logo.png')}}" alt="FriendzSquare"></a>
 			</div>
 			<div class="col-sm-7">
 				<div class="top-search-cont">
@@ -131,12 +131,13 @@
 
 </header><!--/header-->
 	
-	@yield('content')
+@yield('content')
 @include('panels.footer')
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
-	$( "#searchform" ).submit(function( event ) {
+jQuery(function($){
+  $( "#searchform" ).submit(function( event ) {
 		var searchkey = $('#searchfriends').val();
 		if(searchkey == ''){
 			$('#searchfriends').attr('placeholder', 'Search here..').focus();
@@ -144,49 +145,63 @@
 		}
 	});
 
-        $( "#search-forum-chat" ).submit(function( event ) {
-      var searchkey = $('.forum-keyword-app').val();
-      if(searchkey == ''){
-        $('.forum-keyword-app').attr('placeholder', 'Enter Keyword').focus();
-        event.preventDefault();
-      }
-    });
-
-
-	
-	$("#suggestionform2").ajaxForm(function(response) {
-      if(response == "success")
-      {
-        $('.modal-title').hide();
-        $('.modal-footer').hide();
-        $('.successmsg').toggle();
-        //setTimeout(function(){
-          //$('#myModal').modal('hide');
-          //$(document).find('.modal-backdrop').remove();
-        //}, 2000);
-             
-      }
-    });
-
-    $('.modalshow').click(function(){
-      $('.modal-title').show();
-      $('.modal-footer').show();
-      $('.successmsg').toggle();
-      $('.message_text').val('');
-      $('.useremail').val('');
-    });
-
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+  $( "#search-forum-chat" ).submit(function( event ) {
+    var searchkey = $('.forum-keyword-app').val();
+    if(searchkey == ''){
+      $('.forum-keyword-app').attr('placeholder', 'Enter Keyword').focus();
+      event.preventDefault();
     }
+  });
 
-    $(document).on('click','.mob-menu-btn',function(){
-      $('.dashboard-sidemenu').slideToggle();
-    });
+  $("#suggestionform2").ajaxForm(function(response) {
+    if(response == "success")
+    {
+      $('.modal-title').hide();
+      $('.modal-footer').hide();
+      $('.successmsg').toggle();
+      //setTimeout(function(){
+        //$('#myModal').modal('hide');
+        //$(document).find('.modal-backdrop').remove();
+      //}, 2000);
+           
+    }
+  });
 
+  $('.modalshow').click(function(){
+    $('.modal-title').show();
+    $('.modal-footer').show();
+    $('.successmsg').toggle();
+    $('.message_text').val('');
+    $('.useremail').val('');
+  });
+
+  $(document).on('click','.mob-menu-btn',function(){
+    $('.dashboard-sidemenu').slideToggle();
+  });
+
+  $(window).scroll(function(){
+    if ($(this).scrollTop() > 100) {
+      $('.scrollToTop').fadeIn();
+    } else {
+      $('.scrollToTop').fadeOut();
+    }
+  });
+
+  //Click event to scroll to top
+  $('.scrollToTop').click(function(){
+    $('html, body').animate({scrollTop : 0},800);
+    return false;
+  });
+});
+
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+}
 </script>
 
 {!! Session::forget('error') !!}
 {!! Session::forget('success') !!}
+
+<a href="#" class="scrollToTop"></a>
 </body>
 </html>

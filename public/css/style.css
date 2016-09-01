@@ -3942,3 +3942,26 @@ line-height: 28px;
   margin: 20px auto 0;
   padding: 20px;
 }
+
+.scrollToTop  {
+	width: 85px;
+	height: 85px;
+	padding: 13px;
+	text-align: center;
+	background: whiteSmoke;
+	font-weight: bold;
+	color: #444;
+	text-decoration: none;
+	position: fixed;
+	bottom: 50px;
+	right: 15px;
+	display: none;
+	background: url('../images/arrow_up.png') no-repeat 0px 20px;
+}
+.scrollToTop:hover{
+  text-decoration:none;
+}
+.scrollToTop:focus{
+  outline: none;
+  border:none;
+}
