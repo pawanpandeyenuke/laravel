@@ -121,6 +121,7 @@ class AuthController extends Controller
         
         $emaildata = array(
             'confirmation_code' => $confirmation_code,
+            'email' => $data['email'],
         );
 
         Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
