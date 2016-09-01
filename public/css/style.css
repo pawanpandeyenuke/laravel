@@ -2646,7 +2646,7 @@ textarea{
 	padding-left: 60px;
 }
 #chat-system .chat-message .chat-msg-author {
-    color: #000;
+    color: #555555;
     margin-bottom: 5px;
     width: 100%;
 }
