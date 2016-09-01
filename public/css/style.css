@@ -3956,6 +3956,7 @@ line-height: 28px;
 	bottom: 50px;
 	right: 15px;
 	display: none;
+	z-index: 999;
 	background: url('../images/arrow_up.png') no-repeat 0px 20px;
 }
 .scrollToTop:hover{
