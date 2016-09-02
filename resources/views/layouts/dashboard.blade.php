@@ -196,6 +196,20 @@ jQuery(function($){
     $('.message_text').val('');
     $('.useremail').val('');
   });
+
+  $(window).scroll(function(){
+    if ($(this).scrollTop() > 100) {
+      $('.scrollToTop').fadeIn();
+    } else {
+      $('.scrollToTop').fadeOut();
+    }
+  });
+
+  //Click event to scroll to top
+  $('.scrollToTop').click(function(){
+    $('html, body').animate({scrollTop : 0},800);
+    return false;
+  });
 });
 
 function googleTranslateElementInit() {
@@ -209,7 +223,7 @@ jQuery(function($){
   $( document ).idleTimer( 60000 );
   $( document ).on( "idle.idleTimer", function(event, elem, obj){
     window.location.href = "/";
-  }); 
+  });
 })
 </script> -->
 
@@ -225,5 +239,7 @@ jQuery(function($){
 
 {!! Session::forget('error') !!}
 {!! Session::forget('success') !!}
+
+<a href="#" class="scrollToTop"></a>
 </body>
 </html>

@@ -52,12 +52,30 @@ class HomeController extends Controller
                     $errors->add('mobile_unique', 'This mobile number has already been taken.');
                 }
             }
-            
+
+
+            if($data['country_code'] != 0 && $data['phone_no'] != null)
+            {
+
+                $codeLength = countryMobileLength();
+                if(array_key_exists($data['country_code'], $codeLength)){
+                    $min = countryMobileLength($data['country_code']);
+                    $len = strlen($data['phone_no']);
+                    if($len > $min[$data['country_code']]['max'] || $len < $min[$data['country_code']]['min'])
+                    { 
+                        $errors->add('invalid_country_code', 'This country code is invalid.');
+                    }
+                } else {
+                    $errors->add('invalid_country_code', 'This country code does not exist.');
+                }
+
+            }
+
             if( !empty($errors->getMessages()) ) {
                 unset($data['_token']);
                 return redirect('/')->withErrors($errors)->with($data);
             }
-            
+
             // Register user
             $userData = app()->make('App\Http\Controllers\Auth\AuthController')->create($data);
             return redirect('send-verification-link');

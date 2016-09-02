@@ -96,6 +96,7 @@ class ApiController extends Controller
 		        $useremail = $userdata->email;
 		        $emaildata = array(
 		            'confirmation_code' => $confirmation_code,
+		            'email' => $userdata->email,
 		        );
 
 		        Mail::send('emails.verify',$emaildata, function($message) use($useremail, $full_name){

@@ -2646,7 +2646,7 @@ textarea{
 	padding-left: 60px;
 }
 #chat-system .chat-message .chat-msg-author {
-    color: #000;
+    color: #555555;
     margin-bottom: 5px;
     width: 100%;
 }
@@ -2793,7 +2793,7 @@ textarea{
 }
 .forum-srch-list {
   margin: 20px 0 0;
-  min-height: 600px;
+  min-height: 270px;
 }
 .forum-srch-list .count span{
   background: #A0F0E6;
@@ -3019,9 +3019,9 @@ input.help-inline, textarea.help-inline, .select2-selection.help-inline{
 }
 .country-code-field{
 	border: 0 none;
-    left: 40px;
+    left: 26px;
     position: absolute;
-    top: 15px;
+    top: 7px;
     width: 50px;
     padding-left: 11px;
 }
@@ -3218,7 +3218,7 @@ margin-left: -15px;
 }
 .pe-row .ph-field::before {
     content: "-" !important;
-    left: 70px;
+    left: 78px;
     position: absolute;
     top: 6px;
     z-index: 1;
@@ -3804,7 +3804,14 @@ body
 }
 
 .ph-field input {
-    padding: 6px 65px !important;
+    padding: 6px 70px !important;
+}
+
+.ph-field  span input
+{
+	padding:2px !important;
+	border:0 none !important;
+	width:40px !important;
 }
 
 
@@ -3941,4 +3948,28 @@ line-height: 28px;
   background: #fff none repeat scroll 0 0;
   margin: 20px auto 0;
   padding: 20px;
+}
+
+.scrollToTop  {
+	width: 85px;
+	height: 85px;
+	padding: 13px;
+	text-align: center;
+	background: whiteSmoke;
+	font-weight: bold;
+	color: #444;
+	text-decoration: none;
+	position: fixed;
+	bottom: 50px;
+	right: 15px;
+	display: none;
+	z-index: 999;
+	background: url('../images/arrow_up.png') no-repeat 0px 20px;
+}
+.scrollToTop:hover{
+  text-decoration:none;
+}
+.scrollToTop:focus{
+  outline: none;
+  border:none;
 }

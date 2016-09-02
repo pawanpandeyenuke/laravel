@@ -1148,9 +1148,14 @@ $(document).ready(function(){
 			'type' : 'post',
 			'data' : {'pid' : id},
 			'success' : function(data){
-		 		$('.private-group_'+id).remove();
-		 		$('#forum-confirm-modal').modal('hide');
-		 		current.attr('disabled', false);
+				if( typeof redirectToGroupList != 'undefined' ){
+					console.log( 'done redirect' );
+					window.location.href = redirectToGroupList;
+				} else {
+			 		$('.private-group_'+id).remove();
+			 		$('#forum-confirm-modal').modal('hide');
+			 		current.attr('disabled', false);
+		 		}
 			}
 		});
 	});
@@ -1165,9 +1170,13 @@ $(document).ready(function(){
 			'type' : 'post',
 			'data' : {'pid' : id},
 			'success' : function(data){
-		 		$('.private-group_'+id).remove();
-		 		$('#forum-confirm-modal').modal('hide');
-		 		current.attr('disabled', false);
+				if( typeof redirectToGroupList != 'undefined' ){
+					window.location.href = redirectToGroupList;
+				} else {
+			 		$('.private-group_'+id).remove();
+			 		$('#forum-confirm-modal').modal('hide');
+			 		current.attr('disabled', false);
+			 	}
 			}
 		});
 	});

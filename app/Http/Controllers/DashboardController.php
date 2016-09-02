@@ -483,7 +483,7 @@ class DashboardController extends Controller
         $user = new User();
         
         if(Request::isMethod('post')){
-            
+
             $getCommonEduArgs = array_intersect_key( $arguments, [
                                     'user_id' => 'null',
                                     'education_level' => 'null',

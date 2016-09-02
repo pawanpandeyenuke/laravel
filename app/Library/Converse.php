@@ -386,7 +386,7 @@ class Converse
 						$ImageData = file_get_contents($path);
 						$ImageType = pathinfo($path, PATHINFO_EXTENSION);
 						$ImageData = base64_encode($ImageData);
-						Converse::setVcard($user->xmpp_username, $ImageData, $ImageType);
+						self::setVcard($user->xmpp_username, $ImageData, $ImageType);
 		            }
 		        }
 		        return true;

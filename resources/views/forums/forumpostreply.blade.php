@@ -192,7 +192,8 @@
     </div><!--/pagedata-->
 
 <script type="text/javascript">
-$(".multiple-slt").select2();
+$(document).ready(function(){
+	$(".multiple-slt").select2();
 
 	$("#up_imgs").fileinput({
 	    uploadUrl: "/file-upload-batch/2",
@@ -202,40 +203,37 @@ $(".multiple-slt").select2();
 	    showCaption: false
 	});
 
-	// window.onload = function() {
-	$(document).ready(function(){
-		var w = $('#sticky-anchor').width();
-		$('.fix-header').css('width',w+60);
-		$(".forum_post .morelink").click();
-	});
-      	
-		// $(".forum_post .morelink").addClass('unique_post');
-	// }
-
-	var i = 1;
-	function sticky_relocate() {
-	    var window_top = $(window).scrollTop();
-	    var div_top = $('#sticky-anchor').offset().top;
-	    if (window_top > div_top) {
-	      $('.fix-header').addClass('stick');
-	      $('.forum-post-replies').addClass('stick-margin');
-	      if(i == 1){
-	      	//$(".forum_post .morelink").click();
-	      	i++;
-	      }
-	    }else{
-	      $('.fix-header').removeClass('stick');
-	      $('.forum-post-replies').removeClass('stick-margin');
-	    }
-	}
-
-	$(function () {
-	    $(window).scroll(sticky_relocate);
-	    sticky_relocate();
-	});
+	var w = $('#sticky-anchor').width();
+	$('.fix-header').css('width',w+60);
+	$(".forum_post .morelink").click();
 
 	$(document).on('click','.mpost-rply-btn',function(){
 		$('.f-post-reply-form').slideToggle();
 	});
+
+	$(window).scroll(sticky_relocate);
+	sticky_relocate();
+});
+
+var i = 1;
+function sticky_relocate() 
+{
+    var window_top = $(window).scrollTop();
+    var div_top = $('#sticky-anchor').offset().top;
+    if (window_top > div_top) {
+      $('.fix-header').addClass('stick');
+      $('.forum-post-replies').addClass('stick-margin');
+      var height = 230 + $('.forum-master-post .forum_post').height();
+      $('.stick-margin').css('marginTop', height);
+      if(i == 1){
+      	//$(".forum_post .morelink").click();
+      	i++;
+      }
+    }else{
+      $('.fix-header').removeClass('stick');
+      $('.stick-margin').css('marginTop', 0);
+      $('.forum-post-replies').removeClass('stick-margin');
+    }
+}
 </script>
 @endsection

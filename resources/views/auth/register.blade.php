@@ -162,20 +162,28 @@ $userdata = session('userdata');
                                 <span class="field-icon flaticon-web-1"></span>                                 
                             </div>
 
-                            <div class="form-group ph-field {{ $errors->has('mobile_unique') ? ' has-error' : '' }}">
+                            <div class="form-group ph-field {{ ($errors->has('mobile_unique') || $errors->has('invalid_country_code')) ? ' has-error' : '' }}">
                                 <?php 
                                     if(session('country_code') != "")
                                         $font = "";
                                     else
                                         $font = "#999";
                                 ?>
-                                <span  class="country-code-field country-code-field-span numeric"><font color={{$font}}><?php echo (session('country_code') != "")?session('country_code'):"00"; ?></font></span> 
-                                <input type="hidden" name="country_code" class="country-code-field numeric register-country-code" value="{{ session('country_code') }}" placeholder="000" >
+                                <span class="country-code-field">
+                                    <input type="text" name="country_code" class="country-code-field numeric register-country-code" placeholder="000" value="{{ session('country_code') }}" maxlength="4"/>    
+                                </span> 
+                                
                                 <input type="text" class="form-control icon-field numeric register-mobile" name = "phone_no" value="{{ session('phone_no') }}" placeholder="Mobile" id="mobileContact">
                                 <span class="field-icon flaticon-smartphone-with-blank-screen"></span>
                                 @if ($errors->has('mobile_unique'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('mobile_unique') }}</strong>
+                                    </span>
+                                @endif
+
+                                @if ($errors->has('invalid_country_code'))
+                                    <span class="help-block c_code_err_msg">
+                                        <strong>{{ $errors->first('invalid_country_code') }}</strong>
                                     </span>
                                 @endif
                             </div>
@@ -286,13 +294,9 @@ jQuery(function($) {
             'data': { 'countryId': countryId },
             'type': 'post',
             'success': function(response){
-
                 var mobCode = response[0].phonecode;
-
                 $('.country-code-field').val(mobCode);
-                $('.country-code-field-span').html(mobCode);
                 $('.country-code-field').attr('data-value', mobCode);
-                //var validArray = getValidationArray(mobCode);
             }
         });
     });
@@ -370,6 +374,11 @@ jQuery(function($) {
     
     // Opens popup for app download links
     $('#sendMsg2').modal('show');
+
+    $('.country-code-field').focus(function(){
+        $('.c_code_err_msg').hide();
+    })
+
 });
 </script>
 {{ Session::forget('userdata') }}
