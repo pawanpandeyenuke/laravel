@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Dashboard')
+@section('title', 'News Feed')
 <style type="text/css"> 
 	.dashboard-load {
 	    background: none repeat scroll 0 0 #fbfbfb;
