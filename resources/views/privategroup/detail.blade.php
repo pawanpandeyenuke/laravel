@@ -103,13 +103,12 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 							<div class="btn-cont text-center mem">
 								<ul class="list-inline">
 								<?php if(Auth::User()->id==$ownerid){ ?>
-								<li><a href="{{url("private-group-list")}}" title=""  class="btn btn-primary">Back</a></li>
+								<li><button data-forumtype="private" class="btn btn-primary del-confirm-forum" value="{{ $groupid }}" >Delete Group</button></li>
 								<?php } else { ?>
 								<li><button value="{{ $groupid }}" class="btn btn-primary del-confirm-forum" data-forumtype="private-leave">Leave Group</button></li>
 								<?php } ?>
 								<li><a href="{{url("groupchat/pg/".$groupid)}}" title=""  class="btn btn-primary startchat">Start Chat</a></li>
 								</ul>
-
 							<div class="bcast-list" style="display: none;">
 								<select class="multiple-slt form-control" name="groupmembers[]" multiple="multiple">
 						@foreach($friends as $data)
@@ -132,7 +131,9 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 		</div>
 	</div>
 </div>
-
+<script>
+var redirectToGroupList = '<?php echo url( 'private-group-list' ); ?>';
+</script>
 <style>
 .select2-container {
 	width:200px;

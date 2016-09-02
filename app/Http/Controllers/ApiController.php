@@ -2069,7 +2069,7 @@ class ApiController extends Controller
 			$invalid_users = array();
 			$alreadyMemberArray = array();
 			$new_members = array();
-
+			$GroupUpdated = false;
 			foreach ($members as $key => $value) {
 	 			
 	 			$existingUser = User::find($value);
@@ -2078,51 +2078,57 @@ class ApiController extends Controller
 	 										->where('status','Accepted')
 	 										->get()->toArray();
 
-	 			if( !empty($existingUser) && $AFriend ){
-		 			$alreadyMember = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])->get()->toArray();
+	 			if( !empty($existingUser) && !empty($AFriend) ){
+		 			$alreadyMember = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])->first()->toArray();
 		 			if( empty($alreadyMember) ){
-	 						$new_members[] = $existingUser;
-	 	 					$privateGroupMemberObj = new GroupMembers;
-		 	 				$privateGroupMemberObj->group_id = $group->id;
-		 	 				$privateGroupMemberObj->member_id = $value;
-		 	 				$privateGroupMemberObj->status = 'Pending';
-		 	 				$privateGroupMemberObj->save();
+	 					$GroupUpdated = true;
+ 						$new_members[] = $existingUser;
+ 	 					$privateGroupMemberObj = new GroupMembers;
+	 	 				$privateGroupMemberObj->group_id = $group->id;
+	 	 				$privateGroupMemberObj->member_id = $value;
+	 	 				$privateGroupMemberObj->status = 'Pending';
+	 	 				$privateGroupMemberObj->save();
 
 	 				} else if( isset($alreadyMember['status']) && $alreadyMember['status'] == 'Left' ){
+	 					$GroupUpdated = true;
 	 					$new_members[] = $existingUser;
 	 					$data = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])
 												->update(['status' => 'Pending']);
 	 				}
+					
 				}
 			}
-
-
+			
 			// Send Message
-				$owner_data = User::find($owner_id);
-				$name = $owner_data->first_name.' '.$owner_data->last_name;
-				$members = User::whereIn('id', GroupMembers::where('group_id', $group->id)->pluck('member_id')->toArray())->select('id as user_id', DB::raw('CONCAT(first_name, " ", last_name) AS username'), 'xmpp_username as xmpp_userid','picture as user_image')->get()->toArray();
+			$owner_data = User::find($owner_id);
+			$name = $owner_data->first_name.' '.$owner_data->last_name;
+			$members = User::whereIn('id', GroupMembers::where('group_id', $group->id)->pluck('member_id')->toArray())->select('id as user_id', DB::raw('CONCAT(first_name, " ", last_name) AS username'), 'xmpp_username as xmpp_userid','picture as user_image')->get()->toArray();
 
-				$message = json_encode( array( 'user_id' => $owner_data->id, 'user_image'=> $owner_data->picture ,'type' => 'room', 'groupname' => $group->title, 'sender_jid' => $owner_data->xmpp_username, 'groupjid'=>$group_jid, 'group_image' => $group->picture, 'created_by'=>$name,'message' => 'This invitation is for joining the '.$group->title.' group.', 'users' => $members) );
-                
-                foreach($new_members as $val){
-                    Converse::broadcast($owner_data->xmpp_username, $val->xmpp_username, $message);
+			$message = json_encode( array( 'user_id' => $owner_data->id, 'user_image'=> $owner_data->picture ,'type' => 'room', 'groupname' => $group->title, 'sender_jid' => $owner_data->xmpp_username, 'groupjid'=>$group_jid, 'group_image' => $group->picture, 'created_by'=>$name,'message' => 'This invitation is for joining the '.$group->title.' group.', 'users' => $members) );
+            
+            foreach($new_members as $val){
+                Converse::broadcast($owner_data->xmpp_username, $val->xmpp_username, $message);
+            }
+
+
+            foreach($new_members as $key1 => $val1) 
+            {
+            	// die('kill');
+            	$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner_data->xmpp_username, 'action'=>'add','user_id' => $val1->id, 'user_image' => $val1->picture,'message' => $val1->first_name.' '.$val1->last_name.' has invited for joining the group', 'xmpp_userid' => $val1->xmpp_username, 'user_name' => $val1->first_name.' '.$val1->last_name, 'user_id' => $val1->id) );
+
+            	foreach($old_member as $key => $val) 
+                {
+                    Converse::broadcastchatroom($group->group_jid, $name, $val['xmpp_username'], $owner_data->xmpp_username, $message);
                 }
-
-
-	            foreach($new_members as $key1 => $val1) 
-	            {
-	            	// die('kill');
-	            	$message = json_encode( array( 'type' => 'hint', 'sender_jid' => $owner_data->xmpp_username, 'action'=>'add','user_id' => $val1->id, 'user_image' => $val1->picture,'message' => $val1->first_name.' '.$val1->last_name.' has invited for joining the group', 'xmpp_userid' => $val1->xmpp_username, 'user_name' => $val1->first_name.' '.$val1->last_name, 'user_id' => $val1->id) );
-
-	            	foreach($old_member as $key => $val) 
-	                {
-	                    Converse::broadcastchatroom($group->group_jid, $name, $val['xmpp_username'], $owner_data->xmpp_username, $message);
-	                }
-	            }
+            }
 			// Send Message
-
-            $this->status = "success";
-            $this->message = "Members updated successfully.";
+	        if( $GroupUpdated ){
+	            $this->status = "success";
+	            $this->message = "Members updated successfully.";
+        	} else {
+        		$this->status = "Failed";
+	            $this->message = "Try again.";
+        	}
             $this->data = '';//GroupMembers::where('group_id', $group->id)->get()->toArray();
 
 		}catch(Exception $e){
