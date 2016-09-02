@@ -31,6 +31,65 @@
 <script src="{{url('/lib/js/emoji-picker.js')}}"></script>
 <script src="{{url('/js/jquery.nicescroll.min.js')}}"></script>
 <!-- Emoji Inclues Ends-->
+<script>
+jQuery(function($){
+  $( "#searchform" ).submit(function( event ) {
+    var searchkey = $('#searchfriends').val();
+    if(searchkey == ''){
+      $('#searchfriends').attr('placeholder', 'Search here..').focus();
+      event.preventDefault();
+    }
+  });
+
+  $( "#search-forum-chat" ).submit(function( event ) {
+    var searchkey = $('.forum-keyword-app').val();
+    if(searchkey == ''){
+      $('.forum-keyword-app').attr('placeholder', 'Enter Keyword').focus();
+      event.preventDefault();
+    }
+  });
+
+  $("#suggestionform2").ajaxForm(function(response) {
+    if(response == "success")
+    {
+      $('.modal-title').hide();
+      $('.modal-footer').hide();
+      $('.successmsg').toggle();
+      //setTimeout(function(){
+        //$('#myModal').modal('hide');
+        //$(document).find('.modal-backdrop').remove();
+      //}, 2000);
+           
+    }
+  });
+
+  $('.modalshow').click(function(){
+    $('.modal-title').show();
+    $('.modal-footer').show();
+    $('.successmsg').toggle();
+    $('.message_text').val('');
+    $('.useremail').val('');
+  });
+
+  $(document).on('click','.mob-menu-btn',function(){
+    $('.dashboard-sidemenu').slideToggle();
+  });
+
+  $(window).scroll(function(){
+    if ($(this).scrollTop() > 100) {
+      $('.scrollToTop').fadeIn();
+    } else {
+      $('.scrollToTop').fadeOut();
+    }
+  });
+
+  //Click event to scroll to top
+  $('.scrollToTop').click(function(){
+    $('html, body').animate({scrollTop : 0},800);
+    return false;
+  });
+});
+</script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -136,63 +195,7 @@
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
-jQuery(function($){
-  $( "#searchform" ).submit(function( event ) {
-		var searchkey = $('#searchfriends').val();
-		if(searchkey == ''){
-			$('#searchfriends').attr('placeholder', 'Search here..').focus();
-			event.preventDefault();
-		}
-	});
 
-  $( "#search-forum-chat" ).submit(function( event ) {
-    var searchkey = $('.forum-keyword-app').val();
-    if(searchkey == ''){
-      $('.forum-keyword-app').attr('placeholder', 'Enter Keyword').focus();
-      event.preventDefault();
-    }
-  });
-
-  $("#suggestionform2").ajaxForm(function(response) {
-    if(response == "success")
-    {
-      $('.modal-title').hide();
-      $('.modal-footer').hide();
-      $('.successmsg').toggle();
-      //setTimeout(function(){
-        //$('#myModal').modal('hide');
-        //$(document).find('.modal-backdrop').remove();
-      //}, 2000);
-           
-    }
-  });
-
-  $('.modalshow').click(function(){
-    $('.modal-title').show();
-    $('.modal-footer').show();
-    $('.successmsg').toggle();
-    $('.message_text').val('');
-    $('.useremail').val('');
-  });
-
-  $(document).on('click','.mob-menu-btn',function(){
-    $('.dashboard-sidemenu').slideToggle();
-  });
-
-  $(window).scroll(function(){
-    if ($(this).scrollTop() > 100) {
-      $('.scrollToTop').fadeIn();
-    } else {
-      $('.scrollToTop').fadeOut();
-    }
-  });
-
-  //Click event to scroll to top
-  $('.scrollToTop').click(function(){
-    $('html, body').animate({scrollTop : 0},800);
-    return false;
-  });
-});
 
 function googleTranslateElementInit() {
     new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
