@@ -1437,12 +1437,13 @@ public function sendImage(Request $request){
 			if( isset($MemberGroup->id) && !empty($MemberGroup->id) ){
 				$MemberID = $MemberGroup->id;
 				$GroupId = $MemberGroup->group_id;
+				
+				$members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where(['members.group_id' => $GroupId,'members.status' => 'Joined'])->pluck('xmpp_username');
+
 				$PrivateGroupMember = GroupMembers::find($MemberID);
 				$PrivateGroupMember->status = 'Joined';
 				$PrivateGroupMember->update();
-
-				$members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id', $GroupId)->pluck('xmpp_username');
-	               	
+  	
 	            $name = Auth::User()->first_name.' '.Auth::User()->last_name;
 	            $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => Auth::User()->xmpp_username,'xmpp_userid' => Auth::User()->xmpp_username,'user_id' => $UserId, 'user_image' => Auth::User()->picture, 'user_name'=>$name, 'message' => $name.' joined the group') );
 	            foreach($members as $memberxmpp) {

@@ -2017,12 +2017,12 @@ class ApiController extends Controller
 					$group_members = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->count();
 				if( $group_members > 0 ){
 
-					$status = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])
-													->update(['status' => 'Joined']);
-
 					// Broadcast message
 	                //$members = GroupMembers::where(['group_id' => $group->id])->get();
-	                $members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id', $group->id)->pluck('xmpp_username');
+	                $members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where(['members.group_id' => $group->id,'members.status' => 'Joined'])->pluck('xmpp_username');
+
+	                $status = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])
+													->update(['status' => 'Joined']);
 	               	
 	                $name = $user->first_name.' '.$user->last_name;
 	                $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username,'user_id' => $user->id, 'user_image' => $user->picture, 'user_name'=>$name, 'message' => $name.' joined the group') );
