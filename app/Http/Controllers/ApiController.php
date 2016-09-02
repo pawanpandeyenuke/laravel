@@ -2011,28 +2011,35 @@ class ApiController extends Controller
 			if( !$user )
 				throw new Exception("User does not exist.", 1);
 
-			$group_members = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->count();
+			$TotalCount = GroupMembers::where(['member_id' => $member_id,'status' => 'Joined'] )->get()->count();
+			
+			if( $TotalCount <= Config::get('constants.private_group_limit') ){
+					$group_members = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->count();
+				if( $group_members > 0 ){
 
-			if( $group_members > 0 ){
+					$status = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])
+													->update(['status' => 'Joined']);
 
-				$status = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])
-												->update(['status' => 'Joined']);
+					// Broadcast message
+	                //$members = GroupMembers::where(['group_id' => $group->id])->get();
+	                $members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id', $group->id)->pluck('xmpp_username');
+	               	
+	                $name = $user->first_name.' '.$user->last_name;
+	                $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username,'user_id' => $user->id, 'user_image' => $user->picture, 'user_name'=>$name, 'message' => $name.' joined the group') );
+	                foreach($members as $memberxmpp) {
+	                    Converse::broadcastchatroom($group->group_jid, $name, $memberxmpp, $user->xmpp_username, $message);
+	                };
 
-				// Broadcast message
-                //$members = GroupMembers::where(['group_id' => $group->id])->get();
-                $members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id', $group->id)->pluck('xmpp_username');
-               	
-                $name = $user->first_name.' '.$user->last_name;
-                $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => $user->xmpp_username,'xmpp_userid' => $user->xmpp_username,'user_id' => $user->id, 'user_image' => $user->picture, 'user_name'=>$name, 'message' => $name.' joined the group') );
-                foreach($members as $memberxmpp) {
-                    Converse::broadcastchatroom($group->group_jid, $name, $memberxmpp, $user->xmpp_username, $message);
-                };
-
-				if( $status ){
-					$this->data = $status;
-					$this->message = 'Joined private group successfully.' ;
-					$this->status = 'success';
+					if( $status ){
+						$this->data = $status;
+						$this->message = 'Joined private group successfully.' ;
+						$this->status = 'success';
+					}
 				}
+			} else {
+				$this->message = 'only '.Config::get('constants.private_group_limit').' group join.' ;
+				$this->status = 'Failed';
+				$this->data = '';
 			}
 
 		}catch(Exception $e){
