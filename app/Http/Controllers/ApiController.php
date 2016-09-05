@@ -5,7 +5,7 @@ use Mail, Config;
 use App\Library\Converse;
 use App\User, App\Feed, App\Like, App\Comment, Auth, App\EducationDetails, App\Friend, App\Broadcast, App\BroadcastMembers, App\BroadcastMessages, App\ReportUser;
 use App\Http\Controllers\Controller;
-use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments,App\ForumsDoctor, App\Setting;
+use App\Country, App\State, App\City, App\Category, App\DefaultGroup, App\Group, App\GroupMembers, App\JobArea, App\JobCategory,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments,App\ForumsDoctor, App\Setting, App\PostSpams, App\ReplySpams;
 use Validator, Redirect, Request, Session, Hash, DB, File;
 use Illuminate\Support\Facades\Input;
 use Intervention\Image\Facades\Image;
