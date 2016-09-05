@@ -1430,12 +1430,28 @@ public function sendImage(Request $request){
 		$GroupJid = $Request['group_jid'];
 		$UserId   = Auth::User()->id;	
 		$Result   = ['data' => '' ];
-		$MemberGroup = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['groups.group_jid' => $GroupJid, 'members.member_id' => $UserId, 'groups.status' => 'Active','members.status' => 'Pending'] )->select( 'members.id' )->first();		
-		if( isset($MemberGroup->id) && !empty($MemberGroup->id) ){
-			$MemberID = $MemberGroup->id;
-			$PrivateGroupMember = GroupMembers::find($MemberID);
-			$PrivateGroupMember->status = 'Joined';
-			$PrivateGroupMember->update();
+
+		if( !empty($GroupJid) ) {
+			$MemberGroup = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['groups.group_jid' => $GroupJid, 'members.member_id' => $UserId, 'groups.status' => 'Active','members.status' => 'Pending'] )->select( 'members.id','members.group_id' )->first();		
+		
+			if( isset($MemberGroup->id) && !empty($MemberGroup->id) ){
+				$MemberID = $MemberGroup->id;
+				$GroupId = $MemberGroup->group_id;
+				
+				$members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where(['members.group_id' => $GroupId,'members.status' => 'Joined'])->pluck('xmpp_username');
+
+				$PrivateGroupMember = GroupMembers::find($MemberID);
+				$PrivateGroupMember->status = 'Joined';
+				$PrivateGroupMember->update();
+  	
+	            $name = Auth::User()->first_name.' '.Auth::User()->last_name;
+	            $message = json_encode( array( 'type' => 'hint', 'action'=>'join', 'sender_jid' => Auth::User()->xmpp_username,'xmpp_userid' => Auth::User()->xmpp_username,'user_id' => $UserId, 'user_image' => Auth::User()->picture, 'user_name'=>$name, 'message' => $name.' joined the group') );
+	            foreach($members as $memberxmpp) {
+	                Converse::broadcastchatroom($GroupJid, $name, $memberxmpp, Auth::User()->xmpp_username, $message);
+	            };
+
+			}
+
 		}
 		$UserGroup = Group::leftJoin('members','members.group_id','=','groups.id')->where( ['members.member_id' => $UserId,'members.status' => 'Joined'] )->select( 'groups.group_jid','groups.title','groups.picture','groups.id' )->orderBy('groups.id', 'desc')->get();
 		$Result['data']  = $UserGroup;
