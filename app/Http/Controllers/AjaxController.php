@@ -2377,7 +2377,7 @@ public function sendImage(Request $request){
 
 	                foreach($members as $key => $val) {
 	                    Converse::broadcastchatroom($group->group_jid, $name, $val, $user->xmpp_username, $message);
-	                };
+	                }
 
 					$Status = 1;
 				}
