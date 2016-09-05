@@ -15,7 +15,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body style="font-family: 'Open Sans', sans-serif;background-color:#e9faf8;">
+  <body style="font-family: 'Open Sans', sans-serif;background-color:#e9faf8;width:100%;float:left;">
 		<div style="width:571px;margin:30px auto;">
 			<div style="background-color:#fff;padding:10px 15px;">
 			<a href="#"><img src="{{url('/images/logo.png')}}" alt="" title=""/></a>
@@ -35,7 +35,7 @@
 			<a href="{{ url('unsubscribe?email='.$email) }}" style="background-color:#5df7e3;color:#000;padding:10px 20px;margin-bottom:25px;text-decoration:none;font-weight:bold;">Unsubscribe</a>
 			</div>
 			<div style="background-color:#fff;padding:10px 15px;text-align:center;">
-			<p style="font-size:12px;margin-top:15px;margin-bottom:15px;">If you have any questions, then please contact at <a href="mailto:contact@friendzsquare.com" style="color:#000;font-weight:bold;">contact@friendzsquare.com </a>
+			<p style="font-size:12px;margin-top:15px;margin-bottom:15px;">If you have any questions, then please contact at <a href="mailto:contact@friendzsquare.com" style="color:#000;font-weight:bold;">contact@friendzsquare.com </a></p>
 			</div>
 			<div style="background-color:#5df7e3;height:8px; margin-bottom:15px;"></div>	
 		</div>

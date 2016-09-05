@@ -15,7 +15,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body style="font-family: 'Open Sans', sans-serif;background-color:#e9faf8;">
+  <body style="font-family: 'Open Sans', sans-serif;background-color:#e9faf8;width:100%;float:left;">
     <div style="width:590px;margin:30px auto;">
       <div style="background-color:#fff;padding:10px 15px;">
       <a href="#"><img src="{{url('/images/logo.jpg')}}" alt="" title=""/></a>
