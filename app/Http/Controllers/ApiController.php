@@ -995,7 +995,7 @@ class ApiController extends Controller
 			
 			if($f1 == null)
 			{
-				throw new Exception("These users are not friends.", 1);	
+				throw new Exception("This user is not your friend.", 1);	
 			}
 			else
 			{
