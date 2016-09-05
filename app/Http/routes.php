@@ -403,6 +403,7 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 
 	Route::get('terms','SearchController@terms');
 	Route::get('privacy-policy','SearchController@privacyPolicy');
+	Route::get('about-us','SearchController@aboutUs');
 
 	Route::get('send-verification-link','SearchController@verify');
 	Route::post('send-verification-link','SearchController@verify');

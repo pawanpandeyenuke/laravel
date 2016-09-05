@@ -98,6 +98,7 @@
 	            <li>Copyright 2016 Connect All Pte Ltd.</li>
 	            <li><a href="{{ url('terms') }}" title="Terms of Use">Terms of Use</a></li>
 	            <li><a href="{{ url('privacy-policy') }}" title="Privacy Policy">Privacy Policy</a></li>
+	            <li><a href="{{ url('about-us') }}" title="About Us">About Us</a></li>
 	        </ul>
 	    </div>
 	</footer>
