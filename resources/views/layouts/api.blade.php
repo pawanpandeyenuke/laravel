@@ -25,6 +25,7 @@
 	}
 </style>
 <script type="text/javascript" src="{{ url('forums-data/js/jquery-1.11.3.min.js') }}"></script>
+@include('panels.google-analytics')
 </head>
 <body>
 		
