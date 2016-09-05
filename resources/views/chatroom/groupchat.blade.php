@@ -474,11 +474,11 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
           chatbox.$el.find( '.chat-title' ).html( GroupName[jidStr] );
         } else {
           $.ajax({
-            'url' : "/ajax/getgroupdeatils",
+            'url' : "{{url('/ajax/getgroupdeatils')}}",
             'type' : 'post',
             'async' : false,
             'dataType' : 'json',
-            'data' : { group_jid: xmpp },
+            'data' : { group_jid: jidStr },
             'success' : function(data){
               if( data.status == 1 ){
                 if( data.title !== undefined ){
@@ -888,9 +888,9 @@ function groupChatRefresh( grpjid ){
 
         ChatHtml += '<li><div style="position:relative;" class="pvt-room-list">';
           ChatHtml += '<a href="/private-group-detail/'+v.id+'">';
-          ChatHtml += '<span style="background: url(\''+GroupImage+'\');" class="chat-thumb groupdatapic-'+v.group_jid+'"></span>';
+          ChatHtml += '<span style="background: url(\''+GroupImage+'\');" class="chat-thumb grouppic-'+v.group_jid+'"></span>';
           ChatHtml += '<span class="title grouptitle-'+v.group_jid+'">'+v.title+'</span></a>';
-          ChatHtml += '<button id="'+v.group_jid+' groupdatapic-'+v.group_jid+'" data-groupimage="'+GroupImage+'" class="time" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\', \''+GroupImage+'\' );">Chat</button></div></li>';
+          ChatHtml += '<button id="'+v.group_jid+'" data-groupimage="'+GroupImage+'" class="time groupdatapic-'+v.group_jid+'" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\', \''+GroupImage+'\' );">Chat</button></div></li>';
       });
       $('#gccollapseThree').find( '.chat-user-list' ).html( '<ul>'+ChatHtml+'</ul>' );
     }
