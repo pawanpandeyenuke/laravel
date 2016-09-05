@@ -26,24 +26,22 @@
 			<div class="single-post" id="forumpost_{{$post->id}}">
 				<div class="post-header">
 				  	@if($user_id)
-				  		
-							<div class="dropdown reply-action">
-								<button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-									<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
-								</button>
-								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-								@if($user_id == $user->id)
-									@if($repliesCount == 0)
-										<?php $title = base64_encode(nl2br($postTitle)); ?>
-										<li><a href="{{ url("api/get-forum-post-details?post_id=$post->id&user_id=$user->id&post_data=$title") }}">Edit</a></li>
-									@endif
-										<li><a href="#" class="del-confirm-api" data-type="post" data-postid="{{$post->id}}" data-breadcrum = "{{$post->forum_category_breadcrum}}">Delete</a></li>
-								@else
-									<li><a href="#" class="spamModal" data-postid="{{$post->id}}">Report as spam</a></li>
+						<div class="dropdown reply-action">
+							<button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+								<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							@if($user_id == $user->id)
+								@if($repliesCount == 0)
+									<?php $title = base64_encode(nl2br($postTitle)); ?>
+									<li><a href="{{ url("api/get-forum-post-details?post_id=$post->id&user_id=$user->id&post_data=$title") }}">Edit</a></li>
 								@endif
-								</ul>
-							</div>
-					  	@endif
+									<li><a href="#" class="del-confirm-api" data-type="post" data-postid="{{$post->id}}" data-breadcrum = "{{$post->forum_category_breadcrum}}">Delete</a></li>
+							@else
+								<li><a href="#" class="spamModal" data-postid="{{$post->id}}">Report as spam</a></li>
+							@endif
+							</ul>
+						</div>
 				  	@endif
 					<span class="u-img" style="background: url('<?php echo userImage($user) ?>');"></span>
 					<span class="title">{{ $user->first_name.' '.$user->last_name }}</span>
