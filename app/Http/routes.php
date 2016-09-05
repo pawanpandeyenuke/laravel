@@ -158,6 +158,10 @@ Route::post('/ajax/joingroup','AjaxController@joinPrivateGroup');
 Route::post('/ajax/remove-image', 'AjaxController@removeImageWeb');
 
 Route::post('/ajax/default-group-user', 'AjaxController@getDefaultGroupUser');
+
+Route::post('ajax/spam/post', 'AjaxController@spamPost');
+Route::post('ajax/spam/reply', 'AjaxController@spamReply');
+
 /**
  * @Api Routes..
  *

@@ -85,18 +85,20 @@
 				<div class="single-post" id="forumreply_{{$reply->id}}">
 					<div class="post-header">
 					  	@if($user_id)
-					  		@if($user_id == $reply->owner_id)
-								<div class="dropdown reply-action">
-									<button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-										<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
-									</button>
-									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							<div class="dropdown reply-action">
+								<button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+									<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+									@if($user_id == $reply->owner_id)
 										<?php $title = base64_encode(nl2br($reply_data)); ?>
 										<li><a href="{{ url("api/get-forum-reply-details?reply_id=$reply->id&user_id=$user->id&reply_data=$title") }}">Edit</a></li>
 										<li><a href="#" class="del-confirm-api" data-type="reply" data-forumpostid="{{$checkpost->id}}" data-forumreplyid = "{{$reply->id}}">Delete</a></li>
-									</ul>
-								</div>
-						  	@endif
+									@else
+										<li><a href="#" class="spamModal" data-replyid="{{$reply->id}}">Report as spam</a></li>
+									@endif
+								</ul>
+							</div>
 					  	@endif
 						<span class="u-img" style="background: url('<?php echo userImage($replyUser) ?>');"></span>
 						<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name}}</span>
@@ -132,7 +134,7 @@
 			@endforeach
 
 		</div>
-		@if($replies->count() >= 5)
+		@if($totalRecords > 10)
 			<div class="load-more-btn-cont text-center">
 				<button type="button" class="load-more-forumreply loading-btn" data-forumpostid = "{{$checkpost->id}}">View More</button>
 			</div>
@@ -141,14 +143,66 @@
 	</div>
 	<div class="userid" data-id="{{$user_id}}"></div>
 
-@endsection
 
-<script type="text/javascript">
-	
-	window.onload = function() {
-		
-		//$('.morecontent').hide();
-	}
+@if($user_id)
 
+<!-- Spam Modal -->
+<div id="spamModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Report as spam</h4>
+      </div>
+      <div class="modal-body">
+      	<p>By reporting, you will no longer see this reply.</p>
+        <p><b>Select reason: </b></p>
+        <select name='reason' id='reason' class='form-control'>
+        	<option value=''>---Select---</option>
+        	<option>This reply is spamming</option>
+        	<option>This reply is sexually explicit</option>
+        	<option>This reply is harassing me</option>
+        </select>
+        <input type="hidden" id="reply_id">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-reply" id='submitSpam'>Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<script>
+jQuery(function($){
+	$(document).on('click', '.spamModal', function(e){
+		e.preventDefault();
+		$('#spamModal').modal({
+			'keyboard': false,
+			'backdrop': 'static',
+			'show': true
+		});
+		$('#reason').val('');
+		$('#reply_id').val($(this).data('replyid'));
+	});
+
+	$('#submitSpam').click(function(){
+		var user_id = $('.userid').data('id');
+		var reply_id = $('#reply_id').val();
+		var reason = $('#reason').val();
+		if(!reason){
+			alert('Select some reason to proceed.');
+		} else {
+			$(this).prop('disabled', true);
+			$.post('/ajax/spam/reply', {user_id:user_id, reply_id:reply_id, reason:reason}, function(response){
+				$('#spamModal').modal('hide');
+				$('#submitSpam').prop('disabled', false);
+				$('#forumreply_'+reply_id).fadeOut(500);
+			});
+		}
+	});
+});
 </script>
+
+@endif
+@endsection

@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Feed, Auth, Mail, File;
 
 use \Exception,Route;
+use App\PostSpams, App\ReplySpams;
 use App\Library\Converse, App\Library\Functions, Config;
 use Illuminate\Support\Facades\Request, Intervention\Image\Facades\Image;
 
@@ -1797,12 +1798,12 @@ public function sendImage(Request $request){
 
 	public function viewMoreForumPost()
 	{
-		$per_page = 10;
 		$page = Input::get('pageid');
 		$call_type = Input::get('call_type');
+		$per_page = $call_type=='web' ? 10 : 5;
 		$breadcrum = Input::get('breadcrum');
 		$offset = ($page - 1) * $per_page;
-
+		
 		// Get total pages
 		$totalRecords = ForumPost::with('user')->with('forumPostLikesCount')
 	     	->with('replyCount')
@@ -2022,7 +2023,7 @@ public function sendImage(Request $request){
 		$call_type = Input::get('call_type');
 		$forumpostid = Input::get('forumpostid');
 		$offset = ($page - 1) * $per_page;
-
+		
 		// Get total pages
 		$totalRecords = ForumReply::with('user')
             ->with('replyLikesCount')
@@ -2031,7 +2032,7 @@ public function sendImage(Request $request){
             ->count();
         $pages = ceil($totalRecords / $per_page);
         $existmore = $page == $pages ? 0 : 1;
-
+        
 	    $reply = ForumReply::with('user')
             ->with('replyLikesCount')
             ->with('replyCommentsCount')
@@ -2447,5 +2448,21 @@ public function sendImage(Request $request){
 
 	}
 
-
+	// Mark post as spam
+	public function spamPost()
+	{
+		$input = Input::all();
+		$spam = new PostSpams;
+        $spam = $spam->create($input);
+        exit;
+	}
+	
+	// Mark reply as spam
+	public function spamReply()
+	{
+		$input = Input::all();
+		$spam = new ReplySpams;
+        $spam = $spam->create($input);
+        exit;
+	}
 }
