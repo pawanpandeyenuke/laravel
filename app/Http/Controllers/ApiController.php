@@ -10,7 +10,6 @@ use Validator, Redirect, Request, Session, Hash, DB, File;
 use Illuminate\Support\Facades\Input;
 use Intervention\Image\Facades\Image;
 use \Exception;
-use App\PostSpams, App\ReplySpams;
 use App\Library\Functions;
 
 class ApiController extends Controller
@@ -2087,8 +2086,8 @@ class ApiController extends Controller
 	 										->get()->toArray();
 
 	 			if( !empty($existingUser) && !empty($AFriend) ){
-		 			$alreadyMember = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])->first()->toArray();
-		 			if( empty($alreadyMember) ){
+		 			$alreadyMember = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])->first();
+		 			if( !$alreadyMember ){
 	 					$GroupUpdated = true;
  						$new_members[] = $existingUser;
  	 					$privateGroupMemberObj = new GroupMembers;
@@ -2097,7 +2096,7 @@ class ApiController extends Controller
 	 	 				$privateGroupMemberObj->status = 'Pending';
 	 	 				$privateGroupMemberObj->save();
 
-	 				} else if( isset($alreadyMember['status']) && $alreadyMember['status'] == 'Left' ){
+	 				} else if( isset($alreadyMember->status) && $alreadyMember->status == 'Left' ){
 	 					$GroupUpdated = true;
 	 					$new_members[] = $existingUser;
 	 					$data = GroupMembers::where(['group_id' => $group->id, 'member_id' => $value])
@@ -2560,7 +2559,7 @@ class ApiController extends Controller
 
 			$spamids = PostSpams::select('post_id')->pluck('post_id')->toArray();
 			$posts = $posts->whereNotIn('forums_post.id', $spamids)->orderBy('updated_at','DESC');
-			
+						
 	        if($user_id != ""){
 				$user_check = User::where('id',$user_id)->first();
 
@@ -2572,14 +2571,12 @@ class ApiController extends Controller
 				}
 			}
 
-			$count = $posts->count();
-			if( !$count ){
+			if($posts->isEmpty()){
 				return view('forums-api.forum-not-found')->with('message', 'Post does not exist.')->render();
 			}
 
 			return view('forums-api.forum-posts')
-					->with('posts', $posts->take(5)->get())
-					->with('totalRecords', $count)
+					->with('posts', $posts->take(5))
 					->with('user_id', $user_id)
 					->render();
 
@@ -2609,32 +2606,27 @@ class ApiController extends Controller
 			if(empty($checkpost)){
 				return view('forums-api.forum-not-found')->with('message', 'Reply does not exist.')->render();
 			}
-			if($user_id != "")
-			{
-				$user_check = User::where('id',$user_id)->first();
-				
-				if($user_check == ""){
-					return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
-				}
-				else
-				{
-					if($access_token != $user_check->access_token) {
-					 	return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
-					}
-				}
-			}
+			if($user_id != ""){      
+			$user_check = User::where('id',$user_id)->first();
 			
-			$spamids = ReplySpams::select('reply_id')->pluck('reply_id')->toArray();
+			if($user_check == "")
+				return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
+			else{
+				if($access_token != $user_check->access_token)
+				 return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
+			}
+			}
+
+
 	        $replies = ForumReply::with('user')
 	                ->with('replyLikesCount')
 	                ->with('replyCommentsCount')
 	                ->where('post_id',$post_id)
-	                ->whereNotIn('forums_reply.id', $spamids)
-	                ->orderBy('updated_at','DESC');
-	                
+	                ->orderBy('updated_at','DESC')
+	                ->get();
+
 			return view('forums-api.forum-post-reply')
-					->with('totalRecords', $replies->count())
-					->with('replies', $replies->take(10)->get())
+					->with('replies', $replies->take(10))
 					->with('checkpost', $checkpost)
 					->with('user_id', $user_id)
 					->render();
@@ -2829,7 +2821,6 @@ class ApiController extends Controller
 				'id' => $userid,
 				'type' => $type,
 				'username' => $username,
-				'email' => $email,
 			);
 
 	        if($email != ''){
