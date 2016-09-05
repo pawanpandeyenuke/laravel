@@ -1525,6 +1525,7 @@ $(document).ready(function(){
 		        	thisObj.parent().html( '<button data-forumtype="private-leave" class="btn btn-primary del-confirm-forum" value="'+GroupId+'">Leave Group</button>' );
 				} else {
 					thisObj.attr('disabled', false);
+					$('#limitModal').modal('show');
 				}
 			}
 		});
