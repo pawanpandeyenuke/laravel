@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast, App\JobArea, App\JobCategory
-,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments;
+use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast, App\JobArea, App\JobCategory,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments;
 
 // use Illuminate\Http\Request;
 use Session, Validator, Cookie;
@@ -1817,13 +1816,13 @@ public function sendImage(Request $request){
 	        ->where('forum_category_breadcrum',$breadcrum)
 	        ->skip($offset)
 	        ->take($per_page)
-	        ->orderBy('updated_at','DESC')
-	        ->get();
+	        ->orderBy('updated_at','DESC');
 
 		$str  = "No More Results";
 
 		if($call_type == 'web')
 		{
+			$posts = $posts->get();
 			if(!($posts->isEmpty()))
 			{
 				$html = view('forums.viewmoreforumposts')->with('posts',$posts)->with('breadcrum',$breadcrum)->render();
@@ -1834,6 +1833,8 @@ public function sendImage(Request $request){
 		}
 		elseif($call_type == 'api')
 		{
+			$spamids = PostSpams::select('post_id')->pluck('post_id')->toArray();
+			$posts = $posts->whereNotIn('forums_post.id', $spamids)->get();
 			if(!($posts->isEmpty()))
 			{
 				$html = view('forums-api.ajax-post')
@@ -2039,13 +2040,13 @@ public function sendImage(Request $request){
             ->where('post_id',$forumpostid)
             ->skip($offset)
 	        ->take($per_page)
-            ->orderBy('updated_at','DESC')
-            ->get();
+            ->orderBy('updated_at','DESC');
             
 		$str  = "No More Results";
 		
 		if($call_type === 'web')
 		{
+			$reply = $reply->get();
 			if(!($reply->isEmpty()))
 			{
 				$html = view('forums.viewmoreforumreply')->with('reply',$reply)->with('forumpostid',$forumpostid)->render();
@@ -2056,6 +2057,8 @@ public function sendImage(Request $request){
 		}
 		elseif($call_type === 'api')
 		{
+			$spamids = ReplySpams::select('reply_id')->pluck('reply_id')->toArray();
+			$reply = $reply->whereNotIn('forums_reply.id', $spamids)->get();
 			if(!($reply->isEmpty()))
 			{
 				$html = view('forums-api.ajax-reply')
