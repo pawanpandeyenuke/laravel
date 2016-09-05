@@ -34,13 +34,14 @@
           <a class="btn btn-primary btn-lg icon-btn" title="" href="{{ $post_url }}" style="text-decoration: none;-moz-user-select: none; background-image: none; border: 1px solid transparent; border-radius: 4px; cursor: pointer; display: inline-block; font-size: 14px; font-weight: normal; line-height: 1.42857; margin-bottom: 0; padding: 6px 12px; text-align: center; vertical-align: middle; white-space: nowrap; background: #a0f0e6 none repeat scroll 0 0; color: #000; font-size: 15px;"><i class="flaticon-draw"></i>Go To {{ $linktype }}</a>
           <br>
         </p>
-        
-        <p><a href="{{ url('forums/unsubscribe?token='.$access_token) }}" target='_blank'>Click here!</a> to unsubscribe.</p>
+
       </div>
       <div style="background-color:#e9faf8;padding:10px 20px;text-align:center;margin-bottom:20px;">
       
         <p style="font-size:16px;margin-top:20px;margin-bottom:0;">This email has been sent to <a href="#" style="color:#000;font-weight:bold;">{{ $user_email }}</a></p>
 
+    <p style="font-weight:bold;">Don’t want forum notification?</p>
+      <a href="{{ url('forums/unsubscribe?token='.$access_token) }}" target='_blank' style="background-color:#5df7e3;color:#000;padding:10px 20px;margin-bottom:25px;text-decoration:none;text-transform:capitalize;font-weight:bold;">Unsubscribe</a>
       </div>
 
       <div style="background-color:#fff;padding:10px 15px;text-align:center;">
