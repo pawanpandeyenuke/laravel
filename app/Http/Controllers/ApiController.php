@@ -10,6 +10,7 @@ use Validator, Redirect, Request, Session, Hash, DB, File;
 use Illuminate\Support\Facades\Input;
 use Intervention\Image\Facades\Image;
 use \Exception;
+use App\PostSpams, App\ReplySpams;
 use App\Library\Functions;
 
 class ApiController extends Controller
@@ -2557,9 +2558,9 @@ class ApiController extends Controller
 				$posts = $posts->where('forum_category_breadcrum', 'like', $breadcrumb."%");
 			}
 
-			$posts = $posts->orderBy('updated_at','DESC')->get(); //->toArray();
-			// echo '<pre>';print_r($posts);die;
-
+			$spamids = PostSpams::select('post_id')->pluck('post_id')->toArray();
+			$posts = $posts->whereNotIn('forums_post.id', $spamids)->orderBy('updated_at','DESC')->get();
+			
 	        if($user_id != ""){
 				$user_check = User::where('id',$user_id)->first();
 
@@ -2571,12 +2572,14 @@ class ApiController extends Controller
 				}
 			}
 
-			if($posts->isEmpty()){
+			$count = $posts->count();
+			if( !$count ){
 				return view('forums-api.forum-not-found')->with('message', 'Post does not exist.')->render();
 			}
 
 			return view('forums-api.forum-posts')
-					->with('posts', $posts->take(5))
+					->with('posts', $posts->take(5)->get())
+					->with('totalRecords', $count)
 					->with('user_id', $user_id)
 					->render();
 
@@ -2603,32 +2606,35 @@ class ApiController extends Controller
 	                        ->where('id',$post_id)
 	                        ->first();
 
-//print_r($checkpost);die;
 			if(empty($checkpost)){
 				return view('forums-api.forum-not-found')->with('message', 'Reply does not exist.')->render();
 			}
-			if($user_id != ""){      
-			$user_check = User::where('id',$user_id)->first();
-			  // print_r($user_check->access_token);die;
-
-			if($user_check == "")
-				return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
-			else{
-				if($access_token != $user_check->access_token)
-				 return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
+			if($user_id != "")
+			{
+				$user_check = User::where('id',$user_id)->first();
+				
+				if($user_check == ""){
+					return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
+				}
+				else
+				{
+					if($access_token != $user_check->access_token) {
+					 	return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
+					}
+				}
 			}
-			}
-
-
+			
+			$spamids = ReplySpams::select('reply_id')->pluck('reply_id')->toArray();
 	        $replies = ForumReply::with('user')
 	                ->with('replyLikesCount')
 	                ->with('replyCommentsCount')
 	                ->where('post_id',$post_id)
-	                ->orderBy('updated_at','DESC')
-	                ->get();
-
+	                ->whereNotIn('forums_reply.id', $spamids)
+	                ->orderBy('updated_at','DESC');
+	                
 			return view('forums-api.forum-post-reply')
-					->with('replies', $replies->take(10))
+					->with('totalRecords', $replies->count())
+					->with('replies', $replies->take(10)->get())
 					->with('checkpost', $checkpost)
 					->with('user_id', $user_id)
 					->render();
