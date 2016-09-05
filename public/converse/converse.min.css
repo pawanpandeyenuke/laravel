@@ -1451,7 +1451,7 @@ to {
     height: 48px;
     border-radius: 50%;
     float: left;
-    border: 1px solid #333 !important;
+    border: 1px solid #333;
     margin-right: 10px !important
 }
 .chat-message {
