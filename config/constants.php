@@ -30,6 +30,7 @@ return [
 	'xmpp_host_Url'=>'friendzsquare.com',
 
 	'feedback_email' => 'contact@friendzsquare.com',
+	// 'feedback_email' => 'pawan.pandey@enukesoftware.com',
 
 	'broadcast_limit' => '10',
 

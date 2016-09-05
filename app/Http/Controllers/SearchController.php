@@ -42,7 +42,7 @@ class SearchController extends Controller
         $arguments = Request::all();
         $feedbackid = "feedback@friendzsquare.com";
         if($arguments['email'] == "") {
-            $arguments['email'] = "Anonymous User";
+            $arguments['email'] = "";
         }
 
         self::suggestionMail($feedbackid,$arguments['message_text'],'Suggestion',$arguments['email']);

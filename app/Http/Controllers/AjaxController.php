@@ -1351,7 +1351,7 @@ public function sendImage(Request $request){
 			$converse = new Converse;
 			$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
 			$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name
-			$message 		= json_encode( array( 'type' => 'hint', 'action'=>'group_delete', 'sender_jid' => $userJid, 'groupname'=>$GroupTitle, 'groupjid' => $GroupJid, 'message' => webEncode($GroupTitle.' has been removed.') ) ); // hint message to send every group member
+			$message 		= json_encode( array( 'type' => 'hint', 'action'=>'group_delete', 'sender_jid' => $userJid, 'groupname'=>$GroupTitle, 'user_image' => Auth::User()->picture, 'user_name'=>$name, 'groupjid' => $GroupJid, 'message' => webEncode($GroupTitle.' has been removed.') ) ); // hint message to send every group member
 			$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$input)->pluck('xmpp_username');		
 			foreach ($xmp as $key => $value) {
 				$converse->broadcastchatroom( $GroupJid, $name, $value, $userJid, $message ); // message broadcast per group member
@@ -1384,7 +1384,7 @@ public function sendImage(Request $request){
 			$GroupTitle  	= $GroupDetail->title;
 			$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
 			$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name
-			$message = json_encode( array( 'type' => 'hint', 'action'=>'delete', 'sender_jid' => $userJid, 'xmpp_userid' => $memberDetails->xmpp_username, 'user_id'=> $memberDetails->id , 'message' => webEncode( $memberDetails->first_name.' '.$memberDetails->last_name.' remove from group chat') ) );
+			$message = json_encode( array( 'type' => 'hint', 'action'=>'delete', 'sender_jid' => $userJid, 'xmpp_userid' => $memberDetails->xmpp_username, 'user_image' => Auth::User()->picture, 'user_name'=>$name,'user_id'=> $memberDetails->id , 'message' => webEncode( $memberDetails->first_name.' '.$memberDetails->last_name.' remove from group chat') ) );
 			
 			$xmp = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$input['gid'])->pluck('xmpp_username');	// list of all members in group
 			foreach ($xmp as $key => $value) {
@@ -1510,7 +1510,7 @@ public function sendImage(Request $request){
 				// Send hint
 				$user = User::where('id', $user_id)->select(['first_name', 'last_name', 'xmpp_username','id','picture'])->first();
 				$inviteeName = $user->first_name.' '.$user->last_name;
-				$addMessage = json_encode(array( 'type' => 'hint', 'action'=>'add','sender_jid' => $userJid, 'user_id' => $user->id, 'user_image' => $user->picture,'groupname' => $GroupName, 'message' => webEncode($inviteeName.' is invited for joining the group.'), 'group_jid'=>$GroupDetail->group_jid) );
+				$addMessage = json_encode(array( 'type' => 'hint', 'action'=>'add','sender_jid' => $userJid, 'user_id' => $user->id, 'user_name'=>$inviteeName, 'user_image' => $user->picture,'groupname' => $GroupName, 'message' => webEncode($inviteeName.' is invited for joining the group.'), 'group_jid'=>$GroupDetail->group_jid) );
 
 				foreach ($xmp as $key => $value) {
 
@@ -2260,7 +2260,7 @@ public function sendImage(Request $request){
 		
 		$userJid 		= Auth::User()->xmpp_username; // current user jid for chat message
 		$name 			= Auth::User()->first_name.' '.Auth::User()->last_name; // current user full name          
-		$message 		= json_encode( array( 'type' => 'hint', 'action'=>'leave', 'sender_jid' => $userJid, 'xmpp_userid' => $userJid, 'user_id'=>Auth::User()->id, 'message' => webEncode( $name.' left the group '.$groupTitle) ) );
+		$message 		= json_encode( array( 'type' => 'hint', 'action'=>'leave', 'sender_jid' => $userJid, 'xmpp_userid' => $userJid, 'user_id'=>Auth::User()->id, 'user_image' => Auth::User()->picture, 'user_name' => $name, 'message' => webEncode( $name.' left the group '.$groupTitle) ) );
 		
 		$xmp 			= GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where('members.group_id',$groupId)->pluck('xmpp_username');	// list of all group member 
 		foreach ($xmp as $key => $value) {
@@ -2396,7 +2396,7 @@ public function sendImage(Request $request){
 
 	                foreach($members as $key => $val) {
 	                    Converse::broadcastchatroom($group->group_jid, $name, $val, $user->xmpp_username, $message);
-	                };
+	                }
 
 					$Status = 1;
 				}

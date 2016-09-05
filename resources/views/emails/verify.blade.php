@@ -23,12 +23,12 @@
       <div style="background-color:#5df7e3;height:8px; margin-bottom:12px;"></div>
       <div style="background-color:#fff;padding:10px 15px;margin-bottom:10px;">
       <p style="font-size:16px;font-weight:600;">Verfiy Your Email Account</p>
-      <p style="font-size:14px;line-height:32px;">Thanks for creating an account with FriendzSquare. Please <a href="{{ URL::to('register/verify/'.$confirmation_code) }}">click here</a> to verify your email address.</p>
+      <p style="font-size:14px;line-height:20px;">Thanks for creating an account with FriendzSquare. Please <a href="{{ URL::to('register/verify/'.$confirmation_code) }}">click here</a> to verify your email address.</p>
       
       
       <h4 style="text-align:center;margin:10px 0 8px;font-size:20px;">OR</h4>
       
-      <p style="font-size:14px;line-height:32px;">You can paste the following link into your browser : {{URL::to('register/verify/'.$confirmation_code)}}</p>
+      <p style="font-size:14px;line-height:20px;">You can paste the following link into your browser : {{URL::to('register/verify/'.$confirmation_code)}}</p>
       
       
       </div>
@@ -41,7 +41,7 @@
       <div style="background-color:#fff;padding:10px 15px;text-align:center;">
       <p style="font-size:12px;margin-top:15px;margin-bottom:15px;">If you have any questions, then please contact at <a href="mailto:contact@friendzsquare.com" style="color:#000;font-weight:bold;">contact@friendzsquare.com </a>
       </div>
-      <div style="background-color:#5df7e3;height:8px; margin-bottom:15px;"></div>  
+      <div style="background-color:#5df7e3;height:8px; margin-bottom:15px;font-size:0px;">Copyright</div>   
     </div>
   </body>
 </html>

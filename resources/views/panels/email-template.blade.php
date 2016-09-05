@@ -40,14 +40,14 @@
       
         <p style="font-size:16px;margin-top:20px;margin-bottom:0;">This email has been sent to <a href="#" style="color:#000;font-weight:bold;">{{ $user_email }}</a></p>
 
-    <p style="font-weight:bold;">Don’t want forum notification?</p>
-      <a href="{{ url('forums/unsubscribe?token='.$access_token) }}" target='_blank' style="background-color:#5df7e3;color:#000;padding:10px 20px;margin-bottom:25px;text-decoration:none;text-transform:capitalize;font-weight:bold;">Unsubscribe</a>
+        <p style="font-weight:bold;">Don’t want forum notification?</p>
+        <a href="{{ url('forums/unsubscribe?token='.$access_token) }}" target='_blank' style="background-color:#5df7e3;color:#000;padding:10px 20px;margin-bottom:25px;text-decoration:none;text-transform:capitalize;font-weight:bold;">Unsubscribe</a>
       </div>
 
       <div style="background-color:#fff;padding:10px 15px;text-align:center;">
       <p style="font-size:12px;margin-top:15px;margin-bottom:15px;">If you have any questions, then please contact at <a href="mailto:contact@friendzsquare.com" style="color:#000;font-weight:bold;">contact@friendzsquare.com </a></p>
       </div>
-      <div style="background-color:#5df7e3;height:8px; margin-bottom:15px;"></div>  
+      <div style="background-color:#5df7e3;height:8px; margin-bottom:15px;font-size:0px;">Copyright</div>  
     </div>
   </body>
 </html>
