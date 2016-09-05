@@ -13,8 +13,7 @@
             
             <br><h4>How it works?</h4>
             
-            <p>A user can enter into any of the 26 predefined chatrooms such as Singles, politics, stock market, study questions etc. and exchange views on variety of topics as well as make new friends. Users can grow their social network by adding users from chat room into their friend list.</p>
-            <p>There are also 26 predefined Forum and a user can choose to write their views/suggestions in any of these forums. Forums are open to all so there is exchange of information across different regions of world, with users coming with difference experience, backgrounds &amp;views.</p>		
+            <p>A user can enter into any of the 26 predefined chatrooms such as Singles, politics, stock market, study questions etc. and exchange views on variety of topics as well as make new friends. Users can grow their social network by adding users from chat room into their friend list. There are also 26 predefined Forum and a user can choose to write their views/suggestions in any of these forums. Forums are open to all so there is exchange of information across different regions of world, with users coming with difference experience, backgrounds &amp; views.</p>		
 	    </div>
 	    </div>
   	</div>
