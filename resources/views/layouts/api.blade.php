@@ -80,6 +80,7 @@ jQuery(function($){
 	$(document).on('click','.load-more-forumpost',function(){
 		var current = $(this);
 		var breadcrum = $(this).data('breadcrum');
+		var keyword = $(this).data('keyword');
 		var user_id = $('.userid').data('id');
 		current.prop('disabled',true).text('Loading...');
 		var abc = current.closest('.friends-list').find('ul.counting').children('li').length;
@@ -87,7 +88,7 @@ jQuery(function($){
 			'url' : '/ajax/view-more-forum-post',
 			'type' : 'post',
 			'dataType' : 'json',
-			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum, 'call_type': 'api', 'user_id': user_id },
+			'data' : { 'pageid': pageid ,'breadcrum' : breadcrum,'keyword' : keyword, 'call_type': 'api', 'user_id': user_id },
 			'success' : function(data){
 				current.text('View More').prop('disabled', false);
 				pageid = pageid + 1;

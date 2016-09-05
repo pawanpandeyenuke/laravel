@@ -87,7 +87,7 @@
 
 	@if($totalRecords > 5)
 		<div class="load-more-btn-cont text-center">
-			<button type="button" class="load-more-forumpost loading-btn" data-breadcrum="{{$breadcrumb}}">View More</button>
+			<button type="button" class="load-more-forumpost loading-btn" data-breadcrum="{{$searchBreadcrumb}}" data-keyword="{{$keyword}}">View More</button>
 		</div>
 	@endif
 <div class="userid" data-id="{{$user_id}}"></div>

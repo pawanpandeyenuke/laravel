@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 use App\State, App\City, App\Like, App\Comment, App\User, App\Friend, DB,App\EducationDetails, App\Country,App\Broadcast, App\JobArea, App\JobCategory,App\BroadcastMessages,App\Group,App\GroupMembers,App\BroadcastMembers,App\Forums,App\ForumPost,App\ForumLikes,App\ForumReply,App\ForumReplyLikes,App\ForumReplyComments;
-
-// use Illuminate\Http\Request;
 use Session, Validator, Cookie;
 use App\Http\Requests;
 use App\DefaultGroup;
@@ -1801,6 +1799,7 @@ public function sendImage(Request $request){
 		$call_type = Input::get('call_type');
 		$per_page = $call_type=='web' ? 10 : 5;
 		$breadcrum = Input::get('breadcrum');
+		$keyword = Input::get('keyword');
 		$offset = ($page - 1) * $per_page;
 		
 		// Get total pages
@@ -1811,17 +1810,29 @@ public function sendImage(Request $request){
         $pages = ceil($totalRecords / $per_page);
         $existmore = $page == $pages ? 0 : 1;
 
-	    $posts = ForumPost::with('user')->with('forumPostLikesCount')
+	    $posts = ForumPost::with('user')
+	    	->with('forumPostLikesCount')
 	     	->with('replyCount')
-	        ->where('forum_category_breadcrum',$breadcrum)
 	        ->skip($offset)
 	        ->take($per_page)
 	        ->orderBy('updated_at','DESC');
 
-		$str  = "No More Results";
+	    if($breadcrum){
+			$posts = $posts->where('forum_category_breadcrum', 'like', $breadcrum."%");
+		}
 
+		if($keyword){
+			$posts = $posts->whereRaw( 'title like ?', array("%".$keyword."%"));
+		}
+
+		$str  = "No More Results";
 		if($call_type == 'web')
 		{
+			// Get total pages
+			$totalRecords = $posts->count();
+	        $pages = ceil($totalRecords / $per_page);
+	        $existmore = $page == $pages ? 0 : 1;
+
 			$posts = $posts->get();
 			if(!($posts->isEmpty()))
 			{
@@ -1834,12 +1845,20 @@ public function sendImage(Request $request){
 		elseif($call_type == 'api')
 		{
 			$spamids = PostSpams::select('post_id')->pluck('post_id')->toArray();
-			$posts = $posts->whereNotIn('forums_post.id', $spamids)->get();
+			$posts = $posts->whereNotIn('forums_post.id', $spamids);
+
+			// Get total pages
+			$totalRecords = $posts->count();
+	        $pages = ceil($totalRecords / $per_page);
+	        $existmore = $page == $pages ? 0 : 1;
+
+			$posts = $posts->get();
 			if(!($posts->isEmpty()))
 			{
 				$html = view('forums-api.ajax-post')
 							->with('forumPosts',$posts)
 							->with('breadcrum',$breadcrum)
+							->with('keyword',$keyword)
 							->with('user_id', Input::get('user_id'))
 							->render();
 				return response()->json(['html' => $html, 'existmore'=>$existmore]);
