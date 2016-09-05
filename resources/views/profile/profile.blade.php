@@ -308,7 +308,7 @@
 													</td>
 												</tr>
 												<tr>
-													<td><div class="p-data-title"><i class="flaticon-vintage"></i>Subscribed to forum notifications</div></td>
+													<td><div class="p-data-title"><i class="flaticon-vintage"></i>Subscribe to forum notifications</div></td>
 													<td>
 														<span style="font-weight:500">{{$user->subscribe ? 'Yes': 'No'}}</span>
 													</td>

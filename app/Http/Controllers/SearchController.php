@@ -117,7 +117,12 @@ class SearchController extends Controller
     {
         return view('terms');
     }
-
+    
+    public function aboutUs()
+    {
+        return view('about-us');
+    }
+    
     public function privacyPolicy()
     {
         return view('privacy-policy');
