@@ -2823,6 +2823,7 @@ class ApiController extends Controller
 				'id' => $userid,
 				'type' => $type,
 				'username' => $username,
+				'email' => $email,
 			);
 
 	        if($email != ''){
