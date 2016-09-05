@@ -2538,20 +2538,18 @@ class ApiController extends Controller
 	 */
 	public function getForumPosts()
 	{
-		try{
-
+		try
+		{
 			$breadcrumb = Request::get('breadcrumb');
-			$keyword = Request::get('keyword');
+			$keyword = trim(Request::get('keyword'));
 			$access_token = Request::get('access_token');
 			$user_id = Request::get('user_id');
 
 			$breadcrumb = urldecode($breadcrumb);
-
 			$posts = ForumPost::with('user')->with('forumPostLikesCount')->with('replyCount');
 
 			if($keyword){
 				$posts = $posts->whereRaw( 'title like ?', array("%".$keyword."%"));
-				// $posts = $posts->whereRaw( 'LOWER(`title`) like ?', array("%".$keyword."%"));
 			}
 			
 			if($breadcrumb){
@@ -2561,12 +2559,12 @@ class ApiController extends Controller
 			$spamids = PostSpams::select('post_id')->pluck('post_id')->toArray();
 			$posts = $posts->whereNotIn('forums_post.id', $spamids)->orderBy('updated_at','DESC');
 			
-	        if($user_id != ""){
+	        if($user_id != "")
+	        {
 				$user_check = User::where('id',$user_id)->first();
-
 				if($user_check == ""){
 					return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
-				}else{
+				} else {
 					if($access_token != $user_check->access_token)
 					return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
 				}
@@ -2579,6 +2577,8 @@ class ApiController extends Controller
 
 			return view('forums-api.forum-posts')
 					->with('posts', $posts->take(5)->get())
+					->with('keyword', $keyword)
+					->with('searchBreadcrumb', $breadcrumb)
 					->with('totalRecords', $count)
 					->with('user_id', $user_id)
 					->render();
