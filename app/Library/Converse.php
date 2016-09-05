@@ -320,6 +320,7 @@ class Converse
  				$user_email = $userObj->email;
  				$data['user_email'] = $userObj->email;
  				$user_name = $userObj->first_name.' '.$userObj->last_name;
+ 				$data['user_name'] = $user_name;
 
  				// Send email
 				Mail::send('panels.email-template', $data, function( $message ) use( $user_email, $user_name, $from_name, $subject ){
