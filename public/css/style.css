@@ -3976,10 +3976,10 @@ line-height: 28px;
 
 .about-us
 {
-	min-height:525px;
+	min-height:490px;
 }
 
 .profile-pic
 {
-	border:0 none;
+	border:0 none !important;
 }
