@@ -1521,7 +1521,9 @@ $(document).ready(function(){
 			'data' : { 'group_id' : GroupId },
 			'type' : 'post',
 			'success' : function(response){
-		        thisObj.parent().html( '<button data-forumtype="private-leave" class="btn btn-primary del-confirm-forum" value="'+GroupId+'">Leave Group</button>' );
+				if( response.status == 1 ) {
+		        	thisObj.parent().html( '<button data-forumtype="private-leave" class="btn btn-primary del-confirm-forum" value="'+GroupId+'">Leave Group</button>' );
+				}
 			}
 		});
 
