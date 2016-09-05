@@ -24,6 +24,7 @@
 		border-color: #92e7dc;
 	}
 </style>
+<script type="text/javascript" src="{{ url('forums-data/js/jquery-1.11.3.min.js') }}"></script>
 </head>
 <body>
 		
@@ -33,7 +34,6 @@
 
 @yield('content')
 
-<script type="text/javascript" src="{{ url('forums-data/js/jquery-1.11.3.min.js') }}"></script>
 <script type="text/javascript" src="{{ url('forums-data/js/bootstrap.min.js') }}"></script>
 <script src="{{url('forums-data/js/emojione.js')}}"></script>
 <script type="text/javascript" src="{{url('/js/readmore.min.js')}}"></script>
