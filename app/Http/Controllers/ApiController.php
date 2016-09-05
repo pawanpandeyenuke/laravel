@@ -2559,7 +2559,7 @@ class ApiController extends Controller
 			}
 
 			$spamids = PostSpams::select('post_id')->pluck('post_id')->toArray();
-			$posts = $posts->whereNotIn('forums_post.id', $spamids)->orderBy('updated_at','DESC')->get();
+			$posts = $posts->whereNotIn('forums_post.id', $spamids)->orderBy('updated_at','DESC');
 			
 	        if($user_id != ""){
 				$user_check = User::where('id',$user_id)->first();
