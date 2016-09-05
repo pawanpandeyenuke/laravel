@@ -3973,5 +3973,13 @@ line-height: 28px;
   outline: none;
   border:none;
 }
-.about-us{min-height:525px;}
 
+.about-us
+{
+	min-height:525px;
+}
+
+.profile-pic
+{
+	border:0 none;
+}
