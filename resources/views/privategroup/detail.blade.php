@@ -156,7 +156,7 @@ var redirectToGroupList = '<?php echo url( 'private-group-list' ); ?>';
 	display:block;
 }
 #friendsContainer {
-	width:89.5%;
+	width:498px;
 	display:none;
 }
 </style>
