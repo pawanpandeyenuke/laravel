@@ -965,7 +965,8 @@ $(document).ready(function(){
 			'success' : function(data){
 				current.text('View More').prop('disabled', false);
 				pageid = pageid + 1;
-				current.closest('.friends-list').find('.active').find('ul').append(data.html);
+				// current.closest('.friends-list').find('.active').find('ul').append(data.html);
+				$('.counting').append(data.html);
 				if(data.existmore == 0) {
 					current.remove();
 				}

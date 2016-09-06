@@ -1541,13 +1541,13 @@ width:495px;
 	list-style:none;
 	display:block;
 	position:relative;
-  padding: 15px 0;
+  padding: 15px 0 10px;
   border-bottom: 1px solid #ddd;
 }
 .friends-list li .user-cont{
   min-height: 40px;
   position: relative;
-  padding: 10px 0px 0 55px;
+  padding: 0 0 0 55px;
 }
 .friends-list li .user-cont a{
 	color:#000;
@@ -3982,4 +3982,12 @@ line-height: 28px;
 .profile-pic
 {
 	border:0 none !important;
+}
+
+.user-cont ul li 
+{
+  display: inline-block !important;
+  padding: 0 5px 0 0;
+  border-bottom: 0;
+  font-size:12px;
 }

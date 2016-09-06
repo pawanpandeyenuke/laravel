@@ -72,21 +72,32 @@
 		$user_picture = !empty($data['picture']) ? url('/uploads/user_img/'.$data['picture']) : url('images/user-thumb.jpg');
 		$id1 = Auth::User()->id;
 		$name = $data['first_name'].' '.$data['last_name'];
-		// $country = $data['country'];
-		// $state = $data['state'];
-		// $city = $data['city'];
+		$location = array($data['country'], $data['state'], $data['city']);
+
+		foreach ($location as $key => $value) {
+			if(empty($value)){
+				unset($location[$key]);
+			}
+		}
+		// echo '<pre>';print_r($location);die;
+		$location = implode(', ', $location);
 	?>
 	<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="{{$id1}}">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-sm-7 col-md-7 col-xs-12">
 				<div class="user-cont">
 					<a title="" href="profile/{{$data['id']}}">
 						<span style="background: url('{{$user_picture}}');" class="user-thumb"></span>
 					{{ $name }}
 					</a>
+					@if($location)
+						<ul class="list-inline">
+							<li><i class="fa fa-map-marker"></i> {{ $location }} </li>					
+						</ul>
+					@endif
 				</div>
 			</div>
-			<div class="col-sm-6">
+			<div class="col-sm-5 col-md-5 col-xs-12">
 				<?php 
 					$status1= \App\Friend::where('user_id',$data['id'])
 								->where('friend_id',Auth::User()->id)
