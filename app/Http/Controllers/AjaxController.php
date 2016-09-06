@@ -1523,8 +1523,7 @@ public function sendImage(Request $request){
 				$converse->broadcast(Auth::user()->xmpp_username, $user->xmpp_userid, $Message);
 			}
 		}
-		json_encode(array( 'status' => '1' ));
-		exit();
+		return json_encode(array( 'status' => '1' ));
 	}
 	
 	/**

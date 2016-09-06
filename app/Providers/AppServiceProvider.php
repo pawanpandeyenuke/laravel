@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         }
         echo '<pre>';print_r($forumdata);die; */
 
-        $educationLevel = array('High school','Certifciate/diploma','Associate degree','3 or 4 year undergraduate program','Post graduate degree','Post graduate degree - MBA','Post graduate degree - Masters','Post graduate degree - JD','Post graduate degree - PHD/Doctrate','Professional','Other degree');
+        $educationLevel = array('High school','Certificate/diploma','Associate degree','3 or 4 year undergraduate program','Post graduate degree','Post graduate degree - MBA','Post graduate degree - Masters','Post graduate degree - JD','Post graduate degree - PHD/Doctrate','Professional','Other degree');
 
         $specialization = array('Accounting','Arts','Economics','Engineer','English','Finance','HR','IT','Marketing','Mathematics','Medicine','Operations','Others');
 
