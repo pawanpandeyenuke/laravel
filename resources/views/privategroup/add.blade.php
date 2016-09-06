@@ -84,12 +84,14 @@ $(document).ready(function () {
 	$( ".bcast-field" ).focus(function( ) {
 		$(this).closest('.b-cast-name').find('#groupname-error').remove();
 		$(this).removeClass('help-inline');
+		$('.privategroupaddform').prop('disabled', false);
 	});
 
 
 	$( ".multiple-slt" ).change(function( ) {
 		$(this).closest('.bcast-list').find('#groupuser-error').remove();
 		$('.select2-selection').removeClass('help-inline');
+		$('.privategroupaddform').prop('disabled', false);
 	});
  
 });
