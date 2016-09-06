@@ -1222,6 +1222,7 @@ $(document).ready(function(){
 				'type' : 'post',
 				'data' : {'gid':id,'gname':gname, 'members': newmembers},
 				'success' : function(data){
+					data = $.parseJSON(data);
 					if( typeof data.status != 'undefined'  && data.status == 1 ){
 						$('.pr-edit').prop('disabled', true);
 						current.hide();

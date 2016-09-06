@@ -9,10 +9,7 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 	$group_picture = url('/uploads/'.$groupdetail[0]['picture']);
 }
 
-// echo '<pre>';print_r($group_picture);die;
-// $group_picture = !empty($groupdetail[0]) ? url('/uploads/'.$groupdetail[0]['picture']) : url('/images/post-img-big.jpg');
-
- ?>
+?>
 @section('content')
 <div class="page-data dashboard-body">
 	<div class="container">
