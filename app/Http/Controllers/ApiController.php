@@ -2360,13 +2360,13 @@ class ApiController extends Controller
             {
             	foreach($users['records'] as $key => $val)
             	{
-            		$status = \App\Friend::where('user_id',$val->id)
-							->where('friend_id', $input['user_id'])
+            		$status = \App\Friend::where('friend_id',$val->id)
+							->where('user_id', $input['user_id'])
 							->value('status');
 					if( !$status ) 
 					{
-						$status = \App\Friend::where('friend_id',$val->id)
-							->where('user_id', $input['user_id'])
+						$status = \App\Friend::where('user_id',$val->id)
+							->where('friend_id', $input['user_id'])
 							->value('status');
 						if( $status == 'Rejected') {
 							$status = null;
