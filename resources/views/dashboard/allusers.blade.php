@@ -68,10 +68,13 @@
 														
 @foreach($model1 as $data) 
 	<?php $data = (array) $data;
-	$user_picture = !empty($data['picture']) ? url('/uploads/user_img/'.$data['picture']) : url('images/user-thumb.jpg');
-	$id1=Auth::User()->id;
-			$name = $data['first_name'].' '.$data['last_name'];
-		
+		// echo '<pre>';print_r($data);die;
+		$user_picture = !empty($data['picture']) ? url('/uploads/user_img/'.$data['picture']) : url('images/user-thumb.jpg');
+		$id1 = Auth::User()->id;
+		$name = $data['first_name'].' '.$data['last_name'];
+		// $country = $data['country'];
+		// $state = $data['state'];
+		// $city = $data['city'];
 	?>
 	<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="{{$id1}}">
 		<div class="row">
@@ -84,17 +87,17 @@
 				</div>
 			</div>
 			<div class="col-sm-6">
-			<?php 
-				$status1= \App\Friend::where('user_id',$data['id'])
-							->where('friend_id',Auth::User()->id)
-							->value('status');
+				<?php 
+					$status1= \App\Friend::where('user_id',$data['id'])
+								->where('friend_id',Auth::User()->id)
+								->value('status');
 
-				$status2=\App\Friend::where('friend_id',$data['id'])
-							->where('user_id',Auth::User()->id)
-							->value('status');
+					$status2=\App\Friend::where('friend_id',$data['id'])
+								->where('user_id',Auth::User()->id)
+								->value('status');
 
-				if($status1 == 'Pending'){
-			?>
+					if($status1 == 'Pending'){
+				?>
 				<div class="row">
 					<div class="col-sm-6">
 						<button class="btn btn-primary btn-full accept abc" type="button" id="accept" >Confirm</button>
@@ -103,10 +106,10 @@
 						<button class="btn btn-default btn-full abc decline" type="button"  id="decline">Delete</button>
 					</div>
 					<div class="col-sm-12">
-					<button class="btn btn-default btn-full remove abc" type="button" id="remove" style="display: none;">Remove</button>
-					<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
-					<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
-				</div>
+						<button class="btn btn-default btn-full remove abc" type="button" id="remove" style="display: none;">Remove</button>
+						<button type="button" class="btn btn-primary btn-full invite" id='invite' style="display: none;">Add Friend</button>
+						<button class="spanmsg btn-full sent" type="button" id="sent"style="display: none;">Undo</button>
+					</div>
 				</div>
 			<?php }elseif($status2 == 'Pending'){ 
 			?>
