@@ -12,19 +12,33 @@ $count=0;
 	<?php 
 		$data = (array) $data;
 		$name = $data['first_name'].' '.$data['last_name'];
+		$location = array($data['country'], $data['state'], $data['city']);
+
+		foreach ($location as $key => $value) {
+			if(empty($value)){
+				unset($location[$key]);
+			}
+		}
+		// echo '<pre>';print_r($location);die;
+		$location = implode(', ', $location);
 	?>
 	<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="{{$id1}}" >
 		<div class="row">
-			<div class="col-sm-6" value="hello">
+			<div class="col-sm-7 col-md-7 col-xs-12" value="hello">
 				<div class="user-cont">
 					<a title="" href="profile/{{$data['id']}}">
 						<?php $profileimage = !empty($data['picture']) ? url('/uploads/user_img/'.$data['picture']) : url('/images/user-thumb.jpg'); ?>
 						<span class="hello user-thumb" value="hello" style="background: url('{{$profileimage}}');" class="user-thumb"></span>
 					{{ $name }}
 					</a>
+					@if($location)
+						<ul class="list-inline">
+							<li><i class="fa fa-map-marker"></i> {{ $location }} </li>					
+						</ul>
+					@endif
 				</div>
 			</div>
-			<div class="col-sm-6">
+			<div class="col-sm-5 col-md-5 col-xs-12">
 		@if(Auth::check())
 	<?php
 		$count++;
