@@ -125,7 +125,7 @@ class AuthController extends Controller
         );
 
         Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
-        $message->from('no-reply@friendzsquare.com', 'FriendzSquare');
+        $message->from('contact@friendzsquare.com', 'FriendzSquare');
         $message->to($useremail,$username)->subject('Verfiy Your Email Account');
         });
        
