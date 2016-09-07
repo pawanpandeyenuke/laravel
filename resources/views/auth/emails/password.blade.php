@@ -31,11 +31,11 @@
           
           <h4 style="text-align:center;margin:10px 0 8px;font-size:20px;">OR</h4>
           
-          <p style="font-size:14px;line-height:20px;">You can paste the following link into your browser: <a href="{{ $link }}" target="_blank"> {{ $link }} </a></p>
+          <p style="font-size:14px;line-height:20px;">You can paste the following link into your browser: <a href="{{ $link }}" target="_blank"> {{ $link }} </a></p><br>
           
-          <p style='font-size:14px;'> The link will expire in 24 hours.</p>
+          <p style='font-size:14px;'> The link will expire in 24 hours.</p><br>
           
-          <p style='margin:0;font-size:14px;color:#0d0d0d;line-height:20px;'> If you did not request the password change, please immediately email to <a href="mailto:contact@friendzsquare.com" style="font-weight:700">contact@friendzsquare.com</a> </p>
+          <p style='margin:0;font-size:14px;color:#0d0d0d;line-height:20px;'> If you did not request the password change, please immediately email to <a href="mailto:contact@friendzsquare.com" style="font-weight:700">contact@friendzsquare.com</a> </p><br>
         
           <p style='font-size:14px;color:#0d0d0d;'>To keep your account secure, please don’t forward this email or link to anyone. </p>
           
