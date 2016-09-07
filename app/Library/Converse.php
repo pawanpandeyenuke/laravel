@@ -286,7 +286,7 @@ class Converse
 	 				$data['type'] = 'Reply: ';
 	 				$data['linktype'] = 'Post';
 	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
-	 				$from_name = 'FriendzSquare Reply';
+	 				// $from_name = 'FriendzSquare Reply';
 	 				$subject = $name.' has replied on your post';
 
 	 			} elseif ( $parameters['type'] === 'comment' ) {
@@ -299,7 +299,7 @@ class Converse
 	 				$data['type'] = 'Comment: ';
 	 				$data['linktype'] = 'Reply';
 	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
-	 				$from_name = 'FriendzSquare Comment';
+	 				// $from_name = 'FriendzSquare Comment';
 	 				$subject = $name.' has commented on your reply';
 	 			}
 
@@ -323,8 +323,8 @@ class Converse
  				$data['user_name'] = $user_name;
 
  				// Send email
-				Mail::send('panels.email-template', $data, function( $message ) use( $user_email, $user_name, $from_name, $subject ){
-					$message->from('no-reply@friendzsquare.com', $from_name);
+				Mail::send('panels.email-template', $data, function( $message ) use( $user_email, $user_name, $subject ){
+					$message->from('no-reply@friendzsquare.com', 'FriendzSquare');
 					$message->to( $user_email, $user_name )->subject( $subject );
 				});
  			}

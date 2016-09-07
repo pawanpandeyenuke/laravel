@@ -373,14 +373,6 @@
         return in_array($_SERVER['REMOTE_ADDR'], $whitelist) ? true : false;
     }
 
-    /*    function verificationEmail( $email, $token ){
-        return Mail::send('emails.verify', ['email' => $email, 'confirmation_code' => $token], function ($m) use($email)   {
-                $m->from('contact@friendzsquare.com', 'Email varification');
-                $m->to($email)->subject('Biz Bricks');            
-            });
-    }*/
-
-
     // Convert number into K, M and B format
     function format_number($num, $precision = 2)
     {
