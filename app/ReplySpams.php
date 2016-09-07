@@ -12,7 +12,7 @@ class ReplySpams extends Model
 	
 	public $timestamps = false;
 	
-	protected $fillable = ['user_id', 'reply_id', 'reason'];
+	protected $fillable = ['user_id', 'post_id', 'reply_id', 'reason'];
 
 	public static function boot()
     {

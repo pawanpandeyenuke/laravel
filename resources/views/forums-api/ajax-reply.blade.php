@@ -1,6 +1,5 @@
 @foreach($replies as $reply)
-	<?php 
-		// echo '<pre>';print_r($reply->owner_id);die; 
+	<?php
 		$replyUser = $reply->user;
 
 		$rawReplyCountry = [$replyUser->city, $replyUser->state, $replyUser->country];
@@ -17,27 +16,27 @@
 
 		$replyCommentsCount = isset($reply->replyCommentsCount[0]) ? $reply->replyCommentsCount[0]['replyCommentsCount'] : 0;
 
-		// $pic = !empty($replyUser->picture) ? $replyUser->picture : url('images/user-thumb.jpg');
-
 		$likedata = \App\ForumReplyLikes::where(['owner_id' => $user_id, 'reply_id' => $reply->id])->get();
 	?>
 	<div class="single-post" id="forumreply_{{$reply->id}}">
 		<div class="post-header">
 		  	@if($user_id)
-		  		@if($user_id == $reply->owner_id)
 					<div class="dropdown reply-action">
 						<button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 							<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
 						</button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-							<?php $title = base64_encode(nl2br($reply_data)); ?>
-							<li><a href="{{ url("api/get-forum-reply-details?reply_id=$reply->id&user_id=$replyUser->id&reply_data=$title") }}">Edit</a></li>
-							<li><a href="#" class="del-confirm-api" data-type="reply" data-forumpostid="{{$forumpostid}}" data-forumreplyid = "{{$reply->id}}">Delete</a></li>
+							@if($user_id == $reply->owner_id)
+								<?php $title = base64_encode(nl2br($reply_data)); ?>
+								<li><a href="{{ url('api/get-forum-reply-details?reply_id='.$reply->id.'&user_id='.$replyUser->id.'&reply_data='.$title) }}">Edit</a></li>
+								<li><a href="#" class="del-confirm-api" data-type="reply" data-forumpostid="{{$forumpostid}}" data-forumreplyid = "{{$reply->id}}">Delete</a></li>
+							@else
+								<li><a href="#" class="spamModal" data-replyid="{{$reply->id}}">Report as spam</a></li>
+							@endif
 						</ul>
 					</div>
-			  	@endif
 		  	@endif
-
+		  	
 			<span class="u-img" style="background: url('<?php echo userImage($replyUser) ?>');"></span>
 			<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name }}</span>
 			<span class="loc">

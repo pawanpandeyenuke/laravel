@@ -15,7 +15,8 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body style="font-family: 'Open Sans', sans-serif;background-color:#e9faf8;width:100%;float:left;">
+  <body style="font-family: 'Open Sans', sans-serif;background-color:#e9faf8;">
+  	<div style="background-color:#e9faf8;width:100%;float:left;">
 		<div style="width:571px;margin:30px auto;">
 			<div style="background-color:#fff;padding:10px 15px;">
 			<a href="#"><img src="{{url('/images/logo.png')}}" alt="" title=""/></a>
@@ -39,5 +40,6 @@
 			</div>
 			<div style="background-color:#5df7e3;height:8px; margin-bottom:15px;font-size:0px;">Copyright</div>  
 		</div>
+	</div>
   </body>
 </html>

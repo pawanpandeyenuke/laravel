@@ -18,8 +18,6 @@
 		$location = implode(', ', $rawCountry);
 		$postTitle = !empty($checkpost->title) ? $checkpost->title : '';
 		$breadcrumb = !empty($checkpost->forum_category_breadcrum) ? $checkpost->forum_category_breadcrum : '';
-		// $pic = !empty($user->picture) ? $user->picture : 'images/user-thumb.jpg';
-
 		$likedata = \App\ForumLikes::where(['owner_id' => $user_id, 'post_id' => $checkpost->id])->get(); 
 
 	?>
@@ -78,8 +76,7 @@
 					$replyLikessCount = isset($reply->replyLikesCount[0]) ? $reply->replyLikesCount[0]['replyLikesCount'] : 0;
 
 					$replyCommentsCount = isset($reply->replyCommentsCount[0]) ? $reply->replyCommentsCount[0]['replyCommentsCount'] : 0;
-					// $replyUserPic = !empty($replyUser->picture) ? $replyUser->picture : 'images/user-thumb.jpg';
-
+					
 					$likedata = \App\ForumReplyLikes::where(['owner_id' => $user_id, 'reply_id' => $reply->id])->get();
 				?>
 				<div class="single-post" id="forumreply_{{$reply->id}}">
@@ -164,6 +161,7 @@
         	<option>This reply is harassing me</option>
         </select>
         <input type="hidden" id="reply_id">
+        <input type="hidden" id="post_id" value="{{ $checkpost->id }}">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -189,12 +187,13 @@ jQuery(function($){
 	$('#submitSpam').click(function(){
 		var user_id = $('.userid').data('id');
 		var reply_id = $('#reply_id').val();
+		var post_id = $('#post_id').val();
 		var reason = $('#reason').val();
 		if(!reason){
 			alert('Select some reason to proceed.');
 		} else {
 			$(this).prop('disabled', true);
-			$.post('/ajax/spam/reply', {user_id:user_id, reply_id:reply_id, reason:reason}, function(response){
+			$.post('/ajax/spam/reply', {user_id:user_id, post_id:post_id, reply_id:reply_id,reason:reason}, function(response){
 				$('#spamModal').modal('hide');
 				$('#submitSpam').prop('disabled', false);
 				$('#forumreply_'+reply_id).fadeOut(500);
