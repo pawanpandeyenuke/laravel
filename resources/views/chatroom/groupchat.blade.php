@@ -488,7 +488,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                   GroupName[jidStr] = data.title;
                 } 
               } else {
-                closePublic();
+                // closePublic();
                 groupChatRefresh( 'refreshgrouplist' );
               }
             }
