@@ -469,11 +469,13 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
         return;
       } else {
         chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
+        /**
         if( typeof GroupName[jidStr] != 'undefined' ){
           var groupimage = $('#'+jidStr).data('groupimage');
           chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
           chatbox.$el.find( '.chat-title' ).html( GroupName[jidStr] );
         } else {
+        **/
           $.ajax({
             'url' : "{{url('/ajax/getgroupdeatils')}}",
             'type' : 'post',
@@ -489,11 +491,12 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                 } 
               } else {
                 // closePublic();
+                chatbox.close();
                 groupChatRefresh( 'refreshgrouplist' );
               }
             }
           });
-        }
+       /** } **/
       }
       renderEmoji( chatbox ); 
     });
