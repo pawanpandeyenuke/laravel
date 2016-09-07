@@ -191,7 +191,7 @@ class Converse
  	{
 		$user = User::find($userId);
 		$friend = User::find($friendId);
- 		$subjectName = $user->first_name.' '.$user->last_name;
+ 		$subjectName = trim($user->first_name.' '.$user->last_name);
  		$data_array = array();
 
  		if($type == 'accept'){
