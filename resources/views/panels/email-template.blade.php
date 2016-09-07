@@ -41,7 +41,7 @@
         
           <p style="font-size:16px;margin-top:20px;margin-bottom:0;">This email has been sent to <a href="#" style="color:#000;font-weight:bold;">{{ $user_email }}</a></p>
 
-          <p style="font-weight:bold;margin-bottom:10px;">Don’t want forum notification?</p>
+          <p style="font-weight:bold;margin-bottom:20px;">Don’t want forum notification?</p>
           <a href="{{ url('forums/unsubscribe?token='.$access_token) }}" target='_blank' style="background-color:#5df7e3;color:#000;padding:10px 20px;margin-bottom:25px;text-decoration:none;text-transform:capitalize;font-weight:bold;">Unsubscribe</a>
         </div>
 
