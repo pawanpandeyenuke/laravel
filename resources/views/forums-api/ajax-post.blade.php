@@ -27,7 +27,7 @@
 
 		$breadcrumb = !empty($posts->forum_category_breadcrum) ? $posts->forum_category_breadcrum : '';
 		
-		$likedata = \App\ForumLikes::where(['	' => $user_id, 'post_id' => $posts->id])->get(); 
+		$likedata = \App\ForumLikes::where(['owner_id' => $user_id, 'post_id' => $posts->id])->get(); 
 	?>
 
 	<div class="single-post" id="forumpost_{{$posts->id}}">
