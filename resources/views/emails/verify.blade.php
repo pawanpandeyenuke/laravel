@@ -22,7 +22,7 @@
       </div>
       <div style="background-color:#5df7e3;height:8px; margin-bottom:12px;"></div>
       <div style="background-color:#fff;padding:10px 15px;margin-bottom:10px;">
-      <p style="font-size:16px;font-weight:600;">Verfiy Your Email Account</p>
+      <p style="font-size:16px;font-weight:600;">Hi,</p>
       <p style="font-size:14px;line-height:20px;">Thanks for creating an account with FriendzSquare. Please <a href="{{ URL::to('register/verify/'.$confirmation_code) }}">click here</a> to verify your email address.</p>
       
       
