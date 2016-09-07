@@ -2545,6 +2545,17 @@ class ApiController extends Controller
 			$access_token = Request::get('access_token');
 			$user_id = Request::get('user_id');
 
+			if($user_id != "")
+	        {
+				$user_check = User::where('id',$user_id)->first();
+				if($user_check == ""){
+					return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
+				} else {
+					if($access_token != $user_check->access_token)
+					return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
+				}
+			}
+
 			$breadcrumb = urldecode($breadcrumb);
 			$posts = ForumPost::with('user')->with('forumPostLikesCount')->with('replyCount');
 
@@ -2556,20 +2567,13 @@ class ApiController extends Controller
 				$posts = $posts->where('forum_category_breadcrum', 'like', $breadcrumb."%");
 			}
 
-			$spamids = PostSpams::select('post_id')->pluck('post_id')->toArray();
-			$posts = $posts->whereNotIn('forums_post.id', $spamids)->orderBy('updated_at','DESC');
-			
-	        if($user_id != "")
-	        {
-				$user_check = User::where('id',$user_id)->first();
-				if($user_check == ""){
-					return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
-				} else {
-					if($access_token != $user_check->access_token)
-					return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
-				}
+			if( $user_id )
+			{
+				$spamids = PostSpams::select('post_id')->where('user_id', $user_id)->pluck('post_id')->toArray();
+				$posts = $posts->whereNotIn('forums_post.id', $spamids);
 			}
-
+			
+			$posts = $posts->orderBy('updated_at','DESC');
 			$count = $posts->count();
 			if( !$count ){
 				return view('forums-api.forum-not-found')->with('message', 'Post does not exist.')->render();
@@ -2590,7 +2594,6 @@ class ApiController extends Controller
 		return $this->output();
 	}
 
-
 	/*
 	 * @ Get forum posts replies API.
 	 */
@@ -2601,7 +2604,7 @@ class ApiController extends Controller
 			$post_id = Request::get('post_id');
 			$user_id = Request::get('user_id');
 			$access_token = Request::get('access_token');
-		        $checkpost = ForumPost::with('user')
+		    $checkpost = ForumPost::with('user')
 	                        ->with('forumPostLikesCount')
 	                        ->where('id',$post_id)
 	                        ->first();
@@ -2609,25 +2612,31 @@ class ApiController extends Controller
 			if(empty($checkpost)){
 				return view('forums-api.forum-not-found')->with('message', 'Reply does not exist.')->render();
 			}
-			if($user_id != ""){      
-			$user_check = User::where('id',$user_id)->first();
 
-			if($user_check == "")
-				return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
-			else{
-				if($access_token != $user_check->access_token)
-				 return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
-			}
+			if($user_id != "")
+			{
+				$user_check = User::where('id',$user_id)->first();
+				if($user_check == ""){
+					return view('forums-api.forum-not-found')->with('message', 'No such user exist.')->render();
+				} else {
+					if($access_token != $user_check->access_token){
+					 	return view('forums-api.forum-not-found')->with('message', 'Unauthorized user.')->render();	
+					}
+				}
 			}
 
-			$spamids = ReplySpams::select('reply_id')->pluck('reply_id')->toArray();
 	        $replies = ForumReply::with('user')
 	                ->with('replyLikesCount')
 	                ->with('replyCommentsCount')
 	                ->where('post_id',$post_id)
-	                ->whereNotIn('forums_reply.id', $spamids)
 	                ->orderBy('updated_at','DESC');
 
+	        if( $user_id ) 
+	        {
+	        	$spamids = ReplySpams::select('reply_id')->where('user_id', $user_id)->pluck('reply_id')->toArray();
+	        	$replies = $replies->whereNotIn('forums_reply.id', $spamids);
+	        }
+	        
 			return view('forums-api.forum-post-reply')
 					->with('replies', $replies->take(10)->get())
 					->with('totalRecords', $replies->count())

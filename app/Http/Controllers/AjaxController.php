@@ -1799,21 +1799,12 @@ public function sendImage(Request $request){
 		$per_page = $call_type=='web' ? 10 : 5;
 		$breadcrum = Input::get('breadcrum');
 		$keyword = Input::get('keyword');
+		$user_id = Input::get('user_id');
 		$offset = ($page - 1) * $per_page;
-		
-		// Get total pages
-		$totalRecords = ForumPost::with('user')->with('forumPostLikesCount')
-	     	->with('replyCount')
-	        ->where('forum_category_breadcrum',$breadcrum)
-            ->count();
-        $pages = ceil($totalRecords / $per_page);
-        $existmore = $page == $pages ? 0 : 1;
 
 	    $posts = ForumPost::with('user')
 	    	->with('forumPostLikesCount')
 	     	->with('replyCount')
-	        ->skip($offset)
-	        ->take($per_page)
 	        ->orderBy('updated_at','DESC');
 
 	    if($breadcrum){
@@ -1832,7 +1823,7 @@ public function sendImage(Request $request){
 	        $pages = ceil($totalRecords / $per_page);
 	        $existmore = $page == $pages ? 0 : 1;
 
-			$posts = $posts->get();
+			$posts = $posts->skip($offset)->take($per_page)->get();
 			if(!($posts->isEmpty()))
 			{
 				$html = view('forums.viewmoreforumposts')->with('posts',$posts)->with('breadcrum',$breadcrum)->render();
@@ -1843,26 +1834,28 @@ public function sendImage(Request $request){
 		}
 		elseif($call_type == 'api')
 		{
-			$spamids = PostSpams::select('post_id')->pluck('post_id')->toArray();
-			$posts = $posts->whereNotIn('forums_post.id', $spamids);
-
+			if( $user_id )
+			{
+				$spamids = PostSpams::select('post_id')->where('user_id', $user_id)->pluck('post_id')->toArray();
+				$posts = $posts->whereNotIn('forums_post.id', $spamids);
+			}
+			
 			// Get total pages
 			$totalRecords = $posts->count();
 	        $pages = ceil($totalRecords / $per_page);
 	        $existmore = $page == $pages ? 0 : 1;
-
-			$posts = $posts->get();
+	        
+			$posts = $posts->skip($offset)->take($per_page)->get();
 			if(!($posts->isEmpty()))
 			{
 				$html = view('forums-api.ajax-post')
 							->with('forumPosts',$posts)
 							->with('breadcrum',$breadcrum)
 							->with('keyword',$keyword)
-							->with('user_id', Input::get('user_id'))
+							->with('user_id', $user_id)
 							->render();
 				return response()->json(['html' => $html, 'existmore'=>$existmore]);
-			}
-			else{
+			} else {
 				echo $str;
 			}
 		}
@@ -2041,30 +2034,24 @@ public function sendImage(Request $request){
 		$page = Input::get('pageid');
 		$call_type = Input::get('call_type');
 		$forumpostid = Input::get('forumpostid');
+		$user_id = Input::get('user_id');
 		$offset = ($page - 1) * $per_page;
 		
-		// Get total pages
-		$totalRecords = ForumReply::with('user')
-            ->with('replyLikesCount')
-            ->with('replyCommentsCount')
-            ->where('post_id',$forumpostid)
-            ->count();
-        $pages = ceil($totalRecords / $per_page);
-        $existmore = $page == $pages ? 0 : 1;
-        
 	    $reply = ForumReply::with('user')
             ->with('replyLikesCount')
             ->with('replyCommentsCount')
             ->where('post_id',$forumpostid)
-            ->skip($offset)
-	        ->take($per_page)
             ->orderBy('updated_at','DESC');
             
 		$str  = "No More Results";
-		
 		if($call_type === 'web')
 		{
-			$reply = $reply->get();
+			// Get total pages
+			$totalRecords = $reply->count();
+	        $pages = ceil($totalRecords / $per_page);
+	        $existmore = $page == $pages ? 0 : 1;
+
+			$reply = $reply->skip($offset)->take($per_page)->get();
 			if(!($reply->isEmpty()))
 			{
 				$html = view('forums.viewmoreforumreply')->with('reply',$reply)->with('forumpostid',$forumpostid)->render();
@@ -2075,17 +2062,26 @@ public function sendImage(Request $request){
 		}
 		elseif($call_type === 'api')
 		{
-			$spamids = ReplySpams::select('reply_id')->pluck('reply_id')->toArray();
-			$reply = $reply->whereNotIn('forums_reply.id', $spamids)->get();
+			if( $user_id )
+			{
+				$spamids = ReplySpams::select('reply_id')->where('user_id', $user_id)->pluck('reply_id')->toArray();
+				$reply = $reply->whereNotIn('forums_reply.id', $spamids);
+			}
+
+			// Get total pages
+			$totalRecords = $reply->count();
+	        $pages = ceil($totalRecords / $per_page);
+	        $existmore = $page == $pages ? 0 : 1;
+
+			$reply = $reply->skip($offset)->take($per_page)->get();
 			if(!($reply->isEmpty()))
 			{
 				$html = view('forums-api.ajax-reply')
 						->with('replies', $reply)
-						->with('user_id', Input::get('user_id'))
+						->with('user_id', $user_id)
 						->with('forumpostid', $forumpostid)->render();
 				return response()->json(['html' => $html, 'existmore'=>$existmore]);
-			}
-			else{
+			} else {
 				echo $str;
 			}
 		}

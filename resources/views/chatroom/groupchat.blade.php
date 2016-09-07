@@ -383,6 +383,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
   var checkFriendUrl = '<?= url('/ajax/isfriend') ?>';
   var profiletitles = {};
   var myFullname = '<?= Auth::User()->first_name ?> <?= Auth::User()->last_name ?>';
+  var messageFetched = 0;
   function webEncode( str ){
     //return Base64.encode( str );
     return str;
@@ -500,9 +501,11 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
     conObj.listen.on('chatBoxClosed', function (event, chatbox) {
       OpenFirstMinChat();
     }); 
-    conObj.listen.on('chatBoxToggled', function (event, chatbox) {
-      console.log( event );
+    
+    conObj.listen.on('chatBoxMaximized', function (event, chatbox) {
+      //console.log( chatbox );
     }); 
+
     conObj.listen.on('disconnected', function (event) { 
       location.reload();
     });
