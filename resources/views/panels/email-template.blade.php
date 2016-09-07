@@ -22,7 +22,7 @@
       </div>
       <div style="background-color:#5df7e3;height:8px; margin-bottom:12px;"></div>
       <div style="background-color:#fff;padding:10px 15px;margin-bottom:10px;">
-        <p style="font-size:16px;font-weight:600;">Hi {{ $user_name }},</p>
+        <p style="font-size:16px;font-weight:600;">Hi {{ $user_name }},</p><br>
         <p style='text-align:left;color:#0d0d0d;font-size:14px;font-weight:normal;line-height:19px;'>
           {{ $current_data }}
         </p>

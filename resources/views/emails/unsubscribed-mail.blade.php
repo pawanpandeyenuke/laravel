@@ -28,7 +28,7 @@
 			<div style="background-color:#e9e9e9;height:370px;padding:10px 10px 0 10px;">
 				
 				<div style="background-color:#fff;padding:10px 0px 20px 15px;margin-bottom:25px;">
-				<p style="font-size:18px;">Hi,</p>
+				<p style="font-size:18px;">Hi,</p><br>
 				
 				<p style="font-size:18px;line-height: 1.42857;">You have been unsubscribed from FriendzSquare. If you want to subscribe again, please <a href="{{ url('subscribe?email='.$email) }}" target="_blank">click here</a>.</p>
 			
