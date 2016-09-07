@@ -324,14 +324,14 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Leave Group</h4>
+        <h4 class="modal-title">Close Group</h4>
       </div>
       <div class="modal-body">
-        <p class='text-center'>Are you sure you want to leave?</p>
+        <p class='text-center'>Are you sure you want to close?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" data-jid="" id='leave-pvt-group'>Leave</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger" data-jid="" id='leave-pvt-group'>Yes</button>
       </div>
     </div>
   </div>
@@ -402,7 +402,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
           console.log( 'connected' );
           setTimeout( function(){
             $('.loader_blk').remove();
-            closePublic( groupid );
+            closePublic();
           }, 2000 );
           waitProfile = 1;
         });
@@ -469,11 +469,13 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
         return;
       } else {
         chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
+       
         if( typeof GroupName[jidStr] != 'undefined' ){
           var groupimage = $('#'+jidStr).data('groupimage');
           chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
           chatbox.$el.find( '.chat-title' ).html( GroupName[jidStr] );
-        } else {
+        }
+        /** else { **/
           $.ajax({
             'url' : "{{url('/ajax/getgroupdeatils')}}",
             'type' : 'post',
@@ -488,13 +490,15 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                   GroupName[jidStr] = data.title;
                 } 
               } else {
-                closePublic( '' );
-                groupChatRefresh( '' );
-                return;
+                removeGroup( chatbox );
+                if( typeof GroupName[jidStr] == 'undefined' ){
+                  chatbox.$el.find( '.chat-title' ).html( '<a href="javascript:void(0)" style="float: none;" class="close-chatbox-button" > Close Now</a>' );
+                }
+                groupChatRefresh( 'refreshgrouplist' );
               }
             }
           });
-        }
+       /** } **/
       }
       renderEmoji( chatbox ); 
     });
@@ -721,14 +725,12 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
 
      function openChatbox(xmpusername,username)
      {
-         var ss=conObj.contacts.get(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
-         if( ss==null ){  
-             conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
-         }
-         if( hideOpendBox( xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>' , 1 ) ){
-      var SingleChat = conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
-      SingleChat.maximize();
-     }
+        var ss=conObj.contacts.get(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+        if( ss==null ){  
+          conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
+        }
+        var SingleChat = conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+        SingleChat.maximize();
      }
 
     /**
@@ -906,9 +908,10 @@ function groupChatRefresh( grpjid ){
 function removeGroup( chatbox ){
   chatbox.$el.find('.chat-content').hide();
   chatbox.$el.find('.sendXMPPMessage').hide();
-  chatbox.$el.find('.chat-area').append( '<div class="chat-notification" >You are removed from group</div>' );
+  chatbox.$el.find('.chat-notification').remove();
+  chatbox.$el.find('.chat-area').append( '<div class="chat-notification" >You are removed from group<a href="javascript:void(0)" style="float: none;" class="close-chatbox-button" > Close Now</a></div>' );
   setTimeout( function(){
-    chatbox.close();
+      chatbox.close();
   }  , 5000 );
 }
 
@@ -952,7 +955,7 @@ function OpenLastMinChat(  ){
 /** 
 * show only one public group
 **/
-function closePublic( grpname ){
+function closePublic( ){
   var openChat = 1;
   $( '.chatroom' ).each( function(){
     var jid = Base64.decode($(this).data( 'bid' ));
