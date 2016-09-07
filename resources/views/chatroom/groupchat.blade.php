@@ -402,7 +402,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
           console.log( 'connected' );
           setTimeout( function(){
             $('.loader_blk').remove();
-            closePublic( groupid );
+            closePublic();
           }, 2000 );
           waitProfile = 1;
         });
@@ -488,9 +488,8 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                   GroupName[jidStr] = data.title;
                 } 
               } else {
-                closePublic( '' );
-                groupChatRefresh( '' );
-                return;
+                closePublic();
+                groupChatRefresh( 'refreshgrouplist' );
               }
             }
           });
@@ -952,7 +951,7 @@ function OpenLastMinChat(  ){
 /** 
 * show only one public group
 **/
-function closePublic( grpname ){
+function closePublic( ){
   var openChat = 1;
   $( '.chatroom' ).each( function(){
     var jid = Base64.decode($(this).data( 'bid' ));
