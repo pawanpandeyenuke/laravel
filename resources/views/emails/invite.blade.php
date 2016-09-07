@@ -32,7 +32,7 @@
 			</div>
 			<div style="background-color:#e9faf8;padding:10px 20px;text-align:center;margin-bottom:20px;">
 			<p style="font-size:16px;margin-top:20px;margin-bottom:0;">This email has been sent to <a href="mailto:{{$email}}" style="color:#000;font-weight:bold;">{{ $email }}</a></p>
-			<p style="font-weight:bold;">It is an invitation to connect</p>
+			<p style="font-weight:bold;margin-bottom:20px;">It is an invitation to connect</p>
 			<a href="{{ url('unsubscribe?email='.$email) }}" style="background-color:#5df7e3;color:#000;padding:10px 20px;margin-bottom:25px;text-decoration:none;font-weight:bold;">Unsubscribe</a>
 			</div>
 			<div style="background-color:#fff;padding:10px 15px;text-align:center;">
