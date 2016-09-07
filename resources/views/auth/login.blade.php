@@ -106,6 +106,7 @@
 				<li><a href="#" title="">About</a></li>
 				<li><a href="#" title="">Terms Privacy</a></li>
 				<li><a href="#" title="">&copy; 2015 friendzsquare</a></li>
+				<li><a href="<?php echo Config::get('constants.bizbricks_uri'); ?>" target="_blank" title="">BizBricks</a></li>
 			</ul>
 		</div>
 	</div>
