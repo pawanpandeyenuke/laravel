@@ -1561,7 +1561,7 @@ public function sendImage(Request $request){
 				);
 				
 				Mail::send('emails.invite', $data, function($message) use($value, $subject) {
-					$message->from('no-reply@friendzsquare.com', 'Friend Square');
+					$message->from('contact@friendzsquare.com', 'Friend Square');
 					$message->to($value)->subject($subject);
 	            });
 			}

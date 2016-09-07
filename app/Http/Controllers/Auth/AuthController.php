@@ -125,8 +125,8 @@ class AuthController extends Controller
         );
 
         Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
-        $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
-        $message->to($useremail,$username)->subject('Verify your email address');
+        $message->from('contact@friendzsquare.com', 'FriendzSquare');
+        $message->to($useremail,$username)->subject('Verfiy Your Email Account');
         });
        
         DB::table('settings')->insert(['setting_title'=>'contact-request','setting_value'=>'all','user_id'=>$userdata->id]);

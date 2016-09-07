@@ -95,8 +95,8 @@ class SearchController extends Controller
                     $emaildata = array('confirmation_code' => $confirmation_code, 'email' => $useremail);
 
                         Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
-                            $message->from('no-reply@friendzsquare.com', 'Verify Friendzsquare Account');
-                            $message->to($useremail,$username)->subject('Verify your email address');
+                            $message->from('contact@friendzsquare.com', 'FriendzSquare');
+                            $message->to($useremail,$username)->subject('Verfiy Your Email Account');
                         });
                     Session::put('success', 'Verification link sent to '.$useremail.' !');
                       return redirect()->back();
@@ -505,7 +505,7 @@ class SearchController extends Controller
             Session::put('success', 'Your E-mail Notification Settings have been saved. <br> You will receive an e-mail confirming your new choices.');
 
             Mail::send('emails.unsubscribed-mail', ['email' => $email], function($message) use($email) {
-                $message->from('no-reply@friendzsquare.com', 'FriendzSquare');
+                $message->from('contact@friendzsquare.com', 'FriendzSquare');
                 $message->to($email)->subject('FriendzSquare Unsubscription');
             });
 

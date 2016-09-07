@@ -22,7 +22,7 @@
 			</div>
 			<div style="background-color:#5df7e3;height:8px; margin-bottom:12px;"></div>
 			<div style="background-color:#fff;padding:10px 15px;margin-bottom:10px;">
-			<p style="font-size:16px;">Hi,</p>
+			<p style="font-size:16px;">Hi,</p><br>
 			<p style="font-size:16px;">{{ $username }} has joined FriendzSquare. On FriendzSquare you can make new friends by joining <strong>Chat rooms</strong>, participate in <strong>Forums</strong>, post comments on <strong>Newsfeed</strong> and much more.</p>
 			<p style="font-size:16px;margin-bottom:40px;">Explore and grow your social network.</p>
 				<div style="margin-bottom:20px;text-align:center;padding:10px;">

@@ -22,7 +22,7 @@
       </div>
       <div style="background-color:#5df7e3;height:8px; margin-bottom:12px;"></div>
       <div style="background-color:#fff;padding:10px 15px;margin-bottom:10px;">
-        <p style="font-size:16px;font-weight:600;">Hi {{ $user->first_name.' '.$user->last_name }},</p>
+        <p style="font-size:16px;font-weight:600;">Hi <?= ucwords($user->first_name.' '.$user->last_name) ?>,</p>
         <p style="font-size:14px;line-height:20px;">We recently received a password change request from you. To change your FriendzSquare password click below:</p>
         
         <p style='margin-top:20px;font-size:14px;margin-bottom:25px;text-align:center;'>
