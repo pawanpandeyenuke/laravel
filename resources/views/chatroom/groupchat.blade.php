@@ -469,13 +469,13 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
         return;
       } else {
         chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
-        /**
+       
         if( typeof GroupName[jidStr] != 'undefined' ){
           var groupimage = $('#'+jidStr).data('groupimage');
           chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
           chatbox.$el.find( '.chat-title' ).html( GroupName[jidStr] );
-        } else {
-        **/
+        }
+        /** else { **/
           $.ajax({
             'url' : "{{url('/ajax/getgroupdeatils')}}",
             'type' : 'post',
@@ -490,8 +490,14 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                   GroupName[jidStr] = data.title;
                 } 
               } else {
+                chatbox.$el.find('.chat-content').hide();
+                chatbox.$el.find('.sendXMPPMessage').hide();
+                chatbox.$el.find('.chat-notification').remove();
+                chatbox.$el.find('.chat-body').append( '<div class="chat-notification" >You are removed from group<a href="javascript:void(0)" style="float: none;" class="close-chatbox-button" > Close Now</a></div>' );
                 // closePublic();
-                chatbox.close();
+                if( typeof GroupName[jidStr] == 'undefined' ){
+                  chatbox.$el.find( '.chat-title' ).html( '<a href="javascript:void(0)" style="float: none;" class="close-chatbox-button" > Close Now</a>' );
+                }
                 groupChatRefresh( 'refreshgrouplist' );
               }
             }
