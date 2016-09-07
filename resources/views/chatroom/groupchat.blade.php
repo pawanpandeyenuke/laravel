@@ -324,14 +324,14 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Leave Group</h4>
+        <h4 class="modal-title">Close Group</h4>
       </div>
       <div class="modal-body">
-        <p class='text-center'>Are you sure you want to leave?</p>
+        <p class='text-center'>Are you sure you want to close?</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" data-jid="" id='leave-pvt-group'>Leave</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger" data-jid="" id='leave-pvt-group'>Yes</button>
       </div>
     </div>
   </div>
