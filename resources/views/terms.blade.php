@@ -175,6 +175,7 @@
 	            <li><a href="{{ url('terms') }}" title="Terms of Use">Terms of Use</a></li>
 	            <li><a href="{{ url('privacy-policy') }}" title="Privacy Policy">Privacy Policy</a></li>
 	            <li><a href="{{ url('about-us') }}" title="About Us">About Us</a></li>
+	            <li><a href="<?php echo Config::get('constants.bizbricks_uri'); ?>" target="_blank" title="">BizBricks</a></li>
 	        </ul>
 	    </div>
 	</footer>
