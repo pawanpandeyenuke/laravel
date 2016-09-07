@@ -41,7 +41,7 @@
 						 	@if($user_id == $user->id)
 							 	@if($repliesCount == 0)
 							 	<?php $title = base64_encode(nl2br($postTitle)); ?>
-								<li><a href="{{ url('api/get-forum-post-details?post_id='.$posts->id.'&user_id='.$user->id.'&post_data='.$title") }}">Edit</a></li>
+								<li><a href="{{ url('api/get-forum-post-details?post_id='.$posts->id.'&user_id='.$user->id.'&post_data='.$title) }}">Edit</a></li>
 							 	@endif
 								<li><a href="#" class="del-confirm-api" data-type="post" data-postid="{{$posts->id}}" data-breadcrum = "{{$posts->forum_category_breadcrum}}">Delete</a></li>
 							@else

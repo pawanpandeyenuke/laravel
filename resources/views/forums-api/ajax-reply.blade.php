@@ -28,7 +28,7 @@
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 							@if($user_id == $reply->owner_id)
 								<?php $title = base64_encode(nl2br($reply_data)); ?>
-								<li><a href="{{ url("api/get-forum-reply-details?reply_id=$reply->id&user_id=$replyUser->id&reply_data=$title") }}">Edit</a></li>
+								<li><a href="{{ url('api/get-forum-reply-details?reply_id='.$reply->id.'&user_id='.$replyUser->id.'&reply_data='.$title) }}">Edit</a></li>
 								<li><a href="#" class="del-confirm-api" data-type="reply" data-forumpostid="{{$forumpostid}}" data-forumreplyid = "{{$reply->id}}">Delete</a></li>
 							@else
 								<li><a href="#" class="spamModal" data-replyid="{{$reply->id}}">Report as spam</a></li>
