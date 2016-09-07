@@ -490,11 +490,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                   GroupName[jidStr] = data.title;
                 } 
               } else {
-                chatbox.$el.find('.chat-content').hide();
-                chatbox.$el.find('.sendXMPPMessage').hide();
-                chatbox.$el.find('.chat-notification').remove();
-                chatbox.$el.find('.chat-body').append( '<div class="chat-notification" >You are removed from group<a href="javascript:void(0)" style="float: none;" class="close-chatbox-button" > Close Now</a></div>' );
-                // closePublic();
+                removeGroup( chatbox );
                 if( typeof GroupName[jidStr] == 'undefined' ){
                   chatbox.$el.find( '.chat-title' ).html( '<a href="javascript:void(0)" style="float: none;" class="close-chatbox-button" > Close Now</a>' );
                 }
@@ -729,14 +725,12 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
 
      function openChatbox(xmpusername,username)
      {
-         var ss=conObj.contacts.get(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
-         if( ss==null ){  
-             conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
-         }
-         if( hideOpendBox( xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>' , 1 ) ){
-      var SingleChat = conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
-      SingleChat.maximize();
-     }
+        var ss=conObj.contacts.get(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+        if( ss==null ){  
+          conObj.contacts.add(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>', username);             
+        }
+        var SingleChat = conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+        SingleChat.maximize();
      }
 
     /**
@@ -914,9 +908,10 @@ function groupChatRefresh( grpjid ){
 function removeGroup( chatbox ){
   chatbox.$el.find('.chat-content').hide();
   chatbox.$el.find('.sendXMPPMessage').hide();
-  chatbox.$el.find('.chat-area').append( '<div class="chat-notification" >You are removed from group</div>' );
+  chatbox.$el.find('.chat-notification').remove();
+  chatbox.$el.find('.chat-area').append( '<div class="chat-notification" >You are removed from group<a href="javascript:void(0)" style="float: none;" class="close-chatbox-button" > Close Now</a></div>' );
   setTimeout( function(){
-    chatbox.close();
+      chatbox.close();
   }  , 5000 );
 }
 
