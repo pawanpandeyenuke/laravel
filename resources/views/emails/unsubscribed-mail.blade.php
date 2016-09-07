@@ -15,7 +15,8 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body style="font-family: 'Roboto', sans-serif;">
+  <body style="font-family: 'Open Sans', sans-serif;background-color:#e9faf8;">
+    <div style="background-color:#e9faf8;width:100%;float:left;">
 		<div style="width:680px;margin:0 auto;">
 			<div style="background-color:#e9e9e9;height:7px;width:680px;margin-bottom:3px;"></div>
 			
@@ -44,6 +45,6 @@
 			
 			
 		</div>
-   
+   	</div>
   </body>
 </html>

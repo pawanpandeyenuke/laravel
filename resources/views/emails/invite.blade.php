@@ -15,7 +15,8 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body style="font-family: 'Open Sans', sans-serif;background-color:#e9faf8;width:100%;float:left;">
+  <body style="font-family: 'Open Sans', sans-serif;background-color:#e9faf8;">
+  	<div style="background-color:#e9faf8;width:100%;float:left;">
 		<div style="width:571px;margin:30px auto;">
 			<div style="background-color:#fff;padding:10px 15px;">
 			<a href="#"><img src="{{url('/images/logo.png')}}" alt="" title=""/></a>
@@ -31,7 +32,7 @@
 			</div>
 			<div style="background-color:#e9faf8;padding:10px 20px;text-align:center;margin-bottom:20px;">
 			<p style="font-size:16px;margin-top:20px;margin-bottom:0;">This email has been sent to <a href="mailto:{{$email}}" style="color:#000;font-weight:bold;">{{ $email }}</a></p>
-			<p style="font-weight:bold;">It is an invitation to connect</p>
+			<p style="font-weight:bold;margin-bottom:20px;">It is an invitation to connect</p>
 			<a href="{{ url('unsubscribe?email='.$email) }}" style="background-color:#5df7e3;color:#000;padding:10px 20px;margin-bottom:25px;text-decoration:none;font-weight:bold;">Unsubscribe</a>
 			</div>
 			<div style="background-color:#fff;padding:10px 15px;text-align:center;">
@@ -39,5 +40,6 @@
 			</div>
 			<div style="background-color:#5df7e3;height:8px; margin-bottom:15px;font-size:0px;">Copyright</div>  
 		</div>
+	</div>
   </body>
 </html>
