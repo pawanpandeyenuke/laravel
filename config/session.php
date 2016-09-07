@@ -29,9 +29,9 @@ return [
     |
     */
 
-    'lifetime' => 1,
+    'lifetime' => 120,
 
-    'expire_on_close' => false,
+    'expire_on_close' => true,
 
     /*
     |--------------------------------------------------------------------------

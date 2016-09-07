@@ -1009,7 +1009,7 @@ window.localStorage.setItem('FSRefreshOtherTab', true);
 
 function storageChangee(event) {
     if(event.key == 'FSRefreshOtherTab' && event.newValue == 'false') {
-    window.location.href="/chat-category";
+    window.location.href="/group";
     }
 }
 window.addEventListener('storage', storageChangee, false);
