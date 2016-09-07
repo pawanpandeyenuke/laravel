@@ -9,7 +9,16 @@
 			<?php 
 				$user = $post['user'];
 				$likesCount = isset($post->forumPostLikesCount[0]) ? $post->forumPostLikesCount[0]['forumlikescount'] : 0;
-				$repliesCount = isset($post->replyCount[0]) ? $post->replyCount[0]['replyCount'] : 0;
+				// $repliesCount = isset($post->replyCount[0]) ? $post->replyCount[0]['replyCount'] : 0;
+				
+				if( $user_id )
+				{
+					$spamids = \App\ReplySpams::where(['post_id' => $post->id, 'user_id' => $user_id])->select('reply_id')->pluck('reply_id');
+					$repliesCount = DB::table('forums_reply')->where('post_id','=',$post->id)->whereNotIn('id', $spamids)->count();
+				} else {
+					$repliesCount = DB::table('forums_reply')->where('post_id','=',$post->id)->count();
+				}
+
 				$rawCountry = [$user->city, $user->state, $user->country];
 				foreach ($rawCountry as $key => $value) {
 					if($value == ''){
