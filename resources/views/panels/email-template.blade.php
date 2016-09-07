@@ -15,7 +15,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body style="font-family: 'Open Sans', sans-serif;background-color:#e9faf8;width:100%;float:left;">
+  <body style="font-family: 'Open Sans', sans-serif;background:#e9faf8;width:100%;float:left;">
   
     <div style="width:590px;margin:30px auto;">
       <div style="background-color:#fff;padding:10px 15px;">
@@ -37,13 +37,7 @@
         </p>
 
       </div>
-      <div style="background-color:#e9faf8;padding:10px 20px;text-align:center;margin-bottom:20px;">
       
-        <p style="font-size:16px;margin-top:20px;margin-bottom:0;">This email has been sent to <a href="#" style="color:#000;font-weight:bold;">{{ $user_email }}</a></p>
-
-        <p style="font-weight:bold;margin-bottom:10px;">Don’t want forum notification?</p>
-        <a href="{{ url('forums/unsubscribe?token='.$access_token) }}" target='_blank' style="background-color:#5df7e3;color:#000;padding:10px 20px;margin-bottom:25px;text-decoration:none;text-transform:capitalize;font-weight:bold;">Unsubscribe</a>
-      </div>
 
       <div style="background-color:#fff;padding:10px 15px;text-align:center;">
       <p style="font-size:12px;margin-top:15px;margin-bottom:15px;">If you have any questions, then please contact at <a href="mailto:contact@friendzsquare.com" style="color:#000;font-weight:bold;">contact@friendzsquare.com </a></p>
