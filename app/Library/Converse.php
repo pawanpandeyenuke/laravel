@@ -324,7 +324,7 @@ class Converse
 
  				// Send email
 				Mail::send('panels.email-template', $data, function( $message ) use( $user_email, $user_name, $subject ){
-					$message->from('no-reply@friendzsquare.com', 'FriendzSquare');
+					$message->from('contact@friendzsquare.com', 'FriendzSquare');
 					$message->to( $user_email, $user_name )->subject( $subject );
 				});
  			}

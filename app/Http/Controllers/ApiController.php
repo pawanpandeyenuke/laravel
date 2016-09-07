@@ -101,7 +101,7 @@ class ApiController extends Controller
 		        );
 
 		        Mail::send('emails.verify',$emaildata, function($message) use($useremail, $full_name){
-			        $message->from('no-reply@friendzsquare.com', 'FriendzSquare');
+			        $message->from('contact@friendzsquare.com', 'FriendzSquare');
 			        $message->to($useremail,$full_name)->subject('Verfiy Your Email Account');
 		        });
 
@@ -2839,7 +2839,7 @@ class ApiController extends Controller
 
 	        if($email != ''){
 				Mail::send('emails.invite', $data, function($message) use($email, $subject) {
-					$message->from('no-reply@friendzsquare.com', 'Friend Square');
+					$message->from('contact@friendzsquare.com', 'Friend Square');
 					$message->to($email)->subject($subject);
 				});
 	        }
@@ -3170,7 +3170,7 @@ class ApiController extends Controller
 					$useremail = $user->email;
 					
 					Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
-						$message->from('no-reply@friendzsquare.com', 'FriendzSquare');
+						$message->from('contact@friendzsquare.com', 'FriendzSquare');
 						$message->to($useremail,$username)->subject('Verfiy Your Email Account');
 
 					$this->status = "Success";
