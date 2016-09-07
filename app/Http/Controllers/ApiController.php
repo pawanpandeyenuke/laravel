@@ -2351,7 +2351,7 @@ class ApiController extends Controller
 			$offset = ($page - 1) * $per_page;
 			$keyword = isset($input['keyword']) ? trim($input['keyword']) : '';
 			$authUserId = isset($input['user_id']) ? $input['user_id'] : 0;
-			$select = array('users.id', 'first_name', 'last_name', 'email', 'picture','xmpp_username','status as fstatus');
+			$select = array('users.id', 'first_name', 'last_name', 'email', 'picture','xmpp_username','status as fstatus', 'country', 'state', 'city');
 			
 			// Search users
             $users = Functions::searchUsers($keyword, $authUserId, $page, $input['page_size'],$select);
