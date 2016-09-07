@@ -2670,7 +2670,7 @@ textarea{
     padding: 8px 10px;
     border-radius: 5px;
     display: inline-block;
-    background: #f1f1f1;
+    background: #E9FAF8;
 	position: relative;
 	word-break: keep-all;
 }
@@ -2692,7 +2692,7 @@ textarea{
 	height: 0; 
 	border-top: 0px solid transparent;
 	border-bottom: 10px solid transparent; 
-	border-right:10px solid #f1f1f1;
+	border-right:10px solid #E9FAF8;
     right: 100%;
     top: 5px;
 }
