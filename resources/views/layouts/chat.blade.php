@@ -89,6 +89,15 @@ jQuery(function($){
     return false;
   });
 });
+
+function storageChange(event) {
+  if(event.key == 'logged_in' && event.newValue == 'false') {
+    setInterval(function(){ location.reload(true); }, 2000); 
+  }
+}
+
+window.addEventListener('storage', storageChange, false);
+window.localStorage.setItem('logged_in', true);
 </script>
 @include('panels.google-analytics')
 </head>
@@ -185,11 +194,20 @@ jQuery(function($){
 <input type="hidden" id="user_id" value="<?php echo Auth::User()->id; ?>">
 <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script type="text/javascript">
-
-
 function googleTranslateElementInit() {
-    new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
+  new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
 }
+
+var sessionLifetime = "<?php echo config('session.lifetime')*60*1000+5;?>";
+setInterval(function(){
+  $.post('/ajax/is-session-expired', {}, function(response){
+    if( response == 0 )
+    {
+      window.localStorage.setItem('logged_in', false);
+      window.location.href = '/';
+    }
+  });
+}, sessionLifetime);
 </script>
 
 {!! Session::forget('error') !!}

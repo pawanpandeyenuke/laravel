@@ -2482,4 +2482,10 @@ public function sendImage(Request $request){
         $spam = $spam->create($input);
         exit;
 	}
+
+	// Check if session is expired
+	public function isSessionExpired()
+	{
+		return Auth::check() ? 1 : 0;
+	}
 }
