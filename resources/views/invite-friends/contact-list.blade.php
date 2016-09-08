@@ -73,6 +73,10 @@
 <script type="text/javascript">
 	$("#checkboxG1").change(function () {
 	    $("input:checkbox").prop('checked', $(this).prop("checked"));
+
+	    if($(this).is(':checked')){
+	    	$("#sent-invitation-btn").attr("disabled", false);	
+	    }	    
 	});
 
 	$(document).on('change', '.checkbox', function(){
