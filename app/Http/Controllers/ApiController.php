@@ -375,9 +375,9 @@ class ApiController extends Controller
 								->with('likedornot')
 								->count();
 
-					if( $posts ){
-
 						$this->status = 'success';
+
+					if( $posts ){
 						$this->data['feed'] = $posts;
 						$this->data['page_no'] = $arguments['page'];
 						$this->data['page_size'] = $arguments['page_size'];
@@ -385,6 +385,10 @@ class ApiController extends Controller
 						$this->data['records'] = $postscount;
 						$this->data['total_pages'] = ceil($postscount / $arguments['page_size']);
 						$this->message = count($postscount). ' posts found.';
+					}else{
+
+						$this->message = strip_tags(Config::get('constants.first_custom_post'));
+
 					}
 					
 				}

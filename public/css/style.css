@@ -713,7 +713,7 @@ a:hover{
 }
 .side-widget-cont, .shadow-box{
 	box-shadow: 0px 0px 1px 1px #DEDEDE;
-	margin: 15px 0 0;
+	margin: 15px 0 15px;
 	border-radius: 7px;
 }
 .side-widget-cont .side-ad{
@@ -3990,4 +3990,51 @@ line-height: 28px;
   padding: 0 5px 0 0;
   border-bottom: 0;
   font-size:12px;
+}
+
+.welcome-text
+{
+	
+}
+
+.welcome-text h3
+{
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.welcome-text h4
+{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.welcome-text blockquote {
+    border-left: 5px solid #a0f0e6;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.welcome-text ul li {
+  line-height: 24px;
+  margin-bottom: 12px;
+}
+
+.welcome-text ul li i {
+  font-size: 18px;
+  color:#92e7dc;
+}
+
+.refer-link {
+  background: #fff none repeat scroll 0 0;
+  border-radius: 3px;
+  float: left;
+  padding: 5px 35px;
+  width: 100%;
+  text-align: center;
+}
+
+.refer-link img
+{
+	width:50%;
 }

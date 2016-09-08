@@ -31,7 +31,8 @@ class DashboardController extends Controller
 	public function dashboard()
 	{
 
-        try{ 
+        try
+        { 
             $xmppusername = User::where('id',Auth::User()->id)->value('xmpp_username');
 
             $defGroup = DefaultGroup::where('group_by',Auth::User()->id)->lists('group_name');
