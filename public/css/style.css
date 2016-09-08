@@ -3491,6 +3491,7 @@ header{
 	margin-left: 60px !important;
 }
 .backbutton{
+	cursor: pointer;
 	margin-top:-10px;
 }
 .forum-srch-list .forum-master-post p.forum_post{

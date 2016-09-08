@@ -30,13 +30,11 @@
 
 								<div class="forum-post-cont forum-post-count">
 									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{$postscount}}</span> Posts
-									<a class='backbutton pull-right' href="{{$lastURL}}" title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back"></a>
+									<span class='backbutton pull-right' title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back" onclick="window.history.length>2 ? window.history.back() : window.location.href='/forums';"></span>
 									</div>
 								</div><!--/forum post cont-->
 
-								
 								<!---New Forum Post-->
-								
 									@if(Auth::check())
 									<div class="f-post-form">
 										<textarea name="topic" class="form-control forumpost" data-emojiable="true"></textarea>

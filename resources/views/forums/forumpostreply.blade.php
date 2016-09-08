@@ -27,7 +27,7 @@
 						<div class="forum-srch-list" id="forum-post-reply_{{$post->id}}">
 							<div class="fs-breadcrumb">
 								{{$post->forum_category_breadcrum}}
-									<a class='backbutton pull-right' href="{{$lastURL}}" title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back"></a>
+									<span class='backbutton pull-right' title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back" onclick="window.history.length>2 ? window.history.back() : window.location.href='/forums';"></sapn>
 							</div>
 
 							<div class="forum-master-post">
