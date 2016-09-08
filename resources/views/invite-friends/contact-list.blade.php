@@ -76,7 +76,9 @@
 
 	    if($(this).is(':checked')){
 	    	$("#sent-invitation-btn").attr("disabled", false);	
-	    }	    
+	    }else{
+	    	$("#sent-invitation-btn").attr("disabled", true);	
+	    }
 	});
 
 	$(document).on('change', '.checkbox', function(){
