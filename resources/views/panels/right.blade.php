@@ -6,7 +6,7 @@
 		<img src="{{url('/images/side-ad.jpg')}}" alt="" class="img-responsive side-ad">
 	</div>
 	<div class="refer-link">
-		<a href="<?php echo Config::get('constants.bizbricks_uri'); ?>"><img src="{{url('/images/logo-biz.png')}}" alt="" class=""></a>
+		<a target="_blank" href="<?php echo Config::get('constants.bizbricks_uri'); ?>"><img src="{{url('/images/logo-biz.png')}}" alt="" class=""></a>
 	</div>
 </div>
 
