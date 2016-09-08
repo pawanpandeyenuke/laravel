@@ -1002,6 +1002,17 @@ $( document ).on('keyup', '.emoji-wysiwyg-editor' ,function(event) {
   $(this).change();
 });
 
+</script>
 
+<script >
+window.localStorage.setItem('FSRefreshOtherTab', true);
+
+function storageChangee(event) {
+    if(event.key == 'FSRefreshOtherTab' && event.newValue == 'false') {
+    window.location.href="/group";
+    }
+}
+window.addEventListener('storage', storageChangee, false);
+window.localStorage.setItem('FSRefreshOtherTab', false);
 </script>
 @endsection

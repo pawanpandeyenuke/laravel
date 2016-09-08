@@ -19,6 +19,7 @@ Route::get('pushnotification-iphone', 'DashboardController@pushNotificationIphon
 Route::get('pushnotification-android', 'DashboardController@pushNotificationAndroid');
 
 Route::post('sendpushtoios','HomeController@sendpushtoios');
+Route::post('ajax/is-session-expired','AjaxController@isSessionExpired');
 
 /**
  * @Ajax Routes..
