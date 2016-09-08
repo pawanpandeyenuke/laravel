@@ -40,7 +40,7 @@ class PasswordController extends Controller
     public function sendResetPasswordLink($email)
     {
         $response = $this->passwords->sendResetLink($email, function($message) {
-            $message->subject('Password Reminder');
+            $message->subject('Password Change Request');
         });
 
         switch ($response)
