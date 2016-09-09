@@ -103,7 +103,7 @@ class ApiController extends Controller
 
 		        Mail::send('emails.verify',$emaildata, function($message) use($useremail, $full_name){
 			        $message->from('contact@friendzsquare.com', 'FriendzSquare');
-			        $message->to($useremail,$full_name)->subject('Verfiy Your Email Account');
+			        $message->to($useremail,$full_name)->subject($full_name.'.. Please authenticate your email Address');
 		        });
 
 		        $converse = new Converse;
@@ -3186,7 +3186,7 @@ class ApiController extends Controller
 
 					Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
 						$message->from('contact@friendzsquare.com', 'FriendzSquare');
-						$message->to($useremail,$username)->subject('Verfiy Your Email Account');
+						$message->to($useremail,$username)->subject($username.'.. Please authenticate your email Address');
 
 					$this->status = "Success";
 					$this->message = "Verification link has been sent to your registered email address. Please check your inbox and verify your email address.";
