@@ -84,7 +84,7 @@ $userdata = session('userdata');
                     <div class="row field-row">
                         <div class="col-sm-12">
                             @if (Session::has('email_error'))
-                                <div class="form-group">
+                                <div class="form-group"> 
                                     <div class="alert alert-danger">{!! Session::get('email_error') !!}</div>
                                 </div>
                             @endif
