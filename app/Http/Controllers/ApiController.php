@@ -98,11 +98,12 @@ class ApiController extends Controller
 		        $emaildata = array(
 		            'confirmation_code' => $confirmation_code,
 		            'email' => $userdata->email,
+		            'fullname' => $full_name,
 		        );
 
 		        Mail::send('emails.verify',$emaildata, function($message) use($useremail, $full_name){
 			        $message->from('contact@friendzsquare.com', 'FriendzSquare');
-			        $message->to($useremail,$full_name)->subject('Verfiy Your Email Account');
+			        $message->to($useremail,$full_name)->subject($full_name.'.. Please authenticate your email Address');
 		        });
 
 		        $converse = new Converse;
@@ -3177,13 +3178,15 @@ class ApiController extends Controller
 			else{
 				if($user->is_email_verified == "N"){
 
-					$emaildata = array('confirmation_code' => $user->confirmation_code);
+					
 					$username = $user->first_name." ".$user->last_name;
 					$useremail = $user->email;
 					
+					$emaildata = array('confirmation_code' => $user->confirmation_code, 'email' => $useremail, 'fullname' => $username );
+
 					Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
 						$message->from('contact@friendzsquare.com', 'FriendzSquare');
-						$message->to($useremail,$username)->subject('Verfiy Your Email Account');
+						$message->to($useremail,$username)->subject($username.'.. Please authenticate your email Address');
 
 					$this->status = "Success";
 					$this->message = "Verification link has been sent to your registered email address. Please check your inbox and verify your email address.";
