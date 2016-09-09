@@ -576,7 +576,8 @@ class DashboardController extends Controller
                 if(empty($arguments['state'])){
                     $arguments['city'] = '';
                 }
-                
+                $arguments['first_name']    = trim($arguments['first_name']);
+                $arguments['last_name']     = trim($arguments['last_name']);
                 $full_name = $arguments['first_name'].' '.$arguments['last_name'];
                 Converse::setNameVcard(Auth::User()->xmpp_username, 'FN', $full_name);
                 unset($arguments['email'], $arguments['password']);
@@ -821,7 +822,7 @@ class DashboardController extends Controller
 								'status'=>'Active',
 								'owner_id'=>$userid,
 						    );  
-					$GroupTitle = $input['groupname'];	
+					$GroupTitle = trim($input['groupname']);	
 					$groupid   = preg_replace('/[^A-Za-z0-9\-]/', '_', $GroupTitle);
 					$groupid   = strtolower($groupid);
 					$converse  = new Converse;
@@ -855,8 +856,7 @@ class DashboardController extends Controller
 						$converse->addUserGroup( $GroupJid,$value->xmpp_userid );
 						$converse->broadcast($userXamp,$value->xmpp_userid,$Message);
 					}
-				return redirect(url('groupchat/pg/'.$groupdata->id));
-
+				return redirect( url('groupchat/pg/'.$groupdata->id) );
 			}  else {
 			     return redirect()->back();
 			}
