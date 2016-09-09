@@ -31,7 +31,8 @@
 												<?php $count = 1; ?>
 												@foreach($contacts as $value)
 													<tr>
-														<td title="{{ $value['name'] }}">{{ $value['name'] }}</td>
+														<td  title="{{ $value['name'] }}">
+														<div class="user-name">{{ $value['name'] }}</div></td>
 														<td title="{{ $value['email'] }}">{{ $value['email'] }}</td>
 														<td>
 															<div class="checkbox-cont label-right">
