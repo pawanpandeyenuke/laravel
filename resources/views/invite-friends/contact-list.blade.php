@@ -33,7 +33,8 @@
 													<tr>
 														<td  title="{{ $value['name'] }}">
 														<div class="user-name">{{ $value['name'] }}</div></td>
-														<td title="{{ $value['email'] }}">{{ $value['email'] }}</td>
+														<td title="{{ $value['email'] }}">
+														<div class="email-text">{{ $value['email'] }}</div></td>
 														<td>
 															<div class="checkbox-cont label-right">
 																<input type="checkbox" name="checkboxG2-{{ $count }}" id="checkboxG2-{{ $count }}" class="css-checkbox checkbox" value="{{$value['email']}}"/>

@@ -4047,3 +4047,11 @@ line-height: 28px;
     overflow: hidden;
     text-overflow: ellipsis; 
 }
+
+.email-text
+{
+	white-space: nowrap; 
+    width: 190px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
