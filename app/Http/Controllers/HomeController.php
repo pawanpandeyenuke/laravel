@@ -43,29 +43,7 @@ class HomeController extends Controller
 
             // Validator errors
             $errors = $validator->errors();
-            // echo '<pre>';print_r($errors);die;
-
-            // Custom check for emails
-            if( $data['email'] )
-            {
-                $exist = User::where('email', $data['email'])->first();
-                if( $exist && $exist->is_email_verified == 'N' ) 
-                {
-                    $url = url('send-verification-link');
-                    $err_msg = "Your email is registered on FriendzSquare. We have sent a verification email to ".$data['email']." Please <a href='".$url."'>verify</a> your email address to activate your account.";
-
-                    // $errors->add('email', $err_msg);
-                    Session::put('email_error', $err_msg);
-                    // return redirect('send-verification-link');
-                } 
-                elseif( $exist && $exist->is_email_verified == 'Y' ) 
-                {
-                    $errors->add('email', 'This email has already been taken.');
-                }
-            }
-
-
-
+            
             // Custom check for mobile existence
             if( $data['country_code'] && $data['phone_no'] )
             {
@@ -88,6 +66,25 @@ class HomeController extends Controller
                     }
                 } else {
                     $errors->add('invalid_country_code', 'This country code does not exist.');
+                }
+            }
+
+            // Custom check for emails
+            if( $data['email'] )
+            {
+                $exist = User::where('email', $data['email'])->first();
+                if( $exist && $exist->is_email_verified == 'N' ) 
+                {
+                    $url = url('send-verification-link');
+                    $err_msg = "Your email is registered on FriendzSquare. We have sent a verification email to ".$data['email']." Please <a href='".$url."'>verify</a> your email address to activate your account.";
+
+                    // $errors->add('email', $err_msg);
+                    Session::put('email_error', $err_msg);
+                    return redirect('/')->withErrors($errors)->with($data);
+                } 
+                elseif( $exist && $exist->is_email_verified == 'Y' ) 
+                {
+                    $errors->add('email', 'This email has already been taken.');
                 }
             }
 
