@@ -218,6 +218,7 @@ function googleTranslateElementInit() {
 
 {!! Session::forget('error') !!}
 {!! Session::forget('success') !!}
+{!! Session::forget('email_error') !!}
 
 <a href="#" class="scrollToTop"></a>
 </body>

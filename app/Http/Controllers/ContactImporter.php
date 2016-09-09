@@ -47,7 +47,7 @@ class ContactImporter extends Controller
 
                     if($value && __isemail($value) && ($value != $currentemail)){
 
-                        $userData = User::whereEmail($value)->select('email')->first();
+                        $userData = User::whereEmail($value)->where('is_email_verified', 1)->select('email')->first();
 
                         if($userData){
                             // echo '<pre>';print_r($userData);die;
@@ -168,7 +168,7 @@ class ContactImporter extends Controller
                 $unsubscribedUser = array();
                 foreach ($request as $value) {                
                     if($value != Auth::User()->email){
-                        $userData = User::where('email', '=', $value)->get()->toArray();
+                        $userData = User::where('email', '=', $value)->where('is_email_verified', 1)->get()->toArray();
                         if(!empty($userData))
                             $existingUser[] = $value;
                         else{
