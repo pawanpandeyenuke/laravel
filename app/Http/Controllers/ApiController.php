@@ -98,6 +98,7 @@ class ApiController extends Controller
 		        $emaildata = array(
 		            'confirmation_code' => $confirmation_code,
 		            'email' => $userdata->email,
+		            'fullname' => $full_name,
 		        );
 
 		        Mail::send('emails.verify',$emaildata, function($message) use($useremail, $full_name){
@@ -3177,10 +3178,12 @@ class ApiController extends Controller
 			else{
 				if($user->is_email_verified == "N"){
 
-					$emaildata = array('confirmation_code' => $user->confirmation_code);
+					
 					$username = $user->first_name." ".$user->last_name;
 					$useremail = $user->email;
 					
+					$emaildata = array('confirmation_code' => $user->confirmation_code, 'email' => $useremail, 'fullname' => $username );
+
 					Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
 						$message->from('contact@friendzsquare.com', 'FriendzSquare');
 						$message->to($useremail,$username)->subject('Verfiy Your Email Account');

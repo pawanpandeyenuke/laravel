@@ -92,7 +92,7 @@ class SearchController extends Controller
                     $username = $user->first_name." ".$user->last_name;
                     $confirmation_code = str_random(30);
                     User::where('email',$arguments['email'])->update(['confirmation_code'=>$confirmation_code]);
-                    $emaildata = array('confirmation_code' => $confirmation_code, 'email' => $useremail);
+                    $emaildata = array('confirmation_code' => $confirmation_code, 'email' => $useremail, 'fullname' => $username );
 
                         Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
                             $message->from('contact@friendzsquare.com', 'FriendzSquare');
