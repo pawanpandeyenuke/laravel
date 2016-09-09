@@ -2422,7 +2422,7 @@ class ApiController extends Controller
 			// User's email check
 			$nonExistingUsers = [];
 			foreach ($arguments as $key => $email) {
-				$userEmailCheck = User::where('email', $email)->get();
+				$userEmailCheck = User::where('email', $email)->where('is_email_verified', 1)->get();
 				if($userEmailCheck->isEmpty()){
 					$nonExistingUsers[] = $email;
 				}

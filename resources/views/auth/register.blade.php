@@ -78,13 +78,16 @@ $userdata = session('userdata');
                 <div class="login-form registration-form">
                     <div class="already-member">Already have Account? <a href="#" title="" data-toggle="modal" data-target="#LoginPop">Login</a></div>
                     <h3 class="text-center">Registration</h3>
-
                       <form class="form-horizontal" id="registerForm" role="form" method="POST" action="{{ url('/') }}">
                         {!! csrf_field() !!}
 
                     <div class="row field-row">
                         <div class="col-sm-12">
-
+                            @if (Session::has('email_error'))
+                                <div class="form-group"> 
+                                    <div class="alert alert-danger">{!! Session::get('email_error') !!}</div>
+                                </div>
+                            @endif
                             <div class="form-group{{ $errors->has('first_name') ? ' has-error' : '' }}">
                                 <input type="text" name="first_name" value="{{ Request::get('first_name') ? Request::get('first_name') : session('first_name') }}" class="form-control icon-field" placeholder="First Name">
                                     

@@ -36,14 +36,14 @@ class HomeController extends Controller
             $validator = Validator::make($data, [
                 'first_name' => 'required|max:255',
                 'last_name' => 'required|max:255',
-                'email' => 'required|email|max:255|unique:users',
+                'email' => 'required|email|max:255',
                 'password' => 'required|min:6',
                 'country' => 'required'
             ]);
 
             // Validator errors
             $errors = $validator->errors();
-
+            
             // Custom check for mobile existence
             if( $data['country_code'] && $data['phone_no'] )
             {
@@ -56,7 +56,6 @@ class HomeController extends Controller
 
             if($data['country_code'] != 0 && $data['phone_no'] != null)
             {
-
                 $codeLength = countryMobileLength();
                 if(array_key_exists($data['country_code'], $codeLength)){
                     $min = countryMobileLength($data['country_code']);
@@ -68,7 +67,25 @@ class HomeController extends Controller
                 } else {
                     $errors->add('invalid_country_code', 'This country code does not exist.');
                 }
+            }
 
+            // Custom check for emails
+            if( $data['email'] )
+            {
+                $exist = User::where('email', $data['email'])->first();
+                if( $exist && $exist->is_email_verified == 'N' ) 
+                {
+                    $url = url('send-verification-link');
+                    $err_msg = "Your email is registered on FriendzSquare. We have sent a verification email to ".$data['email']." Please <a href='".$url."'>verify</a> your email address to activate your account.";
+
+                    $errors->add('email_error', $err_msg);
+                    Session::put('email_error', $err_msg);
+                    return redirect('/')->withErrors($errors)->with($data);
+                } 
+                elseif( $exist && $exist->is_email_verified == 'Y' ) 
+                {
+                    $errors->add('email', 'This email has already been taken.');
+                }
             }
 
             if( !empty($errors->getMessages()) ) {
@@ -83,6 +100,7 @@ class HomeController extends Controller
 
         return view('auth.register');
     }
+
 
     // Send notification to iphone device
     public function sendpushtoios()
@@ -122,6 +140,7 @@ class HomeController extends Controller
         
     }
 
+
     // Unsubscribe
     public function unsubscribeForumNotifications()
     {
@@ -152,4 +171,6 @@ class HomeController extends Controller
 
         return view('forums.unsubscribe');
     }
+
+    
 }
