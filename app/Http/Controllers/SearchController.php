@@ -95,7 +95,7 @@ class SearchController extends Controller
                     $emaildata = array('confirmation_code' => $confirmation_code, 'email' => $useremail, 'fullname' => $username );
 
                         Mail::send('emails.verify',$emaildata, function($message) use($useremail, $username){
-                            $message->from('contact@friendzsquare.com', 'FriendzSquare');
+                            $message->from('vishal.chaudhary@enukesoftware.com', 'FriendzSquare');
                             $message->to($useremail,$username)->subject('Verfiy Your Email Account');
                         });
                     Session::put('success', 'Verification link sent to '.$useremail.' !');
