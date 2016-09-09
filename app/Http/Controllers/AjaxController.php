@@ -1413,6 +1413,8 @@ public function sendImage(Request $request){
 				if( $TotalCount < Config::get('constants.private_group_limit') ){
 					$Result['limit'] = 1;
 				}
+			} else {
+				$Result['status']	= 2;
 			}
 		} catch( Exception $e) {
 			echo  $e->getMessage();

@@ -1834,11 +1834,19 @@ class ApiController extends Controller
 			                $bid = Group::create($data);
 
 			                foreach ($input['member_id'] as $key => $value) {
-		                		$data1 = array(
-					                        'group_id'=>$bid['id'],
-					                        'member_id'=>$value,
-					                        'status' => 'Joined'
-			                            );  
+		                		if( $value == $input['owner_id'] ){
+		                			$data1 = array(
+				                        'group_id'=>$bid['id'],
+				                        'member_id'=>$value,
+				                        'status' => 'Joined'
+		                            );  
+			                	} else {
+			                		$data1 = array(
+				                        'group_id'=>$bid['id'],
+				                        'member_id'=>$value,
+				                        'status' => 'Pending'
+		                            );  
+			                	} 
 		                    	GroupMembers::create($data1);
 	               			}
 
