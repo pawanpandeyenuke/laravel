@@ -78,7 +78,7 @@ class HomeController extends Controller
                     $url = url('send-verification-link');
                     $err_msg = "Your email is registered on FriendzSquare. We have sent a verification email to ".$data['email']." Please <a href='".$url."'>verify</a> your email address to activate your account.";
 
-                    // $errors->add('email', $err_msg);
+                    $errors->add('email_error', $err_msg);
                     Session::put('email_error', $err_msg);
                     return redirect('/')->withErrors($errors)->with($data);
                 } 
