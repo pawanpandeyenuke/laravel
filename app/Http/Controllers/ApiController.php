@@ -2039,8 +2039,9 @@ class ApiController extends Controller
 			
 			if( $TotalCount < Config::get('constants.private_group_limit') ){
 					$group_members = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id])->count();
-				if( $group_members > 0 ){
+					$GroupCount = GroupMembers::where(['group_id' => $group->id, 'member_id' => $member_id,'status' => 'Pending'])->count();
 
+				if( $group_members > 0 && $GroupCount ){
 					// Broadcast message
 	                //$members = GroupMembers::where(['group_id' => $group->id])->get();
 	                $members = GroupMembers::leftJoin('users', 'members.member_id', '=', 'users.id')->where(['members.group_id' => $group->id,'members.status' => 'Joined'])->pluck('xmpp_username');
