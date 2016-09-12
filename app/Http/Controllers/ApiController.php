@@ -69,10 +69,14 @@ class ApiController extends Controller
 			$existsCheck = User::whereEmail($input['email'])->first();
 			if($existsCheck && $existsCheck->is_email_verified == 'N')
 			{
+				$errors->add('email', 'Your email is registered on FriendzSquare, please verify your email address.');
+
 				$this->data = $existsCheck;
 				$this->status = 'unverified';
-				$this->message = 'Your email is registered on FriendzSquare, please verify your email address.';
+				$this->message = $this->getError($validator);
+
 				return $this->output();
+				
 			} elseif($existsCheck && $existsCheck->is_email_verified == 'Y') {
 				$errors->add('email', 'Email already exists');
 			}
