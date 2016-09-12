@@ -42,10 +42,10 @@ return [
 	],
  
 	'twitter' => [
-            'client_id' => 'tu7f4c1WegVX2UzybYkHbKQnu',
-            'client_secret' => 'pavx5Ies5YtKSFL675hsyBKPXdvTtILmd6jS3lSe8k6JJdsfTC',
-            'redirect' => 'http://stage.friendzsquare.com/callback/twitter',
-	    'scopes' => 'email',
+            'client_id' => 'REG6vRMOzfB1oauv1gsy5Y7Ln',
+            'client_secret' => 'eOTpewvb0uBuBMAG8p4jzlLcfcRiYkJrKW5nWUOrGdWk67dZSy',
+            'redirect' => 'http://www.friendzsquare.com/callback/twitter',
+	        'scopes' => 'email',
 	],
     
 	'google' => [
