@@ -45,7 +45,7 @@ class User extends Authenticatable
 	);
 	
 	public $apiRules = array(
-		'email' => 'required|email|unique:users,email',
+		'email' => 'required|email',
 		'password' => 'required'
 	);
 	

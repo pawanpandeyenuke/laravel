@@ -64,12 +64,23 @@ class ApiController extends Controller
 			
 			$validator = Validator::make($input, $user->apiRules, $user->messages);
 			
-			if($validator->fails()) {
-				
+			$errors = $validator->errors();
+
+			$existsCheck = User::whereEmail($input['email'])->first();
+			if($existsCheck && $existsCheck->is_email_verified == 'N')
+			{
+				$this->data = $existsCheck;
+				$this->status = 'unverified';
+				$this->message = 'Your email is registered on FriendzSquare, please verify your email address.';
+				return $this->output();
+			} elseif($existsCheck && $existsCheck->is_email_verified == 'Y') {
+				$errors->add('email', 'Email already exists');
+			}
+			
+			if( $errors->getMessages() ){
 				$this->message = $this->getError($validator);
-				
-			}else{
-				
+				$this->data = $existsCheck;
+			} else {
 				$input['password'] = Hash::make($input['password']);
 				$confirmation_code = str_random(30);
 				$input['confirmation_code'] = $confirmation_code;
@@ -113,9 +124,8 @@ class ApiController extends Controller
 				$this->status = 'success';
 				$this->message = 'User registered successfully';				
 				$this->data = $user->toArray();
-				
-			}
- 
+			
+ 			}
 		}
 
 		return $this->output();
