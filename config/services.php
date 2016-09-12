@@ -56,7 +56,7 @@ return [
     
 	'linkedin' => [
     		'client_id' => '7560t23vhfay3w',
-    		'client_secret' => '4c3Cjv0urMvDVWqa',
+    		'client_secret' => 'AlhC8zayAwplo3Ks',
     		'redirect' => 'http://www.friendzsquare.com/callback/linkedin', 
 
 	],
