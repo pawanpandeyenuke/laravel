@@ -948,15 +948,7 @@ function OpenFirstMinChat(  ){
 function OpenLastMinChat(  ){
   if(  jQuery('.chatbox:visible').length == 0 ){
       var firstChatObj = jQuery('.minimized-chats-flyout .chat-head:last .restore-chat');
-      var firstChat =  firstChatObj.attr( 'data-bid' );
-      if( typeof firstChat === "string" ){
-        if( firstChatObj.hasClass( "singlechat" ) ) {
-          var chatbox = conObj.chats.get( Base64.decode(firstChat) );
-        } else {
-          var chatbox = conObj.rooms.get( Base64.decode(firstChat) );
-        }
-        chatbox.maximize();
-      }
+        firstChatObj[0].click();
   }
 }
 /** 
