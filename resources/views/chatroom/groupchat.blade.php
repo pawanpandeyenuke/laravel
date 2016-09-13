@@ -401,7 +401,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
         conObj.listen.on('connected', function (event) {
           console.log( 'connected' );
           setTimeout( function(){
-            $('.loader_blk').remove();
+            jQuery('.loader_blk').remove();
             closePublic();
           }, 2000 );
           waitProfile = 1;
@@ -443,7 +443,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
           //Emoji Picker
           renderEmoji( chatbox );
         });
-        
+       
         conObj.listen.on('chatRoomOpened', function (event, chatbox) {
           chatbox.$el.attr( 'data-bid', Base64.encode(chatbox.model.get('jid')) );
 
@@ -471,12 +471,12 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
             chatbox.$el.find( '.chat-head-chatroom' ).append( '<a href="javascript:void(0)" data-jid="'+jidStr+'" class="leave-pvt-group pull-right">Close</a>' );
            
             if( typeof GroupName[jidStr] != 'undefined' ){
-              var groupimage = $('#'+jidStr).data('groupimage');
+              var groupimage = jQuery('#'+jidStr).data('groupimage');
               chatbox.$el.find( '.profileavatar' ).attr( "style", "background: url('"+groupimage+"');" );
               chatbox.$el.find( '.chat-title' ).html( GroupName[jidStr] );
             }
-            /** else { **/
-              $.ajax({
+           
+              jQuery.ajax({
                 'url' : "{{url('/ajax/getgroupdeatils')}}",
                 'type' : 'post',
                 'async' : false,
@@ -492,31 +492,32 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                   } else {
                     removeGroup( chatbox );
                     if( typeof GroupName[jidStr] == 'undefined' ){
-                      chatbox.$el.find( '.chat-title' ).html( '<a href="javascript:void(0)" style="float: none;" class="close-chatbox-button" > Close Now</a>' );
+                      chatbox.$el.find( '.chat-title' ).html( '' );
                     }
                     groupChatRefresh( 'refreshgrouplist' );
                   }
                 }
               });
-           /** } **/
+     
           }
           renderEmoji( chatbox ); 
         });
-
+       
         conObj.listen.on('chatBoxClosed', function (event, chatbox) {
           OpenFirstMinChat();
         }); 
         
         conObj.listen.on('chatBoxMaximized', function (event, chatbox) {
-          //console.log( chatbox );
+         // console.log( 'chatBoxMaximized' );
         }); 
+
 
       conObj.listen.on('disconnected', function (event) { 
         location.reload();
       });
 
         conObj.listen.on('message', function (event, messageXML) { 
-          var $message = $(messageXML),
+          var $message = jQuery(messageXML),
               $forwarded = $message.find('forwarded');
             if ($forwarded.length) {
                 $message = $forwarded.children('message');
@@ -563,11 +564,11 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
 
     });
 
-    $(document).on('click','.invite',function(){
-        var current = $(this);
+    jQuery(document).on('click','.invite',function(){
+        var current = jQuery(this);
         var user_id = current.closest('.info').data('id');
           
-      $.ajax({
+      jQuery.ajax({
         'url' : "{{url('/ajax/sendrequest')}}",
         'type' : 'post',
         'data' : {'user_id' : user_id },
@@ -579,9 +580,9 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
     });
 
 
-        $(document).on('click','#search',function() {
-            var name=$('.searchtxt').val();
-            $.ajax({
+        jQuery(document).on('click','#search',function() {
+            var name=jQuery('.searchtxt').val();
+            jQuery.ajax({
               'url' : "{{url('/ajax/searchfriend')}}",
               'type' : 'post',
               'dataType' : 'json',
@@ -608,16 +609,16 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
 
                     });
                   }
-                   $("#userslist").html(friendList);
+                   jQuery("#userslist").html(friendList);
               }       
             });
         });
 
-        $(document).on('keypress', '.searchtxt', function(e){
+        jQuery(document).on('keypress', '.searchtxt', function(e){
             var key = e.which;
             if( key == 13 ){
-                var name=$('.searchtxt').val();
-                  $.ajax({
+                var name=jQuery('.searchtxt').val();
+                 jQuery.ajax({
                     'url' : "{{url('/ajax/searchfriend')}}",
                     'type' : 'post',
                     'dataType' : 'json',
@@ -646,42 +647,42 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
 
                           });
                         }
-                         $("#userslist").html(friendList);
+                         jQuery("#userslist").html(friendList);
                     }       
                   });
             }
         }); 
 
-        $(document).on('click', '#leave', function(){
-          $('#leaveModal').modal('show');
+        jQuery(document).on('click', '#leave', function(){
+          jQuery('#leaveModal').modal('show');
         });
 
-        $(document).on('click', '#leave-group', function(e){
-          $(this).attr('disabled', true);
-          $.post('/ajax/leave-group', {group_jid: groupid}, function(response){
+        jQuery(document).on('click', '#leave-group', function(e){
+          jQuery(this).attr('disabled', true);
+          jQuery.post('/ajax/leave-group', {group_jid: groupid}, function(response){
             var getRooms = conObj.rooms.get( groupid+conferencechatserver );
             getRooms.close();
-            $('#leaveModal').modal('hide');
+            jQuery('#leaveModal').modal('hide');
           });
         });
         
 
 
-        $(document).on('click', '.leave-pvt-group', function(e){
-            var PvtJid = $(this).data( 'jid' );
-            $('#leave-pvt-group').attr('data-jid' , PvtJid);
-            $('#leavePvtModal').modal('show');
+        jQuery(document).on('click', '.leave-pvt-group', function(e){
+            var PvtJid = jQuery(this).data( 'jid' );
+            jQuery('#leave-pvt-group').attr('data-jid' , PvtJid);
+            jQuery('#leavePvtModal').modal('show');
         });
 
-        $(document).on('click', '#leave-pvt-group', function(e){
-            var PvtJid = $(this).attr( 'data-jid' );
+        jQuery(document).on('click', '#leave-pvt-group', function(e){
+            var PvtJid = jQuery(this).attr( 'data-jid' );
             var getRooms = conObj.rooms.get( PvtJid+conferencechatserver );
             getRooms.close();
-            $('#leavePvtModal').modal('hide');
+            jQuery('#leavePvtModal').modal('hide');
         });
 
-        $(document).on('click', '.load-pub-user', function(e){
-          var SpinObj = $(this);
+        jQuery(document).on('click', '.load-pub-user', function(e){
+          var SpinObj = jQuery(this);
           if (!SpinObj.hasClass('fa-spin')) {
               SpinObj.addClass( 'fa-spin' );
               if( updatePublicGroup() ){
@@ -692,14 +693,14 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
  });
     
     function updatePublicGroup(){
-      $.ajax({
+      jQuery.ajax({
         'url' : "{{url('/ajax/default-group-user')}}",
         'type' : 'post',
         'dataType' : 'json',
         'async' : false,
         'data' : {'group_jid':groupid},
         'success' : function(data){
-          $('#gccollapseOne .chat-user-list ul').html( $.parseHTML(data.html) );
+          jQuery('#gccollapseOne .chat-user-list ul').html( $.parseHTML(data.html) );
           PublicGroupUser = [];
           $.each( data.users , function( k, v ){
              if( typeof v.image != 'undefined' ){
@@ -730,18 +731,24 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
         }
         var SingleChat = conObj.chats.open(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
         SingleChat.maximize();
+
+        if ( typeof SingleChat !== undefined && SingleChat.get('minimized')) {
+	        var basejid = Base64.encode(xmpusername+'@<?= Config::get('constants.xmpp_host_Url') ?>');
+	        jQuery( "a[data-bid='"+basejid+"']" )[0].click();
+	    }
+
      }
 
     /**
     // comment by vc
     function checkChatboxAndChatRoom(obj)
     {
-         var id=$(obj).attr('id');
+         var id=jQuery(obj).attr('id');
          if(id!='controlbox')
          {
             if(!is_first)
             {                       
-        $(obj).find('.icon-minus').click();
+        jQuery(obj).find('.icon-minus').click();
             }
             is_first=false; 
          }
@@ -771,7 +778,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
 function openChatbox( xmpusername,username ){
    //var chatbox=conObj.chats.get(xmpusername+chatserver);
    //console.log(chatbox);
-   var minbox=$("#min-"+xmpusername);
+   var minbox=jQuery("#min-"+xmpusername);
    //console.log(minbox.length);
       var ss=conObj.contacts.get(xmpusername+chatserver);
       if(ss==null)
@@ -799,33 +806,33 @@ function openChatbox( xmpusername,username ){
 * Bootstrap custom collapsed 
 **/
 function bootstrapCustomCollapse( collapsedtarget ){
-  $('.panel').each( function(){
-    var HeadingID = $(this).find('.panel-heading').attr('id');
+  jQuery('.panel').each( function(){
+    var HeadingID = jQuery(this).find('.panel-heading').attr('id');
     if( HeadingID == collapsedtarget ){
-      $( this ).find('.panel-heading a').removeClass( 'collapsed' );
-      $( this ).find('.panel-heading a').attr('aria-expanded', 'true' );
-      $( this ).find( '.panel-collapse' ).addClass( 'in' );
-      $( this ).find('.panel-collapse').attr('aria-expanded', 'true' );
-      $( this ).find('.panel-collapse').attr('style', '' );
+      jQuery( this ).find('.panel-heading a').removeClass( 'collapsed' );
+      jQuery( this ).find('.panel-heading a').attr('aria-expanded', 'true' );
+      jQuery( this ).find( '.panel-collapse' ).addClass( 'in' );
+      jQuery( this ).find('.panel-collapse').attr('aria-expanded', 'true' );
+      jQuery( this ).find('.panel-collapse').attr('style', '' );
     } else {
-      $( this ).find('.panel-heading a').addClass( 'collapsed' );
-      $( this ).find('.panel-heading a').attr('aria-expanded', 'false' );
-      $( this ).find( '.panel-collapse' ).removeClass( 'in' );
-      $( this ).find('.panel-collapse').attr('aria-expanded', 'false' );
-      $( this ).find('.panel-collapse').attr('style', 'height: 0px;' );
+      jQuery( this ).find('.panel-heading a').addClass( 'collapsed' );
+      jQuery( this ).find('.panel-heading a').attr('aria-expanded', 'false' );
+      jQuery( this ).find( '.panel-collapse' ).removeClass( 'in' );
+      jQuery( this ).find('.panel-collapse').attr('aria-expanded', 'false' );
+      jQuery( this ).find('.panel-collapse').attr('style', 'height: 0px;' );
     }
   });
 }
 /**
 //comment By VC
-$(document).ready(function() {
-  $("#gccollapseThree").click();
-  $( document ).on( 'click' , '.restore-chat.chatgroup' , function(){
-    var jid = Base64.decode($(this).data( 'bid' ));
+jQuery(document).ready(function() {
+  jQuery("#gccollapseThree").click();
+  jQuery( document ).on( 'click' , '.restore-chat.chatgroup' , function(){
+    var jid = Base64.decode(jQuery(this).data( 'bid' ));
     hideOpendBox( jid , 2 );
   });
-  $( document ).on( 'click' , '.restore-chat.singlechat' , function(){
-    var jid = Base64.decode($(this).data( 'bid' ));
+  jQuery( document ).on( 'click' , '.restore-chat.singlechat' , function(){
+    var jid = Base64.decode(jQuery(this).data( 'bid' ));
     hideOpendBox( jid , 2 );
   });
 });
@@ -834,29 +841,29 @@ function hideOpendBox( grpname , actiontype ){
   var resultreturn = true;
   /**
   // Comment By VC
-  $( '.privatechat' ).each( function(){
-    var jid = Base64.decode($(this).data( 'bid' ));
+  jQuery( '.privatechat' ).each( function(){
+    var jid = Base64.decode(jQuery(this).data( 'bid' ));
     var getChat = conObj.chats.get(jid);
     if( jid == grpname ){
-      if( actiontype == 1 && $(this).css('display') == 'none'){
+      if( actiontype == 1 && jQuery(this).css('display') == 'none'){
         getChat.maximize();
       }
       resultreturn = false;
-    } else if($(this).css('display') == 'block'){
+    } else if(jQuery(this).css('display') == 'block'){
       getChat.minimize();
-      $(this).css('display', 'none');
+      jQuery(this).css('display', 'none');
     }
   });
   
-  $( '.chatroom' ).each( function(){
-    var jid = Base64.decode($(this).data( 'bid' ));
+  jQuery( '.chatroom' ).each( function(){
+    var jid = Base64.decode(jQuery(this).data( 'bid' ));
     var getRooms = conObj.rooms.get(jid);
     if( jid == grpname ){
-      if( actiontype == 1 && $(this).css('display') == 'none' ){
+      if( actiontype == 1 && jQuery(this).css('display') == 'none' ){
         getRooms.maximize();
       }
       resultreturn = false;
-    } else if( $(this).css('display') == 'block' ){
+    } else if( jQuery(this).css('display') == 'block' ){
       getRooms.minimize();
     }
   });
@@ -867,18 +874,19 @@ function hideOpendBox( grpname , actiontype ){
 
 function openChatGroup( grpjid,grpname,groupimage ){
   var openNewGroup = conObj.rooms.open( grpjid+conferencechatserver );
-  openNewGroup.maximize();
+    if (openNewGroup.get('minimized')) {
+        var basejid = Base64.encode(grpjid+conferencechatserver);
+        jQuery( "a[data-bid='"+basejid+"']" )[0].click();
+    }
 }
 function openFirstChat( grpjid ){
   groupChatRefresh( grpjid );
   var NewGroup = conObj.rooms.open( grpjid+conferencechatserver );
-  $( '.chatnotification' ).remove();
-  NewGroup.minimize();
-  OpenLastMinChat();
+  jQuery( '.chatnotification' ).remove();
 }
 
 function groupChatRefresh( grpjid ){
-  $.ajax({
+  jQuery.ajax({
     'url' : "/ajax/getchatgroup",
     'type' : 'post',
     'async' : false,
@@ -886,7 +894,7 @@ function groupChatRefresh( grpjid ){
     'data' : { group_jid: grpjid },
     'success' : function(data){
       var ChatHtml = '';
-      $.each( data.data , function( i, v){
+      jQuery.each( data.data , function( i, v){
         GroupName[v.group_jid] = v.title;
         var GroupImage = ((v.picture != '' ) ? v.picture : defaultImage);
 
@@ -896,7 +904,7 @@ function groupChatRefresh( grpjid ){
           ChatHtml += '<span class="title grouptitle-'+v.group_jid+'">'+v.title+'</span></a>';
           ChatHtml += '<button id="'+v.group_jid+'" data-groupimage="'+GroupImage+'" class="time groupdatapic-'+v.group_jid+'" onclick="return openChatGroup(\''+v.group_jid+'\', \''+v.title+'\', \''+GroupImage+'\' );">Chat</button></div></li>';
       });
-      $('#gccollapseThree').find( '.chat-user-list' ).html( '<ul>'+ChatHtml+'</ul>' );
+      jQuery('#gccollapseThree').find( '.chat-user-list' ).html( '<ul>'+ChatHtml+'</ul>' );
     }
   });
 }
@@ -918,8 +926,8 @@ function removeGroup( chatbox ){
 * show only one public group
 **/
 function OpenFirstMinChat(  ){
-  if(  $('.chatbox:visible').length == 0 ){
-      var firstChatObj = $('.minimized-chats-flyout .chat-head:first .restore-chat');
+  if(  jQuery('.chatbox:visible').length == 0 ){
+      var firstChatObj = jQuery('.minimized-chats-flyout .chat-head:first .restore-chat');
       var firstChat =  firstChatObj.attr( 'data-bid' );
       if( typeof firstChat === "string" ){
         if( firstChatObj.hasClass( "singlechat" ) ) {
@@ -938,8 +946,8 @@ function OpenFirstMinChat(  ){
 * show only last chatbox
 **/
 function OpenLastMinChat(  ){
-  if(  $('.chatbox:visible').length == 0 ){
-      var firstChatObj = $('.minimized-chats-flyout .chat-head:last .restore-chat');
+  if(  jQuery('.chatbox:visible').length == 0 ){
+      var firstChatObj = jQuery('.minimized-chats-flyout .chat-head:last .restore-chat');
       var firstChat =  firstChatObj.attr( 'data-bid' );
       if( typeof firstChat === "string" ){
         if( firstChatObj.hasClass( "singlechat" ) ) {
@@ -956,8 +964,8 @@ function OpenLastMinChat(  ){
 **/
 function closePublic( ){
   var openChat = 1;
-  $( '.chatroom' ).each( function(){
-    var jid = Base64.decode($(this).data( 'bid' ));
+  jQuery( '.chatroom' ).each( function(){
+    var jid = Base64.decode(jQuery(this).data( 'bid' ));
     var xmpp = jid.substring(0, jid.indexOf('@'));
     var grouptype = xmpp.substr(xmpp.length - 3);
     if( grouptype == 'pub' && xmpp !=  groupid  ){
@@ -968,8 +976,8 @@ function closePublic( ){
           pvtRoom.close();
     }
   });
-  $( '.chatgroup' ).each( function(){
-    var jid = Base64.decode($(this).data( 'bid' ));
+  jQuery( '.chatgroup' ).each( function(){
+    var jid = Base64.decode(jQuery(this).data( 'bid' ));
     var xmpp = jid.substring(0, jid.indexOf('@'));
     var grouptype = xmpp.substr(xmpp.length - 3);
     if( grouptype == 'pub' && xmpp !=  groupid  ){
@@ -983,22 +991,22 @@ function closePublic( ){
   OpenLastMinChat();
 }
 
-$('.status-r-btn').on('click',function(){
-  if ( $('#status_img_up').is(':checked') ) {
-    $('.status-img-up').show();
+jQuery('.status-r-btn').on('click',function(){
+  if ( jQuery('#status_img_up').is(':checked') ) {
+    jQuery('.status-img-up').show();
   } else {
-    $('.status-img-up').hide();
+    jQuery('.status-img-up').hide();
   }
 });
 
-$('.dropdown.keep-open').on({
+jQuery('.dropdown.keep-open').on({
   "shown.bs.dropdown": function() { this.closable = false; },
   "click":             function() { this.closable = true; },
   "hide.bs.dropdown":  function() { return this.closable; }
 });
 
-$( document ).on('keyup', '.emoji-wysiwyg-editor' ,function(event) {
-  $(this).change();
+jQuery( document ).on('keyup', '.emoji-wysiwyg-editor' ,function(event) {
+  jQuery(this).change();
 });
 
 </script>
