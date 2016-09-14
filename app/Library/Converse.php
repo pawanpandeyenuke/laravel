@@ -149,14 +149,15 @@ class Converse
     }
 
     // @ Create xmpp credentials for authenticated user
-    static function createUserXmppDetails( $userdata ){
+    static function createUserXmppDetails( $userdata )
+    {
 
-        $xmpp_username = $userdata->first_name.$userdata->id;
-        $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
-
+    	$username = trim($userdata->first_name);
+    	$username = preg_replace('/[^A-Za-z0-9\-]/', '', $username);
+    	$username = strtolower($username);
        	$user = User::find($userdata->id);
-        $user->xmpp_username = strtolower($xmpp_username);
-        $user->xmpp_password = $xmpp_password;
+        $user->xmpp_username = $username.$userdata->id;
+        $user->xmpp_password = 'enuke';
         $user->save();
 
         return $user;

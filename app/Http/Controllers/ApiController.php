@@ -85,21 +85,20 @@ class ApiController extends Controller
 				$this->message = $this->getError($validator);
 				$this->data = $existsCheck;
 			} else {
+				$input['first_name'] = trim($input['first_name']);
+				$input['last_name'] = trim($input['last_name']);
 				$input['password'] = Hash::make($input['password']);
 				$confirmation_code = str_random(30);
 				$input['confirmation_code'] = $confirmation_code;
 				$userdata = $user->create($input);
 				$full_name = $userdata->first_name.' '.$userdata->last_name;
-				//Saving xmpp-username and xmpp-pasword into database.
-		        $xmpp_username = $userdata->first_name.$userdata->id;
-		        $xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
-
+				
 		        $raw_token = $userdata->first_name.date('Y-m-d H:i:s',time()).$userdata->last_name.$userdata->email;
 	        	$access_token = Hash::make($raw_token);
 
+	        	$xmppuserdata = Converse::createUserXmppDetails($userdata);
+
 		        $user = User::find($userdata->id);
-		        $user->xmpp_username = strtolower($xmpp_username);
-		        $user->xmpp_password = $xmpp_password;
 		        $user->confirmation_code = $confirmation_code;
 		        $user->is_email_verified = 'N';
 		        $user->access_token = $access_token;
@@ -122,8 +121,8 @@ class ApiController extends Controller
 		        });
 
 		        $converse = new Converse;
-		        $response = $converse->register($xmpp_username, $xmpp_password);
-				$name = $converse->setNameVcard($user->xmpp_username, 'FN', $full_name);
+		        $response = $converse->register($xmppuserdata->xmpp_username, $xmppuserdata->xmpp_password);
+				$name = $converse->setNameVcard($xmppuserdata->xmpp_username, 'FN', $full_name);
 
 				$this->status = 'success';
 				$this->message = 'User registered successfully';				
