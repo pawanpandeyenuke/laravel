@@ -86,8 +86,8 @@ class SocialController extends Controller
 				$userData = array(
 					'fb_id' => $providerUser->getId(),
 					'nickname' => $providerUser->getNickname(),
-					'first_name' =>$nameRaw[0],// $providerUser->user['first_name'],
-					'last_name' =>$nameRaw[1],// $providerUser->user['last_name'],
+					'first_name' => trim($nameRaw[0]),
+					'last_name' => trim($nameRaw[1]),
 					'email' => $providerUser->getEmail(),
 					'avatar' => $providerUser->getAvatar(),
 					'src' => 'fb'
@@ -102,8 +102,8 @@ class SocialController extends Controller
 				$userData = array(
 					'twitter_id' => $providerUser->getId(),
 					'nickname' => $providerUser->getNickname(),
-					'first_name' => $nameRaw[0],
-					'last_name' => $nameRaw[1],
+					'first_name' => trim($nameRaw[0]),
+					'last_name' => trim($nameRaw[1]),
 					'email' => $providerUser->getEmail(),
 					'avatar' => $providerUser->getAvatar(),
 					'src' => 'twitter'
@@ -114,8 +114,8 @@ class SocialController extends Controller
 
 				$userData = array(
 					'google_id' => $providerUser->getId(),
-					'first_name' => $providerUser->user['name']['givenName'],
-					'last_name' => $providerUser->user['name']['familyName'],
+					'first_name' => trim($providerUser->user['name']['givenName']),
+					'last_name' => trim($providerUser->user['name']['familyName']),
 					'email' => $providerUser->getEmail(),
 					'avatar' => $providerUser->getAvatar(),
 					'src' => 'google'
@@ -127,8 +127,8 @@ class SocialController extends Controller
 				$userData = array(
 					'linked_id' => $providerUser->getId(),
 					'nickname' => $providerUser->getNickname(),
-					'first_name' => $providerUser->user['firstName'],
-					'last_name' => $providerUser->user['lastName'],
+					'first_name' => trim($providerUser->user['firstName']),
+					'last_name' => trim($providerUser->user['lastName']),
 					'email' => $providerUser->getEmail(),
 					'avatar' => $providerUser->getAvatar(),
 					'src' => 'linked'
