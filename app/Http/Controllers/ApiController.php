@@ -207,7 +207,7 @@ class ApiController extends Controller
 				{
 	                // Saving xmpp-username and xmpp-pasword into database.
 	                $xmppuserdata = Converse::createUserXmppDetails($controller);
-	                if( !$xmppuserdata->xmpp_username )
+	                if( $xmppuserdata->xmpp_username )
 	                {	                	
 		                // $controller->xmpp_username = strtolower($controller->first_name.$controller->id);
 		                // $controller->xmpp_password = 'enuke'; //substr(md5($userdata->id),0,10);
