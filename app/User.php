@@ -46,7 +46,7 @@ class User extends Authenticatable
 	
 	public $apiRules = array(
 		'email' => 'required|email',
-		'password' => 'required'
+		'password' => 'required|min:6'
 	);
 	
 	public $socialApiRules = array(

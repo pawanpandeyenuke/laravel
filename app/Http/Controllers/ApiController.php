@@ -3231,8 +3231,8 @@ class ApiController extends Controller
 					if(Hash::check($input['old_password'], bcrypt($input['new_password']))) {
                         throw new Exception("New password can't be same as old password.", 1);
                     }else{
-                    	if(strlen($input['new_password']) < 8){
-                    		throw new Exception("New password should be atleast 8 characters long.", 1);
+                    	if(strlen($input['new_password']) < 6){
+                    		throw new Exception("New password should be atleast 6 characters long.", 1);
                     	}else{
 		                    $user->password = bcrypt($input['new_password']);
 		                    $user->save();

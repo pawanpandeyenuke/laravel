@@ -915,11 +915,11 @@ class DashboardController extends Controller
                     if(Hash::check($input['old_password'], bcrypt($input['new_password']))) {
                         return redirect()->back()->with('error',"New password can't be same as old password.");
                     }else{
-                        if(strlen($input['new_password']) < 8){
-                            return redirect()->back()->with('error',"New password should be atleast 8 characters long.");
+                        if(strlen($input['new_password']) < 6){
+                            return redirect()->back()->with('error','New password should be atleast 6 characters long.');
                         }else{
                                 User::where('id',Auth::User()->id)->update(['password' => bcrypt($input['new_password'])]);
-                             return redirect()->back()->with('success',"Password changed succesfully.");
+                             return redirect()->back()->with('success','Password changed succesfully.');
                          }
                     }
                 }else{

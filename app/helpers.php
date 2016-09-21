@@ -578,5 +578,24 @@
         return filter_var($email, FILTER_VALIDATE_EMAIL);
 
     }
- 
+
+// Trim all values in array
+function trim_values( $array = array() )
+{
+    foreach($array as $key => $val){
+        $array[$key] = is_array($val) ? trim_values($val) : trim($val);
+    }
+    
+    return $array;
+}
+
+// Trim all values in array
+function trim_and_remove_tags( $array = array() )
+{
+    foreach($array as $key => $val){
+        $array[$key] = is_array($val) ? trim_and_remove_tags($val) : trim(strip_tags($val));
+    }
+    
+    return $array;
+} 
 ?>
