@@ -75,7 +75,7 @@
         errorClass: 'help-inline',
         rules: {
             old_password: { required: true },
-            new_password: {required: true,  minlength: 8}
+            new_password: {required: true,  minlength: 6}
         },
         messages:{
             old_password:{
@@ -83,7 +83,7 @@
             },
             new_password:{
                     required: "New password can't be empty.",
-                    minlength: "Minimum length of password should be 8."
+                    minlength: "Password should be at least 6 characters long."
             }
         }
     });

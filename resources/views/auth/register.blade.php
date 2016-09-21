@@ -327,7 +327,7 @@ jQuery(function($) {
             first_name: { required: true },
             last_name:  { required: true },
             email:  { required: true, email: true },
-            password:  { required: true, minlength: 8 },
+            password:  { required: true, minlength: 6 },
             terms:  { required: true },
             phone_no: { maxlength: 15 },
             country: {required:true}
@@ -345,7 +345,7 @@ jQuery(function($) {
             },
             password:{
                 required: "Please enter a password.",
-                minlength: "Password must have more that 8 character."
+                minlength: "Password should be at least 6 characters long."
             },
             terms:{
                 required: "Please agree to the terms.",
