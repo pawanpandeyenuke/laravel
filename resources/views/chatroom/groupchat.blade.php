@@ -87,7 +87,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                         <div class="col-sm-4 padding-right-none chat-list-outer">
                             <div class="group-chat-cont">
                                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                                  <div class="panel panel-default">
+                                  <div class="panel panel-default publicgroups">
                                     <div class="panel-heading" role="tab" id="gcheadingOne">
                                       <h4 class="panel-title">
                                       <?php
@@ -202,7 +202,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                                       </div>
                                     </div>
                                   </div>
-                                  <div class="panel panel-default">
+                                  <div class="panel panel-default singlechat">
                                     <div class="panel-heading" role="tab" id="gcheadingTwo">
                                       <h4 class="panel-title">
                                         <a {{$friclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseTwo" aria-expanded="{{$friexpand}}" aria-controls="gccollapseTwo">
@@ -246,7 +246,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                                       </div>
                                     </div>
                                   </div>
-                                  <div class="panel panel-default">
+                                  <div class="panel panel-default privatechat">
                                     <div class="panel-heading" role="tab" id="gcheadingThree">
                                       <h4 class="panel-title">
                                         <a {{$priclass}} role="button" data-toggle="collapse" data-parent="#accordion" href="#gccollapseThree" aria-expanded="{{$priexpand}}" aria-controls="gccollapseThree">
@@ -663,6 +663,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
             var getRooms = conObj.rooms.get( groupid+conferencechatserver );
             getRooms.close();
             jQuery('#leaveModal').modal('hide');
+            jQuery('.publicgroups .panel-body').html('');
           });
         });
         
