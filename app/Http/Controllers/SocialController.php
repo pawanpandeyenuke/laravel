@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use Mail;
 use Hash, Session;
-use App\User;
+use App\User, DB;
 use Socialite;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -44,6 +44,11 @@ class SocialController extends Controller
 					$providerUser['access_token'] = $access_token;
 					$providerUser['is_email_verified'] = 'Y';
 					$userDbObj = $user->create($providerUser);
+
+					// Save default settings
+			        DB::table('settings')->insert(['setting_title'=>'contact-request','setting_value'=>'all','user_id'=>$userDbObj->id]);
+	        		DB::table('settings')->insert(['setting_title'=>'friend-request','setting_value'=>'all','user_id'=>$userDbObj->id]);
+
 					return $userDbObj;
 				}
 				else 
