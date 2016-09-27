@@ -232,7 +232,7 @@ class ContactImporter extends Controller
 
         if($email != ''){
     		Mail::send('emails.invite', $data, function($message) use($email, $data) {
-        		$message->from('contact@friendzsquare.com', 'FriendzSquare');
+        		$message->from('no-reply@friendzsquare.com', 'FriendzSquare');
         		$message->to($email)->subject($data['subject'])->returnPath(Config::get('constants.returned_mails_path'));
     	    });
         }
