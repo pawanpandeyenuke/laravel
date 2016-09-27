@@ -48,5 +48,8 @@ return [
 
 	'first_custom_post' => '<div class="welcome-text"><h3>Hi,</h3><h4>Welcome to FriendzSquare.</h4><blockquote>Here you can make new friends by joining Chat rooms, participate in Forums, post comments on Newsfeed and much more. Experience this new way of connecting with people and grow your social network. </blockquote><h4>How it works?</h4><ul><li><i class="fa fa-check-square-o" aria-hidden="true"></i> There are various predefined chat rooms to choose from such as singles, politics, stock market, study questions etc. and exchange views on variety of topics as well as make new friends.You can grow your social network by adding users from chat room into their friend list.</li><li><i class="fa fa-check-square-o" aria-hidden="true"></i> There are also 26 predefined Forum and you may choose to write views/suggestions in any of these forums. Forums are open to all so there is exchange of information across different regions of world, with users coming with difference experience, backgrounds & views.</li></ul></div>',
 
-	'returned_mails_path' => 'no-reply@friendzsquare.com',
+	'returned_mails_path' => 'pawan.pandey@enukesoftware.com',
+	// 'returned_mails_path' => 'no-reply@friendzsquare.com',
+
+	
 ]?>
