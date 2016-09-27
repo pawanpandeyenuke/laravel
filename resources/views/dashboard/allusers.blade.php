@@ -39,23 +39,6 @@
 						@if (Session::has('success'))
 								<div class="alert alert-success">{!! Session::get('success') !!}</div>
 						@endif
-
-					  <!-- Nav tabs -->
-						  <!-- <ul role="tablist" class="nav nav-tabs"> -->
-						    <!-- <li class="active" role="presentation"> -->
-						    	<!-- <a class="friendstabs" data-reqtype="all" data-name="All" data-toggle="tab" role="tab" aria-controls="All" href="#All">All Users</a> -->
-						    <!-- </li> -->
-						     <!-- <li role="presentation" class="active"> -->
-						    	<!-- <a class="friendstabs" data-reqtype="recieved" data-name="Recieved" data-toggle="tab" role="tab" aria-controls="Recieved"  aria-expanded="true" href="#Recieved">Recieved (<span class = "count"></span>)</a>  -->
-						    <!-- </li> -->
-						    <!-- <li role="presentation"> -->
-						    	<!-- <a class="friendstabs" data-reqtype="sent" data-name="Sent" data-toggle="tab" role="tab" aria-controls="Send" href="#Sent">Sent (<span class = "count"></span>)</a> -->
-						    <!-- </li> -->
-						    <!-- <li role="presentation"> -->
-						    	<!-- <a class="friendstabs" data-reqtype="current" data-name="Current" data-toggle="tab" role="tab" aria-controls="Current" href="#Friends">Friends (<span class = "count"></span>)</a> -->
-						    <!-- </li> -->
-						  <!-- </ul> -->
-
 						  <!-- Tab panes -->
 						  	<div class="row">
 						  		<div class="col-md-10 col-md-offset-1">
@@ -170,7 +153,7 @@
 	?>
 				<li  class="get_id" data-userid="{{$data['id']}}" data-friendid="">
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-sm-7 col-md-7 col-xs-12">
 							<div class="user-cont">
 								<a title="" href="profile/{{$data['id']}}">
 									<span style="background: url('{{$user_picture}}');" class="user-thumb"></span>
@@ -178,7 +161,7 @@
 											</a>
 										</div>
 									</div>
-									<div class="col-sm-6">
+									<div class="col-sm-5 col-md-5 col-xs-12">
 										<div class="text-right">
 												<a href="{{url('/register')}}" class="btn btn-primary btn-full" id='invite'>Add Friend</a>
 										</div>
