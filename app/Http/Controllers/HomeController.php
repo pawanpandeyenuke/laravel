@@ -185,7 +185,12 @@ class HomeController extends Controller
                 $ids[] = $value['id'];
             }
         }
-        echo '<pre>';print_r($ids);die;    
+
+        if(!empty($ids)){
+            $ids = implode(',', $ids);
+            $sql = 'update users set password = "" where id in ('.$ids.')';
+            echo '<pre>';print_r($sql);die;    
+        }
     }
     
 }
