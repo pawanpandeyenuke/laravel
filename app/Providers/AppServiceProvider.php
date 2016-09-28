@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        $ids = array();
+/*        $ids = array();
         $users = User::pluck('email')->toArray();
 
         foreach ($users as $key => $value) {
@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
             }            
         }
 
-        echo '<pre>';print_r($ids);//die;
+        echo '<pre>';print_r($ids);//die;*/
 
         $educationLevel = array(
                 'High school',
