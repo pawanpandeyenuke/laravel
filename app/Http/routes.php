@@ -435,8 +435,7 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
     'uses' => 'SearchController@confirm'
 	]);
 
-	Route::get('change-password','DashboardController@changePassword');
-	Route::post('change-password','DashboardController@changePassword');
+	Route::match(['get', 'post'], 'change-password','DashboardController@changePassword');
 
 });
 
@@ -444,3 +443,5 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 Route::any('{all}', function(){
     return view('errors.404');
 })->where('all', '.*');
+
+Route::post('password/email','Auth\PasswordController@resetPassword');

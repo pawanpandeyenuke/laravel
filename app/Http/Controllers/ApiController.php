@@ -143,6 +143,14 @@ class ApiController extends Controller
 		try
 		{
 			$input = Request::all();
+
+			$pswdCheck = User::whereEmail($input['email'])->first();
+			if( $pswdCheck && empty($pswdCheck->password) ){
+			    $this->status = 'error';
+			    $message = $pswdCheck->email.' is already registered with us using social login. Please try social login.';
+			    throw new Exception($message, 1);
+			}
+
 			$validator = Validator::make($input, ['email' => 'required|email']);
 			if($validator->fails()) {
 				throw new Exception( $this->getError($validator) );
@@ -3223,7 +3231,14 @@ class ApiController extends Controller
 	{
 		try{
 			$input = Request::all();
-			$user = User::where('id',$input['user_id'])->first();
+			$user = User::where('id', $input['user_id'])->first();
+
+			if( $user && empty($user->password) ){
+			    $this->status = 'error';
+			    $message = $user->email.' is already registered with us using social login. So you cannot change your password.';
+			    throw new Exception($message, 1);
+			}
+
 			if(empty($user))
 				throw new Exception("No matching record for the user.", 1);
 			else{

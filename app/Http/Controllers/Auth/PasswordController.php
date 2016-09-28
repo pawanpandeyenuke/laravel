@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Passwords\PasswordBroker;
 
+// use App\Http\Controllers\Auth\Password;
+use App\User, Session;
+
 class PasswordController extends Controller
 {
     /*
@@ -52,4 +55,36 @@ class PasswordController extends Controller
                 return trans($response);
         }
     }
+
+
+    // Reset password override 
+    public function resetPassword()
+    {
+        $input = \Request::all();
+
+        $pswdCheck = User::whereEmail($input['email'])->first();
+        if( $pswdCheck && empty($pswdCheck->password) ){
+            Session::put('error', $pswdCheck->email.' is already registered with us using social login. Please try social login.');
+            return redirect()->back();
+        }
+
+        unset($input['_token']);
+        $response = $this->passwords->sendResetLink($input, function($message) {
+            $message->subject('Password Change Request');
+        });
+        
+        switch ($response)
+        {
+            case PasswordBroker::RESET_LINK_SENT:
+                Session::put('success', trans($response));
+                break;
+            
+            case PasswordBroker::INVALID_USER:
+                Session::put('error', trans($response));
+                break;
+        }
+        
+        return redirect()->back();
+    }
+
 }
