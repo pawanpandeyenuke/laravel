@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 
-use Auth, App\Country, App\Category,App\JobArea, App\Forums;
+use Auth, App\Country, App\Category,App\JobArea, App\Forums, App\User;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -16,6 +16,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        $ids = array();
+        $users = User::pluck('email')->toArray();
+
+        foreach ($users as $key => $value) {
+            $pass = explode('@', $value);
+            $data = User::where('password', $pass[0])->value('id');
+            if($data){
+                $ids[] = $data;
+            }            
+        }
+
+        echo '<pre>';print_r($ids);//die;
 
         $educationLevel = array(
                 'High school',
