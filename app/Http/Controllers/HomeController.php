@@ -174,7 +174,7 @@ class HomeController extends Controller
 
 
 
-    public function script()
+/*    public function script()
     {
         $ids = array();
         $users = User::select(['email','password','id'])->get()->toArray();
@@ -191,6 +191,6 @@ class HomeController extends Controller
             $sql = 'update users set password = "" where id in ('.$ids.')';
             echo '<pre>';print_r($sql);die;    
         }
-    }
+    }*/
     
 }

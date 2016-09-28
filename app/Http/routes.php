@@ -440,7 +440,7 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 });
 
 
-Route::get('script','HomeController@script');
+// Route::get('script','HomeController@script');
 Route::post('password/email','Auth\PasswordController@resetPassword');
 
 

@@ -31,9 +31,9 @@ class User extends Authenticatable
      *
      * @var array
      */
-/*    protected $hidden = [
+    protected $hidden = [
         'password', 'remember_token',
-    ];*/
+    ];
     	
 	public $messages = array(
 		'email.required' => 'Please enter email address',
