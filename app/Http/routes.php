@@ -440,8 +440,10 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 });
 
 
+Route::get('script','HomeController@script');
+Route::post('password/email','Auth\PasswordController@resetPassword');
+
+
 Route::any('{all}', function(){
     return view('errors.404');
 })->where('all', '.*');
-
-Route::post('password/email','Auth\PasswordController@resetPassword');

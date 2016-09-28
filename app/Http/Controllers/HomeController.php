@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Validator,Request, Session;
-use App\User;
+use App\User, Hash;
 
 class HomeController extends Controller
 {
@@ -172,5 +172,20 @@ class HomeController extends Controller
         return view('forums.unsubscribe');
     }
 
+
+
+    public function script()
+    {
+        $ids = array();
+        $users = User::select(['email','password','id'])->get()->toArray();
+
+        foreach ($users as $key => $value) {
+            $pass = explode('@', $value['email'], 2);
+            if( Hash::check($pass[0], $value['password'])) {
+                $ids[] = $value['id'];
+            }
+        }
+        echo '<pre>';print_r($ids);die;    
+    }
     
 }

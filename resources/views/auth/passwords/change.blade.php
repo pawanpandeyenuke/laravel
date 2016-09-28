@@ -27,7 +27,7 @@
                         <div class="alert alert-success">{!! Session::get('success') !!}</div>
                     @endif
 
-                    @if( empty( $user->password ) )
+                    @if( Auth::check() && empty( Auth::User()->password ) )
                         <div class="alert alert-info">
                           <strong> Note: </strong> You are registered through social login. So you cannot change your password.
                         </div>
