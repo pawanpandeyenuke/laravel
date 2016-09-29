@@ -132,7 +132,7 @@ class SearchController extends Controller
 
      public function forumsList()
     {
-        $mainforums = Forums::where('parent_id',0)->orderBy('display_order')->get();
+        $mainforums = Forums::where('parent_id',0)->where('status', 'Active')->orderBy('display_order')->get();
         return view('forums.mainforums')
             ->with('forums',$mainforums);
     }
@@ -146,7 +146,7 @@ class SearchController extends Controller
                 return redirect('forums');
         
                $mainforum = Forums::where('id',$parentid)->first();
-               $subforums = Forums::where('parent_id',$parentid)->get();
+               $subforums = Forums::where('parent_id',$parentid)->where('status', 'Active')->get();
                if($subforums->isEmpty())
                         return redirect()->back();
         }else{
@@ -176,7 +176,7 @@ class SearchController extends Controller
         $parentforumid = Forums::where('id',$parentid)->value('parent_id');
         $parentforum = Forums::where('id',$parentforumid)->value('title');
         $mainforum=Forums::where('id',$parentid)->value('title');
-        $subforums = Forums::where('parent_id',$parentid)->get();
+        $subforums = Forums::where('parent_id',$parentid)->where('status', 'Active')->get();
 
          return view('forums.subcatforums')
                 ->with('mainforum',$mainforum)
