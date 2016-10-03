@@ -42,7 +42,7 @@ return [
 	
 	'ios_app_link' => 'https://itunes.apple.com/us/app/friendzsquare/id1076919346?ls=1&mt=8',
 	
-	'android_app_link' => '#',
+	'android_app_link' => 'https://play.google.com/store/apps/details?id=com.connect.friendzsquare',
 
 	'bizbricks_uri' => 'http://bizbricks.com/',
 

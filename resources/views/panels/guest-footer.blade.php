@@ -1,14 +1,15 @@
-<footer>
- 	<div class="container">
-        <ul class="f-links text-center list-inline">
-            <li>Copyright 2016 Connect All Pte Ltd.</li>       
-            <li><a href="{{ url('terms') }}" title="">Terms of Use</a></li>
-            <li><a href="{{ url('privacy-policy') }}" title="">Privacy Policy</a></li>
-            <li><a href="{{ url('about-us') }}" title="">About Us</a></li>
+<div class="page-footer">
+    <div class="text-center">
+        <ul>
+            <li><a href="{{url('terms')}}" title="Terms of Use">Terms of Use</a></li>
+            <li><a href="{{url('privacy-policy')}}" title="Privacy Policy">Privacy Policy</a></li>
+            <li><a href="{{url('about-us')}}" title="About Us">About Us</a></li>
+            <li>Copyright 2016 Connect All Pte Ltd.</li>
             <li><a href="<?php echo Config::get('constants.bizbricks_uri'); ?>" target="_blank" title="">BizBricks</a></li>
         </ul>
     </div>
-</footer>
+</div>
+
 <!--Start of Zopim Live Chat Script-->
 <script type="text/javascript">
 window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=

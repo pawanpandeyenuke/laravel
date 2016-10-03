@@ -28,11 +28,11 @@
 						<li><h5><b>Download This App</b></h5>
 						
 						@if($Android)
-							<a href="#" title=""><img src="{{url('images/and-btn.png')}}" alt=""></a>
+							<a href="{{ Config::get('constants.android_app_link') }}" title=""><img src="{{url('images/and-btn.png')}}" alt=""></a>
 						@endif
 
 						@if($iPhone)
-							<a href="{{ url('https://itunes.apple.com/us/app/friendzsquare/id1076919346?ls=1&mt=8') }}" title=""><img src="{{url('images/ios-btn.png')}}" alt=""></a>
+							<a href="{{ Config::get('constants.ios_app_link') }}" title=""><img src="{{url('images/ios-btn.png')}}" alt=""></a>
 						@endif
 						<h5><b>OR <br/><br/> <a href="{{url('/')}}" title="" class="close" data-dismiss="modal" aria-label="Close">Continue to web...</a></b></h5></li>
 					</ul>
