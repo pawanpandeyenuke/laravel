@@ -10,6 +10,7 @@
     </div>
 </div>
 
+@if( ! Auth::Check() )
 <!--Start of Zopim Live Chat Script-->
 <script type="text/javascript">
 window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
@@ -19,3 +20,4 @@ $.src="//v2.zopim.com/?4GGNOUFw0pHafUQcyFZPVfg21Hf4ABXQ";z.t=+new Date;$.
 type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
 </script>
 <!--End of Zopim Live Chat Script-->
+@endif
