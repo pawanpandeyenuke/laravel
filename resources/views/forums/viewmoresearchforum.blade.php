@@ -75,7 +75,7 @@
 
 			<div class="fp-btns text-right">
 				<span class="reply-count">Replies ({{$replyCount}})</span>
-				<a href="{{url("forum-post-reply/$data->id")}}" title="" class="btn btn-primary"><span class="glyphicon glyphicon-share-alt"></span>Reply</a>
+				<a href="{{ forumReplyUrl($data) }}" title="" class="btn btn-primary"><span class="glyphicon glyphicon-share-alt"></span>Reply</a>
 			</div>
 
 		</div><!--/single post-->

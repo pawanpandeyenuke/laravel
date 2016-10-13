@@ -308,6 +308,11 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 	Route::get('/forums', 'SearchController@forumsList');
 	Route::post('/forums', 'SearchController@forumsList');
 
+	Route::any('forums/{hierarchy}', [
+		'uses' => 'SearchController@forumsManage'
+	])->where('hierarchy', '.*');
+
+
 	Route::get('sub-forums/{parentid}', 'SearchController@subForums');
 
 	Route::get('sub-forums', 'SearchController@subForums');
@@ -325,7 +330,7 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 	// });
 
 	Route::get('demo', 'SearchController@demo');
-    Route::get('forum-post-reply/{forumpostid}', 'SearchController@forumPostReply');
+    Route::get('reply/{forumpostid}', 'SearchController@forumPostReply');
 
     Route::post('search-forum', 'SearchController@searchForum');
 	Route::get('search-forum', 'SearchController@searchForumGet');

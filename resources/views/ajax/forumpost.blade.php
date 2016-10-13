@@ -29,9 +29,9 @@
 		</div>
 	</div>
 	<p class='readmore'><?php echo forumPostContents(nl2br($forumpostid->title)); ?></p>
-	<?php $forumpostid = $forumpostid->id; ?>
+	<?php //$forumpostid = $forumpostid->id; ?>
 	<div class='fp-btns text-right'>
 		<span class='reply-count'>Replies(0)</span>
-		<a href='{{url("forum-post-reply/$forumpostid")}}' title="Jump to Reply Section" class='btn btn-primary'><span class='glyphicon glyphicon-share-alt'></span>Reply</a>
+		<a href='{{ forumReplyUrl($forumpostid) }}' title="Jump to Reply Section" class='btn btn-primary'><span class='glyphicon glyphicon-share-alt'></span>Reply</a>
 	</div>
 </div>

@@ -598,4 +598,22 @@ function trim_and_remove_tags( $array = array() )
     
     return $array;
 } 
+
+/** Create Reply url **/
+function forumReplyUrl( $PostData ){
+    $postSlug = strtolower( preg_replace("/[^A-Za-z0-9\-]/", "", str_replace(' ', '-', $PostData->title) ));
+    $postSlug = substr(preg_replace('/[-]+/', '-',  $postSlug), 0, 20 );
+    return url("reply/".(!empty($postSlug)?$postSlug."-":'').$PostData->id);
+}
+
+/** Validate Reply **/
+function validateForumReply( $PostData, $replyStr ){
+    $postSlug = strtolower( preg_replace("/[^A-Za-z0-9\-]/", "", str_replace(' ', '-', $PostData->title) ));
+    $postSlug = substr( preg_replace('/[-]+/', '-',  $postSlug), 0, 20 );
+    if( $postSlug == $replyStr ){
+        return true;
+    } else {
+        return false;
+    }
+}
 ?>

@@ -2,7 +2,7 @@
 @section('title', 'Forums')
 <?php
 if($mainforum->title == "Doctor") {
-	$diseases = \App\ForumsDoctor::pluck('title')->toArray();
+	$diseases = \App\ForumsDoctor::select(['doctor_slug','title'])->get();
 }
 ?>
 
@@ -42,27 +42,23 @@ if($mainforum->title == "Doctor") {
 										 	$count = \App\ForumPost::where('category_id',$data->id)->get()->count();
 											$fieldsdata = \App\Forums::where('parent_id',$data->id)->value('id');
 											$forumid = $data->id;
+											$forumSlug = $data->forum_slug;
 											if($data->updated_at->format('Y-m-d H:i:s') == "-0001-11-30 00:00:00")
 													$date = "No Posts";
 											else
 												$date = $data->updated_at->format('d, M h:i a');
 										?>	@if($fieldsdata)
-													 <?php $subid1 = \App\Forums::where('parent_id',$data->id)->pluck('id');
-															$count1 = \App\ForumPost::whereIn('category_id',$subid1)->get()->count(); ?>
-															<tr>
-																<td>{{ $data->title }}</td>
-																<td>{{$date}}</td>
-																<td><div class="count text-center"><span>{{$count1}}</span></div></td>
-																<td><a href="{{url("sub-cat-forums/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
-															</tr>
-														@else
-															<tr>
-																<td>{{ $data->title }}</td>
-																<td>{{$date}}</td>
-																<td><div class="count text-center"><span>{{$count}}</span></div></td>
-																<td><a href="{{url("view-forum-posts/$forumid")}}" title=""><i class="flaticon-next"></i></a></td>
-															</tr>
-													@endif
+											<?php $subid1 = \App\Forums::where('parent_id',$data->id)->pluck('id');
+															$count = \App\ForumPost::whereIn('category_id',$subid1)->get()->count(); ?>
+											@endif
+											
+											<tr>
+												<td>{{ $data->title }}</td>
+												<td>{{$date}}</td>
+												<td><div class="count text-center"><span>{{$count}}</span></div></td>
+												<td><a href="{{url("forums/$mainforum->forum_slug/$forumSlug")}}" title=""><i class="flaticon-next"></i></a></td>
+											</tr>
+											
 										@endforeach	
 										@endif
 								</table>
@@ -108,12 +104,12 @@ if($mainforum->title == "Doctor") {
 													    	@if($mainforum->title == "Doctor")
 													    		<div class="row">
 													    			<div class="col-md-4 col-xs-12 col-md-offset-4">
-													    				<select name="idiseases" class="form-control">
-														    					<option value="">Select Option</option>
-															    				@foreach($diseases as $doc)					
-																					<option value="{{$doc}}">{{$doc}}</option>
-																					@endforeach
-																			</select>
+													    				<select name="idiseases" class="form-control sel-diseases">
+														    				<option data-value="" value="">Select Option</option>
+															    			@foreach($diseases as $doc)					
+																				<option data-value="{{$doc->doctor_slug}}" value="{{$doc->title}}">{{$doc->title}}</option>
+																			@endforeach
+																		</select>
 													    			</div>
 													    		</div>
 													    	@endif
@@ -135,20 +131,20 @@ if($mainforum->title == "Doctor") {
 																			$cls = "col-md-offset-4";
 																	?>
 																	<div class="col-md-4 col-xs-12 {{$cls}}">
-																		<select name="country1" class="form-control">
-																				<option value="">Select Country</option>
-																				@foreach($countries as $data)					
-																				<option value="{{$data}}">{{$data}}</option>
+																		<select name="country1" class="form-control sel-country">
+																			<option data-value="" value="">Select Country</option>
+																				@foreach($forumcountries as $data)					
+																					<option data-value="{{$data->country_slug}}" value="{{$data->country_name}}">{{$data->country_name}}</option>
 																				@endforeach
 																		</select>
 																	</div>
 																	@if($mainforum->title == "Doctor")
 																	<div class="col-md-4 col-xs-12">
-													    				<select name="cdiseases" class="form-control">
-														    					<option value="">Select Option</option>
-														    					@foreach($diseases as $doc)					
-																					<option value="{{$doc}}">{{$doc}}</option>
-																					@endforeach
+													    				<select name="cdiseases" class="form-control sel-diseases">
+														    					<option data-value="" value="">Select Option</option>
+															    			@foreach($diseases as $doc)					
+																				<option data-value="{{$doc->doctor_slug}}" value="{{$doc->title}}">{{$doc->title}}</option>
+																			@endforeach
 																			</select>
 																	</div>
 																	@endif
@@ -165,30 +161,30 @@ if($mainforum->title == "Doctor") {
 														    	<input type="hidden" name="subcategory" value="country,state,city" />
 																<div class="row">
 																		<div class="col-md-4 col-xs-12">
-																			<select name="country" class="form-control" id="subcountry-forum">
-																					<option value="">Select Country</option>
-																					@foreach($countries as $data)					
-																					<option value="{{$data}}">{{$data}}</option>
-																					@endforeach
+																			<select name="country" class="form-control sel-country" id="subcountry-forum">
+																				<option data-value="" value="">Select Country</option>
+																				@foreach($forumcountries as $data)					
+																					<option data-value="{{$data->country_slug}}" value="{{$data->country_name}}">{{$data->country_name}}</option>
+																				@endforeach
 																			</select>
 																		</div>
 																		<div class="col-md-4 col-xs-12">
-																				<select name="state" class="form-control" id="substate-forum">
+																				<select name="state" class="form-control sel-state" id="substate-forum">
 																						<option>Select State</option>
 																				</select>
 																		</div>
 																		<div class="col-md-4 col-xs-12">
-																				<select name="city" class="form-control" id="subcity-forum">
+																				<select name="city" class="form-control sel-city" id="subcity-forum">
 																						<option>Select City</option>
 																				</select>
 																		</div>
 																		@if($mainforum->title == "Doctor")
 																		<div class="col-md-4 col-xs-12 col-md-offset-4 margin-top20">
-													    					<select name="cscdiseases" class="form-control">
-													    							<option value="">Select Option</option>
-													    							@foreach($diseases as $doc)					
-																						<option value="{{$doc}}">{{$doc}}</option>
-																						@endforeach
+													    					<select name="cscdiseases" class="form-control sel-diseases">
+													    						<option data-value="" value="">Select Option</option>
+																    			@foreach($diseases as $doc)					
+																					<option data-value="{{$doc->doctor_slug}}" value="{{$doc->title}}">{{$doc->title}}</option>
+																				@endforeach
 																				</select>
 																		</div>
 													    			@endif
@@ -280,6 +276,49 @@ jQuery(function($){
             }
         }
     });
+
+	$( "#forum_select_form_int" ).submit( function(){
+
+ 		var diseases 	= $(this).find( ".sel-diseases :selected" ).data( 'value' );
+ 		if( typeof diseases == 'undefined' ){
+ 			diseases = '';
+ 		} else {
+ 			diseases = '/'+diseases;
+ 		}
+ 		window.location.href = "<?php echo url( '/forums/'.$mainforum->forum_slug ); ?>/international"+diseases;
+ 		return false;
+ 	});
+
+
+ 	$( "#forum_select_form_country" ).submit( function(){
+ 		var country 	= $(this).find( ".sel-country :selected" ).data( 'value' );
+ 		var diseases 	= $(this).find( ".sel-diseases :selected" ).data( 'value' );
+ 		if( typeof diseases == 'undefined' ){
+ 			diseases = '';
+ 		} else {
+ 			diseases = '/'+diseases;
+ 		}
+ 		if( typeof country != 'undefined' && country != '' ){
+ 			window.location.href = "<?php echo url( '/forums/'.$mainforum->forum_slug ); ?>/"+country+diseases;
+ 		}
+ 		return false;
+ 	});
+
+ 	$( "#forum_select_form" ).submit( function(){
+ 		var country  = $(this).find( ".sel-country :selected" ).data( 'value' );
+ 		var state 	 = $(this).find( ".sel-state :selected" ).data( 'value' );
+ 		var city 	 = $(this).find( ".sel-city :selected" ).data( 'value' );
+ 		var diseases = $(this).find( ".sel-diseases :selected" ).data( 'value' );
+ 		if( typeof diseases == 'undefined' ){
+ 			diseases = '';
+ 		} else {
+ 			diseases = '/'+diseases;
+ 		}
+ 		if( typeof country != 'undefined' && typeof state != 'undefined' && typeof city != 'undefined' && country != '' && state != '' && city != '' ){
+ 			window.location.href = "<?php echo url( '/forums/'.$mainforum->forum_slug ); ?>/"+country+'/'+state+'/'+city+diseases;
+ 		}
+ 		return false;
+ 	});
 
 	$('#subcountry-forum').change(function(){
 		var countryId = $(this).val();
