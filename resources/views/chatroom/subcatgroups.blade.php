@@ -21,18 +21,11 @@
 								<ul>
 								@foreach($subgroup as $data)
 								<?php 
-									$fieldsData = \App\Category::where('parent_id',$data->id)->get();
-									$next_id = $parent_id.'-'.$data->id;
+									$next_id = $parent_slug.$data->category_slug;
 								?>
-								@if(!($fieldsData->isEmpty()))
 									<li>
-										<a href="{{url("sub-cat-group/$next_id")}}" title="">{{$data->title}}</a>
+										<a href="{{url("chat/$next_id")}}" title="">{{$data->title}}</a>
 									</li>
-								@else
-									<li>
-										<a href="{{url("groupchat/$next_id")}}" title="">{{$data->title}}</a>
-									</li>
-								@endif
 								@endforeach					
 								</ul>
 							</div>

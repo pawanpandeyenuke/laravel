@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 
-use Auth, App\Feed, DB, App\Setting, App\Category,App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers,App\BroadcastMembers,App\Forums;
+use Auth, App\Feed, DB, App\Setting, App\Category,App\Group, App\Friend, App\DefaultGroup, App\User, App\Country, App\State, App\City, App\EducationDetails,App\JobArea,App\JobCategory,App\Broadcast,App\BroadcastMessages,App\GroupMembers,App\BroadcastMembers,App\Forums;
 
 use App\Library\Converse, Google_Client, Mail;
 
-use Request, Session, Validator, Input, Cookie, Hash;
+use Response, Request, Session, Validator, Input, Cookie, Hash;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -147,6 +147,95 @@ class DashboardController extends Controller
     *   Group chatrooms ajax call handling.
     *   Ajaxcontroller@groupchatrooms
     */
+
+
+    public function chatUrlHandler($hierarchy='')
+    {
+        $categories = explode('/', $hierarchy);
+        $categories = array_filter($categories, function($value) { return $value !== ''; });
+        $parameterCount = count( $categories );
+
+        $parentCat    = reset($categories);
+        $rsParentCategory = Category::select( ['id','title','selection'] )->where(['category_slug' => $parentCat,'status' => 'Active' ,'parent_id' => 0])->first();
+        
+        if( $rsParentCategory ) {
+            switch($parameterCount){ // based on the number of url parameter
+                case 1: 
+                    $rsChildCategory = Category::where('parent_id', $rsParentCategory->id)->get(); 
+                    if( !$rsChildCategory->isEmpty() ){ // if category have their child category
+                        if( $rsParentCategory->selection == 'N' ){ // check category not have selection type
+                            return $this->subCatGroup( $rsParentCategory->id );
+                        }else{
+                            return $this->subgroup( $rsParentCategory->id );
+                        }
+                    } else {
+                        return $this->groupchat( $rsParentCategory->id );
+                    }
+                break;
+                case 2: 
+                    $lastPara = last($categories); // get last parameter from url
+                    $rsCategory = Category::select( ['id','title','selection'] )->where(['category_slug' => $lastPara,'status' => 'Active' ,'parent_id' => $rsParentCategory->id])->first(); // get category from last parameter
+                    if( $rsCategory ){
+                        $rsChildCategory = Category::where('parent_id', $rsCategory->id)->get(); // ccheck have a child category 
+                        if( !$rsChildCategory->isEmpty() ){
+                            if( $rsCategory->selection == 'N' ){ // check category selection type
+                                return $this->subCatGroup( $rsParentCategory->id.'-'.$rsCategory->id );
+                            }else{
+                                return $this->subgroup( $rsParentCategory->id.'-'.$rsCategory->id );
+                            }
+                        } else {
+                            return $this->groupchat( $rsParentCategory->id.'-'.$rsCategory->id );
+                        }
+                    } else if( isset($rsParentCategory->selection) && $rsParentCategory->selection == 'Y' ) {
+          
+                        if( $lastPara == 'international' ){
+                            return $this->groupchat( '', ['parentname' => $rsParentCategory->title,'subcategory' => 'international'] );
+                        } else {
+                            $Country = Country::select( 'country_name' )->where(['country_slug' => $lastPara])->first();
+                            if($Country){
+                                return $this->groupchat( '', ['parentname' => $rsParentCategory->title,'subcategory' => 'Country','country1' => $Country->country_name ] );
+                            } else {
+                                return Response::view('errors.404',[],404);
+                            }
+                        }
+                    } else {
+                        return Response::view('errors.404',[],404);
+                    }
+                case 3:
+                    $subParentCat   = $categories[1];
+                    $lastPara       = last($categories);
+
+                    $rsSubParentCategory = Category::select( ['id','title','selection'] )->where(['category_slug' => $subParentCat,'status' => 'Active' ,'parent_id' => $rsParentCategory->id])->first();
+                    $rscurrentCategory     = Category::select( 'id' )->where(['category_slug' => $lastPara,'status' => 'Active' ,'parent_id' => ( isset($rsSubParentCategory->id)?$rsSubParentCategory->id:0)])->first();
+                    if( $rscurrentCategory ){
+                        return $this->groupchat( $rsParentCategory->id.'-'.$rsSubParentCategory->id.'-'.$rscurrentCategory->id );
+                    } else {
+                        return Response::view('errors.404',[],404);  
+                    }
+                    break;
+                break;
+                case 4:
+                    $countrySlug    = $categories[1];
+                    $stateSlug      = $categories[2];
+                    $citySlug       = last($categories);
+                    
+                    $Country = Country::select( ['country_name','country_id'] )->where(['country_slug' => $countrySlug ])->first();
+                    $State = State::select( ['state_id','state_name'] )->where(['state_slug' => $stateSlug, 'country_id' => (isset($Country->country_id)?$Country->country_id:0) ])->first();
+                    $City = City::select( 'city_name' )->where(['city_slug' => $citySlug, 'state_id' => (isset($State->state_id)?$State->state_id:0) ])->first();
+                    if( $City  ){
+                        return $this->groupchat( '', ['parentname' => $rsParentCategory->title,'subcategory' => 'Country, State, City', 'country' => $Country->country_name, 'state' => $State->state_name, 'city' => $City->city_name] );
+                    } else {
+                        return Response::view('errors.404',[],404); 
+                    }
+                break;
+                default:
+                    return Response::view('errors.404',[],404);
+                break;
+            }
+        }
+        return Response::view('errors.404',[],404);
+    }
+
     public function group()
     {
 
@@ -174,9 +263,9 @@ class DashboardController extends Controller
             $name_check = Category::where('id',$parentid)->first();
             if($data->isEmpty()){
                 if($name_check->title == "")
-                    return redirect('group');
+                    return redirect('chat');
                 else
-                    return redirect('groupchat/'.$parentid);
+                    return redirect('chat/'.$data->category_slug);
             }
             else
                 $subgroups = $data;
@@ -195,9 +284,10 @@ class DashboardController extends Controller
             $breadcrumb = "";
             $store_id = "";
             $id_arr = explode('-',$parentid);
-
+            $parentSlugs = '';
             foreach ($id_arr as $key => $value) {
-              $cat = Category::where('id',$value)->first();
+                $cat = Category::where('id',$value)->first();
+                $parentSlugs .= $cat->category_slug.'/';
                 if($cat){
                     if($key == 0){
                         if($cat->parent_id != 0)
@@ -240,12 +330,13 @@ class DashboardController extends Controller
 
                     return view('chatroom.subcatgroups')
                             ->with('parent_id',$parentid)
+                            ->with('parent_slug',$parentSlugs)
                             ->with('breadcrumb',$breadcrumb)
                             ->with('subgroup',$sub_groups)
                             ->with('icon_url',$img_icon);
             }
             else
-                return redirect('group');
+                return redirect('chat');
 
 
         }
@@ -256,7 +347,7 @@ class DashboardController extends Controller
     *   Ajaxcontroller@groupchatrooms
     */
 
-    public function groupchat( $groupid = "" ){
+    public function groupchat( $groupid = "" , $GetInput = [] ){
         $private_group_check = "pub" ;
         $id=Auth::User()->id;
         if($groupid){
@@ -302,8 +393,13 @@ class DashboardController extends Controller
 			$GroupImage = Category::where('id',$id_arr[0])->value( 'img_url' );
 
         } else {
-			$input = Request::all();
-			$parent_name = $input['parentname'];
+			if( !empty($GetInput) ){
+                 $input = $GetInput;
+			} else {
+               $input = Request::all();
+            }
+
+            $parent_name = $input['parentname'];
 
                 if($input['subcategory']=='International'){
                     $check_name = $input['parentname'].' > '.$input['subcategory'];
@@ -312,7 +408,7 @@ class DashboardController extends Controller
                 }
                    
 
-                 elseif($input['subcategory']=='Professional Course'){
+                 elseif($input['subcategory'] == 'Professional Course'){
                     $check_name = $input['parentname'].' > '.$input['subcategory'].' > '.$input['coursedata1'];
                      $sub_name = $input['subcategory'].'_'.$input['coursedata1'];
                  }

@@ -19,7 +19,7 @@
 								    @foreach($parent_category as $data)
 
 							        <?php 
-							            $fieldsData = \App\Category::where('parent_id',$data->id)->get(); 
+							            
 
 							            $nameexp = explode(' ', $data->title);
 							            $catname = implode('-', $nameexp);
@@ -28,29 +28,13 @@
 							            $image = url("/category_images/".$data['img_url']);
 							            ?>
 
-		                                @if(!($fieldsData->isEmpty()))
-		                                <?php
-		                                	if(\App\Category::where('id',$data->id)->value('selection') == "N")
-		                                		$next_url = url("sub-cat-group/".$data->id);
-		                                	else
-		                                		$next_url = url("subgroup/".$data->id);
-		                                 ?>
 											<div class="col-sm-4">
 												<div class="cat-btn-outer">
-													<a href="{{$next_url}}" title="" class="cat-btn">
+													<a href="{{url("chat/$data->category_slug")}}" title="" class="cat-btn">
 													<img src="{{$image}}"><br>
 													{{ $data->title }}</a>
 												</div>
 											</div>
-										@else
-											<div class="col-sm-4">
-												<div class="cat-btn-outer">
-													<a href="{{url("groupchat/$data->id")}}" title="" class="cat-btn">
-													<img src="{{$image}}"><br>
-													{{ $data->title }}</a>
-												</div>
-											</div>
-										@endif
 
 									@endforeach
 
