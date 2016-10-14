@@ -155,6 +155,14 @@ class DashboardController extends Controller
         $categories = array_filter($categories, function($value) { return $value !== ''; });
         $parameterCount = count( $categories );
 
+        /** Private group Check **/
+        if( $parameterCount == 1 ){
+            $private_group = Group::where( 'group_jid', last($categories) )->select('id')->first();
+            if( $private_group ){
+                return $this->privateGroupChat( $private_group->id );
+            }
+        }
+
         $parentCat    = reset($categories);
         $rsParentCategory = Category::select( ['id','title','selection'] )->where(['category_slug' => $parentCat,'status' => 'Active' ,'parent_id' => 0])->first();
         
@@ -199,7 +207,7 @@ class DashboardController extends Controller
                             }
                         }
                     } else {
-                        return Response::view('errors.404',[],404);
+                        return redirect('chat/'.$parentCat);
                     }
                 case 3:
                     $subParentCat   = $categories[1];
@@ -210,7 +218,7 @@ class DashboardController extends Controller
                     if( $rscurrentCategory ){
                         return $this->groupchat( $rsParentCategory->id.'-'.$rsSubParentCategory->id.'-'.$rscurrentCategory->id );
                     } else {
-                        return Response::view('errors.404',[],404);  
+                        return redirect('chat/'.$parentCat.'/'.$subParentCat);
                     }
                     break;
                 break;
@@ -218,14 +226,14 @@ class DashboardController extends Controller
                     $countrySlug    = $categories[1];
                     $stateSlug      = $categories[2];
                     $citySlug       = last($categories);
-                    
+
                     $Country = Country::select( ['country_name','country_id'] )->where(['country_slug' => $countrySlug ])->first();
                     $State = State::select( ['state_id','state_name'] )->where(['state_slug' => $stateSlug, 'country_id' => (isset($Country->country_id)?$Country->country_id:0) ])->first();
                     $City = City::select( 'city_name' )->where(['city_slug' => $citySlug, 'state_id' => (isset($State->state_id)?$State->state_id:0) ])->first();
                     if( $City  ){
                         return $this->groupchat( '', ['parentname' => $rsParentCategory->title,'subcategory' => 'Country, State, City', 'country' => $Country->country_name, 'state' => $State->state_name, 'city' => $City->city_name] );
                     } else {
-                        return Response::view('errors.404',[],404); 
+                        return redirect('chat/'.$parentCat.'/'.$countrySlug.'/'.$stateSlug);
                     }
                 break;
                 default:
@@ -263,7 +271,7 @@ class DashboardController extends Controller
             $name_check = Category::where('id',$parentid)->first();
             if($data->isEmpty()){
                 if($name_check->title == "")
-                    return redirect('chat');
+                    return redirect('chat-category');
                 else
                     return redirect('chat/'.$data->category_slug);
             }
@@ -336,7 +344,7 @@ class DashboardController extends Controller
                             ->with('icon_url',$img_icon);
             }
             else
-                return redirect('chat');
+                return redirect('chat-category');
 
 
         }
@@ -976,7 +984,7 @@ class DashboardController extends Controller
     {
         if( $privategroupid )
         {
-            $groupdetail = Group::where('id',$privategroupid)->get()->toArray();
+            $groupdetail = Group::where('id',$privategroupid)->first()->toArray();
 
             if( !$groupdetail ){
                 return redirect('private-group-list')->with('error','This private group does not exist.');

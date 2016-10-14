@@ -31,7 +31,7 @@ $userdata = session('userdata');
                 <div class="home-slider-cont">
                     <div class="slider-btns">
                         <ul class="list-inline">
-                            <li><a href="{{url('chat')}}" title="" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Enter Chat Room</a></li>
+                            <li><a href="{{url('chat-category')}}" title="" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Enter Chat Room</a></li>
                             <li><a href="{{url('forums')}}" title="" class="btn btn-primary">Enter Forum</a></li>
                         </ul>
                     </div>

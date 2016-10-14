@@ -353,7 +353,7 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 		'uses' => 'DashboardController@chatUrlHandler'
 	])->where( 'hierarchy', '.*' );
 
-	Route::get('chat', 'DashboardController@group');
+	Route::get('chat-category', 'DashboardController@group');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
 	Route::get('sub-cat-group/{parentid}','DashboardController@subCatGroup');
 	Route::get('groupchat/{id}', 'DashboardController@groupchat');
@@ -364,7 +364,7 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 
 	Route::get('groupchat/pg/{groupid}','DashboardController@privateGroupChat');
 
-	Route::get('friends-chat','DashboardController@friendsChat');
+	Route::get('chat','DashboardController@friendsChat');
 	
 
 	Route::get('profile/{id}', 'DashboardController@profile');
