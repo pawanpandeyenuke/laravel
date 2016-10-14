@@ -308,6 +308,11 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 	Route::get('/forums', 'SearchController@forumsList');
 	Route::post('/forums', 'SearchController@forumsList');
 
+	Route::any('forums/{hierarchy}', [
+		'uses' => 'SearchController@forumsManage'
+	])->where('hierarchy', '.*');
+
+
 	Route::get('sub-forums/{parentid}', 'SearchController@subForums');
 
 	Route::get('sub-forums', 'SearchController@subForums');
@@ -320,12 +325,9 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 
 	Route::get('view-forum-posts/{id}','SearchController@viewForumPosts');
 	Route::match(['post', 'get'], 'view-forum-posts','SearchController@viewForumPostsOpt');
-	// Route::get('view-forum-posts', function(){
-		// return redirect('forums');
-	// });
 
 	Route::get('demo', 'SearchController@demo');
-    Route::get('forum-post-reply/{forumpostid}', 'SearchController@forumPostReply');
+    Route::get('reply/{forumpostid}', 'SearchController@forumPostReply');
 
     Route::post('search-forum', 'SearchController@searchForum');
 	Route::get('search-forum', 'SearchController@searchForumGet');
@@ -344,6 +346,12 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 		Route::get('invite-friends', 'ContactImporter@inviteFriends');
 		Route::post('invite-friends', 'ContactImporter@inviteFriends');
 		Route::get('invite-contacts', 'ContactImporter@inviteContactList');
+
+		Route::any('chat/{hierarchy}', [
+			'uses' => 'DashboardController@chatUrlHandler'
+		])->where( 'hierarchy', '.*' );
+
+		Route::get('chat-category', 'DashboardController@group');
 
 		Route::get('group', 'DashboardController@group');
 		Route::get('subgroup/{parentid}', 'DashboardController@subgroup');

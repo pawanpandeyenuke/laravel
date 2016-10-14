@@ -196,7 +196,7 @@ class HomeController extends Controller
 
                     $title_value = $value1->title;
                     $pagename = $title_value;
-                    $title = $title_value." Discussion Community & Support Forum | ForumzHub";
+                    $title = $title_value." Discussion Community & Support Forum | FriendzSquare";
                     $description = "Interact with people and discuss about ".$title_value." in our online forum community. Share your queries and stories here.";
 
                     $insert_query[] = '("forums/'.$slugval.'", "'.$pagename.'", "'.$title.'", "'.$description.'", "", "1", "0000-00-00 00:00:00", "0000-00-00 00:00:00")';
@@ -211,7 +211,7 @@ class HomeController extends Controller
 
                             $title_value = $value2->title;
                             $pagename = $title_value;
-                            $title = $title_value." Discussion Community & Support Forum | ForumzHub";
+                            $title = $title_value." Discussion Community & Support Forum | FriendzSquare";
                             $description = "Interact with people and discuss about ".$title_value." in our online forum community. Share your queries and stories here.";
 
                             $insert_query[] = '("forums/'.$slugval.'", "'.$pagename.'", "'.$title.'", "'.$description.'", "", "1", "0000-00-00 00:00:00", "0000-00-00 00:00:00")';
@@ -224,7 +224,7 @@ class HomeController extends Controller
 
                 $title_value = $value->title;
                 $pagename = $title_value;
-                $title = $title_value." Discussion Community & Support Forum | ForumzHub";
+                $title = $title_value." Discussion Community & Support Forum | FriendzSquare";
                 $description = "Interact with people and discuss about ".$title_value." in our online forum community. Share your queries and stories here.";
 
                 $insert_query[] = '("forums/'.$slugval.'", "'.$pagename.'", "'.$title.'", "'.$description.'", "", "1", "0000-00-00 00:00:00", "0000-00-00 00:00:00")';

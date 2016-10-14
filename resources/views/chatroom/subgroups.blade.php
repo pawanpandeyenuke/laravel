@@ -18,6 +18,7 @@ unset($countries[0]);
 	            @include('panels.left')
 				<?php 
 					$icon_url = url('category_images/'.$p_group->img_url);
+					$categoryslug = $p_group->category_slug;
 				?>
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
@@ -82,10 +83,10 @@ unset($countries[0]);
 										<div class="row">
 											<div class="col-md-4 col-md-offset-4">
 												<!-- <label>Country</label> -->
-												<select name="country1" class="form-control">
-													<option value="">Select Country</option>
-													@foreach($countries as $data)					
-														<option value="{{$data}}">{{$data}}</option>
+												<select name="country1" class="form-control sel-country">
+													<option data-value="" value="">Select Country</option>
+													@foreach($forumcountries as $data)					
+														<option data-value="{{$data->country_slug}}" value="{{$data->country_name}}">{{$data->country_name}}</option>
 													@endforeach
 												</select>
 											</div>
@@ -101,21 +102,21 @@ unset($countries[0]);
 							    	<input type="hidden" name="subcategory" value="Country, State, City" />
 										<div class="row">
 											<div class="col-md-4">
-												<select name="country" class="form-control" id="subcountry">
-													<option value="">Select Country</option>
-													@foreach($countries as $data)					
-													<option value="{{$data}}">{{$data}}</option>
+												<select name="country" class="form-control sel-country" id="subcountry">
+													<option data-value="" value="">Select Country</option>
+													@foreach($forumcountries as $data)					
+														<option data-value="{{$data->country_slug}}" value="{{$data->country_name}}">{{$data->country_name}}</option>
 													@endforeach
 												</select>
 											</div>
 											<div class="col-md-4">
-												<select name="state" class="form-control" id="substate">
-													<option value="">Select State</option>
+												<select name="state" class="form-control sel-state" id="substate">
+													<option data-value="" value="">Select State</option>
 												</select>
 											</div>
 											<div class="col-md-4">
-												<select name="city" class="form-control" id="subcity">
-													<option value="">Select City</option>
+												<select name="city" class="form-control sel-city" id="subcity">
+													<option data-value="" value="">Select City</option>
 												</select>
 											</div>
 										</div>
@@ -212,6 +213,30 @@ jQuery(function($){
 			$('#subcity').html('<option value="">Select City</option>');
 		}
 	});
+
+	$( "#internationalform" ).submit( function(){
+ 		window.location.href = "<?php echo url( '/chat/'.$categoryslug ); ?>/international";
+ 		return false;
+ 	});
+
+
+ 	$( "#countryform" ).submit( function(){
+ 		var country 	= $(this).find( ".sel-country :selected" ).data( 'value' );
+ 		if( typeof country != 'undefined' && country != '' ){
+ 			window.location.href = "<?php echo url( '/chat/'.$categoryslug ); ?>/"+country;
+ 		}
+ 		return false;
+ 	});
+
+ 	$( "#chatsubgroupsvalidate" ).submit( function(){
+ 		var country  = $(this).find( ".sel-country :selected" ).data( 'value' );
+ 		var state 	 = $(this).find( ".sel-state :selected" ).data( 'value' );
+ 		var city 	 = $(this).find( ".sel-city :selected" ).data( 'value' );
+ 		if( typeof country != 'undefined' && typeof state != 'undefined' && typeof city != 'undefined' && country != '' && state != '' && city != '' ){
+ 			window.location.href = "<?php echo url( '/chat/'.$categoryslug ); ?>/"+country+'/'+state+'/'+city;
+ 		}
+ 		return false;
+ 	});
 });
 </script>
 {!! Session::forget('error') !!}

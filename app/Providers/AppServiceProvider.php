@@ -47,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
 
         view()->share([
                 'countries' => self::prepare(Country::all(['country_id', 'country_name'])),
+                'forumcountries' => Country::all(['country_id', 'country_name','country_slug']),
                 'parent_category' => Category::where('parent_id', '=', 0)->orderBy('display_order')->get(),
                 'educationLevel' => $educationLevel,
                 'specialization' => $specialization,

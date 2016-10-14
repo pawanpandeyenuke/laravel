@@ -286,7 +286,7 @@ class Converse
 	 				$data['post_message'] = $parameters['current_data'];
 	 				$data['type'] = 'Reply: ';
 	 				$data['linktype'] = 'Post';
-	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
+	 				$data['post_url'] = forumReplyUrl( $object );
 	 				// $from_name = 'FriendzSquare Reply';
 	 				$subject = $name.' has replied on your post';
 
@@ -299,7 +299,7 @@ class Converse
 	 				$data['post_message'] = $parameters['current_data'];
 	 				$data['type'] = 'Comment: ';
 	 				$data['linktype'] = 'Reply';
-	 				$data['post_url'] = url('forum-post-reply/'.$object->id);
+	 				$data['post_url'] = forumReplyUrl( $object );
 	 				// $from_name = 'FriendzSquare Comment';
 	 				$subject = $name.' has commented on your reply';
 	 			}

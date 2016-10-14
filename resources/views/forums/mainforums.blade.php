@@ -21,28 +21,17 @@
 						<div class="row">
 							@foreach($forums as $data)
 					        	<?php
-						            $fieldsData = \App\Forums::where(['parent_id' => $data->id])->where(['status' => 'Active'])->select('title', 'id')->get(); 
+						 
 					   				$image = url("forums-data/forum_icons/".$data['img_url']);
 					            ?>
-			                    @if(!$fieldsData->isEmpty())
-									<div class="col-sm-4">
-										<div class="cat-btn-outer">
-											<a href="{{url("sub-forums/$data->id")}}" class="cat-btn" title="">
-												<img src="{{$image}}" alt=""><br>
-												<span>{{ $data->title }}</span>
-											</a>
-										</div>
+								<div class="col-sm-4">
+									<div class="cat-btn-outer">
+										<a href="{{url("forums/$data->forum_slug")}}" class="cat-btn" title="">
+											<img src="{{$image}}" alt=""><br>
+											<span>{{ $data->title }}</span>
+										</a>
 									</div>
-								@else
-									<div class="col-sm-4">
-										<div class="cat-btn-outer">
-											<a href="{{url("view-forum-posts/$data->id")}}" class="cat-btn" title="">
-												<img src="{{$image}}" alt=""><br>
-												<span>{{ $data->title }}</span>
-											</a>
-										</div>
-									</div>
-								@endif
+								</div>
 							@endforeach
 						</div>
 					</div>

@@ -55,11 +55,8 @@
 									<div class="social-btns">
 										<ul class="list-inline">
 											<?php $googleurl = isset($googleImportUrl) ? $googleImportUrl : ''; ?>
-											<li><a href="<?php echo $googleurl; ?>" title=""><img src="/images/gmail-btn.png" alt=""></li>
-											<!-- <li><a href="#" title=""><img src="/images/yahoomail-btn.png" alt=""></li> -->
-											<li><a href="#" id="import"><img src="/images/hotmail-btn.png" alt=""></a></li>
-											<!-- <li><a href="#try" onclick="FacebookInviteFriends();"><img src="/images/facebook-btn.png" alt=""></li>
-											<li><a href="" title="" onclick="myFunction()"><img src="/images/linkedin-btn.png" alt=""></li> -->
+											<li><a href="<?php echo $googleurl; ?>" title=""><img src="/images/gmail-btn.png" alt="Google Contacts"></li>
+											<li><a href="#" id="import"><img src="/images/hotmail-btn.png" alt="Hotmail Contacts"></a></li>
 										</ul>
 									</div>
 								</div>

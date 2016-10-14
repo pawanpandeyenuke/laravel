@@ -4,11 +4,11 @@
 @section('title', 'Private Group')
 <?php 
 
-$title1 = strtolower($groupdetail[0]['title']);
+$title1 = strtolower($groupdetail['title']);
 $title1 = str_replace(" ","-",$title1);
 $group_picture = url('/images/post-img-big.jpg');
-if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
-	$group_picture = url('/uploads/'.$groupdetail[0]['picture']);
+if(isset($groupdetail) && !empty($groupdetail['picture'])){
+	$group_picture = url('/uploads/'.$groupdetail['picture']);
 }
 
 ?>
@@ -26,7 +26,7 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 
  		{{Form::open(array('url'=>'/private-group-detail/ajax/groupimage','id'=>'uploadgroupimage','files'=>true))}}
 					<div class="group-img" id="groupimageholder">
-						<img src="{{$group_picture}}" class="g-img">
+						<img src="{{$group_picture}}" alt="Private Group's Image" class="g-img">
 						<div class="grp-img-outer">
 						<input type="hidden" name="groupid" value={{$groupid}}></input>
 							<input name="groupimage" type="file" id="groupimage" class="filestyle" data-input="false" data-icon="true" data-iconName="glyphicon glyphicon-picture" data-buttonText=""  data-buttonName="btn-upload-icon" data-groupid="{{$groupid}}">
@@ -37,7 +37,7 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
 							<div class="edit-grp-name">
-								<b><input type="text" name="privategroupname" class="pr-edit pr-gname" disabled="disabled"  value="{{$groupdetail[0]['title']}}"></b>
+								<b><input type="text" name="privategroupname" class="pr-edit pr-gname" disabled="disabled"  value="{{$groupdetail['title']}}"></b>
 								<?php if($ownerid == Auth::user()->id){ ?>
 									<div id='friendsContainer'>
 									<select id='friends' class='multiple-slt' multiple data-placeholder="Add members">
@@ -106,7 +106,7 @@ if(isset($groupdetail[0]) && !empty($groupdetail[0]['picture'])){
 								<?php } else { ?>
 								<li><button value="{{ $groupid }}" class="btn btn-primary del-confirm-forum" data-forumtype="private-leave">Leave Group</button></li>
 								<?php } ?>
-								<li><a href="{{url("groupchat/pg/".$groupid)}}" title=""  class="btn btn-primary startchat">Start Chat</a></li>
+								<li><a href="{{url("chat/".$groupdetail['group_jid'])}}" title=""  class="btn btn-primary startchat">Start Chat</a></li>
 								</ul>
 							<div class="bcast-list" style="display: none;">
 								<select class="multiple-slt form-control" name="groupmembers[]" multiple="multiple">

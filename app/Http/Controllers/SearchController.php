@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 // use Illuminate\Http\Request;
 
 use App\Http\Requests,Config;
-use Request, Session, Validator, Input, Cookie, URL;
+use Response, Request, Session, Validator, Input, Cookie, URL;
 use App\User, Auth,Mail,App\Forums,DB,App\ForumPost,App\Friend,App\ForumLikes,App\ForumReply,App\ForumsDoctor;
-use App\Setting, App\UnsubscribedUsers;
+use App\Setting, App\UnsubscribedUsers, App\Country, App\State, App\City;
 use App\Library\Functions;
 
 class SearchController extends Controller
@@ -130,6 +130,124 @@ class SearchController extends Controller
 
     /******* FORUMS ********/
 
+    public function forumsManage($hierarchy='')
+    {
+        $categories = explode('/', $hierarchy);
+        $categories = array_filter($categories, function($value) { return $value !== ''; });
+        $parameterCount = count( $categories );
+
+        $parentCat    = reset($categories);
+        $ParentForums = Forums::select( ['id','title','selection'] )->where(['forum_slug' => $parentCat,'status' => 'Active' ,'parent_id' => 0])->first();
+        
+        if( $ParentForums ) {
+            switch($parameterCount){
+                case 1: 
+                    $SubForum = Forums::select( 'id' )->where(['parent_id' => $ParentForums->id,'status' => 'Active'])->count();
+                    if( $SubForum ){
+                        return $this->subForums( $ParentForums->id );
+                    } else {
+                        return $this->viewForumPosts($ParentForums->id);
+                    }
+                    break;
+                case 2:
+                    $LastPara = last($categories);
+                    
+                    $Forums = Forums::select( 'id' )->where(['forum_slug' => $LastPara,'status' => 'Active' ,'parent_id' => $ParentForums->id])->first();
+
+                    if( !empty($Forums) && $ParentForums->selection != 'Y' ){
+                        $SubForum = Forums::select( 'id' )->where(['parent_id' => $Forums->id,'status' => 'Active'])->count();
+                        if( $SubForum ){
+                            return $this->subCatForums( $Forums->id );
+                        } else {
+                            return $this->viewForumPosts($Forums->id);
+                        }
+
+                    } else if( isset($ParentForums->selection) && $ParentForums->selection == 'Y' ) {
+                        
+                        if( $LastPara == 'international' ){
+
+                            return $this->viewForumPostsOpt( ['mainforum' => $ParentForums->title,'subcategory' => 'international','idiseases' => ''] );
+                        } else {
+                            $Country = Country::select( 'country_name' )->where(['country_slug' => $LastPara])->first();
+                            if($Country){
+                                return $this->viewForumPostsOpt( ['mainforum' => $ParentForums->title,'subcategory' => 'country','country1' => $Country->country_name ] );
+                            } else {
+                                return Response::view('errors.404',[],404);
+                            }
+                        }
+                    } else {
+                        return Response::view('errors.404',[],404);
+                    }
+                    break;
+                case 3:
+                    $subParentCat   = $categories[1];
+                    $LastPara       = last($categories);
+                    $subParentForums = Forums::select( 'id' ,'selection','title' )->where(['forum_slug' => $subParentCat,'status' => 'Active' ,'parent_id' => $ParentForums->id])->first();
+                    $currentForums = Forums::select( 'id' )->where(['forum_slug' => $LastPara,'status' => 'Active' ,'parent_id' => ( isset($subParentForums->id)?$subParentForums->id:0)])->first();
+                    if( $currentForums ){
+                        return $this->viewForumPosts( $currentForums->id );
+                    } else {
+                        if( $parentCat == 'doctor' ){
+                            $ForumsDoctor = ForumsDoctor::select( 'title' )->where(['doctor_slug' => $LastPara])->first();
+                            if( $subParentCat == 'international' ){
+                                return $this->viewForumPostsOpt( ['mainforum' => $ParentForums->title,'subcategory' => 'international','idiseases' => (isset($ForumsDoctor->title)?$ForumsDoctor->title:'') ] );
+                            } else {
+                                $Country = Country::select( 'country_name' )->where(['country_slug' => $subParentCat ])->first();
+                                if( $Country ){
+                                    return $this->viewForumPostsOpt( ['mainforum' => $ParentForums->title,'subcategory' => 'country', 'country1' => $Country->country_name, 'cdiseases' => (isset($ForumsDoctor->title)?$ForumsDoctor->title:'')] );
+                                } else {
+                                    return Response::view('errors.404',[],404);     
+                                }
+                            }
+                        } else {
+                            return Response::view('errors.404',[],404);
+                        }
+                    }
+                    break;
+                case 4:
+                    $parentCat      = $categories[0];
+                    $countrySlug    = $categories[1];
+                    $stateSlug      = $categories[2];
+                    $citySlug       = last($categories);
+
+                        $Country = Country::select( ['country_name','country_id'] )->where(['country_slug' => $countrySlug ])->first();
+                        $State = State::select( ['state_id','state_name'] )->where(['state_slug' => $stateSlug, 'country_id' => (isset($Country->country_id)?$Country->country_id:0) ])->first();
+                        $City = City::select( 'city_name' )->where(['city_slug' => $citySlug, 'state_id' => (isset($State->state_id)?$State->state_id:0) ])->first();
+                        if( $City ){
+                            return $this->viewForumPostsOpt( ['mainforum' => $ParentForums->title,'subcategory' => 'country,state,city', 'country' => $Country->country_name, 'state' => $State->state_name, 'city' => $City->city_name, 'cscdiseases' => ''] );
+                        } else {
+                            return Response::view('errors.404',[],404); 
+                        }
+
+                    break;
+                case 5:
+                    $countrySlug    = $categories[1];
+                    $stateSlug      = $categories[2];
+                    $citySlug       = $categories[3];
+                    $diseasesSlug   = last($categories);
+
+                        $Country = Country::select( ['country_name','country_id'] )->where(['country_slug' => $countrySlug ])->first();
+
+                        $State = State::select( ['state_id','state_name'] )->where(['state_slug' => $stateSlug, 'country_id' => (isset($Country->country_id)?$Country->country_id:0) ])->first();
+                        $City = City::select( 'city_name' )->where(['city_slug' => $citySlug, 'state_id' => (isset($State->state_id)?$State->state_id:0) ])->first();
+
+                        $ForumsDoctor = ForumsDoctor::select( 'title' )->where(['doctor_slug' => $diseasesSlug])->first();
+
+                        if( $City && $ForumsDoctor ){
+                            return $this->viewForumPostsOpt( ['mainforum' => $ParentForums->title,'subcategory' => 'country,state,city', 'country' => $Country->country_name, 'state' => $State->state_name, 'city' => $City->city_name, 'cscdiseases' => $ForumsDoctor->title] );
+                        } else {
+                            return Response::view('errors.404',[],404); 
+                        }
+          
+                break;
+                default:
+                    return Response::view('errors.404',[],404);
+                break;
+            }
+        }
+        return Response::view('errors.404',[],404);
+    }
+
      public function forumsList()
     {
         $mainforums = Forums::where('parent_id',0)->where('status', 'Active')->orderBy('display_order')->get();
@@ -177,13 +295,17 @@ class SearchController extends Controller
         $parentforum = Forums::where('id',$parentforumid)->value('title');
         $mainforum=Forums::where('id',$parentid)->value('title');
         $subforums = Forums::where('parent_id',$parentid)->where('status', 'Active')->get();
+        $mainforumSlug = Forums::where('id',$parentid)->value('forum_slug');
+        $parentforumSlug = Forums::where('id',$parentforumid)->value('forum_slug');
 
-         return view('forums.subcatforums')
+        return view('forums.subcatforums')
                 ->with('mainforum',$mainforum)
                 ->with('mainforumid',$parentid)
                 ->with('subforums',$subforums)
                 ->with('parentforumid',$parentforumid)
-                ->with('parentforum',$parentforum);
+                ->with('parentforum',$parentforum)
+                ->with('parentforumslug',$parentforumSlug)
+                ->with('mainforumslug',$mainforumSlug);
 
     }
 
@@ -241,6 +363,11 @@ class SearchController extends Controller
 
     public function forumPostReply($forumpostid = "")
     {
+        
+        $postId = explode( '-', $forumpostid );
+        
+        $postslugStr = substr($forumpostid, 0, - (strlen(last($postId)) + 1));
+        $forumpostid = last($postId);
         $checkpost = ForumPost::with('user')
                         ->with('forumPostLikesCount')
                         ->where('id',$forumpostid)
@@ -248,6 +375,10 @@ class SearchController extends Controller
 
     	if(empty($checkpost))
             return redirect()->back();
+
+        if( !validateForumReply($checkpost, $postslugStr) ){
+            return Response::view('errors.404',[], 301 );
+        }
 
         $reply = ForumReply::with('user')
                 ->with('replyLikesCount')
@@ -271,9 +402,14 @@ class SearchController extends Controller
                     ->with('reply',$reply);
     }
 
-    public function viewForumPostsOpt()
+    public function viewForumPostsOpt( $data = array() )
     {
+        
         $input = Request::all();
+        if( !empty($data) ){
+            $input = $data;
+        }
+
 
         // Restore from session
         if( !isset($input['mainforum']) || !$input['mainforum'] )

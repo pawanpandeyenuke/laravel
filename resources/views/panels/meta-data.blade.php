@@ -1,6 +1,12 @@
 <?php
     $route = Route::current()->getUri();
-    $data = getMetaData( $route, true );
+
+    if( $_SERVER['REQUEST_URI'] == '/' )
+    	$data = getMetaData( $_SERVER['REQUEST_URI'], false );
+    elseif( stristr( $_SERVER['REQUEST_URI'], 'forums' ) ) 
+    	$data = getMetaData( ltrim($_SERVER['REQUEST_URI'], '/'), true );
+	else 
+    	$data = getMetaData( ltrim($_SERVER['REQUEST_URI'], '/'), false );
 
     $meta_title = $meta_keyword = $meta_description = '';
 

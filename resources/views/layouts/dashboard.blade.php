@@ -34,7 +34,7 @@
 @include('forums.deleteconfirmbox')
 
 <body class="dashboard">
-<div class="page-loading" style="display:none"><img src="{{url('/images/full-loading.gif')}}" alt=""></div>
+<div class="page-loading" style="display:none"><img src="{{url('/images/full-loading.gif')}}" alt="FriendzSquare Page Loading"></div>
  <header>
 	<div class="container">
 		<div class="row header-row-full">

@@ -32,7 +32,7 @@ $userdata = session('userdata');
                 <div class="home-slider-cont">
                     <div class="slider-btns">
                         <ul class="list-inline">
-                            <li><a href="{{url('groupchat')}}" title="" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Enter Chat Room</a></li>
+                            <li><a href="{{url('chat-category')}}" title="" class="btn btn-primary" data-toggle="modal" data-target="#LoginPop">Enter Chat Room</a></li>
                             <li><a href="{{url('forums')}}" title="" class="btn btn-primary">Enter Forum</a></li>
                         </ul>
                     </div>
@@ -46,13 +46,13 @@ $userdata = session('userdata');
                       <!-- Wrapper for slides -->
                       <div class="carousel-inner" role="listbox">
                         <div class="item active">
-                          <img src="images/dashboard.png" alt="">
+                          <img src="images/dashboard.png" alt="Dashboard">
                         </div>
                         <div class="item">
-                          <img src="images/chatroom.png" alt="">
+                          <img src="images/chatroom.png" alt="Chatroom">
                         </div>
                         <div class="item">
-                          <img src="images/forum.png" alt="">
+                          <img src="images/forum.png" alt="Forums">
                         </div>
                       </div>
                       
