@@ -349,7 +349,11 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 	Route::post('invite-friends', 'ContactImporter@inviteFriends');
 	Route::get('invite-contacts', 'ContactImporter@inviteContactList');
 
-	Route::get('group', 'DashboardController@group');
+	Route::any('chat/{hierarchy}', [
+		'uses' => 'DashboardController@chatUrlHandler'
+	])->where( 'hierarchy', '.*' );
+
+	Route::get('chat', 'DashboardController@group');
 	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
 	Route::get('sub-cat-group/{parentid}','DashboardController@subCatGroup');
 	Route::get('groupchat/{id}', 'DashboardController@groupchat');
