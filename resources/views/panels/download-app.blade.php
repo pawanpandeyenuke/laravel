@@ -20,21 +20,22 @@
 	  <div class="modal-dialog modal-sm" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        <h4 class="modal-title" id="sendMsgLabel">
 	        	<div class="ap-btns text-center">
-					<ul class="list-inline">
+					<ul class="list-unstyled">
 						
-						<li><h5><b>Download This App</b></h5>
+						<li><h5><b>Download This App</b></h5></li>
 						
 						@if($Android)
-							<a href="{{ Config::get('constants.android_app_link') }}" title=""><img src="{{url('images/and-btn.png')}}" alt=""></a>
+							<li><a href="{{ Config::get('constants.android_app_link') }}" title=""><img src="{{url('images/and-btn.png')}}" alt=""></a></li>
 						@endif
 
 						@if($iPhone)
-							<a href="{{ Config::get('constants.ios_app_link') }}" title=""><img src="{{url('images/ios-btn.png')}}" alt=""></a>
+							<li><a href="{{ Config::get('constants.ios_app_link') }}" title=""><img src="{{url('images/ios-btn.png')}}" alt=""></a></li>
 						@endif
-						<h5><b>OR <br/><br/> <a href="{{url('/')}}" title="" class="close" data-dismiss="modal" aria-label="Close">Continue to web...</a></b></h5></li>
+						<li><h5><b>OR <br/><br/></b></h5></li> 
+						<li><a href="{{url('/')}}" title="">Continue to web...</a></li>
 					</ul>
 				</div>
 			</h4>

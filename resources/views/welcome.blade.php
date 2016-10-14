@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@include('panels.meta-data')
+
 @section('content')
 <div class="container">
     <div class="row">

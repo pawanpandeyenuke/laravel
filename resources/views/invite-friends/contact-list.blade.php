@@ -1,4 +1,6 @@
 @extends('layouts.dashboard')
+
+@include('panels.meta-data')
 @section('title', 'Invite Friends')
 @section('content')
 <div class="page-data dashboard-body">

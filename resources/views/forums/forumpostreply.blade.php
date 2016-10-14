@@ -1,4 +1,6 @@
 @extends('layouts.dashboard')
+
+@include('panels.meta-data')
 @section('title', 'Forums')
 <style type="text/css">
 	.boxsize{width:200px;}

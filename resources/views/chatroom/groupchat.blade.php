@@ -1,5 +1,6 @@
 @extends('layouts.chat')
 
+@include('panels.meta-data')
 @section('title', 'Chat')
 
 @section('content')

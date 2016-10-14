@@ -1,4 +1,6 @@
 @extends('layouts.app')
+
+@include('panels.meta-data')
 @section('title', 'Subscribe')
 @section('content')
 <div class="default-page">

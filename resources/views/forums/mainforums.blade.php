@@ -1,4 +1,6 @@
 @extends('layouts.dashboard')
+
+@include('panels.meta-data')
 @section('title', 'Forums')
 @section('content')
 	<div class="page-data dashboard-body">

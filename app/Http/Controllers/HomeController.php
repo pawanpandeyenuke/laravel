@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator,Request, Session;
 use App\User, Hash;
+use App\Forums;
 
 class HomeController extends Controller
 {
@@ -173,24 +174,74 @@ class HomeController extends Controller
     }
 
 
-
-/*    public function script()
+    // create forumz url database entries
+    public function test()
     {
-        $ids = array();
-        $users = User::select(['email','password','id'])->get()->toArray();
+        $forums = new Forums;
+        $parent_forums = $forums->where('parent_id', 0)->get();
 
-        foreach ($users as $key => $value) {
-            $pass = explode('@', $value['email'], 2);
-            if( Hash::check($pass[0], $value['password'])) {
-                $ids[] = $value['id'];
+        $insert_query = array();
+        foreach ($parent_forums as $key => $value) {
+            
+            $parent_slug = $value->forum_slug;
+
+            $child = $forums->where('parent_id', $value->id)->get();
+
+            if( $child->count() > 1 ){
+                $slugval = array();
+                foreach ($child as $key1 => $value1) {
+
+                    $child_slug = $value1->forum_slug;
+                    $slugval = $parent_slug.'/'.$child_slug;
+
+                    $title_value = $value1->title;
+                    $pagename = $title_value;
+                    $title = $title_value." Discussion Community & Support Forum | ForumzHub";
+                    $description = "Interact with people and discuss about ".$title_value." in our online forum community. Share your queries and stories here.";
+
+                    $insert_query[] = '("forums/'.$slugval.'", "'.$pagename.'", "'.$title.'", "'.$description.'", "", "1", "0000-00-00 00:00:00", "0000-00-00 00:00:00")';
+
+                    $subchild = $forums->where('parent_id', $value1->id)->get();
+                    $temp = $slugval;
+
+                    if( $subchild->count() > 0 ){
+                        foreach ($subchild as $key2 => $value2) {
+                            $subchild_slug = $value2->forum_slug;
+                            $slugval = $temp.'/'.$subchild_slug;
+
+                            $title_value = $value2->title;
+                            $pagename = $title_value;
+                            $title = $title_value." Discussion Community & Support Forum | ForumzHub";
+                            $description = "Interact with people and discuss about ".$title_value." in our online forum community. Share your queries and stories here.";
+
+                            $insert_query[] = '("forums/'.$slugval.'", "'.$pagename.'", "'.$title.'", "'.$description.'", "", "1", "0000-00-00 00:00:00", "0000-00-00 00:00:00")';
+
+                        }
+                    }
+                }                
+            }else{
+                $slugval = $parent_slug;
+
+                $title_value = $value->title;
+                $pagename = $title_value;
+                $title = $title_value." Discussion Community & Support Forum | ForumzHub";
+                $description = "Interact with people and discuss about ".$title_value." in our online forum community. Share your queries and stories here.";
+
+                $insert_query[] = '("forums/'.$slugval.'", "'.$pagename.'", "'.$title.'", "'.$description.'", "", "1", "0000-00-00 00:00:00", "0000-00-00 00:00:00")';
+
             }
+
         }
 
-        if(!empty($ids)){
-            $ids = implode(',', $ids);
-            $sql = 'update users set password = "" where id in ('.$ids.')';
-            echo '<pre>';print_r($sql);die;    
-        }
-    }*/
+/*        $queries = implode(',', $insert_query);
+
+        echo "INSERT INTO `meta_data` (`url`, `page_name`, `meta_title`, `meta_description`, `meta_keyword`, `status`, `created_at`, `updated_at`) VALUES ".$queries.";";
+
+        exit();*/
+        echo '<pre>';print_r($insert_query);die;
+
+    }
+
+
     
 }

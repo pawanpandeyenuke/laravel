@@ -1,4 +1,6 @@
 @extends('layouts.dashboard')
+
+@include('panels.meta-data')
 @section('title', 'Forums')
 <?php
 unset($countries[0]);

@@ -1,4 +1,6 @@
 @extends('layouts.dashboard')
+
+@include('panels.meta-data')
 @section('title', 'Invite Friends')
 <head>
 	<meta property="og:url" content="{{url('/')}}" />

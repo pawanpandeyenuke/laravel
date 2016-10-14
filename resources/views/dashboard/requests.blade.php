@@ -1,4 +1,6 @@
 @extends('layouts.dashboard')
+
+@include('panels.meta-data')
 @section('title', 'Friends')
 @section('content')
 <?php  //print_r($model1);die; ?>

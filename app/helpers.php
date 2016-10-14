@@ -1,4 +1,5 @@
 <?php
+use App\MetaData;
 
     /*
     *   @Returns the minimum and maximum validation points.
@@ -579,23 +580,53 @@
 
     }
 
-// Trim all values in array
-function trim_values( $array = array() )
-{
-    foreach($array as $key => $val){
-        $array[$key] = is_array($val) ? trim_values($val) : trim($val);
+    // Trim all values in array
+    function trim_values( $array = array() )
+    {
+        foreach($array as $key => $val){
+            $array[$key] = is_array($val) ? trim_values($val) : trim($val);
+        }
+        
+        return $array;
     }
-    
-    return $array;
-}
 
-// Trim all values in array
-function trim_and_remove_tags( $array = array() )
-{
-    foreach($array as $key => $val){
-        $array[$key] = is_array($val) ? trim_and_remove_tags($val) : trim(strip_tags($val));
+    // Trim all values in array
+    function trim_and_remove_tags( $array = array() )
+    {
+        foreach($array as $key => $val){
+            $array[$key] = is_array($val) ? trim_and_remove_tags($val) : trim(strip_tags($val));
+        }
+        
+        return $array;
+    } 
+
+    // Get meta details of urls
+    function getMetaData( $url, $recursive = false )
+    {
+        try
+        {
+            if( ! $url )
+                throw new Exception("Url is required", 1);                
+
+            $meta_data = new MetaData;
+
+            $temp = $meta_data->where( 'url', $url )->select(['url', 'meta_title', 'meta_description', 'meta_keyword'])->first();
+
+            if ( $recursive == true && empty( $temp ) ) 
+            {
+                $url = substr($url, 0, strripos($url, '/'));
+
+                if( $url )
+                {
+                    $temp = getMetaData( $url, true );
+                }
+
+            }
+
+            return $temp;
+
+        }catch(Exception $e){
+            return $e->getMessage();
+        }
+
     }
-    
-    return $array;
-} 
-?>

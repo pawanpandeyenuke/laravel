@@ -6,6 +6,8 @@ $setting['contact-request']="all";
 $setting['friend-request'] ="all";
 }
 ?>
+
+@include('panels.meta-data')
 @section('title', 'Settings')
 @section('content')
 

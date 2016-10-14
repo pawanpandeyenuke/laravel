@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
 
+@include('panels.meta-data')
+
 @section('content')
 <div class="page-data dashboard-body">
 	<div class="container">

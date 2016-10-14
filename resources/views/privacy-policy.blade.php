@@ -1,5 +1,7 @@
 @extends( isset($_GET['mobile']) ? 'layouts.noheaderfooter' : 'layouts.app')
 
+@include('panels.meta-data')
+
 @section('title', 'Privacy Policy')
 
 <!-- Main Content -->

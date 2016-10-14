@@ -1,4 +1,6 @@
 @extends('layouts.dashboard')
+
+@include('panels.meta-data')
 @section('title', 'Group Chat')
 <?php 
 $groupnamestr = ucwords($p_group->title);

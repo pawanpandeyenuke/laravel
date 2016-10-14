@@ -1,4 +1,6 @@
 @extends('layouts.dashboard')
+
+@include('panels.meta-data')
 @section('title', 'Broadcast')
 @section('content')
 <?php  // echo '<pre>';print_r($broadcast);die; ?>

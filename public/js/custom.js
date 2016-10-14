@@ -186,6 +186,7 @@ $(document).ready(function(){
 	});
 
 	$("#uploadgroupimage").ajaxForm(function(response) {});
+	
 	$(document).on('click', '#cancel-btn', function(){
 		$('#newsfeed').val('');
 		$('.emoji-wysiwyg-editor').text('');

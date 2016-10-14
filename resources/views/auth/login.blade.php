@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@include('panels.meta-data')
 @section('content')
 
 <div class="page-data login-page">

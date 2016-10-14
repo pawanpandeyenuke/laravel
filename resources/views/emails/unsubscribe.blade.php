@@ -1,4 +1,6 @@
 @extends('layouts.app')
+
+@include('panels.meta-data')
 @section('title', 'Unsubscribe')
 @section('content')
 <div class="default-page">

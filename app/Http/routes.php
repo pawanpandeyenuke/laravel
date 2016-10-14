@@ -331,119 +331,128 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 	Route::get('search-forum', 'SearchController@searchForumGet');
 
 	Route::group(['middleware' => 'web'], function () {
-    Route::auth();
 
-    Route::get('/home', 'HomeController@index');
-	Route::get('dashboard', 'DashboardController@dashboard');
-	Route::post('dashboard', 'DashboardController@dashboard');
-	Route::get('settings/privacy', 'DashboardController@settings');	
-	Route::post('settings/privacy', 'DashboardController@settings');
-	Route::get('chatroom', 'DashboardController@chatroom');
-	Route::get('friends', 'DashboardController@friendRequests');
-	Route::get('invite-friends', 'ContactImporter@inviteFriends');
-	Route::post('invite-friends', 'ContactImporter@inviteFriends');
-	Route::get('invite-contacts', 'ContactImporter@inviteContactList');
+	    Route::auth();
 
-	Route::get('group', 'DashboardController@group');
-	Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
-	Route::get('sub-cat-group/{parentid}','DashboardController@subCatGroup');
-	Route::get('groupchat/{id}', 'DashboardController@groupchat');
-		Route::get('groupchat', function(){
-			return redirect('group');
+	    Route::get('/home', 'HomeController@index');
+		Route::get('dashboard', 'DashboardController@dashboard');
+		Route::post('dashboard', 'DashboardController@dashboard');
+		Route::get('settings/privacy', 'DashboardController@settings');	
+		Route::post('settings/privacy', 'DashboardController@settings');
+		Route::get('chatroom', 'DashboardController@chatroom');
+		Route::get('friends', 'DashboardController@friendRequests');
+		Route::get('invite-friends', 'ContactImporter@inviteFriends');
+		Route::post('invite-friends', 'ContactImporter@inviteFriends');
+		Route::get('invite-contacts', 'ContactImporter@inviteContactList');
+
+		Route::get('group', 'DashboardController@group');
+		Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
+		Route::get('sub-cat-group/{parentid}','DashboardController@subCatGroup');
+		Route::get('groupchat/{id}', 'DashboardController@groupchat');
+			Route::get('groupchat', function(){
+				return redirect('group');
+		});
+		Route::post('groupchat', 'DashboardController@groupchat');	
+
+		Route::get('groupchat/pg/{groupid}','DashboardController@privateGroupChat');
+
+		Route::get('friends-chat','DashboardController@friendsChat');
+		
+
+		Route::get('profile/{id}', 'DashboardController@profile');
+		Route::post('profile/{id}', 'DashboardController@profile');
+
+		Route::get('editprofile/{id}', 'DashboardController@editUserProfile');
+		Route::post('editprofile/{id}', 'DashboardController@editUserProfile');	
+
+
+		Route::get('broadcast-list', 'DashboardController@broadcastList');
+		Route::post('broadcast-list', 'DashboardController@broadcastList');
+		
+		Route::get('broadcast-add', 'DashboardController@broadcastAdd');
+		Route::post('broadcast-add', 'DashboardController@broadcastAdd');
+
+		Route::match(['post', 'get'], 'broadcast-edit/{id}', 'DashboardController@broadcastEdit');
+
+		Route::get('broadcast-msg/{broadcastid}', 'DashboardController@broadcastMessage');
+		
+		Route::get('private-group-list/{privategroupid}', 'DashboardController@privateGroupList');
+		Route::get('private-group-list', 'DashboardController@privateGroupList');
+		Route::post('private-group-list/{privategroupid}', 'DashboardController@privateGroupList');
+		
+		Route::get('private-group-add', 'DashboardController@privateGroupAdd');
+		Route::post('private-group-add', 'DashboardController@privateGroupAdd');
+
+		Route::get('private-group-detail/{privategroupid}', 'DashboardController@privateGroupDetail');
+
+
+		Route::get('google/client', 'ContactImporter@inviteFriends');
+		Route::get('google/client/callback', 'ContactImporter@inviteContactList');
+		Route::post('google/client/callback', 'ContactImporter@inviteContactList');
+
+		Route::get('hotmail/client/callback', 'ContactImporter@hotmailCallback');
+
+		Route::get('linkedin/client', 'ContactImporter@linkedin');
+		Route::get('linkedin/client/callback', 'ContactImporter@linkedinCallback');
+
+	    Route::get('/demopage', 'DashboardController@demopage');
+		Route::post('/demopage', 'DashboardController@demopage');
+	 
+		Route::get('newpassword','SearchController@newPassword');
+		Route::post('newpassword','SearchController@newPassword');
+
+		Route::get('terms','SearchController@terms');
+		Route::get('privacy-policy','SearchController@privacyPolicy');
+		Route::get('about-us','SearchController@aboutUs');
+
+		Route::get('send-verification-link','SearchController@verify');
+		Route::post('send-verification-link','SearchController@verify');
+		Route::get('email-verified/{user_id}/{confirmation_code}','SearchController@emailVerified');	
+	 
+		Route::match(['get', 'post'], 'unsubscribe','SearchController@unsubscribe');
+		Route::get('subscribe','SearchController@subscribe');
+		Route::get('forums/unsubscribe','HomeController@unsubscribeForumNotifications');
+
+		Route::get('/', function(){
+			if(Auth::check())
+				return redirect()->action('DashboardController@dashboard');
+			else
+				return view('auth.register');
+		});
+
+		Route::post('/', 'HomeController@postRegister');
+
+		/*Route::get('mail',function(){
+			return view('emails.invite')->with('username','Aditya')->with('id',"42");
+		});*/
+		Route::get('register/verify/{confirmation_code}', [
+	    'as' => 'confirmation_path',
+	    'uses' => 'SearchController@confirm'
+		]);
+
+		Route::match(['get', 'post'], 'change-password','DashboardController@changePassword');
+
+		Route::get('/login', function(){
+			if(Auth::check())
+				return Redirect::to('dashboard');
+			else
+				return Redirect::to('/');
+		});
+
+		Route::get('/register', function(){
+			if(Auth::check())
+				return Redirect::to('dashboard');
+			else
+				return Redirect::to('/');
+		});
+
 	});
-	Route::post('groupchat', 'DashboardController@groupchat');	
-
-	Route::get('groupchat/pg/{groupid}','DashboardController@privateGroupChat');
-
-	Route::get('friends-chat','DashboardController@friendsChat');
-	
-
-	Route::get('profile/{id}', 'DashboardController@profile');
-	Route::post('profile/{id}', 'DashboardController@profile');
-
-	Route::get('editprofile/{id}', 'DashboardController@editUserProfile');
-	Route::post('editprofile/{id}', 'DashboardController@editUserProfile');	
 
 
-	Route::get('broadcast-list', 'DashboardController@broadcastList');
-	Route::post('broadcast-list', 'DashboardController@broadcastList');
-	
-	Route::get('broadcast-add', 'DashboardController@broadcastAdd');
-	Route::post('broadcast-add', 'DashboardController@broadcastAdd');
+	// Route::get('script','HomeController@script');
+	Route::post('password/email','Auth\PasswordController@resetPassword');
+	Route::get('test','HomeController@test');
 
-	Route::match(['post', 'get'], 'broadcast-edit/{id}', 'DashboardController@broadcastEdit');
-
-	Route::get('broadcast-msg/{broadcastid}', 'DashboardController@broadcastMessage');
-	
-	Route::get('private-group-list/{privategroupid}', 'DashboardController@privateGroupList');
-	Route::get('private-group-list', 'DashboardController@privateGroupList');
-	Route::post('private-group-list/{privategroupid}', 'DashboardController@privateGroupList');
-	
-	Route::get('private-group-add', 'DashboardController@privateGroupAdd');
-	Route::post('private-group-add', 'DashboardController@privateGroupAdd');
-
-	Route::get('private-group-detail/{privategroupid}', 'DashboardController@privateGroupDetail');
-	//Route::post('private-group-detail', 'DashboardController@privateGroupDetail');
-
-
-
-	Route::get('google/client', 'ContactImporter@inviteFriends');
-	Route::get('google/client/callback', 'ContactImporter@inviteContactList');
-	Route::post('google/client/callback', 'ContactImporter@inviteContactList');
-
-	// Route::get('hotmail/client', 'ContactImporter@hotmail');
-	Route::get('hotmail/client/callback', 'ContactImporter@hotmailCallback');
-
-	// Route::get('yoauth/client', 'ContactImporter@hotmail');
-	// Route::get('yoauth/client/callback', 'ContactImporter@callbackH');
-
-	Route::get('linkedin/client', 'ContactImporter@linkedin');
-	Route::get('linkedin/client/callback', 'ContactImporter@linkedinCallback');
-
-    Route::get('/demopage', 'DashboardController@demopage');
-	Route::post('/demopage', 'DashboardController@demopage');
- 
-	Route::get('newpassword','SearchController@newPassword');
-	Route::post('newpassword','SearchController@newPassword');
-
-	Route::get('terms','SearchController@terms');
-	Route::get('privacy-policy','SearchController@privacyPolicy');
-	Route::get('about-us','SearchController@aboutUs');
-
-	Route::get('send-verification-link','SearchController@verify');
-	Route::post('send-verification-link','SearchController@verify');
-	Route::get('email-verified/{user_id}/{confirmation_code}','SearchController@emailVerified');	
- 
-	Route::match(['get', 'post'], 'unsubscribe','SearchController@unsubscribe');
-	Route::get('subscribe','SearchController@subscribe');
-	Route::get('forums/unsubscribe','HomeController@unsubscribeForumNotifications');
-
-	Route::get('/', function(){
-		if(Auth::check())
-			return redirect()->action('DashboardController@dashboard');
-		else
-			return view('auth.register');
-	});
-
-	Route::post('/', 'HomeController@postRegister');
-
-	/*Route::get('mail',function(){
-		return view('emails.invite')->with('username','Aditya')->with('id',"42");
-	});*/
-	Route::get('register/verify/{confirmation_code}', [
-    'as' => 'confirmation_path',
-    'uses' => 'SearchController@confirm'
-	]);
-
-	Route::match(['get', 'post'], 'change-password','DashboardController@changePassword');
-
-});
-
-
-// Route::get('script','HomeController@script');
-Route::post('password/email','Auth\PasswordController@resetPassword');
-
-
-Route::any('{all}', function(){
-    return view('errors.404');
-})->where('all', '.*');
+	Route::any('{all}', function(){
+	    return view('errors.404');
+	})->where('all', '.*');

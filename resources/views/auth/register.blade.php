@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@include('panels.meta-data')
 @section('content')
 <style>
 .small-text{
@@ -45,13 +46,13 @@ $userdata = session('userdata');
                       <!-- Wrapper for slides -->
                       <div class="carousel-inner" role="listbox">
                         <div class="item active">
-                          <img src="images/slide1.jpg" alt="">
+                          <img src="images/dashboard.png" alt="">
                         </div>
                         <div class="item">
-                          <img src="images/slide1.jpg" alt="">
+                          <img src="images/chatroom.png" alt="">
                         </div>
                         <div class="item">
-                          <img src="images/slide1.jpg" alt="">
+                          <img src="images/forum.png" alt="">
                         </div>
                       </div>
                       

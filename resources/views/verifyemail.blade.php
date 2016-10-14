@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@include('panels.meta-data')
 <!-- Main Content -->
 @section('content')
          
