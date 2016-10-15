@@ -9,7 +9,7 @@
 <meta name="title" content="@yield('title', 'Default Meta Tags, Metadata')" />
 <meta name="keywords" content="@yield('keywords', 'Default Meta Tags, Metadata')" />
 <meta name="description" content="@yield('description', 'Default Meta Tags, Metadata')" />
-<link rel="canonical" href="{{ url('/') }}">
+<link rel="canonical" href="{{ url()->current() }}">
 
 <title>@yield('title', 'FriendzSquare')</title>
 <link href="{{url('/css/bootstrap.css')}}" rel="stylesheet">
