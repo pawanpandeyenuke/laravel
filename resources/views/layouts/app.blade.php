@@ -13,14 +13,16 @@
 
 <title>@yield('title', 'FriendzSquare')</title>
 <link href="{{url('/css/bootstrap.css')}}" rel="stylesheet">
-<link href="{{url('/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
-<link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
 <link href="{{url('/css/style.css')}}" rel="stylesheet">
-<link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
 <script type="text/javascript" src="{{url('/js/jquery-1.11.3.min.js')}}"></script>
 @include('panels.google-analytics')
 </head>
 <body>
+<noscript id="deferred-styles">
+	<link href="{{url('/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
+	<link href="{{url('/css/flat-icon/flaticon.css')}}" rel="stylesheet" media="all">
+	<link href="{{url('/css/responsive.css')}}" rel="stylesheet" media="all">
+</noscript>
 @include('panels.loginpopup')
 <header>
 	<div class="container">
@@ -98,7 +100,19 @@
 </header>
 		
 @yield('content')
-
+	<script>
+	  var loadDeferredStyles = function() {
+	    var addStylesNode = document.getElementById("deferred-styles");
+	    var replacement = document.createElement("div");
+	    replacement.innerHTML = addStylesNode.textContent;
+	    document.body.appendChild(replacement)
+	    addStylesNode.parentElement.removeChild(addStylesNode);
+	  };
+	  var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+	      webkitRequestAnimationFrame || msRequestAnimationFrame;
+	  if (raf) raf(function() { window.setTimeout(loadDeferredStyles, 0); });
+	  else window.addEventListener('load', loadDeferredStyles);
+	</script>
 <script type="text/javascript" src="{{url('/js/bootstrap.min.js')}}"></script>
 <script type="text/javascript" src="{{url('/js/jquery.form.js')}}"></script>
 <script src="{{url('/js/jquery.validate.js')}}"></script>
