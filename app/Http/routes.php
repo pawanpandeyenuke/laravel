@@ -330,7 +330,7 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
     Route::get('reply/{forumpostid}', 'SearchController@forumPostReply');
 
     Route::post('search-forum', 'SearchController@searchForum');
-	Route::get('search-forum', 'SearchController@searchForumGet');
+	Route::get('search-forum', 'SearchController@searchForum');
 
 	Route::group(['middleware' => 'web'], function () {
 
