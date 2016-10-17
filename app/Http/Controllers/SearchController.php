@@ -326,7 +326,7 @@ class SearchController extends Controller
                         ->with('replyCount')
                         ->where('category_id',$id)
                         ->orderBy('updated_at','DESC')
-                        ->get();
+                        ;
 
         $forum_category_breadcrum="";
         $parents1 = Forums::where('id',$id)->first();
@@ -347,8 +347,8 @@ class SearchController extends Controller
                 }
             }
 
-        $postscount = $posts->count();
-        $posts = $posts->take(10);
+        $postscount = $posts->get()->count();
+        $posts = $posts->paginate(10);
 
         $lastURL = URL::previous();
         $currentURL = URL::current();

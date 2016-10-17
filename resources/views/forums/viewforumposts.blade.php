@@ -143,11 +143,16 @@
 								</div><!--/single post-->
 							@endforeach
 							</div>
+							<div class="clearfix" >
+								{{ $posts->links() }}
+							</div>
+							<!--
 							 @if($postscount > 10)
 							<div class="load-more-btn-cont text-center">
 								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumpost" data-breadcrum = "{{$breadcrum}}">View More</button>
 							</div>
 							@endif
+							-->
 						</div><!--/forum search list-->
 					</div>
 				</div><!--/page center data-->
