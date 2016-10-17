@@ -29,12 +29,12 @@
 						 <div id="sticky-anchor"></div>
 						 	<div class="fix-header">
 								<div class="row fs-breadcrumb" >
-									<div class=" col-xs-12 col-md-9">Home > {{$breadcrum}}</div>
-									<div class="col-xs-12 col-md-3 text-right ">Page {{$currentpage}}{{!empty($pagecount)?'/'.$pagecount:''}}</div>
+									Home > {{$breadcrum}}
+									<span class='backbutton pull-right' title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back" onclick="window.history.length>2 ? window.history.back() : window.location.href='/forums';"></span>
 								</div>
 								<div class="forum-post-cont forum-post-count">
 									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{!empty($firstitem)?$firstitem.' - ':''}} {{!empty($lastitem)?$lastitem.' of ':''}} {{$postscount}}</span> Posts
-									<span class='backbutton pull-right' title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back" onclick="window.history.length>2 ? window.history.back() : window.location.href='/forums';"></span>
+									<div class="pull-right"> {{!empty($pagecount)?'Page '.$currentpage.'/'.$pagecount:''}}</div>
 									</div>
 								</div><!--/forum post cont-->
 
