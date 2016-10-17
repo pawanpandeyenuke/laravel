@@ -347,8 +347,16 @@ class SearchController extends Controller
                 }
             }
 
+        
+
         $postscount = $posts->get()->count();
         $posts = $posts->paginate(10);
+
+        $currentPage =$posts->currentPage();
+        $pageCount = $posts->lastPage();
+
+        $firstItem = $posts->firstItem();
+        $lastItem = $posts->lastItem();
 
         $lastURL = URL::previous();
         $currentURL = URL::current();
@@ -358,6 +366,10 @@ class SearchController extends Controller
                 ->with('posts',$posts)
                 ->with('postscount',$postscount)
                 ->with('lastURL', $lastURL)
+                ->with('firstitem',$firstItem)
+                ->with('lastitem',$lastItem)
+                ->with('currentpage',$currentPage)
+                ->with('pagecount', $pageCount)
                 ->with('breadcrum',$forum_category_breadcrum);
     }
 
