@@ -135,7 +135,7 @@
 								</div><!--/single post-->
 							@endforeach
 							</div>
-							<div class="clearfix" >
+							<div class="clearfix text-center" >
 								{{ $posts->links() }}
 							</div>
 							<!--

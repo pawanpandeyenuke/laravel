@@ -87,8 +87,16 @@
 							</div>
 
 							<div class="forum-post-cont">
-									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class="forumreplycount"> {{$replycount}}</span> Replies</div>
-								</div><!--/forum post cont-->
+								<div class="row" >
+									<div class="col-xs-12 col-md-8 posts-count"><i class="flaticon-two-post-it"></i><span class="forumreplycount"> {{!empty($reply->firstItem())?$reply->firstItem().' - ':''}} {{!empty($reply->lastItem())?$reply->lastItem().' of ':''}} {{$replycount}}</span> Replies</div>
+
+									<div class="col-xs-12 col-md-4 text-right" >
+										{{!empty($reply->lastPage())?'Page '.$reply->currentPage().'/'.$reply->lastPage():''}}
+									</div>
+
+								</div>
+
+							</div><!--/forum post cont-->
 							@if(Auth::check())
 								<div class="f-post-form">
 									<textarea name="" class="form-control forumreply" data-emojiable="true"></textarea>
@@ -175,11 +183,16 @@
 									</div><!--/single post-->								
 								@endforeach
 							</div>
+							<div class="clearfix text-center" >
+								{{ $reply->links() }}
+							</div>
+							<!--
 							 @if($replycount > 10)
 							<div class="load-more-btn-cont text-center">
 								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumreply" data-forumpostid = "{{$post->id}}" title="View More Replies">View More</button>
 							</div>
 							@endif
+							-->
  						 </div>
 					    </div><!--/forum search list-->
 					</div>

@@ -396,11 +396,12 @@ class SearchController extends Controller
                 ->with('replyLikesCount')
                 ->with('replyCommentsCount')
                 ->where('post_id',$forumpostid)
-                ->orderBy('updated_at','DESC')
-                ->get();
+                ->orderBy('updated_at','DESC')->paginate(10);
 
-        $replycount = $reply->count();
-        $reply = $reply->take(10);
+        
+        $replycount = $reply->total();
+
+
         $checkarr = array();
 
         $lastURL = URL::previous();
