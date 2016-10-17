@@ -41,7 +41,7 @@
 									{!! Form::close() !!}
 							</div>
 						</div>
-            		{!! Form::open(array('url' => 'search-forum', 'id' => 'search-forum', 'method' => 'post')) !!}
+            		{!! Form::open(array('url' => 'search-forum', 'id' => 'search-forum', 'method' => 'get')) !!}
 						<div class="col-sm-6 col-xs-12">
 							<div class="search-field">
               					<input type = "hidden" name = "mainforum" value = "Forum">
