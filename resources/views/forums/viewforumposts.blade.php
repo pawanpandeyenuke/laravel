@@ -33,7 +33,7 @@
 									<span class='backbutton pull-right' title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back" onclick="window.history.length>2 ? window.history.back() : window.location.href='/forums';"></span>
 								</div>
 								<div class="forum-post-cont forum-post-count">
-									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{!empty($firstitem)?$firstitem.' - ':''}} {{!empty($lastitem)?$lastitem.' of ':''}} {{$postscount}}</span> Posts
+									<div class="posts-count"><i class="flaticon-two-post-it"></i> {{!empty($firstitem)?$firstitem.' - ':''}} <?php echo !empty($lastitem)?'<span class = "count">'.$lastitem.'</span> of ':''; ?> <span class = "count">{{$postscount}}</span> Posts
 									<div class="pull-right"> {{!empty($pagecount)?'Page '.$currentpage.'/'.$pagecount:''}}</div>
 									</div>
 								</div><!--/forum post cont-->

@@ -1299,9 +1299,12 @@ $(document).ready(function(){
 			'type' : 'post',
 			'data' : {'forumpostid' : forumpostid , 'breadcrum' : breadcrum},
 			'success' : function(response){
-				$('.posts-count').find('.count').html(' '+response);
+				//$('.posts-count').find('.count').html(' '+response);
 				$('#forumpost_'+forumpostid).hide();
-				$('.search-forum-count').find('.count').html(newcount);
+				//$('.search-forum-count').find('.count').html(newcount);
+				$('.posts-count, .search-forum-count').find('.count').each( function(){
+					$(this).html( parseInt( $(this).html()) - 1 );
+				});
 				$('#forum-confirm-modal').modal('hide');
 			}
 		});
@@ -1319,7 +1322,11 @@ $(document).ready(function(){
 			'type' : 'post',
 			'data' : {'forumreplyid' : forumreplyid , 'forumpostid' : forumpostid},
 			'success' : function(response){
-				$('.posts-count').find('.forumreplycount').html(' '+response);
+
+				$('.posts-count').find('.forumreplycount').each( function(){
+					$(this).html( parseInt( $(this).html()) - 1 );
+				});
+
 				$('#forumreply_'+forumreplyid).hide();
 				$('#forum-confirm-modal').modal('hide');
 			}
@@ -1335,8 +1342,6 @@ $(document).ready(function(){
 		var current = $(this);
 		var breadcrum = $(this).val();
 		var post = $('.forumpost').val().trim();
-		var postcount = parseInt($('.posts-count').find('.count').html());
-		var newpostcount = postcount + 1;
 		if(post)
 		{
 		  	current.prop('disabled',true);
@@ -1345,7 +1350,9 @@ $(document).ready(function(){
 				'type' : 'post',
 				'data' : {'breadcrum' : breadcrum,'topic' : post},
 				'success' : function(response){	
-					$('.posts-count').find('.count').html(' '+newpostcount);
+					$('.posts-count').find('.count').each( function(){
+						$(this).html( parseInt( $(this).html()) + 1 );
+					});
 			  		$('.forumpost').val('');
 			  		$('.emoji-wysiwyg-editor').text('');
 					$('.forumpostlist').prepend(response);
@@ -1471,7 +1478,12 @@ $(document).ready(function(){
 					if(response == "no"){
 					$('#forum-post-reply_'+forumPostID).html("<div class ='alert alert-danger'>You can't reply to the post as it doesn't exist anymore.</div>");	
 					}else{
-						$('.posts-count').find('.forumreplycount').html(' '+newpostcount);
+						//$('.posts-count').find('.forumreplycount').html(' '+newpostcount);
+
+						$('.posts-count').find('.forumreplycount').each( function(){
+							$(this).html( parseInt( $(this).html()) + 1 );
+						});
+
 						$('.forumreplylist').prepend(response);
 						$('.forumreply').val('');
 					    $('.emoji-wysiwyg-editor').text('');
