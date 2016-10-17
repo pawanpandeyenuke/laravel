@@ -45,7 +45,7 @@
 										@if($postscount == 0)
 											<span class = "count"> No posts found.</span>
 										@else
-											<span class = "count"> {{!empty($firstitem)?$firstitem.' - ':''}} {{!empty($lastitem)?$lastitem.' of ':''}} </span> Posts found for "{{$show}}"
+											<span class = "count"> {{!empty($firstitem)?$firstitem.' - ':''}} {{!empty($lastitem)?$lastitem.' of ':''}} {{$postscount}}</span> Posts found for "{{$show}}"
 										@endif
 										<span class='backbutton pull-right' title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back" onclick="window.history.length>2 ? window.history.back() : window.location.href='/forums';"></span>
 									</div>
