@@ -524,8 +524,6 @@ class SearchController extends Controller
         $replyresult = ForumReply::whereRaw( 'LOWER(`reply`) like ?', array("%".$keyword."%"))
                             ->pluck('post_id')
                             ->toArray();
-
-
         $results = ForumPost::with('user')
                         ->with('forumPostLikesCount')
                         ->with('replyCount')
@@ -534,11 +532,18 @@ class SearchController extends Controller
                         ->orWhere( function( $query ) use ( $replyresult, $breadcrum) {
                             $query->whereIn( 'id', $replyresult)
                                   ->where('forum_category_breadcrum', 'LIKE', $breadcrum.'%'); })
-                        ->orderBy('updated_at','DESC')
-                        ->get();
+                        ->orderBy('updated_at','DESC');
+                        
 
-            $count = $results->count();
-            $results = $results->take(10); 
+        $count   = $results->get()->count();
+        $results = $results->paginate(10);
+
+        $currentPage = $results->currentPage();
+        $pageCount   = $results->lastPage();
+
+        $firstItem = $results->firstItem();
+        $lastItem  = $results->lastItem();
+
         
         $lastURL = URL::previous();
         $currentURL = URL::current();
@@ -549,7 +554,11 @@ class SearchController extends Controller
                 ->with('lastURL',$lastURL)
                 ->with('keyword',$keyword)
                 ->with('breadcrum',$breadcrum)
-                ->with('posts',$results)
+                ->with('posts',$results->appends(Request::except('page')))
+                ->with('firstitem',$firstItem)
+                ->with('lastitem',$lastItem)
+                ->with('currentpage',$currentPage)
+                ->with('pagecount',$pageCount)
                 ->with('old',$input);
 
     }

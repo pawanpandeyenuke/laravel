@@ -9,7 +9,7 @@
 $check_val = "direct";
 
 ?>				
-				{!! Form::open(array('url' => 'search-forum','id' => 'search-forum-layout', 'method' => 'post')) !!}
+				{!! Form::open(array('url' => 'search-forum','id' => 'search-forum-layout', 'method' => 'get')) !!}
 						<div class="forum-filter">
 							<div class="row">
 								<div class="col-md-4">
