@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Passwords\PasswordBroker;
-use Password, Redirect;
+use Password, Redirect, Validator;
 // use App\Http\Controllers\Auth\Password;
 use App\User, Session;
 
@@ -86,5 +86,39 @@ class PasswordController extends Controller
         
         return redirect()->back();
     }
+
+
+
+
+    public function reset(Request $request)
+    {
+
+        $credentials = $request->only(
+            'email', 'password', 'password_confirmation', 'token'
+        );
+
+        $validator = Validator::make($credentials, [
+                    'token' => 'required',
+                    'email' => 'required|email',
+                    'password' => 'required|confirmed|min:6',
+                ]);
+
+        if( !$validator->fails() )
+        {
+            $broker = $this->getBroker();
+
+            $response = Password::broker($broker)->reset($credentials, function ($user, $password) {
+                $user->forceFill([
+                            'password' => bcrypt($password),
+                            'remember_token' => Str::random(60),
+                        ])->save();
+            });
+
+            return redirect('newpassword');
+
+        }
+
+    }
+
 
 }
