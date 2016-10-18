@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Password, Redirect, Validator;
 // use App\Http\Controllers\Auth\Password;
+use Illuminate\Support\Str;
 use App\User, Session;
 
 class PasswordController extends Controller
