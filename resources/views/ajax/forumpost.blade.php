@@ -1,13 +1,21 @@
 <div class='f-single-post' id="forumpost_{{$forumpostid->id}}">
 	<div class='p-user'>
-		<a href="{{url("profile/$user->id")}}" title='User Profile'>
+		@if( Auth::check() )
+			<a href="{{ url('profile/'.$user->id) }}" title = "User Profile">
+		@else
+			<a href="javascript:void(0)" data-toggle="modal" data-target="#LoginPop" >
+		@endif
 		<span class="user-thumb" style="background: url('<?php echo userImage($profileimage) ?>');"></span>
 		</a>
 		<span class='p-date'><i class='flaticon-days'></i> {{$forumpostid->updated_at->format('d M Y')}}</span>
 		<span class='p-time'><i class='flaticon-time'></i> {{$forumpostid->updated_at->format('h:i A').' (UTC)'}}</span>
 	</div>
 	<div class='f-post-title'>
-	<a href="{{url("profile/$user->id")}}" title='User Profile'>
+		@if( Auth::check() )
+			<a href="{{ url('profile/'.$user->id) }}" title = "User Profile">
+		@else
+			<a href="javascript:void(0)" data-toggle="modal" data-target="#LoginPop" >
+		@endif
 		{{$name}} </a>
 
 		<?php $rightClass = 'right'; ?>

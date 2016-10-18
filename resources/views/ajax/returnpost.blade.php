@@ -4,7 +4,11 @@
 		<button type="button" class="p-del-btn post-delete" data-toggle="modal" data-target=".post-del-confrm"><span class="glyphicon glyphicon-remove"></span></button>
 		<div class="row">
 			<div class="col-md-7">
-				<a href="{{url("profile/$user->id")}}" title="" class="user-thumb-link">
+				@if( Auth::check() )
+					<a href="{{ url('profile/'.$user->id) }}" class="user-thumb-link" title = "User Profile">
+				@else
+					<a href="javascript:void(0)" data-toggle="modal" data-target="#LoginPop" class="user-thumb-link" >
+				@endif
 					<span class="small-thumb" style="background: url('<?php echo userImage($user) ?>');"></span>
 					{{ $user->first_name.' '.$user->last_name }}
 				</a>
