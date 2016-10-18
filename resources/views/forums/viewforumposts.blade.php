@@ -28,11 +28,13 @@
 						<div class="forum-srch-list">
 						 <div id="sticky-anchor"></div>
 						 	<div class="fix-header">
-								 <div class="fs-breadcrumb">Home > {{$breadcrum}}</div>
-
-								<div class="forum-post-cont forum-post-count">
-									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{$postscount}}</span> Posts
+								<div class="row fs-breadcrumb" >
+									Home > {{$breadcrum}}
 									<span class='backbutton pull-right' title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back" onclick="window.history.length>2 ? window.history.back() : window.location.href='/forums';"></span>
+								</div>
+								<div class="forum-post-cont forum-post-count">
+									<div class="posts-count"><i class="flaticon-two-post-it"></i><span class = "count"> {{!empty($firstitem)?$firstitem.' - ':''}} {{!empty($lastitem)?$lastitem.' of ':''}} {{$postscount}}</span> Posts
+									<div class="pull-right pagi-detail"> {{!empty($pagecount)?'Page '.$currentpage.'/'.$pagecount:''}}</div>
 									</div>
 								</div><!--/forum post cont-->
 
@@ -143,11 +145,16 @@
 								</div><!--/single post-->
 							@endforeach
 							</div>
+							<div class="clearfix text-center" >
+								{{ $posts->links() }}
+							</div>
+							<!--
 							 @if($postscount > 10)
 							<div class="load-more-btn-cont text-center">
 								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-forumpost" data-breadcrum = "{{$breadcrum}}">View More</button>
 							</div>
 							@endif
+							-->
 						</div><!--/forum search list-->
 					</div>
 				</div><!--/page center data-->

@@ -126,7 +126,7 @@ window.localStorage.setItem('logged_in', true);
 									{!! Form::close() !!}
 							</div>
 						</div>
-           {!! Form::open(array('url' => 'search-forum', 'id' => 'search-forum-chat', 'method' => 'post'))  !!}
+           {!! Form::open(array('url' => 'search-forum', 'id' => 'search-forum-chat', 'method' => 'get'))  !!}
             <div class="col-sm-6">
               <div class="search-field">
               <input type = "hidden" name = "mainforum" value = "Forum">

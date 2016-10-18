@@ -35,15 +35,17 @@
 
 						<div class="forum-srch-list">
 						 <div id="sticky-anchor"></div>
-								 <div class="fs-breadcrumb">Search Result</div>
-
+						 		<div class="row fs-breadcrumb" >
+									<div class="col-xs-12 col-md-9" >Search Result</div>
+									<div class="col-xs-12 col-md-3 text-right" >{{!empty($pagecount)?'Page '.$currentpage.'/'.$pagecount:''}}</div>
+								</div>
 								<div class="forum-post-cont">		
 									<div class="posts-count search-forum-count"><i class="flaticon-two-post-it"></i>
 
 										@if($postscount == 0)
 											<span class = "count"> No posts found.</span>
 										@else
-											<span class = "count"> {{$postscount}}</span> Posts found for "{{$show}}"
+											<span class = "count"> {{!empty($firstitem)?$firstitem.' - ':''}} {{!empty($lastitem)?$lastitem.' of ':''}} {{$postscount}}</span> Posts found for "{{$show}}"
 										@endif
 										<span class='backbutton pull-right' title="Go back"><img src="{{url('/images/back-Button.png')}}" alt="Go back" onclick="window.history.length>2 ? window.history.back() : window.location.href='/forums';"></span>
 									</div>
@@ -133,11 +135,16 @@
 								</div><!--/single post-->
 							@endforeach
 							</div>
+							<div class="clearfix text-center" >
+								{{ $posts->links() }}
+							</div>
+							<!--
 							 @if($postscount > 10)
 							<div class="load-more-btn-cont text-center">
 								<button type="button" class="btn btn-primary btn-smbtn-sm load-more-search-forum" data-breadcrum = "{{$breadcrum}}" data-keyword = "{{$keyword}}">View More</button>
 							</div>
 							@endif
+							-->
 						</div><!--/forum search list-->
 				
 					</div>
