@@ -10,6 +10,7 @@ use Socialite;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
+use \Exception;
 
 class SocialController extends Controller
 {
@@ -82,80 +83,87 @@ class SocialController extends Controller
     public function callback( $provider )
     {		
 
-        $providerUser = \Socialite::driver( $provider )->user();
-        
-        switch( $provider ){
-			
-			case 'facebook':
-			$nameRaw = explode(' ', $providerUser->getName());
-				$userData = array(
-					'fb_id' => $providerUser->getId(),
-					'nickname' => $providerUser->getNickname(),
-					'first_name' => trim($nameRaw[0]),
-					'last_name' => trim($nameRaw[1]),
-					'email' => $providerUser->getEmail(),
-					'avatar' => $providerUser->getAvatar(),
-					'src' => 'fb'
-				);
-				break;
-			
-			case 'twitter':
-				//echo '<pre>';print_r($providerUser->getEmail());die;
-				//$email = $providerUser->getNickname().'@twitter.com';
-				$nameRaw = explode(' ', $providerUser->getName());
-				
-				$userData = array(
-					'twitter_id' => $providerUser->getId(),
-					'nickname' => $providerUser->getNickname(),
-					'first_name' => trim($nameRaw[0]),
-					'last_name' => trim($nameRaw[1]),
-					'email' => $providerUser->getEmail(),
-					'avatar' => $providerUser->getAvatar(),
-					'src' => 'twitter'
-				);
-				break;
-				
-			case 'google':
+    	try {
+    		if( $providerUser = \Socialite::driver( $provider )->user() ){
+		        switch( $provider ){
+					
+					case 'facebook':
+					$nameRaw = explode(' ', $providerUser->getName());
+						$userData = array(
+							'fb_id' => $providerUser->getId(),
+							'nickname' => $providerUser->getNickname(),
+							'first_name' => trim($nameRaw[0]),
+							'last_name' => trim($nameRaw[1]),
+							'email' => $providerUser->getEmail(),
+							'avatar' => $providerUser->getAvatar(),
+							'src' => 'fb'
+						);
+						break;
+					
+					case 'twitter':
+						//echo '<pre>';print_r($providerUser->getEmail());die;
+						//$email = $providerUser->getNickname().'@twitter.com';
+						$nameRaw = explode(' ', $providerUser->getName());
+						
+						$userData = array(
+							'twitter_id' => $providerUser->getId(),
+							'nickname' => $providerUser->getNickname(),
+							'first_name' => trim($nameRaw[0]),
+							'last_name' => trim($nameRaw[1]),
+							'email' => $providerUser->getEmail(),
+							'avatar' => $providerUser->getAvatar(),
+							'src' => 'twitter'
+						);
+						break;
+						
+					case 'google':
 
-				$userData = array(
-					'google_id' => $providerUser->getId(),
-					'first_name' => trim($providerUser->user['name']['givenName']),
-					'last_name' => trim($providerUser->user['name']['familyName']),
-					'email' => $providerUser->getEmail(),
-					'avatar' => $providerUser->getAvatar(),
-					'src' => 'google'
-				);
-				break;
-				
-			case 'linkedin':
+						$userData = array(
+							'google_id' => $providerUser->getId(),
+							'first_name' => trim($providerUser->user['name']['givenName']),
+							'last_name' => trim($providerUser->user['name']['familyName']),
+							'email' => $providerUser->getEmail(),
+							'avatar' => $providerUser->getAvatar(),
+							'src' => 'google'
+						);
+						break;
+						
+					case 'linkedin':
 
-				$userData = array(
-					'linked_id' => $providerUser->getId(),
-					'nickname' => $providerUser->getNickname(),
-					'first_name' => trim($providerUser->user['firstName']),
-					'last_name' => trim($providerUser->user['lastName']),
-					'email' => $providerUser->getEmail(),
-					'avatar' => $providerUser->getAvatar(),
-					'src' => 'linked'
-				);
-				break;
-			
-			default :
+						$userData = array(
+							'linked_id' => $providerUser->getId(),
+							'nickname' => $providerUser->getNickname(),
+							'first_name' => trim($providerUser->user['firstName']),
+							'last_name' => trim($providerUser->user['lastName']),
+							'email' => $providerUser->getEmail(),
+							'avatar' => $providerUser->getAvatar(),
+							'src' => 'linked'
+						);
+						break;
+					
+					default :
+						
+						$userData = array();
+						break;			
+				}
 				
-				$userData = array();
-				break;			
-		}
-		
-    	$user = self::socialLogin( $userData );
-    	if( is_object($user) ) 
-    	{
-    		Auth::login($user);
-    		return redirect('home');
-    	} elseif($user == 'verification'){
-    		Session::put('success', 'Verification link has been sent to your registered email. Please check your inbox and verify email.<a href="#" title="Login" data-toggle="modal" data-target="#LoginPop">  Login</a>');
-			return redirect('send-verification-link');
+		    	$user = self::socialLogin( $userData );
+		    	if( is_object($user) ) 
+		    	{
+		    		Auth::login($user);
+		    		return redirect('home');
+		    	} elseif($user == 'verification'){
+		    		Session::put('success', 'Verification link has been sent to your registered email. Please check your inbox and verify email.<a href="#" title="Login" data-toggle="modal" data-target="#LoginPop">  Login</a>');
+					return redirect('send-verification-link');
+		    	}
+		    	
+		    	return redirect('register?first_name='.$userData['first_name'].'&last_name='.$userData['last_name'].'&src='.$userData['src']);
+	    	} else {
+	    		throw new Exception("Error Processing Request", 1);
+	    	}
+    	} catch( Exception $e){
+    		Session::put('error', "Please try again, social login was canceled");
+    		return redirect('register' );
     	}
-    	
-    	return redirect('register?first_name='.$userData['first_name'].'&last_name='.$userData['last_name'].'&src='.$userData['src']);
     }
 }
