@@ -22,7 +22,11 @@
 					if(Auth::check())
 					$likedata = \App\ForumReplyLikes::where(['owner_id' => Auth::User()->id, 'reply_id' => $replyid])->get();								
 				 ?>
-					<a href="{{url("profile/$userid")}}" title="" class="user-thumb-link">
+					@if( Auth::check() )
+						<a href="{{ url('profile/'.$userid) }}" class="user-thumb-link" title = "User Profile">
+					@else
+						<a class="user-thumb-link" href="javascript:void(0)" data-toggle="modal" data-target="#LoginPop" >
+					@endif
 						<span class="small-thumb" style="background: url('<?php echo userImage($user) ?>');"></span>
 						{{$name}}
 					</a>
@@ -88,8 +92,12 @@
 					<div class="comment-title-cont">
 						<div class="row">
 							<div class="col-sm-6">
-
-								<a href="{{url("profile/$commentuserid")}}" title="" class="user-link">{{$name}}</a>
+								@if( Auth::check() )
+									<a href="{{ url('profile/'.$commentuserid) }}" title = "User Profile" class="user-link" >
+								@else
+									<a href="javascript:void(0)" data-toggle="modal" data-target="#LoginPop" class="user-link" >
+								@endif
+								{{$name}}</a>
 
 							</div>
 							<div class="col-sm-6">

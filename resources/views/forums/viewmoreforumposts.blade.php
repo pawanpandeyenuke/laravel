@@ -17,7 +17,11 @@
 			if(Auth::check())
 			$likedata = \App\ForumLikes::where(['owner_id' => Auth::User()->id, 'post_id' => $data->id])->get();
 			?>
-			<a href="{{url("profile/$userid")}}" title="User Profile">
+			@if( Auth::check() )
+				<a href="{{ url('profile/'.$userid) }}" title = "User Profile">
+			@else
+				<a href="javascript:void(0)" data-toggle="modal" data-target="#LoginPop" >
+			@endif
 				<span class="user-thumb" style="background: url('<?php echo userImage($userdata) ?>');"></span>
 			</a>
 			<span class="p-date"><i class="flaticon-days"></i> {{$data->updated_at->format('d M Y')}}</span>
@@ -26,7 +30,11 @@
 		</div>
 
 		<div class="f-post-title">
-		<a href="{{url("profile/$userid")}}" title="User Profile">
+		@if( Auth::check() )
+			<a href="{{ url('profile/'.$userid) }}" title = "User Profile">
+		@else
+			<a href="javascript:void(0)" data-toggle="modal" data-target="#LoginPop" >
+		@endif
 			{{$data->user->first_name." ".$data->user->last_name}}
 		</a>
 

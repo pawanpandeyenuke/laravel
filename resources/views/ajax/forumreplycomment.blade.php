@@ -3,7 +3,11 @@
 	<div class="comment-title-cont">
 		<div class="row">
 			<div class="col-sm-6">
-				<a href="{{url("profile/$userid")}}" title="" class="user-link">{{$name}}</a>
+			@if( Auth::check() )
+				<a href="{{ url('profile/'.$userid) }}" title = "User Profile">
+			@else
+				<a href="javascript:void(0)" data-toggle="modal" data-target="#LoginPop" >
+			@endif{{$name}}</a>
 			</div>
 			<div class="col-sm-6">
 				<div class="comment-time text-right">{{$comment->created_at->format('h:i A,d M Y').' (UTC)'}}</div>

@@ -25,7 +25,11 @@
 				$temp_class = "without-action-btn";
 			}
 		?>
-		<a href = "{{url("profile/$userid")}}" title = "User Profile">
+		@if( Auth::check() )
+			<a href="{{ url('profile/'.$userid) }}" title = "User Profile">
+		@else
+			<a href="javascript:void(0)" data-toggle="modal" data-target="#LoginPop" >
+		@endif
 			<span class="user-thumb" style="background: url('<?php echo userImage($user) ?>');"></span>
 		</a>
 			<div class="p-likes ml">
@@ -49,7 +53,12 @@
 		</div>
 
 		<div class="f-post-title {{$temp_class}}">
-			<a href = "{{url("profile/$userid")}}" title = "User Profile">{{$name}}</a>
+			@if( Auth::check() )
+				<a href="{{ url('profile/'.$userid) }}" title = "User Profile">
+			@else
+				<a href="javascript:void(0)" data-toggle="modal" data-target="#LoginPop" >
+			@endif
+			{{$name}}</a>
 			<div class="fp-meta">
 				<span class="p-date"><i class="flaticon-days"></i> {{$forumreply->updated_at->format('d M Y')}}</span>
 				<span class="p-time"><i class="flaticon-time"></i> {{$forumreply->updated_at->format('h:i A').' (UTC)'}}</span>
