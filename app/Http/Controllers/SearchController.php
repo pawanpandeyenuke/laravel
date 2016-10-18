@@ -471,22 +471,28 @@ class SearchController extends Controller
                         ->with('forumPostLikesCount')
                         ->with('replyCount')
                         ->where('forum_category_breadcrum',$breadcrum)
-                        ->orderBy('updated_at','DESC')
-                        ->get();
+                        ->orderBy('updated_at','DESC');
          
-        $postscount = $posts->count();
-        $posts = $posts->take(10);
+         $posts = $posts->paginate(10);
+        $postscount = $posts->total();
+
+        $currentPage =$posts->currentPage();
+        $pageCount = $posts->lastPage();
+
+        $firstItem = $posts->firstItem();
+        $lastItem = $posts->lastItem();
 
         $lastURL = URL::previous();
         $currentURL = URL::current();
         $lastURL = $lastURL==$currentURL ? url('/forums') : $lastURL;
-        
-        Session::put('forum_post_request', $input);
-        
         return view('forums.viewforumposts')
                 ->with('posts',$posts)
-                ->with('lastURL',$lastURL)
                 ->with('postscount',$postscount)
+                ->with('lastURL', $lastURL)
+                ->with('firstitem',$firstItem)
+                ->with('lastitem',$lastItem)
+                ->with('currentpage',$currentPage)
+                ->with('pagecount', $pageCount)
                 ->with('breadcrum',$breadcrum);
     }
 
