@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Passwords\PasswordBroker;
-
+use Password, Redirect;
 // use App\Http\Controllers\Auth\Password;
 use App\User, Session;
 

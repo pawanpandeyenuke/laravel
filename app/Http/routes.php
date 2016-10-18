@@ -416,7 +416,7 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 		Route::get('send-verification-link','SearchController@verify');
 		Route::post('send-verification-link','SearchController@verify');
 		Route::get('email-verified/{user_id}/{confirmation_code}','SearchController@emailVerified');	
-	 
+
 		Route::match(['get', 'post'], 'unsubscribe','SearchController@unsubscribe');
 		Route::get('subscribe','SearchController@subscribe');
 		Route::get('forums/unsubscribe','HomeController@unsubscribeForumNotifications');
