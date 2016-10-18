@@ -88,7 +88,7 @@
 
 							<div class="forum-post-cont">
 								<div class="row" >
-									<div class="col-xs-12 col-md-8 posts-count"><i class="flaticon-two-post-it"></i><span class="forumreplycount"> {{!empty($reply->firstItem())?$reply->firstItem().' - ':''}} {{!empty($reply->lastItem())?$reply->lastItem().' of ':''}} {{$replycount}}</span> Replies</div>
+									<div class="col-xs-12 col-md-8 posts-count"><i class="flaticon-two-post-it"></i>{{!empty($reply->firstItem())?$reply->firstItem().' - ':''}} <?php echo !empty($reply->lastItem())?'<span class="forumreplycount">'.$reply->lastItem().'</span> of ':''; ?> <span class="forumreplycount">{{$replycount}}</span> Replies</div>
 
 									<div class="col-xs-12 col-md-4 text-right" >
 										{{!empty($reply->lastPage())?'Page '.$reply->currentPage().'/'.$reply->lastPage():''}}
