@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Passwords\PasswordBroker;
-
+use Password, Redirect;
 // use App\Http\Controllers\Auth\Password;
 use App\User, Session;
 
@@ -72,7 +72,7 @@ class PasswordController extends Controller
         $response = $this->passwords->sendResetLink($input, function($message) {
             $message->subject('Password Change Request');
         });
-        
+
         switch ($response)
         {
             case PasswordBroker::RESET_LINK_SENT:
@@ -85,6 +85,31 @@ class PasswordController extends Controller
         }
         
         return redirect()->back();
+    }
+
+
+    // Reset password override 
+    public function setNewPassword()
+    {
+        $credentials = \Request::only(
+            'email', 'password', 'password_confirmation', 'token'
+        );
+        
+        $response = Password::reset($credentials, function($user, $password) {
+            $user->password = Hash::make($password);
+            $user->save();
+        });
+
+        switch ($response)
+        {
+            case Password::INVALID_PASSWORD:
+            case Password::INVALID_TOKEN:
+            case Password::INVALID_USER:
+                return Redirect::back()->with('error', trans($response));
+
+            case Password::PASSWORD_RESET:
+                return Redirect::to('newPassword');
+        }
     }
 
 }

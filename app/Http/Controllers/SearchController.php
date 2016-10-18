@@ -347,8 +347,6 @@ class SearchController extends Controller
                 }
             }
 
-        
-
         $postscount = $posts->get()->count();
         $posts = $posts->paginate(10);
 
