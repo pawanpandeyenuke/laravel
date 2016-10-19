@@ -29,13 +29,18 @@ $check_val = "direct";
 								<div class="col-md-4">
 								<div class="search-subforums">
 										<?php 
-											if(isset($old['search-subforums']) && $old['search-subforums'] != ""){
-												$check_val = "sub";
+											if( !empty($old['mainforum']) ){
 												$options = \App\Forums::where('parent_id',$old['mainforum'])->get();
+											} else{
+												$options = "";
+											}
+											
+											if(isset($old['search-subforums']) && !empty($old['search-subforums']) && $old['search-subforums'] != "sub-opt"){
+												$check_val = "sub";
 											}else{
 											 	$sub_id = "";
 											 	$sub_title = "Sub Category";
-											 	$options = "";
+											 	
 											}
 										?>
 									<select class="form-control" id="search-subforums" name="search-subforums">
@@ -173,7 +178,7 @@ $check_val = "direct";
 								</div>
 								</div>
 								<?php 
-									if(isset($old['search-diseases']) && $old['search-diseases'] != ""){
+									if(isset($old['search-subforums']) && $old['search-subforums'] != ""){
 										if((\App\Forums::where('id',$old['mainforum'])->value('title') == "Doctor") && $old['check'] != "direct")
 											$d_disp = "";
 										else
@@ -184,7 +189,7 @@ $check_val = "direct";
 								?>
 								<div class="col-md-4 search-diseases" style="{{ $d_disp }}">
 									<select class="form-control csc" id="search-diseases" name="search-diseases">
-										<option value="disease">Select Options</option>
+										<option value="">Select Options</option>
 									@foreach($diseases as $diseases)
 										<?php
 												if(isset($old['search-diseases']) && $old['search-diseases'] != "" && $old['search-diseases'] == $diseases)
@@ -246,6 +251,7 @@ $check_val = "direct";
 	
 
      $( "#search-forum-layout" ).submit(function( event ) {
+      
       if($('.search-check').val() == "c" && $('#search-country1').val() == "Country"){
       	$('#search-country1').focus();
       	$('.alert-search-forum').html('Please select country.');
@@ -253,20 +259,13 @@ $check_val = "direct";
       	event.preventDefault();
       }
 
-      if($("#getsubcategory option:selected").text() == "Doctor" && $('#search-subforums').val()!="sub-opt" && $('#search-diseases').val() == "disease"){
-      	$('#search-diseases').focus();
-      	$('.alert-search-forum').html('Please select an option.');
-      	$('.alert-search-forum').show();
-      	event.preventDefault();	
-      }
-
       var searchkey = $('#forum-keyword-layout').val();
       var parent = $('.getsubcategory').val();
       
-      if(searchkey == "" && parent == "Forum"){
+    if(searchkey == "" && parent == "Forum"){
         $('#forum-keyword-layout').focus();
         event.preventDefault();
-   		}
+   	}
 
       if(searchkey == '' || $("#search-subforums option:selected").text() == 'City'){
       	
@@ -337,71 +336,76 @@ $check_val = "direct";
 		});	
 	});		
 
-		$('#search-subforums').change(function(){
-					$('.search-country1').hide();
-					$('.search-country').hide();
-					$('.search-state').hide();
-					$('.search-city').hide();
-					$('.search-subject1').hide();
-					$('.search-subject2').hide();
-					$('#search-country1').hide();
-					$('#search-country').hide();
-					$('#search-state').hide();
-					$('#search-city').hide();
-					$('#search-subject1').hide();
-					$('#search-subject2').hide();
-					$('.search-diseases').hide();
-					$('#search-diseases').hide();
-					$('.alert-search-forum').hide();
-					$('#search-country').html("");
-					$('#search-state').html("");
-					$('#search-city').html("");
-		if($("#getsubcategory option:selected").text() == "Doctor")
-		{
-				$('.search-diseases').show();
-				$('#search-diseases').show();
-		}
+	$('#search-subforums').change(function(){
+		$('.search-country1').hide();
+		$('.search-country').hide();
+		$('.search-state').hide();
+		$('.search-city').hide();
+		$('.search-subject1').hide();
+		$('.search-subject2').hide();
+		$('#search-country1').hide();
+		$('#search-country').hide();
+		$('#search-state').hide();
+		$('#search-city').hide();
+		$('#search-subject1').hide();
+		$('#search-subject2').hide();
+		$('.search-diseases').hide();
+		$('#search-diseases').hide();
+		$('.alert-search-forum').hide();
+		$('#search-country').html("");
+		$('#search-state').html("");
+		$('#search-city').html("");
+
 		var forumid = $(this).val();
 		var _token = $('#searchform input[name=_token]').val();
-		$.ajax({			
-			'url' : '/ajax/getsubforums-2',
-			'data' : { 'forumid' : forumid },
-			'type' : 'post',
-			'success' : function(response){
-				if(response == 'hide')
-				{
-				$('.search-check').val('sub');
-				}else{
-					var jresponse = jQuery.parseJSON(response);
-					$('.search-check').val(jresponse.msg);
-					if(jresponse.msg == 'c')
+		if( forumid != 'sub-opt' ){
+			if($("#getsubcategory option:selected").text() == "Doctor")
+			{
+				$('.search-diseases').show();
+				$('#search-diseases').show();
+			}
+			$.ajax({			
+				'url' : '/ajax/getsubforums-2',
+				'data' : { 'forumid' : forumid },
+				'type' : 'post',
+				'success' : function(response){
+					if(response == 'hide')
 					{
-						$('.search-country1').show();
-						$('#search-country1').show();
-						$('#search-country1').html(jresponse.data);
-					}
-					else if(jresponse.msg == 'csc')
-					{
-						$('.search-country').show();
-						$('#search-country').show();
-						$('.search-state').show();
-						$('#search-state').show();
-						$('.search-city').show();
-						$('#search-city').show();
-						$('#search-country').html(jresponse.data);
-						$('#search-state').html("<option>Select State</option>");
-						$('#search-city').html("<option>Select City</option>");
-					}
-					else if(jresponse.msg == 'subfor')
-					{
-						$('.search-subject1').show();
-						$('#search-subject1').show();
-						$('#search-subject1').html(jresponse.data);
-					}
+					$('.search-check').val('sub');
+					}else{
+						var jresponse = jQuery.parseJSON(response);
+						$('.search-check').val(jresponse.msg);
+						if(jresponse.msg == 'c')
+						{
+							$('.search-country1').show();
+							$('#search-country1').show();
+							$('#search-country1').html(jresponse.data);
+						}
+						else if(jresponse.msg == 'csc')
+						{
+							$('.search-country').show();
+							$('#search-country').show();
+							$('.search-state').show();
+							$('#search-state').show();
+							$('.search-city').show();
+							$('#search-city').show();
+							$('#search-country').html(jresponse.data);
+							$('#search-state').html("<option>Select State</option>");
+							$('#search-city').html("<option>Select City</option>");
+						}
+						else if(jresponse.msg == 'subfor')
+						{
+							$('.search-subject1').show();
+							$('#search-subject1').show();
+							$('#search-subject1').html(jresponse.data);
+						}
 
-				}
-			}			
-		});	
+					}
+				}			
+			});	
+		} else {
+			$('.search-check').val('direct');
+		}
 	});
 		
 	$('#search-country').change(function(){
