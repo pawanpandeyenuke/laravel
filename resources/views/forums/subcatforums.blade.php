@@ -32,26 +32,26 @@ unset($countries[0]);
 							<div class="fs-breadcrumb"><a href="{{url('forums')}}" title="">Home</a> > <a href = "{{url("sub-forums/$parentforumid")}}" title="">{{$parentforum}}</a> >{{$mainforum}}</div>
 							<div class="table-responsive">
 								<table class="table">
-			@if(!empty($subforums))
-				@foreach($subforums as $data)
-				<?php
-				 	$count = \App\ForumPost::where('category_id',$data->id)->get()->count();
-					$fieldsdata = \App\Forums::where('parent_id',$data->id)->value('id');
-					$forumid = $data->id;
-					$forumslug= $data->forum_slug;
-					if($data->updated_at->format('Y-m-d H:i:s') == "-0001-11-30 00:00:00")
-							$date = "No Posts";
-					else
-						$date = $data->updated_at->format('d, M h:i a');
-				?>	
-					
-								<tr>
-									<td>{{ $data->title }}</td>
-									<td>{{$date}}</td>
-									<td><div class="count text-center"><span>{{$count}}</span></div></td>
-									<td><a href="{{url("forums/$parentforumslug/$mainforumslug/$forumslug")}}" title=""><i class="flaticon-next"></i></a></td>
-								</tr>
-							@endforeach	
+							@if(!empty($subforums))
+								@foreach($subforums as $data)
+									<?php
+									 	$count = \App\ForumPost::where('category_id',$data->id)->get()->count();
+										$fieldsdata = \App\Forums::where('parent_id',$data->id)->value('id');
+										$forumid = $data->id;
+										$forumslug= $data->forum_slug;
+										if($data->updated_at->format('Y-m-d H:i:s') == "-0001-11-30 00:00:00")
+												$date = "No Posts";
+										else
+											$date = $data->updated_at->format('d, M h:i a');
+									?>	
+						
+									<tr onclick="document.location = '/forums/{{$parentforumslug}}/{{$mainforumslug}}/{{$forumslug}}'" style="cursor:pointer">
+										<td>{{ $data->title }}</td>
+										<td>{{$date}}</td>
+										<td><div class="count text-center"><span>{{$count}}</span></div></td>
+										<td><a href="{{url("forums/$parentforumslug/$mainforumslug/$forumslug")}}" title=""><i class="flaticon-next"></i></a></td>
+									</tr>
+								@endforeach	
 							@endif
 								</table>
 							</div>

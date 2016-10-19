@@ -54,7 +54,7 @@ if($mainforum->title == "Doctor") {
 															$count = \App\ForumPost::whereIn('category_id',$subid1)->get()->count(); ?>
 											@endif
 											
-											<tr>
+											<tr onclick="document.location = '/forums/{{$mainforum->forum_slug}}/{{$forumSlug}}'" style="cursor:pointer">
 												<td>{{ $data->title }}</td>
 												<td>{{$date}}</td>
 												<td><div class="count text-center"><span>{{$count}}</span></div></td>
