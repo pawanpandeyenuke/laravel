@@ -12,7 +12,7 @@
 			
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
-					<div class="page-title no-left-padding">Create New Broadcast List</div>
+					<div class="page-title no-left-padding"><h1>Create New Broadcast List</h1></div>
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
 							{!! Form::open(array('id' => 'broadcastAdd')) !!}

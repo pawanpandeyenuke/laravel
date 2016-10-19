@@ -11,7 +11,7 @@
 	<div class="row">
 	    <div class="col-md-10 col-md-offset-1 terms">
 	    <div class="terms-container">
-	    	<h3 class='text-center'><b>Terms of Use</b></h3>
+	    	<h1 class='text-center'><b>Terms of Use</b></h1>
 	        FriendzSquare application on any internet enabled device is collectively referred here in this Terms of Use as "FriendzSquare" ("We"). <br> <br>
 
 			This Terms of Use is applicable to FriendzSquare and by accessing FriendzSquare you consent to accept the following terms as specified below. Furthermore, by accepting these Terms of Use, you also agree to be bound by the FriendzSquare's Privacy Policy. <br><br>

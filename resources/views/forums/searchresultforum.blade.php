@@ -27,7 +27,7 @@
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title green-bg">
-						<i class="flaticon-user-profile"></i>Forums
+						<i class="flaticon-user-profile"></i><h1>Forums</h1>
 					</div>
 
 					<div class="padding-data-inner">

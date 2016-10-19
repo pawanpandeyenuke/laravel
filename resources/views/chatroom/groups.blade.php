@@ -12,7 +12,7 @@
 					<div class="col-sm-6">
 						<div class="shadow-box page-center-data blue-bg no-margin-top">
 							<div class="page-title">
-								<i class="flaticon-balloon"></i>Chat Room
+								<i class="flaticon-balloon"></i><h1>Chat Room</h1>
 							</div>
 
 							<div class="category-outer">

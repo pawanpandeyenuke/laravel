@@ -9,7 +9,7 @@
 
         <div class="login-form">
         {!! Form::open(array('url' => '/ajax/login', 'id' => 'loginform')) !!}
-                    <h3 class="text-center">Login with Accounts</h3>
+                    <h1 class="text-center">Login with Accounts</h1>
                     <div class="row field-row">
                         <div class="col-sm-12 col-xs-12">
                             <div class="form-group">

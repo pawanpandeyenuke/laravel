@@ -11,7 +11,7 @@
    			 @include('panels.left')
 			<div class="col-sm-6 col-xs-12">
 				<div class="shadow-box page-center-data no-margin-top">
-					<div class="page-title no-left-padding">Broadcast List</div>
+					<div class="page-title no-left-padding broadcast-heading"><h1>Broadcast List</h1></div>
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
 							<div class="bcast-list no-margin">

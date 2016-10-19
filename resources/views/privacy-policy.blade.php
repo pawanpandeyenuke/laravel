@@ -8,9 +8,9 @@
 @section('content')
 <div class="container">
 	<div class="row">
-	    <div class="col-md-10 col-md-offset-1 privacy">
+	    <div class="col-md-10 col-md-offset-1 privacy privacy-policy">
 	    <div class="privacy-container">
-	    	<h3 class='text-center'><b>Privacy Policy</b></h3>
+	    	<h1 class='text-center'><b>Privacy Policy</b></h1>
 	        FriendzSquare application on any internet enabled device is collectively referred here in this Privacy Policy as "FriendzSquare" ("We"). <br> <br>
 
 			FriendzSquare is committed to protecting your privacy and this Privacy Policy describes how we handle your private and personal information. This privacy applies to FriendzSquare website and applications which are owned and operated by Connect All Pte ltd. By using FriendzSquare website and application, you allow us to use your information in accordance with this Privacy Policy. We will not use or share your personal information with anyoneexcept as described in this Privacy Policy. This Privacy Policy does not apply to any information we collect from other sources.<br><br>

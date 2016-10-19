@@ -20,7 +20,7 @@
         @include('panels.left')
         <div class="col-sm-6" >
             <div class="panel panel-default">
-                <div class="panel-heading">Change Password</div>  
+                <div class="panel-heading"><h1>Change Password</h1></div>  
                 <div class="panel-body">
                     @if (Session::has('error'))
                         <div class="alert alert-danger">{!! Session::get('error') !!}</div>

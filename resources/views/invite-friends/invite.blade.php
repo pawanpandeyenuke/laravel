@@ -23,7 +23,7 @@
 
 				<div class="col-sm-6">
 					<div class="shadow-box page-center-data no-margin-top">
-						<div class="page-title no-left-padding">Invite Contacts</div>
+						<div class="page-title no-left-padding invite-friend"><h1>Invite Contacts</h1></div>
 						<div class="container">
 							@if (Session::has('error'))
 								<div class="alert alert-danger">{!! Session::get('error') !!}</div>

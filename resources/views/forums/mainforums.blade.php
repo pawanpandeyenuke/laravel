@@ -14,7 +14,7 @@
 				<div class="col-sm-6">
 				<div class="shadow-box page-center-data blue-bg no-margin-top">
 					<div class="page-title">
-						<i class="flaticon-user-profile"></i>Forums
+						<i class="flaticon-user-profile"></i><h1>Forums</h1>
 					</div>
 
 					<div class="category-outer forum-list-cont">

@@ -10,7 +10,7 @@
 	<div class="row">
 	    <div class="col-md-10 col-md-offset-1 privacy">
 	    <div class="privacy-container about-us">
-	    	<h3 class='text-center'><b>About Us</b></h3>
+	    	<h1 class='text-center'><b>About Us</b></h1>
 	        <p>FriendzSquare is a unique platform to meet &amp; interact with other users of common interests in predefined chat rooms or forums. You can add users from chat rooms and engage in one-to-one chat or private group chat on FriendzSquare. You can keep up with your friends’ updates through newsfeed section where users can post pictures, comments or status messages on what they are up to.</p> 
             
             <br><h4>How it works?</h4>

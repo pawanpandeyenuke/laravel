@@ -26,7 +26,7 @@
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title">
-						<i class="flaticon-people"></i>Friend Requests
+						<i class="flaticon-people"></i><h1>Friend Requests</h1>
 					</div>
 
 						<div class="tab-style-no-border">

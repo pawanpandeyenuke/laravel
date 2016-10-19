@@ -28,7 +28,7 @@ if($mainforum->title == "Doctor") {
 	     <div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title green-bg">
-						<img src="{{$icon_url}}" alt="" class="img-icon"> Forums
+						<img src="{{$icon_url}}" alt="" class="img-icon"> <h1>Forums</h1>
 					</div>
 
 					<div class="padding-data-inner">

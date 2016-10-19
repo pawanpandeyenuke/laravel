@@ -21,7 +21,7 @@ $setting['friend-request'] ="all";
 				<div class="shadow-box page-center-data no-margin-top">
 				{!! Form::open(array()) !!}
 					<div class="page-title">
-						<i class="flaticon-tool"></i>Privacy Setting
+						<i class="flaticon-tool"></i><h1>Privacy Setting</h1>
 					</div>
 					@if (Session::has('error'))
 						<div class="alert alert-danger">{!! Session::get('error') !!}</div>

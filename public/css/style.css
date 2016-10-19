@@ -312,7 +312,7 @@ span.field-icon:before{
 .social-login .social-store ul{
 	margin-bottom: 0px;
 }
-.login-form h3{
+.login-form h1{
 	margin-top: 0px;
 }
 .banner-botom-data{
@@ -891,7 +891,7 @@ a:hover{
 	padding-bottom:30px;
 	min-height: 335px;
 }
-.page-title{
+.page-title h1{
 	padding: 10px 10px 10px 43px;
   position: relative;
   color: #000;
@@ -901,9 +901,9 @@ a:hover{
 }
 .page-title i{
   position: absolute;
-  top: 50%;
+  top: 5px;
   left: 15px;
-  margin-top: -14px;
+  color: #000;
 }
 .page-center-data h4{
 	font-size:16px;
@@ -1564,7 +1564,7 @@ width:495px;
 .blue-bg{
 	background: #92e7dc;
 }
-.blue-bg .page-title{
+.blue-bg .page-title h1{
 	border-color: #6ecfc2;
 }
 .category-outer{
@@ -2421,7 +2421,7 @@ textarea{
 .login-form {
   padding: 15px 30px 5px;
 }
-.login-form h3 {
+.login-form h1 {
   margin: 0 0 30px;
   font-size: 25px;
 }
@@ -3396,7 +3396,7 @@ header{
 .page-title .img-icon {
     left: 10px;
     position: absolute;
-    top: 8px;
+    top: 5px;
     width: 25px;
 }
 .msg-notification span.profile-pic, .msg-notification span.chat-msg-author {
@@ -4071,4 +4071,26 @@ ul.pagination > .active >span:hover
 {
 	background-color: #a0f0e6;
 	border-color: #a0f0e6;
+}
+
+.terms h1, .about-us h1, .privacy-policy h1
+{
+	font-size:24px;
+}
+
+.panel-heading h1 
+{
+    font-size: 14px;
+    margin: 0;
+}
+
+.broadcast-heading h1, .invite-friend h1
+{
+    padding: 10px 10px 10px 10px;
+}
+
+.user-name h1 
+{
+    font-size: 36px;
+    margin: 0;
 }

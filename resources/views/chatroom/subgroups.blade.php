@@ -23,7 +23,7 @@ unset($countries[0]);
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title">
-						<img src="{{$icon_url}}" alt="" class="img-icon"> {{$p_group->title}}
+						<img src="{{$icon_url}}" alt="" class="img-icon"><h1> {{$p_group->title}}</h1>
 					</div>
 
 					<div class="row">

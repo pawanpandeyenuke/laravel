@@ -78,7 +78,7 @@ $userdata = session('userdata');
             <div class="col-sm-4 col-xs-12">
                 <div class="login-form registration-form">
                     <div class="already-member">Already have Account? <a href="#" title="" data-toggle="modal" data-target="#LoginPop">Login</a></div>
-                    <h3 class="text-center">Registration</h3>
+                    <h1 class="text-center">Registration</h1>
                       <form class="form-horizontal" id="registerForm" role="form" method="POST" action="{{ url('/') }}">
                         {!! csrf_field() !!}
 

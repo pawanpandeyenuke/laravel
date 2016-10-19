@@ -67,8 +67,8 @@
 								@endif
 
 								<div class="pr-field">
-									<span class="user-name" style="font-size: xx-large;">
-										{{ $user->first_name.' '.$user->last_name }}
+									<span class="user-name">
+										<h1>{{ $user->first_name.' '.$user->last_name }}</h1>
 									</span>
 								</div>
 
