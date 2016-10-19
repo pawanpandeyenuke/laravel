@@ -279,7 +279,7 @@ jQuery(function($){
         }
     });
 
-	$( "#forum_select_form_int" ).submit( function(){
+	$( document ).on( 'submit' , '#forum_select_form_int', function(){
 
  		var diseases 	= $(this).find( ".sel-diseases :selected" ).data( 'value' );
  		if( typeof diseases == 'undefined' ){
@@ -287,12 +287,14 @@ jQuery(function($){
  		} else {
  			diseases = '/'+diseases;
  		}
- 		window.location.href = "<?php echo url( '/forums/'.$mainforum->forum_slug ); ?>/international"+diseases;
+ 		if( $(this).find('.help-inline.form-control').length == 0 ){
+ 			window.location.href = "<?php echo url( '/forums/'.$mainforum->forum_slug ); ?>/international"+diseases;
+ 		}
  		return false;
  	});
 
 
- 	$( "#forum_select_form_country" ).submit( function(){
+ 	$( document ).on( 'submit' , '#forum_select_form_country', function(){
  		var country 	= $(this).find( ".sel-country :selected" ).data( 'value' );
  		var diseases 	= $(this).find( ".sel-diseases :selected" ).data( 'value' );
  		if( typeof diseases == 'undefined' ){
@@ -300,13 +302,13 @@ jQuery(function($){
  		} else {
  			diseases = '/'+diseases;
  		}
- 		if( typeof country != 'undefined' && country != '' ){
+ 		if( typeof country != 'undefined' && country != '' && $(this).find('.help-inline.form-control').length == 0 ){
  			window.location.href = "<?php echo url( '/forums/'.$mainforum->forum_slug ); ?>/"+country+diseases;
  		}
  		return false;
  	});
 
- 	$( "#forum_select_form" ).submit( function(){
+ 	$( document ).on( 'submit' , '#forum_select_form', function(){
  		var country  = $(this).find( ".sel-country :selected" ).data( 'value' );
  		var state 	 = $(this).find( ".sel-state :selected" ).data( 'value' );
  		var city 	 = $(this).find( ".sel-city :selected" ).data( 'value' );
@@ -316,7 +318,7 @@ jQuery(function($){
  		} else {
  			diseases = '/'+diseases;
  		}
- 		if( typeof country != 'undefined' && typeof state != 'undefined' && typeof city != 'undefined' && country != '' && state != '' && city != '' ){
+ 		if( typeof country != 'undefined' && typeof state != 'undefined' && typeof city != 'undefined' && country != '' && state != '' && city != '' && $(this).find('.help-inline.form-control').length == 0 ){
  			window.location.href = "<?php echo url( '/forums/'.$mainforum->forum_slug ); ?>/"+country+'/'+state+'/'+city+diseases;
  		}
  		return false;
