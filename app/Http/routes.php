@@ -364,7 +364,7 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 
 		Route::get('groupchat/pg/{groupid}','DashboardController@privateGroupChat');
 
-		Route::get('friends-chat','DashboardController@friendsChat');
+		Route::get('chat','DashboardController@friendsChat');
 		
 
 		Route::get('profile/{id}', 'DashboardController@profile');
