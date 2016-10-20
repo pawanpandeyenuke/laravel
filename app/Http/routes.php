@@ -313,18 +313,18 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 	])->where('hierarchy', '.*');
 
 
-	Route::get('sub-forums/{parentid}', 'SearchController@subForums');
+	// Route::get('sub-forums/{parentid}', 'SearchController@subForums');
 
-	Route::get('sub-forums', 'SearchController@subForums');
-	Route::post('sub-forums', 'SearchController@subForums');
+	// Route::get('sub-forums', 'SearchController@subForums');
+	// Route::post('sub-forums', 'SearchController@subForums');
 
-	Route::get('forum-post/{name}', 'SearchController@forumPost');
-	Route::post('forum-post', 'SearchController@forumPost');
+	// Route::get('forum-post/{name}', 'SearchController@forumPost');
+	// Route::post('forum-post', 'SearchController@forumPost');
 
-	Route::get('sub-cat-forums/{id}','SearchController@subCatForums');
+	// Route::get('sub-cat-forums/{id}','SearchController@subCatForums');
 
-	Route::get('view-forum-posts/{id}','SearchController@viewForumPosts');
-	Route::match(['post', 'get'], 'view-forum-posts','SearchController@viewForumPostsOpt');
+	// Route::get('view-forum-posts/{id}','SearchController@viewForumPosts');
+	// Route::match(['post', 'get'], 'view-forum-posts','SearchController@viewForumPostsOpt');
 
 	Route::get('demo', 'SearchController@demo');
     Route::get('reply/{forumpostid}', 'SearchController@forumPostReply');
@@ -353,12 +353,12 @@ Route::post('api/remove-user-image','ApiController@removeUserImage');
 
 		Route::get('chat-category', 'DashboardController@group');
 
-		Route::get('group', 'DashboardController@group');
+		// Route::get('group', 'DashboardController@group');
 		Route::get('subgroup/{parentid}', 'DashboardController@subgroup');
 		Route::get('sub-cat-group/{parentid}','DashboardController@subCatGroup');
 		Route::get('groupchat/{id}', 'DashboardController@groupchat');
 			Route::get('groupchat', function(){
-				return redirect('group');
+				return redirect('chat-category');
 		});
 		Route::post('groupchat', 'DashboardController@groupchat');	
 
