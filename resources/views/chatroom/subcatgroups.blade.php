@@ -15,7 +15,12 @@
 	            <div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title">
-						<img src="{{$icon_url}}" alt="" class="img-icon"><a href="{{url('group')}}"><h1>Chat Room</h1></a> <?= $breadcrumb ?>					</div>
+						<img src="{{$icon_url}}" alt="" class="img-icon">
+							<h1>
+								<a href="{{url('group')}}">Chat Room</a> 
+									<span><?= $breadcrumb ?></span>
+							</h1>
+					</div>
 
 					<div class="row">
 						<div class="col-md-12">

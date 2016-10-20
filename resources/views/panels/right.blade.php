@@ -3,7 +3,7 @@
 		<a href="#" title="" data-toggle="modal" data-target="#myModal" class="btn btn-lg btn-full btn-primary">Suggestions</a>
 	</div>
 	<div class="side-widget-cont">
-		<img src="{{url('/images/fs-ad.png')}}" alt="" class="img-responsive side-ad">
+		<img src="{{url('/images/imgpsh_fullsize.png')}}" alt="" class="img-responsive side-ad">
 	</div>
 	<div class="refer-link">
 		<a target="_blank" href="<?php echo Config::get('constants.bizbricks_uri'); ?>"><img src="{{url('/images/logo-biz.png')}}" alt="" class=""></a>

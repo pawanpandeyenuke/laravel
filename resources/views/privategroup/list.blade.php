@@ -16,7 +16,7 @@
    			 @include('panels.left')
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
-					<div class="page-title no-left-padding">Group List</div>
+					<div class="page-title no-left-padding private-heading"><h1>Group List</h1></div>
 					<div class="row">
 						<div class="col-md-10 col-md-offset-1">
 							<div class="bcast-list no-margin">

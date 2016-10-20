@@ -22,7 +22,7 @@ if(isset($groupdetail) && !empty($groupdetail['picture'])){
    			 
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
-					<div class="page-title no-left-padding">Detail</div>
+					<div class="page-title no-left-padding"><h1>Detail</h1></div>
 
  		{{Form::open(array('url'=>'/private-group-detail/ajax/groupimage','id'=>'uploadgroupimage','files'=>true))}}
 					<div class="group-img" id="groupimageholder">
