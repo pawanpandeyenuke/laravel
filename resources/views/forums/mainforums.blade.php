@@ -27,7 +27,7 @@
 								<div class="col-sm-4">
 									<div class="cat-btn-outer">
 										<a href="{{url("forums/$data->forum_slug")}}" class="cat-btn" title="">
-											<img src="{{$image}}" alt=""><br>
+											<img src="{{$image}}" alt="{{ $data->title }}"><br>
 											<span>{{ $data->title }}</span>
 										</a>
 									</div>
