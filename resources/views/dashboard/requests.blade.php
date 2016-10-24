@@ -173,9 +173,7 @@
 						  	</div>
 						</div>
 				</div><!--/page center data-->
-				<div class="shadow-box bottom-ad">
-					<img class="img-responsive" alt="Shop By Temperature" src="{{url('/images/bottom-ad.jpg')}}">
-				</div>
+				@include('panels.footer-advertisement')
 			</div>
 
 			@include('panels.right')
