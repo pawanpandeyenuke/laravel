@@ -46,13 +46,13 @@ $userdata = session('userdata');
                       <!-- Wrapper for slides -->
                       <div class="carousel-inner" role="listbox">
                         <div class="item active">
-                          <img src="images/dashboard.png" alt="Dashboard">
+                          <img src="images/dashboard.jpeg" alt="Dashboard">
                         </div>
                         <div class="item">
-                          <img src="images/chatroom.png" alt="Chatroom">
+                          <img src="images/chatroom.jpeg" alt="Chatroom">
                         </div>
                         <div class="item">
-                          <img src="images/forum.png" alt="Forums">
+                          <img src="images/forum.jpeg" alt="Forums">
                         </div>
                       </div>
                       
