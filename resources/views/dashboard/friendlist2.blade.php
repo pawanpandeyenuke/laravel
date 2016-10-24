@@ -184,7 +184,7 @@ $status2=\App\Friend::where('friend_id',$data['id'])->where('user_id',Auth::User
 			?>
 			<div class="load-btn load-more-friend-search" data-last-id = "{{$last_id}}" data-keyword="{{$keyword}}">
 			<span class="loading-text">View more</span>
-			<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+			<span class="loading-img" style="display: none"><img src="{{url('/images/loading.gif')}}" alt="Shop By Temperature"></span>
 		</div>
 		<?php } ?>
 @endif

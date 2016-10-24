@@ -121,7 +121,7 @@
 
 									    	<div class="load-btn {{$class2}}" data-last-id="{{$LastID}}" >  	
 										    	<span class="loading-text">{{$text}}</span>
-										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+										    	<span class="loading-img" style="display: none"><img src="{{url('/images/loading.gif')}}" alt="Loading"></span>
 										    </div>
 
 										<?php }  ?>
@@ -141,7 +141,7 @@
 										    @if($sentcount > 10)
 									    	<div class="load-btn load-more-friend">
 										    	<span class="loading-text">View more</span>
-										    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+										    	<span class="loading-img" style="display: none"><img src="{{url('/images/loading.gif')}}" alt="Loading"></span>
 										    </div>
 										    @endif
 										    </div>
@@ -162,7 +162,7 @@
 												@if($recievedcount > 10)
 									    			<div class="load-btn load-more-friend">
 											    		<span class="loading-text">View more</span>
-											    		<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+											    		<span class="loading-img" style="display: none"><img src="{{url('/images/loading.gif')}}" alt="Loading"></span>
 											    	</div>
 											    @endif
 											  </div>
@@ -173,7 +173,9 @@
 						  	</div>
 						</div>
 				</div><!--/page center data-->
-				<div class="shadow-box bottom-ad"><img class="img-responsive" alt="" src="/images/bottom-ad.jpg"></div>
+				<div class="shadow-box bottom-ad">
+					<img class="img-responsive" alt="Shop By Temperature" src="{{url('/images/bottom-ad.jpg')}}">
+				</div>
 			</div>
 
 			@include('panels.right')

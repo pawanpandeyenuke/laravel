@@ -19,7 +19,7 @@
   	<div style="background-color:#e9faf8;width:100%;float:left;">
 		<div style="width:571px;margin:30px auto;">
 			<div style="background-color:#fff;padding:10px 15px;">
-			<a href="#"><img src="{{url('/images/logo.png')}}" alt="" title=""/></a>
+			<a href="#"><img src="{{url('/images/logo.png')}}" alt="FriendzSquare" title=""/></a>
 			</div>
 			<div style="background-color:#5df7e3;height:8px; margin-bottom:12px;"></div>
 			<div style="background-color:#fff;padding:10px 15px;margin-bottom:10px;">

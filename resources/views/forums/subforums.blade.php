@@ -28,7 +28,7 @@ if($mainforum->title == "Doctor") {
 	     <div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title green-bg">
-						<img src="{{$icon_url}}" alt="" class="img-icon"> <h1>Forums</h1>
+						<img src="{{$icon_url}}" alt="Forums" class="img-icon"> <h1>Forums</h1>
 					</div>
 
 					<div class="padding-data-inner">
@@ -203,7 +203,7 @@ if($mainforum->title == "Doctor") {
 						@endif
 					</div>
 				</div><!--/page center data-->
-				<div class="shadow-box bottom-ad"><img src="{{url('images/bottom-ad.jpg')}}" alt="" class="img-responsive"></div>
+				<div class="shadow-box bottom-ad"><img src="{{url('images/bottom-ad.jpg')}}" alt="Shop By Temperature" class="img-responsive"></div>
 			</div>
  		@include('panels.right')
             </div>

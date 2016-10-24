@@ -21,7 +21,7 @@
 			<div style="background-color:#e9e9e9;height:7px;width:680px;margin-bottom:3px;"></div>
 			
 			<div style="background-color:#A6FFED;padding:0 10px;height:78px;">
-			<img src="{{url('/images/logo.jpg')}}" alt="" title=""/>
+			<img src="{{url('/images/logo.jpg')}}" alt="FriendzSquare" title=""/>
 			</div>
 			
 			<div style="background-color:#e9e9e9;height:7px;width:680px; margin-bottom:20px;"></div>

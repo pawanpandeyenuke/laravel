@@ -27,11 +27,11 @@
 				<span class="u-img" style="background: url('<?php echo userImage($user) ?>');"></span>
 				<span class="title">{{ $user->first_name.' '.$user->last_name }}</span>
 				<div class="post-time">
-					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">{{ $checkpost->updated_at->format('d M Y') }}</span>
-					<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="">{{ $checkpost->updated_at->format('h:i A').' (UTC)' }}</span>
+					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="Date Icon">{{ $checkpost->updated_at->format('d M Y') }}</span>
+					<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="Time Icon">{{ $checkpost->updated_at->format('h:i A').' (UTC)' }}</span>
 				</div>
 				<span class="loc">
-					<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($location)?$location:'N/A' }}
+					<img src="{{url('forums-data/images/location.png')}}" alt="Location Icon">{{ !empty($location)?$location:'N/A' }}
 				</span>
 				<div class="breadcrumb-cont">
 					<?= $breadcrumb ?>
@@ -84,7 +84,7 @@
 					  	@if($user_id)
 							<div class="dropdown reply-action">
 								<button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-									<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
+									<img src="{{url('forums-data/images/dd-btn.png')}}" alt="Dropdown Icon">
 								</button>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 									@if($user_id == $reply->owner_id)
@@ -100,7 +100,7 @@
 						<span class="u-img" style="background: url('<?php echo userImage($replyUser) ?>');"></span>
 						<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name}}</span>
 						<span class="loc">
-							<img src="{{url('/forums-data/images/location.png')}}" alt="">{{ !empty($replyLocation)?$replyLocation:'N/A' }}
+							<img src="{{url('/forums-data/images/location.png')}}" alt="Location Icon">{{ !empty($replyLocation)?$replyLocation:'N/A' }}
 						</span>
 					</div>
 					<div class="post-data">
@@ -118,12 +118,12 @@
 							@endif
 
 								<div class="rpost-comments">
-									<a href="{{ url('api/get-forum-post-reply-comment?reply_id='.$reply->id) }}" title=""><img src="{{url('forums-data/images/comment-icon.png')}}" alt=""><span class="replies-comment-count">{{ $replyCommentsCount }}</span></a>
+									<a href="{{ url('api/get-forum-post-reply-comment?reply_id='.$reply->id) }}" title=""><img src="{{url('forums-data/images/comment-icon.png')}}" alt="Comment Icon"><span class="replies-comment-count">{{ $replyCommentsCount }}</span></a>
 								</div>
 							</div>
 							<div class="post-time">
-								<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">{{ $reply->updated_at->format('d M Y') }}</span>
-								<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="">{{ $reply->updated_at->format('h:i A').' (UTC)' }}</span>
+								<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="Date Icon">{{ $reply->updated_at->format('d M Y') }}</span>
+								<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="Time Icon">{{ $reply->updated_at->format('h:i A').' (UTC)' }}</span>
 							</div>
 						</div>
 					</div>

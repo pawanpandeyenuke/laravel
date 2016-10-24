@@ -28,11 +28,11 @@
 						<li><h5><b>Download This App</b></h5></li>
 						
 						@if($Android)
-							<li><a href="{{ Config::get('constants.android_app_link') }}" title=""><img src="{{url('images/and-btn.png')}}" alt=""></a></li>
+							<li><a href="{{ Config::get('constants.android_app_link') }}" title=""><img src="{{url('images/and-btn.png')}}" alt="FriendzSquare Android App"></a></li>
 						@endif
 
 						@if($iPhone)
-							<li><a href="{{ Config::get('constants.ios_app_link') }}" title=""><img src="{{url('images/ios-btn.png')}}" alt=""></a></li>
+							<li><a href="{{ Config::get('constants.ios_app_link') }}" title=""><img src="{{url('images/ios-btn.png')}}" alt="FriendzSquare Apple App"></a></li>
 						@endif
 						<li><h5><b>OR <br/><br/></b></h5></li> 
 						<li><a href="{{url('/')}}" title="">Continue to web...</a></li>

@@ -179,7 +179,7 @@
 
  										<div class="load-btn load-more-all" data-key="{{$keyword}}">
 											    	<span class="loading-text">View More</span>
-											    	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+											    	<span class="loading-img" style="display: none"><img src="{{url('/images/loading.gif')}}" alt="Loading"></span>
 											    </div>
 											<?php } ?>
 
@@ -189,7 +189,7 @@
 						  	</div>
 						</div>
 				</div><!--/page center data-->
-				<div class="shadow-box bottom-ad"><img class="img-responsive" alt="" src="/images/bottom-ad.jpg"></div>
+				<div class="shadow-box bottom-ad"><img class="img-responsive" alt="Shop By Temperature" src="{{url('/images/bottom-ad.jpg')}}"></div>
 			</div>
 
 			@include('panels.right')

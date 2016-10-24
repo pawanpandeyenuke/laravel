@@ -19,7 +19,7 @@
 			<span class="u-img" style="background: url('<?php echo userImage($commentUser) ?>');"></span>
 			<span class="title">{{ $commentUser->first_name.' '.$commentUser->last_name }}</span>
 			<span class="loc">
-				<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($commentLocation)?$commentLocation:'N/A' }}
+				<img src="{{url('forums-data/images/location.png')}}" alt="Location">{{ !empty($commentLocation)?$commentLocation:'N/A' }}
 			</span>
 		</div>
 

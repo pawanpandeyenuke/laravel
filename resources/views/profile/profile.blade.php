@@ -166,30 +166,6 @@
 									<div class="profile-data-table">
 										<div class="table-responsive">
 											<table class="table">
-												<!-- <tr>
-													<td><div class="p-data-title"></div></td>
-													<td>
-														<span></span>
-													</td>
-												</tr>
-												<tr>
-													<td><div class="p-data-title"><i class="flaticon-web-1"></i>Country</div></td>
-													<td> 
-														<span style="font-weight:500">{{ !empty($user->country)?$user->country:'NA'}}</span>
-													</td>
-												</tr>
-												<tr>
-													<td><div class="p-data-title"><i class="flaticon-gps"></i>State</div></td>
-													<td>
-														<span style="font-weight:500">{{!empty($user->state)?$user->state:'NA'}}</span>
-													</td>
-												</tr>
-												<tr>
-													<td><div class="p-data-title"><i class="flaticon-city"></i>City</div></td>
-													<td>
-														<span style="font-weight:500">{{!empty($user->city)?$user->city:'NA'}}</span>
-													</td>
-												</tr> -->
 												<tr>
 													<td><div class="p-data-title"><i class="flaticon-technology"></i>Mobile Contact</div></td>
 													<td>
@@ -225,7 +201,6 @@
 												</tr>
 
 												<?php $customcounter = 1; ?>
-												<?php //echo '<pre>';print_r($education->toArray());die; ?>
 												@foreach($education as $value)
 												<tr>
 													<td>
@@ -320,14 +295,10 @@
 									</div>
 								</div>
 							</div>
-						</div><!--/profile detail-->
-
-						
+						</div>
 					</div><!--/page center data-->
-					<div class="shadow-box bottom-ad"><img src="/images/bottom-ad.jpg" alt="" class="img-responsive"></div>
+					<div class="shadow-box bottom-ad"><img src="{{url('/images/bottom-ad.jpg')}}" alt="Shop By Temperature" class="img-responsive"></div>
 				</div><!--/col-6-center data-->
-			<!-- 		</div>
-				</div> -->
 			@include('panels.right')
 		</div><!--/main row-->
 	</div>

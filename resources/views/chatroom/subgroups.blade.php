@@ -23,7 +23,7 @@ unset($countries[0]);
 			<div class="col-sm-6">
 				<div class="shadow-box page-center-data no-margin-top">
 					<div class="page-title">
-						<img src="{{$icon_url}}" alt="" class="img-icon"><h1> {{$p_group->title}}</h1>
+						<img src="{{$icon_url}}" alt="{{$p_group->title}}" class="img-icon"><h1> {{$p_group->title}}</h1>
 					</div>
 
 					<div class="row">
@@ -132,7 +132,7 @@ unset($countries[0]);
 					</div>
 
 				</div><!--/page center data-->
-				<div class="shadow-box bottom-ad"><img src="{{url('images/bottom-ad.jpg')}}" alt="" class="img-responsive"></div>
+				<div class="shadow-box bottom-ad"><img src="{{url('images/bottom-ad.jpg')}}" alt="Shop By Temperature" class="img-responsive"></div>
 			</div>
 
  				@include('panels.right')

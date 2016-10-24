@@ -145,7 +145,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                                           <?php 
                                              $icon_url = url('category_images/'.$group_image); 
                                           if( isset($group_image) && !empty($group_image) ) { ?>
-                                           <img src="{{$icon_url}}" alt="" class="img-icon">
+                                           <img src="{{$icon_url}}" alt="{{ $groupname }}" class="img-icon">
                                           <?php } ?>
                                          <b><?php echo ($exception == "private")?"":$groupname; ?></b>
                                          <?php if( $groupname && $exception != 'private' ){ ?>
@@ -297,7 +297,7 @@ $GroupsJidList = $SingleChatList = $PublicGroupUser = array();
                     </div>
                 </div>
 <!--END-->
-                <div class="shadow-box bottom-ad"><img src="/images/bottom-ad.jpg" alt="" class="img-responsive"></div>
+                <div class="shadow-box bottom-ad"><img src="/images/bottom-ad.jpg" alt="Shop By Temperature" class="img-responsive"></div>
                </div>
         @include('panels.right')
              </div>

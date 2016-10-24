@@ -30,11 +30,11 @@
 				<span class="u-img" style="background: url('<?php echo userImage($replyUser) ?>');"></span>
 				<span class="title">{{ $replyUser->first_name.' '.$replyUser->last_name }}</span>
 				<div class="post-time">
-					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="">{{ $reply->updated_at->format('d M Y') }}</span>
-					<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="">{{ $reply->updated_at->format('h:i A').' (UTC)' }}</span>
+					<span class="date"><img src="{{url('forums-data/images/date-icon.png')}}" alt="Date Icon">{{ $reply->updated_at->format('d M Y') }}</span>
+					<span class="time"><img src="{{url('forums-data/images/time-icon.png')}}" alt="Time Icon">{{ $reply->updated_at->format('h:i A').' (UTC)' }}</span>
 				</div>
 				<span class="loc">
-					<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($replyLocati)?$replyLocation:'N/A' }}
+					<img src="{{url('forums-data/images/location.png')}}" alt="Location Icon">{{ !empty($replyLocati)?$replyLocation:'N/A' }}
 				</span>
 				<div class="breadcrumb-cont">
 					{{ $breadcrumb }}
@@ -82,7 +82,7 @@
 						<span class="u-img" style="background: url('<?php echo userImage($commentUser) ?>');"></span>
 						<span class="title">{{ $commentUser->first_name.' '.$commentUser->last_name }}</span>
 						<span class="loc">
-							<img src="{{url('forums-data/images/location.png')}}" alt="">{{ !empty($commentLocation)?$commentLocation:'N/A' }}
+							<img src="{{url('forums-data/images/location.png')}}" alt="Location Icon">{{ !empty($commentLocation)?$commentLocation:'N/A' }}
 						</span>
 					</div>
 

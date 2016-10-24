@@ -83,6 +83,6 @@
 @if($count > 9)
 <div class="load-btn load-more-friend" data-last-id="{{$LastID}}">
 	<span class="loading-text" >View more</span>
-	<span class="loading-img" style="display: none"><img src="/images/loading.gif" alt=""></span>
+	<span class="loading-img" style="display: none"><img src="{{url('/images/loading.gif')}}" alt="Shop By Temperature"></span>
 </div>
 @endif

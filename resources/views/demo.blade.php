@@ -640,14 +640,14 @@
 					</div>
 
 				</div><!--/page center data-->
-				<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
+				<div class="shadow-box bottom-ad"><img src="{{url('images/bottom-ad.jpg')}}" alt="Shop By Temperature" class="img-responsive"></div>
 			</div>
 			<div class="col-sm-3">
 				<div class="side-btn">
 					<a href="#" title="" class="btn btn-lg btn-full btn-primary">Suggestions</a>
 				</div><!--/side btn-->
 				<div class="side-widget-cont">
-					<img src="images/side-ad.jpg" alt="" class="img-responsive side-ad">
+					<img src="{{url('images/side-ad.jpg')}}" alt="Shop By Temperature" class="img-responsive side-ad">
 				</div>
 			</div>
 		</div>

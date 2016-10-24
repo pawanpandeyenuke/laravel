@@ -68,7 +68,7 @@
 
 
            
-    <div class="shadow-box bottom-ad"><img class="img-responsive" alt="" src="images/bottom-ad.jpg"></div>
+    <div class="shadow-box bottom-ad"><img class="img-responsive" alt="Shop By Temperature" src="{{url('images/bottom-ad.jpg')}}"></div>
             </div></div>
 
  @include('panels.right')

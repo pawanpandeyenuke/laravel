@@ -8,7 +8,7 @@
 		<div class="row">
 			<div class="col-sm-8">
 				<div class="login-banner">
-					<img src="/images/login-banner.png" alt="" class="img-responsive">
+					<img src="/images/login-banner.png" alt="Login Banner" class="img-responsive">
 				</div>
 				<div class="banner-botom-data text-center">
 					<h2>Register yourself to find friends</h2>
@@ -92,8 +92,8 @@
 
 						<div class="social-store">
 							<ul>
-								<li><a href=""><img src="{{url('/images/apple-stroe-btn.png')}}" alt=""></a></li>
-								<li><a href=""><img src="{{url('/images/android-store-btn.png')}}" alt=""></a></li>
+								<li><a href=""><img src="{{url('/images/apple-stroe-btn.png')}}" alt="Apple Button"></a></li>
+								<li><a href=""><img src="{{url('/images/android-store-btn.png')}}" alt="Android Button"></a></li>
 							</ul>
 						</div>
 					</div><!--/social login-->

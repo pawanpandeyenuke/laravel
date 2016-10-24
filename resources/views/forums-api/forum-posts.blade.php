@@ -37,7 +37,7 @@
 				  	@if($user_id)
 						<div class="dropdown reply-action">
 							<button type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-								<img src="{{url('forums-data/images/dd-btn.png')}}" alt="">
+								<img src="{{url('forums-data/images/dd-btn.png')}}" alt="Dropdown Icon">
 							</button>
 							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 							@if($user_id == $user->id)
@@ -55,11 +55,11 @@
 					<span class="u-img" style="background: url('<?php echo userImage($user) ?>');"></span>
 					<span class="title">{{ $user->first_name.' '.$user->last_name }}</span>
 					<div class="post-time">
-						<span class="date"><img src="{{url('/forums-data/images/date-icon.png')}}" alt="">{{ $post->updated_at->format('d M Y') }}</span>
-						<span class="time"><img src="{{url('/forums-data/images/time-icon.png')}}" alt="">{{ $post->updated_at->format('h:i A').' (UTC)' }}</span>
+						<span class="date"><img src="{{url('/forums-data/images/date-icon.png')}}" alt="Date Icon">{{ $post->updated_at->format('d M Y') }}</span>
+						<span class="time"><img src="{{url('/forums-data/images/time-icon.png')}}" alt="Time Icon">{{ $post->updated_at->format('h:i A').' (UTC)' }}</span>
 					</div>
 					<span class="loc">
-						<img src="{{url('/forums-data/images/location.png')}}" alt="">{{ !empty($location)?$location:'N/A' }}
+						<img src="{{url('/forums-data/images/location.png')}}" alt="Location Icon">{{ !empty($location)?$location:'N/A' }}
 					</span>
 					<div class="breadcrumb-cont">
 						<?= $breadcrumb ?>

@@ -299,10 +299,10 @@
 					@if($feeds->count() > 1)
 			    	<div class="dashboard-load">
 				    	<span class="glyphicon glyphicon-download"></span>
-				    	<span class="loading-img" style="display: none"><img src="/images/fs-loading.gif" alt=""></span>
+				    	<span class="loading-img" style="display: none"><img src="{{url('/images/fs-loading.gif')}}" alt="Loading"></span>
 				    </div>
 				    @endif
-					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="" class="img-responsive"></div>
+					<div class="shadow-box bottom-ad"><img src="images/bottom-ad.jpg" alt="Shop By Temperature" class="img-responsive"></div>
 				</div>
 
 			@include('panels.right')

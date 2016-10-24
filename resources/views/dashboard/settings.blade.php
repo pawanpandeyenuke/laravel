@@ -85,7 +85,7 @@ $setting['friend-request'] ="all";
 					</div>
 				{!! Form::close() !!}
 				</div><!--/page center data-->
-				<div class="shadow-box bottom-ad"><img src="/images/bottom-ad.jpg" alt="" class="img-responsive"></div>
+				<div class="shadow-box bottom-ad"><img src="{{url('/images/bottom-ad.jpg')}}" alt="Shop By Temperature" class="img-responsive"></div>
 			</div>
 
 			@include('panels.right')
